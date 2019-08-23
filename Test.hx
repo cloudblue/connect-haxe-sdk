@@ -1,4 +1,6 @@
 import connect.Config;
+import connect.ProcessorFactory;
+import connect.TileActivation;
 
 class Test {
     public static function main() {
@@ -6,9 +8,11 @@ class Test {
         Config.load("test_config.json");
         
         // List requests
-        var url = Config.getInstance().apiUrl + "requests?status=pending";
-        var http = new haxe.Http(url);
-        http.onData = function(data) { trace(data); };
-        http.request();
+        var processor = ProcessorFactory.newFulfillmentProcessor();
+        processor.onProcessRequest = function(request) {
+            trace(request.id);
+            return new TileActivation("# Hello, world!");
+        };
+        processor.process();
     }
 }
