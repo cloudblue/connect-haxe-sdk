@@ -8,11 +8,9 @@ class Test {
         Config.load("test_config.json");
         
         // List requests
-        var processor = ProcessorFactory.newFulfillmentProcessor();
-        processor.onProcessRequest = function(request) {
-            trace(request.id);
+        ProcessorFactory.newFulfillmentProcessor(function(request) {
+            trace(request.asset.connection.id);
             return new TileActivation("# Hello, world!");
-        };
-        processor.process();
+        }).process();
     }
 }
