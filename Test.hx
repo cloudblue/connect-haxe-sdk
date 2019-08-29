@@ -9,7 +9,7 @@ class Test {
         
         // List requests
         ProcessorFactory.newFulfillmentProcessor(function(request) {
-            trace(request.asset.connection.id);
+            trace(request.id + " : " + request.asset.connection.id);
             return new TileActivation("# Hello, world!");
         }).process();
     }

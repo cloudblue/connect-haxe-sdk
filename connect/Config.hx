@@ -1,7 +1,5 @@
 package connect;
 
-import connect.Processor.FilterMap;
-
 /**
     Configuration singleton that allows communication with the Connect platform.
 **/
@@ -36,42 +34,6 @@ class Config {
     **/
     public function getProductsString() : String {
         return this.products.join(",");
-    }
-
-
-    /**
-        Sends a synchronous request to Connect.
-
-        @param method The REST method to use (i.e. "GET", "POST", "PUT"...).
-        @param path A path to append to the apiUrl of this configuration (i.e. "requests").
-        @param params A map with string keys and values with the request query params.
-        @param data String encoded post data.
-        @returns a Response object with the response status and text
-    **/
-    public function syncRequest(method:String, path:String, ?params:FilterMap, ?data:String) : Response {
-        var status:Null<Int> = null;
-        var responseBytes = new haxe.io.BytesOutput();
-
-        var http = new haxe.Http(this.apiUrl + path);
-
-        http.addHeader("Authorization", this.apiKey);
-
-        if (params != null) {
-            for (name in params.keys()) {
-                http.addParameter(name, params[name]);
-            }
-        }
-
-        if (data != null) {
-            http.setPostData(data);
-        }
-
-        http.onStatus = function(status_) { status = status_; };
-        
-        http.customRequest(false, responseBytes, null, method.toUpperCase());
-        while (status == null) {} // Wait for async request
-
-        return new Response(status, responseBytes.getBytes().toString());
     }
     
 

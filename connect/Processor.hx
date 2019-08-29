@@ -48,14 +48,10 @@ class Processor {
         Lists all the pending requests for this processor.
 
         @returns an array of anonymous structures with the parsed list of requests.
+        @throws String if the request fails.
     **/
     public function list() : Array<Dynamic> {
-        var response = Config.getInstance().syncRequest("GET", listPath, this.defaultFilters);
-        if (response.status == 200) {
-            return haxe.Json.parse(response.text);
-        } else {
-            throw response.text;
-        }
+        return Connect.getInstance().listRequests(listPath, defaultFilters);
     }
 
 
