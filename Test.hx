@@ -16,9 +16,15 @@ class Test {
         // List requests
         var requests = api.fulfillment.listRequests(new QueryParams()
             .param('asset.product.id__in', Config.getInstance().getProductsString())
+            .param('status', 'pending')
         );
+
+        // Trace requests
         for (request in requests) {
-            trace(request.id + ' : ' + request.asset.connection.id + ' : ' + request.asset.product.id);
+            trace(request.id
+                + ' : ' + request.asset.connection.id
+                + ' : ' + request.asset.product.id
+                + ' : ' + request.status);
 
             /*
             // Approve by tile
