@@ -1,5 +1,6 @@
 import connect.Config;
 import connect.api.ConnectApi;
+import connect.api.QueryParams;
 
 class Test {
     public static function main() {
@@ -13,9 +14,11 @@ class Test {
         var api = ConnectApi.getInstance();
         
         // List requests
-        var requests = api.fulfillment.listRequests();
+        var requests = api.fulfillment.listRequests(new QueryParams()
+            .param('asset.product.id__in', Config.getInstance().getProductsString())
+        );
         for (request in requests) {
-            trace(request.id + ' : ' + request.asset.connection.id);
+            trace(request.id + ' : ' + request.asset.connection.id + ' : ' + request.asset.product.id);
 
             /*
             // Approve by tile

@@ -1,7 +1,5 @@
 package connect.api;
 
-typedef FilterMap = Map<String, String>;
-
 
 class ApiClient {
     public static function getInstance() : ApiClient {
@@ -16,11 +14,11 @@ class ApiClient {
         Lists requests for one resource.
 
         @param resource Resource path (e.g. "requests" for the Fulfillment API).
-        @param filters Optional FilterMap (a map with string keys and values) with the filters.
+        @param filters Optional filters.
         @returns an array of anonymous structures with the parsed list of requests.
         @throws String if the request fails.
     **/
-    public function list(resource: String, ?filters: FilterMap) : Array<Dynamic> {
+    public function list(resource: String, ?filters: QueryParams) : Array<Dynamic> {
         var response = getInstance().syncRequest("GET", resource, filters);
         if (response.status < 400) {
             return haxe.Json.parse(response.text);
@@ -100,12 +98,12 @@ class ApiClient {
 
         @param method The REST method to use (i.e. "GET", "POST", "PUT"...).
         @param path A path to append to the apiUrl of this configuration (i.e. "requests").
-        @param params A map with string keys and values with the request query params.
+        @param params Request query params.
         @param data String encoded post data.
         @returns a Response object with the response status and text
     **/
     private function syncRequest(method: String, path: String,
-            ?params: FilterMap, ?data: String) : Response {
+            ?params: QueryParams, ?data: String) : Response {
         var status:Null<Int> = null;
         var responseBytes = new haxe.io.BytesOutput();
 
@@ -115,7 +113,7 @@ class ApiClient {
 
         if (params != null) {
             for (name in params.keys()) {
-                http.addParameter(name, params[name]);
+                http.addParameter(name, params.get(name));
             }
         }
 

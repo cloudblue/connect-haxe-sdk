@@ -1,7 +1,5 @@
 package connect.api;
 
-import connect.api.ApiClient;
-
 
 class FulfillmentApi {
     private static inline var RESOURCE = 'requests';
@@ -10,7 +8,7 @@ class FulfillmentApi {
     public function new() {}
 
 
-    public function listRequests(?filters: FilterMap): Array<Dynamic> {
+    public function listRequests(?filters: QueryParams): Array<Dynamic> {
         return ApiClient.getInstance().list(RESOURCE, filters);
     }
 
