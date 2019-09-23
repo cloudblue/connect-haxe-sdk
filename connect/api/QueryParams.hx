@@ -24,6 +24,13 @@ class QueryParams {
         return this.map.get(name);
     }
 
+    public function toString(): String {
+        var params = [for (key in this.keys()) key].map(function (key) {
+            return key + '=' + this.get(key);
+        });
+        return (params.length > 0) ? ('?' + params.join('&')) : '';
+    }
+
 
     private var map(default, null): StringMap<String>;
 }

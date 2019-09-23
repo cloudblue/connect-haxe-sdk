@@ -1,0 +1,22 @@
+-lib tink_http
+-main Test
+-dce no
+
+--each
+-php out.php
+
+--next
+-lib hxnodejs
+-js out.js
+
+--next
+-cs out.cs
+
+--next
+-cpp out.cpp
+
+--next
+-java out.java
+
+--next
+-python out.py

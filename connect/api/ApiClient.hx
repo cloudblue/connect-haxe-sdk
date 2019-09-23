@@ -1,5 +1,7 @@
 package connect.api;
 
+import tink.http.Header.HeaderField;
+
 
 class ApiClient {
     public static function getInstance() : ApiClient {
@@ -104,6 +106,44 @@ class ApiClient {
     **/
     private function syncRequest(method: String, path: String,
             ?params: QueryParams, ?data: String) : Response {
+        var methods = [
+            'GET' => tink.http.Method.GET,
+            'PUT' => tink.http.Method.PUT,
+            'POST' => tink.http.Method.POST
+        ];
+
+        var tinkMethod: tink.http.Method = null;
+        try {
+            tinkMethod = methods.get(method.toUpperCase());
+        } catch (e: Dynamic) {
+            throw 'Invalid request method ${method}';
+        }
+
+        var stringParams = params != null ? params.toString() : '';
+        var response: Response = null;
+        tink.http.Client.fetch(Config.getInstance().apiUrl + path + stringParams, {
+            method: tinkMethod,
+            headers: [new HeaderField('Authorization', Config.getInstance().apiKey)],
+            body: data
+        }).all().handle(function(o) {
+            switch (o) {
+                case Success(res):
+                    response = new Response(res.header.statusCode, res.body.toString());
+                case Failure(res):
+                    throw res.toString();
+            }
+        });
+        
+        // Wait for async request
+        while (response == null) {}
+
+        return response;
+    }
+    
+    
+    /*
+    private function syncRequest(method: String, path: String,
+            ?params: QueryParams, ?data: String) : Response {
         var status:Null<Int> = null;
         var responseBytes = new haxe.io.BytesOutput();
 
@@ -122,12 +162,14 @@ class ApiClient {
         }
 
         http.onStatus = function(status_) { status = status_; };
+        http.onError = function(msg) { throw msg; }
         
         http.customRequest(false, responseBytes, null, method.toUpperCase());
         while (status == null) {} // Wait for async request
 
         return new Response(status, responseBytes.getBytes().toString());
     }
+    */
 
 
     private function new() {}
