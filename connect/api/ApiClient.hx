@@ -106,6 +106,34 @@ class ApiClient {
     **/
     private function syncRequest(method: String, path: String,
             ?params: QueryParams, ?data: String) : Response {
+        var status:Null<Int> = null;
+        var responseBytes = new haxe.io.BytesOutput();
+
+        var http = new haxe.Http(Config.getInstance().apiUrl + path);
+
+        http.addHeader("Authorization", Config.getInstance().apiKey);
+
+        if (params != null) {
+            for (name in params.keys()) {
+                http.addParameter(name, params.get(name));
+            }
+        }
+
+        if (data != null) {
+            http.setPostData(data);
+        }
+
+        http.onStatus = function(status_) { status = status_; };
+        http.onError = function(msg) { throw msg; }
+        
+        http.customRequest(false, responseBytes, null, method.toUpperCase());
+        while (status == null) {} // Wait for async request
+
+        return new Response(status, responseBytes.getBytes().toString());
+    }
+    /*
+    private function syncRequest(method: String, path: String,
+            ?params: QueryParams, ?data: String) : Response {
         var methods = [
             'GET' => tink.http.Method.GET,
             'PUT' => tink.http.Method.PUT,
@@ -138,36 +166,6 @@ class ApiClient {
         while (response == null) {}
 
         return response;
-    }
-    
-    
-    /*
-    private function syncRequest(method: String, path: String,
-            ?params: QueryParams, ?data: String) : Response {
-        var status:Null<Int> = null;
-        var responseBytes = new haxe.io.BytesOutput();
-
-        var http = new haxe.Http(Config.getInstance().apiUrl + path);
-
-        http.addHeader("Authorization", Config.getInstance().apiKey);
-
-        if (params != null) {
-            for (name in params.keys()) {
-                http.addParameter(name, params.get(name));
-            }
-        }
-
-        if (data != null) {
-            http.setPostData(data);
-        }
-
-        http.onStatus = function(status_) { status = status_; };
-        http.onError = function(msg) { throw msg; }
-        
-        http.customRequest(false, responseBytes, null, method.toUpperCase());
-        while (status == null) {} // Wait for async request
-
-        return new Response(status, responseBytes.getBytes().toString());
     }
     */
 
