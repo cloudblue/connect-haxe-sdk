@@ -1,6 +1,5 @@
 import connect.Config;
-import connect.ProcessorFactory;
-import connect.TileActivation;
+import connect.api.ConnectApi;
 
 class Test {
     public static function main() {
@@ -8,17 +7,31 @@ class Test {
         var initialTime = Date.now().getTime();
 
         // Load test config
-        Config.load("test_config.json");
+        Config.load('test_config.json');
+
+        // Get Connect API
+        var api = ConnectApi.getInstance();
         
         // List requests
-        ProcessorFactory.newFulfillmentProcessor(function(request) {
-            trace(request.id + " : " + request.asset.connection.id);
-            return new TileActivation("# Hello, world!");
-        }).process();
+        var requests = api.fulfillment.listRequests();
+        for (request in requests) {
+            trace(request.id + ' : ' + request.asset.connection.id);
 
-        // Get final time
+            /*
+            // Approve by tile
+            api.fulfillment.changeRequestStatus(request.id, 'approve', {
+                activation_tile: 'Markdown text'
+            });
+
+            // Approve by template
+            api.fulfillment.changeRequestStatus(request.id, 'approve', {
+                template_id: 'TL-000-000-000'
+            });
+            */
+        }
+
+        // Trace total time
         var finalTime = Date.now().getTime();
-
-        trace("Total time: " + ((finalTime - initialTime) / 1000) + " secs.");
+        trace('Total time: ' + ((finalTime - initialTime) / 1000) + ' secs.');
     }
 }

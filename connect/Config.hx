@@ -7,13 +7,13 @@ class Config {
     /**
         Endpoint to interact with Connect API.
     **/
-    public var apiUrl(default, null) : String;
+    public var apiUrl(default, null): String;
 
 
     /**
         Authorization key.
     **/
-    public var apiKey(default, null) : String;
+    public var apiKey(default, null): String;
     
     
     /**
@@ -22,7 +22,7 @@ class Config {
         @param productId The id of the product.
         @returns true if the configuration is setup to process the specified product.
     **/
-    public function hasProduct(productId:String) : Bool {
+    public function hasProduct(productId: String): Bool {
         return products.indexOf(productId) > -1;
     }
 
@@ -32,7 +32,7 @@ class Config {
 
         @returns a comma-separated string with the list of products.
     **/
-    public function getProductsString() : String {
+    public function getProductsString(): String {
         return this.products.join(",");
     }
     
@@ -45,7 +45,7 @@ class Config {
         @param products Array of product ids that can be processed with this configuration.
         @throws String if the configuration is already initialized.
     **/
-    public static function init(apiUrl:String, apiKey:String, products:Array<String>) : Void {
+    public static function init(apiUrl: String, apiKey: String, products: Array<String>): Void {
         if (instance == null) {
             instance = new Config();
             instance.setApiUrl(apiUrl);
@@ -64,7 +64,7 @@ class Config {
         @throws Exception if the file cannot be parsed.
         @throws String if the configuration is already initialized.
     **/
-    public static function load(filename: String) : Void {
+    public static function load(filename: String): Void {
         if (instance == null) {
             instance = new Config();
             var content = sys.io.File.getContent(filename);
@@ -86,7 +86,7 @@ class Config {
         @throws Exception if the instance is not initialized and the file "config.json" cannot be
             parsed.
     **/
-    public static function getInstance() : Config {
+    public static function getInstance(): Config {
         if (instance == null) {
             load("config.json");
         }
@@ -94,21 +94,21 @@ class Config {
     }
     
     
-    private var products : Array<String>;
+    private var products: Array<String>;
     
     
-    private static var instance : Config;
+    private static var instance: Config;
     
     
     private function new() {}
 
     
-    private function setApiUrl(apiUrl:String) : Void {
+    private function setApiUrl(apiUrl: String): Void {
         this.apiUrl = (apiUrl.charAt(apiUrl.length - 1) == "/") ? apiUrl : apiUrl + "/";
     }
     
     
-    private function setApiKey(apiKey:String) : Void {
+    private function setApiKey(apiKey: String): Void {
         this.apiKey = (apiKey.indexOf("ApiKey ") == 0) ? apiKey : ("ApiKey " + apiKey);
     }
 }
