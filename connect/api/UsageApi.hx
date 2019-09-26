@@ -6,67 +6,71 @@ class UsageApi {
     private static inline var USAGE_PRODUCTS_PATH = 'usage/products';
     private static inline var USAGE_RECORDS_PATH = 'usage/records';
 
+    private var client: IApiClient;
 
-    public function new() {}
+
+    public function new(?client: IApiClient) {
+        this.client = client != null ? client : ApiClient.getInstance();
+    }
 
 
     public function listUsageFiles(?filters: QueryParams): Array<Dynamic> {
-        return ApiClient.getInstance().get(USAGE_FILES_PATH, null, null, filters);
+        return this.client.get(USAGE_FILES_PATH, null, null, filters);
     }
 
 
     public function createUsageFile(): Dynamic {
-        return ApiClient.getInstance().post(USAGE_FILES_PATH);
+        return this.client.post(USAGE_FILES_PATH);
     }
 
 
     public function getUsageFile(id: String): Dynamic {
-        return ApiClient.getInstance().get(USAGE_FILES_PATH, id);
+        return this.client.get(USAGE_FILES_PATH, id);
     }
 
 
     public function updateUsageFile(id: String, file: Dynamic): Dynamic {
-        return ApiClient.getInstance().put(USAGE_FILES_PATH, id, file);
+        return this.client.put(USAGE_FILES_PATH, id, file);
     }
 
 
     public function deleteUsageFile(id: String): Void {
-        ApiClient.getInstance().post(USAGE_FILES_PATH, id, 'delete');
+        this.client.post(USAGE_FILES_PATH, id, 'delete');
     }
 
 
     public function uploadUsageFile(id: String, file: Dynamic): Dynamic {
-        return ApiClient.getInstance().post(USAGE_FILES_PATH, id, 'upload', file);
+        return this.client.post(USAGE_FILES_PATH, id, 'upload', file);
     }
 
 
     public function submitUsageFileAction(id: String): Dynamic {
-        return ApiClient.getInstance().post(USAGE_FILES_PATH, id, 'submit');
+        return this.client.post(USAGE_FILES_PATH, id, 'submit');
     }
 
 
     public function acceptUsageFileAction(id: String): Dynamic {
-        return ApiClient.getInstance().post(USAGE_FILES_PATH, id, 'accept');
+        return this.client.post(USAGE_FILES_PATH, id, 'accept');
     }
 
 
     public function rejectUsageFileAction(id: String): Dynamic {
-        return ApiClient.getInstance().post(USAGE_FILES_PATH, id, 'reject');
+        return this.client.post(USAGE_FILES_PATH, id, 'reject');
     }
 
 
     public function closeUsageFileAction(id: String): Dynamic {
-        return ApiClient.getInstance().post(USAGE_FILES_PATH, id, 'close');
+        return this.client.post(USAGE_FILES_PATH, id, 'close');
     }
 
 
     public function getProductSpecificUsageFileTemplate(product_id: String): Dynamic {
-        return ApiClient.getInstance().get(USAGE_PRODUCTS_PATH, product_id, 'template');
+        return this.client.get(USAGE_PRODUCTS_PATH, product_id, 'template');
     }
 
 
     public function uploadReconciliationFileFromProvider(id: String, file: String): Dynamic {
-        return ApiClient.getInstance().postFile(
+        return this.client.postFile(
             USAGE_FILES_PATH,
             id,
             'reconciliation',
@@ -78,26 +82,26 @@ class UsageApi {
 
 
     public function reprocessProcessedFile(id: String): Dynamic {
-        return ApiClient.getInstance().post(USAGE_FILES_PATH, id, 'reprocess');
+        return this.client.post(USAGE_FILES_PATH, id, 'reprocess');
     }
 
 
     public function listUsageRecords(?filters: QueryParams): Array<Dynamic> {
-        return ApiClient.getInstance().get(USAGE_RECORDS_PATH, null, null, filters);
+        return this.client.get(USAGE_RECORDS_PATH, null, null, filters);
     }
 
 
     public function getUsageRecord(id: String): Dynamic {
-        return ApiClient.getInstance().get(USAGE_RECORDS_PATH, id);
+        return this.client.get(USAGE_RECORDS_PATH, id);
     }
 
 
     public function updateUsageRecord(id: String, record: Dynamic): Dynamic {
-        return ApiClient.getInstance().put(USAGE_RECORDS_PATH, id, record);
+        return this.client.put(USAGE_RECORDS_PATH, id, record);
     }
 
 
     public function closeUsageRecord(id: String, record: Dynamic): Dynamic {
-        return ApiClient.getInstance().post(USAGE_RECORDS_PATH, id, 'close', record);
+        return this.client.post(USAGE_RECORDS_PATH, id, 'close', record);
     }
 }
