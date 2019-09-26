@@ -1,4 +1,3 @@
--lib tink_http
 -main Test
 -dce no
 
@@ -6,17 +5,17 @@
 -php out.php
 
 --next
--cs out.cs
+-java out.java
 
 --next
 -cpp out.cpp
 
 --next
+-python out.py
+
+--next
+-cs out.cs
+
+--next
 -lib hxnodejs
 -js out.js
-
---next
--java out.java
-
---next
--python out.py

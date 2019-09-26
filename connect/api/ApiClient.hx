@@ -1,6 +1,17 @@
 package connect.api;
 
-import tink.http.Header.HeaderField;
+#if js
+import connect.lib.XMLHttpRequestInitializer;
+#else
+import haxe.io.StringInput;
+#end
+
+
+private typedef Multipart = {
+    argname: String,
+    filename: String,
+    contents: String,
+}
 
 
 class ApiClient {
@@ -11,40 +22,20 @@ class ApiClient {
         return instance;
     }
 
-
     /**
-        Lists requests for one resource.
+        Get a resource if 'id' is specified, or a list of reosurces otherwise.
 
         @param resource Resource path (e.g. "requests" for the Fulfillment API).
-        @param filters Optional filters.
-        @returns an array of anonymous structures with the parsed list of requests.
+        @param id Optional id of the resource to get.
+        @param suffix Optional path suffix (i.e. "approve").
+        @param parse Whether to parse the response as a Json object (default true).
+        @returns An object with the requested resource, or a string if parse == false.
         @throws String if the request fails.
     **/
-    public function list(resource: String, ?filters: QueryParams) : Array<Dynamic> {
-        var response = getInstance().syncRequest("GET", resource, filters);
-        if (response.status < 400) {
-            return haxe.Json.parse(response.text);
-        } else {
-            throw response.text;
-        }
-    }
-
-
-    /**
-        Get one resource.
-
-        @param resource Resource path (e.g. "requests" for the Fulfillment API).
-        @param id Id of the resource to get.
-        @returns An object with the requested resource.
-        @throws String if the request fails.
-    **/
-    public function get(resource: String, id: String): Dynamic {
-        var response = getInstance().syncRequest("GET", resource + "/" + id);
-        if (response.status < 400) {
-            return haxe.Json.parse(response.text);
-        } else {
-            throw response.text;
-        }
+    public function get(resource: String, ?id: String, ?suffix: String,
+            ?params: QueryParams, parse: Bool = true): Dynamic {
+        var response = syncRequest('GET', parsePath(resource, id, suffix), params);
+        return checkResponse(response, parse);
     }
 
 
@@ -59,12 +50,8 @@ class ApiClient {
     **/
     public function put(resource: String, id: String, data: Dynamic): Dynamic {
         var dataStr = (data != null) ? haxe.Json.stringify(data) : null;
-        var response = getInstance().syncRequest("PUT", resource + "/" + id, dataStr);
-        if (response.status < 400) {
-            return haxe.Json.parse(response.text);
-        } else {
-            throw response.text;
-        }
+        var response = syncRequest('PUT', parsePath(resource, id), dataStr);
+        return checkResponse(response);
     }
 
 
@@ -79,16 +66,32 @@ class ApiClient {
         @throws String if the request fails.
     **/
     public function post(resource: String, ?id: String, ?suffix: String, ?data: Dynamic): Dynamic {
-        var path = resource
-            + (id != null ? "/" + id : "")
-            + (suffix != null ? "/" + suffix : "");
         var dataStr = (data != null) ? haxe.Json.stringify(data) : null;
-        var response = getInstance().syncRequest("POST", path, dataStr);
-        if (response.status < 400) {
-            return haxe.Json.parse(response.text);
-        } else {
-            throw response.text;
-        }
+        var response = syncRequest('POST', parsePath(resource, id, suffix), dataStr);
+        return checkResponse(response);
+    }
+
+
+    /**
+        Post a file using the Content-Type "multipart/form-data".
+
+        @param resource Resource path (e.g. "requests" for the Fulfillment API).
+        @param id Optional id of the resource to post data to.
+        @param suffix Optional path suffix (i.e. "approve").
+        @param argname Argument name in the request.
+        @param filename Name of the file to send.
+        @param contents Contents of the file.
+        @returns An object.
+        @throws String if the request fails.
+    **/
+    public function postFile(resource: String, ?id: String, ?suffix: String,
+        argname: String, filename: String, contents: String): Dynamic {
+        var response = syncRequest('POST', parsePath(resource, id, suffix), null, {
+            argname: argname,
+            filename: filename,
+            contents: contents
+        });
+        return checkResponse(response);
     }
 
 
@@ -105,69 +108,90 @@ class ApiClient {
         @returns a Response object with the response status and text
     **/
     private function syncRequest(method: String, path: String,
-            ?params: QueryParams, ?data: String) : Response {
-        var status:Null<Int> = null;
-        var responseBytes = new haxe.io.BytesOutput();
+            ?params: QueryParams, ?data: String, ?multipart: Multipart) : Response {
+        #if js
+            XMLHttpRequestInitializer.init();
 
-        var http = new haxe.Http(Config.getInstance().apiUrl + path);
+            var url = Config.getInstance().apiUrl + path + params.toString();
 
-        http.addHeader("Authorization", Config.getInstance().apiKey);
+            var xhr = new js.html.XMLHttpRequest();
+            xhr.open(method.toUpperCase(), url, false);
 
-        if (params != null) {
-            for (name in params.keys()) {
-                http.addParameter(name, params.get(name));
+            xhr.setRequestHeader('Authorization', Config.getInstance().apiKey);
+
+            if (data != null) {
+                xhr.send(data);
+            } else if (multipart != null) {
+                var formData = new js.html.FormData();
+                formData.append(multipart.argname, multipart.contents);
+                xhr.send(formData);
+            } else {
+                xhr.send();
             }
-        }
 
-        if (data != null) {
-            http.setPostData(data);
-        }
-
-        http.onStatus = function(status_) { status = status_; };
-        http.onError = function(msg) { throw msg; }
-        
-        http.customRequest(false, responseBytes, null, method.toUpperCase());
-        while (status == null) {} // Wait for async request
-
-        return new Response(status, responseBytes.getBytes().toString());
-    }
-    /*
-    private function syncRequest(method: String, path: String,
-            ?params: QueryParams, ?data: String) : Response {
-        var methods = [
-            'GET' => tink.http.Method.GET,
-            'PUT' => tink.http.Method.PUT,
-            'POST' => tink.http.Method.POST
-        ];
-
-        var tinkMethod: tink.http.Method = null;
-        try {
-            tinkMethod = methods.get(method.toUpperCase());
-        } catch (e: Dynamic) {
-            throw 'Invalid request method ${method}';
-        }
-
-        var stringParams = params != null ? params.toString() : '';
-        var response: Response = null;
-        tink.http.Client.fetch(Config.getInstance().apiUrl + path + stringParams, {
-            method: tinkMethod,
-            headers: [new HeaderField('Authorization', Config.getInstance().apiKey)],
-            body: data
-        }).all().handle(function(o) {
-            switch (o) {
-                case Success(res):
-                    response = new Response(res.header.statusCode, res.body.toString());
-                case Failure(res):
-                    throw res.toString();
+            if (xhr.readyState == js.html.XMLHttpRequest.UNSENT) {
+                throw xhr.responseText != null
+                    ? xhr.responseText
+                    : 'Error sending ${method} request to "${url}."';
             }
-        });
-        
-        // Wait for async request
-        while (response == null) {}
 
-        return response;
+            return new Response(xhr.status, xhr.responseText);
+        #else
+            var status:Null<Int> = null;
+            var responseBytes = new haxe.io.BytesOutput();
+
+            var http = new haxe.Http(Config.getInstance().apiUrl + path);
+
+            http.setHeader('Authorization', Config.getInstance().apiKey);
+
+            if (params != null) {
+                for (name in params.keys()) {
+                    http.setParameter(name, params.get(name));
+                }
+            }
+
+            if (data != null) {
+                http.setPostData(data);
+            }
+
+            if (multipart != null) {
+                http.fileTransfer(
+                    multipart.argname,
+                    multipart.filename,
+                    new StringInput(multipart.contents),
+                    multipart.contents.length,
+                    'multipart/form-data'
+                );
+            }
+
+            http.onStatus = function(status_) { status = status_; };
+            http.onError = function(msg) { throw msg; }            
+            http.customRequest(false, responseBytes, null, method.toUpperCase());
+
+            while (status == null) {} // Wait for async request
+            return new Response(status, responseBytes.getBytes().toString());
+        #end
     }
-    */
+
+
+    private function parsePath(resource: String, ?id: String, ?suffix: String): String {
+        return resource
+            + (id != null ? "/" + id : "")
+            + (suffix != null ? "/" + suffix : "");
+    }
+
+
+    private function checkResponse(response: Response, parse: Bool = true): Dynamic {
+        if (response.status < 400) {
+            if (parse) {
+                return haxe.Json.parse(response.text);
+            } else {
+                return response.text;
+            }
+        } else {
+            throw response.text;
+        }
+    }
 
 
     private function new() {}

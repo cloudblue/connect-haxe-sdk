@@ -25,10 +25,12 @@ class QueryParams {
     }
 
     public function toString(): String {
-        var params = [for (key in this.keys()) key].map(function (key) {
-            return key + '=' + this.get(key);
+        var paramsArr = [for (key in this.keys()) key].map(function (key) {
+            var encodedKey = StringTools.urlEncode(key);
+            var encodedValue = StringTools.urlEncode(this.get(key));
+            return encodedKey + '=' + encodedValue;
         });
-        return (params.length > 0) ? ('?' + params.join('&')) : '';
+        return (paramsArr.length > 0) ? ('?' + paramsArr.join('&')) : '';
     }
 
 
