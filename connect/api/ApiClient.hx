@@ -93,6 +93,21 @@ class ApiClient {
     }
 
 
+    /**
+        Delete resource.
+
+        @param resource Resource path (e.g. "requests" for the Fulfillment API).
+        @param id Id of the resource to delete.
+        @param suffix Optional path suffix (i.e. "delete").
+        @returns An object.
+        @throws String if the request fails.
+    **/
+    public function delete(resource: String, id: String, ?suffix: String): Dynamic {
+        var response = syncRequest('DELETE', parsePath(resource, id, suffix));
+        return checkResponse(response);
+    }
+
+
     private static var instance: ApiClient;
 
 
