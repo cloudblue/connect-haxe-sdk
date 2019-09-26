@@ -1,9 +1,10 @@
 package connect.api;
 
 
-class UsageFileApi {
+class UsageApi {
     private static inline var USAGE_FILES_PATH = 'usage/files';
     private static inline var USAGE_PRODUCTS_PATH = 'usage/products';
+    private static inline var USAGE_RECORDS_PATH = 'usage/records';
 
 
     public function new() {}
@@ -24,8 +25,8 @@ class UsageFileApi {
     }
 
 
-    public function updateUsageFile(file: Dynamic): Dynamic {
-        return ApiClient.getInstance().put(USAGE_FILES_PATH, file.id, file);
+    public function updateUsageFile(id: String, file: Dynamic): Dynamic {
+        return ApiClient.getInstance().put(USAGE_FILES_PATH, id, file);
     }
 
 
@@ -34,8 +35,8 @@ class UsageFileApi {
     }
 
 
-    public function uploadUsageFile(file: Dynamic): Dynamic {
-        return ApiClient.getInstance().post(USAGE_FILES_PATH, file.id, 'upload', file);
+    public function uploadUsageFile(id: String, file: Dynamic): Dynamic {
+        return ApiClient.getInstance().post(USAGE_FILES_PATH, id, 'upload', file);
     }
 
 
@@ -73,5 +74,30 @@ class UsageFileApi {
             'reconciliation_file.xlsx',
             file
         );
+    }
+
+
+    public function reprocessProcessedFile(id: String): Dynamic {
+        return ApiClient.getInstance().post(USAGE_FILES_PATH, id, 'reprocess');
+    }
+
+
+    public function listUsageRecords(?filters: QueryParams): Array<Dynamic> {
+        return ApiClient.getInstance().get(USAGE_RECORDS_PATH, null, null, filters);
+    }
+
+
+    public function getUsageRecord(id: String): Dynamic {
+        return ApiClient.getInstance().get(USAGE_RECORDS_PATH, id);
+    }
+
+
+    public function updateUsageRecord(id: String, record: Dynamic): Dynamic {
+        return ApiClient.getInstance().put(USAGE_RECORDS_PATH, id, record);
+    }
+
+
+    public function closeUsageRecord(id: String, record: Dynamic): Dynamic {
+        return ApiClient.getInstance().post(USAGE_RECORDS_PATH, id, 'close', record);
     }
 }

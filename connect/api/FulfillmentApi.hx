@@ -25,8 +25,8 @@ class FulfillmentApi {
     }
 
 
-    public function updateRequest(request: Dynamic): Dynamic {
-        return ApiClient.getInstance().put(REQUESTS_PATH, request.id, request);
+    public function updateRequest(id: String, request: Dynamic): Dynamic {
+        return ApiClient.getInstance().put(REQUESTS_PATH, id, request);
     }
 
 
