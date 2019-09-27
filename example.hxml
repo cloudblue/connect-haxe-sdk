@@ -1,0 +1,4 @@
+-main Example
+-dce full
+-php _build/example/php
+-cmd php _build/example/php/index.php

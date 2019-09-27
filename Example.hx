@@ -2,7 +2,7 @@ import connect.Config;
 import connect.api.ConnectApi;
 import connect.api.QueryParams;
 
-class Test {
+class Example {
     public static function main() {
         // Get initial time
         var initialTime = Date.now().getTime();
