@@ -1,5 +1,8 @@
 package connect.api;
 
+import haxe.extern.EitherType;
+
+
 interface IApiClient {
     /**
         Get a resource if 'id' is specified, or a list of reosurces otherwise.
@@ -7,12 +10,26 @@ interface IApiClient {
         @param resource Resource path (e.g. "requests" for the Fulfillment API).
         @param id Optional id of the resource to get.
         @param suffix Optional path suffix (i.e. "approve").
-        @param parse Whether to parse the response as a Json object (default true).
+        @param params Query params.
         @returns An object with the requested resource, or a string if parse == false.
         @throws String if the request fails.
     **/
     public function get(resource: String, ?id: String, ?suffix: String,
-            ?params: QueryParams, parse: Bool = true): Dynamic;
+            ?params: QueryParams): EitherType<Dictionary, Collection<Dictionary>>;
+
+
+    /**
+        Get a string
+
+        @param resource Resource path (e.g. "requests" for the Fulfillment API).
+        @param id Optional id of the resource to get.
+        @param suffix Optional path suffix (i.e. "approve").
+        @param params Query params.
+        @returns A string with the response.
+        @throws String if the request fails.
+    **/
+    public function getString(resource: String, ?id: String, ?suffix: String,
+            ?params: QueryParams): String;
 
 
     /**
@@ -24,7 +41,7 @@ interface IApiClient {
         @returns An object with the modified resource.
         @throws String if the request fails.
     **/
-    public function put(resource: String, id: String, data: Dynamic): Dynamic;
+    public function put(resource: String, id: String, data: Dictionary): Dictionary;
 
 
     /**
@@ -37,7 +54,7 @@ interface IApiClient {
         @returns An object.
         @throws String if the request fails.
     **/
-    public function post(resource: String, ?id: String, ?suffix: String, ?data: Dynamic): Dynamic;
+    public function post(resource: String, ?id: String, ?suffix: String, ?data: Dictionary): Dictionary;
 
 
     /**
@@ -53,7 +70,7 @@ interface IApiClient {
         @throws String if the request fails.
     **/
     public function postFile(resource: String, ?id: String, ?suffix: String,
-        argname: String, filename: String, contents: String): Dynamic;
+        argname: String, filename: String, contents: String): Dictionary;
 
 
     /**
@@ -65,5 +82,5 @@ interface IApiClient {
         @returns An object.
         @throws String if the request fails.
     **/
-    public function delete(resource: String, id: String, ?suffix: String): Dynamic;
+    public function delete(resource: String, id: String, ?suffix: String): Dictionary;
 }

@@ -15,7 +15,7 @@ class GeneralApi {
 
 
     public function listAccounts(?filters: QueryParams): Collection<Dynamic> {
-        return new Collection<Dynamic>(this.client.get(ACCOUNTS_PATH, null, null, filters));
+        return this.client.get(ACCOUNTS_PATH, null, null, filters);
     }
 
 
@@ -30,7 +30,7 @@ class GeneralApi {
 
 
     public function listAccountUsers(id: String): Collection<Dynamic> {
-        return new Collection<Dynamic>(this.client.get(ACCOUNTS_PATH, id, 'users'));
+        return this.client.get(ACCOUNTS_PATH, id, 'users');
     }
 
 
@@ -55,7 +55,7 @@ class GeneralApi {
 
 
     public function listProducts(?filters: QueryParams): Collection<Dynamic> {
-        return new Collection<Dynamic>(this.client.get(PRODUCTS_PATH, null, null, filters));
+        return this.client.get(PRODUCTS_PATH, null, null, filters);
     }
 
 
@@ -65,7 +65,7 @@ class GeneralApi {
 
 
     public function listProductActions(id: String, ?filters: QueryParams): Collection<Dynamic> {
-        return new Collection<Dynamic>(this.client.get(PRODUCTS_PATH, id, 'actions', filters));
+        return this.client.get(PRODUCTS_PATH, id, 'actions', filters);
     }
 
 
@@ -80,38 +80,38 @@ class GeneralApi {
 
 
     public function getProductConnections(id: String): Collection<Dynamic> {
-        return new Collection<Dynamic>(this.client.get(PRODUCTS_PATH, id, 'connections'));
+        return this.client.get(PRODUCTS_PATH, id, 'connections');
     }
 
 
     public function getProductItems(id: String): Collection<Dynamic> {
-        return new Collection<Dynamic>(this.client.get(PRODUCTS_PATH, id, 'items'));
+        return this.client.get(PRODUCTS_PATH, id, 'items');
     }
 
 
     public function getProductParameters(id: String): Collection<Dynamic> {
-        return new Collection<Dynamic>(this.client.get(PRODUCTS_PATH, id, 'parameters'));
+        return this.client.get(PRODUCTS_PATH, id, 'parameters');
     }
 
 
     public function getProductTemplates(id: String): Collection<Dynamic> {
-        return new Collection<Dynamic>(this.client.get(PRODUCTS_PATH, id, 'templates'));
+        return this.client.get(PRODUCTS_PATH, id, 'templates');
     }
 
 
     public function getProductVersions(id: String): Collection<Dynamic> {
-        return new Collection<Dynamic>(this.client.get(PRODUCTS_PATH, id, 'versions'));
+        return this.client.get(PRODUCTS_PATH, id, 'versions');
     }
 
 
     public function getProductVersion(id: String, version: String): Dynamic {
-        return new Collection<Dynamic>(this.client.get(PRODUCTS_PATH, id, 'versions/${version}'));
+        return this.client.get(PRODUCTS_PATH, id, 'versions/${version}');
     }
 
 
     public function getProductVersionActions(id: String, version: String): Collection<Dynamic> {
-        return new Collection<Dynamic>(
-            this.client.get(PRODUCTS_PATH, id, 'versions/${version}/actions'));
+        return 
+            this.client.get(PRODUCTS_PATH, id, 'versions/${version}/actions');
     }
 
 
@@ -130,26 +130,26 @@ class GeneralApi {
 
 
     public function getProductVersionItems(id: String, version: String): Collection<Dynamic> {
-        return new Collection<Dynamic>(
-            this.client.get(PRODUCTS_PATH, id, 'versions/${version}/items'));
+        return 
+            this.client.get(PRODUCTS_PATH, id, 'versions/${version}/items');
     }
 
 
     public function getProductVersionParameters(id: String, version: String): Collection<Dynamic> {
-        return new Collection<Dynamic>(
-            this.client.get(PRODUCTS_PATH, id, 'versions/${version}/parameters'));
+        return 
+            this.client.get(PRODUCTS_PATH, id, 'versions/${version}/parameters');
     }
 
 
     public function getProductVersionTemplates(id: String, version: String): Collection<Dynamic> {
-        return new Collection<Dynamic>(
-            this.client.get(PRODUCTS_PATH, id, 'versions/${version}/templates'));
+        return 
+            this.client.get(PRODUCTS_PATH, id, 'versions/${version}/templates');
     }
 
 
     public function listProductConfigurations(id: String, ?filters: QueryParams): Collection<Dynamic> {
-        return new Collection<Dynamic>(
-            this.client.get(PRODUCTS_PATH, id, 'configurations', filters));
+        return 
+            this.client.get(PRODUCTS_PATH, id, 'configurations', filters);
     }
 
 
@@ -159,12 +159,12 @@ class GeneralApi {
 
 
     public function listProductAgreements(id: String, ?filters: QueryParams): Collection<Dynamic> {
-        return new Collection<Dynamic>(this.client.get(PRODUCTS_PATH, id, 'agreements', filters));
+        return this.client.get(PRODUCTS_PATH, id, 'agreements', filters);
     }
 
 
     public function listProductMedia(id: String, ?filters: QueryParams): Collection<Dynamic> {
-        return new Collection<Dynamic>(this.client.get(PRODUCTS_PATH, id, 'media', filters));
+        return this.client.get(PRODUCTS_PATH, id, 'media', filters);
     }
 
 
@@ -189,7 +189,7 @@ class GeneralApi {
 
 
     public function listCategories(?filters: QueryParams): Collection<Dynamic> {
-        return new Collection<Dynamic>(this.client.get(CATEGORIES_PATH, null, null, filters));
+        return this.client.get(CATEGORIES_PATH, null, null, filters);
     }
 
 

@@ -1,4 +1,5 @@
 import connect.Config;
+import connect.Dictionary;
 import connect.api.ConnectApi;
 import connect.api.QueryParams;
 
@@ -21,10 +22,10 @@ class Example {
 
         // Trace requests
         for (request in requests) {
-            trace(request.id
-                + ' : ' + request.asset.connection.id
-                + ' : ' + request.asset.product.id
-                + ' : ' + request.status);
+            trace(request.get('id')
+                + ' : ' + request.get('asset').get('connection').get('id')
+                + ' : ' + request.get('asset').get('product').get('id')
+                + ' : ' + request.get('status'));
 
             /*
             // Approve by tile

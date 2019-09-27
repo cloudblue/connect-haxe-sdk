@@ -14,8 +14,8 @@ class FulfillmentApi {
     }
 
 
-    public function listRequests(?filters: QueryParams): Collection<Dynamic> {
-        return new Collection<Dynamic>(this.client.get(REQUESTS_PATH, null, null, filters));
+    public function listRequests(?filters: QueryParams): Collection<Dictionary> {
+        return this.client.get(REQUESTS_PATH, null, null, filters);
     }
 
 
@@ -45,13 +45,13 @@ class FulfillmentApi {
 
 
     public function renderTemplate(id: String, request_id: String): String {
-        return this.client.get(TEMPLATES_PATH, id, 'render',
-            new QueryParams().param('request_id', request_id), false);
+        return this.client.getString(TEMPLATES_PATH, id, 'render',
+            new QueryParams().param('request_id', request_id));
     }
 
 
     public function listAssets(?filters: QueryParams): Collection<Dynamic> {
-        return new Collection<Dynamic>(this.client.get(ASSETS_PATH, null, null, filters));
+        return this.client.get(ASSETS_PATH, null, null, filters);
     }
 
 
@@ -61,6 +61,6 @@ class FulfillmentApi {
 
 
     public function getAssetRequests(id: String): Collection<Dynamic> {
-        return new Collection<Dynamic>(this.client.get(ASSETS_PATH, id, 'requests'));
+        return this.client.get(ASSETS_PATH, id, 'requests');
     }
 }
