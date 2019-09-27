@@ -14,8 +14,8 @@ class UsageApi {
     }
 
 
-    public function listUsageFiles(?filters: QueryParams): Array<Dynamic> {
-        return this.client.get(USAGE_FILES_PATH, null, null, filters);
+    public function listUsageFiles(?filters: QueryParams): Collection<Dynamic> {
+        return new Collection<Dynamic>(this.client.get(USAGE_FILES_PATH, null, null, filters));
     }
 
 
@@ -86,8 +86,8 @@ class UsageApi {
     }
 
 
-    public function listUsageRecords(?filters: QueryParams): Array<Dynamic> {
-        return this.client.get(USAGE_RECORDS_PATH, null, null, filters);
+    public function listUsageRecords(?filters: QueryParams): Collection<Dynamic> {
+        return new Collection<Dynamic>(this.client.get(USAGE_RECORDS_PATH, null, null, filters));
     }
 
 

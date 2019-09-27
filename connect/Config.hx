@@ -42,10 +42,11 @@ class Config {
 
         @param apiUrl Value for the apiUrl property.
         @param apiKey Value for the apiKey property.
-        @param products Array of product ids that can be processed with this configuration.
+        @param products Collection of product ids that can be processed with this configuration.
         @throws String if the configuration is already initialized.
     **/
-    public static function init(apiUrl: String, apiKey: String, products: Array<String>): Void {
+    public static function init(apiUrl: String, apiKey: String,
+            products: Collection<String>): Void {
         if (instance == null) {
             instance = new Config();
             instance.setApiUrl(apiUrl);
@@ -71,7 +72,7 @@ class Config {
             var object = haxe.Json.parse(content);
             instance.setApiUrl(object.apiEndpoint);
             instance.setApiKey(object.apiKey);
-            instance.products = [object.products];
+            instance.products = new Collection<String>([object.products]);
         } else {
             throw "Config instance is already initialized.";
         }
@@ -94,7 +95,7 @@ class Config {
     }
     
     
-    private var products: Array<String>;
+    private var products: Collection<String>;
     
     
     private static var instance: Config;

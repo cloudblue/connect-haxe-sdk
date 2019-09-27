@@ -17,7 +17,7 @@ class Example {
         var requests = api.fulfillment.listRequests(new QueryParams()
             .param('asset.product.id__in', Config.getInstance().getProductsString())
             .param('status', 'pending')
-        );
+        ).toArray();
 
         // Trace requests
         for (request in requests) {

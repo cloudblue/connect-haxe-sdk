@@ -14,8 +14,8 @@ class FulfillmentApi {
     }
 
 
-    public function listRequests(?filters: QueryParams): Array<Dynamic> {
-        return this.client.get(REQUESTS_PATH, null, null, filters);
+    public function listRequests(?filters: QueryParams): Collection<Dynamic> {
+        return new Collection<Dynamic>(this.client.get(REQUESTS_PATH, null, null, filters));
     }
 
 
@@ -50,8 +50,8 @@ class FulfillmentApi {
     }
 
 
-    public function listAssets(?filters: QueryParams): Array<Dynamic> {
-        return this.client.get(ASSETS_PATH, null, null, filters);
+    public function listAssets(?filters: QueryParams): Collection<Dynamic> {
+        return new Collection<Dynamic>(this.client.get(ASSETS_PATH, null, null, filters));
     }
 
 
@@ -60,7 +60,7 @@ class FulfillmentApi {
     }
 
 
-    public function getAssetRequests(id: String): Array<Dynamic> {
-        return this.client.get(ASSETS_PATH, id, 'requests');
+    public function getAssetRequests(id: String): Collection<Dynamic> {
+        return new Collection<Dynamic>(this.client.get(ASSETS_PATH, id, 'requests'));
     }
 }
