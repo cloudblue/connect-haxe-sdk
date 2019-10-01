@@ -2,6 +2,7 @@ package connect.models;
 
 import connect.api.ConnectApi;
 import connect.api.QueryParams;
+import connect.Util;
 
 
 class Fulfillment extends IdModel {
@@ -27,7 +28,7 @@ class Fulfillment extends IdModel {
 
     public static function list(?filters: QueryParams): Collection<Fulfillment> {
         var requests = ConnectApi.getInstance().fulfillment.listRequests(filters);
-        return Model.parseCollection(Fulfillment, requests);
+        return Model.parseArray(Fulfillment, requests);
     }
 
 
@@ -46,28 +47,66 @@ class Fulfillment extends IdModel {
     public function update(): Fulfillment {
         var request = ConnectApi.getInstance().fulfillment.updateRequest(
             this.id,
-            this.toDictionary());
+            this.toString());
         return Model.parse(Fulfillment, request);
     }
 
 
-    /*
-    public function approve(approval: IApproval): Fulfillment {
+    public function approveByTemplate(id: String): Fulfillment {
         var request = ConnectApi.getInstance().fulfillment.changeRequestStatus(
             this.id,
             'approve',
-            approval
+            haxe.Json.stringify({template_id: id})
         );
         return Model.parse(Fulfillment, request);
     }
 
 
-    public function fail(): Fulfillment {
+    public function approveByTile(text: String): Fulfillment {
         var request = ConnectApi.getInstance().fulfillment.changeRequestStatus(
             this.id,
-            'fail'
+            'approve',
+            haxe.Json.stringify({activation_tile: text})
         );
         return Model.parse(Fulfillment, request);
     }
-    */
+
+
+    public function fail(reason: String): Fulfillment {
+        var request = ConnectApi.getInstance().fulfillment.changeRequestStatus(
+            this.id,
+            'fail',
+            haxe.Json.stringify({reason: reason})
+        );
+        return Model.parse(Fulfillment, request);
+    }
+
+
+    public function inquire(): Fulfillment {
+        var request = ConnectApi.getInstance().fulfillment.changeRequestStatus(
+            this.id,
+            'inquire',
+            haxe.Json.stringify({})
+        );
+        return Model.parse(Fulfillment, request);
+    }
+
+
+    public function pend(): Fulfillment {
+        var request = ConnectApi.getInstance().fulfillment.changeRequestStatus(
+            this.id,
+            'pend',
+            haxe.Json.stringify({})
+        );
+        return Model.parse(Fulfillment, request);
+    }
+
+
+    public function assignTo(assignee_id: String): Fulfillment {
+       var request = ConnectApi.getInstance().fulfillment.assignRequest(
+            this.id,
+            assignee_id
+        );
+        return Model.parse(Fulfillment, request);
+    }
 }

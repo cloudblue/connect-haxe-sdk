@@ -1,21 +1,43 @@
 package connect;
 
+import haxe.extern.EitherType;
+
 
 class Util {
-    public static function jsonToCollectionOrDictionary(x: Dynamic): Dynamic {
+    public static function toDictionary(obj: Dynamic): Dictionary {
+        var dict = new Dictionary();
+        var fields = Reflect.fields(obj);
+        for (field in fields) {
+            dict.set(field, toCollectionOrDictionary(Reflect.field(obj, field)));
+        }
+        return dict;
+    }
+
+
+    public static function toCollection<T>(array: Array<T>): Collection<T> {
+        var col = new Collection<T>();
+        for (elem in array) {
+            col.push(elem);
+        }
+        return col;
+    }
+
+
+    private static function toCollectionOrDictionary(x: Dynamic)
+            : EitherType<Collection<Dictionary>, Dictionary> {
         switch (Type.typeof(x)) {
             case TClass(Array):
                 var arr: Array<Dynamic> = x;
                 var col = new Collection<Dictionary>();
                 for (elem in arr) {
-                    col.push(jsonToCollectionOrDictionary(elem));
+                    col.push(toCollectionOrDictionary(elem));
                 }
                 return col;
             case TObject:
                 var dict = new Dictionary();
                 var fields = Reflect.fields(x);
                 for (field in fields) {
-                    dict.set(field, jsonToCollectionOrDictionary(Reflect.field(x, field)));
+                    dict.set(field, toCollectionOrDictionary(Reflect.field(x, field)));
                 }
                 return dict;
             default:

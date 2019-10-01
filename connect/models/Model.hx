@@ -55,7 +55,7 @@ class Model {
 
 
     public function toDictionary(): Dictionary {
-        return Util.jsonToCollectionOrDictionary(this.toObject());
+        return Util.toDictionary(this.toObject());
     }
 
 
@@ -78,25 +78,25 @@ class Model {
     }
 
 
-    public static function parse<T>(modelClass: Class<T>, obj: Dictionary): T {
+    public static function parse<T>(modelClass: Class<T>, obj: Dynamic): T {
         var model = Type.createInstance(modelClass, []);
         var castedModel = cast(model, Model);
         var fields = Type.getInstanceFields(modelClass);
         for (field in fields) {
             var snakeField = Inflection.toSnakeCase(field);
-            if (obj.exists(snakeField)) {
-                var val = obj.get(snakeField);
+            if (Reflect.hasField(obj, snakeField)) {
+                var val: Dynamic = Reflect.field(obj, snakeField);
                 //trace('Injecting "${field}" in ' + Type.getClassName(modelClass));
                 switch (Type.typeof(val)) {
-                    case TClass(Collection):
+                    case TClass(Array):
                         var className = castedModel.getFieldClassName(field);
                         if (className == null) {
                             var camelField = 'connect.models.' + Inflection.toCamelCase(field, true);
                             className = Inflection.toSingular(camelField);
                         }
                         var classObj = Type.resolveClass(className);
-                        Reflect.setProperty(model, field, parseCollection(classObj, val));
-                    case TClass(Dictionary):
+                        Reflect.setProperty(model, field, parseArray(classObj, val));
+                    case TObject:
                         var className = castedModel.getFieldClassName(field);
                         if (className == null) {
                             className = 'connect.models.' + Inflection.toCamelCase(field, true);
@@ -116,11 +116,10 @@ class Model {
     }
 
 
-    public static function parseCollection<T>(modelClass: Class<T>,
-            collection: Collection<Dictionary>): Collection<T> {
+    public static function parseArray<T>(modelClass: Class<T>, array: Array<Dynamic>): Collection<T> {
         var result = new Collection<T>();
-        for (dict in collection) {
-            result.push(parse(modelClass, dict));
+        for (obj in array) {
+            result.push(parse(modelClass, obj));
         }
         return result;
     }

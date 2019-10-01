@@ -1,7 +1,5 @@
 package connect.api;
 
-import haxe.extern.EitherType;
-
 
 interface IApiClient {
     /**
@@ -15,7 +13,7 @@ interface IApiClient {
         @throws String if the request fails.
     **/
     public function get(resource: String, ?id: String, ?suffix: String,
-            ?params: QueryParams): EitherType<Dictionary, Collection<Dictionary>>;
+            ?params: QueryParams): Dynamic;
 
 
     /**
@@ -41,7 +39,7 @@ interface IApiClient {
         @returns An object with the modified resource.
         @throws String if the request fails.
     **/
-    public function put(resource: String, id: String, data: Dictionary): Dictionary;
+    public function put(resource: String, id: String, data: String): Dynamic;
 
 
     /**
@@ -54,7 +52,7 @@ interface IApiClient {
         @returns An object.
         @throws String if the request fails.
     **/
-    public function post(resource: String, ?id: String, ?suffix: String, ?data: Dictionary): Dictionary;
+    public function post(resource: String, ?id: String, ?suffix: String, ?data: String): Dynamic;
 
 
     /**
@@ -70,7 +68,7 @@ interface IApiClient {
         @throws String if the request fails.
     **/
     public function postFile(resource: String, ?id: String, ?suffix: String,
-        argname: String, filename: String, contents: String): Dictionary;
+        argname: String, filename: String, contents: String): Dynamic;
 
 
     /**
@@ -82,5 +80,5 @@ interface IApiClient {
         @returns An object.
         @throws String if the request fails.
     **/
-    public function delete(resource: String, id: String, ?suffix: String): Dictionary;
+    public function delete(resource: String, id: String, ?suffix: String): Dynamic;
 }

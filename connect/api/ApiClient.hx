@@ -1,7 +1,5 @@
 package connect.api;
 
-import connect.Util;
-import haxe.extern.EitherType;
 #if !js
 import haxe.io.StringInput;
 #end
@@ -23,7 +21,7 @@ class ApiClient implements IApiClient {
     }
 
     public function get(resource: String, ?id: String, ?suffix: String,
-            ?params: QueryParams): EitherType<Dictionary, Collection<Dictionary>> {
+            ?params: QueryParams): Dynamic {
         return checkResponse(syncRequest('GET', parsePath(resource, id, suffix), params));
     }
 
@@ -34,21 +32,18 @@ class ApiClient implements IApiClient {
     }
 
 
-    public function put(resource: String, id: String, data: Dictionary): Dictionary {
-        var dataStr = (data != null) ? haxe.Json.stringify(data) : null;
-        return checkResponse(syncRequest('PUT', parsePath(resource, id), dataStr));
+    public function put(resource: String, id: String, data: String): Dynamic {
+        return checkResponse(syncRequest('PUT', parsePath(resource, id), data));
     }
 
 
-    public function post(resource: String, ?id: String, ?suffix: String,
-            ?data: Dictionary): Dictionary {
-        var dataStr = (data != null) ? haxe.Json.stringify(data) : null;
-        return checkResponse(syncRequest('POST', parsePath(resource, id, suffix), dataStr));
+    public function post(resource: String, ?id: String, ?suffix: String, ?data: String): Dynamic {
+        return checkResponse(syncRequest('POST', parsePath(resource, id, suffix), data));
     }
 
 
     public function postFile(resource: String, ?id: String, ?suffix: String,
-        argname: String, filename: String, contents: String): Dictionary {
+        argname: String, filename: String, contents: String): Dynamic {
         return checkResponse(syncRequest('POST', parsePath(resource, id, suffix), null, {
             argname: argname,
             filename: filename,
@@ -57,7 +52,7 @@ class ApiClient implements IApiClient {
     }
 
 
-    public function delete(resource: String, id: String, ?suffix: String): Dictionary {
+    public function delete(resource: String, id: String, ?suffix: String): Dynamic {
         return checkResponse(syncRequest('DELETE', parsePath(resource, id, suffix)));
     }
 
@@ -148,10 +143,9 @@ class ApiClient implements IApiClient {
     }
 
 
-    private function checkResponse(response: Response):
-            EitherType<Dictionary, Collection<Dictionary>> {
+    private function checkResponse(response: Response): Dynamic {
         if (response.status < 400) {
-            return Util.jsonToCollectionOrDictionary(haxe.Json.parse(response.text));
+            return haxe.Json.parse(response.text);
         } else {
             throw response.text;
         }

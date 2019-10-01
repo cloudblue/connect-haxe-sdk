@@ -26,15 +26,9 @@ class Example {
                 + ' : ' + request.status);
 
             /*
-            // Approve by tile
-            api.fulfillment.changeRequestStatus(request.id, 'approve', {
-                activation_tile: 'Markdown text'
-            });
-
-            // Approve by template
-            api.fulfillment.changeRequestStatus(request.id, 'approve', {
-                template_id: 'TL-000-000-000'
-            });
+            // Approve by tile or template
+            request.approveByTemplate('TL-000-000-000');
+            request.approveByTile('Markdown text');
             */
         }
 
