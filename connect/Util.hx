@@ -14,15 +14,6 @@ class Util {
     }
 
 
-    public static function toCollection<T>(array: Array<T>): Collection<T> {
-        var col = new Collection<T>();
-        for (elem in array) {
-            col.push(elem);
-        }
-        return col;
-    }
-
-
     private static function toCollectionOrDictionary(x: Dynamic)
             : EitherType<Collection<Dictionary>, Dictionary> {
         switch (Type.typeof(x)) {

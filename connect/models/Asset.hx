@@ -1,5 +1,8 @@
 package connect.models;
 
+import connect.api.ConnectApi;
+import connect.api.QueryParams;
+
 
 class Asset extends IdModel {
     public var status(default, null): String;
@@ -14,4 +17,12 @@ class Asset extends IdModel {
     public var tiers(default, null): Tiers;
     public var items(default, null): Collection<Item>;
     public var configuration(default, null): Configuration;
+
+
+    public function list(?filters: QueryParams, ?api: connect.api.FulfillmentApi)
+            : Collection<Asset> {
+        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        var assets = api.listAssets(filters);
+        return Model.parseArray(Asset, assets);
+    }
 }

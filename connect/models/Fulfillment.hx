@@ -1,8 +1,6 @@
 package connect.models;
 
-import connect.api.ConnectApi;
 import connect.api.QueryParams;
-import connect.Util;
 
 
 class Fulfillment extends IdModel {
@@ -20,40 +18,40 @@ class Fulfillment extends IdModel {
     //public var assignee(default, null): User;
 
 
-    public function new() {
-        this._setFieldClassNames([
-            'assignee' => 'User'
-        ]);
-    }
-
-    public static function list(?filters: QueryParams): Collection<Fulfillment> {
-        var requests = ConnectApi.getInstance().fulfillment.listRequests(filters);
+    public static function list(?filters: QueryParams, ?api: connect.api.FulfillmentApi)
+            : Collection<Fulfillment> {
+        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        var requests = api.listRequests(filters);
         return Model.parseArray(Fulfillment, requests);
     }
 
 
-    public static function get(id: String): Fulfillment {
-        var request = ConnectApi.getInstance().fulfillment.getRequest(id);
+    public static function get(id: String, ?api: connect.api.FulfillmentApi): Fulfillment {
+        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        var request = api.getRequest(id);
         return Model.parse(Fulfillment, request);
     }
 
 
-    public static function create(): Fulfillment {
-        var request = ConnectApi.getInstance().fulfillment.createRequest();
+    public static function create(?api: connect.api.FulfillmentApi): Fulfillment {
+        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        var request = api.createRequest();
         return Model.parse(Fulfillment, request);
     }
 
 
-    public function update(): Fulfillment {
-        var request = ConnectApi.getInstance().fulfillment.updateRequest(
+    public function update(?api: connect.api.FulfillmentApi): Fulfillment {
+        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        var request = api.updateRequest(
             this.id,
             this.toString());
         return Model.parse(Fulfillment, request);
     }
 
 
-    public function approveByTemplate(id: String): Fulfillment {
-        var request = ConnectApi.getInstance().fulfillment.changeRequestStatus(
+    public function approveByTemplate(id: String, ?api: connect.api.FulfillmentApi): Fulfillment {
+        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        var request = api.changeRequestStatus(
             this.id,
             'approve',
             haxe.Json.stringify({template_id: id})
@@ -62,8 +60,9 @@ class Fulfillment extends IdModel {
     }
 
 
-    public function approveByTile(text: String): Fulfillment {
-        var request = ConnectApi.getInstance().fulfillment.changeRequestStatus(
+    public function approveByTile(text: String, ?api: connect.api.FulfillmentApi): Fulfillment {
+        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        var request = api.changeRequestStatus(
             this.id,
             'approve',
             haxe.Json.stringify({activation_tile: text})
@@ -72,8 +71,9 @@ class Fulfillment extends IdModel {
     }
 
 
-    public function fail(reason: String): Fulfillment {
-        var request = ConnectApi.getInstance().fulfillment.changeRequestStatus(
+    public function fail(reason: String, ?api: connect.api.FulfillmentApi): Fulfillment {
+        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        var request = api.changeRequestStatus(
             this.id,
             'fail',
             haxe.Json.stringify({reason: reason})
@@ -82,8 +82,9 @@ class Fulfillment extends IdModel {
     }
 
 
-    public function inquire(): Fulfillment {
-        var request = ConnectApi.getInstance().fulfillment.changeRequestStatus(
+    public function inquire(?api: connect.api.FulfillmentApi): Fulfillment {
+        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        var request = api.changeRequestStatus(
             this.id,
             'inquire',
             haxe.Json.stringify({})
@@ -92,8 +93,9 @@ class Fulfillment extends IdModel {
     }
 
 
-    public function pend(): Fulfillment {
-        var request = ConnectApi.getInstance().fulfillment.changeRequestStatus(
+    public function pend(?api: connect.api.FulfillmentApi): Fulfillment {
+        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        var request = api.changeRequestStatus(
             this.id,
             'pend',
             haxe.Json.stringify({})
@@ -102,11 +104,19 @@ class Fulfillment extends IdModel {
     }
 
 
-    public function assignTo(assignee_id: String): Fulfillment {
-       var request = ConnectApi.getInstance().fulfillment.assignRequest(
+    public function assignTo(assignee_id: String, ?api: connect.api.FulfillmentApi): Fulfillment {
+        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+       var request = api.assignRequest(
             this.id,
             assignee_id
         );
         return Model.parse(Fulfillment, request);
+    }
+
+
+    public function new() {
+        this._setFieldClassNames([
+            'assignee' => 'User'
+        ]);
     }
 }

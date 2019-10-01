@@ -13,11 +13,8 @@ private typedef Multipart = {
 
 
 class ApiClient implements IApiClient {
-    public static function getInstance() : ApiClient {
-        if (instance == null) {
-            instance = new ApiClient();
-        }
-        return instance;
+    public function new(?config: Config) {
+        this.config = (config != null) ? config : Defaults.getConfig();
     }
 
     public function get(resource: String, ?id: String, ?suffix: String,
@@ -57,7 +54,7 @@ class ApiClient implements IApiClient {
     }
 
 
-    private static var instance: ApiClient;
+    private var config: Config;
 
 
     /**
@@ -74,12 +71,12 @@ class ApiClient implements IApiClient {
         #if js
             initXMLHttpRequest();
 
-            var url = Config.getInstance().apiUrl + path + params.toString();
+            var url = this.config.apiUrl + path + params.toString();
 
             var xhr = new js.html.XMLHttpRequest();
             xhr.open(method.toUpperCase(), url, false);
 
-            xhr.setRequestHeader('Authorization', Config.getInstance().apiKey);
+            xhr.setRequestHeader('Authorization', this.config.apiKey);
 
             if (data != null) {
                 xhr.send(data);
@@ -102,9 +99,9 @@ class ApiClient implements IApiClient {
             var status:Null<Int> = null;
             var responseBytes = new haxe.io.BytesOutput();
 
-            var http = new haxe.Http(Config.getInstance().apiUrl + path);
+            var http = new haxe.Http(this.config.apiUrl + path);
 
-            http.setHeader('Authorization', Config.getInstance().apiKey);
+            http.setHeader('Authorization', this.config.apiKey);
 
             if (params != null) {
                 for (name in params.keys()) {
@@ -172,6 +169,4 @@ class ApiClient implements IApiClient {
         }
     }
 #end
-
-    private function new() {}
 }

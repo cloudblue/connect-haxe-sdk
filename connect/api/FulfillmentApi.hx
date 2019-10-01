@@ -10,7 +10,7 @@ class FulfillmentApi {
 
 
     public function new(?client: IApiClient) {
-        this.client = client != null ? client : ApiClient.getInstance();
+        this.client = client != null ? client : Defaults.getApiClient();
     }
 
 

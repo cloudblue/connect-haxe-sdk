@@ -1,5 +1,4 @@
-import connect.Config;
-import connect.api.ConnectApi;
+import connect.Defaults;
 import connect.models.*;
 
 class Empty {
