@@ -54,11 +54,6 @@ class Model {
     }
 
 
-    public function toDictionary(): Dictionary {
-        return Util.toDictionary(this.toObject());
-    }
-
-
     public function toString(): String {
         return haxe.Json.stringify(this.toObject());
     }

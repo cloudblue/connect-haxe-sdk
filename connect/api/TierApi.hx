@@ -13,7 +13,7 @@ class TierApi {
     }
 
 
-    public function listTierConfigRequests(?filters: QueryParams): Collection<Dynamic> {
+    public function listTierConfigRequests(?filters: QueryParams): Array<Dynamic> {
         return this.client.get(TCR_PATH, null, null, filters);
     }
 
@@ -28,7 +28,7 @@ class TierApi {
     }
 
 
-    public function updateTierConfigRequest(id: String, tcr: Dynamic): Dynamic {
+    public function updateTierConfigRequest(id: String, tcr: String): Dynamic {
         return this.client.put(TCR_PATH, id, tcr);
     }
 
@@ -43,12 +43,12 @@ class TierApi {
     }
 
 
-    public function approveTierConfigRequest(id: String, data: Dynamic): Dynamic {
+    public function approveTierConfigRequest(id: String, data: String): Dynamic {
         return this.client.post(TCR_PATH, id, 'approve', data);
     }
 
 
-    public function failTierConfigRequest(id: String, data: Dynamic): Dynamic {
+    public function failTierConfigRequest(id: String, data: String): Dynamic {
         return this.client.post(TCR_PATH, id, 'fail', data);
     }
 
@@ -63,7 +63,7 @@ class TierApi {
     }
 
 
-    public function listTierAccounts(?filters: QueryParams): Collection<Dynamic> {
+    public function listTierAccounts(?filters: QueryParams): Array<Dynamic> {
         return this.client.get(TA_PATH, null, null, filters);
     }
 
@@ -73,7 +73,7 @@ class TierApi {
     }
 
 
-    public function listTierConfigs(?filters: QueryParams): Collection<Dynamic> {
+    public function listTierConfigs(?filters: QueryParams): Array<Dynamic> {
         return this.client.get(TC_PATH, null, null, filters);
     }
 

@@ -14,7 +14,7 @@ class UsageApi {
     }
 
 
-    public function listUsageFiles(?filters: QueryParams): Collection<Dynamic> {
+    public function listUsageFiles(?filters: QueryParams): Array<Dynamic> {
         return this.client.get(USAGE_FILES_PATH, null, null, filters);
     }
 
@@ -29,7 +29,7 @@ class UsageApi {
     }
 
 
-    public function updateUsageFile(id: String, file: Dynamic): Dynamic {
+    public function updateUsageFile(id: String, file: String): Dynamic {
         return this.client.put(USAGE_FILES_PATH, id, file);
     }
 
@@ -39,7 +39,7 @@ class UsageApi {
     }
 
 
-    public function uploadUsageFile(id: String, file: Dynamic): Dynamic {
+    public function uploadUsageFile(id: String, file: String): Dynamic {
         return this.client.post(USAGE_FILES_PATH, id, 'upload', file);
     }
 
@@ -86,7 +86,7 @@ class UsageApi {
     }
 
 
-    public function listUsageRecords(?filters: QueryParams): Collection<Dynamic> {
+    public function listUsageRecords(?filters: QueryParams): Array<Dynamic> {
         return this.client.get(USAGE_RECORDS_PATH, null, null, filters);
     }
 
@@ -96,12 +96,12 @@ class UsageApi {
     }
 
 
-    public function updateUsageRecord(id: String, record: Dynamic): Dynamic {
+    public function updateUsageRecord(id: String, record: String): Dynamic {
         return this.client.put(USAGE_RECORDS_PATH, id, record);
     }
 
 
-    public function closeUsageRecord(id: String, record: Dynamic): Dynamic {
+    public function closeUsageRecord(id: String, record: String): Dynamic {
         return this.client.post(USAGE_RECORDS_PATH, id, 'close', record);
     }
 }
