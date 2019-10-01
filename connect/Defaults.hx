@@ -57,7 +57,7 @@ class Defaults {
 
     public static function getApiClient() : connect.api.IApiClient {
         if (apiClient == null) {
-            apiClient = new connect.api.ApiClient();
+            apiClient = new connect.api.impl.ApiClientImpl();
         }
         return apiClient;
     }

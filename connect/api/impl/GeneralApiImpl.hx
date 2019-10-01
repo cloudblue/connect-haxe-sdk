@@ -1,6 +1,6 @@
-package connect.api;
+package connect.api.impl;
 
-class GeneralApi {
+class GeneralApiImpl implements IGeneralApi {
     private static inline var ACCOUNTS_PATH = 'accounts';
     private static inline var CONVERSATIONS_PATH = 'conversations';
     private static inline var PRODUCTS_PATH = 'products';

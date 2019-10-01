@@ -1,4 +1,4 @@
-package connect.api;
+package connect.api.impl;
 
 #if !js
 import haxe.io.StringInput;
@@ -12,7 +12,7 @@ private typedef Multipart = {
 }
 
 
-class ApiClient implements IApiClient {
+class ApiClientImpl implements IApiClient {
     public function new(?config: Config) {
         this.config = (config != null) ? config : Defaults.getConfig();
     }

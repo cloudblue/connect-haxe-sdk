@@ -1,6 +1,7 @@
 package connect.models;
 
 import connect.api.ConnectApi;
+import connect.api.IFulfillmentApi;
 import connect.api.QueryParams;
 
 
@@ -19,7 +20,7 @@ class Asset extends IdModel {
     public var configuration(default, null): Configuration;
 
 
-    public function list(?filters: QueryParams, ?api: connect.api.FulfillmentApi)
+    public function list(?filters: QueryParams, ?api: IFulfillmentApi)
             : Collection<Asset> {
         api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
         var assets = api.listAssets(filters);

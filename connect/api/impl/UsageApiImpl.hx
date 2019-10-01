@@ -1,7 +1,7 @@
-package connect.api;
+package connect.api.impl;
 
 
-class UsageApi {
+class UsageApiImpl implements IUsageApi {
     private static inline var USAGE_FILES_PATH = 'usage/files';
     private static inline var USAGE_PRODUCTS_PATH = 'usage/products';
     private static inline var USAGE_RECORDS_PATH = 'usage/records';
