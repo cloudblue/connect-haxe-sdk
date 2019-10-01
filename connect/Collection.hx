@@ -1,5 +1,11 @@
 package connect;
 
+#if java
+typedef Arr<T> = java.NativeArray<T>;
+#else
+typedef Arr<T> = Array<T>;
+#end
+
 
 class Collection<T> {
     public function new(?array: Array<T>) {
@@ -27,8 +33,16 @@ class Collection<T> {
     }
 
 
-    public function toArray(): Array<T> {
+    public function toArray(): Arr<T> {
+#if java
+        var arr = new Arr<T>(this._array.length);
+        for (i in 0...arr.length) {
+            arr[i] = this._array[i];
+        }
+        return arr;
+#else
         return this._array.copy();
+#end
     }
 
 
@@ -49,6 +63,11 @@ class Collection<T> {
 
     public function insert(pos: Int, x: T): Void {
         this._array.insert(pos, x);
+    }
+
+
+    public function iterator(): Iterator<T> {
+        return this._array.iterator();
     }
 
 

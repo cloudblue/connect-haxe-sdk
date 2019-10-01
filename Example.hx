@@ -1,7 +1,7 @@
 import connect.Config;
-import connect.Dictionary;
 import connect.api.ConnectApi;
 import connect.api.QueryParams;
+import connect.models.*;
 
 class Example {
     public static function main() {
@@ -15,17 +15,20 @@ class Example {
         var api = ConnectApi.getInstance();
         
         // List requests
-        var requests = api.fulfillment.listRequests(new QueryParams()
-            .param('asset.product.id__in', Config.getInstance().getProductsString())
-            .param('status', 'pending')
-        ).toArray();
+        var requests = Model.parseCollection(
+            Fulfillment,
+            api.fulfillment.listRequests(new QueryParams()
+                .param('asset.product.id__in', Config.getInstance().getProductsString())
+                .param('status', 'pending'))
+        );
 
         // Trace requests
         for (request in requests) {
-            trace(request.get('id')
-                + ' : ' + request.get('asset').get('connection').get('id')
-                + ' : ' + request.get('asset').get('product').get('id')
-                + ' : ' + request.get('status'));
+            trace(request.id
+                + ' : ' + request.asset.id
+                + ' : ' + request.asset.connection.id
+                + ' : ' + request.asset.product.id
+                + ' : ' + request.status);
 
             /*
             // Approve by tile
