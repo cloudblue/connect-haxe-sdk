@@ -4,17 +4,26 @@ package connect;
     Configuration singleton that allows communication with the Connect platform.
 **/
 class Config {
-    /** Endpoint to interact with Connect API. **/
-    public var apiUrl(default, null): String;
-
-    /** Authorization key. **/
-    public var apiKey(default, null): String;
-
-
     public function new(apiUrl: String, apiKey: String, products: Collection<String>) {
-        this.setApiUrl(apiUrl);
-        this.setApiKey(apiKey);
+        this.apiUrl = (apiUrl.charAt(apiUrl.length - 1) == "/") ? apiUrl : apiUrl + "/";
+        this.apiKey = (apiKey.indexOf("ApiKey ") == 0) ? apiKey : ("ApiKey " + apiKey);
         this.products = products.copy();
+    }
+
+
+    /**
+        @returns Endpoint to interact with Connect API.
+    **/
+    public function getApiUrl(): String {
+        return this.apiUrl;
+    }
+
+
+    /**
+        @returns Authorization key.
+    **/
+    public function getApiKey(): String {
+        return this.apiKey;
     }
     
     
@@ -39,15 +48,7 @@ class Config {
     }
     
     
+    private var apiUrl: String;
+    private var apiKey: String;
     private var products: Collection<String>;
-
-    
-    private function setApiUrl(apiUrl: String): Void {
-        this.apiUrl = (apiUrl.charAt(apiUrl.length - 1) == "/") ? apiUrl : apiUrl + "/";
-    }
-    
-    
-    private function setApiKey(apiKey: String): Void {
-        this.apiKey = (apiKey.indexOf("ApiKey ") == 0) ? apiKey : ("ApiKey " + apiKey);
-    }
 }

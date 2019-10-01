@@ -21,28 +21,28 @@ class Fulfillment extends IdModel {
 
     public static function list(?filters: QueryParams, ?api: IFulfillmentApi)
             : Collection<Fulfillment> {
-        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        api = (api != null) ? api : Defaults.getFulfillmentApi();
         var requests = api.listRequests(filters);
         return Model.parseArray(Fulfillment, requests);
     }
 
 
     public static function get(id: String, ?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        api = (api != null) ? api : Defaults.getFulfillmentApi();
         var request = api.getRequest(id);
         return Model.parse(Fulfillment, request);
     }
 
 
     public static function create(?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        api = (api != null) ? api : Defaults.getFulfillmentApi();
         var request = api.createRequest();
         return Model.parse(Fulfillment, request);
     }
 
 
     public function update(?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        api = (api != null) ? api : Defaults.getFulfillmentApi();
         var request = api.updateRequest(
             this.id,
             this.toString());
@@ -51,7 +51,7 @@ class Fulfillment extends IdModel {
 
 
     public function approveByTemplate(id: String, ?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        api = (api != null) ? api : Defaults.getFulfillmentApi();
         var request = api.changeRequestStatus(
             this.id,
             'approve',
@@ -62,7 +62,7 @@ class Fulfillment extends IdModel {
 
 
     public function approveByTile(text: String, ?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        api = (api != null) ? api : Defaults.getFulfillmentApi();
         var request = api.changeRequestStatus(
             this.id,
             'approve',
@@ -73,7 +73,7 @@ class Fulfillment extends IdModel {
 
 
     public function fail(reason: String, ?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        api = (api != null) ? api : Defaults.getFulfillmentApi();
         var request = api.changeRequestStatus(
             this.id,
             'fail',
@@ -84,7 +84,7 @@ class Fulfillment extends IdModel {
 
 
     public function inquire(?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        api = (api != null) ? api : Defaults.getFulfillmentApi();
         var request = api.changeRequestStatus(
             this.id,
             'inquire',
@@ -95,7 +95,7 @@ class Fulfillment extends IdModel {
 
 
     public function pend(?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        api = (api != null) ? api : Defaults.getFulfillmentApi();
         var request = api.changeRequestStatus(
             this.id,
             'pend',
@@ -106,7 +106,7 @@ class Fulfillment extends IdModel {
 
 
     public function assignTo(assignee_id: String, ?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getConnectApi().fulfillment;
+        api = (api != null) ? api : Defaults.getFulfillmentApi();
        var request = api.assignRequest(
             this.id,
             assignee_id

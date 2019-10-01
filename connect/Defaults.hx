@@ -63,15 +63,42 @@ class Defaults {
     }
 
 
-    public static function getConnectApi() : connect.api.ConnectApi {
-        if (connectApi == null) {
-            connectApi = new connect.api.ConnectApi();
+    public static function getFulfillmentApi() : connect.api.IFulfillmentApi {
+        if (fulfillmentApi == null) {
+            fulfillmentApi = new connect.api.impl.FulfillmentApiImpl();
         }
-        return connectApi;
+        return fulfillmentApi;
+    }
+
+
+    public static function getUsageApi() : connect.api.IUsageApi {
+        if (usageApi == null) {
+            usageApi = new connect.api.impl.UsageApiImpl();
+        }
+        return usageApi;
+    }
+
+
+    public static function getTierApi() : connect.api.ITierApi {
+        if (tierApi == null) {
+            tierApi = new connect.api.impl.TierApiImpl();
+        }
+        return tierApi;
+    }
+
+
+    public static function getGeneralApi() : connect.api.IGeneralApi {
+        if (generalApi == null) {
+            generalApi = new connect.api.impl.GeneralApiImpl();
+        }
+        return generalApi;
     }
 
 
     private static var config: Config;
     private static var apiClient: connect.api.IApiClient;
-    private static var connectApi: connect.api.ConnectApi;
+    private static var fulfillmentApi: connect.api.IFulfillmentApi;
+    private static var usageApi: connect.api.IUsageApi;
+    private static var tierApi: connect.api.ITierApi;
+    private static var generalApi: connect.api.IGeneralApi;
 }

@@ -71,12 +71,12 @@ class ApiClientImpl implements IApiClient {
         #if js
             initXMLHttpRequest();
 
-            var url = this.config.apiUrl + path + params.toString();
+            var url = this.config.getApiUrl() + path + params.toString();
 
             var xhr = new js.html.XMLHttpRequest();
             xhr.open(method.toUpperCase(), url, false);
 
-            xhr.setRequestHeader('Authorization', this.config.apiKey);
+            xhr.setRequestHeader('Authorization', this.config.getApiKey());
 
             if (data != null) {
                 xhr.send(data);
@@ -99,9 +99,9 @@ class ApiClientImpl implements IApiClient {
             var status:Null<Int> = null;
             var responseBytes = new haxe.io.BytesOutput();
 
-            var http = new haxe.Http(this.config.apiUrl + path);
+            var http = new haxe.Http(this.config.getApiUrl() + path);
 
-            http.setHeader('Authorization', this.config.apiKey);
+            http.setHeader('Authorization', this.config.getApiKey());
 
             if (params != null) {
                 for (name in params.keys()) {
