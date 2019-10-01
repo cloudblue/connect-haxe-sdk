@@ -1,5 +1,6 @@
 package connect.api;
 
+import connect.Util;
 import haxe.extern.EitherType;
 #if !js
 import haxe.io.StringInput;
@@ -150,7 +151,7 @@ class ApiClient implements IApiClient {
     private function checkResponse(response: Response):
             EitherType<Dictionary, Collection<Dictionary>> {
         if (response.status < 400) {
-            return parse(haxe.Json.parse(response.text));
+            return Util.jsonToCollectionOrDictionary(haxe.Json.parse(response.text));
         } else {
             throw response.text;
         }
@@ -162,28 +163,6 @@ class ApiClient implements IApiClient {
             return response.text;
         } else {
             throw response.text;
-        }
-    }
-
-
-    private function parse(x: Dynamic): Dynamic {
-        switch (Type.typeof(x)) {
-            case TClass(Array):
-                var arr: Array<Dynamic> = x;
-                var col = new Collection();
-                for (elem in arr) {
-                    col.push(parse(elem));
-                }
-                return col;
-            case TObject:
-                var dict = new Dictionary();
-                var fields = Reflect.fields(x);
-                for (field in fields) {
-                    dict.set(field, parse(Reflect.field(x, field)));
-                }
-                return dict;
-            default:
-                return x;
         }
     }
 

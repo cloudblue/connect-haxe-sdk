@@ -11,15 +11,10 @@ class Example {
         // Load test config
         Config.load('test_config.json');
 
-        // Get Connect API
-        var api = ConnectApi.getInstance();
-        
         // List requests
-        var requests = Model.parseCollection(
-            Fulfillment,
-            api.fulfillment.listRequests(new QueryParams()
-                .param('asset.product.id__in', Config.getInstance().getProductsString())
-                .param('status', 'pending'))
+        var requests = Fulfillment.list(new QueryParams()
+            .param('asset.product.id__in', Config.getInstance().getProductsString())
+            .param('status', 'pending')
         );
 
         // Trace requests

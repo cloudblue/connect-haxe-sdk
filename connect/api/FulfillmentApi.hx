@@ -19,27 +19,27 @@ class FulfillmentApi {
     }
 
 
-    public function getRequest(id: String): Dynamic {
+    public function getRequest(id: String): Dictionary {
         return this.client.get(REQUESTS_PATH, id);
     }
 
 
-    public function createRequest(): Dynamic {
+    public function createRequest(): Dictionary {
         return this.client.post(REQUESTS_PATH);
     }
 
 
-    public function updateRequest(id: String, request: Dynamic): Dynamic {
+    public function updateRequest(id: String, request: Dictionary): Dictionary {
         return this.client.put(REQUESTS_PATH, id, request);
     }
 
 
-    public function changeRequestStatus(id: String, status: String, data: Dynamic): Dynamic {
+    public function changeRequestStatus(id: String, status: String, data: Dictionary): Dictionary {
         return this.client.post(REQUESTS_PATH, id, status, data);
     }
 
 
-    public function assignRequest(id: String, assignee: String): Dynamic {
+    public function assignRequest(id: String, assignee: String): Dictionary {
         return this.client.post(REQUESTS_PATH, id, 'assign/' + assignee);
     }
 
@@ -50,17 +50,17 @@ class FulfillmentApi {
     }
 
 
-    public function listAssets(?filters: QueryParams): Collection<Dynamic> {
+    public function listAssets(?filters: QueryParams): Collection<Dictionary> {
         return this.client.get(ASSETS_PATH, null, null, filters);
     }
 
 
-    public function getAsset(id: String): Dynamic {
+    public function getAsset(id: String): Dictionary {
         return this.client.get(ASSETS_PATH, id);
     }
 
 
-    public function getAssetRequests(id: String): Collection<Dynamic> {
+    public function getAssetRequests(id: String): Collection<Dictionary> {
         return this.client.get(ASSETS_PATH, id, 'requests');
     }
 }

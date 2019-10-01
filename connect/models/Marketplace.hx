@@ -10,7 +10,7 @@ class Marketplace extends IdModel {
     public var hubs(default, null): Collection<ExtIdHub>;
     public var zone(default, null): String;
     public var countries(default, null): List<Country>;
-    public var souncing(default, null): Bool;
+    public var sourcing(default, null): Bool;
 
     public function new() {
         this._setFieldClassNames([
