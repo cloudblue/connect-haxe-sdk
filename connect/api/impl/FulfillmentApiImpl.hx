@@ -42,7 +42,7 @@ class FulfillmentApiImpl implements IFulfillmentApi {
 
     public function renderTemplate(id: String, request_id: String): String {
         return Environment.getApiClient().getString(TEMPLATES_PATH, id, 'render',
-            new QueryParams().param('request_id', request_id));
+            new QueryParams().set('request_id', request_id));
     }
 
 

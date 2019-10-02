@@ -7,7 +7,7 @@ class Example {
         // Get initial time
         var initialTime = Date.now().getTime();
 
-        // Load test config
+        // Load config
         Environment.loadConfig('test_config.json');
 
         // List requests
@@ -16,7 +16,7 @@ class Example {
             .set('status', 'pending')
         );
 
-        // Trace requests
+        // Process requests
         for (request in requests) {
             trace(request.id
                 + ' : ' + request.asset.id
@@ -25,7 +25,7 @@ class Example {
                 + ' : ' + request.status);
 
             /*
-            // Approve by tile or template
+            // Approve by template or tile
             request.approveByTemplate('TL-000-000-000');
             request.approveByTile('Markdown text');
             */

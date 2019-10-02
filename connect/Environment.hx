@@ -6,6 +6,13 @@ import connect.api.IUsageApi;
 import connect.api.ITierApi;
 import connect.api.IGeneralApi;
 
+// Need to make sure that there are compiled
+import connect.api.impl.ApiClientImpl;
+import connect.api.impl.FulfillmentApiImpl;
+import connect.api.impl.UsageApiImpl;
+import connect.api.impl.TierApiImpl;
+import connect.api.impl.GeneralApiImpl;
+
 
 class Environment {
     public static function init(?deps: Dictionary): Void {
@@ -164,8 +171,8 @@ class Environment {
     private static function createInstance(interfaceName: String): Dynamic {
         init();
         var className = (dependencies.exists(interfaceName))
-            ? dependencies.get(interfaceName)
-            : defaultDependencies.get(interfaceName);
+            ? dependencies.getString(interfaceName)
+            : defaultDependencies.getString(interfaceName);
         var classObj = Type.resolveClass(className);
         if (classObj != null) {
             return Type.createInstance(classObj, []);
