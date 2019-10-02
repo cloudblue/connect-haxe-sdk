@@ -1,6 +1,5 @@
 package connect.models;
 
-import connect.api.IFulfillmentApi;
 import connect.api.QueryParams;
 
 
@@ -19,40 +18,34 @@ class Fulfillment extends IdModel {
     //public var assignee(default, null): User;
 
 
-    public static function list(?filters: QueryParams, ?api: IFulfillmentApi)
-            : Collection<Fulfillment> {
-        api = (api != null) ? api : Defaults.getFulfillmentApi();
-        var requests = api.listRequests(filters);
+    public static function list(?filters: QueryParams) : Collection<Fulfillment> {
+        var requests = Environment.getFulfillmentApi().listRequests(filters);
         return Model.parseArray(Fulfillment, requests);
     }
 
 
-    public static function get(id: String, ?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getFulfillmentApi();
-        var request = api.getRequest(id);
+    public static function get(id: String): Fulfillment {
+        var request = Environment.getFulfillmentApi().getRequest(id);
         return Model.parse(Fulfillment, request);
     }
 
 
-    public static function create(?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getFulfillmentApi();
-        var request = api.createRequest();
+    public static function create(): Fulfillment {
+        var request = Environment.getFulfillmentApi().createRequest();
         return Model.parse(Fulfillment, request);
     }
 
 
-    public function update(?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getFulfillmentApi();
-        var request = api.updateRequest(
+    public function update(): Fulfillment {
+        var request = Environment.getFulfillmentApi().updateRequest(
             this.id,
             this.toString());
         return Model.parse(Fulfillment, request);
     }
 
 
-    public function approveByTemplate(id: String, ?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getFulfillmentApi();
-        var request = api.changeRequestStatus(
+    public function approveByTemplate(id: String): Fulfillment {
+        var request = Environment.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
             haxe.Json.stringify({template_id: id})
@@ -61,9 +54,8 @@ class Fulfillment extends IdModel {
     }
 
 
-    public function approveByTile(text: String, ?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getFulfillmentApi();
-        var request = api.changeRequestStatus(
+    public function approveByTile(text: String): Fulfillment {
+        var request = Environment.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
             haxe.Json.stringify({activation_tile: text})
@@ -72,9 +64,8 @@ class Fulfillment extends IdModel {
     }
 
 
-    public function fail(reason: String, ?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getFulfillmentApi();
-        var request = api.changeRequestStatus(
+    public function fail(reason: String): Fulfillment {
+        var request = Environment.getFulfillmentApi().changeRequestStatus(
             this.id,
             'fail',
             haxe.Json.stringify({reason: reason})
@@ -83,9 +74,8 @@ class Fulfillment extends IdModel {
     }
 
 
-    public function inquire(?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getFulfillmentApi();
-        var request = api.changeRequestStatus(
+    public function inquire(): Fulfillment {
+        var request = Environment.getFulfillmentApi().changeRequestStatus(
             this.id,
             'inquire',
             haxe.Json.stringify({})
@@ -94,9 +84,8 @@ class Fulfillment extends IdModel {
     }
 
 
-    public function pend(?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getFulfillmentApi();
-        var request = api.changeRequestStatus(
+    public function pend(): Fulfillment {
+        var request = Environment.getFulfillmentApi().changeRequestStatus(
             this.id,
             'pend',
             haxe.Json.stringify({})
@@ -105,9 +94,8 @@ class Fulfillment extends IdModel {
     }
 
 
-    public function assignTo(assignee_id: String, ?api: IFulfillmentApi): Fulfillment {
-        api = (api != null) ? api : Defaults.getFulfillmentApi();
-       var request = api.assignRequest(
+    public function assignTo(assignee_id: String): Fulfillment {
+       var request = Environment.getFulfillmentApi().assignRequest(
             this.id,
             assignee_id
         );

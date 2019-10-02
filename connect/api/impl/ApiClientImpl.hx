@@ -13,9 +13,7 @@ private typedef Multipart = {
 
 
 class ApiClientImpl implements IApiClient {
-    public function new(?config: Config) {
-        this.config = (config != null) ? config : Defaults.getConfig();
-    }
+    public function new() {}
 
     public function get(resource: String, ?id: String, ?suffix: String,
             ?params: QueryParams): Dynamic {
@@ -54,9 +52,6 @@ class ApiClientImpl implements IApiClient {
     }
 
 
-    private var config: Config;
-
-
     /**
         Sends a synchronous request to Connect.
 
@@ -71,12 +66,12 @@ class ApiClientImpl implements IApiClient {
         #if js
             initXMLHttpRequest();
 
-            var url = this.config.getApiUrl() + path + params.toString();
+            var url = Environment.getConfig().getApiUrl() + path + params.toString();
 
             var xhr = new js.html.XMLHttpRequest();
             xhr.open(method.toUpperCase(), url, false);
 
-            xhr.setRequestHeader('Authorization', this.config.getApiKey());
+            xhr.setRequestHeader('Authorization', Environment.getConfig().getApiKey());
 
             if (data != null) {
                 xhr.send(data);
@@ -99,9 +94,9 @@ class ApiClientImpl implements IApiClient {
             var status:Null<Int> = null;
             var responseBytes = new haxe.io.BytesOutput();
 
-            var http = new haxe.Http(this.config.getApiUrl() + path);
+            var http = new haxe.Http(Environment.getConfig().getApiUrl() + path);
 
-            http.setHeader('Authorization', this.config.getApiKey());
+            http.setHeader('Authorization', Environment.getConfig().getApiKey());
 
             if (params != null) {
                 for (name in params.keys()) {

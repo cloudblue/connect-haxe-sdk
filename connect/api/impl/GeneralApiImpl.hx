@@ -1,199 +1,196 @@
 package connect.api.impl;
 
+
 class GeneralApiImpl implements IGeneralApi {
     private static inline var ACCOUNTS_PATH = 'accounts';
     private static inline var CONVERSATIONS_PATH = 'conversations';
     private static inline var PRODUCTS_PATH = 'products';
     private static inline var CATEGORIES_PATH = 'categories';
 
-    private var client: IApiClient;
 
-
-    public function new(?client: IApiClient) {
-        this.client = client != null ? client : Defaults.getApiClient();
-    }
+    public function new() {}
 
 
     public function listAccounts(?filters: QueryParams): Array<Dynamic> {
-        return this.client.get(ACCOUNTS_PATH, null, null, filters);
+        return Environment.getApiClient().get(ACCOUNTS_PATH, null, null, filters);
     }
 
 
     public function createAccount(): Dynamic {
-        return this.client.post(ACCOUNTS_PATH);
+        return Environment.getApiClient().post(ACCOUNTS_PATH);
     }
 
 
     public function getAccount(id: String): Dynamic {
-        return this.client.get(ACCOUNTS_PATH, id);
+        return Environment.getApiClient().get(ACCOUNTS_PATH, id);
     }
 
 
     public function listAccountUsers(id: String): Array<Dynamic> {
-        return this.client.get(ACCOUNTS_PATH, id, 'users');
+        return Environment.getApiClient().get(ACCOUNTS_PATH, id, 'users');
     }
 
 
     public function getAccountUser(id: String, userId: String): Dynamic {
-        return this.client.get(ACCOUNTS_PATH, id, 'users/${userId}');
+        return Environment.getApiClient().get(ACCOUNTS_PATH, id, 'users/${userId}');
     }
 
 
     public function createConversation(data: String): Dynamic {
-        return this.client.post(CONVERSATIONS_PATH, null, null, data);
+        return Environment.getApiClient().post(CONVERSATIONS_PATH, null, null, data);
     }
 
 
     public function getConversation(id: String): Dynamic {
-        return this.client.get(CONVERSATIONS_PATH, id);
+        return Environment.getApiClient().get(CONVERSATIONS_PATH, id);
     }
 
 
     public function createConversationMessage(id: String, data: String): Dynamic {
-        return this.client.post(CONVERSATIONS_PATH, id, 'messages', data);
+        return Environment.getApiClient().post(CONVERSATIONS_PATH, id, 'messages', data);
     }
 
 
     public function listProducts(?filters: QueryParams): Array<Dynamic> {
-        return this.client.get(PRODUCTS_PATH, null, null, filters);
+        return Environment.getApiClient().get(PRODUCTS_PATH, null, null, filters);
     }
 
 
     public function getProduct(id: String): Dynamic {
-        return this.client.get(PRODUCTS_PATH, id);
+        return Environment.getApiClient().get(PRODUCTS_PATH, id);
     }
 
 
     public function listProductActions(id: String, ?filters: QueryParams): Array<Dynamic> {
-        return this.client.get(PRODUCTS_PATH, id, 'actions', filters);
+        return Environment.getApiClient().get(PRODUCTS_PATH, id, 'actions', filters);
     }
 
 
     public function getProductAction(id: String, actionId: String): Dynamic {
-        return this.client.get(PRODUCTS_PATH, id, 'actions/${actionId}');
+        return Environment.getApiClient().get(PRODUCTS_PATH, id, 'actions/${actionId}');
     }
 
 
     public function getProductActionLink(id: String, actionId: String): Dynamic {
-        return this.client.get(PRODUCTS_PATH, id, 'actions/${actionId}/actionLink');
+        return Environment.getApiClient().get(PRODUCTS_PATH, id, 'actions/${actionId}/actionLink');
     }
 
 
     public function getProductConnections(id: String): Array<Dynamic> {
-        return this.client.get(PRODUCTS_PATH, id, 'connections');
+        return Environment.getApiClient().get(PRODUCTS_PATH, id, 'connections');
     }
 
 
     public function getProductItems(id: String): Array<Dynamic> {
-        return this.client.get(PRODUCTS_PATH, id, 'items');
+        return Environment.getApiClient().get(PRODUCTS_PATH, id, 'items');
     }
 
 
     public function getProductParameters(id: String): Array<Dynamic> {
-        return this.client.get(PRODUCTS_PATH, id, 'parameters');
+        return Environment.getApiClient().get(PRODUCTS_PATH, id, 'parameters');
     }
 
 
     public function getProductTemplates(id: String): Array<Dynamic> {
-        return this.client.get(PRODUCTS_PATH, id, 'templates');
+        return Environment.getApiClient().get(PRODUCTS_PATH, id, 'templates');
     }
 
 
     public function getProductVersions(id: String): Array<Dynamic> {
-        return this.client.get(PRODUCTS_PATH, id, 'versions');
+        return Environment.getApiClient().get(PRODUCTS_PATH, id, 'versions');
     }
 
 
     public function getProductVersion(id: String, version: String): Dynamic {
-        return this.client.get(PRODUCTS_PATH, id, 'versions/${version}');
+        return Environment.getApiClient().get(PRODUCTS_PATH, id, 'versions/${version}');
     }
 
 
     public function getProductVersionActions(id: String, version: String): Array<Dynamic> {
         return 
-            this.client.get(PRODUCTS_PATH, id, 'versions/${version}/actions');
+            Environment.getApiClient().get(PRODUCTS_PATH, id, 'versions/${version}/actions');
     }
 
 
     public function getProductVersionAction(id: String, version: String,
             actionId: String): Dynamic {
-        return this.client.get(PRODUCTS_PATH, id,
+        return Environment.getApiClient().get(PRODUCTS_PATH, id,
             'versions/${version}/actions/${actionId}');
     }
 
 
     public function getProductVersionActionLink(id: String, version: String,
             actionId: String): Dynamic {
-        return this.client.get(PRODUCTS_PATH, id,
+        return Environment.getApiClient().get(PRODUCTS_PATH, id,
             'versions/${version}/actions/${actionId}/actionLink');
     }
 
 
     public function getProductVersionItems(id: String, version: String): Array<Dynamic> {
         return 
-            this.client.get(PRODUCTS_PATH, id, 'versions/${version}/items');
+            Environment.getApiClient().get(PRODUCTS_PATH, id, 'versions/${version}/items');
     }
 
 
     public function getProductVersionParameters(id: String, version: String): Array<Dynamic> {
         return 
-            this.client.get(PRODUCTS_PATH, id, 'versions/${version}/parameters');
+            Environment.getApiClient().get(PRODUCTS_PATH, id, 'versions/${version}/parameters');
     }
 
 
     public function getProductVersionTemplates(id: String, version: String): Array<Dynamic> {
         return 
-            this.client.get(PRODUCTS_PATH, id, 'versions/${version}/templates');
+            Environment.getApiClient().get(PRODUCTS_PATH, id, 'versions/${version}/templates');
     }
 
 
     public function listProductConfigurations(id: String, ?filters: QueryParams): Array<Dynamic> {
         return 
-            this.client.get(PRODUCTS_PATH, id, 'configurations', filters);
+            Environment.getApiClient().get(PRODUCTS_PATH, id, 'configurations', filters);
     }
 
 
     public function setProductConfigurationParam(id: String, param: String): Dynamic {
-        return this.client.post(PRODUCTS_PATH, id, 'configurations', param);
+        return Environment.getApiClient().post(PRODUCTS_PATH, id, 'configurations', param);
     }
 
 
     public function listProductAgreements(id: String, ?filters: QueryParams): Array<Dynamic> {
-        return this.client.get(PRODUCTS_PATH, id, 'agreements', filters);
+        return Environment.getApiClient().get(PRODUCTS_PATH, id, 'agreements', filters);
     }
 
 
     public function listProductMedia(id: String, ?filters: QueryParams): Array<Dynamic> {
-        return this.client.get(PRODUCTS_PATH, id, 'media', filters);
+        return Environment.getApiClient().get(PRODUCTS_PATH, id, 'media', filters);
     }
 
 
     public function createProductMedia(id: String): Dynamic {
-        return this.client.post(PRODUCTS_PATH, id, 'media');
+        return Environment.getApiClient().post(PRODUCTS_PATH, id, 'media');
     }
 
 
     public function getProductMedia(id: String, mediaId: String): Dynamic {
-        return this.client.post(PRODUCTS_PATH, id, 'media/${mediaId}');
+        return Environment.getApiClient().post(PRODUCTS_PATH, id, 'media/${mediaId}');
     }
 
 
     public function updateProductMedia(id: String, mediaId: String, media: String): Dynamic {
-        return this.client.put(PRODUCTS_PATH, '${id}/media/${mediaId}', media);
+        return Environment.getApiClient().put(PRODUCTS_PATH, '${id}/media/${mediaId}', media);
     }
 
 
     public function deleteProductMedia(id: String, mediaId: String): Dynamic {
-        return this.client.delete(PRODUCTS_PATH, id, 'media/${mediaId}');
+        return Environment.getApiClient().delete(PRODUCTS_PATH, id, 'media/${mediaId}');
     }
 
 
     public function listCategories(?filters: QueryParams): Array<Dynamic> {
-        return this.client.get(CATEGORIES_PATH, null, null, filters);
+        return Environment.getApiClient().get(CATEGORIES_PATH, null, null, filters);
     }
 
 
     public function getCategory(id: String): Dynamic {
-        return this.client.get(CATEGORIES_PATH, id);
+        return Environment.getApiClient().get(CATEGORIES_PATH, id);
     }
 }

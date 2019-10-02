@@ -1,4 +1,4 @@
-import connect.Defaults;
+import connect.Environment;
 import connect.api.QueryParams;
 import connect.models.*;
 
@@ -8,12 +8,12 @@ class Example {
         var initialTime = Date.now().getTime();
 
         // Load test config
-        Defaults.loadConfig('test_config.json');
+        Environment.loadConfig('test_config.json');
 
         // List requests
         var requests = Fulfillment.list(new QueryParams()
-            .param('asset.product.id__in', Defaults.getConfig().getProductsString())
-            .param('status', 'pending')
+            .set('asset.product.id__in', Environment.getConfig().getProductsString())
+            .set('status', 'pending')
         );
 
         // Trace requests

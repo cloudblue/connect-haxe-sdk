@@ -9,12 +9,6 @@ class QueryParams {
     }
 
 
-    public function param(name: String, value: String): QueryParams {
-        this.map.set(name, value);
-        return this;
-    }
-
-
     public function keys(): Iterator<String> {
         return this.map.keys();
     }
@@ -23,6 +17,13 @@ class QueryParams {
     public function get(name: String): String {
         return this.map.get(name);
     }
+
+
+    public function set(name: String, value: String): QueryParams {
+        this.map.set(name, value);
+        return this;
+    }
+
 
     public function toString(): String {
         var paramsArr = [for (key in this.keys()) key].map(function (key) {
