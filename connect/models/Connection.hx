@@ -9,6 +9,7 @@ class Connection extends IdModel {
     public var hub(default, null): Hub;
 
     public function new() {
+        super();
         this._setFieldClassNames([
             'provider' => 'Account',
             'vendor' => 'Account'

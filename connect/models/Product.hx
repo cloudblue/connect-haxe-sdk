@@ -16,6 +16,7 @@ class Product extends IdModel {
     public var stats(default, null): ProductStats;
 
     public function new() {
+        super();
         this._setFieldClassNames([
             'owner' => 'Account',
             'stats' => 'ProductStats'

@@ -6,6 +6,7 @@ class Event extends Model {
     public var by(default, null): User;
 
     public function new() {
+        super();
         this._setFieldClassNames([
             'by' => 'User'
         ]);

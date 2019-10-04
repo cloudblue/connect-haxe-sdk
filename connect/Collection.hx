@@ -8,12 +8,8 @@ typedef Arr<T> = Array<T>;
 
 
 class Collection<T> {
-    public function new(?array: Array<T>) {
-        if (array != null) {
-            this._array = array.copy();
-        } else {
-            this._array = new Array<T>();
-        }
+    public function new() {
+        this._array = new Array<T>();
     }
 
 
@@ -47,12 +43,12 @@ class Collection<T> {
 
 
     public function concat(c: Collection<T>): Collection<T> {
-        return new Collection<T>(this._array.concat(c._array));
+        return Collection._fromArray(this._array.concat(c._array));
     }
 
 
     public function copy(): Collection<T> {
-        return new Collection<T>(this._array.copy());
+        return Collection._fromArray(this._array.copy());
     }
 
 
@@ -108,12 +104,12 @@ class Collection<T> {
 
 
     public function slice(pos: Int, ?end: Int): Collection<T> {
-        return new Collection<T>(this._array.slice(pos, end));
+        return Collection._fromArray(this._array.slice(pos, end));
     }
 
 
     public function splice(pos: Int, len: Int): Collection<T> {
-        return new Collection<T>(this._array.splice(pos, len));
+        return Collection._fromArray(this._array.splice(pos, len));
     }
 
 
@@ -125,6 +121,18 @@ class Collection<T> {
     public function unshift(x: T): Collection<T> {
         this._array.unshift(x);
         return this;
+    }
+
+
+    public function _getInternalArray(): Array<T> {
+        return this._array;
+    }
+
+
+    public static function _fromArray<T>(array: Array<T>) {
+        var col = new Collection();
+        col._array = array.copy();
+        return col;
     }
 
 

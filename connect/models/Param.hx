@@ -21,6 +21,7 @@ class Param extends IdModel {
 
 
     public function new() {
+        super();
         this._setFieldClassNames([
             'valueChoice' => 'String',
             'valueChoices' => 'Choice',

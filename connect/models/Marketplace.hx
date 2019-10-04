@@ -13,6 +13,7 @@ class Marketplace extends IdModel {
     public var sourcing(default, null): Bool;
 
     public function new() {
+        super();
         this._setFieldClassNames([
             'hubs' => 'ExtIdHub',
             'countries' => 'Country'

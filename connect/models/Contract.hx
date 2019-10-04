@@ -18,6 +18,7 @@ class Contract extends IdModel {
     public var signee(default, null): User;
 
     public function new() {
+        super();
         this._setFieldClassNames([
             'owner' => 'Account',
             'creator' => 'User',

@@ -6,6 +6,7 @@ interface IGeneralApi {
     public function getAccount(id: String): Dynamic;
     public function listAccountUsers(id: String): Array<Dynamic>;
     public function getAccountUser(id: String, userId: String): Dynamic;
+    public function listConversations(?filters: QueryParams): Array<Dynamic>;
     public function createConversation(data: String): Dynamic;
     public function getConversation(id: String): Dynamic;
     public function createConversationMessage(id: String, data: String): Dynamic;

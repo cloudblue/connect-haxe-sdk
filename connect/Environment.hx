@@ -6,7 +6,7 @@ import connect.api.IUsageApi;
 import connect.api.ITierApi;
 import connect.api.IGeneralApi;
 
-// Need to make sure that there are compiled
+// Need to make sure that these get compiled
 import connect.api.impl.ApiClientImpl;
 import connect.api.impl.FulfillmentApiImpl;
 import connect.api.impl.UsageApiImpl;
@@ -69,7 +69,8 @@ class Environment {
         if (config == null) {
             var content = sys.io.File.getContent(filename);
             var object = haxe.Json.parse(content);
-            config = new Config(object.apiEndpoint, object.apiKey, new Collection<String>([object.products]));
+            config = new Config(object.apiEndpoint, object.apiKey,
+                Collection._fromArray([object.products]));
         } else {
             throw "Config instance is already initialized.";
         }
@@ -130,9 +131,6 @@ class Environment {
         }
         return generalApi;
     }
-
-
-    // These methods should be used only in unit testing
 
 
     public static function _reset() {

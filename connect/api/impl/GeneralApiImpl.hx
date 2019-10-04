@@ -36,6 +36,11 @@ class GeneralApiImpl implements IGeneralApi {
     }
 
 
+    public function listConversations(?filters: QueryParams): Array<Dynamic> {
+        return Environment.getApiClient().get(CONVERSATIONS_PATH, null, null, filters);
+    }
+
+
     public function createConversation(data: String): Dynamic {
         return Environment.getApiClient().post(CONVERSATIONS_PATH, null, null, data);
     }

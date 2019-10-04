@@ -8,7 +8,16 @@ class Message extends IdModel {
     public var text(default, null): String;
 
 
+    public static function create(conversationId: String, text: String): Message {
+        var msg = Environment.getGeneralApi().createConversationMessage(
+            conversationId,
+            haxe.Json.stringify({ text: text }));
+        return Model.parse(Message, msg);
+    }
+
+
     public function new() {
+        super();
         this._setFieldClassNames([
             'creator' => 'User'
         ]);

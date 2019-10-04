@@ -7,9 +7,6 @@ class Example {
         // Get initial time
         var initialTime = Date.now().getTime();
 
-        // Load config
-        Environment.loadConfig('test_config.json');
-
         // List requests
         var requests = Fulfillment.list(new QueryParams()
             .set('asset.product.id__in', Environment.getConfig().getProductsString())

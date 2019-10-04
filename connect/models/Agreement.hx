@@ -24,6 +24,7 @@ class Agreement extends IdModel {
     public var name(default, null): String;
 
     public function new() {
+        super();
         this._setFieldClassNames([
             'owner' => 'Account',
             'stats' => 'AgreementStats',

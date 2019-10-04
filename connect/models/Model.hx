@@ -125,4 +125,7 @@ class Model {
             this.fieldClassNames = map;
         }
     }
+
+
+    public function new() {}
 }

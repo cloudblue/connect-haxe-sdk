@@ -7,6 +7,7 @@ class ProductStats extends Model {
     public var contracts(default, null): ProductStatsInfo;
 
     public function new() {
+        super();
         this._setFieldClassNames([
             'agreements' => 'ProductStatsInfo',
             'contracts' => 'ProductStatsInfo'

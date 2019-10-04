@@ -8,6 +8,7 @@ class Tiers extends Model {
 
 
     public function new() {
+        super();
         this._setFieldClassNames([
             'customer' => 'TierAccount',
             'tier1' => 'TierAccount',

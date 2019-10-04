@@ -8,6 +8,7 @@ class Category extends IdModel {
     public var family(default, null): Family;
 
     public function new() {
+        super();
         this._setFieldClassNames([
             'parent' => 'Category',
             'children' => 'Category'

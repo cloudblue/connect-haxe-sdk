@@ -16,6 +16,7 @@ class Events extends Model {
 
 
     public function new() {
+        super();
         this._setFieldClassNames([
             'created' => 'Event',
             'inquired' => 'Event',

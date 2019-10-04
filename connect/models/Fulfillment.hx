@@ -11,7 +11,7 @@ class Fulfillment extends IdModel {
     public var paramsFormUrl(default, null): String;
     public var activationKey(default, null): String;
     public var reason(default, null): String;
-    public var note(default, null): String;
+    public var note(default, default): String;
     public var asset(default, null): Asset;
     public var contract(default, null): Contract;
     public var marketplace(default, null): Marketplace;
@@ -25,8 +25,12 @@ class Fulfillment extends IdModel {
 
 
     public static function get(id: String): Fulfillment {
-        var request = Environment.getFulfillmentApi().getRequest(id);
-        return Model.parse(Fulfillment, request);
+        try {
+            var request = Environment.getFulfillmentApi().getRequest(id);
+            return Model.parse(Fulfillment, request);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
 
@@ -103,7 +107,25 @@ class Fulfillment extends IdModel {
     }
 
 
+    public function needsMigration(key: String = 'migration_info'): Bool {
+        var param = this.asset.getParamById(key);
+        return param != null && param.value != null && param.value != '';
+    }
+
+
+    public function getConversation(): Conversation {
+        var convs = Conversation.list(new QueryParams().set('instance_id', this.id));
+        var conv = (convs.length() > 0) ? convs.get(0) : null;
+        if  (conv != null && conv.id != null && conv.id != '') {
+            return Conversation.get(conv.id);
+        } else {
+            return null;
+        }
+    }
+
+
     public function new() {
+        super();
         this._setFieldClassNames([
             'assignee' => 'User'
         ]);

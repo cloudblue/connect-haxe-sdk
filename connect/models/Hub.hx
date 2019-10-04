@@ -11,6 +11,7 @@ class Hub extends IdModel {
 
 
     public function new() {
+        super();
         this._setFieldClassNames([
             'company' => 'Account',
             'stats' => 'HubStats'
