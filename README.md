@@ -9,16 +9,16 @@ This is a version of the SDK for Incram Micro's Connect platform, written in Hax
 Other platforms that will be added in the future:
 
 * C#.
-* JavaScript (do not use yet, it has a secirity flaw due to the use of `eval`).
+* JavaScript (do not use it yet, it has a security flaw due to the use of `eval`).
 * Python (will work with Haxe 4.1 onwards).
 
 In order to compile the SDK, you must have Haxe installed on your machine. To install it on Ubuntu, simply do:
 
 ```shell script
-$ sudo app install haxe
+$ sudo apt install haxe
 ```
 
-Haxelib and Neko are installed by default (you need Neko to run the unit tests). To install on other platforms, follow installation instructions on [Haxe webpage](https://haxe.org/).
+Haxelib and Neko are installed by default (you need Neko to run the unit tests). To install on other platforms, follow the installation instructions on the [Haxe webpage](https://haxe.org/).
 
 You need to install some libraries to build the SDK using Haxelib:
 
@@ -30,13 +30,13 @@ $ haxelib install hxjava
 $ haxelib install hxnodejs
 ```
 
-To build the SDK for all the available targets, type the following:
+To build the SDK for all the available targets, type the following on a terminal:
 
 ```shell script
 $ haxe lib.hxml
 ```
 
-A `_build` folder will be generated with subfolders for every target (except Python and JavaScript, which are exported to a single file). In the near future, all preparations to use the SDK on the target languages will be make by the build script itself. By now, if you want to use it for example in Java, you should go to the `_build\java` folder, rename `Empty.jar` to `connect.jar`, and use the JAR file in your project.
+A `_build` folder will be generated with subfolders for every target (except Python and JavaScript, which are exported to a single file). In the near future, all preparations required to use the SDK on the target languages will be made by the build script itself. By now, if you want to use it for example in Java, you should go to the `_build\java` folder, rename `Empty.jar` to `connect.jar`, and use the JAR file in your project.
 
 To run an example written in Haxe, type:
 
@@ -51,6 +51,8 @@ To generate the documentation, type:
 ```shell script
 $ haxe doc.hxml
 ```
+
+Documentation with be generated in the `doc` folder.
 
 To run the unit tests, type:
 
