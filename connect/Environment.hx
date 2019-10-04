@@ -14,39 +14,37 @@ import connect.api.impl.TierApiImpl;
 import connect.api.impl.GeneralApiImpl;
 
 
+/**
+    In order to be able to perform their tasks, many classes in the SDK rely on the global
+    availability of several objects. For example, the URL and credentials used to communicate
+    with the platform are defined in an instance of the `connect.Config` class, while the
+    ability to perform Http requests is performed by an instance of a class that implements
+    the `connect.api.IApiClient` interface.
+
+    Since these dependencies must be globally available, the `Environment` class contains static
+    method to obtain the default instances of these clases from anywhere. To minimize the
+    side-effects that can be caused by changes in the values of global objects in a program,
+    all environment objects are immutable, providing a side-effect free context for the program
+    to run.
+
+    All objects returned here are lazy-initialized, meaning that they are not created until they
+    are requested. In order to provide the connector configuration, a call to
+    `Environment.initConfig` or `Environment.loadConfig` can be provided at the top of the program.
+    Otherwise, the configuration will be automatically loaded from the "config.json" file.
+
+    Many of the objects returned by this class are defined in a public interface, with a default
+    implementation provided by the Environment. This is because when unit testing, these classes
+    get replaced through dependency injection by mocked ones, allowing to a sandboxed unit testing
+    environment.
+**/
 class Environment {
-    public static function init(?deps: Dictionary): Void {
-        initDefaultDependencies();
-        if (dependencies == null) {
-            dependencies = new Dictionary();
-            if (deps != null) {
-                var keys = deps.keys();
-                for (key in keys) {
-                    if (defaultDependencies.exists(key)) {
-                        dependencies.setString(key, deps.getString(key));
-                    }
-                }
-            }
-        }
-    }
-
-
-    public static function load(filename: String): Void {
-        initDefaultDependencies();
-        if (dependencies == null) {
-            var content = sys.io.File.getContent(filename);
-            init(Util.toDictionary(haxe.Json.parse(content)));
-        }
-    }
-
-
     /**
-        Initializes the configuration singleton.
+        Initializes the configuration object. It must have not been previously configured.
 
         @param apiUrl Value for the apiUrl property.
         @param apiKey Value for the apiKey property.
         @param products Collection of product ids that can be processed with this configuration.
-        @throws String if the configuration is already initialized.
+        @throws String If the configuration is already initialized.
     **/
     public static function initConfig(apiUrl: String, apiKey: String,
             products: Collection<String>): Void {
@@ -59,11 +57,12 @@ class Environment {
     
 
     /**
-        Initializes the configuration singleton using a JSON file.
+        Initializes the configuration object using a JSON file.  It must have not been previously
+        configured.
 
         @param filename Name of the configuration JSON file to parse.
-        @throws Exception if the file cannot be parsed.
-        @throws String if the configuration is already initialized.
+        @throws Exception If the file cannot be parsed.
+        @throws String If the configuration is already initialized.
     **/
     public static function loadConfig(filename: String): Void {
         if (config == null) {
@@ -78,11 +77,11 @@ class Environment {
 
 
     /**
-        Returns the config instance. If it is not initialized, it tries to initialize it from
+        Returns the configuration object. If it is not initialized, it tries to initialize it from
         the file "config.json".
 
-        @returns the default instance.
-        @throws Exception if the instance is not initialized and the file "config.json" cannot be
+        @returns The default instance.
+        @throws Exception If the instance is not initialized and the file "config.json" cannot be
             parsed.
     **/
     public static function getConfig() {
@@ -93,6 +92,10 @@ class Environment {
     }
 
 
+    /**
+        @returns The API Client, used to make all low level Http requests to the platform.
+        @throws String If a class implementing the IApiClient interface cannot be instanced.
+    **/
     public static function getApiClient() : IApiClient {
         if (apiClient == null) {
             apiClient = createInstance('IApiClient');
@@ -101,6 +104,11 @@ class Environment {
     }
 
 
+    /**
+        @returns The Fulfillment API instance, used to make all fulfillment requests to the
+            platform.
+        @throws String If a class implementing the IFulfillmentApi interface cannot be instanced.
+    **/
     public static function getFulfillmentApi() : IFulfillmentApi {
         if (fulfillmentApi == null) {
             fulfillmentApi = createInstance('IFulfillmentApi');
@@ -109,6 +117,10 @@ class Environment {
     }
 
 
+    /**
+        @returns The Usage API instance, used to make all usage requests to the platform.
+        @throws String If a class implementing the IUsageApi interface cannot be instanced.
+    **/
     public static function getUsageApi() : IUsageApi {
         if (usageApi == null) {
             usageApi = createInstance('IUsageApi');
@@ -117,6 +129,10 @@ class Environment {
     }
 
 
+    /**
+        @returns The Tier API instance, used to make all tier requests to the platform.
+        @throws String If a class implementing the ITierApi interface cannot be instanced.
+    **/
     public static function getTierApi() : ITierApi {
         if (tierApi == null) {
             tierApi = createInstance('ITierApi');
@@ -125,6 +141,10 @@ class Environment {
     }
 
 
+    /**
+        @returns The General API instance, used to make all general requests to the platform.
+        @throws String If a class implementing the IGeneralApi interface cannot be instanced.
+    **/
     public static function getGeneralApi() : IGeneralApi {
         if (generalApi == null) {
             generalApi = createInstance('IGeneralApi');
@@ -133,7 +153,8 @@ class Environment {
     }
 
 
-    public static function _reset() {
+    @:dox(hide)
+    public static function _reset(?deps: Dictionary) {
         config = null;
         apiClient = null;
         fulfillmentApi = null;
@@ -141,6 +162,7 @@ class Environment {
         tierApi = null;
         generalApi = null;
         dependencies = null;
+        init(deps);
     }
 
 
@@ -154,6 +176,22 @@ class Environment {
     private static var dependencies: Dictionary;
 
 
+    private static function init(?deps: Dictionary): Void {
+        initDefaultDependencies();
+        if (dependencies == null) {
+            dependencies = new Dictionary();
+            if (deps != null) {
+                var keys = deps.keys();
+                for (key in keys) {
+                    if (defaultDependencies.exists(key)) {
+                        dependencies.setString(key, deps.getString(key));
+                    }
+                }
+            }
+        }
+    }
+    
+    
     private static function initDefaultDependencies(): Void {
         if (defaultDependencies == null) {
             defaultDependencies = new Dictionary()

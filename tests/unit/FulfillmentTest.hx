@@ -10,8 +10,7 @@ import tests.mocks.Mock;
 
 class FulfillmentTest extends haxe.unit.TestCase {
     override public function setup() {
-        Environment._reset();
-        Environment.init(new Dictionary()
+        Environment._reset(new Dictionary()
             .setString('IFulfillmentApi', 'tests.mocks.FulfillmentApiMock'));
     }
 
