@@ -77,6 +77,14 @@ class Environment {
 
 
     /**
+        @returns `true` is config has already been initialized, `false` otherwise.
+    **/
+    public static function isConfigInitialized(): Bool {
+        return config != null;
+    }
+
+
+    /**
         Returns the configuration object. If it is not initialized, it tries to initialize it from
         the file "config.json".
 
