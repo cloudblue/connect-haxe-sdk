@@ -4,10 +4,14 @@ import connect.Util;
 import haxe.ds.StringMap;
 
 
+/**
+    Base model class.
+**/
 class Model {
     private var fieldClassNames(default, null): StringMap<String>;
 
 
+    /** @returns A Haxe dynamic object with a shallow copy of `this` model's properties. **/
     public function toObject(): Dynamic {
         var obj = {};
         var fields = Type.getInstanceFields(Type.getClass(this));
@@ -54,25 +58,13 @@ class Model {
     }
 
 
+    /** @returns A String with the JSON representation of `this` Model. **/
     public function toString(): String {
         return haxe.Json.stringify(this.toObject());
     }
 
 
-    public function getFieldClassName(field: String): String {
-        if (this.fieldClassNames != null && this.fieldClassNames.exists(field)) {
-            var className = this.fieldClassNames.get(field);
-            var exceptions = ['String'];
-            if (exceptions.indexOf(className) == -1) {
-                className = 'connect.models.' + className;
-            }
-            return className;
-        } else {
-            return null;
-        }
-    }
-
-
+    /** Parses the given Haxe dynamic object as a Model of the specified class. **/
     public static function parse<T>(modelClass: Class<T>, obj: Dynamic): T {
         var model = Type.createInstance(modelClass, []);
         var castedModel = cast(model, Model);
@@ -84,7 +76,7 @@ class Model {
                 //trace('Injecting "${field}" in ' + Type.getClassName(modelClass));
                 switch (Type.typeof(val)) {
                     case TClass(Array):
-                        var className = castedModel.getFieldClassName(field);
+                        var className = castedModel._getFieldClassName(field);
                         if (className == null) {
                             var camelField = 'connect.models.' + Util.toCamelCase(field, true);
                             className = Util.toSingular(camelField);
@@ -92,7 +84,7 @@ class Model {
                         var classObj = Type.resolveClass(className);
                         Reflect.setProperty(model, field, parseArray(classObj, val));
                     case TObject:
-                        var className = castedModel.getFieldClassName(field);
+                        var className = castedModel._getFieldClassName(field);
                         if (className == null) {
                             className = 'connect.models.' + Util.toCamelCase(field, true);
                         }
@@ -111,6 +103,7 @@ class Model {
     }
 
 
+    /** Parses the given Haxe dynamic object as a Collection of Models of the specified class. **/
     public static function parseArray<T>(modelClass: Class<T>, array: Array<Dynamic>): Collection<T> {
         var result = new Collection<T>();
         for (obj in array) {
@@ -124,6 +117,21 @@ class Model {
     public function _setFieldClassNames(map: StringMap<String>): Void {
         if (this.fieldClassNames == null) {
             this.fieldClassNames = map;
+        }
+    }
+
+
+    @:dox(hide)
+    public function _getFieldClassName(field: String): String {
+        if (this.fieldClassNames != null && this.fieldClassNames.exists(field)) {
+            var className = this.fieldClassNames.get(field);
+            var exceptions = ['String'];
+            if (exceptions.indexOf(className) == -1) {
+                className = 'connect.models.' + className;
+            }
+            return className;
+        } else {
+            return null;
         }
     }
 

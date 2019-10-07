@@ -1,17 +1,51 @@
 package connect.models;
 
 
+/**
+    Represents a set of events that can take place on an object.
+**/
 class Events extends Model {
+    /** Creation event. **/
     public var created(default, null): Event;
+
+
+    /** Inquire event. **/
     public var inquired(default, null): Event;
+
+
+    /** Pending event. **/
     public var pended(default, null): Event;
+
+
+    /** Validation event. **/
     public var validated(default, null): Event;
+
+
+    /** Update event. **/
     public var updated(default, null): Event;
+
+
+    /** Approve event. **/
     public var approved(default, null): Event;
+
+
+    /** Upload event. **/
     public var uploaded(default, null): Event;
+
+
+    /** Submit event. **/
     public var submitted(default, null): Event;
+
+
+    /** Accept event. **/
     public var accepted(default, null): Event;
+
+
+    /** Reject event. **/
     public var rejected(default, null): Event;
+
+
+    /** Close event. **/
     public var closed(default, null): Event;
 
 

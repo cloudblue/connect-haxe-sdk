@@ -101,7 +101,7 @@ class Asset extends IdModel {
         - product.id
         - connection.type
 
-        @returns A collection of Assets.
+        @returns A Collection of Assets.
     **/
     public static function list(?filters: QueryParams) : Collection<Asset> {
         var assets = Environment.getFulfillmentApi().listAssets(filters);
