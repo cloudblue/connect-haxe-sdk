@@ -64,19 +64,26 @@ class FulfillmentApiMock extends Mock implements IFulfillmentApi {
 
     public function listAssets(?filters: QueryParams): Array<Dynamic> {
         this.calledFunction('listAssets', [filters]);
-        return null;
+        var requests = this.listRequests(filters);
+        return requests.map(function (request) { return request.asset; });
     }
 
 
     public function getAsset(id: String): Dynamic {
         this.calledFunction('getAsset', [id]);
+        var assets = this.listAssets().filter(function(asset) { return asset.id == id; });
+        if (assets.length > 0) {
+            return Reflect.copy(assets[0]);
+        } else {
+            throw 'Http Error #404';
+        }
         return null;
     }
 
 
     public function getAssetRequests(id: String): Array<Dynamic> {
         this.calledFunction('getAssetRequests', [id]);
-        return null;
+        return this.listRequests().filter(function(request) { return request.asset.id == id; });
     }
 
 

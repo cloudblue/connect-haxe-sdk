@@ -8,6 +8,7 @@ class UnitTests {
         
         runner.add(new tests.unit.ConfigTest());
         runner.add(new tests.unit.FulfillmentTest());
+        runner.add(new tests.unit.AssetTest());
 
         runner.run();
     }

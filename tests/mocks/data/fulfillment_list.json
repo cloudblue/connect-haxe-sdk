@@ -19,10 +19,93 @@
       "id": "AS-392-283-000-0",
       "items": [
         {
-          "id": "string_id",
-          "mpn": "mpn params",
+          "id": "TEAM_ST3L2T1Y",
+          "mpn": "TEAM-ST3L2T1Y",
+          "quantity": "100",
           "old_quantity": "0",
-          "quantity": "0"
+          "global_id": "XXX",
+          "params": [
+                  {
+                    "value": "Value 1",
+                    "events": {
+                      "updated": {
+                        "at": "2019-08-27T14:21:23+00:00",
+                        "by": {
+                          "id": "UR-841-574-187",
+                          "name": "Marc Serrat"
+                        }
+                      },
+                      "created": {
+                        "at": "2019-08-26T10:42:56+00:00",
+                        "by": {
+                          "id": "UR-841-574-187",
+                          "name": "Marc Serrat"
+                        }
+                      }
+                    },
+                    "id": "item_parameter",
+                    "title": "item_parameter",
+                    "description": "item_parameter",
+                    "type": "text",
+                    "scope": "item",
+                    "phase": "configuration",
+                    "constraints": {
+                      "hidden": false,
+                      "required": false,
+                      "unique": false
+                    }
+                  },
+                  {
+                    "value": "item",
+                    "events": {
+                      "updated": {
+                        "at": "2019-08-26T10:44:10+00:00"
+                      },
+                      "created": {
+                        "at": "2019-08-26T10:44:10+00:00",
+                        "by": {
+                          "id": "UR-841-574-187",
+                          "name": "Marc Serrat"
+                        }
+                      }
+                    },
+                    "id": "item_per_marketplace",
+                    "title": "item_per_marketplace",
+                    "description": "item_per_marketplace",
+                    "type": "text",
+                    "scope": "item_marketplace",
+                    "phase": "configuration",
+                    "constraints": {
+                      "hidden": false,
+                      "required": true,
+                      "unique": false
+                    }
+                  }
+                ]
+        },
+        {
+          "id": "TEAM_ST3L2TAC1M",
+          "mpn": "TEAM-ST3L2TAC1M",
+          "quantity": "200",
+          "old_quantity": "0"
+        },
+        {
+          "id": "UPSIZE_TEST",
+          "mpn": "UPSIZE_TEST",
+          "quantity": "201",
+          "old_quantity": "200"
+        },
+        {
+          "id": "DOWNSIZE_TEST",
+          "mpn": "DOWNSIZE_TEST",
+          "quantity": "199",
+          "old_quantity": "200"
+        },
+        {
+          "id": "DELETE_TEST",
+          "mpn": "DELETE_TEST",
+          "quantity": "0",
+          "old_quantity": "200"
         }
       ],
       "params": [
