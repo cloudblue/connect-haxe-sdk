@@ -1,17 +1,15 @@
 package connect;
 
-#if java
-typedef Arr<T> = java.NativeArray<T>;
-#else
-typedef Arr<T> = Array<T>;
-#end
-
 
 /**
     A Collection is a way to have a standard collection type across all languages supported by the
-    SDK. It can be converted into a native array with the `toArray()` method.
+    SDK.
 **/
+#if java
+class Collection<T> implements java.lang.Iterable<T> {
+#else
 class Collection<T> {
+#end
     /**
         Creates a new Collection.
     **/
@@ -46,23 +44,15 @@ class Collection<T> {
 
 
     /**
-        Returns a native array with the same elements as the collection.
+        Returns a Haxe array with the same elements as the collection.
 
         The array is a shallow copy of the original collection.
 
-        The return type `Arr<T>`, is an alias for whatever the native array type
-        is on the target language.
+        This can be used when using the SDK within Haxe, but it is likely useless
+        on other target languages.
     **/
-    public function toArray(): Arr<T> {
-#if java
-        var arr = new Arr<T>(this._array.length);
-        for (i in 0...arr.length) {
-            arr[i] = this._array[i];
-        }
-        return arr;
-#else
+    public function toArray(): Array<T> {
         return this._array.copy();
-#end
     }
 
 
@@ -132,11 +122,17 @@ class Collection<T> {
 
     /**
         Returns an iterator of the Collection values. This can be used with `for` loops when
-        using the SDK within Haxe, but is useless when using it with other languages.
+        using the SDK within Haxe, and in Java it returns a native iterator.
     **/
+#if java
+    public function iterator(): java.util.Iterator<T> {
+        return new connect.native.JavaIterator(this._array);
+    }
+#else
     public function iterator(): Iterator<T> {
         return this._array.iterator();
     }
+#end
 
 
     /**
@@ -312,12 +308,6 @@ class Collection<T> {
     public function unshift(x: T): Collection<T> {
         this._array.unshift(x);
         return this;
-    }
-
-
-    @:dox(hide)
-    public function _getInternalArray(): Array<T> {
-        return this._array;
     }
 
 

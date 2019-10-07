@@ -3,86 +3,185 @@ package connect.models;
 import connect.api.QueryParams;
 
 
+/**
+    Represents a saleable item that can be provided/distributed in terms of one purchase.
+
+    An asset is characterized by the following:
+
+    - Every asset reflects some purchase (somebody purchases either a service or a good).
+    - Purchase action can be reverted (canceled) or terminated when terms of purchase are expired.
+    - Asset can be subscription-based (when customer pay for usage in some time terms) or
+      one-time based.
+    - Matter of asset is defined as list of purchased items with purchased quantities
+      (asset items).
+    - Item in asset may be either reservation-based, when customer decides how many items of SKU
+      to be purchased or Pay-Per-User based when actual use of the SKU defines quantity for
+      asset item.
+    - Asset may be modified using change requests: either set of items may be changed or quantities
+      of reservation-based items may be changed.
+    - Some assets can be put into suspend state, when service is not actually provided
+      and no charges happened.
+    - Assets also may be parametrized by one or more parameters which differentiate
+      one asset from another.
+**/
 class Asset extends IdModel {
+    /**
+        Assets may have one of the following statuses:
+
+        - new: First purchase requested.
+        - processing: Until first purchase request is either completed or rejected.
+        - active: After the first purchase request is completed.
+          NOTE: Asset stays active regardless of any other requests except cancel.
+        - rejected: Asset becomes rejected once the first purchase request is rejected.
+        - terminated: Asset becomes terminated once the 'cancel' request type is fulfilled.
+        - suspended: Asset becomes suspended once 'suspend' request type is fulfilled.
+    **/
     public var status(default, null): String;
+
+
+    /** Identification for asset object on eCommerce. **/
     public var externalId(default, null): String;
+
+
+    /** Id of asset in eCommerce system. **/
     public var externalUid(default, null): String;
+
+
+    /** Name of asset. **/
     public var externalName(default, null): String;
+
+
+    /** Product object reference. **/
     public var product(default, null): Product;
+
+
+    /** Connection object reference. **/
     public var connection(default, null): Connection;
+
+
+    /** Contract object reference. **/
     public var contract(default, null): Contract;
+
+
+    /** Marketplace object reference. **/
     public var marketplace(default, null): Marketplace;
+
+
+    /** Collection of product parameters. **/
     public var params(default, null): Collection<Param>;
+
+
+    /** Supply chain accounts. **/
     public var tiers(default, null): Tiers;
+
+
+    /** Collection of asset product items. **/
     public var items(default, null): Collection<Item>;
+
+
+    /** Product and Marketplace Configuration Phase Parameter. **/
     public var configuration(default, null): Configuration;
 
 
+    /**
+        Lists all Assets that match the given filters. Supported filters are:
+
+        - id
+        - connection.hub.id
+        - connection.provider.id
+        - tiers.customer.id
+        - tiers.tier1.id
+        - tiers.tier2.id
+        - connection.id
+        - status
+        - created
+        - updated
+        - marketplace.id
+        - contract.id
+        - product.id
+        - connection.type
+
+        @returns A collection of Assets.
+    **/
     public static function list(?filters: QueryParams) : Collection<Asset> {
         var assets = Environment.getFulfillmentApi().listAssets(filters);
         return Model.parseArray(Asset, assets);
     }
 
 
+    
+    /** @returns The Asset with the given id, or `null` if it was not found. **/
     public static function get(id: String): Asset {
-        var asset = Environment.getFulfillmentApi().getAsset(id);
-        return Model.parse(Asset, asset);
+        try {
+            var asset = Environment.getFulfillmentApi().getAsset(id);
+            return Model.parse(Asset, asset);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
 
+    /** @returns A collection with all the requests for the `this` Asset. **/
     public function getRequests(): Collection<Fulfillment> {
         var requests = Environment.getFulfillmentApi().getAssetRequests(this.id);
         return Model.parseArray(Fulfillment, requests);
     }
 
 
+    /** @returns A collection with `this` Asset's new items. **/
     public function getNewItems(): Collection<Item> {
-        return Collection._fromArray(this.items._getInternalArray().filter(function(item) {
+        return Collection._fromArray(this.items.toArray().filter(function(item) {
             return Std.parseInt(item.quantity) > 0 && Std.parseInt(item.oldQuantity) == 0;
         }));
     }
 
 
+    /** @returns A collection with `this` Asset's changed items. **/
     public function getChangedItems(): Collection<Item> {
-        return Collection._fromArray(this.items._getInternalArray().filter(function(item) {
+        return Collection._fromArray(this.items.toArray().filter(function(item) {
             return Std.parseInt(item.quantity) > 0 && Std.parseInt(item.oldQuantity) > 0;
         }));
     }
 
 
+    /** @returns A collection with `this` Asset's removed items. **/
     public function getRemovedItems(): Collection<Item> {
-        return Collection._fromArray(this.items._getInternalArray().filter(function(item) {
+        return Collection._fromArray(this.items.toArray().filter(function(item) {
             return Std.parseInt(item.quantity) == 0 && Std.parseInt(item.oldQuantity) > 0;
         }));
     }
 
 
+    /** @returns The param with the given id, or `null` if it was not found. **/
     public function getParamById(paramId: String): Param {
-        var params = this.params._getInternalArray().filter(function(param) {
+        var params = this.params.toArray().filter(function(param) {
             return param.id == paramId;
         });
         return (params.length > 0) ? params[0] : null;
     }
 
 
+    /** @returns The item with the given id, or `null` if it was not found. **/
     public function getItemById(itemId: String): Item {
-        var items = this.items._getInternalArray().filter(function(item) {
+        var items = this.items.toArray().filter(function(item) {
             return item.id == itemId;
         });
         return (items.length > 0) ? items[0] : null;
     }
 
 
+    /** @returns The item with the given Manufacture Part Number, or `null` if it was not found. **/
     public function getItemByMpn(mpn: String): Item {
-        var items = this.items._getInternalArray().filter(function(item) {
+        var items = this.items.toArray().filter(function(item) {
             return item.mpn == mpn;
         });
         return (items.length > 0) ? items[0] : null;
     }
 
 
+    /** @returns The item with the given global id, or `null` if it was not found. **/
     public function getItemByGlobalId(globalId: String): Item {
-        var items = this.items._getInternalArray().filter(function(item) {
+        var items = this.items.toArray().filter(function(item) {
             return item.globalId == globalId;
         });
         return (items.length > 0) ? items[0] : null;
