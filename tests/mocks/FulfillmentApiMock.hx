@@ -13,7 +13,7 @@ class FulfillmentApiMock extends Mock implements IFulfillmentApi {
 
     public function listRequests(?filters: QueryParams): Array<Dynamic> {
         this.calledFunction('listRequests', [filters]);
-        return this.list.copy();
+        return this.list.map(function(request) { return Reflect.copy(request); });
     }
 
 
@@ -30,7 +30,7 @@ class FulfillmentApiMock extends Mock implements IFulfillmentApi {
 
     public function createRequest(): Dynamic {
         this.calledFunction('createRequest', []);
-        return this.list[0];
+        return Reflect.copy(this.list[0]);
     }
 
 
@@ -65,7 +65,7 @@ class FulfillmentApiMock extends Mock implements IFulfillmentApi {
     public function listAssets(?filters: QueryParams): Array<Dynamic> {
         this.calledFunction('listAssets', [filters]);
         var requests = this.listRequests(filters);
-        return requests.map(function (request) { return request.asset; });
+        return requests.map(function (request) { return Reflect.copy(request.asset); });
     }
 
 
@@ -83,7 +83,9 @@ class FulfillmentApiMock extends Mock implements IFulfillmentApi {
 
     public function getAssetRequests(id: String): Array<Dynamic> {
         this.calledFunction('getAssetRequests', [id]);
-        return this.listRequests().filter(function(request) { return request.asset.id == id; });
+        return this.listRequests()
+            .filter(function(request) { return request.asset.id == id; })
+            .map(function(request) { return Reflect.copy(request); });
     }
 
 

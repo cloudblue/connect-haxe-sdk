@@ -11,7 +11,8 @@ import tests.mocks.Mock;
 class RequestTest extends haxe.unit.TestCase {
     override public function setup() {
         Environment._reset(new Dictionary()
-            .setString('IFulfillmentApi', 'tests.mocks.FulfillmentApiMock'));
+            .setString('IFulfillmentApi', 'tests.mocks.FulfillmentApiMock')
+            .setString('IGeneralApi', 'tests.mocks.GeneralApiMock'));
     }
 
 
@@ -211,5 +212,18 @@ class RequestTest extends haxe.unit.TestCase {
     }
 
 
-    // TODO: Add testGetConversation
+    public function testGetConversation() {
+        // Check subject
+        var request = Request.get('PR-5852-1608-0000');
+        var conv = request.getConversation();
+        assertTrue(conv != null);
+        assertEquals('PR-5852-1608-0000', conv.instanceId);
+
+        // Check mocks
+        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        assertEquals(1, apiMock.callCount('listConversations'));
+        assertEquals(
+            ['?instance_id=PR-5852-1608-0000'].toString(),
+            apiMock.callArgs('listConversations', 0).toString());
+    }
 }

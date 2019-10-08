@@ -1,5 +1,6 @@
 // Include all mock classes here to make sure they are accesible to reflection
 import tests.mocks.FulfillmentApiMock;
+import tests.mocks.GeneralApiMock;
 
 
 class UnitTests {
