@@ -8,7 +8,7 @@ class Example {
         var initialTime = Date.now().getTime();
 
         // List requests
-        var requests = Fulfillment.list(new QueryParams()
+        var requests = Request.list(new QueryParams()
             .set('asset.product.id__in', Environment.getConfig().getProductsString())
             .set('status', 'pending')
         );

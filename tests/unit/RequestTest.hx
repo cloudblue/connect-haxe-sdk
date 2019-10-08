@@ -2,13 +2,13 @@ package tests.unit;
 
 import connect.Dictionary;
 import connect.Environment;
-import connect.models.Fulfillment;
 import connect.models.Model;
 import connect.models.Param;
+import connect.models.Request;
 import tests.mocks.Mock;
 
 
-class FulfillmentTest extends haxe.unit.TestCase {
+class RequestTest extends haxe.unit.TestCase {
     override public function setup() {
         Environment._reset(new Dictionary()
             .setString('IFulfillmentApi', 'tests.mocks.FulfillmentApiMock'));
@@ -17,7 +17,7 @@ class FulfillmentTest extends haxe.unit.TestCase {
 
     public function testList() {
         // Check subject
-        var requests = Fulfillment.list();
+        var requests = Request.list();
         assertEquals(1, requests.length());
         assertEquals('PR-5852-1608-0000', requests.get(0).id);
 
@@ -32,7 +32,7 @@ class FulfillmentTest extends haxe.unit.TestCase {
 
     public function testGetOk() {
         // Check subject
-        var request = Fulfillment.get('PR-5852-1608-0000');
+        var request = Request.get('PR-5852-1608-0000');
         assertTrue(request != null);
 
         // Check mocks
@@ -46,7 +46,7 @@ class FulfillmentTest extends haxe.unit.TestCase {
 
     public function testGetKo() {
         // Check subject
-        var request = Fulfillment.get('PR-XXXX-XXXX-XXXX');
+        var request = Request.get('PR-XXXX-XXXX-XXXX');
         assertTrue(request == null);
 
         // Check mocks
@@ -60,7 +60,7 @@ class FulfillmentTest extends haxe.unit.TestCase {
 
     public function testCreate() {
         // Check subject
-        var request = Fulfillment.create();
+        var request = Request.create();
         assertTrue(request != null);
         assertEquals('PR-5852-1608-0000', request.id);
 
@@ -75,11 +75,11 @@ class FulfillmentTest extends haxe.unit.TestCase {
 
     public function testUpdate() {
         // Check subject
-        var request = Fulfillment.get('PR-5852-1608-0000');
+        var request = Request.get('PR-5852-1608-0000');
         request.note = 'Hello, world!';
         var updatedRequest = request.update();
         assertTrue(updatedRequest != null);
-        assertEquals(Fulfillment.get('PR-5852-1608-0000').toString(), updatedRequest.toString());
+        assertEquals(Request.get('PR-5852-1608-0000').toString(), updatedRequest.toString());
         // ^ The mock returns that request
 
         // Check mocks
@@ -93,7 +93,7 @@ class FulfillmentTest extends haxe.unit.TestCase {
 
     public function testApproveByTemplate() {
         // Check subject
-        var request = Fulfillment.get('PR-5852-1608-0000');
+        var request = Request.get('PR-5852-1608-0000');
         var approvedRequest = request.approveByTemplate('TL-XXX-XXX-XXX');
         assertTrue(approvedRequest != null);
 
@@ -108,7 +108,7 @@ class FulfillmentTest extends haxe.unit.TestCase {
 
     public function testApproveByTile() {
         // Check subject
-        var request = Fulfillment.get('PR-5852-1608-0000');
+        var request = Request.get('PR-5852-1608-0000');
         var approvedRequest = request.approveByTile('Hello, world!');
         assertTrue(approvedRequest != null);
 
@@ -123,7 +123,7 @@ class FulfillmentTest extends haxe.unit.TestCase {
 
     public function testFail() {
         // Check subject
-        var request = Fulfillment.get('PR-5852-1608-0000');
+        var request = Request.get('PR-5852-1608-0000');
         var failedRequest = request.fail("Failing...");
         assertTrue(failedRequest != null);
 
@@ -138,7 +138,7 @@ class FulfillmentTest extends haxe.unit.TestCase {
 
     public function testInquire() {
         // Check subject
-        var request = Fulfillment.get('PR-5852-1608-0000');
+        var request = Request.get('PR-5852-1608-0000');
         var inquiredRequest = request.inquire();
         assertTrue(inquiredRequest != null);
 
@@ -153,7 +153,7 @@ class FulfillmentTest extends haxe.unit.TestCase {
 
     public function testPend() {
         // Check subject
-        var request = Fulfillment.get('PR-5852-1608-0000');
+        var request = Request.get('PR-5852-1608-0000');
         var pendedRequest = request.pend();
         assertTrue(pendedRequest != null);
 
@@ -168,7 +168,7 @@ class FulfillmentTest extends haxe.unit.TestCase {
 
     public function testAssignTo() {
         // Check subject
-        var request = Fulfillment.get('PR-5852-1608-0000');
+        var request = Request.get('PR-5852-1608-0000');
         var assignedRequest = request.assignTo('XXX');
         assertTrue(assignedRequest != null);
         //assertEquals('XXX', assignedRequest.assignee);
@@ -184,14 +184,14 @@ class FulfillmentTest extends haxe.unit.TestCase {
 
     public function testNeedsMigrationFalse() {
         // Check subject
-        var request = Fulfillment.get('PR-5852-1608-0000');
+        var request = Request.get('PR-5852-1608-0000');
         assertFalse(request.needsMigration());
     }
 
 
     public function testNeedsMigrationFalse2() {
         // Check subject
-        var request = Fulfillment.get('PR-5852-1608-0000');
+        var request = Request.get('PR-5852-1608-0000');
         request.asset.params.push(Model.parse(Param, {
             id: 'migration_info',
             value: ''
@@ -202,7 +202,7 @@ class FulfillmentTest extends haxe.unit.TestCase {
 
     public function testNeedsMigrationTrue() {
         // Check subject
-        var request = Fulfillment.get('PR-5852-1608-0000');
+        var request = Request.get('PR-5852-1608-0000');
         request.asset.params.push(Model.parse(Param, {
             id: 'migration_info',
             value: '{}'

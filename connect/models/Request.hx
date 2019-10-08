@@ -6,7 +6,7 @@ import connect.api.QueryParams;
 /**
     Represents a request of the Fulfillment Api.
 **/
-class Fulfillment extends IdModel {
+class Request extends IdModel {
     /** Type of request. One of: purchase, change, suspend, resume, renew, cancel. **/
     public var type(default, null): String;
 
@@ -88,19 +88,19 @@ class Fulfillment extends IdModel {
         - asset.tiers.tier2.id
         - asset.connection.type (test|production|preview)
 
-        @returns A Collection of Fulfillments.
+        @returns A Collection of Requests.
     **/
-    public static function list(?filters: QueryParams) : Collection<Fulfillment> {
+    public static function list(?filters: QueryParams) : Collection<Request> {
         var requests = Environment.getFulfillmentApi().listRequests(filters);
-        return Model.parseArray(Fulfillment, requests);
+        return Model.parseArray(Request, requests);
     }
 
 
-    /** @returns The Fulfillment with the given id, or `null` if it was not found. **/
-    public static function get(id: String): Fulfillment {
+    /** @returns The Request with the given id, or `null` if it was not found. **/
+    public static function get(id: String): Request {
         try {
             var request = Environment.getFulfillmentApi().getRequest(id);
-            return Model.parse(Fulfillment, request);
+            return Model.parse(Request, request);
         } catch (ex: Dynamic) {
             return null;
         }
@@ -108,130 +108,130 @@ class Fulfillment extends IdModel {
 
 
     /**
-        Creates a new Fulfillment.
+        Creates a new Request.
 
-        @returns The created Fulfillment.
+        @returns The created Request.
     **/
-    public static function create(): Fulfillment {
+    public static function create(): Request {
         var request = Environment.getFulfillmentApi().createRequest();
-        return Model.parse(Fulfillment, request);
+        return Model.parse(Request, request);
     }
 
 
     /**
-        Updates the Fulfillment in the server with the data changed in `this` model.
+        Updates the Request in the server with the data changed in `this` model.
 
-        @returns The Fulfillment returned from the server, which should contain
-        the same data as `this` Fulfillment.
+        @returns The Request returned from the server, which should contain
+        the same data as `this` Request.
     **/
-    public function update(): Fulfillment {
+    public function update(): Request {
         var request = Environment.getFulfillmentApi().updateRequest(
             this.id,
             this.toString());
-        return Model.parse(Fulfillment, request);
+        return Model.parse(Request, request);
     }
 
 
     /**
-        Changes `this` Fulfillment status to "approved", sending the id
+        Changes `this` Request status to "approved", sending the id
         of a Template to render on the portal.
 
-        @returns The Fulfillment returned from the server, which should contain
+        @returns The Request returned from the server, which should contain
         the updated status.
     **/
-    public function approveByTemplate(id: String): Fulfillment {
+    public function approveByTemplate(id: String): Request {
         var request = Environment.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
             haxe.Json.stringify({template_id: id})
         );
-        return Model.parse(Fulfillment, request);
+        return Model.parse(Request, request);
     }
 
 
     /**
-        Changes `this` Fulfillment status to "approved", rendering a tile on the portal with
+        Changes `this` Request status to "approved", rendering a tile on the portal with
         the given Markdown `text`.
 
-        @returns The Fulfillment returned from the server, which should contain
+        @returns The Request returned from the server, which should contain
         the updated status.
     **/
-    public function approveByTile(text: String): Fulfillment {
+    public function approveByTile(text: String): Request {
         var request = Environment.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
             haxe.Json.stringify({activation_tile: text})
         );
-        return Model.parse(Fulfillment, request);
+        return Model.parse(Request, request);
     }
 
 
     /**
-        Changes the status of `this` Fulfillment to "failed".
+        Changes the status of `this` Request to "failed".
 
-        @returns The Fulfillment returned from the server, which should contain
+        @returns The Request returned from the server, which should contain
         the updated status.
     **/
-    public function fail(reason: String): Fulfillment {
+    public function fail(reason: String): Request {
         var request = Environment.getFulfillmentApi().changeRequestStatus(
             this.id,
             'fail',
             haxe.Json.stringify({reason: reason})
         );
-        return Model.parse(Fulfillment, request);
+        return Model.parse(Request, request);
     }
 
 
     /**
-        Changes the status of `this` Fulfillment to "inquiring".
+        Changes the status of `this` Request to "inquiring".
 
-        @returns The Fulfillment returned from the server, which should contain
+        @returns The Request returned from the server, which should contain
         the updated status.
     **/
-    public function inquire(): Fulfillment {
+    public function inquire(): Request {
         var request = Environment.getFulfillmentApi().changeRequestStatus(
             this.id,
             'inquire',
             haxe.Json.stringify({})
         );
-        return Model.parse(Fulfillment, request);
+        return Model.parse(Request, request);
     }
 
 
     /**
-        Changes the status of `this` Fulfillment to "pending".
+        Changes the status of `this` Request to "pending".
 
-        @returns The Fulfillment returned from the server, which should contain
+        @returns The Request returned from the server, which should contain
         the updated status.
     **/
-    public function pend(): Fulfillment {
+    public function pend(): Request {
         var request = Environment.getFulfillmentApi().changeRequestStatus(
             this.id,
             'pend',
             haxe.Json.stringify({})
         );
-        return Model.parse(Fulfillment, request);
+        return Model.parse(Request, request);
     }
 
 
     /**
         Assigns this request to the assignee with the given `assigneeId`.
 
-        @returns The Fulfillment returned from the server, which should contain
+        @returns The Request returned from the server, which should contain
         the updated assignee.
     **/
-    public function assignTo(assigneeId: String): Fulfillment {
+    public function assignTo(assigneeId: String): Request {
        var request = Environment.getFulfillmentApi().assignRequest(
             this.id,
             assigneeId
         );
-        return Model.parse(Fulfillment, request);
+        return Model.parse(Request, request);
     }
 
 
     
     /**
-        @returns Whether `this` Fulfillment is pending migration. This is indicated by the
+        @returns Whether `this` Request is pending migration. This is indicated by the
         presence of a parameter (by default name "migration_info") that contains JSON data.
     **/
     public function needsMigration(key: String = 'migration_info'): Bool {
@@ -240,7 +240,7 @@ class Fulfillment extends IdModel {
     }
 
 
-    /** @returns The Conversation assigned to `this` Fulfillment, or `null` if there is none. **/
+    /** @returns The Conversation assigned to `this` Request, or `null` if there is none. **/
     public function getConversation(): Conversation {
         var convs = Conversation.list(new QueryParams().set('instance_id', this.id));
         var conv = (convs.length() > 0) ? convs.get(0) : null;
