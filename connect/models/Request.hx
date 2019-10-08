@@ -69,7 +69,7 @@ class Request extends IdModel {
 
 
     /**
-        Lists all Fulfillments that match the given filters. Supported filters are:
+        Lists all Requests that match the given filters. Supported filters are:
 
         - status
         - created

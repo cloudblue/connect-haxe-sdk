@@ -8,6 +8,7 @@ class UnitTests {
         var runner = new haxe.unit.TestRunner();
         
         runner.add(new tests.unit.ConfigTest());
+        runner.add(new tests.unit.AccountTest());
         runner.add(new tests.unit.AssetTest());
         runner.add(new tests.unit.RequestTest());
 
