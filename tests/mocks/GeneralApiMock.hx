@@ -8,6 +8,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     public function new() {
         super();
         this.accountList = Mock.parseJsonFile('tests/mocks/data/account_list.json');
+        this.categoryList = Mock.parseJsonFile('tests/mocks/data/category_list.json');
         this.conversationList = Mock.parseJsonFile('tests/mocks/data/conversation_list.json');
         this.userList = Mock.parseJsonFile('tests/mocks/data/user_list.json');
     }
@@ -248,17 +249,24 @@ class GeneralApiMock extends Mock implements IGeneralApi {
 
     public function listCategories(?filters: QueryParams): Array<Dynamic> {
         this.calledFunction('listCategories', [filters]);
-        return null;
+        return this.categoryList.map(function(cat) { return Reflect.copy(cat); });
     }
 
 
     public function getCategory(id: String): Dynamic {
         this.calledFunction('getCategory', [id]);
+        var categories = this.categoryList.filter(function(cat) { return cat.id == id; });
+        if (categories.length > 0) {
+            return Reflect.copy(categories[0]);
+        } else {
+            throw 'Http Error #404';
+        }
         return null;
     }
 
 
     private var accountList: Array<Dynamic>;
+    private var categoryList: Array<Dynamic>;
     private var conversationList: Array<Dynamic>;
     private var userList: Array<Dynamic>;
 }

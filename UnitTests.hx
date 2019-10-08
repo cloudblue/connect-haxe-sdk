@@ -10,6 +10,7 @@ class UnitTests {
         runner.add(new tests.unit.ConfigTest());
         runner.add(new tests.unit.AccountTest());
         runner.add(new tests.unit.AssetTest());
+        runner.add(new tests.unit.CategoryTest());
         runner.add(new tests.unit.RequestTest());
 
         runner.run();
