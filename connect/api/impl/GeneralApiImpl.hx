@@ -103,30 +103,30 @@ class GeneralApiImpl implements IGeneralApi {
     }
 
 
-    public function listProductVersions(id: String): Array<Dynamic> {
+    public function getProductVersions(id: String): Array<Dynamic> {
         return Environment.getApiClient().get(PRODUCTS_PATH, id, 'versions');
     }
 
 
-    public function getProductVersion(id: String, version: String): Dynamic {
+    public function getProductVersion(id: String, version: Int): Dynamic {
         return Environment.getApiClient().get(PRODUCTS_PATH, id, 'versions/${version}');
     }
 
 
-    public function getProductVersionActions(id: String, version: String): Array<Dynamic> {
+    public function getProductVersionActions(id: String, version: Int): Array<Dynamic> {
         return 
             Environment.getApiClient().get(PRODUCTS_PATH, id, 'versions/${version}/actions');
     }
 
 
-    public function getProductVersionAction(id: String, version: String,
+    public function getProductVersionAction(id: String, version: Int,
             actionId: String): Dynamic {
         return Environment.getApiClient().get(PRODUCTS_PATH, id,
             'versions/${version}/actions/${actionId}');
     }
 
 
-    public function getProductVersionActionLink(id: String, version: String,
+    public function getProductVersionActionLink(id: String, version: Int,
             actionId: String): String {
         return Environment.getApiClient()
             .get(PRODUCTS_PATH, id, 'versions/${version}/actions/${actionId}/actionLink')
@@ -134,19 +134,19 @@ class GeneralApiImpl implements IGeneralApi {
     }
 
 
-    public function getProductVersionItems(id: String, version: String): Array<Dynamic> {
+    public function getProductVersionItems(id: String, version: Int): Array<Dynamic> {
         return 
             Environment.getApiClient().get(PRODUCTS_PATH, id, 'versions/${version}/items');
     }
 
 
-    public function getProductVersionParameters(id: String, version: String): Array<Dynamic> {
+    public function getProductVersionParameters(id: String, version: Int): Array<Dynamic> {
         return 
             Environment.getApiClient().get(PRODUCTS_PATH, id, 'versions/${version}/parameters');
     }
 
 
-    public function getProductVersionTemplates(id: String, version: String): Array<Dynamic> {
+    public function getProductVersionTemplates(id: String, version: Int): Array<Dynamic> {
         return 
             Environment.getApiClient().get(PRODUCTS_PATH, id, 'versions/${version}/templates');
     }

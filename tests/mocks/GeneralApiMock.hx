@@ -123,14 +123,18 @@ class GeneralApiMock extends Mock implements IGeneralApi {
 
     public function listProductActions(id: String, ?filters: QueryParams): Array<Dynamic> {
         this.calledFunction('listProductActions', [id, filters]);
-        return this.actionList.map(function(action) { return Reflect.copy(action); });
+        if (this.getProduct(id) != null) {
+            return this.actionList.map(function(action) { return Reflect.copy(action); });
+        } else {
+            throw 'Http Error #404';
+        }
     }
 
 
     public function getProductAction(id: String, actionId: String): Dynamic {
         this.calledFunction('getProductAction', [id, actionId]);
-        var actions = this.actionList.filter(function(action) { return action.id == id; });
-        if (actions.length > 0) {
+        var actions = this.actionList.filter(function(action) { return action.id == actionId; });
+        if (this.getProduct(id) != null && actions.length > 0) {
             return Reflect.copy(actions[0]);
         } else {
             throw 'Http Error #404';
@@ -191,8 +195,8 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listProductVersions(id: String): Array<Dynamic> {
-        this.calledFunction('listProductVersions', [id]);
+    public function getProductVersions(id: String): Array<Dynamic> {
+        this.calledFunction('getProductVersions', [id]);
         if (this.getProduct(id) != null) {
             return this.productList.map(function(product) { return Reflect.copy(product); });
         } else {
@@ -201,7 +205,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function getProductVersion(id: String, version: String): Dynamic {
+    public function getProductVersion(id: String, version: Int): Dynamic {
         this.calledFunction('getProductVersion', [id, version]);
         var product = this.getProduct(id);
         if (product != null && product.version == version) {
@@ -212,7 +216,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function getProductVersionActions(id: String, version: String): Array<Dynamic> {
+    public function getProductVersionActions(id: String, version: Int): Array<Dynamic> {
         this.calledFunction('getProductVersionActions', [id, version]);
         var product = this.getProduct(id);
         if (product != null && product.version == version) {
@@ -223,19 +227,19 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function getProductVersionAction(id: String, version: String,
+    public function getProductVersionAction(id: String, version: Int,
             actionId: String): Dynamic {
-        this.calledFunction('getProductVersionAction', [id, version]);
+        this.calledFunction('getProductVersionAction', [id, version, actionId]);
         return this.getProductVersionActions(id, version).filter(function(action) {
             return action.id == actionId;
         })[0];
     }
     
 
-    public function getProductVersionActionLink(id: String, version: String,
+    public function getProductVersionActionLink(id: String, version: Int,
             actionId: String): String {
-        this.calledFunction('getProductVersionActionLink', [id, version]);
-        if (this.getProductVersionAction(id, version, actionId)) {
+        this.calledFunction('getProductVersionActionLink', [id, version, actionId]);
+        if (this.getProductVersionAction(id, version, actionId) != null) {
             return 'https://stub-dot-mydevball.appspot.com/?jwt=eyJhbGciOi';
         } else {
             throw 'Http Error #404';
@@ -243,9 +247,9 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function getProductVersionItems(id: String, version: String): Array<Dynamic> {
+    public function getProductVersionItems(id: String, version: Int): Array<Dynamic> {
         this.calledFunction('getProductVersionItems', [id, version]);
-        if (this.getProductVersion(id, version)) {
+        if (this.getProductVersion(id, version) != null) {
             return this.getProductItems(id);
         } else {
             throw 'Http Error #404';
@@ -253,9 +257,9 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function getProductVersionParameters(id: String, version: String): Array<Dynamic> {
+    public function getProductVersionParameters(id: String, version: Int): Array<Dynamic> {
         this.calledFunction('getProductVersionParameters', [id, version]);
-        if (this.getProductVersion(id, version)) {
+        if (this.getProductVersion(id, version) != null) {
             return this.getProductParameters(id);
         } else {
             throw 'Http Error #404';
@@ -263,9 +267,9 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function getProductVersionTemplates(id: String, version: String): Array<Dynamic> {
+    public function getProductVersionTemplates(id: String, version: Int): Array<Dynamic> {
         this.calledFunction('getProductVersionTemplates', [id, version]);
-        if (this.getProductVersion(id, version)) {
+        if (this.getProductVersion(id, version) != null) {
             return this.getProductTemplates(id);
         } else {
             throw 'Http Error #404';
@@ -315,7 +319,11 @@ class GeneralApiMock extends Mock implements IGeneralApi {
 
     public function createProductMedia(id: String): Dynamic {
         this.calledFunction('createProductMedia', [id]);
-        return Reflect.copy(this.mediaList[0]);
+        if (this.getProduct(id) != null) {
+            return Reflect.copy(this.mediaList[0]);
+        } else {
+            throw 'Http Error #404';
+        }
     }
 
 
@@ -346,7 +354,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
 
     public function deleteProductMedia(id: String, mediaId: String): Dynamic {
         this.calledFunction('deleteProductMedia', [id, mediaId]);
-        return haxe.Json.parse(this.getProductMedia(id, mediaId));
+        return this.getProductMedia(id, mediaId);
     }
 
 
