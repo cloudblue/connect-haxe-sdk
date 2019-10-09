@@ -1,6 +1,6 @@
 package connect.models;
 
-import connect.Util;
+import connect.Inflection;
 import haxe.ds.StringMap;
 
 
@@ -21,7 +21,7 @@ class Model {
                 switch (Type.typeof(value)) {
                     case TClass(String):
                         if (value.toString() != '') {
-                            Reflect.setField(obj, Util.toSnakeCase(field), value.toString());
+                            Reflect.setField(obj, Inflection.toSnakeCase(field), value.toString());
                         }
                     case TClass(class_):
                         var className = Type.getClassName(class_);
@@ -37,20 +37,20 @@ class Model {
                                 }                                
                             }
                             if (arr.length > 0) {
-                                Reflect.setField(obj, Util.toSnakeCase(field), arr);
+                                Reflect.setField(obj, Inflection.toSnakeCase(field), arr);
                             }
                         } else if (className.indexOf('connect.models.') == 0) {
                             var model = cast(value, Model).toObject();
                             if (Reflect.fields(model).length != 0) {
-                                Reflect.setField(obj, Util.toSnakeCase(field), model);
+                                Reflect.setField(obj, Inflection.toSnakeCase(field), model);
                             }
                         } else {
-                            Reflect.setField(obj, Util.toSnakeCase(field), value);
+                            Reflect.setField(obj, Inflection.toSnakeCase(field), value);
                         }
                     case TFunction:
                         // Skip
                     default:
-                        Reflect.setField(obj, Util.toSnakeCase(field), value);
+                        Reflect.setField(obj, Inflection.toSnakeCase(field), value);
                 }
             }
         }
@@ -70,7 +70,7 @@ class Model {
         var castedModel = cast(model, Model);
         var fields = Type.getInstanceFields(modelClass);
         for (field in fields) {
-            var snakeField = Util.toSnakeCase(field);
+            var snakeField = Inflection.toSnakeCase(field);
             if (Reflect.hasField(obj, snakeField)) {
                 var val: Dynamic = Reflect.field(obj, snakeField);
                 //trace('Injecting "${field}" in ' + Type.getClassName(modelClass));
@@ -78,15 +78,15 @@ class Model {
                     case TClass(Array):
                         var className = castedModel._getFieldClassName(field);
                         if (className == null) {
-                            var camelField = 'connect.models.' + Util.toCamelCase(field, true);
-                            className = Util.toSingular(camelField);
+                            var camelField = 'connect.models.' + Inflection.toCamelCase(field, true);
+                            className = Inflection.toSingular(camelField);
                         }
                         var classObj = Type.resolveClass(className);
                         Reflect.setProperty(model, field, parseArray(classObj, val));
                     case TObject:
                         var className = castedModel._getFieldClassName(field);
                         if (className == null) {
-                            className = 'connect.models.' + Util.toCamelCase(field, true);
+                            className = 'connect.models.' + Inflection.toCamelCase(field, true);
                         }
                         var classObj = Type.resolveClass(className);
                         if (classObj != null) {
