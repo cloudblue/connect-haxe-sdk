@@ -76,8 +76,10 @@ class GeneralApiImpl implements IGeneralApi {
     }
 
 
-    public function getProductActionLink(id: String, actionId: String): Dynamic {
-        return Environment.getApiClient().get(PRODUCTS_PATH, id, 'actions/${actionId}/actionLink');
+    public function getProductActionLink(id: String, actionId: String): String {
+        return Environment.getApiClient()
+            .get(PRODUCTS_PATH, id, 'actions/${actionId}/actionLink')
+            .link;
     }
 
 
@@ -101,7 +103,7 @@ class GeneralApiImpl implements IGeneralApi {
     }
 
 
-    public function getProductVersions(id: String): Array<Dynamic> {
+    public function listProductVersions(id: String): Array<Dynamic> {
         return Environment.getApiClient().get(PRODUCTS_PATH, id, 'versions');
     }
 
@@ -125,9 +127,10 @@ class GeneralApiImpl implements IGeneralApi {
 
 
     public function getProductVersionActionLink(id: String, version: String,
-            actionId: String): Dynamic {
-        return Environment.getApiClient().get(PRODUCTS_PATH, id,
-            'versions/${version}/actions/${actionId}/actionLink');
+            actionId: String): String {
+        return Environment.getApiClient()
+            .get(PRODUCTS_PATH, id, 'versions/${version}/actions/${actionId}/actionLink')
+            .link;
     }
 
 

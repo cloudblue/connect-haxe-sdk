@@ -1,0 +1,17 @@
+[
+    {
+        "id": "TL-191-299-324",
+        "title": "Default Activation Template",
+        "body": "# Sample Template For Setup of Tier 2"
+    },
+    {
+        "id": "TL-244-935-471",
+        "title": "Default Activation Template",
+        "body": "# Sample Template For Setup of Tier 1"
+    },
+    {
+        "id": "TL-921-532-627",
+        "title": "Default Activation Template",
+        "body": "# Sample Activation Template\n\nActivation template is used to share details of the **successful** asset creation with the user. "
+    }
+]

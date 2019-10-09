@@ -12,6 +12,7 @@ class UnitTests {
         runner.add(new tests.unit.AssetTest());
         runner.add(new tests.unit.CategoryTest());
         runner.add(new tests.unit.ConversationTest());
+        runner.add(new tests.unit.ProductTest());
         runner.add(new tests.unit.RequestTest());
 
         runner.run();

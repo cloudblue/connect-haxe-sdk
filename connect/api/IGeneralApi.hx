@@ -14,18 +14,18 @@ interface IGeneralApi {
     public function getProduct(id: String): Dynamic;
     public function listProductActions(id: String, ?filters: QueryParams): Array<Dynamic>;
     public function getProductAction(id: String, actionId: String): Dynamic;
-    public function getProductActionLink(id: String, actionId: String): Dynamic;
+    public function getProductActionLink(id: String, actionId: String): String;
     public function getProductConnections(id: String): Array<Dynamic>;
     public function getProductItems(id: String): Array<Dynamic>;
     public function getProductParameters(id: String): Array<Dynamic>;
     public function getProductTemplates(id: String): Array<Dynamic>;
-    public function getProductVersions(id: String): Array<Dynamic>;
+    public function listProductVersions(id: String): Array<Dynamic>;
     public function getProductVersion(id: String, version: String): Dynamic;
     public function getProductVersionActions(id: String, version: String): Array<Dynamic>;
     public function getProductVersionAction(id: String, version: String,
             actionId: String): Dynamic;
     public function getProductVersionActionLink(id: String, version: String,
-            actionId: String): Dynamic;
+            actionId: String): String;
     public function getProductVersionItems(id: String, version: String): Array<Dynamic>;
     public function getProductVersionParameters(id: String, version: String): Array<Dynamic>;
     public function getProductVersionTemplates(id: String, version: String): Array<Dynamic>;

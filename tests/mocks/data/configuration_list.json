@@ -1,0 +1,32 @@
+[
+    {
+        "value": "some value",
+        "parameter": {
+            "id": "id",
+            "title": "title",
+            "description": "description",
+            "type": "type",
+            "scope": "scope"
+        },
+        "item": {
+            "id": "PRI-000-000-000",
+            "name": "Item name"
+        },
+        "marketplace": {
+            "id": "MP-000-000-000",
+            "name": "Marketplace name"
+        },
+        "events": {
+            "created": {
+                "at": "2018-11-21T11:10:29+00:00"
+            },
+            "updated": {
+                "at": "2018-11-21T11:10:29+00:00",
+                "by": {
+                    "id": "UR-0001-0001",
+                    "name": "User Name"
+                }
+            }
+        }
+    }
+]

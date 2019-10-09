@@ -1,0 +1,38 @@
+[
+    {
+        "id": "PRD-855-710-864-0001",
+        "unit": {
+            "id":"gb",
+            "title":"Gb",
+            "unit":"unit"
+        },
+        "mpn": "MPN-A",
+        "ui_visibility": true,
+        "ui_position": 10000,
+        "type": "reservation",
+        "local_id": "SKU_A",
+        "display_name": "Sku A",
+        "period": "monthly",
+        "precision": "integer",
+        "description": "Some Text",
+        "status": "end of sale"
+    },
+    {
+        "id": "PRD-855-710-864-0002",
+        "unit": {
+            "id":"gb",
+            "title":"Gb",
+            "unit":"unit"
+        },
+        "mpn": "MPN-B",
+        "ui_visibility": true,
+        "ui_position": 20000,
+        "type": "counter",
+        "local_id": "SKU_B",
+        "display_name": "Sku B",
+        "period": "monthly",
+        "precision": "integer",
+        "description": "Some Text",
+        "status": "published"
+    }
+]
