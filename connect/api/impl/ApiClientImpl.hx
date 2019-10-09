@@ -69,6 +69,7 @@ class ApiClientImpl implements IApiClient {
             var url = Environment.getConfig().getApiUrl() + path + params.toString();
 
             var xhr = new js.html.XMLHttpRequest();
+            xhr.timeout = 300000;
             xhr.open(method.toUpperCase(), url, false);
 
             xhr.setRequestHeader('Authorization', Environment.getConfig().getApiKey());
@@ -95,6 +96,7 @@ class ApiClientImpl implements IApiClient {
             var responseBytes = new haxe.io.BytesOutput();
 
             var http = new haxe.Http(Environment.getConfig().getApiUrl() + path);
+            http.cnxTimeout = 300;
 
             http.setHeader('Authorization', Environment.getConfig().getApiKey());
 
