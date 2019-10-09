@@ -40,6 +40,7 @@ import connect.models.ProductStats;
 import connect.models.ProductStatsInfo;
 import connect.models.Renewal;
 import connect.models.Request;
+import connect.models.Template;
 import connect.models.TierAccount;
 import connect.models.Tiers;
 import connect.models.User;
