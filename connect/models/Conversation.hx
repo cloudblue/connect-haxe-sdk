@@ -35,7 +35,7 @@ class Conversation extends IdModel {
 
         @returns A collection of Conversations.
     **/
-    public static function list(?filters: QueryParams) : Collection<Conversation> {
+    public static function list(filters: QueryParams) : Collection<Conversation> {
         var convs = Environment.getGeneralApi().listConversations(filters);
         return Model.parseArray(Conversation, convs);
     }

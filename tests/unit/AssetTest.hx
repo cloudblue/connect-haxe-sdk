@@ -16,7 +16,7 @@ class AssetTest extends haxe.unit.TestCase {
 
     public function testList() {
         // Check subject
-        var assets = Asset.list();
+        var assets = Asset.list(null);
         assertEquals(1, assets.length());
         assertEquals('AS-392-283-000-0', assets.get(0).id);
 

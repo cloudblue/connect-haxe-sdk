@@ -90,7 +90,7 @@ class Request extends IdModel {
 
         @returns A Collection of Requests.
     **/
-    public static function list(?filters: QueryParams) : Collection<Request> {
+    public static function list(filters: QueryParams) : Collection<Request> {
         var requests = Environment.getFulfillmentApi().listRequests(filters);
         return Model.parseArray(Request, requests);
     }

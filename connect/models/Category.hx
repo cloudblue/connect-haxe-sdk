@@ -31,7 +31,7 @@ class Category extends IdModel {
 
         @returns A Collection of Categories.
     **/
-    public static function list(?filters: QueryParams) : Collection<Category> {
+    public static function list(filters: QueryParams) : Collection<Category> {
         var categories = Environment.getGeneralApi().listCategories(filters);
         return Model.parseArray(Category, categories);
     }

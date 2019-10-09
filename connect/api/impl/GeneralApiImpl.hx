@@ -11,7 +11,7 @@ class GeneralApiImpl implements IGeneralApi {
     public function new() {}
 
 
-    public function listAccounts(?filters: QueryParams): Array<Dynamic> {
+    public function listAccounts(filters: QueryParams): Array<Dynamic> {
         return Environment.getApiClient().get(ACCOUNTS_PATH, null, null, filters);
     }
 
@@ -36,7 +36,7 @@ class GeneralApiImpl implements IGeneralApi {
     }
 
 
-    public function listConversations(?filters: QueryParams): Array<Dynamic> {
+    public function listConversations(filters: QueryParams): Array<Dynamic> {
         return Environment.getApiClient().get(CONVERSATIONS_PATH, null, null, filters);
     }
 
@@ -56,7 +56,7 @@ class GeneralApiImpl implements IGeneralApi {
     }
 
 
-    public function listProducts(?filters: QueryParams): Array<Dynamic> {
+    public function listProducts(filters: QueryParams): Array<Dynamic> {
         return Environment.getApiClient().get(PRODUCTS_PATH, null, null, filters);
     }
 
@@ -66,7 +66,7 @@ class GeneralApiImpl implements IGeneralApi {
     }
 
 
-    public function listProductActions(id: String, ?filters: QueryParams): Array<Dynamic> {
+    public function listProductActions(id: String, filters: QueryParams): Array<Dynamic> {
         return Environment.getApiClient().get(PRODUCTS_PATH, id, 'actions', filters);
     }
 
@@ -152,7 +152,7 @@ class GeneralApiImpl implements IGeneralApi {
     }
 
 
-    public function listProductConfigurations(id: String, ?filters: QueryParams): Array<Dynamic> {
+    public function listProductConfigurations(id: String, filters: QueryParams): Array<Dynamic> {
         return 
             Environment.getApiClient().get(PRODUCTS_PATH, id, 'configurations', filters);
     }
@@ -163,12 +163,12 @@ class GeneralApiImpl implements IGeneralApi {
     }
 
 
-    public function listProductAgreements(id: String, ?filters: QueryParams): Array<Dynamic> {
+    public function listProductAgreements(id: String, filters: QueryParams): Array<Dynamic> {
         return Environment.getApiClient().get(PRODUCTS_PATH, id, 'agreements', filters);
     }
 
 
-    public function listProductMedia(id: String, ?filters: QueryParams): Array<Dynamic> {
+    public function listProductMedia(id: String, filters: QueryParams): Array<Dynamic> {
         return Environment.getApiClient().get(PRODUCTS_PATH, id, 'media', filters);
     }
 
@@ -193,7 +193,7 @@ class GeneralApiImpl implements IGeneralApi {
     }
 
 
-    public function listCategories(?filters: QueryParams): Array<Dynamic> {
+    public function listCategories(filters: QueryParams): Array<Dynamic> {
         return Environment.getApiClient().get(CATEGORIES_PATH, null, null, filters);
     }
 

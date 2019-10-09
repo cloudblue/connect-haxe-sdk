@@ -18,7 +18,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testList() {
         // Check subject
-        var products = Product.list();
+        var products = Product.list(null);
         assertEquals(1, products.length());
         assertEquals('PRD-783-317-575', products.get(0).id);
 
@@ -61,7 +61,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testListActionsOk() {
         // Check subject
-        var actions = Product.get('PRD-783-317-575').listActions();
+        var actions = Product.get('PRD-783-317-575').listActions(null);
         assertEquals(1, actions.length());
         assertEquals('sso_action', actions.get(0).id);
 
@@ -76,7 +76,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testListActionsKo() {
         // Check subject
-        var actions = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'}).listActions();
+        var actions = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'}).listActions(null);
         assertEquals(0, actions.length());
 
         // Check mocks
@@ -544,7 +544,7 @@ class ProductTest extends haxe.unit.TestCase {
     public function testListConfigurationsOk() {
         // Check subject
         var product = Product.get('PRD-783-317-575');
-        var configs = product.listConfigurations();
+        var configs = product.listConfigurations(null);
         assertEquals(1, configs.length());
         assertEquals('id', configs.get(0).parameter.id);
 
@@ -560,7 +560,7 @@ class ProductTest extends haxe.unit.TestCase {
     public function testListConfigurationsKo() {
         // Check subject
         var product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
-        var configs = product.listConfigurations();
+        var configs = product.listConfigurations(null);
         assertEquals(0, configs.length());
 
         // Check mocks
@@ -607,7 +607,7 @@ class ProductTest extends haxe.unit.TestCase {
     public function testListAgreementsOk() {
         // Check subject
         var product = Product.get('PRD-783-317-575');
-        var agreements = product.listAgreements();
+        var agreements = product.listAgreements(null);
         assertEquals(1, agreements.length());
         assertEquals('AGP-884-348-731', agreements.get(0).id);
 
@@ -623,7 +623,7 @@ class ProductTest extends haxe.unit.TestCase {
     public function testListAgreementsKo() {
         // Check subject
         var product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
-        var agreements = product.listAgreements();
+        var agreements = product.listAgreements(null);
         assertEquals(0, agreements.length());
 
         // Check mocks
@@ -638,7 +638,7 @@ class ProductTest extends haxe.unit.TestCase {
     public function testListMediaOk() {
         // Check subject
         var product = Product.get('PRD-783-317-575');
-        var media = product.listMedia();
+        var media = product.listMedia(null);
         assertEquals(1, media.length());
         assertEquals('PRM-00000-00000-00000', media.get(0).id);
 
@@ -654,7 +654,7 @@ class ProductTest extends haxe.unit.TestCase {
     public function testListMediaKo() {
         // Check subject
         var product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
-        var media = product.listMedia();
+        var media = product.listMedia(null);
         assertEquals(0, media.length());
 
         // Check mocks

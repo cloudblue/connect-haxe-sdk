@@ -2,7 +2,7 @@ package connect.api;
 
 
 interface ITierApi {
-    public function listTierConfigRequests(?filters: QueryParams): Array<Dynamic>;
+    public function listTierConfigRequests(filters: QueryParams): Array<Dynamic>;
     public function createTierConfigRequest(): Dynamic;
     public function getTierConfigRequest(id: String): Dynamic;
     public function updateTierConfigRequest(id: String, tcr: String): Dynamic;
@@ -12,8 +12,8 @@ interface ITierApi {
     public function failTierConfigRequest(id: String, data: String): Dynamic;
     public function assignTierConfigRequest(id: String): Dynamic;
     public function unassignTierConfigRequest(id: String): Dynamic;
-    public function listTierAccounts(?filters: QueryParams): Array<Dynamic>;
+    public function listTierAccounts(filters: QueryParams): Array<Dynamic>;
     public function getTierAccount(id: String): Dynamic;
-    public function listTierConfigs(?filters: QueryParams): Array<Dynamic>;
+    public function listTierConfigs(filters: QueryParams): Array<Dynamic>;
     public function getTierConfig(id: String): Dynamic;
 }

@@ -15,7 +15,7 @@ class AccountTest extends haxe.unit.TestCase {
 
     public function testList() {
         // Check subject
-        var accounts = Account.list();
+        var accounts = Account.list(null);
         assertEquals(1, accounts.length());
         assertEquals('VA-044-420', accounts.get(0).id);
 

@@ -10,7 +10,7 @@ class TierApiImpl implements ITierApi {
     public function new() {}
 
 
-    public function listTierConfigRequests(?filters: QueryParams): Array<Dynamic> {
+    public function listTierConfigRequests(filters: QueryParams): Array<Dynamic> {
         return Environment.getApiClient().get(TCR_PATH, null, null, filters);
     }
 
@@ -60,7 +60,7 @@ class TierApiImpl implements ITierApi {
     }
 
 
-    public function listTierAccounts(?filters: QueryParams): Array<Dynamic> {
+    public function listTierAccounts(filters: QueryParams): Array<Dynamic> {
         return Environment.getApiClient().get(TA_PATH, null, null, filters);
     }
 
@@ -70,7 +70,7 @@ class TierApiImpl implements ITierApi {
     }
 
 
-    public function listTierConfigs(?filters: QueryParams): Array<Dynamic> {
+    public function listTierConfigs(filters: QueryParams): Array<Dynamic> {
         return Environment.getApiClient().get(TC_PATH, null, null, filters);
     }
 

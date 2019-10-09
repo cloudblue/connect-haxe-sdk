@@ -103,7 +103,7 @@ class Asset extends IdModel {
 
         @returns A Collection of Assets.
     **/
-    public static function list(?filters: QueryParams) : Collection<Asset> {
+    public static function list(filters: QueryParams) : Collection<Asset> {
         var assets = Environment.getFulfillmentApi().listAssets(filters);
         return Model.parseArray(Asset, assets);
     }

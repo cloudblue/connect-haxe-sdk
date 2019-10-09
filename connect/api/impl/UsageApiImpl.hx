@@ -10,7 +10,7 @@ class UsageApiImpl implements IUsageApi {
     public function new() {}
 
 
-    public function listUsageFiles(?filters: QueryParams): Array<Dynamic> {
+    public function listUsageFiles(filters: QueryParams): Array<Dynamic> {
         return Environment.getApiClient().get(USAGE_FILES_PATH, null, null, filters);
     }
 
@@ -82,7 +82,7 @@ class UsageApiImpl implements IUsageApi {
     }
 
 
-    public function listUsageRecords(?filters: QueryParams): Array<Dynamic> {
+    public function listUsageRecords(filters: QueryParams): Array<Dynamic> {
         return Environment.getApiClient().get(USAGE_RECORDS_PATH, null, null, filters);
     }
 

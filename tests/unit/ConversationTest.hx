@@ -15,7 +15,7 @@ class ConversationTest extends haxe.unit.TestCase {
 
     public function testList() {
         // Check subject
-        var conversations = Conversation.list();
+        var conversations = Conversation.list(null);
         assertEquals(1, conversations.length());
         assertEquals('CO-000-000-000', conversations.get(0).id);
 

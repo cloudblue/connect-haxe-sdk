@@ -10,7 +10,7 @@ class FulfillmentApiImpl implements IFulfillmentApi {
     public function new() {}
 
 
-    public function listRequests(?filters: QueryParams): Array<Dynamic> {
+    public function listRequests(filters: QueryParams): Array<Dynamic> {
         return Environment.getApiClient().get(REQUESTS_PATH, null, null, filters);
     }
 
@@ -46,7 +46,7 @@ class FulfillmentApiImpl implements IFulfillmentApi {
     }
 
 
-    public function listAssets(?filters: QueryParams): Array<Dynamic> {
+    public function listAssets(filters: QueryParams): Array<Dynamic> {
         return Environment.getApiClient().get(ASSETS_PATH, null, null, filters);
     }
 

@@ -15,7 +15,7 @@ class CategoryTest extends haxe.unit.TestCase {
 
     public function testList() {
         // Check subject
-        var categories = Category.list();
+        var categories = Category.list(null);
         assertEquals(1, categories.length());
         assertEquals('CAT-00012', categories.get(0).id);
 

@@ -23,7 +23,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listAccounts(?filters: QueryParams): Array<Dynamic> {
+    public function listAccounts(filters: QueryParams): Array<Dynamic> {
         this.calledFunction('listAccounts', [filters]);
         return this.accountList.map(function(account) { return Reflect.copy(account); });
     }
@@ -63,7 +63,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listConversations(?filters: QueryParams): Array<Dynamic> {
+    public function listConversations(filters: QueryParams): Array<Dynamic> {
         this.calledFunction('listConversations', [filters]);
         return this.conversationList.map(function(conv) { return Reflect.copy(conv); });
     }
@@ -104,7 +104,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listProducts(?filters: QueryParams): Array<Dynamic> {
+    public function listProducts(filters: QueryParams): Array<Dynamic> {
         this.calledFunction('listProducts', [filters]);
         return this.productList.map(function(product) { return Reflect.copy(product); });
     }
@@ -121,7 +121,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listProductActions(id: String, ?filters: QueryParams): Array<Dynamic> {
+    public function listProductActions(id: String, filters: QueryParams): Array<Dynamic> {
         this.calledFunction('listProductActions', [id, filters]);
         if (this.getProduct(id) != null) {
             return this.actionList.map(function(action) { return Reflect.copy(action); });
@@ -277,7 +277,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listProductConfigurations(id: String, ?filters: QueryParams): Array<Dynamic> {
+    public function listProductConfigurations(id: String, filters: QueryParams): Array<Dynamic> {
         this.calledFunction('listProductConfigurations', [id, filters]);
         if (this.getProduct(id) != null) {
             return this.configurationList.map(function(conf) { return Reflect.copy(conf); });
@@ -297,7 +297,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listProductAgreements(id: String, ?filters: QueryParams): Array<Dynamic> {
+    public function listProductAgreements(id: String, filters: QueryParams): Array<Dynamic> {
         this.calledFunction('listProductAgreements', [id, filters]);
         if (this.getProduct(id) != null) {
             return this.agreementList.map(function(agreement) { return Reflect.copy(agreement); });
@@ -307,7 +307,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listProductMedia(id: String, ?filters: QueryParams): Array<Dynamic> {
+    public function listProductMedia(id: String, filters: QueryParams): Array<Dynamic> {
         this.calledFunction('listProductMedia', [id, filters]);
         if (this.getProduct(id) != null) {
             return this.mediaList.map(function(media) { return Reflect.copy(media); });
@@ -358,7 +358,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listCategories(?filters: QueryParams): Array<Dynamic> {
+    public function listCategories(filters: QueryParams): Array<Dynamic> {
         this.calledFunction('listCategories', [filters]);
         return this.categoryList.map(function(cat) { return Reflect.copy(cat); });
     }

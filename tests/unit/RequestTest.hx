@@ -18,7 +18,7 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testList() {
         // Check subject
-        var requests = Request.list();
+        var requests = Request.list(null);
         assertEquals(1, requests.length());
         assertEquals('PR-5852-1608-0000', requests.get(0).id);
 
