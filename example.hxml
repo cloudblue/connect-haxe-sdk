@@ -1,4 +1,4 @@
 -main Example
 -dce no
--java _build/example/java
--cmd java -jar _build/example/java/Example.jar
+-php _build/example/php
+-cmd php _build/example/php/index.php
