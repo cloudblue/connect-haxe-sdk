@@ -65,6 +65,10 @@ class Request extends IdModel {
     public var marketplace(default, null): Marketplace;
 
 
+    /**
+        Connect returns either a String or a JSON object in this field. When it is an object,
+        its String representation is stored.
+    **/
     public var assignee(default, null): String;
 
 
