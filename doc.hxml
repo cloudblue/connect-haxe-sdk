@@ -2,4 +2,4 @@
 --macro include('connect')
 -dce no
 -xml doc/doc.xml
--cmd haxelib run dox -i doc -o doc --title "Connect SDK Documentation" -in "^connect" -ex "connect.api.impl" -ex "connect.Arr"
+-cmd haxelib run dox -i doc -o doc --title "Connect SDK Documentation" -in "^connect" -ex "connect.api.impl" -ex "connect.Arr" --toplevel-package connect

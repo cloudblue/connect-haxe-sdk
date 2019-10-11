@@ -65,7 +65,7 @@ class Request extends IdModel {
     public var marketplace(default, null): Marketplace;
 
 
-    //public var assignee(default, null): User;
+    public var assignee(default, null): String;
 
 
     /**
@@ -255,7 +255,8 @@ class Request extends IdModel {
     public function new() {
         super();
         this._setFieldClassNames([
-            'assignee' => 'User'
+            // Assigne could be an object, so force conversion to string
+            'assignee' => 'String'
         ]);
     }
 }

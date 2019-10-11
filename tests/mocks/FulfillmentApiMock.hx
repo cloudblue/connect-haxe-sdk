@@ -7,7 +7,7 @@ import connect.api.QueryParams;
 class FulfillmentApiMock extends Mock implements IFulfillmentApi {
     public function new() {
         super();
-        this.list = Mock.parseJsonFile('tests/mocks/data/fulfillment_list.json');
+        this.list = Mock.parseJsonFile('tests/mocks/data/request_list.json');
     }
 
 

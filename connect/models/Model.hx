@@ -90,7 +90,11 @@ class Model {
                         }
                         var classObj = Type.resolveClass(className);
                         if (classObj != null) {
-                            Reflect.setProperty(model, field, parse(classObj, val));
+                            if (className != 'String') {
+                                Reflect.setProperty(model, field, parse(classObj, val));
+                            } else {
+                                Reflect.setProperty(model, field, haxe.Json.stringify(val));
+                            }
                         } else {
                             throw 'Cannot find class "${className}"';
                         }

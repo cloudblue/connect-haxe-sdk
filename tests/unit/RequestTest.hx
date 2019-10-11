@@ -19,8 +19,11 @@ class RequestTest extends haxe.unit.TestCase {
     public function testList() {
         // Check subject
         var requests = Request.list(null);
-        assertEquals(1, requests.length());
+        assertEquals(2, requests.length());
         assertEquals('PR-5852-1608-0000', requests.get(0).id);
+        assertEquals('PR-5852-1608-0001', requests.get(1).id);
+        assertEquals('ApiKey XXX', requests.get(0).assignee);
+        assertEquals(haxe.Json.stringify({id: 'XXX'}), requests.get(1).assignee);
 
         // Check mocks
         var apiMock = cast(Environment.getFulfillmentApi(), Mock);

@@ -17,8 +17,9 @@ class AssetTest extends haxe.unit.TestCase {
     public function testList() {
         // Check subject
         var assets = Asset.list(null);
-        assertEquals(1, assets.length());
+        assertEquals(2, assets.length());
         assertEquals('AS-392-283-000-0', assets.get(0).id);
+        assertEquals('AS-392-283-001-0', assets.get(1).id);
 
         // Check mocks
         var apiMock = cast(Environment.getFulfillmentApi(), Mock);

@@ -3,7 +3,7 @@ package connect;
 
 /**
     This class provides static methods for string transformation. For example,
-    to change casing (snake_case, camelCase, UpperCamelCase). or to singularize a word.
+    to change casing (snake_case, camelCase, UpperCamelCase), or to singularize a word.
 **/
 class Inflection {
     /**
