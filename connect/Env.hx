@@ -5,6 +5,7 @@ import connect.api.IFulfillmentApi;
 import connect.api.IUsageApi;
 import connect.api.ITierApi;
 import connect.api.IGeneralApi;
+import connect.LoggerLevel;
 
 // Need to make sure that these get compiled
 import connect.api.impl.ApiClientImpl;
@@ -85,18 +86,58 @@ class Env {
 
 
     /**
+        Initializes the logger. It must have not been previously configured.
+
+        @param filename Name of the file (can include path) where the log will the stored.
+        @param level Level of log (`Debug` or `Release`).
+        @throws String If the logger is already initialized.
+    **/
+    public static function initLogger(filename: String, level: LoggerLevel) {
+        if (logger == null) {
+            logger = new Logger(filename, level);
+        } else {
+            throw "Logger instance is already initialized.";
+        }
+    }
+
+
+    /**
+        @returns `true` is logger has already been initialized, `false` otherwise.
+    **/
+    public static function isLoggerInitialized(): Bool {
+        return logger != null;
+    }
+
+
+    /**
         Returns the configuration object. If it is not initialized, it tries to initialize it from
         the file "config.json".
 
-        @returns The default instance.
+        @returns The environment config.
         @throws Exception If the instance is not initialized and the file "config.json" cannot be
             parsed.
     **/
-    public static function getConfig() {
-        if (config == null) {
+    public static function getConfig(): Config {
+        if (!isConfigInitialized()) {
             loadConfig("config.json");
         }
         return config;
+    }
+
+
+    /**
+        Returns the logger object. If it is not initialized, it will initialize it in the level
+        `Release` with a filename of "log.md".
+
+        @returns The environment logger.
+        @throws Exception If the instance is not initialized and the file "config.json" cannot be
+            parsed.
+    **/
+    public static function getLogger(): Logger {
+        if (!isLoggerInitialized()) {
+            initLogger('log.md', Release);
+        }
+        return logger;
     }
 
 
@@ -164,6 +205,7 @@ class Env {
     @:dox(hide)
     public static function _reset(?deps: Dictionary) {
         config = null;
+        logger = null;
         apiClient = null;
         fulfillmentApi = null;
         usageApi = null;
@@ -175,6 +217,7 @@ class Env {
 
 
     private static var config: Config;
+    private static var logger: Logger;
     private static var apiClient: IApiClient;
     private static var fulfillmentApi: IFulfillmentApi;
     private static var usageApi: IUsageApi;

@@ -63,6 +63,11 @@ class ApiClientImpl implements IApiClient {
     **/
     private function syncRequest(method: String, path: String,
             ?params: QueryParams, ?data: String, ?multipart: Multipart) : Response {
+        var fullUrl = Env.getConfig().getApiUrl() + path + params.toString();
+        Env.getLogger()._write('> Http ${method} Request to ${fullUrl}');
+        if (data != null) {
+            Env.getLogger()._write('> * Data: ${data}');
+        }
         #if js
             initXMLHttpRequest();
 
@@ -91,7 +96,7 @@ class ApiClientImpl implements IApiClient {
                     : 'Error sending ${method} request to "${url}."';
             }
 
-            return new Response(xhr.status, xhr.responseText);
+            var response = new Response(xhr.status, xhr.responseText);
         #else
             var status:Null<Int> = null;
             var responseBytes = new haxe.io.BytesOutput();
@@ -127,8 +132,21 @@ class ApiClientImpl implements IApiClient {
             http.customRequest(false, responseBytes, null, method.toUpperCase());
 
             while (status == null) {} // Wait for async request
-            return new Response(status, responseBytes.getBytes().toString());
+            var response = new Response(status, responseBytes.getBytes().toString());
         #end
+        Env.getLogger()._write('> * Status: ${response.status}');
+        try {
+            var parsed = haxe.Json.parse(response.text);
+            var beautified = haxe.Json.stringify(parsed, null, '  ');
+            Env.getLogger()._write('> * Response:');
+            Env.getLogger()._write('> ```json');
+            Env.getLogger()._write('> ${beautified}');
+            Env.getLogger()._write('> ```');
+        } catch (ex: Dynamic) {
+            Env.getLogger()._write('> * Response: ${response.text}');
+        }
+        Env.getLogger()._write('');
+        return response;
     }
 
 
