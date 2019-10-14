@@ -89,8 +89,10 @@ class Env {
         Initializes the logger. It must have not been previously configured.
 
         @param filename Name of the file (can include path) where the log will the stored.
+            Use `null` to only write to standard output.
         @param level Level of log (`Debug` or `Release`).
         @throws String If the logger is already initialized.
+        @throws Exception If the filename cannot be created or opened.
     **/
     public static function initLogger(filename: String, level: LoggerLevel) {
         if (logger == null) {

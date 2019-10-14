@@ -10,7 +10,11 @@ class Logger {
         since the SDK uses the default instance provided by `Env.getLogger()`.
     **/
     public function new(filename: String, level: LoggerLevel) {
-        this.file = sys.io.File.append(filename);
+        if (filename != null) {
+            this.file = sys.io.File.append(filename);
+        } else {
+            this.file = null;
+        }
         this.level = level;
         this.sections = [];
     }
@@ -73,10 +77,10 @@ class Logger {
 
 
     private function writeLine(line: String): Void {
-        this.file.writeString(line + '\r\n');
-        if (line != '') {
-            Sys.println(line);
+        if (this.file != null) {
+            this.file.writeString(line + '\r\n');
         }
+        Sys.println(line);
     }
 }
 
