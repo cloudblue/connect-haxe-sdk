@@ -80,7 +80,7 @@ class Product extends IdModel {
         @returns A Collection of Products.
     **/
     public static function list(filters: QueryParams) : Collection<Product> {
-        var products = Environment.getGeneralApi().listProducts(filters);
+        var products = Env.getGeneralApi().listProducts(filters);
         return Model.parseArray(Product, products);
     }
 
@@ -88,7 +88,7 @@ class Product extends IdModel {
     /** @returns The Product with the given id, or `null` if it was not found. **/
     public static function get(id: String): Product {
         try {
-            var product = Environment.getGeneralApi().getProduct(id);
+            var product = Env.getGeneralApi().getProduct(id);
             return Model.parse(Product, product);
         } catch (ex: Dynamic) {
             return null;
@@ -105,7 +105,7 @@ class Product extends IdModel {
     **/
     public function listActions(filters: QueryParams) : Collection<Action> {
         try {
-            var actions = Environment.getGeneralApi().listProductActions(this.id, filters);
+            var actions = Env.getGeneralApi().listProductActions(this.id, filters);
             return Model.parseArray(Action, actions);
         } catch (ex: Dynamic) {
             return new Collection<Action>();
@@ -118,7 +118,7 @@ class Product extends IdModel {
     **/
     public function getAction(actionId: String): Action {
         try {
-            var action = Environment.getGeneralApi().getProductAction(this.id, actionId);
+            var action = Env.getGeneralApi().getProductAction(this.id, actionId);
             return Model.parse(Action, action);
         } catch (ex: Dynamic) {
             return null;
@@ -132,7 +132,7 @@ class Product extends IdModel {
     **/
     public function getActionLink(actionId: String): String {
         try {
-            return Environment.getGeneralApi().getProductActionLink(this.id, actionId);
+            return Env.getGeneralApi().getProductActionLink(this.id, actionId);
         } catch (ex: Dynamic) {
             return '';
         }
@@ -144,7 +144,7 @@ class Product extends IdModel {
     **/
     public function getConnections() : Collection<Connection> {
         try {
-            var connections = Environment.getGeneralApi().getProductConnections(this.id);
+            var connections = Env.getGeneralApi().getProductConnections(this.id);
             return Model.parseArray(Connection, connections);
         } catch (ex: Dynamic) {
             return new Collection<Connection>();
@@ -157,7 +157,7 @@ class Product extends IdModel {
     **/
     public function getItems() : Collection<Item> {
         try {
-            var items = Environment.getGeneralApi().getProductItems(this.id);
+            var items = Env.getGeneralApi().getProductItems(this.id);
             return Model.parseArray(Item, items);
         } catch (ex: Dynamic) {
             return new Collection<Item>();
@@ -170,7 +170,7 @@ class Product extends IdModel {
     **/
     public function getParameters() : Collection<Param> {
         try {
-            var params = Environment.getGeneralApi().getProductParameters(this.id);
+            var params = Env.getGeneralApi().getProductParameters(this.id);
             return Model.parseArray(Param, params);
         } catch (ex: Dynamic) {
             return new Collection<Param>();
@@ -183,7 +183,7 @@ class Product extends IdModel {
     **/
     public function getTemplates() : Collection<Template> {
         try {
-            var templates = Environment.getGeneralApi().getProductTemplates(this.id);
+            var templates = Env.getGeneralApi().getProductTemplates(this.id);
             return Model.parseArray(Template, templates);
         } catch (ex: Dynamic) {
             return new Collection<Template>();
@@ -196,7 +196,7 @@ class Product extends IdModel {
     **/
     public function getVersions() : Collection<Product> {
         try {
-            var versions = Environment.getGeneralApi().getProductVersions(this.id);
+            var versions = Env.getGeneralApi().getProductVersions(this.id);
             return Model.parseArray(Product, versions);
         } catch (ex: Dynamic) {
             return new Collection<Product>();
@@ -209,7 +209,7 @@ class Product extends IdModel {
     **/
     public function getVersion(version: Int): Product {
         try {
-            var version = Environment.getGeneralApi().getProductVersion(this.id, version);
+            var version = Env.getGeneralApi().getProductVersion(this.id, version);
             return Model.parse(Product, version);
         } catch (ex: Dynamic) {
             return null;
@@ -222,7 +222,7 @@ class Product extends IdModel {
     **/
     public function getVersionActions(version: Int): Collection<Action> {
         try {
-            var actions = Environment.getGeneralApi()
+            var actions = Env.getGeneralApi()
                 .getProductVersionActions(this.id, version);
             return Model.parseArray(Action, actions);
         } catch (ex: Dynamic) {
@@ -236,7 +236,7 @@ class Product extends IdModel {
     **/
     public function getVersionAction(version: Int, actionId: String): Action {
         try {
-            var action = Environment.getGeneralApi()
+            var action = Env.getGeneralApi()
                 .getProductVersionAction(this.id, version, actionId);
             return Model.parse(Action, action);
         } catch (ex: Dynamic) {
@@ -251,7 +251,7 @@ class Product extends IdModel {
     **/
     public function getVersionActionLink(version: Int, actionId: String): String {
         try {
-            return Environment.getGeneralApi()
+            return Env.getGeneralApi()
                 .getProductVersionActionLink(this.id, version, actionId);
         } catch (ex: Dynamic) {
             return '';
@@ -264,7 +264,7 @@ class Product extends IdModel {
     **/
     public function getVersionItems(version: Int) : Collection<Item> {
         try {
-            var items = Environment.getGeneralApi().getProductVersionItems(this.id, version);
+            var items = Env.getGeneralApi().getProductVersionItems(this.id, version);
             return Model.parseArray(Item, items);
         } catch (ex: Dynamic) {
             return new Collection<Item>();
@@ -277,7 +277,7 @@ class Product extends IdModel {
     **/
     public function getVersionParameters(version: Int) : Collection<Param> {
         try {
-            var params = Environment.getGeneralApi().getProductVersionParameters(this.id, version);
+            var params = Env.getGeneralApi().getProductVersionParameters(this.id, version);
             return Model.parseArray(Param, params);
         } catch (ex: Dynamic) {
             return new Collection<Param>();
@@ -290,7 +290,7 @@ class Product extends IdModel {
     **/
     public function getVersionTemplates(version: Int) : Collection<Template> {
         try {
-            var templates = Environment.getGeneralApi().getProductVersionTemplates(this.id, version);
+            var templates = Env.getGeneralApi().getProductVersionTemplates(this.id, version);
             return Model.parseArray(Template, templates);
         } catch (ex: Dynamic) {
             return new Collection<Template>();
@@ -314,7 +314,7 @@ class Product extends IdModel {
     **/
     public function listConfigurations(filters: QueryParams) : Collection<ProductConfigurationParam> {
         try {
-            var templates = Environment.getGeneralApi().listProductConfigurations(this.id, filters);
+            var templates = Env.getGeneralApi().listProductConfigurations(this.id, filters);
             return Model.parseArray(ProductConfigurationParam, templates);
         } catch (ex: Dynamic) {
             return new Collection<ProductConfigurationParam>();
@@ -330,7 +330,7 @@ class Product extends IdModel {
     **/
     public function setConfigurationParam(param: ProductConfigurationParam) : ProductConfigurationParam {
         try {
-            var param = Environment.getGeneralApi().setProductConfigurationParam(this.id, param.toString());
+            var param = Env.getGeneralApi().setProductConfigurationParam(this.id, param.toString());
             return Model.parse(ProductConfigurationParam, param);
         } catch (ex: Dynamic) {
             return null;
@@ -343,7 +343,7 @@ class Product extends IdModel {
     **/
     public function listAgreements(filters: QueryParams) : Collection<Agreement> {
         try {
-            var agreements = Environment.getGeneralApi().listProductAgreements(this.id, filters);
+            var agreements = Env.getGeneralApi().listProductAgreements(this.id, filters);
             return Model.parseArray(Agreement, agreements);
         } catch (ex: Dynamic) {
             return new Collection<Agreement>();
@@ -363,7 +363,7 @@ class Product extends IdModel {
     **/
     public function listMedia(filters: QueryParams) : Collection<Media> {
         try {
-            var media = Environment.getGeneralApi().listProductMedia(this.id, filters);
+            var media = Env.getGeneralApi().listProductMedia(this.id, filters);
             return Model.parseArray(Media, media);
         } catch (ex: Dynamic) {
             return new Collection<Media>();
@@ -378,7 +378,7 @@ class Product extends IdModel {
     **/
     public function createMedia() : Media {
         try {
-            var media = Environment.getGeneralApi().createProductMedia(this.id);
+            var media = Env.getGeneralApi().createProductMedia(this.id);
             return Model.parse(Media, media);
         } catch (ex: Dynamic) {
             return null;
@@ -391,7 +391,7 @@ class Product extends IdModel {
     **/
     public function getMedia(mediaId: String): Media {
         try {
-            var media = Environment.getGeneralApi().getProductMedia(this.id, mediaId);
+            var media = Env.getGeneralApi().getProductMedia(this.id, mediaId);
             return Model.parse(Media, media);
         } catch (ex: Dynamic) {
             return null;
@@ -406,7 +406,7 @@ class Product extends IdModel {
     **/
     public function updateMedia(media: Media) : Media {
         try {
-            var updated = Environment.getGeneralApi().updateProductMedia(this.id, media.id, media.toString());
+            var updated = Env.getGeneralApi().updateProductMedia(this.id, media.id, media.toString());
             return Model.parse(Media, updated);
         } catch (ex: Dynamic) {
             return null;
@@ -421,7 +421,7 @@ class Product extends IdModel {
     **/
     public function deleteMedia(mediaId: String) : Media {
         try {
-            var media = Environment.getGeneralApi().deleteProductMedia(this.id, mediaId);
+            var media = Env.getGeneralApi().deleteProductMedia(this.id, mediaId);
             return Model.parse(Media, media);
         } catch (ex: Dynamic) {
             return null;

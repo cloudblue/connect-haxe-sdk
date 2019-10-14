@@ -40,7 +40,7 @@ class Account extends IdModel {
         @returns A Collection of Accounts.
     **/
     public static function list(filters: QueryParams): Collection<Account> {
-        var accounts = Environment.getGeneralApi().listAccounts(filters);
+        var accounts = Env.getGeneralApi().listAccounts(filters);
         return Model.parseArray(Account, accounts);
     }
 
@@ -51,7 +51,7 @@ class Account extends IdModel {
         @returns The created Account.
     **/
     public static function create(): Account {
-        var account = Environment.getGeneralApi().createAccount();
+        var account = Env.getGeneralApi().createAccount();
         return Model.parse(Account, account);
     }
 
@@ -59,7 +59,7 @@ class Account extends IdModel {
     /** @returns The Account with the given id, or `null` if it was not found. **/
     public static function get(id: String): Account {
         try {
-            var account = Environment.getGeneralApi().getAccount(id);
+            var account = Env.getGeneralApi().getAccount(id);
             return Model.parse(Account, account);
         } catch (ex: Dynamic) {
             return null;
@@ -69,7 +69,7 @@ class Account extends IdModel {
 
     /** @returns A Collection of Users of `this` Account. **/
     public function listUsers(): Collection<User> {
-        var users = Environment.getGeneralApi().listAccountUsers(this.id);
+        var users = Env.getGeneralApi().listAccountUsers(this.id);
         return Model.parseArray(User, users);
     }
 

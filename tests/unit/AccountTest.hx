@@ -1,14 +1,14 @@
 package tests.unit;
 
 import connect.Dictionary;
-import connect.Environment;
+import connect.Env;
 import connect.models.Account;
 import tests.mocks.Mock;
 
 
 class AccountTest extends haxe.unit.TestCase {
     override public function setup() {
-        Environment._reset(new Dictionary()
+        Env._reset(new Dictionary()
             .setString('IGeneralApi', 'tests.mocks.GeneralApiMock'));
     }
 
@@ -20,7 +20,7 @@ class AccountTest extends haxe.unit.TestCase {
         assertEquals('VA-044-420', accounts.get(0).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listAccounts'));
         assertEquals(
             [null].toString(),
@@ -35,7 +35,7 @@ class AccountTest extends haxe.unit.TestCase {
         assertEquals('VA-044-420', account.id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('createAccount'));
         assertEquals(
             [].toString(),
@@ -49,7 +49,7 @@ class AccountTest extends haxe.unit.TestCase {
         assertTrue(account != null);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getAccount'));
         assertEquals(
             ['VA-044-420'].toString(),
@@ -63,7 +63,7 @@ class AccountTest extends haxe.unit.TestCase {
         assertTrue(account == null);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getAccount'));
         assertEquals(
             ['VA-XXX-XXX'].toString(),

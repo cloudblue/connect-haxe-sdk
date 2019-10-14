@@ -21,7 +21,7 @@ import connect.api.impl.GeneralApiImpl;
     ability to perform Http requests is performed by an instance of a class that implements
     the `connect.api.IApiClient` interface.
 
-    Since these dependencies must be globally available, the `Environment` class contains static
+    Since these dependencies must be globally available, the `Env` class contains static
     method to obtain the default instances of these clases from anywhere. To minimize the
     side-effects that can be caused by changes in the values of global objects in a program,
     all environment objects are immutable, providing a side-effect free context for the program
@@ -29,15 +29,15 @@ import connect.api.impl.GeneralApiImpl;
 
     All objects returned here are lazy-initialized, meaning that they are not created until they
     are requested. In order to provide the connector configuration, a call to
-    `Environment.initConfig` or `Environment.loadConfig` can be provided at the top of the program.
+    `Env.initConfig` or `Env.loadConfig` can be provided at the top of the program.
     Otherwise, the configuration will be automatically loaded from the "config.json" file.
 
     Many of the objects returned by this class are defined in a public interface, with a default
-    implementation provided by the Environment. This is because when unit testing, these classes
+    implementation provided by the environment. This is because when unit testing, these classes
     get replaced through dependency injection by mocked ones, allowing to a sandboxed unit testing
     environment.
 **/
-class Environment {
+class Env {
     /**
         Initializes the configuration object. It must have not been previously configured.
 

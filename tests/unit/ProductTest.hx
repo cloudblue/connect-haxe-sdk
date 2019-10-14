@@ -1,7 +1,7 @@
 package tests.unit;
 
 import connect.Dictionary;
-import connect.Environment;
+import connect.Env;
 import connect.models.Media;
 import connect.models.Model;
 import connect.models.Product;
@@ -11,7 +11,7 @@ import tests.mocks.Mock;
 
 class ProductTest extends haxe.unit.TestCase {
     override public function setup() {
-        Environment._reset(new Dictionary()
+        Env._reset(new Dictionary()
             .setString('IGeneralApi', 'tests.mocks.GeneralApiMock'));
     }
 
@@ -23,7 +23,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('PRD-783-317-575', products.get(0).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listProducts'));
         assertEquals(
             [null].toString(),
@@ -37,7 +37,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertTrue(product != null);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProduct'));
         assertEquals(
             ['PRD-783-317-575'].toString(),
@@ -51,7 +51,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertTrue(product == null);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProduct'));
         assertEquals(
             ['PRD-XXX-XXX-XXX'].toString(),
@@ -66,7 +66,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('sso_action', actions.get(0).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listProductActions'));
         assertEquals(
             ['PRD-783-317-575', null].toString(),
@@ -80,7 +80,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(0, actions.length());
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listProductActions'));
         assertEquals(
             ['PRD-XXX-XXX-XXX', null].toString(),
@@ -96,7 +96,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('sso_action', action.id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductAction'));
         assertEquals(
             ['PRD-783-317-575', 'sso_action'].toString(),
@@ -111,7 +111,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertTrue(action == null);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductAction'));
         assertEquals(
             ['PRD-783-317-575', 'invalid-id'].toString(),
@@ -125,7 +125,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertTrue(action == null);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductAction'));
         assertEquals(
             ['PRD-XXX-XXX-XXX', 'sso_action'].toString(),
@@ -140,7 +140,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertTrue(link == 'https://stub-dot-mydevball.appspot.com/?jwt=eyJhbGciOi');
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductActionLink'));
         assertEquals(
             ['PRD-783-317-575', 'sso_action'].toString(),
@@ -155,7 +155,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertTrue(link == '');
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductActionLink'));
         assertEquals(
             ['PRD-783-317-575', 'invalid_id'].toString(),
@@ -171,7 +171,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('CT-5887-6537', connections.get(0).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductConnections'));
         assertEquals(
             ['PRD-783-317-575'].toString(),
@@ -185,7 +185,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(0, connections.length());
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductConnections'));
         assertEquals(
             ['PRD-XXX-XXX-XXX'].toString(),
@@ -202,7 +202,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('PRD-783-317-575-0002', items.get(1).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductItems'));
         assertEquals(
             ['PRD-783-317-575'].toString(),
@@ -217,7 +217,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(0, items.length());
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductItems'));
         assertEquals(
             ['PRD-XXX-XXX-XXX'].toString(),
@@ -234,7 +234,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('sure-crickets-5x24', params.get(1).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductParameters'));
         assertEquals(
             ['PRD-783-317-575'].toString(),
@@ -249,7 +249,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(0, params.length());
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductParameters'));
         assertEquals(
             ['PRD-XXX-XXX-XXX'].toString(),
@@ -267,7 +267,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('TL-921-532-627', templates.get(2).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductTemplates'));
         assertEquals(
             ['PRD-783-317-575'].toString(),
@@ -282,7 +282,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(0, templates.length());
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductTemplates'));
         assertEquals(
             ['PRD-XXX-XXX-XXX'].toString(),
@@ -299,7 +299,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(2, versions.get(0).version);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersions'));
         assertEquals(
             ['PRD-783-317-575'].toString(),
@@ -314,7 +314,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(0, versions.length());
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersions'));
         assertEquals(
             ['PRD-XXX-XXX-XXX'].toString(),
@@ -330,7 +330,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(2, version.version);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersion'));
         assertEquals(
             ['PRD-783-317-575', '2'].toString(),
@@ -345,7 +345,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertTrue(version == null);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersion'));
         assertEquals(
             ['PRD-783-317-575', '1'].toString(),
@@ -361,7 +361,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('sso_action', actions.get(0).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersionActions'));
         assertEquals(
             ['PRD-783-317-575', '2'].toString(),
@@ -376,7 +376,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(0, actions.length());
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersionActions'));
         assertEquals(
             ['PRD-XXX-XXX-XXX', '2'].toString(),
@@ -391,7 +391,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('sso_action', action.id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersionAction'));
         assertEquals(
             ['PRD-783-317-575', '2', 'sso_action'].toString(),
@@ -406,7 +406,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertTrue(action == null);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersionAction'));
         assertEquals(
             ['PRD-783-317-575', '2', 'invalid_id'].toString(),
@@ -421,7 +421,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertTrue(link == 'https://stub-dot-mydevball.appspot.com/?jwt=eyJhbGciOi');
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersionActionLink'));
         assertEquals(
             ['PRD-783-317-575', '2', 'sso_action'].toString(),
@@ -436,7 +436,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('', link);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersionActionLink'));
         assertEquals(
             ['PRD-XXX-XXX-XXX', '2', 'sso_action'].toString(),
@@ -453,7 +453,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('PRD-783-317-575-0002', items.get(1).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersionItems'));
         assertEquals(
             ['PRD-783-317-575', '2'].toString(),
@@ -468,7 +468,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(0, items.length());
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersionItems'));
         assertEquals(
             ['PRD-XXX-XXX-XXX', '2'].toString(),
@@ -485,7 +485,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('sure-crickets-5x24', params.get(1).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersionParameters'));
         assertEquals(
             ['PRD-783-317-575', '2'].toString(),
@@ -500,7 +500,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(0, params.length());
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersionParameters'));
         assertEquals(
             ['PRD-XXX-XXX-XXX', '2'].toString(),
@@ -518,7 +518,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('TL-921-532-627', templates.get(2).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersionTemplates'));
         assertEquals(
             ['PRD-783-317-575', '2'].toString(),
@@ -533,7 +533,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(0, templates.length());
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductVersionTemplates'));
         assertEquals(
             ['PRD-XXX-XXX-XXX', '2'].toString(),
@@ -549,7 +549,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('id', configs.get(0).parameter.id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listProductConfigurations'));
         assertEquals(
             ['PRD-783-317-575', null].toString(),
@@ -564,7 +564,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(0, configs.length());
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listProductConfigurations'));
         assertEquals(
             ['PRD-XXX-XXX-XXX', null].toString(),
@@ -580,7 +580,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('XXX', result.parameter.id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('setProductConfigurationParam'));
         assertEquals(
             ['PRD-783-317-575', param.toString()].toString(),
@@ -596,7 +596,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertTrue(result == null);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('setProductConfigurationParam'));
         assertEquals(
             ['PRD-XXX-XXX-XXX', param.toString()].toString(),
@@ -612,7 +612,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('AGP-884-348-731', agreements.get(0).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listProductAgreements'));
         assertEquals(
             ['PRD-783-317-575', null].toString(),
@@ -627,7 +627,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(0, agreements.length());
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listProductAgreements'));
         assertEquals(
             ['PRD-XXX-XXX-XXX', null].toString(),
@@ -643,7 +643,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('PRM-00000-00000-00000', media.get(0).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listProductMedia'));
         assertEquals(
             ['PRD-783-317-575', null].toString(),
@@ -658,7 +658,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(0, media.length());
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listProductMedia'));
         assertEquals(
             ['PRD-XXX-XXX-XXX', null].toString(),
@@ -673,7 +673,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('PRM-00000-00000-00000', media.id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('createProductMedia'));
         assertEquals(
             ['PRD-783-317-575'].toString(),
@@ -688,7 +688,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(null, media);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('createProductMedia'));
         assertEquals(
             ['PRD-XXX-XXX-XXX'].toString(),
@@ -703,7 +703,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('PRM-00000-00000-00000', media.id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductMedia'));
         assertEquals(
             ['PRD-783-317-575', 'PRM-00000-00000-00000'].toString(),
@@ -718,7 +718,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(null, media);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProductMedia'));
         assertEquals(
             ['PRD-783-317-575', 'PRM-XXXXX-XXXXX-XXXXX'].toString(),
@@ -734,7 +734,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('PRM-00000-00000-00000', result.id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('updateProductMedia'));
         assertEquals(
             ['PRD-783-317-575', 'PRM-00000-00000-00000', media.toString()].toString(),
@@ -750,7 +750,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(null, result);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('updateProductMedia'));
         assertEquals(
             ['PRD-783-317-575', 'PRM-XXXXX-XXXXX-XXXXX', media.toString()].toString(),
@@ -765,7 +765,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('PRM-00000-00000-00000', result.id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('deleteProductMedia'));
         assertEquals(
             ['PRD-783-317-575', 'PRM-00000-00000-00000'].toString(),
@@ -780,7 +780,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals(null, result);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('deleteProductMedia'));
         assertEquals(
             ['PRD-783-317-575', 'PRM-XXXXX-XXXXX-XXXXX'].toString(),

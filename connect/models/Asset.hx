@@ -104,7 +104,7 @@ class Asset extends IdModel {
         @returns A Collection of Assets.
     **/
     public static function list(filters: QueryParams) : Collection<Asset> {
-        var assets = Environment.getFulfillmentApi().listAssets(filters);
+        var assets = Env.getFulfillmentApi().listAssets(filters);
         return Model.parseArray(Asset, assets);
     }
 
@@ -113,7 +113,7 @@ class Asset extends IdModel {
     /** @returns The Asset with the given id, or `null` if it was not found. **/
     public static function get(id: String): Asset {
         try {
-            var asset = Environment.getFulfillmentApi().getAsset(id);
+            var asset = Env.getFulfillmentApi().getAsset(id);
             return Model.parse(Asset, asset);
         } catch (ex: Dynamic) {
             return null;
@@ -123,7 +123,7 @@ class Asset extends IdModel {
 
     /** @returns A collection with all the requests for the `this` Asset. **/
     public function getRequests(): Collection<Request> {
-        var requests = Environment.getFulfillmentApi().getAssetRequests(this.id);
+        var requests = Env.getFulfillmentApi().getAssetRequests(this.id);
         return Model.parseArray(Request, requests);
     }
 

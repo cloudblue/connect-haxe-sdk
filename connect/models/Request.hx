@@ -95,7 +95,7 @@ class Request extends IdModel {
         @returns A Collection of Requests.
     **/
     public static function list(filters: QueryParams) : Collection<Request> {
-        var requests = Environment.getFulfillmentApi().listRequests(filters);
+        var requests = Env.getFulfillmentApi().listRequests(filters);
         return Model.parseArray(Request, requests);
     }
 
@@ -103,7 +103,7 @@ class Request extends IdModel {
     /** @returns The Request with the given id, or `null` if it was not found. **/
     public static function get(id: String): Request {
         try {
-            var request = Environment.getFulfillmentApi().getRequest(id);
+            var request = Env.getFulfillmentApi().getRequest(id);
             return Model.parse(Request, request);
         } catch (ex: Dynamic) {
             return null;
@@ -117,7 +117,7 @@ class Request extends IdModel {
         @returns The created Request.
     **/
     public static function create(): Request {
-        var request = Environment.getFulfillmentApi().createRequest();
+        var request = Env.getFulfillmentApi().createRequest();
         return Model.parse(Request, request);
     }
 
@@ -129,7 +129,7 @@ class Request extends IdModel {
         the same data as `this` Request.
     **/
     public function update(): Request {
-        var request = Environment.getFulfillmentApi().updateRequest(
+        var request = Env.getFulfillmentApi().updateRequest(
             this.id,
             this.toString());
         return Model.parse(Request, request);
@@ -144,7 +144,7 @@ class Request extends IdModel {
         the updated status.
     **/
     public function approveByTemplate(id: String): Request {
-        var request = Environment.getFulfillmentApi().changeRequestStatus(
+        var request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
             haxe.Json.stringify({template_id: id})
@@ -161,7 +161,7 @@ class Request extends IdModel {
         the updated status.
     **/
     public function approveByTile(text: String): Request {
-        var request = Environment.getFulfillmentApi().changeRequestStatus(
+        var request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
             haxe.Json.stringify({activation_tile: text})
@@ -177,7 +177,7 @@ class Request extends IdModel {
         the updated status.
     **/
     public function fail(reason: String): Request {
-        var request = Environment.getFulfillmentApi().changeRequestStatus(
+        var request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'fail',
             haxe.Json.stringify({reason: reason})
@@ -193,7 +193,7 @@ class Request extends IdModel {
         the updated status.
     **/
     public function inquire(): Request {
-        var request = Environment.getFulfillmentApi().changeRequestStatus(
+        var request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'inquire',
             haxe.Json.stringify({})
@@ -209,7 +209,7 @@ class Request extends IdModel {
         the updated status.
     **/
     public function pend(): Request {
-        var request = Environment.getFulfillmentApi().changeRequestStatus(
+        var request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'pend',
             haxe.Json.stringify({})
@@ -225,7 +225,7 @@ class Request extends IdModel {
         the updated assignee.
     **/
     public function assignTo(assigneeId: String): Request {
-       var request = Environment.getFulfillmentApi().assignRequest(
+       var request = Env.getFulfillmentApi().assignRequest(
             this.id,
             assigneeId
         );

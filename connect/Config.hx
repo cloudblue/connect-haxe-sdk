@@ -6,7 +6,7 @@ package connect;
 class Config {
     /**
         Creates a new Config object. You don't normally create objects of this class,
-        since the SDK uses the default instance provided by `Environment.getConfig()`.
+        since the SDK uses the default instance provided by `Env.getConfig()`.
     **/
     public function new(apiUrl: String, apiKey: String, products: Collection<String>) {
         this.apiUrl = (apiUrl.charAt(apiUrl.length - 1) == "/") ? apiUrl : apiUrl + "/";

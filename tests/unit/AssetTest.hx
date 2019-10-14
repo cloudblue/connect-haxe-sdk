@@ -1,7 +1,7 @@
 package tests.unit;
 
 import connect.Dictionary;
-import connect.Environment;
+import connect.Env;
 import connect.models.Asset;
 import connect.models.Model;
 import tests.mocks.Mock;
@@ -9,7 +9,7 @@ import tests.mocks.Mock;
 
 class AssetTest extends haxe.unit.TestCase {
     override public function setup() {
-        Environment._reset(new Dictionary()
+        Env._reset(new Dictionary()
             .setString('IFulfillmentApi', 'tests.mocks.FulfillmentApiMock'));
     }
 
@@ -22,7 +22,7 @@ class AssetTest extends haxe.unit.TestCase {
         assertEquals('AS-392-283-001-0', assets.get(1).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getFulfillmentApi(), Mock);
+        var apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('listRequests'));
         assertEquals(
             [null].toString(),
@@ -36,7 +36,7 @@ class AssetTest extends haxe.unit.TestCase {
         assertTrue(asset != null);
 
         // Check mocks
-        var apiMock = cast(Environment.getFulfillmentApi(), Mock);
+        var apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('getAsset'));
         assertEquals(
             ['AS-392-283-000-0'].toString(),
@@ -50,7 +50,7 @@ class AssetTest extends haxe.unit.TestCase {
         assertTrue(asset == null);
 
         // Check mocks
-        var apiMock = cast(Environment.getFulfillmentApi(), Mock);
+        var apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('getAsset'));
         assertEquals(
             ['AS-XXX-XXX-XXX-X'].toString(),
@@ -66,7 +66,7 @@ class AssetTest extends haxe.unit.TestCase {
         assertEquals('PR-5852-1608-0000', requests.get(0).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getFulfillmentApi(), Mock);
+        var apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('getAssetRequests'));
         assertEquals(
             ['AS-392-283-000-0'].toString(),
@@ -81,7 +81,7 @@ class AssetTest extends haxe.unit.TestCase {
         assertEquals(0, requests.length());
 
         // Check mocks
-        var apiMock = cast(Environment.getFulfillmentApi(), Mock);
+        var apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('getAssetRequests'));
         assertEquals(
             ['AS-XXX-XXX-XXX-X'].toString(),

@@ -1,4 +1,4 @@
-import connect.Environment;
+import connect.Env;
 import connect.models.Account;
 import connect.models.Action;
 import connect.models.Activation;

@@ -66,13 +66,13 @@ class ApiClientImpl implements IApiClient {
         #if js
             initXMLHttpRequest();
 
-            var url = Environment.getConfig().getApiUrl() + path + params.toString();
+            var url = Env.getConfig().getApiUrl() + path + params.toString();
 
             var xhr = new js.html.XMLHttpRequest();
             xhr.timeout = 300000;
             xhr.open(method.toUpperCase(), url, false);
 
-            xhr.setRequestHeader('Authorization', Environment.getConfig().getApiKey());
+            xhr.setRequestHeader('Authorization', Env.getConfig().getApiKey());
             xhr.setRequestHeader('Content-Type', 'application/json');
 
             if (data != null) {
@@ -96,10 +96,10 @@ class ApiClientImpl implements IApiClient {
             var status:Null<Int> = null;
             var responseBytes = new haxe.io.BytesOutput();
 
-            var http = new haxe.Http(Environment.getConfig().getApiUrl() + path);
+            var http = new haxe.Http(Env.getConfig().getApiUrl() + path);
             http.cnxTimeout = 300;
 
-            http.setHeader('Authorization', Environment.getConfig().getApiKey());
+            http.setHeader('Authorization', Env.getConfig().getApiKey());
             http.setHeader('Content-Type', 'application/json');
 
             if (params != null) {

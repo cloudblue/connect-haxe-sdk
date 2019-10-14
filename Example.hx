@@ -1,4 +1,4 @@
-import connect.Environment;
+import connect.Env;
 import connect.api.QueryParams;
 import connect.models.*;
 
@@ -9,7 +9,7 @@ class Example {
 
         // List requests
         var requests = Request.list(new QueryParams()
-            .set('asset.product.id__in', Environment.getConfig().getProductsString())
+            .set('asset.product.id__in', Env.getConfig().getProductsString())
             .set('status', 'pending')
         );
 

@@ -36,7 +36,7 @@ class Conversation extends IdModel {
         @returns A collection of Conversations.
     **/
     public static function list(filters: QueryParams) : Collection<Conversation> {
-        var convs = Environment.getGeneralApi().listConversations(filters);
+        var convs = Env.getGeneralApi().listConversations(filters);
         return Model.parseArray(Conversation, convs);
     }
     
@@ -48,7 +48,7 @@ class Conversation extends IdModel {
         @returns The created Conversation.
     **/
     public static function create(instanceId: String, topic: String): Conversation {
-        var conv = Environment.getGeneralApi().createConversation(haxe.Json.stringify({
+        var conv = Env.getGeneralApi().createConversation(haxe.Json.stringify({
             instance_id: instanceId,
             topic: topic
         }));
@@ -59,7 +59,7 @@ class Conversation extends IdModel {
     /** @returns The Conversation with the given id, or `null` if it was not found. **/
     public static function get(id: String): Conversation {
         try {
-            var conv = Environment.getGeneralApi().getConversation(id);
+            var conv = Env.getGeneralApi().getConversation(id);
             return Model.parse(Conversation, conv);
         } catch (ex: Dynamic) {
             return null;

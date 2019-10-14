@@ -11,71 +11,71 @@ class TierApiImpl implements ITierApi {
 
 
     public function listTierConfigRequests(filters: QueryParams): Array<Dynamic> {
-        return Environment.getApiClient().get(TCR_PATH, null, null, filters);
+        return Env.getApiClient().get(TCR_PATH, null, null, filters);
     }
 
 
     public function createTierConfigRequest(): Dynamic {
-        return Environment.getApiClient().post(TCR_PATH);
+        return Env.getApiClient().post(TCR_PATH);
     }
 
 
     public function getTierConfigRequest(id: String): Dynamic {
-        return Environment.getApiClient().get(TCR_PATH, id);
+        return Env.getApiClient().get(TCR_PATH, id);
     }
 
 
     public function updateTierConfigRequest(id: String, tcr: String): Dynamic {
-        return Environment.getApiClient().put(TCR_PATH, id, tcr);
+        return Env.getApiClient().put(TCR_PATH, id, tcr);
     }
 
 
     public function pendTierConfigRequest(id: String): Dynamic {
-        return Environment.getApiClient().post(TCR_PATH, id, 'pend');
+        return Env.getApiClient().post(TCR_PATH, id, 'pend');
     }
 
 
     public function inquireTierConfigRequest(id: String): Dynamic {
-        return Environment.getApiClient().post(TCR_PATH, id, 'inquire');
+        return Env.getApiClient().post(TCR_PATH, id, 'inquire');
     }
 
 
     public function approveTierConfigRequest(id: String, data: String): Dynamic {
-        return Environment.getApiClient().post(TCR_PATH, id, 'approve', data);
+        return Env.getApiClient().post(TCR_PATH, id, 'approve', data);
     }
 
 
     public function failTierConfigRequest(id: String, data: String): Dynamic {
-        return Environment.getApiClient().post(TCR_PATH, id, 'fail', data);
+        return Env.getApiClient().post(TCR_PATH, id, 'fail', data);
     }
 
 
     public function assignTierConfigRequest(id: String): Dynamic {
-        return Environment.getApiClient().post(TCR_PATH, id, 'assign');
+        return Env.getApiClient().post(TCR_PATH, id, 'assign');
     }
 
 
     public function unassignTierConfigRequest(id: String): Dynamic {
-        return Environment.getApiClient().post(TCR_PATH, id, 'unassign');
+        return Env.getApiClient().post(TCR_PATH, id, 'unassign');
     }
 
 
     public function listTierAccounts(filters: QueryParams): Array<Dynamic> {
-        return Environment.getApiClient().get(TA_PATH, null, null, filters);
+        return Env.getApiClient().get(TA_PATH, null, null, filters);
     }
 
 
     public function getTierAccount(id: String): Dynamic {
-        return Environment.getApiClient().get(TA_PATH, id);
+        return Env.getApiClient().get(TA_PATH, id);
     }
 
 
     public function listTierConfigs(filters: QueryParams): Array<Dynamic> {
-        return Environment.getApiClient().get(TC_PATH, null, null, filters);
+        return Env.getApiClient().get(TC_PATH, null, null, filters);
     }
 
 
     public function getTierConfig(id: String): Dynamic {
-        return Environment.getApiClient().get(TC_PATH, id);
+        return Env.getApiClient().get(TC_PATH, id);
     }
 }

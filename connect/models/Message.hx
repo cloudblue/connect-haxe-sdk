@@ -27,7 +27,7 @@ class Message extends IdModel {
         @returns The created Conversation.
     **/
     public static function create(conversationId: String, text: String): Message {
-        var msg = Environment.getGeneralApi().createConversationMessage(
+        var msg = Env.getGeneralApi().createConversationMessage(
             conversationId,
             haxe.Json.stringify({ text: text }));
         return Model.parse(Message, msg);

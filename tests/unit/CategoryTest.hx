@@ -1,14 +1,14 @@
 package tests.unit;
 
 import connect.Dictionary;
-import connect.Environment;
+import connect.Env;
 import connect.models.Category;
 import tests.mocks.Mock;
 
 
 class CategoryTest extends haxe.unit.TestCase {
     override public function setup() {
-        Environment._reset(new Dictionary()
+        Env._reset(new Dictionary()
             .setString('IGeneralApi', 'tests.mocks.GeneralApiMock'));
     }
 
@@ -20,7 +20,7 @@ class CategoryTest extends haxe.unit.TestCase {
         assertEquals('CAT-00012', categories.get(0).id);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listCategories'));
         assertEquals(
             [null].toString(),
@@ -34,7 +34,7 @@ class CategoryTest extends haxe.unit.TestCase {
         assertTrue(category != null);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getCategory'));
         assertEquals(
             ['CAT-00012'].toString(),
@@ -48,7 +48,7 @@ class CategoryTest extends haxe.unit.TestCase {
         assertTrue(category == null);
 
         // Check mocks
-        var apiMock = cast(Environment.getGeneralApi(), Mock);
+        var apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getCategory'));
         assertEquals(
             ['CAT-XXXXX'].toString(),
