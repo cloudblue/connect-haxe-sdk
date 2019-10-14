@@ -53,7 +53,7 @@ class Logger {
     public function _write(message: String): Void {
         this.writeSections();
         this.writeLine(message);
-        if (this.sections.length > 0 && '>-*'.indexOf(message.charAt(0)) == -1) {
+        if (this.sections.length > 0 && '>-*|'.indexOf(StringTools.trim(message).charAt(0)) == -1 && message.substr(0, 3) != '```') {
             this.writeLine('');
         }
     }

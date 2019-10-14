@@ -63,7 +63,8 @@ class ApiClientImpl implements IApiClient {
     **/
     private function syncRequest(method: String, path: String,
             ?params: QueryParams, ?data: String, ?multipart: Multipart) : Response {
-        var fullUrl = Env.getConfig().getApiUrl() + path + params.toString();
+        var fullUrl = Env.getConfig().getApiUrl() + path +
+            ((params != null) ? params.toString() : '');
         Env.getLogger()._write('> Http ${method} Request to ${fullUrl}');
         if (data != null) {
             Env.getLogger()._write('> * Data: ${data}');
@@ -71,7 +72,8 @@ class ApiClientImpl implements IApiClient {
         #if js
             initXMLHttpRequest();
 
-            var url = Env.getConfig().getApiUrl() + path + params.toString();
+            var url = Env.getConfig().getApiUrl() + path +
+                ((params != null) ? params.toString() : '');
 
             var xhr = new js.html.XMLHttpRequest();
             xhr.timeout = 300000;
