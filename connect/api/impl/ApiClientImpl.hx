@@ -73,6 +73,7 @@ class ApiClientImpl implements IApiClient {
             xhr.open(method.toUpperCase(), url, false);
 
             xhr.setRequestHeader('Authorization', Environment.getConfig().getApiKey());
+            xhr.setRequestHeader('Content-Type', 'application/json');
 
             if (data != null) {
                 xhr.send(data);
@@ -99,6 +100,7 @@ class ApiClientImpl implements IApiClient {
             http.cnxTimeout = 300;
 
             http.setHeader('Authorization', Environment.getConfig().getApiKey());
+            http.setHeader('Content-Type', 'application/json');
 
             if (params != null) {
                 for (name in params.keys()) {
