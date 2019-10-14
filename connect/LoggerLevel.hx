@@ -5,9 +5,12 @@ package connect;
     Indicates the level of the log system.
 **/
 enum LoggerLevel {
-    /** Only writes release level messages. **/
-    Release;
+    /** Only writes compact error messages. **/
+    Error;
 
-    /** Writes both debug and release level messages. **/
+    /** Only writes compact error & info level messages. **/
+    Info;
+
+    /** Writes detailed messages of all levels. **/
     Debug;
 }

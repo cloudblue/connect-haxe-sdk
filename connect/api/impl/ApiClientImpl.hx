@@ -65,10 +65,11 @@ class ApiClientImpl implements IApiClient {
             ?params: QueryParams, ?data: String, ?multipart: Multipart) : Response {
         var fullUrl = Env.getConfig().getApiUrl() + path +
             ((params != null) ? params.toString() : '');
-        Env.getLogger()._write('> Http ${method} Request to ${fullUrl}');
-        if (data != null) {
-            Env.getLogger()._write('> * Data: ${data}');
+        
+        if (Env.getLogger().getLevel() != LoggerLevel.Error) {
+            writeRequestCall(method, fullUrl, data);
         }
+
         #if js
             initXMLHttpRequest();
 
@@ -93,6 +94,10 @@ class ApiClientImpl implements IApiClient {
             }
 
             if (xhr.readyState == js.html.XMLHttpRequest.UNSENT) {
+                if (Env.getLogger().getLevel() == LoggerLevel.Error) {
+                    writeRequestCall(method, fullUrl, data);
+                    writeRequestResponse(new Response(status, xhr.responseText));
+                }
                 throw xhr.responseText != null
                     ? xhr.responseText
                     : 'Error sending ${method} request to "${url}."';
@@ -130,25 +135,59 @@ class ApiClientImpl implements IApiClient {
             }
 
             http.onStatus = function(status_) { status = status_; };
-            http.onError = function(msg) { throw msg; }            
+            http.onError = function(msg) {
+                if (Env.getLogger().getLevel() == LoggerLevel.Error) {
+                    writeRequestCall(method, fullUrl, data);
+                    writeRequestResponse(new Response(status, msg));
+                }
+                throw msg;
+            }
             http.customRequest(false, responseBytes, null, method.toUpperCase());
 
             while (status == null) {} // Wait for async request
             var response = new Response(status, responseBytes.getBytes().toString());
         #end
+
+        if (Env.getLogger().getLevel() == LoggerLevel.Error && response.status >= 400) {
+            writeRequestCall(method, fullUrl, data);
+        }
+        if (Env.getLogger().getLevel() != LoggerLevel.Error || response.status >= 400) {
+            writeRequestResponse(response);
+        }
+        
+        return response;
+    }
+
+
+    private function writeRequestCall(method: String, fullUrl: String, data: String) {
+        Env.getLogger()._write('> Http ${method} Request to ${fullUrl}');
+        if (data != null) {
+            Env.getLogger()._write('> * Data: ${data}');
+        }
+    }
+
+
+    private function writeRequestResponse(response: Response) {
         Env.getLogger()._write('> * Status: ${response.status}');
-        try {
-            var parsed = haxe.Json.parse(response.text);
-            var beautified = haxe.Json.stringify(parsed, null, '  ');
-            Env.getLogger()._write('> * Response:');
-            Env.getLogger()._write('> ```json');
-            Env.getLogger()._write('> ${beautified}');
-            Env.getLogger()._write('> ```');
-        } catch (ex: Dynamic) {
+        
+        if (Inflection.isJson(response.text)) {
+            var beautified = Inflection.beautify(response.text,
+                Env.getLogger().getLevel() != LoggerLevel.Debug);
+            var responsePrefix = (Env.getLogger().getLevel() == LoggerLevel.Debug)
+                ? '> * Response:'
+                : '> * Response (compact):';
+            if (Env.getLogger().getLevel() == LoggerLevel.Debug || Inflection.isJsonArray(beautified)) {
+                Env.getLogger()._write(responsePrefix);
+                Env.getLogger()._write('> ```json');
+                Env.getLogger()._write('> ${beautified}');
+                Env.getLogger()._write('> ```');
+            } else {
+                Env.getLogger()._write('${responsePrefix} ${beautified}');
+            }
+        } else {
             Env.getLogger()._write('> * Response: ${response.text}');
         }
         Env.getLogger()._write('');
-        return response;
     }
 
 

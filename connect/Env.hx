@@ -92,7 +92,6 @@ class Env {
             Use `null` to only write to standard output.
         @param level Level of log (`Debug` or `Release`).
         @throws String If the logger is already initialized.
-        @throws Exception If the filename cannot be created or opened.
     **/
     public static function initLogger(filename: String, level: LoggerLevel) {
         if (logger == null) {
@@ -129,7 +128,7 @@ class Env {
 
     /**
         Returns the logger object. If it is not initialized, it will initialize it in the level
-        `Release` with a filename of "log.md".
+        `Error` with a filename of "log.md".
 
         @returns The environment logger.
         @throws Exception If the instance is not initialized and the file "config.json" cannot be
@@ -137,7 +136,7 @@ class Env {
     **/
     public static function getLogger(): Logger {
         if (!isLoggerInitialized()) {
-            initLogger('log.md', Release);
+            initLogger('log.md', Error);
         }
         return logger;
     }

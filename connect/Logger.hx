@@ -10,13 +10,15 @@ class Logger {
         since the SDK uses the default instance provided by `Env.getLogger()`.
     **/
     public function new(filename: String, level: LoggerLevel) {
-        if (filename != null) {
-            this.file = sys.io.File.append(filename);
-        } else {
-            this.file = null;
-        }
+        this.filename = filename;
         this.level = level;
         this.sections = [];
+    }
+
+
+    /** @returns The level of the log. **/
+    public function getLevel(): LoggerLevel {
+        return this.level;
     }
 
 
@@ -53,17 +55,28 @@ class Logger {
     public function _write(message: String): Void {
         this.writeSections();
         this.writeLine(message);
-        if (this.sections.length > 0 && '>-*|'.indexOf(StringTools.trim(message).charAt(0)) == -1 && message.substr(0, 3) != '```') {
+        if (this.sections.length > 0
+                && '>-*|{'.indexOf(StringTools.trim(message).charAt(0)) == -1
+                && message.substr(0, 3) != '```') {
             this.writeLine('');
         }
     }
 
 
+    private var filename: String;
     private var file: sys.io.FileOutput;
-    private var level: LoggerLevel = Release;
+    private var level: LoggerLevel;
     private var sections: Array<LoggerSection>;
 
 
+    private function getFile(): sys.io.FileOutput {
+        if (this.file == null && this.filename != null) {
+            this.file = sys.io.File.append(this.filename);
+        }
+        return this.file;
+    }
+    
+    
     private function writeSections(): Void {
         for (i in 0...this.sections.length) {
             if (!this.sections[i].written) {
@@ -77,8 +90,8 @@ class Logger {
 
 
     private function writeLine(line: String): Void {
-        if (this.file != null) {
-            this.file.writeString(line + '\r\n');
+        if (this.getFile() != null) {
+            this.getFile().writeString(line + '\r\n');
         }
         Sys.println(line);
     }
