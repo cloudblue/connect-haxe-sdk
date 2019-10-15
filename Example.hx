@@ -1,4 +1,6 @@
 import connect.Env;
+import connect.LoggerLevel;
+import connect.Processor;
 import connect.api.QueryParams;
 import connect.models.*;
 
@@ -7,29 +9,38 @@ class Example {
         // Get initial time
         var initialTime = Date.now().getTime();
 
-        // List requests
-        var requests = Request.list(new QueryParams()
-            .set('asset.product.id__in', Env.getConfig().getProductsString())
-            .set('status', 'pending')
-        );
+        //Env.initLogger('log.md', LoggerLevel.Error, null);
 
         // Process requests
-        for (request in requests) {
-            trace(request.id
-                + ' : ' + request.asset.id
-                + ' : ' + request.asset.connection.id
-                + ' : ' + request.asset.product.id
-                + ' : ' + request.status);
-
+        new Processor()
+            .step('Add dummy data', function(p, input) {
+                p.setData('assetId', p.getRequest().asset.id)
+                    .setData('connectionId', p.getRequest().asset.connection.id)
+                    .setData('productId', p.getRequest().asset.product.id)
+                    .setData('status', p.getRequest().status);
+                return p.getRequest().id;
+            })
+            .step('Trace request data', function(p, requestId) {
+                Sys.println(requestId
+                    + ' : ' + p.getData('assetId')
+                    + ' : ' + p.getData('connectionId')
+                    + ' : ' + p.getData('productId')
+                    + ' : ' + p.getData('status'));
+                return '';
+            })
             /*
-            // Approve by template or tile
-            request.approveByTemplate('TL-000-000-000');
-            request.approveByTile('Markdown text');
+            .step('Approve request', function(p, input) {
+                p.getRequest().approveByTemplate('TL-000-000-000');
+                p.getRequest().approveByTile('Markdown text');
+                return '';
+            })
             */
-        }
+            .run(Request, new QueryParams()
+                .set('asset.product.id__in', Env.getConfig().getProductsString())
+                .set('status', 'pending'));
 
         // Trace total time
         var finalTime = Date.now().getTime();
-        trace('Total time: ' + ((finalTime - initialTime) / 1000) + ' secs.');
+        Sys.println('Total time: ' + ((finalTime - initialTime) / 1000) + ' secs.');
     }
 }
