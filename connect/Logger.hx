@@ -9,10 +9,11 @@ class Logger {
         Creates a new Logger object. You don't normally create objects of this class,
         since the SDK uses the default instance provided by `Env.getLogger()`.
     **/
-    public function new(filename: String, level: LoggerLevel) {
-        this.filename = filename;
+    public function new(filename: String, level: LoggerLevel, writer: LoggerWriter) {
         this.level = level;
         this.sections = [];
+        this.writer = (writer != null) ? writer : new LoggerWriter();
+        this.writer.setFilename(filename);
     }
 
 
@@ -41,39 +42,46 @@ class Logger {
 
 
     /**
-        Writes a debug message to the log. Release messages cannot be written by the
-        developer, they are automatically written by the SDK.
+        Writes a debug message to the log.
     **/
-    public function write(message: String): Void {
+    public function debug(message: String): Void {
         if (this.level == Debug) {
-            this._write(message);
+            this.write(message);
         }
     }
 
 
-    @:dox(hide)
-    public function _write(message: String): Void {
+    /**
+        Writes an info message to the log.
+    **/
+    public function info(message: String): Void {
+        if (this.level == Debug || this.level == Info) {
+            this.write(message);
+        }
+    }
+
+
+    /**
+        Writes an error message to the log
+    **/
+    public function error(message: String): Void {
+        this.write(message);
+    }
+
+
+    private var level: LoggerLevel;
+    private var sections: Array<LoggerSection>;
+    private var writer: LoggerWriter;
+
+
+    private function write(message: String): Void {
         this.writeSections();
-        this.writeLine(message);
+        this.writer.writeLine(message);
         if (this.sections.length > 0
                 && '>-*|{'.indexOf(StringTools.trim(message).charAt(0)) == -1
                 && message.substr(0, 3) != '```') {
-            this.writeLine('');
+            this.writer.writeLine('');
         }
-    }
-
-
-    private var filename: String;
-    private var file: sys.io.FileOutput;
-    private var level: LoggerLevel;
-    private var sections: Array<LoggerSection>;
-
-
-    private function getFile(): sys.io.FileOutput {
-        if (this.file == null && this.filename != null) {
-            this.file = sys.io.File.append(this.filename);
-        }
-        return this.file;
     }
     
     
@@ -81,19 +89,11 @@ class Logger {
         for (i in 0...this.sections.length) {
             if (!this.sections[i].written) {
                 var prefix = StringTools.rpad('', '#', i+1);
-                this.writeLine(prefix + ' ' + this.sections[i].name);
-                this.writeLine('');
+                this.writer.writeLine(prefix + ' ' + this.sections[i].name);
+                this.writer.writeLine('');
                 this.sections[i].written = true;
             }
         }
-    }
-
-
-    private function writeLine(line: String): Void {
-        if (this.getFile() != null) {
-            this.getFile().writeString(line + '\r\n');
-        }
-        Sys.println(line);
     }
 }
 

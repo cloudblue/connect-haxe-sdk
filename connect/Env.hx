@@ -91,11 +91,16 @@ class Env {
         @param filename Name of the file (can include path) where the log will the stored.
             Use `null` to only write to standard output.
         @param level Level of log (`Debug` or `Release`).
+        @param writer The logger writer. Pass `null` to use the default writer, or if you
+            need to write logs in a custom way, create a class that extends `LoggerWriter`,
+            override the required methods (usually `writeLine`), and pass an instance of the
+            class here.
         @throws String If the logger is already initialized.
     **/
-    public static function initLogger(filename: String, level: LoggerLevel) {
+    public static function initLogger(filename: String, level: LoggerLevel,
+            writer: LoggerWriter) {
         if (logger == null) {
-            logger = new Logger(filename, level);
+            logger = new Logger(filename, level, writer);
         } else {
             throw "Logger instance is already initialized.";
         }
@@ -128,15 +133,13 @@ class Env {
 
     /**
         Returns the logger object. If it is not initialized, it will initialize it in the level
-        `Error` with a filename of "log.md".
+        `Info` with a filename of "log.md".
 
         @returns The environment logger.
-        @throws Exception If the instance is not initialized and the file "config.json" cannot be
-            parsed.
     **/
     public static function getLogger(): Logger {
         if (!isLoggerInitialized()) {
-            initLogger('log.md', Error);
+            initLogger('log.md', Info, null);
         }
         return logger;
     }

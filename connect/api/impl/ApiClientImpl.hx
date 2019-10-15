@@ -1,5 +1,6 @@
 package connect.api.impl;
 
+import haxe.Constraints.Function;
 #if !js
 import haxe.io.StringInput;
 #end
@@ -66,9 +67,8 @@ class ApiClientImpl implements IApiClient {
         var fullUrl = Env.getConfig().getApiUrl() + path +
             ((params != null) ? params.toString() : '');
         
-        if (Env.getLogger().getLevel() != LoggerLevel.Error) {
-            writeRequestCall(method, fullUrl, data);
-        }
+        // Write call info
+        writeRequestCall(Env.getLogger().info, method, fullUrl, data);
 
         #if js
             initXMLHttpRequest();
@@ -95,8 +95,8 @@ class ApiClientImpl implements IApiClient {
 
             if (xhr.readyState == js.html.XMLHttpRequest.UNSENT) {
                 if (Env.getLogger().getLevel() == LoggerLevel.Error) {
-                    writeRequestCall(method, fullUrl, data);
-                    writeRequestResponse(new Response(status, xhr.responseText));
+                    writeRequestCall(Env.getLogger().error, method, fullUrl, data);
+                    writeRequestResponse(Env.getLogger().error, new Response(xhr.status, xhr.responseText));
                 }
                 throw xhr.responseText != null
                     ? xhr.responseText
@@ -137,8 +137,8 @@ class ApiClientImpl implements IApiClient {
             http.onStatus = function(status_) { status = status_; };
             http.onError = function(msg) {
                 if (Env.getLogger().getLevel() == LoggerLevel.Error) {
-                    writeRequestCall(method, fullUrl, data);
-                    writeRequestResponse(new Response(status, msg));
+                    writeRequestCall(Env.getLogger().error, method, fullUrl, data);
+                    writeRequestResponse(Env.getLogger().error, new Response(status, msg));
                 }
                 throw msg;
             }
@@ -148,27 +148,33 @@ class ApiClientImpl implements IApiClient {
             var response = new Response(status, responseBytes.getBytes().toString());
         #end
 
+        // If error response, write call to error log level
         if (Env.getLogger().getLevel() == LoggerLevel.Error && response.status >= 400) {
-            writeRequestCall(method, fullUrl, data);
+            writeRequestCall(Env.getLogger().error, method, fullUrl, data);
         }
-        if (Env.getLogger().getLevel() != LoggerLevel.Error || response.status >= 400) {
-            writeRequestResponse(response);
-        }
+
+        // Write response to error or info level, depending on status
+        writeRequestResponse(
+            (response.status >= 400) ? Env.getLogger().error : Env.getLogger().info,
+            response);
         
         return response;
     }
 
 
-    private function writeRequestCall(method: String, fullUrl: String, data: String) {
-        Env.getLogger()._write('> Http ${method} Request to ${fullUrl}');
+    private function writeRequestCall(loggerFunc: Function, method: String, fullUrl: String,
+            data: String) {
+        Reflect.callMethod(Env.getLogger(), loggerFunc,
+            ['> Http ${method} Request to ${fullUrl}']);
         if (data != null) {
-            Env.getLogger()._write('> * Data: ${data}');
+            Reflect.callMethod(Env.getLogger(), loggerFunc,
+                ['> * Data: ${data}']);
         }
     }
 
 
-    private function writeRequestResponse(response: Response) {
-        Env.getLogger()._write('> * Status: ${response.status}');
+    private function writeRequestResponse(loggerFunc: Function, response: Response) {
+        Reflect.callMethod(Env.getLogger(), loggerFunc, ['> * Status: ${response.status}']);
         
         if (Inflection.isJson(response.text)) {
             var beautified = Inflection.beautify(response.text,
@@ -176,18 +182,20 @@ class ApiClientImpl implements IApiClient {
             var responsePrefix = (Env.getLogger().getLevel() == LoggerLevel.Debug)
                 ? '> * Response:'
                 : '> * Response (compact):';
-            if (Env.getLogger().getLevel() == LoggerLevel.Debug || Inflection.isJsonArray(beautified)) {
-                Env.getLogger()._write(responsePrefix);
-                Env.getLogger()._write('> ```json');
-                Env.getLogger()._write('> ${beautified}');
-                Env.getLogger()._write('> ```');
+            if (Env.getLogger().getLevel() == LoggerLevel.Debug
+                    || Inflection.isJsonArray(beautified)) {
+                Reflect.callMethod(Env.getLogger(), loggerFunc, [responsePrefix]);
+                Reflect.callMethod(Env.getLogger(), loggerFunc, ['> ```json']);
+                Reflect.callMethod(Env.getLogger(), loggerFunc, ['> ${beautified}']);
+                Reflect.callMethod(Env.getLogger(), loggerFunc, ['> ```']);
             } else {
-                Env.getLogger()._write('${responsePrefix} ${beautified}');
+                Reflect.callMethod(Env.getLogger(), loggerFunc,
+                    ['${responsePrefix} ${beautified}']);
             }
         } else {
-            Env.getLogger()._write('> * Response: ${response.text}');
+            Reflect.callMethod(Env.getLogger(), loggerFunc, ['> * Response: ${response.text}']);
         }
-        Env.getLogger()._write('');
+        Reflect.callMethod(Env.getLogger(), loggerFunc, ['']);
     }
 
 
