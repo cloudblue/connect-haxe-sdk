@@ -27,6 +27,13 @@ class Processor {
 
 
     public function run<T>(modelClass: Class<T>, filters: QueryParams): Void {
+        // On PHP, a string is received as model class
+        switch (Type.typeof(modelClass)) {
+            case TClass(String):
+                modelClass = untyped Type.resolveClass(cast(modelClass, String));
+            default:
+        }
+        
         var listMethod = Reflect.field(modelClass, 'list');
         
         Env.getLogger().openSection('Running processor on ' + getDate());
@@ -49,7 +56,7 @@ class Processor {
             for (index in 0...this.steps.length) {
                 var step = this.steps[index];
                 var requestStr = Inflection.beautify(this.model.toString(),
-                    Env.getLogger().getLevel() != LoggerLevel.Debug);
+                    Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
                 var dataStr = this.data.toString();
                 Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
 
@@ -64,7 +71,7 @@ class Processor {
                     input = step.func(this, input);
                     #end
                 } catch (ex: Dynamic) {
-                    if (Env.getLogger().getLevel() == Error) {
+                    if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                         this.logStepData(Env.getLogger().error, Inflection.beautify(input, false),
                             requestStr, dataStr, lastRequestStr, lastDataStr);
                     }
@@ -131,7 +138,7 @@ class Processor {
 
         // Log request
         if (request != lastRequest) {
-            if (Env.getLogger().getLevel() == Debug) {
+            if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
                 Reflect.callMethod(Env.getLogger(), func, ['* Request:']);
                 Reflect.callMethod(Env.getLogger(), func, ['```json']);
                 Reflect.callMethod(Env.getLogger(), func, [request]);
@@ -146,7 +153,7 @@ class Processor {
         // Log data
         if (data != '{}') {
             if (data != lastData) {
-                if (Env.getLogger().getLevel() == LoggerLevel.Debug) {
+                if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
                     var keys = this.data.keys();
                     Reflect.callMethod(Env.getLogger(), func, ['* Data:']);
                     Reflect.callMethod(Env.getLogger(), func, ['| Key | Value |']);

@@ -5,20 +5,32 @@ package connect;
     This class is used to log events to a file and the output console.
 **/
 class Logger {
+    /** Only writes compact error messages. **/
+    public static inline var LEVEL_ERROR = 0;
+
+
+    /** Only writes compact error & info level messages. **/
+    public static inline var LEVEL_INFO = 1;
+
+
+    /** Writes detailed messages of all levels. **/
+    public static inline var LEVEL_DEBUG = 2;
+
+
     /**
         Creates a new Logger object. You don't normally create objects of this class,
         since the SDK uses the default instance provided by `Env.getLogger()`.
     **/
-    public function new(filename: String, level: LoggerLevel, writer: LoggerWriter) {
-        this.level = level;
+    public function new(filename: String, level: Int, writer: LoggerWriter) {
+        this.level = Std.int(Math.min(Math.max(level, LEVEL_ERROR), LEVEL_DEBUG));
         this.sections = [];
         this.writer = (writer != null) ? writer : new LoggerWriter();
         this.writer.setFilename(filename);
     }
 
 
-    /** @returns The level of the log. **/
-    public function getLevel(): LoggerLevel {
+    /** @returns The level of the log. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`. **/
+    public function getLevel(): Int {
         return this.level;
     }
 
@@ -45,7 +57,7 @@ class Logger {
         Writes a debug message to the log.
     **/
     public function debug(message: String): Void {
-        if (this.level == Debug) {
+        if (this.level == LEVEL_DEBUG) {
             this.write(message);
         }
     }
@@ -55,7 +67,7 @@ class Logger {
         Writes an info message to the log.
     **/
     public function info(message: String): Void {
-        if (this.level == Debug || this.level == Info) {
+        if (this.level >= LEVEL_INFO) {
             this.write(message);
         }
     }
@@ -69,7 +81,7 @@ class Logger {
     }
 
 
-    private var level: LoggerLevel;
+    private var level: Int;
     private var sections: Array<LoggerSection>;
     private var writer: LoggerWriter;
 

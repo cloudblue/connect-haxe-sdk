@@ -1,3 +1,4 @@
+--class-path examples
 -main Example
 -dce no
 -php _build/example/php

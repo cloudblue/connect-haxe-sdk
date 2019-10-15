@@ -1,15 +1,16 @@
 import connect.Env;
-import connect.LoggerLevel;
+import connect.Logger;
 import connect.Processor;
 import connect.api.QueryParams;
-import connect.models.*;
+import connect.models.Request;
 
 class Example {
     public static function main() {
         // Get initial time
         var initialTime = Date.now().getTime();
 
-        //Env.initLogger('log.md', LoggerLevel.Error, null);
+        Env.loadConfig('examples/config.json');
+        Env.initLogger('examples/log.md', Logger.LEVEL_DEBUG, null);
 
         // Process requests
         new Processor()

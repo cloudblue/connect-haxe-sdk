@@ -94,7 +94,7 @@ class ApiClientImpl implements IApiClient {
             }
 
             if (xhr.readyState == js.html.XMLHttpRequest.UNSENT) {
-                if (Env.getLogger().getLevel() == LoggerLevel.Error) {
+                if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                     writeRequestCall(Env.getLogger().error, method, fullUrl, data);
                     writeRequestResponse(Env.getLogger().error, new Response(xhr.status, xhr.responseText));
                 }
@@ -136,7 +136,7 @@ class ApiClientImpl implements IApiClient {
 
             http.onStatus = function(status_) { status = status_; };
             http.onError = function(msg) {
-                if (Env.getLogger().getLevel() == LoggerLevel.Error) {
+                if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                     writeRequestCall(Env.getLogger().error, method, fullUrl, data);
                     writeRequestResponse(Env.getLogger().error, new Response(status, msg));
                 }
@@ -149,7 +149,7 @@ class ApiClientImpl implements IApiClient {
         #end
 
         // If error response, write call to error log level
-        if (Env.getLogger().getLevel() == LoggerLevel.Error && response.status >= 400) {
+        if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR && response.status >= 400) {
             writeRequestCall(Env.getLogger().error, method, fullUrl, data);
         }
 
@@ -178,11 +178,11 @@ class ApiClientImpl implements IApiClient {
         
         if (Inflection.isJson(response.text)) {
             var beautified = Inflection.beautify(response.text,
-                Env.getLogger().getLevel() != LoggerLevel.Debug);
-            var responsePrefix = (Env.getLogger().getLevel() == LoggerLevel.Debug)
+                Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
+            var responsePrefix = (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG)
                 ? '> * Response:'
                 : '> * Response (compact):';
-            if (Env.getLogger().getLevel() == LoggerLevel.Debug
+            if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG
                     || Inflection.isJsonArray(beautified)) {
                 Reflect.callMethod(Env.getLogger(), loggerFunc, [responsePrefix]);
                 Reflect.callMethod(Env.getLogger(), loggerFunc, ['> ```json']);

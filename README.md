@@ -2,12 +2,12 @@
 
 This is a version of the SDK for Incram Micro's Connect platform, written in Haxe. While it allows to write connectors in Haxe itself, the generated code can be used to write connectors in other languages:
 
-* C++.
 * Java.
 * PHP (requires compiling with Haxe 4 or higher).
 
 Other platforms that will be added in the future:
 
+* C++.
 * C#.
 * JavaScript (do not use it yet, it has a security flaw due to the use of `eval`).
 * Python (will work with Haxe 4.1 onwards).
@@ -33,10 +33,10 @@ $ haxelib install hxnodejs
 To build the SDK for all the available targets, type the following on a terminal:
 
 ```shell script
-$ haxe lib.hxml
+$ haxe package.hxml
 ```
 
-A `_build` folder will be generated with subfolders for every target (except Python and JavaScript, which are exported to a single file). In the near future, all preparations required to use the SDK on the target languages will be made by the build script itself. By now, if you want to use it for example in Java, you should go to the `_build\java` folder, rename `Empty.jar` to `connect.jar`, and use the JAR file in your project.
+A `_build/_packages` folder will be generated with subfolders for every target language. For example, if you want to use it in Java, you should go to the `_build/_packages/java` folder, and copy `connect.jar` to your project.
 
 To run an example written in Haxe, type:
 
@@ -44,7 +44,7 @@ To run an example written in Haxe, type:
 $ haxe example.hxml
 ```
 
-It compiles the `Example.hx` file to Java and runs it.
+It compiles the `examples/Example.hx` file to Java and runs it.
 
 To generate the documentation, type:
 

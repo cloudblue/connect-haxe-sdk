@@ -1,0 +1,28 @@
+-main Packager
+-dce no
+
+--each
+-php _build/php
+
+--next
+-java _build/java
+
+#--next
+#-cpp _build/cpp
+
+--next
+-python _build/connect.py
+
+#--next
+#-lib hxnodejs
+#-js _build/connect.js
+
+#--next
+#-cs _build/cs
+
+--next
+-xml _build/connect.xml
+
+--next
+-D packager
+--interp

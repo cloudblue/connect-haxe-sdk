@@ -5,7 +5,6 @@ import connect.api.IFulfillmentApi;
 import connect.api.IUsageApi;
 import connect.api.ITierApi;
 import connect.api.IGeneralApi;
-import connect.LoggerLevel;
 
 // Need to make sure that these get compiled
 import connect.api.impl.ApiClientImpl;
@@ -90,15 +89,15 @@ class Env {
 
         @param filename Name of the file (can include path) where the log will the stored.
             Use `null` to only write to standard output.
-        @param level Level of log (`Debug` or `Release`).
+        @param level Level of log.
+            One of: `Logger.LEVEL_ERROR`, `Logger.LEVEL_INFO`, `Logger.LEVEL_DEBUG`.
         @param writer The logger writer. Pass `null` to use the default writer, or if you
             need to write logs in a custom way, create a class that extends `LoggerWriter`,
             override the required methods (usually `writeLine`), and pass an instance of the
             class here.
         @throws String If the logger is already initialized.
     **/
-    public static function initLogger(filename: String, level: LoggerLevel,
-            writer: LoggerWriter) {
+    public static function initLogger(filename: String, level: Int, writer: LoggerWriter) {
         if (logger == null) {
             logger = new Logger(filename, level, writer);
         } else {
@@ -139,7 +138,7 @@ class Env {
     **/
     public static function getLogger(): Logger {
         if (!isLoggerInitialized()) {
-            initLogger('log.md', Info, null);
+            initLogger('log.md', Logger.LEVEL_INFO, null);
         }
         return logger;
     }
