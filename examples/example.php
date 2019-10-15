@@ -9,6 +9,9 @@ use connect\api\QueryParams;
 use connect\models\Request;
 
 
+//Env::initLogger('log.md', Logger::LEVEL_ERROR, null);
+
+
 // Process requests
 (new Processor())
     ->step('Add dummy data', function($p, $input) {
@@ -19,12 +22,12 @@ use connect\models\Request;
         return $p->getRequest()->id;
     })
     ->step('Trace request data', function($p, $requestId) {
-        trace($requestId
+        echo $requestId
             . ' : ' . $p->getData('assetId')
             . ' : ' . $p->getData('connectionId')
             . ' : ' . $p->getData('productId')
             . ' : ' . $p->getData('status')
-            . PHP_EOL);
+            . PHP_EOL;
         return '';
     })
     /*

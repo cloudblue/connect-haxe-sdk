@@ -14,6 +14,9 @@ typedef ProcessorStepFunc = (Processor, String) -> String;
 #end
 
 
+/**
+    In development. Do noy use by now...
+**/
 class Processor {
     public function new() {
         this.steps = [];
