@@ -54,9 +54,9 @@ class Packager {
     public static function main() {
 //#if packager
         var classes = getClassNames();
-        createPath('_build/_packages');
         createJavaPackage();
         createPhpPackage(classes);
+        createPythonPackage(classes);
 //#end
     }
 
@@ -74,6 +74,28 @@ class Packager {
                         && class_.get('path').indexOf('.impl.') == -1)
                     class_.get('path')
         ];
+    }
+
+
+    private static function getPackages(classNames: Array<String>): Array<String> {
+        var packages: Array<String> = [];
+        for (className in classNames) {
+            var package_ = getPackage(className);
+            if (packages.indexOf(package_) == -1) {
+                packages.push(package_);
+            }
+        }
+        return packages;
+    }
+
+
+    private static function getPackage(className: String): String {
+        return className.split('.').slice(0, -1).join('.');
+    }
+
+
+    private static function stripPackage(className: String): String {
+        return className.split('.').pop();
     }
 
 
@@ -114,7 +136,62 @@ class Packager {
             file.writeString('class_alias("${originalName}", "${aliasName}");${EOL}');
         }
         */
+        file.close();
         copyPath('_build/php/lib', '_build/_packages/php/lib');
+    }
+
+
+    private static function createPythonPackage(classes: Array<String>): Void {
+        // Get list of packages
+        var packages = getPackages(classes);
+
+        // Create package folders
+        for (pkg in packages) {
+            var pkgPath = StringTools.replace(pkg, '.', '/');
+            createPath('_build/_packages/python/${pkgPath}');
+        }
+
+        // Copy haxe code and create requirements
+        sys.io.File.copy('_build/connect.py', '_build/_packages/python/connect/autogen.py');
+        sys.io.File.saveContent('_build/_packages/python/requirements.txt', 'requests==2.21.0' + EOL);
+
+        // Create __init__.py files
+        for (pkg in packages) { 
+            var pkgPath = StringTools.replace(pkg, '.', '/');
+            var pkgClasses = [for (cls in classes) if (getPackage(cls) == pkg) stripPackage(cls)];
+            var file = sys.io.File.write('_build/_packages/python/${pkgPath}/__init__.py');
+            
+            // Write imports
+            for (cls in pkgClasses) {
+                var autogenName = StringTools.replace(pkg, '.', '_') + '_' + cls;
+                file.writeString('from connect.autogen import ${autogenName} as ${cls}' + EOL);
+            }
+            file.writeString(EOL + EOL);
+
+            // Write __all__
+            file.writeString('__all__ = [' + EOL);
+            for (cls in pkgClasses) {
+                file.writeString('    \'${cls}\',' + EOL);
+            }
+            file.writeString(']' + EOL);
+
+            file.close();
+        }
+
+        // Create setup.py file
+        var file = sys.io.File.write('_build/_packages/python/setup.py');
+        file.writeString("from setuptools import setup" + EOL + EOL + EOL);
+        file.writeString("setup(" + EOL);
+        file.writeString("    name='connect'," + EOL);
+        file.writeString("    author='Ingram Micro'," + EOL);
+        file.writeString("    version='0.0.0'," + EOL);
+        file.writeString("    keywords='connect ingram sdk'," + EOL);
+        file.writeString("    packages=[" + packages.map(function(pkg) { return '\'${pkg}\''; }).join(', ') + "]," + EOL);
+        file.writeString("    description='Connect Python SDK'," + EOL);
+        //file.writeString("    url='https://github.com/ingrammicro/connect-python-sdk'," + EOL);
+        file.writeString("    license='Apache Software License'," + EOL);
+        file.writeString(")" + EOL);
+        file.close();
     }
 
 

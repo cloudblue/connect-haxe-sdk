@@ -1,3 +1,4 @@
 _build/*
 doc/*
 log.md
+_build/_venv/*
