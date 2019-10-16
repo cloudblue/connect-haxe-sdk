@@ -14,9 +14,9 @@
 -python _build/connect.py
 --next
 
-#-lib hxnodejs
-#-js _build/connect.js
-#--next
+-lib hxnodejs
+-js _build/connect.js
+--next
 
 #-cs _build/cs
 # --next

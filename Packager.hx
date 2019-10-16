@@ -52,12 +52,15 @@ import connect.models.User;
 
 class Packager {
     public static function main() {
-#if packager
+    #if packager
         var classes = getClassNames();
         createJavaPackage();
+        createJSPackage(classes);
         createPhpPackage(classes);
         createPythonPackage(classes);
-#end
+    #elseif js
+        js.Syntax.code("global.$hxClasses = $hxClasses;");
+    #end
     }
 
 #if packager
@@ -94,6 +97,12 @@ class Packager {
     }
 
 
+    private static function getClassesInPackage(classNames: Array<String>, pkg: String)
+            : Array<String> {
+        return [for(cls in classNames) if (getPackage(cls) == pkg) stripPackage(cls)];
+    }
+
+
     private static function stripPackage(className: String): String {
         return className.split('.').pop();
     }
@@ -109,6 +118,44 @@ class Packager {
     private static function createJavaPackage(): Void {
         createPath('_build/_packages/java');
         sys.io.File.copy('_build/java/Packager.jar', '_build/_packages/java/connect.jar');
+    }
+
+
+    private static function createJSPackage(classes: Array<String>): Void {
+        createPath('_build/_packages/js');
+
+        // Get list of packages
+        var packages = getPackages(classes).map(function(pkg) {
+            if (StringTools.startsWith(pkg, 'connect.')) {
+                return pkg.substr(8);
+            } else if (StringTools.startsWith(pkg, 'connect')) {
+                return pkg.substr(7);
+            } else {
+                return pkg;
+            }
+        }).filter(function(pkg) { return  pkg != ""; });
+
+        // Copy JavaScript code
+        sys.io.File.copy('_build/connect.js', '_build/_packages/js/connect.js');
+        
+        // Append module exports
+        var file = sys.io.File.append('_build/_packages/js/connect.js');
+        file.writeString(EOL);
+        file.writeString('module.exports = {' + EOL);
+        var pkgClasses = getClassesInPackage(classes, 'connect');
+        for (cls in pkgClasses) {
+            file.writeString('    ${cls}: global.$$hxClasses["connect.${cls}"],' + EOL);
+        }
+        for (pkg in packages) {
+            var pkgClasses = getClassesInPackage(classes, 'connect.' + pkg);
+            file.writeString('    ${pkg}: {' + EOL);
+            for (cls in pkgClasses) {
+                file.writeString('        ${cls}: global.$$hxClasses["connect.${pkg}.${cls}"],' + EOL);
+            }
+            file.writeString('    },' + EOL);
+        }
+        file.writeString('}' + EOL);
+        file.close();
     }
 
 
@@ -147,7 +194,7 @@ class Packager {
         // Create __init__.py files
         for (pkg in packages) { 
             var pkgPath = StringTools.replace(pkg, '.', '/');
-            var pkgClasses = [for (cls in classes) if (getPackage(cls) == pkg) stripPackage(cls)];
+            var pkgClasses = getClassesInPackage(classes, pkg);
             var file = sys.io.File.write('_build/_packages/python/${pkgPath}/__init__.py');
             
             // Write imports

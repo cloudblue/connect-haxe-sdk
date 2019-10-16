@@ -286,7 +286,7 @@ class ApiClientImpl implements IApiClient {
 
     private static function initXMLHttpRequest(): Void {
         if (!_isXMLHttpRequestInit) {
-            js.Lib.eval(_JS_CODE);
+            js.Syntax.code(_JS_CODE);
             _isXMLHttpRequestInit = true;
         }
     }

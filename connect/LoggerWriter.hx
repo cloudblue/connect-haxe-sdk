@@ -1,5 +1,7 @@
 package connect;
 
+import haxe.ds.ListSort;
+
 
 /**
     Represents the default LoggerWriter. The `Logger` uses an instance of this class
@@ -46,7 +48,19 @@ class LoggerWriter {
 
     private function getFile(): sys.io.FileOutput {
         if (this.file == null && this.filename != null) {
+        #if !js
             this.file = sys.io.File.append(this.filename);
+        #else
+            var content: String = null;
+            if (sys.FileSystem.exists(this.filename)
+                    && !sys.FileSystem.isDirectory(this.filename)) {
+                content = sys.io.File.getContent(this.filename);
+            }
+            this.file = sys.io.File.write(this.filename);
+            if (content != null) {
+                this.file.writeString(content);
+            }
+        #end
         }
         return this.file;
     }

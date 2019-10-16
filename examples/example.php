@@ -28,13 +28,11 @@ use connect\models\Request;
             . ' : ' . $p->getData('productId')
             . ' : ' . $p->getData('status')
             . PHP_EOL;
-        return '';
     })
     /*
     ->step('Approve request', function($p, $input) {
         $p->getRequest()->approveByTemplate('TL-000-000-000');
         $p->getRequest()->approveByTile('Markdown text');
-        return '';
     })
     */
     ->run(Request::class, (new QueryParams())
