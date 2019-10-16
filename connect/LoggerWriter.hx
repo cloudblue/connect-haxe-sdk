@@ -34,6 +34,7 @@ class LoggerWriter {
     public function writeLine(line: String): Void {
         if (this.getFile() != null) {
             this.getFile().writeString(line + '\r\n');
+            this.getFile().flush();
         }
         Sys.println(line);
     }
