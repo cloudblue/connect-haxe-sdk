@@ -104,6 +104,52 @@ class ApiClientImpl implements IApiClient {
             }
 
             var response = new Response(xhr.status, xhr.responseText);
+        #elseif use_tink
+            var methods = [
+                'GET' => tink.http.Method.GET,
+                'PUT' => tink.http.Method.PUT,
+                'POST' => tink.http.Method.POST
+            ];
+
+            var tinkMethod: tink.http.Method = null;
+            try {
+                tinkMethod = methods.get(method.toUpperCase());
+            } catch (e: Dynamic) {
+                if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
+                    writeRequestCall(Env.getLogger().error, method, fullUrl, data);
+                    writeRequestResponse(Env.getLogger().error,
+                        new Response(null, 'Invalid request method ${method}'));
+                }
+                throw 'Invalid request method ${method}';
+            }
+
+            var response: Response = null;
+
+            var options = new Dictionary();
+            options.set('method', tinkMethod);
+            options.set('headers', [
+                new tink.http.Header.HeaderField('Authorization', Env.getConfig().getApiKey())
+            ]);
+            if (data != null) {
+                options.set('body', data);
+            }
+
+            tink.http.Client.fetch(fullUrl, options.toObject()).all().handle(function(o) {
+                switch (o) {
+                    case Success(res):
+                        response = new Response(res.header.statusCode, res.body.toString());
+                    case Failure(res):
+                        if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
+                            writeRequestCall(Env.getLogger().error, method, fullUrl, data);
+                            writeRequestResponse(Env.getLogger().error,
+                                new Response(null, res.toString()));
+                        }
+                        throw res.toString();
+                }
+            });
+            
+            // Wait for async request
+            while (response == null) {}
         #else
             var status:Null<Int> = null;
             var responseBytes = new haxe.io.BytesOutput();

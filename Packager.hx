@@ -52,15 +52,15 @@ import connect.models.User;
 
 class Packager {
     public static function main() {
-//#if packager
+#if packager
         var classes = getClassNames();
         createJavaPackage();
         createPhpPackage(classes);
         createPythonPackage(classes);
-//#end
+#end
     }
 
-//#if packager
+#if packager
     private static inline var EOL = '\r\n';
 
     private static function getClassNames(): Array<String> {
@@ -198,5 +198,5 @@ class Packager {
             }
         }
     }
-//#end
+#end
 }

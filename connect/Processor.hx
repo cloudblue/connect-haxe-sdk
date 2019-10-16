@@ -30,20 +30,30 @@ class Processor {
 
 
     public function run<T>(modelClass: Class<T>, filters: QueryParams): Void {
-        // On PHP, a string is received as model class
+        // On some targets, a string is received as modelClass, so obtain the real class from it
         switch (Type.typeof(modelClass)) {
             case TClass(String):
                 modelClass = untyped Type.resolveClass(cast(modelClass, String));
             default:
         }
         
-        var listMethod = Reflect.field(modelClass, 'list');
-        
         Env.getLogger().openSection('Running processor on ' + getDate());
 
         // List requests
         Env.getLogger().openSection('Listing requests on ' + getDate());
-        var list: Collection<IdModel> = Reflect.callMethod(modelClass, listMethod, [filters]);
+        var list: Collection<IdModel> = null;
+        try {
+            var listMethod: Function = Reflect.field(modelClass, 'list');
+            list = Reflect.callMethod(modelClass, listMethod, [filters]);
+        } catch (ex: Dynamic) {
+            Env.getLogger().error('```');
+            Env.getLogger().error(Std.string(ex));
+            Env.getLogger().error('```');
+            Env.getLogger().error('');
+            Env.getLogger().closeSection();
+            Env.getLogger().closeSection();
+            return;
+        }
         Env.getLogger().closeSection();
         
         // Process each request
