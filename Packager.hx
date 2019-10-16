@@ -126,16 +126,6 @@ class Packager {
         file.writeString("    }" + EOL);
         file.writeString(");" + EOL);
         file.writeString("\\php\\Boot::__hx__init();" + EOL);
-        
-        /*
-        file.writeString('require_once dirname(__FILE__)."/lib/php/Boot.php";' + EOL + EOL);
-        // This is not needed anymore since Haxe 4
-        for (className in classes) {
-            var originalName = StringTools.replace(className, '.', '_');
-            var aliasName = StringTools.replace(className, '.', '\\');
-            file.writeString('class_alias("${originalName}", "${aliasName}");${EOL}');
-        }
-        */
         file.close();
         copyPath('_build/php/lib', '_build/_packages/php/lib');
     }
@@ -151,9 +141,8 @@ class Packager {
             createPath('_build/_packages/python/${pkgPath}');
         }
 
-        // Copy haxe code and create requirements
+        // Copy haxe code
         sys.io.File.copy('_build/connect.py', '_build/_packages/python/connect/autogen.py');
-        sys.io.File.saveContent('_build/_packages/python/requirements.txt', 'requests==2.21.0' + EOL);
 
         // Create __init__.py files
         for (pkg in packages) { 
@@ -190,6 +179,7 @@ class Packager {
         file.writeString("    description='Connect Python SDK'," + EOL);
         //file.writeString("    url='https://github.com/ingrammicro/connect-python-sdk'," + EOL);
         file.writeString("    license='Apache Software License'," + EOL);
+        file.writeString("    install_requires=['requests==2.21.0']" + EOL);
         file.writeString(")" + EOL);
         file.close();
     }
