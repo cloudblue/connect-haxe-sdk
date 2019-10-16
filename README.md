@@ -1,8 +1,9 @@
 # Connect Haxe SDK
 
-This is a version of the SDK for Incram Micro's Connect platform, written in Haxe (it requires Haxe 4.0 or higher). While it allows to write connectors in Haxe itself, the generated code can be used to write connectors in other languages:
+This is a version of the SDK for Incram Micro's Connect platform, written in Haxe. While it allows to write connectors in Haxe itself, the generated code can be used to write connectors in other languages:
 
 * Java.
+* JavaScript.
 * PHP.
 * Python.
 
@@ -10,15 +11,14 @@ Other platforms that will be added in the future:
 
 * C++.
 * C#.
-* JavaScript (do not use it yet, it has a security flaw due to the use of `eval`).
 
-In order to compile the SDK, you must have Haxe installed on your machine. To install it on Ubuntu, simply do:
+In order to compile the SDK, you must have Haxe 4.0 or higher installed on your machine. When this README was last updated, Haxe 4.0 was not officialy released, so installing from the official repositories of your distro will get you Haxe 3:
 
 ```shell script
 $ sudo apt install haxe
 ```
 
-Haxelib and Neko are installed by default (you need Neko to run the unit tests). To install on other platforms, follow the installation instructions on the [Haxe webpage](https://haxe.org/).
+Haxelib and Neko are installed by default (you need Neko to run the unit tests) with this procedure, but while Haxe 4.0 is released to your distribution, you'll have to follow the installation instructions on the [Haxe webpage](https://haxe.org/).
 
 You need to install some libraries to build the SDK using Haxelib:
 
