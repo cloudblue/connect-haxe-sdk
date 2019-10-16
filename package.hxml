@@ -11,8 +11,6 @@
 #-cpp _build/cpp
 #--next
 
--D use_tink
--lib tink_http
 -python _build/connect.py
 --next
 

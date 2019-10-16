@@ -70,7 +70,7 @@ class Processor {
                 var step = this.steps[index];
                 var requestStr = Inflection.beautify(this.model.toString(),
                     Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
-                var dataStr = this.data.toString();
+                var dataStr = Std.string(this.data);
                 Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
 
                 this.logStepData(Env.getLogger().info, Inflection.beautify(input, false),

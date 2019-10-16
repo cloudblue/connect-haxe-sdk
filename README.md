@@ -1,16 +1,16 @@
 # Connect Haxe SDK
 
-This is a version of the SDK for Incram Micro's Connect platform, written in Haxe. While it allows to write connectors in Haxe itself, the generated code can be used to write connectors in other languages:
+This is a version of the SDK for Incram Micro's Connect platform, written in Haxe (it requires Haxe 4.0 or higher). While it allows to write connectors in Haxe itself, the generated code can be used to write connectors in other languages:
 
 * Java.
-* PHP (requires compiling with Haxe 4 or higher).
+* PHP.
+* Python.
 
 Other platforms that will be added in the future:
 
 * C++.
 * C#.
 * JavaScript (do not use it yet, it has a security flaw due to the use of `eval`).
-* Python (will work with Haxe 4.1 onwards).
 
 In order to compile the SDK, you must have Haxe installed on your machine. To install it on Ubuntu, simply do:
 

@@ -63,13 +63,11 @@ class Inflection {
                 if (Type.typeof(parsed) == TObject && Reflect.hasField(parsed, 'id')) {
                     return parsed.id;
                 } else {
-                    return haxe.Json.stringify(
-                        cast(parsed, Array<Dynamic>).map(function(obj) {
-                            return Reflect.hasField(obj, 'id') ? obj.id : Std.string(obj);
-                        }),
-                        null,
-                        '  '
-                    );
+                    var arr: Array<Dynamic> = parsed;
+                    var mapped = arr.map(function(obj) {
+                        return Reflect.hasField(obj, 'id') ? obj.id : Std.string(obj);
+                    });
+                    return haxe.Json.stringify(mapped, null, '  ');
                 }
             } else {
                 return haxe.Json.stringify(parsed, null, '  ');

@@ -20,8 +20,8 @@ class Model {
             if (field != 'fieldClassNames' && value != null) {
                 switch (Type.typeof(value)) {
                     case TClass(String):
-                        if (value.toString() != '') {
-                            Reflect.setField(obj, Inflection.toSnakeCase(field), value.toString());
+                        if (Std.string(value) != '') {
+                            Reflect.setField(obj, Inflection.toSnakeCase(field), Std.string(value));
                         }
                     case TClass(class_):
                         var className = Type.getClassName(class_);

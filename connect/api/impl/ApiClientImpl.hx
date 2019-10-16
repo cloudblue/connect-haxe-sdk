@@ -96,7 +96,6 @@ class ApiClientImpl implements IApiClient {
             if (xhr.readyState == js.html.XMLHttpRequest.UNSENT) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                     writeRequestCall(Env.getLogger().error, method, fullUrl, data);
-                    writeRequestResponse(Env.getLogger().error, new Response(xhr.status, xhr.responseText));
                 }
                 throw xhr.responseText != null
                     ? xhr.responseText
@@ -117,8 +116,6 @@ class ApiClientImpl implements IApiClient {
             } catch (e: Dynamic) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                     writeRequestCall(Env.getLogger().error, method, fullUrl, data);
-                    writeRequestResponse(Env.getLogger().error,
-                        new Response(null, 'Invalid request method ${method}'));
                 }
                 throw 'Invalid request method ${method}';
             }
@@ -129,6 +126,7 @@ class ApiClientImpl implements IApiClient {
             options.set('method', tinkMethod);
             options.set('headers', [
                 new tink.http.Header.HeaderField('Authorization', Env.getConfig().getApiKey())
+                new tink.http.Header.HeaderField('Content-Type', 'application/json')
             ]);
             if (data != null) {
                 options.set('body', data);
@@ -141,8 +139,6 @@ class ApiClientImpl implements IApiClient {
                     case Failure(res):
                         if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                             writeRequestCall(Env.getLogger().error, method, fullUrl, data);
-                            writeRequestResponse(Env.getLogger().error,
-                                new Response(null, res.toString()));
                         }
                         throw res.toString();
                 }
@@ -150,6 +146,21 @@ class ApiClientImpl implements IApiClient {
             
             // Wait for async request
             while (response == null) {}
+        #elseif python
+            var headers = new python.Dict<String, Dynamic>();
+            headers.set('Authorization', Env.getConfig().getApiKey());
+            headers.set('Content-Type', 'application/json');
+
+            var response: Response = null;
+            try {
+                response = connect.native.PythonRequest.request(
+                    method, fullUrl, headers, data, 300);
+            } catch (ex: Dynamic) {
+                if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
+                    writeRequestCall(Env.getLogger().error, method, fullUrl, data);
+                }
+                throw ex;
+            }
         #else
             var status:Null<Int> = null;
             var responseBytes = new haxe.io.BytesOutput();
@@ -184,7 +195,6 @@ class ApiClientImpl implements IApiClient {
             http.onError = function(msg) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                     writeRequestCall(Env.getLogger().error, method, fullUrl, data);
-                    writeRequestResponse(Env.getLogger().error, new Response(status, msg));
                 }
                 throw msg;
             }
