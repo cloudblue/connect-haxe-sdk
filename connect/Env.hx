@@ -49,7 +49,7 @@ class Env {
     public static function initConfig(apiUrl: String, apiKey: String,
             products: Collection<String>): Void {
         if (config == null) {
-            config = new Config(apiUrl, apiKey, products);
+            config = new Config(apiUrl, apiKey, products, null);
         } else {
             throw "Config instance is already initialized.";
         }
@@ -67,9 +67,21 @@ class Env {
     public static function loadConfig(filename: String): Void {
         if (config == null) {
             var content = sys.io.File.getContent(filename);
-            var object = haxe.Json.parse(content);
-            config = new Config(object.apiEndpoint, object.apiKey,
-                Collection._fromArray([object.products]));
+            var dict = Dictionary.fromObject(haxe.Json.parse(content));
+            var apiUrl = dict.get('apiEndpoint');
+            var apiKey = dict.get('apiKey');
+            var products: Collection<String> = null;
+            switch (Type.typeof(dict.get('products'))) {
+                case TClass(String):
+                    products = Collection._fromArray([dict.getString('products')]);
+                case TClass(Collection):
+                    products = dict.get('products');
+                default:
+            }
+            dict.remove('apiEndpoint');
+            dict.remove('apiKey');
+            dict.remove('products');
+            config = new Config(apiUrl, apiKey, products, dict);
         } else {
             throw "Config instance is already initialized.";
         }

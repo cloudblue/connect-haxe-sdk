@@ -6,88 +6,31 @@ import haxe.io.StringInput;
 #end
 
 
-private typedef Multipart = {
-    argname: String,
-    filename: String,
-    contents: String,
-}
-
-
 class ApiClientImpl implements IApiClient {
-    public function new() {}
-
-    public function get(resource: String, ?id: String, ?suffix: String,
-            ?params: QueryParams): Dynamic {
-        return checkResponse(syncRequest('GET', parsePath(resource, id, suffix), params));
-    }
-
-
-    public function getString(resource: String, ?id: String, ?suffix: String,
-            ?params: QueryParams): String {
-        return checkStringResponse(syncRequest('GET', parsePath(resource, id, suffix), params));
-    }
-
-
-    public function put(resource: String, id: String, data: String): Dynamic {
-        return checkResponse(syncRequest('PUT', parsePath(resource, id), data));
-    }
-
-
-    public function post(resource: String, ?id: String, ?suffix: String, ?data: String): Dynamic {
-        return checkResponse(syncRequest('POST', parsePath(resource, id, suffix), data));
-    }
-
-
-    public function postFile(resource: String, ?id: String, ?suffix: String,
-        argname: String, filename: String, contents: String): Dynamic {
-        return checkResponse(syncRequest('POST', parsePath(resource, id, suffix), null, {
-            argname: argname,
-            filename: filename,
-            contents: contents
-        }));
-    }
-
-
-    public function delete(resource: String, id: String, ?suffix: String): Dynamic {
-        return checkResponse(syncRequest('DELETE', parsePath(resource, id, suffix)));
-    }
-
-
-    /**
-        Sends a synchronous request to Connect.
-
-        @param method The REST method to use (i.e. "GET", "POST", "PUT"...).
-        @param path A path to append to the apiUrl of this configuration (i.e. "requests").
-        @param params Request query params.
-        @param data String encoded post data.
-        @returns a Response object with the response status and text
-    **/
-    private function syncRequest(method: String, path: String,
-            ?params: QueryParams, ?data: String, ?multipart: Multipart) : Response {
-        var fullUrl = Env.getConfig().getApiUrl() + path +
-            ((params != null) ? params.toString() : '');
-        
+    public function syncRequest(method: String, url: String, headers: Dictionary, data: String,
+            fileArg: String, fileName: String, fileContent: String) : Response {        
         // Write call info
-        writeRequestCall(Env.getLogger().info, method, fullUrl, data);
+        writeRequestCall(Env.getLogger().info, method, url, data);
 
         #if js
             initXMLHttpRequest();
-
-            var url = Env.getConfig().getApiUrl() + path +
-                ((params != null) ? params.toString() : '');
 
             var xhr = new js.html.XMLHttpRequest();
             xhr.timeout = 300000;
             xhr.open(method.toUpperCase(), url, false);
 
-            xhr.setRequestHeader('Authorization', Env.getConfig().getApiKey());
-            xhr.setRequestHeader('Content-Type', 'application/json');
+            if (headers != null) {
+                var keys = headers.keys();
+                for (key in keys) {
+                    xhr.setRequestHeader(key, headers.get(key));
+                }
+            }
 
             if (data != null) {
                 xhr.send(data);
-            } else if (multipart != null) {
+            } else if (fileArg != null && fileName != null && fileContent != null) {
                 var formData = new js.html.FormData();
-                formData.append(multipart.argname, multipart.contents);
+                formData.append(fileArg, fileContent);
                 xhr.send(formData);
             } else {
                 xhr.send();
@@ -95,7 +38,7 @@ class ApiClientImpl implements IApiClient {
 
             if (xhr.readyState == js.html.XMLHttpRequest.UNSENT) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, fullUrl, data);
+                    writeRequestCall(Env.getLogger().error, method, url, data);
                 }
                 throw xhr.responseText != null
                     ? xhr.responseText
@@ -115,30 +58,37 @@ class ApiClientImpl implements IApiClient {
                 tinkMethod = methods.get(method.toUpperCase());
             } catch (e: Dynamic) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, fullUrl, data);
+                    writeRequestCall(Env.getLogger().error, method, url, data);
                 }
                 throw 'Invalid request method ${method}';
             }
 
             var response: Response = null;
 
+            var parsedHeaders = new Array<tink.http.Header.HeaderField>();
+            if (headers != null) {
+                var keys = headers.keys();
+                for (key in keys) {
+                    parsedHeaders.push(new tink.http.Header.HeaderField(key, headers.get(key)));
+                }
+            }
+
             var options = new Dictionary();
             options.set('method', tinkMethod);
-            options.set('headers', [
-                new tink.http.Header.HeaderField('Authorization', Env.getConfig().getApiKey())
-                new tink.http.Header.HeaderField('Content-Type', 'application/json')
-            ]);
+            if (parsedHeaders.keys().length > 0) {
+                options.set('headers', parsedHeaders);
+            }
             if (data != null) {
                 options.set('body', data);
             }
 
-            tink.http.Client.fetch(fullUrl, options.toObject()).all().handle(function(o) {
+            tink.http.Client.fetch(url, options.toObject()).all().handle(function(o) {
                 switch (o) {
                     case Success(res):
                         response = new Response(res.header.statusCode, res.body.toString());
                     case Failure(res):
                         if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                            writeRequestCall(Env.getLogger().error, method, fullUrl, data);
+                            writeRequestCall(Env.getLogger().error, method, url, data);
                         }
                         throw res.toString();
                 }
@@ -147,17 +97,21 @@ class ApiClientImpl implements IApiClient {
             // Wait for async request
             while (response == null) {}
         #elseif python
-            var headers = new python.Dict<String, Dynamic>();
-            headers.set('Authorization', Env.getConfig().getApiKey());
-            headers.set('Content-Type', 'application/json');
+            var parsedHeaders = new python.Dict<String, Dynamic>();
+            if (headers != null) {
+                var keys = headers.keys();
+                for (key in keys) {
+                    parsedHeaders.set(key, headers.get(key));
+                }
+            }
 
             var response: Response = null;
             try {
                 response = connect.native.PythonRequest.request(
-                    method, fullUrl, headers, data, 300);
+                    method, url, parsedHeaders, data, 300);
             } catch (ex: Dynamic) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, fullUrl, data);
+                    writeRequestCall(Env.getLogger().error, method, url, data);
                 }
                 throw ex;
             }
@@ -165,15 +119,13 @@ class ApiClientImpl implements IApiClient {
             var status:Null<Int> = null;
             var responseBytes = new haxe.io.BytesOutput();
 
-            var http = new haxe.Http(Env.getConfig().getApiUrl() + path);
+            var http = new haxe.Http(url);
             http.cnxTimeout = 300;
 
-            http.setHeader('Authorization', Env.getConfig().getApiKey());
-            http.setHeader('Content-Type', 'application/json');
-
-            if (params != null) {
-                for (name in params.keys()) {
-                    http.setParameter(name, params.get(name));
+            if (headers != null) {
+                var keys = headers.keys();
+                for (key in keys) {
+                    http.setHeader(key, headers.get(key));
                 }
             }
 
@@ -181,12 +133,12 @@ class ApiClientImpl implements IApiClient {
                 http.setPostData(data);
             }
 
-            if (multipart != null) {
+            if (fileArg != null && fileName != null && fileContent != null) {
                 http.fileTransfer(
-                    multipart.argname,
-                    multipart.filename,
-                    new StringInput(multipart.contents),
-                    multipart.contents.length,
+                    fileArg,
+                    fileName,
+                    new StringInput(fileContent),
+                    fileContent.length,
                     'multipart/form-data'
                 );
             }
@@ -194,7 +146,7 @@ class ApiClientImpl implements IApiClient {
             http.onStatus = function(status_) { status = status_; };
             http.onError = function(msg) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, fullUrl, data);
+                    writeRequestCall(Env.getLogger().error, method, url, data);
                 }
                 throw msg;
             }
@@ -206,7 +158,7 @@ class ApiClientImpl implements IApiClient {
 
         // If error response, write call to error log level
         if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR && response.status >= 400) {
-            writeRequestCall(Env.getLogger().error, method, fullUrl, data);
+            writeRequestCall(Env.getLogger().error, method, url, data);
         }
 
         // Write response to error or info level, depending on status
@@ -218,10 +170,67 @@ class ApiClientImpl implements IApiClient {
     }
 
 
-    private function writeRequestCall(loggerFunc: Function, method: String, fullUrl: String,
+    public function get(resource: String, ?id: String, ?suffix: String,
+            ?params: QueryParams): Dynamic {
+        return checkResponse(connectSyncRequest('GET', parsePath(resource, id, suffix),
+            getHeaders(), params));
+    }
+
+
+    public function getString(resource: String, ?id: String, ?suffix: String,
+            ?params: QueryParams): String {
+        return checkStringResponse(connectSyncRequest('GET', parsePath(resource, id, suffix),
+            getHeaders(), params));
+    }
+
+
+    public function put(resource: String, id: String, data: String): Dynamic {
+        return checkResponse(connectSyncRequest('PUT', parsePath(resource, id),
+            getHeaders(), data));
+    }
+
+
+    public function post(resource: String, ?id: String, ?suffix: String, ?data: String): Dynamic {
+        return checkResponse(connectSyncRequest('POST', parsePath(resource, id, suffix),
+            getHeaders(), data));
+    }
+
+
+    public function postFile(resource: String, ?id: String, ?suffix: String,
+        fileArg: String, fileName: String, fileContents: String): Dynamic {
+        return checkResponse(connectSyncRequest('POST', parsePath(resource, id, suffix),
+            getHeaders('multipart/form-data'), null, fileArg, fileName, fileContents));
+    }
+
+
+    public function delete(resource: String, id: String, ?suffix: String): Dynamic {
+        return checkResponse(connectSyncRequest('DELETE', parsePath(resource, id, suffix), getHeaders()));
+    }
+
+
+    public function new() {}
+
+
+    private function connectSyncRequest(method: String, path: String, headers: Dictionary,
+            ?params: QueryParams, ?data: String,
+            ?fileArg: String, ?fileName: String, ?fileContent: String) : Response {
+        var url = Env.getConfig().getApiUrl() + path + ((params != null) ? params.toString() : '');
+        return this.syncRequest(method, url, headers, data, fileArg, fileName, fileContent);
+    }
+
+
+    private function getHeaders(contentType: String = 'application/json'): Dictionary {
+        var headers = new Dictionary();
+        headers.set('Authorization', Env.getConfig().getApiKey());
+        headers.set('Content-Type', contentType);
+        return headers;
+    }
+
+
+    private function writeRequestCall(loggerFunc: Function, method: String, url: String,
             data: String) {
         Reflect.callMethod(Env.getLogger(), loggerFunc,
-            ['> Http ${method} Request to ${fullUrl}']);
+            ['> Http ${method} Request to ${url}']);
         if (data != null) {
             Reflect.callMethod(Env.getLogger(), loggerFunc,
                 ['> * Data: ${data}']);

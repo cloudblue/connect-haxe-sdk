@@ -3,7 +3,23 @@ package connect.api;
 
 interface IApiClient {
     /**
-        Get a resource if 'id' is specified, or a list of reosurces otherwise.
+        Sends a synchronous request.
+
+        @param method The REST method to use (i.e. "GET", "POST", "PUT", "DELETE").
+        @param url The full URL to send the request to, including query params.
+        @param headers A `Dictionary` with the headers to use.
+        @param data String encoded post data or `null`.
+        @param fileArg Argument name of file to send in multipart requests, or `null`.
+        @param fileName File name of file to send in multipart requests, or `null`.
+        @param fileContent File content of file to send in multipart requests, or `null`.
+        @returns A `Response` object.
+    **/
+    public function syncRequest(method: String, url: String, headers: Dictionary, data: String,
+            fileArg: String, fileName: String, fileContent: String) : Response;
+    
+
+    /**
+        Get a Connect resource if 'id' is specified, or a list of reosurces otherwise.
 
         @param resource Resource path (e.g. "requests" for the Fulfillment API).
         @param id Optional id of the resource to get.
@@ -17,7 +33,7 @@ interface IApiClient {
 
 
     /**
-        Get a string
+        Send a GET request to Connect that returns a string.
 
         @param resource Resource path (e.g. "requests" for the Fulfillment API).
         @param id Optional id of the resource to get.
@@ -31,7 +47,7 @@ interface IApiClient {
 
 
     /**
-        Put data to one resource.
+        Put data to one Connect resource.
 
         @param resource Resource path (e.g. "requests" for the Fulfillment API).
         @param id Id of the resource to put data on.
@@ -43,7 +59,7 @@ interface IApiClient {
 
 
     /**
-        Post data.
+        Post data to Connect.
 
         @param resource Resource path (e.g. "requests" for the Fulfillment API).
         @param id Optional id of the resource to post data to.
@@ -56,7 +72,7 @@ interface IApiClient {
 
 
     /**
-        Post a file using the Content-Type "multipart/form-data".
+        Post a file to Connect using the Content-Type "multipart/form-data".
 
         @param resource Resource path (e.g. "requests" for the Fulfillment API).
         @param id Optional id of the resource to post data to.
@@ -72,7 +88,7 @@ interface IApiClient {
 
 
     /**
-        Delete resource.
+        Delete Connect resource.
 
         @param resource Resource path (e.g. "requests" for the Fulfillment API).
         @param id Id of the resource to delete.
