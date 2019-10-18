@@ -59,7 +59,7 @@ class Processor {
         // Process each request
         for (model in list) {
             this.model = model;
-            this.data = new StringMap<String>();
+            this.data = new Dictionary();
             this.skip_ = false;
             var input: String = null;
             var lastRequestStr = '';
@@ -68,13 +68,33 @@ class Processor {
 
             Env.getLogger().openSection('Processing request "${this.model.id}" on ' + getDate());
 
+            var stepParamId = '__sdk_processor_step';
             // For Fulfillment requests, check if we must skip due to pending migration
             if (this.getRequest() != null && this.getRequest().needsMigration()) {
-                Env.getLogger().info(
-                    'Skipping request "${this.model.id}" because it is pending migration.');
+                Env.getLogger().info('Skipping request because it is pending migration.');
             } else {
+                var firstIndex = 0;
+
+                // If there is stored step data, set data and jump to that step
+                if (this.getRequest() != null
+                        && this.getRequest().asset.getParamById(stepParamId) != null) {
+                    var param = this.getRequest().asset.getParamById(stepParamId);
+                    if (param.value != null && Inflection.isJsonObject(param.value)) {
+                        var stepData = haxe.Json.parse(param.value);
+                        firstIndex = stepData.current_step;
+                        input = stepData.input;
+                        var fields: Array<String> = Reflect.fields(stepData.data);
+                        for (field in fields) {
+                            var value = Reflect.field(stepData.data, field);
+                            var parsedData = this.parseSavedData(field, value);
+                            this.setData(field, parsedData);
+                        }
+                    }
+                    Env.getLogger().info('Resuming request from step ${firstIndex + 1}');
+                }
+
                 // Process each step
-                for (index in 0...this.steps.length) {
+                for (index in firstIndex...this.steps.length) {
                     var step = this.steps[index];
                     var requestStr = Inflection.beautify(this.model.toString(),
                         Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
@@ -103,14 +123,37 @@ class Processor {
                         this.skip();
                     }
 
-                    Env.getLogger().closeSection();
-
                     if (this.skip_) {
-                        break;
-                    }
+                        Env.getLogger().info('Skipping request.');
 
-                    lastRequestStr = requestStr;
-                    lastDataStr = dataStr;
+                        // Save step data if request supports it
+                        if (this.getRequest() != null
+                                && this.getRequest().asset.getParamById(stepParamId) != null) {
+                            Env.getLogger().info('Saving step data.');
+                            var param = this.getRequest().asset.getParamById(stepParamId);
+                            param.value = haxe.Json.stringify({
+                                current_step: index,
+                                input: input,
+                                data: this.data.toObject(),
+                            });
+                            try {
+                                this.getRequest().update();
+                            } catch (ex: Dynamic) {
+                                Env.getLogger().error('```');
+                                Env.getLogger().error(Std.string(ex));
+                                Env.getLogger().error('```');
+                                Env.getLogger().error('');
+                            }
+                        }
+
+                        Env.getLogger().closeSection();
+                        break;
+                    } else {
+                        Env.getLogger().closeSection();
+
+                        lastRequestStr = requestStr;
+                        lastDataStr = dataStr;
+                    }
                 }
             }
 
@@ -125,13 +168,13 @@ class Processor {
     }
 
 
-    public function setData(key: String, value: String): Processor {
+    public function setData(key: String, value: Dynamic): Processor {
         this.data.set(key, value);
         return this;
     }
     
     
-    public function getData(key: String): String {
+    public function getData(key: String): Dynamic {
         return this.data.get(key);
     }
 
@@ -139,11 +182,16 @@ class Processor {
     public function skip(): Void {
         this.skip_ = true;
     }
+
+
+    public function parseSavedData(key: String, value: Dynamic): Dynamic {
+        return value;
+    }
     
 
     private var steps: Array<Step>;
     private var model: IdModel;
-    private var data: StringMap<String>;
+    private var data: Dictionary;
     private var skip_: Bool;
 
 

@@ -115,14 +115,21 @@ class Packager {
     }
 
 
+    private static function copyLicense(destPath: String): Void {
+        sys.io.File.copy('LICENSE', destPath + '/LICENSE');
+    }
+
+
     private static function createJavaPackage(): Void {
         createPath('_packages/connect.java');
+        copyLicense('_packages/connect.java');
         sys.io.File.copy('_build/java/Packager.jar', '_packages/connect.java/connect.jar');
     }
 
 
     private static function createJSPackage(classes: Array<String>): Void {
         createPath('_packages/connect.js');
+        copyLicense('_packages/connect.js');
 
         // Get list of packages
         var packages = getPackages(classes).map(function(pkg) {
@@ -161,6 +168,7 @@ class Packager {
 
     private static function createPhpPackage(classes: Array<String>): Void {
         createPath('_packages/connect.php');
+        copyLicense('_packages/connect.php');
         var file = sys.io.File.write('_packages/connect.php/connect.php');
         file.writeString('<?php' + EOL + EOL);
         file.writeString("set_include_path(get_include_path().PATH_SEPARATOR.__DIR__.'/lib');" + EOL);
@@ -190,6 +198,9 @@ class Packager {
 
         // Copy haxe code
         sys.io.File.copy('_build/connect.py', '_packages/connect.py/connect/autogen.py');
+
+        // Copy license
+        copyLicense('_packages/connect.py');
 
         // Create __init__.py files
         for (pkg in packages) { 

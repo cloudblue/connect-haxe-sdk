@@ -18,11 +18,11 @@ class Param extends IdModel {
 
 
     /** Value of parameter. **/
-    public var value(default, null): String;
+    public var value: String;
 
 
     /** Error indicated for parameter. **/
-    public var valueError(default, null): String;
+    public var valueError: String;
 
 
     /** Collections of string choices for parameter. **/
