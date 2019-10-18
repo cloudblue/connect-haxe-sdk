@@ -116,13 +116,13 @@ class Packager {
 
 
     private static function createJavaPackage(): Void {
-        createPath('_build/_packages/java');
-        sys.io.File.copy('_build/java/Packager.jar', '_build/_packages/java/connect.jar');
+        createPath('_packages/connect.java');
+        sys.io.File.copy('_build/java/Packager.jar', '_packages/connect.java/connect.jar');
     }
 
 
     private static function createJSPackage(classes: Array<String>): Void {
-        createPath('_build/_packages/js');
+        createPath('_packages/connect.js');
 
         // Get list of packages
         var packages = getPackages(classes).map(function(pkg) {
@@ -136,10 +136,10 @@ class Packager {
         }).filter(function(pkg) { return  pkg != ""; });
 
         // Copy JavaScript code
-        sys.io.File.copy('_build/connect.js', '_build/_packages/js/connect.js');
+        sys.io.File.copy('_build/connect.js', '_packages/connect.js/connect.js');
         
         // Append module exports
-        var file = sys.io.File.append('_build/_packages/js/connect.js');
+        var file = sys.io.File.append('_packages/connect.js/connect.js');
         file.writeString(EOL);
         file.writeString('module.exports = {' + EOL);
         var pkgClasses = getClassesInPackage(classes, 'connect');
@@ -160,8 +160,8 @@ class Packager {
 
 
     private static function createPhpPackage(classes: Array<String>): Void {
-        createPath('_build/_packages/php');
-        var file = sys.io.File.write('_build/_packages/php/connect.php');
+        createPath('_packages/connect.php');
+        var file = sys.io.File.write('_packages/connect.php/connect.php');
         file.writeString('<?php' + EOL + EOL);
         file.writeString("set_include_path(get_include_path().PATH_SEPARATOR.__DIR__.'/lib');" + EOL);
         file.writeString("spl_autoload_register(" + EOL);
@@ -174,7 +174,7 @@ class Packager {
         file.writeString(");" + EOL);
         file.writeString("\\php\\Boot::__hx__init();" + EOL);
         file.close();
-        copyPath('_build/php/lib', '_build/_packages/php/lib');
+        copyPath('_build/php/lib', '_packages/connect.php/lib');
     }
 
 
@@ -185,17 +185,17 @@ class Packager {
         // Create package folders
         for (pkg in packages) {
             var pkgPath = StringTools.replace(pkg, '.', '/');
-            createPath('_build/_packages/python/${pkgPath}');
+            createPath('_packages/connect.py/${pkgPath}');
         }
 
         // Copy haxe code
-        sys.io.File.copy('_build/connect.py', '_build/_packages/python/connect/autogen.py');
+        sys.io.File.copy('_build/connect.py', '_packages/connect.py/connect/autogen.py');
 
         // Create __init__.py files
         for (pkg in packages) { 
             var pkgPath = StringTools.replace(pkg, '.', '/');
             var pkgClasses = getClassesInPackage(classes, pkg);
-            var file = sys.io.File.write('_build/_packages/python/${pkgPath}/__init__.py');
+            var file = sys.io.File.write('_packages/connect.py/${pkgPath}/__init__.py');
             
             // Write imports
             for (cls in pkgClasses) {
@@ -215,7 +215,7 @@ class Packager {
         }
 
         // Create setup.py file
-        var file = sys.io.File.write('_build/_packages/python/setup.py');
+        var file = sys.io.File.write('_packages/connect.py/setup.py');
         file.writeString("from setuptools import setup" + EOL + EOL + EOL);
         file.writeString("setup(" + EOL);
         file.writeString("    name='connect'," + EOL);

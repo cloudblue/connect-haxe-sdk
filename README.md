@@ -36,7 +36,7 @@ To build the SDK for all the available targets, type the following on a terminal
 $ haxe package.hxml
 ```
 
-A `_build/_packages` folder will be generated with subfolders for every target language. For example, if you want to use it in Java, you should go to the `_build/_packages/java` folder, and copy `connect.jar` to your project.
+A `_packages` folder will be generated with subfolders for every target language. For example, if you want to use it in Java, you should go to the `_packages/connect.java` folder, and copy `connect.jar` to your project.
 
 To run an example written in Haxe, type:
 

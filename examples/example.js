@@ -1,4 +1,4 @@
-const connect = require("../_build/_packages/js/connect");
+const connect = require("../_packages/js/connect");
 const Env = connect.Env;
 const Logger = connect.Logger;
 const Processor = connect.Processor;
