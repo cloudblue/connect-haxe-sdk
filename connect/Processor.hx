@@ -64,46 +64,54 @@ class Processor {
             var input: String = null;
             var lastRequestStr = '';
             var lastDataStr = '{}';
-            Env.getLogger().openSection('Processing request "${this.model.id}" on ' + getDate());            
 
-            // Process each step
-            for (index in 0...this.steps.length) {
-                var step = this.steps[index];
-                var requestStr = Inflection.beautify(this.model.toString(),
-                    Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
-                var dataStr = Std.string(this.data);
-                
-                Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
-                this.logStepData(Env.getLogger().info, Inflection.beautify(input, false),
-                    requestStr, dataStr, lastRequestStr, lastDataStr);
 
-                // Execute step
-                try {
-                    #if java
-                    input = step.func.apply(this, input);
-                    #else
-                    input = step.func(this, input);
-                    #end
-                } catch (ex: Dynamic) {
-                    if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                        this.logStepData(Env.getLogger().error, Inflection.beautify(input, false),
-                            requestStr, dataStr, lastRequestStr, lastDataStr);
+            Env.getLogger().openSection('Processing request "${this.model.id}" on ' + getDate());
+
+            // For Fulfillment requests, check if we must skip due to pending migration
+            if (this.getRequest() != null && this.getRequest().needsMigration()) {
+                Env.getLogger().info(
+                    'Skipping request "${this.model.id}" because it is pending migration.');
+            } else {
+                // Process each step
+                for (index in 0...this.steps.length) {
+                    var step = this.steps[index];
+                    var requestStr = Inflection.beautify(this.model.toString(),
+                        Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
+                    var dataStr = Std.string(this.data);
+                    
+                    Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
+                    this.logStepData(Env.getLogger().info, Inflection.beautify(input, false),
+                        requestStr, dataStr, lastRequestStr, lastDataStr);
+
+                    // Execute step
+                    try {
+                        #if java
+                        input = step.func.apply(this, input);
+                        #else
+                        input = step.func(this, input);
+                        #end
+                    } catch (ex: Dynamic) {
+                        if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
+                            this.logStepData(Env.getLogger().error, Inflection.beautify(input, false),
+                                requestStr, dataStr, lastRequestStr, lastDataStr);
+                        }
+                        Env.getLogger().error('```');
+                        Env.getLogger().error(Std.string(ex));
+                        Env.getLogger().error('```');
+                        Env.getLogger().error('');
+                        this.skip();
                     }
-                    Env.getLogger().error('```');
-                    Env.getLogger().error(Std.string(ex));
-                    Env.getLogger().error('```');
-                    Env.getLogger().error('');
-                    this.skip();
+
+                    Env.getLogger().closeSection();
+
+                    if (this.skip_) {
+                        break;
+                    }
+
+                    lastRequestStr = requestStr;
+                    lastDataStr = dataStr;
                 }
-
-                Env.getLogger().closeSection();
-
-                if (this.skip_) {
-                    break;
-                }
-
-                lastRequestStr = requestStr;
-                lastDataStr = dataStr;
             }
 
             Env.getLogger().closeSection();
