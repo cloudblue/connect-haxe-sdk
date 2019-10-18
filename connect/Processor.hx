@@ -15,7 +15,7 @@ typedef ProcessorStepFunc = (Processor, String) -> String;
 
 
 /**
-    In development. Do noy use by now...
+    In development. Do not use by now...
 **/
 class Processor {
     public function new() {
@@ -60,6 +60,7 @@ class Processor {
         for (model in list) {
             this.model = model;
             this.data = new StringMap<String>();
+            this.skip_ = false;
             var input: String = null;
             var lastRequestStr = '';
             var lastDataStr = '{}';
@@ -71,8 +72,8 @@ class Processor {
                 var requestStr = Inflection.beautify(this.model.toString(),
                     Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
                 var dataStr = Std.string(this.data);
+                
                 Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
-
                 this.logStepData(Env.getLogger().info, Inflection.beautify(input, false),
                     requestStr, dataStr, lastRequestStr, lastDataStr);
 
@@ -92,10 +93,14 @@ class Processor {
                     Env.getLogger().error(Std.string(ex));
                     Env.getLogger().error('```');
                     Env.getLogger().error('');
-                    input = null;
+                    this.skip();
                 }
 
                 Env.getLogger().closeSection();
+
+                if (this.skip_) {
+                    break;
+                }
 
                 lastRequestStr = requestStr;
                 lastDataStr = dataStr;
@@ -121,11 +126,17 @@ class Processor {
     public function getData(key: String): String {
         return this.data.get(key);
     }
+
+
+    public function skip(): Void {
+        this.skip_ = true;
+    }
     
 
     private var steps: Array<Step>;
     private var model: IdModel;
     private var data: StringMap<String>;
+    private var skip_: Bool;
 
 
     private static function getDate(): String {

@@ -10,7 +10,7 @@ class Example {
         var initialTime = Date.now().getTime();
 
         Env.loadConfig('examples/config.json');
-        Env.initLogger('examples/log.md', Logger.LEVEL_DEBUG, null);
+        Env.initLogger('examples/log.md', Logger.LEVEL_INFO, null);
 
         // Process requests
         new Processor()
