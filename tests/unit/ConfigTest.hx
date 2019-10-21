@@ -13,7 +13,7 @@ class ConfigTest extends haxe.unit.TestCase {
 
     public function test() {
         var config = new Config(API_URL, API_KEY,
-            new Collection<String>().push(PRODUCT1).push(PRODUCT2));
+            new Collection<String>().push(PRODUCT1).push(PRODUCT2), null);
         assertEquals(API_URL, config.getApiUrl());
         assertEquals(API_KEY, config.getApiKey());
         assertTrue(config.hasProduct(PRODUCT1));

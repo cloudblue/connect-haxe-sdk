@@ -224,7 +224,7 @@ class Request extends IdModel {
         @returns The Request returned from the server, which should contain
         the updated assignee.
     **/
-    public function assignTo(assigneeId: String): Request {
+    public function assign(assigneeId: String): Request {
        var request = Env.getFulfillmentApi().assignRequest(
             this.id,
             assigneeId

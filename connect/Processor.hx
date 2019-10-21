@@ -4,7 +4,6 @@ import connect.api.QueryParams;
 import connect.models.IdModel;
 import connect.models.Request;
 import haxe.Constraints.Function;
-import haxe.ds.StringMap;
 
 
 #if java
@@ -61,6 +60,7 @@ class Processor {
             this.model = model;
             this.data = new Dictionary();
             this.skip_ = false;
+            this.saveStep = false;
             var input: String = null;
             var lastRequestStr = '';
             var lastDataStr = '{}';
@@ -68,7 +68,6 @@ class Processor {
 
             Env.getLogger().openSection('Processing request "${this.model.id}" on ' + getDate());
 
-            var stepParamId = '__sdk_processor_step';
             // For Fulfillment requests, check if we must skip due to pending migration
             if (this.getRequest() != null && this.getRequest().needsMigration()) {
                 Env.getLogger().info('Skipping request because it is pending migration.');
@@ -77,8 +76,10 @@ class Processor {
 
                 // If there is stored step data, set data and jump to that step
                 if (this.getRequest() != null
-                        && this.getRequest().asset.getParamById(stepParamId) != null) {
-                    var param = this.getRequest().asset.getParamById(stepParamId);
+                        && this.getRequest().asset.getParamById(STEP_PARAM_ID) != null
+                        && this.getRequest().asset.getParamById(STEP_PARAM_ID).value != null
+                        && this.getRequest().asset.getParamById(STEP_PARAM_ID).value != '') {
+                    var param = this.getRequest().asset.getParamById(STEP_PARAM_ID);
                     if (param.value != null && Inflection.isJsonObject(param.value)) {
                         var stepData = haxe.Json.parse(param.value);
                         firstIndex = stepData.current_step;
@@ -120,29 +121,31 @@ class Processor {
                         Env.getLogger().error(Std.string(ex));
                         Env.getLogger().error('```');
                         Env.getLogger().error('');
-                        this.skip();
+                        this.skip(true);
                     }
 
                     if (this.skip_) {
-                        Env.getLogger().info('Skipping request.');
+                        if (this.saveStep) {
+                            Env.getLogger().info('Skipping request.');
 
-                        // Save step data if request supports it
-                        if (this.getRequest() != null
-                                && this.getRequest().asset.getParamById(stepParamId) != null) {
-                            Env.getLogger().info('Saving step data.');
-                            var param = this.getRequest().asset.getParamById(stepParamId);
-                            param.value = haxe.Json.stringify({
-                                current_step: index,
-                                input: input,
-                                data: this.data.toObject(),
-                            });
-                            try {
-                                this.getRequest().update();
-                            } catch (ex: Dynamic) {
-                                Env.getLogger().error('```');
-                                Env.getLogger().error(Std.string(ex));
-                                Env.getLogger().error('```');
-                                Env.getLogger().error('');
+                            // Save step data if request supports it
+                            if (this.getRequest() != null &&
+                                    this.getRequest().asset.getParamById(STEP_PARAM_ID) != null) {
+                                Env.getLogger().info('Saving step data.');
+                                var param = this.getRequest().asset.getParamById(STEP_PARAM_ID);
+                                param.value = haxe.Json.stringify({
+                                    current_step: index,
+                                    input: input,
+                                    data: this.data.toObject(),
+                                });
+                                try {
+                                    this.getRequest().update();
+                                } catch (ex: Dynamic) {
+                                    Env.getLogger().error('```');
+                                    Env.getLogger().error(Std.string(ex));
+                                    Env.getLogger().error('```');
+                                    Env.getLogger().error('');
+                                }
                             }
                         }
 
@@ -179,20 +182,161 @@ class Processor {
     }
 
 
-    public function skip(): Void {
-        this.skip_ = true;
+    /**
+        Changes the status of the Request being processed to "approved", sending the id
+        of a Template to render on the portal.
+
+        When using the Processor, this method should be used instead of
+        `Request.approveByTemplate()`, since this take care of cleaning the stored step
+        information, and automatically calls `skip` to avoid processing any further steps.
+
+        @returns The Request returned from the server, which should contain
+        the updated status.
+    **/
+    public function approveByTemplate(id: String): Request {
+        var request = this.getRequest();
+        if (request != null) {
+            var param = request.asset.getParamById(STEP_PARAM_ID);
+            if (param != null) {
+                param.value = '';
+            }
+            request.update();
+            var result = request.approveByTemplate(id);
+            this.skip(false);
+            return result;
+        } else {
+            return null;
+        }
     }
 
 
-    public function parseSavedData(key: String, value: Dynamic): Dynamic {
-        return value;
+    /**
+        Changes the status of the Request being processed to "approved", rendering a tile on
+        the portal with the given Markdown `text`.
+
+        When using the Processor, this method should be used instead of `Request.approveByTile()`,
+        since this take care of cleaning the stored step information, and automatically calls
+        `skip` to avoid processing any further steps.
+
+        @returns The Request returned from the server, which should contain
+        the updated status.
+    **/
+    public function approveByTile(text: String): Request {
+        var request = this.getRequest();
+        if (request != null) {
+            var param = request.asset.getParamById(STEP_PARAM_ID);
+            if (param != null) {
+                param.value = '';
+            }
+            request.update();
+            var result = request.approveByTile(text);
+            this.skip(false);
+            return result;
+        } else {
+            return null;
+        }
+    }
+
+
+    /**
+        Changes the status of the Request being processed to "failed".
+
+        When using the Processor, this method should be used instead of `Request.fail()`,
+        since this take care of cleaning the stored step information, and automatically calls
+        `skip` to avoid processing any further steps.
+
+        @returns The Request returned from the server, which should contain
+        the updated status.
+    **/
+    public function fail(reason: String): Request {
+        var request = this.getRequest();
+        if (request != null) {
+            var param = request.asset.getParamById(STEP_PARAM_ID);
+            if (param != null) {
+                param.value = '';
+            }
+            request.update();
+            var result = request.fail(reason);
+            this.skip(false);
+            return result;
+        } else {
+            return null;
+        }
+    }
+
+
+    /**
+        Changes the status of the Request being processed to "inquiring".
+
+        When using the Processor, this method should be used instead of `Request.inquire()`,
+        since this take care of cleaning the stored step information, and automatically calls
+        `skip` to avoid processing any further steps.
+
+        @returns The Request returned from the server, which should contain
+        the updated status.
+    **/
+    public function inquire(): Request {
+        var request = this.getRequest();
+        if (request != null) {
+            var param = request.asset.getParamById(STEP_PARAM_ID);
+            if (param != null) {
+                param.value = '';
+            }
+            request.update();
+            var result = request.inquire();
+            this.skip(false);
+            return result;
+        } else {
+            return null;
+        }
+    }
+
+
+    /**
+        Changes the status of the Request being processed to "pending".
+
+        When using the Processor, this method should be used instead of `Request.pend()`,
+        since this take care of cleaning the stored step information, and automatically calls
+        `skip` to avoid processing any further steps.
+
+        @returns The Request returned from the server, which should contain
+        the updated status.
+    **/
+    public function pend(): Request {
+        var request = this.getRequest();
+        if (request != null) {
+            var param = request.asset.getParamById(STEP_PARAM_ID);
+            if (param != null) {
+                param.value = '';
+            }
+            request.update();
+            var result = request.pend();
+            this.skip(false);
+            return result;
+        } else {
+            return null;
+        }
     }
     
 
+    private static inline var STEP_PARAM_ID = '__sdk_processor_step';
+    
     private var steps: Array<Step>;
     private var model: IdModel;
     private var data: Dictionary;
     private var skip_: Bool;
+    private var saveStep: Bool;
+
+
+    private function skip(saveStep: Bool): Void {
+        this.skip_ = true;
+        this.saveStep = saveStep;
+    }
+
+
+    private function parseSavedData(key: String, value: Dynamic): Dynamic {
+        return value;
+    }
 
 
     private static function getDate(): String {

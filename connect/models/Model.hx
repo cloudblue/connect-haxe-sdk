@@ -20,9 +20,7 @@ class Model {
             if (field != 'fieldClassNames' && value != null) {
                 switch (Type.typeof(value)) {
                     case TClass(String):
-                        if (Std.string(value) != '') {
-                            Reflect.setField(obj, Inflection.toSnakeCase(field), Std.string(value));
-                        }
+                        Reflect.setField(obj, Inflection.toSnakeCase(field), Std.string(value));
                     case TClass(class_):
                         var className = Type.getClassName(class_);
                         if (className.indexOf('connect.Collection') == 0) {

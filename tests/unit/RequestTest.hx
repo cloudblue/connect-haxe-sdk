@@ -170,10 +170,10 @@ class RequestTest extends haxe.unit.TestCase {
     }
 
 
-    public function testAssignTo() {
+    public function testAssign() {
         // Check subject
         var request = Request.get('PR-5852-1608-0000');
-        var assignedRequest = request.assignTo('XXX');
+        var assignedRequest = request.assign('XXX');
         assertTrue(assignedRequest != null);
         //assertEquals('XXX', assignedRequest.assignee);
 
