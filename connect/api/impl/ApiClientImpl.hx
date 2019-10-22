@@ -7,10 +7,10 @@ import haxe.io.StringInput;
 
 
 class ApiClientImpl implements IApiClient {
-    public function syncRequest(method: String, url: String, headers: Dictionary, data: String,
+    public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: String) : Response {        
         // Write call info
-        writeRequestCall(Env.getLogger().info, method, url, headers, data);
+        writeRequestCall(Env.getLogger().info, method, url, headers, body);
 
         #if js
             initXMLHttpRequest();
@@ -26,8 +26,8 @@ class ApiClientImpl implements IApiClient {
                 }
             }
 
-            if (data != null) {
-                xhr.send(data);
+            if (body != null) {
+                xhr.send(body);
             } else if (fileArg != null && fileName != null && fileContent != null) {
                 var formData = new js.html.FormData();
                 formData.append(fileArg, fileContent);
@@ -38,7 +38,7 @@ class ApiClientImpl implements IApiClient {
 
             if (xhr.readyState == js.html.XMLHttpRequest.UNSENT) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, url, headers, data);
+                    writeRequestCall(Env.getLogger().error, method, url, headers, body);
                 }
                 throw xhr.responseText != null
                     ? xhr.responseText
@@ -58,7 +58,7 @@ class ApiClientImpl implements IApiClient {
                 tinkMethod = methods.get(method.toUpperCase());
             } catch (e: Dynamic) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, url, headers, data);
+                    writeRequestCall(Env.getLogger().error, method, url, headers, body);
                 }
                 throw 'Invalid request method ${method}';
             }
@@ -78,8 +78,8 @@ class ApiClientImpl implements IApiClient {
             if (parsedHeaders.keys().length > 0) {
                 options.set('headers', parsedHeaders);
             }
-            if (data != null) {
-                options.set('body', data);
+            if (body != null) {
+                options.set('body', body);
             }
 
             tink.http.Client.fetch(url, options.toObject()).all().handle(function(o) {
@@ -88,7 +88,7 @@ class ApiClientImpl implements IApiClient {
                         response = new Response(res.header.statusCode, res.body.toString());
                     case Failure(res):
                         if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                            writeRequestCall(Env.getLogger().error, method, url, headers, data);
+                            writeRequestCall(Env.getLogger().error, method, url, headers, body);
                         }
                         throw res.toString();
                 }
@@ -108,10 +108,10 @@ class ApiClientImpl implements IApiClient {
             var response: Response = null;
             try {
                 response = connect.native.PythonRequest.request(
-                    method, url, parsedHeaders, data, 300);
+                    method, url, parsedHeaders, body, 300);
             } catch (ex: Dynamic) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, url, headers, data);
+                    writeRequestCall(Env.getLogger().error, method, url, headers, body);
                 }
                 throw ex;
             }
@@ -129,8 +129,8 @@ class ApiClientImpl implements IApiClient {
                 }
             }
 
-            if (data != null) {
-                http.setPostData(data);
+            if (body != null) {
+                http.setPostData(body);
             }
 
             if (fileArg != null && fileName != null && fileContent != null) {
@@ -146,7 +146,7 @@ class ApiClientImpl implements IApiClient {
             http.onStatus = function(status_) { status = status_; };
             http.onError = function(msg) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, url, headers, data);
+                    writeRequestCall(Env.getLogger().error, method, url, headers, body);
                 }
                 throw msg;
             }
@@ -158,7 +158,7 @@ class ApiClientImpl implements IApiClient {
 
         // If error response, write call to error log level
         if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR && response.status >= 400) {
-            writeRequestCall(Env.getLogger().error, method, url, headers, data);
+            writeRequestCall(Env.getLogger().error, method, url, headers, body);
         }
 
         // Write response to error or info level, depending on status
@@ -184,15 +184,15 @@ class ApiClientImpl implements IApiClient {
     }
 
 
-    public function put(resource: String, id: String, data: String): Dynamic {
+    public function put(resource: String, id: String, body: String): Dynamic {
         return checkResponse(connectSyncRequest('PUT', parsePath(resource, id),
-            getHeaders(), data));
+            getHeaders(), body));
     }
 
 
-    public function post(resource: String, ?id: String, ?suffix: String, ?data: String): Dynamic {
+    public function post(resource: String, ?id: String, ?suffix: String, ?body: String): Dynamic {
         return checkResponse(connectSyncRequest('POST', parsePath(resource, id, suffix),
-            getHeaders(), data));
+            getHeaders(), body));
     }
 
 
@@ -228,7 +228,7 @@ class ApiClientImpl implements IApiClient {
 
 
     private function writeRequestCall(loggerFunc: Function, method: String, url: String,
-            headers: Dictionary, data: String) {
+            headers: Dictionary, body: String) {
         var maskedHeaders = headers;
         if (loggerFunc != Env.getLogger().debug && headers != null) {
             maskedHeaders = new Dictionary();
@@ -255,7 +255,8 @@ class ApiClientImpl implements IApiClient {
             }
         }
 
-        Reflect.callMethod(Env.getLogger(), loggerFunc, ['> Http ${method} Request to ${url}']);
+        Reflect.callMethod(Env.getLogger(), loggerFunc,
+            ['> Http ${method.toUpperCase()} Request to ${url}']);
         if (maskedHeaders != null) {
             Reflect.callMethod(Env.getLogger(), loggerFunc, ['> * Headers:']);
             Reflect.callMethod(Env.getLogger(), loggerFunc, ['> | Name | Value |']);
@@ -265,35 +266,46 @@ class ApiClientImpl implements IApiClient {
                     ['> | ${key} | ${maskedHeaders.get(key)} |']);
             }
         }
-        if (data != null) {
-            Reflect.callMethod(Env.getLogger(), loggerFunc, ['> * Data: ${data}']);
+        if (body != null) {
+            if (Inflection.isJson(body)) {
+                var compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
+                var prefix = compact ? '> * Body (compact):' : '> * Body:';
+                var formatted = getFormattedData(body, prefix, compact);
+                Reflect.callMethod(Env.getLogger(), loggerFunc, [formatted]);
+            } else {
+                body = StringTools.lpad(body.substr(body.length - 4), '*', body.length);
+                Reflect.callMethod(Env.getLogger(), loggerFunc, ['> * Body: ${body}']);
+            }
         }
     }
 
 
     private function writeRequestResponse(loggerFunc: Function, response: Response) {
         Reflect.callMethod(Env.getLogger(), loggerFunc, ['> * Status: ${response.status}']);
-        
         if (Inflection.isJson(response.text)) {
-            var beautified = Inflection.beautify(response.text,
-                Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
-            var responsePrefix = (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG)
-                ? '> * Response:'
-                : '> * Response (compact):';
-            if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG
-                    || Inflection.isJsonArray(beautified)) {
-                Reflect.callMethod(Env.getLogger(), loggerFunc, [responsePrefix]);
-                Reflect.callMethod(Env.getLogger(), loggerFunc, ['> ```json']);
-                Reflect.callMethod(Env.getLogger(), loggerFunc, ['> ${beautified}']);
-                Reflect.callMethod(Env.getLogger(), loggerFunc, ['> ```']);
-            } else {
-                Reflect.callMethod(Env.getLogger(), loggerFunc,
-                    ['${responsePrefix} ${beautified}']);
-            }
+            var compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
+            var prefix = compact ? '> * Response (compact):' : '> * Response:';
+            var formatted = getFormattedData(response.text, prefix, compact);
+            Reflect.callMethod(Env.getLogger(), loggerFunc, [formatted]);
         } else {
-            Reflect.callMethod(Env.getLogger(), loggerFunc, ['> * Response: ${response.text}']);
+            var text = response.text;
+            text = StringTools.lpad(text.substr(text.length - 4), '*', text.length);
+            Reflect.callMethod(Env.getLogger(), loggerFunc, ['> * Response: ${text}']);
         }
         Reflect.callMethod(Env.getLogger(), loggerFunc, ['']);
+    }
+
+
+    private function getFormattedData(data: String, prefix: String, compact: Bool): String {
+        var beautified = Inflection.beautify(data, compact);
+        if (!compact || Inflection.isJsonArray(beautified)) {
+            return prefix + '\r\n'
+                + '> ```json' + '\r\n'
+                + '> ${beautified}' + '\r\n'
+                + '> ```';
+        } else {
+            return '${prefix} ${beautified}';
+        }
     }
 
 

@@ -383,7 +383,7 @@ class Processor {
                     Reflect.callMethod(Env.getLogger(), func, ['| Key | Value |']);
                     Reflect.callMethod(Env.getLogger(), func, ['| --- | ----- |']);
                     for (key in keys) {
-                        var val = this.getData(key);
+                        var val = Std.string(this.getData(key));
                         Reflect.callMethod(Env.getLogger(), func, ['| ${key} | ${val} |']);
                     }
                 } else {

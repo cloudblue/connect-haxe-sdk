@@ -53,19 +53,30 @@ class Inflection {
 
     /*
         If the text contains a JSON string representation, it returns it beautified using two space
-        indentation. Otherwise, returns the string as-is. If `onlyId` is `true` and the text
-        contains a JSON string representation, only the id is returned.
+        indentation. Otherwise, returns the string as-is. If `onlyIdOrKeys` is `true` and the text
+        contains a JSON string representation, only the id is returned or a string with all the
+        fields if it does not have an id.
     */
-    public static function beautify(text: String, onlyId: Bool): String {
+    public static function beautify(text: String, onlyIdOrKeys: Bool): String {
         try {
             var parsed: Dynamic = haxe.Json.parse(text);
-            if (onlyId) {
-                if (Type.typeof(parsed) == TObject && Reflect.hasField(parsed, 'id')) {
-                    return parsed.id;
+            if (onlyIdOrKeys) {
+                if (Type.typeof(parsed) == TObject) {
+                    // Json contains an object
+                    if (Reflect.hasField(parsed, 'id')) {
+                        return parsed.id;
+                    } else {
+                        return '{ ' + Reflect.fields(parsed).join(', ') + ' }';
+                    }
                 } else {
+                    // Json contains an array
                     var arr: Array<Dynamic> = parsed;
                     var mapped = arr.map(function(obj) {
-                        return Reflect.hasField(obj, 'id') ? obj.id : Std.string(obj);
+                        return Reflect.hasField(obj, 'id')
+                            ? obj.id
+                            : (Type.typeof(obj) == TObject)
+                            ? '{ ' + Reflect.fields(obj).join(', ') + ' }'
+                            : Std.string(obj);
                     });
                     return haxe.Json.stringify(mapped, null, '  ');
                 }
