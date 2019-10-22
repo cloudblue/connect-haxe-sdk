@@ -1,6 +1,6 @@
 <?php
 
-require_once '../_packages/php/connect.php';
+require_once '../_packages/connect.php/connect.php';
 
 use connect\Env;
 use connect\Logger;

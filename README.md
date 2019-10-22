@@ -44,7 +44,7 @@ To run an example written in Haxe, type:
 $ haxe example.hxml
 ```
 
-It compiles the `examples/Example.hx` file to Java and runs it.
+This compiles the `examples/Example.hx` file to Java and runs it.
 
 To generate the documentation, type:
 
