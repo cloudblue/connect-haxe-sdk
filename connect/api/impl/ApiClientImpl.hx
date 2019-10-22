@@ -10,7 +10,7 @@ class ApiClientImpl implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, data: String,
             fileArg: String, fileName: String, fileContent: String) : Response {        
         // Write call info
-        writeRequestCall(Env.getLogger().info, method, url, data);
+        writeRequestCall(Env.getLogger().info, method, url, headers, data);
 
         #if js
             initXMLHttpRequest();
@@ -38,7 +38,7 @@ class ApiClientImpl implements IApiClient {
 
             if (xhr.readyState == js.html.XMLHttpRequest.UNSENT) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, url, data);
+                    writeRequestCall(Env.getLogger().error, method, url, headers, data);
                 }
                 throw xhr.responseText != null
                     ? xhr.responseText
@@ -58,7 +58,7 @@ class ApiClientImpl implements IApiClient {
                 tinkMethod = methods.get(method.toUpperCase());
             } catch (e: Dynamic) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, url, data);
+                    writeRequestCall(Env.getLogger().error, method, url, headers, data);
                 }
                 throw 'Invalid request method ${method}';
             }
@@ -88,7 +88,7 @@ class ApiClientImpl implements IApiClient {
                         response = new Response(res.header.statusCode, res.body.toString());
                     case Failure(res):
                         if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                            writeRequestCall(Env.getLogger().error, method, url, data);
+                            writeRequestCall(Env.getLogger().error, method, url, headers, data);
                         }
                         throw res.toString();
                 }
@@ -111,7 +111,7 @@ class ApiClientImpl implements IApiClient {
                     method, url, parsedHeaders, data, 300);
             } catch (ex: Dynamic) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, url, data);
+                    writeRequestCall(Env.getLogger().error, method, url, headers, data);
                 }
                 throw ex;
             }
@@ -146,7 +146,7 @@ class ApiClientImpl implements IApiClient {
             http.onStatus = function(status_) { status = status_; };
             http.onError = function(msg) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, url, data);
+                    writeRequestCall(Env.getLogger().error, method, url, headers, data);
                 }
                 throw msg;
             }
@@ -158,7 +158,7 @@ class ApiClientImpl implements IApiClient {
 
         // If error response, write call to error log level
         if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR && response.status >= 400) {
-            writeRequestCall(Env.getLogger().error, method, url, data);
+            writeRequestCall(Env.getLogger().error, method, url, headers, data);
         }
 
         // Write response to error or info level, depending on status
@@ -228,12 +228,45 @@ class ApiClientImpl implements IApiClient {
 
 
     private function writeRequestCall(loggerFunc: Function, method: String, url: String,
-            data: String) {
-        Reflect.callMethod(Env.getLogger(), loggerFunc,
-            ['> Http ${method} Request to ${url}']);
+            headers: Dictionary, data: String) {
+        var maskedHeaders = headers;
+        if (loggerFunc != Env.getLogger().debug && headers != null) {
+            maskedHeaders = new Dictionary();
+            for (key in headers.keys()) {
+                if (key == 'Authorization') {
+                    var auth = Std.string(headers.get('Authorization'));
+                    if (StringTools.startsWith(auth, 'ApiKey ')) {
+                        var parts = auth.split(':');
+                        if (parts.length > 1) {
+                            var join = parts.slice(1).join(':');
+                            auth = parts[0] + ':'
+                                + StringTools.lpad(join.substr(join.length - 4), '*', join.length);
+                        } else {
+                            auth = 'ApiKey '
+                                + StringTools.lpad(auth.substr(auth.length - 4), '*', auth.length - 7);
+                        }
+                    } else {
+                        auth = StringTools.lpad(auth.substr(auth.length - 4), '*', auth.length);
+                    }
+                    maskedHeaders.set('Authorization', auth);
+                } else {
+                    maskedHeaders.set(key, headers.get(key));
+                }
+            }
+        }
+
+        Reflect.callMethod(Env.getLogger(), loggerFunc, ['> Http ${method} Request to ${url}']);
+        if (maskedHeaders != null) {
+            Reflect.callMethod(Env.getLogger(), loggerFunc, ['> * Headers:']);
+            Reflect.callMethod(Env.getLogger(), loggerFunc, ['> | Name | Value |']);
+            Reflect.callMethod(Env.getLogger(), loggerFunc, ['> | ---- | ----- |']);
+            for (key in maskedHeaders.keys()) {
+                Reflect.callMethod(Env.getLogger(), loggerFunc,
+                    ['> | ${key} | ${maskedHeaders.get(key)} |']);
+            }
+        }
         if (data != null) {
-            Reflect.callMethod(Env.getLogger(), loggerFunc,
-                ['> * Data: ${data}']);
+            Reflect.callMethod(Env.getLogger(), loggerFunc, ['> * Data: ${data}']);
         }
     }
 
