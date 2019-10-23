@@ -155,7 +155,8 @@ class ApiClientImpl implements IApiClient {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                     writeRequestCall(Env.getLogger().error, method, url, headers, body);
                 }
-                Env.getLogger().error('> * Exception: ${msg}');
+                Env.getLogger().error(
+                    '> * Exception (${status}): ${responseBytes.getBytes().toString()}');
                 Env.getLogger().error('');
                 throw msg;
             }
