@@ -62,8 +62,17 @@ class Model {
     }
 
 
-    /** Parses the given Haxe dynamic object as a Model of the specified class. **/
+    /**
+        Parses the given Haxe dynamic object as a Model of the specified class.
+
+        @returns The parsel model.
+        @throws String If `obj` is not a dynamic object or if the class for a field was not
+            found.
+    **/
     public static function parse<T>(modelClass: Class<T>, obj: Dynamic): T {
+        if (Type.typeof(obj) != TObject) {
+            throw 'Model.parse should receive a dynamic object, not a ${Type.typeof(obj)}';
+        }
         var model = Type.createInstance(modelClass, []);
         var castedModel = cast(model, Model);
         var fields = Type.getInstanceFields(modelClass);
