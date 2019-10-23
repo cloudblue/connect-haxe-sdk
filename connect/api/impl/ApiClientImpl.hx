@@ -40,6 +40,8 @@ class ApiClientImpl implements IApiClient {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                     writeRequestCall(Env.getLogger().error, method, url, headers, body);
                 }
+                Env.getLogger().error('> * Exception: ${xhr.responseText}');
+                Env.getLogger().error('');
                 throw xhr.responseText != null
                     ? xhr.responseText
                     : 'Error sending ${method} request to "${url}."';
@@ -60,6 +62,7 @@ class ApiClientImpl implements IApiClient {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                     writeRequestCall(Env.getLogger().error, method, url, headers, body);
                 }
+                Env.getLogger().error('');
                 throw 'Invalid request method ${method}';
             }
 
@@ -90,6 +93,8 @@ class ApiClientImpl implements IApiClient {
                         if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                             writeRequestCall(Env.getLogger().error, method, url, headers, body);
                         }
+                        Env.getLogger().error('> * Exception: ${res}');
+                        Env.getLogger().error('');
                         throw res.toString();
                 }
             });
@@ -113,6 +118,8 @@ class ApiClientImpl implements IApiClient {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                     writeRequestCall(Env.getLogger().error, method, url, headers, body);
                 }
+                Env.getLogger().error('> * Exception: ${ex}');
+                Env.getLogger().error('');
                 throw ex;
             }
         #else
@@ -148,6 +155,8 @@ class ApiClientImpl implements IApiClient {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                     writeRequestCall(Env.getLogger().error, method, url, headers, body);
                 }
+                Env.getLogger().error('> * Exception: ${msg}');
+                Env.getLogger().error('');
                 throw msg;
             }
             http.customRequest(false, responseBytes, null, method.toUpperCase());
