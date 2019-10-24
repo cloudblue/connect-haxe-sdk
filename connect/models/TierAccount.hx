@@ -6,17 +6,17 @@ package connect.models;
 **/
 class TierAccount extends IdModel {
     /** Tier name. **/
-    public var name(default, null): String;
+    public var name: String;
 
 
     /** Tier ContactInfo object. **/
-    public var contactInfo(default, null): ContactInfo;
+    public var contactInfo: ContactInfo;
 
 
     /** Only in case of filtering by this field. **/
-    public var externalId(default, null): String;
+    public var externalId: String;
 
 
     /** Only in case of filtering by this field. **/
-    public var externalUid(default, null): String;
+    public var externalUid: String;
 }

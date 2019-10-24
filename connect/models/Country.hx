@@ -6,13 +6,13 @@ package connect.models;
 **/
 class Country extends IdModel {
     /** Country name. **/
-    public var name(default, null): String;
+    public var name: String;
 
 
     /** Icon path. **/
-    public var icon(default, null): String;
+    public var icon: String;
 
 
     /** Geographical zone. **/
-    public var zone(default, null): String;
+    public var zone: String;
 }

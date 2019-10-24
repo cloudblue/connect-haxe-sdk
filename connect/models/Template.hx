@@ -6,8 +6,8 @@ package connect.models;
 **/
 class Template extends IdModel {
     /** Title of `tihs` Template. **/
-    public var title(default, null): String;
+    public var title: String;
 
     /** Body of `this` Template. **/
-    public var body(default, null): String;
+    public var body: String;
 }

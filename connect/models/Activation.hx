@@ -6,13 +6,13 @@ package connect.models;
 **/
 class Activation extends Model {
     /** Activation link. **/
-    public var link(default, null): String;
+    public var link: String;
 
 
     /** Activation message. **/
-    public var message(default, null): String;
+    public var message: String;
 
 
     /** Activation date. **/
-    public var date(default, null): String;
+    public var date: String;
 }

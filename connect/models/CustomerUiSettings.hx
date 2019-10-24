@@ -6,17 +6,17 @@ package connect.models;
 **/
 class CustomerUiSettings extends Model {
     /** Description text. **/
-    public var description(default, null): String;
+    public var description: String;
 
 
     /** Getting started text. **/
-    public var gettingStarted(default, null): String;
+    public var gettingStarted: String;
 
 
     /** Collection of download links. **/
-    public var downloadLinks(default, null): Collection<DownloadLink>;
+    public var downloadLinks: Collection<DownloadLink>;
 
 
     /** Collection of documents. **/
-    public var documents(default, null): Collection<Document>;
+    public var documents: Collection<Document>;
 }

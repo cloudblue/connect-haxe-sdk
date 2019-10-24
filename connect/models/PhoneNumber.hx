@@ -6,17 +6,17 @@ package connect.models;
 **/
 class PhoneNumber extends Model {
     /** Country code. **/
-    public var countryCode(default, null): String;
+    public var countryCode: String;
 
 
     /** Area code. **/
-    public var areaCode(default, null): String;
+    public var areaCode: String;
 
 
     /** Phone number. **/
-    public var phoneNumber(default, null): String;
+    public var phoneNumber: String;
 
 
     /** Phone extension. **/
-    public var extension(default, null): String;
+    public var extension: String;
 }

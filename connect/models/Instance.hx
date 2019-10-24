@@ -6,5 +6,5 @@ package connect.models;
 **/
 class Instance extends IdModel {
     /** E-Commerce system type. **/
-    public var type(default, null): String;
+    public var type: String;
 }

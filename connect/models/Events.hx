@@ -6,47 +6,47 @@ package connect.models;
 **/
 class Events extends Model {
     /** Creation event. **/
-    public var created(default, null): Event;
+    public var created: Event;
 
 
     /** Inquire event. **/
-    public var inquired(default, null): Event;
+    public var inquired: Event;
 
 
     /** Pending event. **/
-    public var pended(default, null): Event;
+    public var pended: Event;
 
 
     /** Validation event. **/
-    public var validated(default, null): Event;
+    public var validated: Event;
 
 
     /** Update event. **/
-    public var updated(default, null): Event;
+    public var updated: Event;
 
 
     /** Approve event. **/
-    public var approved(default, null): Event;
+    public var approved: Event;
 
 
     /** Upload event. **/
-    public var uploaded(default, null): Event;
+    public var uploaded: Event;
 
 
     /** Submit event. **/
-    public var submitted(default, null): Event;
+    public var submitted: Event;
 
 
     /** Accept event. **/
-    public var accepted(default, null): Event;
+    public var accepted: Event;
 
 
     /** Reject event. **/
-    public var rejected(default, null): Event;
+    public var rejected: Event;
 
 
     /** Close event. **/
-    public var closed(default, null): Event;
+    public var closed: Event;
 
 
     public function new() {

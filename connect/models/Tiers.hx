@@ -6,15 +6,15 @@ package connect.models;
 **/
 class Tiers extends Model {
     /** Customer Level TierAccount Object. **/
-    public var customer(default, null): TierAccount;
+    public var customer: TierAccount;
 
 
     /** Level 1 TierAccount Object. **/
-    public var tier1(default, null): TierAccount;
+    public var tier1: TierAccount;
 
 
     /** Level 2 TierAccount Object. **/
-    public var tier2(default, null): TierAccount;
+    public var tier2: TierAccount;
 
 
     public function new() {

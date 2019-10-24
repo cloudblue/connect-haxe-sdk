@@ -13,51 +13,51 @@ import connect.api.QueryParams;
 **/
 class Product extends IdModel {
     /** Product name. **/
-    public var name(default, null): String;
+    public var name: String;
 
 
     /** Product icon URI. **/
-    public var icon(default, null): String;
+    public var icon: String;
 
 
     /** Short description of `this` Product. **/
-    public var shortDescription(default, null): String;
+    public var shortDescription: String;
 
 
     /** Detailed description of `this` Product. **/
-    public var detailedDescription(default, null): String;
+    public var detailedDescription: String;
 
 
     /** Version of `this` Product. **/
-    public var version(default, null): Int;
+    public var version: Int;
 
 
     /** Date of publishing. **/
-    public var publishedAt(default, null): String;
+    public var publishedAt: String;
 
 
     /** Product configurations. **/
-    public var configurations(default, null): Configurations;
+    public var configurations: Configurations;
 
 
     /** Customer UI Settings. **/
-    public var customerUiSettings(default, null): CustomerUiSettings;
+    public var customerUiSettings: CustomerUiSettings;
 
 
     /** Product Category. **/
-    public var category(default, null): Category;
+    public var category: Category;
 
 
     /** Product owner Account. **/
-    public var owner(default, null): Account;
+    public var owner: Account;
 
 
     /** true if version is latest or for master versions without versions, false otherwise. **/
-    public var latest(default, null): Bool;
+    public var latest: Bool;
 
 
     /** Statistics of product use, depends on account of callee. **/
-    public var stats(default, null): ProductStats;
+    public var stats: ProductStats;
 
 
     /**

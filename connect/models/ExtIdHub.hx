@@ -6,9 +6,9 @@ package connect.models;
 **/
 class ExtIdHub extends Model {
     /** Hub. **/
-    public var hub(default, null): Hub;
+    public var hub: Hub;
 
 
     /** External id. **/
-    public var externalId(default, null): String;
+    public var externalId: String;
 }

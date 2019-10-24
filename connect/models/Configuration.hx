@@ -11,5 +11,5 @@ package connect.models;
 **/
 class Configuration extends Model {
     /** The collection of parameters. **/
-    public var params(default, null): Collection<Param>;
+    public var params: Collection<Param>;
 }

@@ -9,23 +9,23 @@ package connect.models;
 **/
 class Connection extends IdModel {
     /** Type of connection (one of: production, test, preview). **/
-    public var type(default, null): String;
+    public var type: String;
 
 
     /** Provider account reference. **/
-    public var provider(default, null): Account;
+    public var provider: Account;
 
 
     /** Vendor account reference. **/
-    public var vendor(default, null): Account;
+    public var vendor: Account;
 
 
     /** Product reference. **/
-    public var product(default, null): Product;
+    public var product: Product;
 
 
     /** Hub reference. **/
-    public var hub(default, null): Hub;
+    public var hub: Hub;
 
 
     public function new() {

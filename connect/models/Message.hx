@@ -6,19 +6,19 @@ package connect.models;
 **/
 class Message extends IdModel {
     /** Primary id of Conversation object. **/
-    public var conversation(default, null): String;
+    public var conversation: String;
 
 
     /** Date of the Message creation. **/
-    public var created(default, null): String;
+    public var created: String;
 
 
     /** User that created the message. **/
-    public var creator(default, null): User;
+    public var creator: User;
 
 
     /** Actual message. **/
-    public var text(default, null): String;
+    public var text: String;
 
 
     /**

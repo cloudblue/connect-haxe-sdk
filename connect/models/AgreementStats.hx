@@ -6,9 +6,9 @@ package connect.models;
 **/
 class AgreementStats extends Model {
     /** Number of contracts this agreement has. **/
-    public var contracts(default, null): Int;
+    public var contracts: Int;
 
 
     /** Number of versions in the agreement. **/
-    public var versions(default, null): Int;
+    public var versions: Int;
 }

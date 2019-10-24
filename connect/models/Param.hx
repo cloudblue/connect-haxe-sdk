@@ -6,15 +6,15 @@ package connect.models;
 **/
 class Param extends IdModel {
     /** Name of parameter. **/
-    public var name(default, null): String;
+    public var name: String;
 
 
     /** Description of parameter. **/
-    public var description(default, null): String;
+    public var description: String;
 
 
     /** Type of parameter. **/
-    public var type(default, null): String;
+    public var type: String;
 
 
     /** Value of parameter. **/
@@ -26,38 +26,38 @@ class Param extends IdModel {
 
 
     /** Collections of string choices for parameter. **/
-    public var valueChoice(default, null): Collection<String>;
+    public var valueChoice: Collection<String>;
 
 
     // Undocumented fields (they appear in PHP SDK)
 
 
     /** Title for parameter. **/
-    public var title(default, null): String;
+    public var title: String;
 
 
     /** Scope of parameter. **/
-    public var scope(default, null): String;
+    public var scope: String;
 
 
     /** Parameter constraints. **/
-    public var constraints(default, null): Constraints;
+    public var constraints: Constraints;
 
 
     /** Collection of available dropdown choices for parameter. **/
-    public var valueChoices(default, null): Collection<Choice>;
+    public var valueChoices: Collection<Choice>;
 
 
     /** Param phase. **/
-    public var phase(default, null): String;
+    public var phase: String;
 
 
     /** Events. **/
-    public var events(default, null): Events;
+    public var events: Events;
 
 
     /** Marketplace. **/
-    public var marketplace(default, null): Marketplace;
+    public var marketplace: Marketplace;
 
 
     public function new() {

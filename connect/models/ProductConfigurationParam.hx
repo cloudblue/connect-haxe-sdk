@@ -6,30 +6,30 @@ package connect.models;
 **/
 class ProductConfigurationParam extends Model {
     /** Configuration parameter value. **/
-    public var value(default, null): String;
+    public var value: String;
 
 
     /** Full representation of parameter. **/
-    public var parameter(default, null): Param;
+    public var parameter: Param;
 
 
     /** Reference to Marketplace. **/
-    public var marketplace(default, null): Marketplace;
+    public var marketplace: Marketplace;
 
 
     /** Reference to Item. **/
-    public var item(default, null): Item;
+    public var item: Item;
 
 
     /** Product events. **/
-    public var events(default, null): Events;
+    public var events: Events;
 
 
     // Undocumented fields (they appear in PHP SDK)
 
 
     /** Constraints. **/
-    public var constraints(default, null): Constraints;
+    public var constraints: Constraints;
 
 
     public function new() {

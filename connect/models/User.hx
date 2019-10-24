@@ -6,9 +6,9 @@ package connect.models;
 **/
 class User extends IdModel {
     /** User name. **/
-    public var name(default, null): String;
+    public var name: String;
 
 
     /** User email. **/
-    public var email(default, null): String;
+    public var email: String;
 }

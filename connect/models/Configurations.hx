@@ -6,8 +6,8 @@ package connect.models;
 **/
 class Configurations extends Model {
     /** Is suspend and resume supported for the product? **/
-    public var suspendResumeSupported(default, null): Bool;
+    public var suspendResumeSupported: Bool;
 
     /** Does the product require reseller information? **/
-    public var requiresResellerInformation(default, null): Bool;
+    public var requiresResellerInformation: Bool;
 }

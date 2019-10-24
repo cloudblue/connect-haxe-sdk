@@ -8,15 +8,15 @@ import connect.api.QueryParams;
 **/
 class Request extends IdModel {
     /** Type of request. One of: purchase, change, suspend, resume, renew, cancel. **/
-    public var type(default, null): String;
+    public var type: String;
 
 
     /** Date of request creation. **/
-    public var created(default, null): String;
+    public var created: String;
 
 
     /** Date of last request modification. **/
-    public var updated(default, null): String;
+    public var updated: String;
 
 
     /**
@@ -31,22 +31,22 @@ class Request extends IdModel {
         - inquiring -> approved
         - inquiring -> pending
     **/
-    public var status(default, null): String;
+    public var status: String;
 
 
     /** URL for customer/reseller/provider for modifying param based on vendor's feedback. **/
-    public var paramsFormUrl(default, null): String;
+    public var paramsFormUrl: String;
 
 
     /**
         Activation key content for activating the subscription on vendor portal.
         This markdown formatted message is sent to customer.
     **/
-    public var activationKey(default, null): String;
+    public var activationKey: String;
 
 
     /** Fail reason in case of status of request is failed. **/
-    public var reason(default, null): String;
+    public var reason: String;
 
 
     /** Details of note. **/
@@ -54,22 +54,22 @@ class Request extends IdModel {
 
 
     /** Asset object **/
-    public var asset(default, null): Asset;
+    public var asset: Asset;
 
 
     /** Contract object. **/
-    public var contract(default, null): Contract;
+    public var contract: Contract;
 
 
     /** Marketplace object. **/
-    public var marketplace(default, null): Marketplace;
+    public var marketplace: Marketplace;
 
 
     /**
         Connect returns either a String or a JSON object in this field. When it is an object,
         its String representation is stored.
     **/
-    public var assignee(default, null): String;
+    public var assignee: String;
 
 
     /**

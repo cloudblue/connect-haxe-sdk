@@ -11,23 +11,23 @@ class Conversation extends IdModel {
         The id of object based on which discussion is made, e.g. listing request.
         It can be any object.
     **/
-    public var instanceId(default, null): String;
+    public var instanceId: String;
 
 
     /** Date of the Conversation creation. **/
-    public var created(default, null): String;
+    public var created: String;
 
 
     /** Conversation topic. **/
-    public var topic(default, null): String;
+    public var topic: String;
 
 
     /** Collection of messages. **/
-    public var messages(default, null): Collection<Message>;
+    public var messages: Collection<Message>;
 
 
     /** Creator of the conversation. **/
-    public var creator(default, null): User;
+    public var creator: User;
 
 
     /**

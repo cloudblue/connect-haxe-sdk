@@ -6,11 +6,11 @@ package connect.models;
 **/
 class Event extends Model {
     /** Date when the event occurred. **/
-    public var at(default, null): String;
+    public var at: String;
 
 
     /** User that caused the event. **/
-    public var by(default, null): User;
+    public var by: User;
 
 
     public function new() {

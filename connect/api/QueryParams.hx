@@ -35,5 +35,5 @@ class QueryParams {
     }
 
 
-    private var map(default, null): StringMap<String>;
+    private var map: StringMap<String>;
 }

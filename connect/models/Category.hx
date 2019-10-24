@@ -8,19 +8,19 @@ import connect.api.QueryParams;
 **/
 class Category extends IdModel {
     /** Category name. **/
-    public var name(default, null): String;
+    public var name: String;
 
 
     /** Reference to parent category. **/
-    public var parent(default, null): Category;
+    public var parent: Category;
 
 
     /** Collection of children categories. **/
-    public var children(default, null): Collection<Category>;
+    public var children: Collection<Category>;
 
 
     /** Product family. **/
-    public var family(default, null): Family;
+    public var family: Family;
 
 
     /**

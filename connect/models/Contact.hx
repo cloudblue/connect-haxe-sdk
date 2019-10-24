@@ -6,17 +6,17 @@ package connect.models;
 **/
 class Contact extends Model {
     /** First name. **/
-    public var firstName(default, null): String;
+    public var firstName: String;
 
 
     /** Last name. **/
-    public var lastName(default, null): String;
+    public var lastName: String;
 
 
     /** Email address. **/
-    public var email(default, null): String;
+    public var email: String;
 
 
     /** Phone number. **/
-    public var phoneNumber(default, null): PhoneNumber;
+    public var phoneNumber: PhoneNumber;
 }

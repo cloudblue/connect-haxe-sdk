@@ -3,77 +3,77 @@ package connect.models;
 
 class Agreement extends IdModel {
     /** Type of the agreement. One of: distribution, program, service. **/
-    public var type(default, null): String;
+    public var type: String;
 
 
     /** Title of the agreement. **/
-    public var title(default, null): String;
+    public var title: String;
 
 
     /** Agreement details (Markdown). **/
-    public var description(default, null): String;
+    public var description: String;
 
 
     /** Date of creation of the agreement. **/
-    public var created(default, null): String;
+    public var created: String;
 
 
     /**
         Date of the update of the agreement. It can be creation
         of the new version, change of the field, etc. (any change).
     **/
-    public var updated(default, null): String;
+    public var updated: String;
 
 
     /** Reference to the owner account object. **/
-    public var owner(default, null): Account;
+    public var owner: Account;
 
 
     /** Agreement stats. **/
-    public var stats(default, null): AgreementStats;
+    public var stats: AgreementStats;
 
 
     /** Reference to the user who created the version. **/
-    public var author(default, null): User;
+    public var author: User;
 
 
     /** Chronological number of the version. **/
-    public var version(default, null): Int;
+    public var version: Int;
 
 
     /** State of the version. **/
-    public var active(default, null): Bool;
+    public var active: Bool;
 
 
     /** Url to the document. **/
-    public var link(default, null): String;
+    public var link: String;
 
 
     /** Date of the creation of the version. **/
-    public var versionCreated(default, null): String;
+    public var versionCreated: String;
 
 
     /** Number of contracts this version has. **/
-    public var versionContracts(default, null): Int;
+    public var versionContracts: Int;
 
 
     /** Program agreements can have distribution agreements associated with them. **/
-    public var agreements(default, null): Collection<Agreement>;
+    public var agreements: Collection<Agreement>;
 
 
     /** Reference to the parent program agreement (for distribution agreement). **/
-    public var parent(default, null): Agreement;
+    public var parent: Agreement;
 
 
     /** Reference to marketplace object (for distribution agreement). **/
-    public var marketplace(default, null): Marketplace;
+    public var marketplace: Marketplace;
 
 
     // Undocumented fields (they appear in PHP SDK)
 
 
     /** Name of Agreement. **/
-    public var name(default, null): String;
+    public var name: String;
 
 
     public function new() {

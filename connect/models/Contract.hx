@@ -6,59 +6,59 @@ package connect.models;
 **/
 class Contract extends IdModel {
     /** Contract name. **/
-    public var name(default, null): String;
+    public var name: String;
 
 
     /** Version of the contract (same as associated agreement version). **/
-    public var version(default, null): Int;
+    public var version: Int;
 
 
     /** Type of contract (same as agreement type). One of: distribution, program, service. **/
-    public var type(default, null): String;
+    public var type: String;
 
 
     /** Contract status. One of: enrolling, pending, active, terminated, rejected. **/
-    public var status(default, null): String;
+    public var status: String;
 
 
     /** Agreement object reference. **/
-    public var agreement(default, null): Agreement;
+    public var agreement: Agreement;
 
 
     /** Marketplace object reference. **/
-    public var marketplace(default, null): Marketplace;
+    public var marketplace: Marketplace;
 
 
     /** Owner Account object reference. **/
-    public var owner(default, null): Account;
+    public var owner: Account;
 
 
     /** Create User object reference. **/
-    public var creator(default, null): User;
+    public var creator: User;
 
 
     /** Contract creation date. **/
-    public var created(default, null): String;
+    public var created: String;
 
 
     /** Contract status update date. **/
-    public var updated(default, null): String;
+    public var updated: String;
 
 
     /** Contract enrollment date. **/
-    public var enrolled(default, null): String;
+    public var enrolled: String;
 
 
     /** Contract version creation date. **/
-    public var versionCreated(default, null): String;
+    public var versionCreated: String;
 
 
     /** Activation informacion. **/
-    public var activation(default, null): Activation;
+    public var activation: Activation;
 
 
     /** Signee User object reference, who signed the contract. **/
-    public var signee(default, null): User;
+    public var signee: User;
 
 
     public function new() {

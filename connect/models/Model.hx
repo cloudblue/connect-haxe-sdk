@@ -8,9 +8,6 @@ import haxe.ds.StringMap;
     Base model class.
 **/
 class Model {
-    private var fieldClassNames(default, null): StringMap<String>;
-
-
     /** @returns A Haxe dynamic object with a shallow copy of `this` model's properties. **/
     public function toObject(): Dynamic {
         var obj = {};
@@ -148,4 +145,7 @@ class Model {
 
 
     public function new() {}
+
+
+    private var fieldClassNames: StringMap<String>;
 }

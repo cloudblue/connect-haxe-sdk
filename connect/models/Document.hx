@@ -6,9 +6,9 @@ package connect.models;
 **/
 class Document extends Model {
     /** Document title. **/
-    public var title(default, null): String;
+    public var title: String;
 
 
     /* Document URL. */
-    public var url(default, null): String;
+    public var url: String;
 }

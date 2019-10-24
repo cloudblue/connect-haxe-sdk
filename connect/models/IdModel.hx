@@ -6,5 +6,5 @@ package connect.models;
 **/
 class IdModel extends Model {
     /** Id of the model. **/
-    public var id(default, null): String;
+    public var id: String;
 }

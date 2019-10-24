@@ -6,29 +6,29 @@ package connect.models;
 **/
 class ContactInfo extends Model {
     /** Street address, first line. **/
-    public var addressLine1(default, null): String;
+    public var addressLine1: String;
 
 
     /** Street address, second line. **/
-    public var addressLine2(default, null): String;
+    public var addressLine2: String;
 
 
     /** Country code. **/
-    public var country(default, null): String;
+    public var country: String;
 
 
     /** State name. **/
-    public var state(default, null): String;
+    public var state: String;
 
 
     /** City name. **/
-    public var city(default, null): String;
+    public var city: String;
 
 
     /** Postal ZIP code. **/
-    public var postalCode(default, null): String;
+    public var postalCode: String;
 
 
     /** Person of contact. **/
-    public var contact(default, null): Contact;
+    public var contact: Contact;
 }

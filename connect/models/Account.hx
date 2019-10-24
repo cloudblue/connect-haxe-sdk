@@ -8,30 +8,30 @@ import connect.api.QueryParams;
 **/
 class Account extends IdModel {
     /** Name of account object. **/
-    public var name(default, null): String;
+    public var name: String;
 
 
     /** Type of the account object ("vendor" or "provider"). **/
-    public var type(default, null): String;
+    public var type: String;
 
 
     /** Contains the `created` event, with the date when the account object was created. **/
-    public var events(default, null): Events;
+    public var events: Events;
 
 
     /** Brand id of the account object. **/
-    public var brand(default, null): String;
+    public var brand: String;
 
 
     /** External id of the account object. **/
-    public var externalId(default, null): String;
+    public var externalId: String;
 
 
     /**
         Whether the account has the ability to create Sourcing Agreements (is HyperProvider),
         defaults to false.
     **/
-    public var sourcing(default, null): Bool;
+    public var sourcing: Bool;
 
 
     /**

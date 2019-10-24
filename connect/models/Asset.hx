@@ -36,51 +36,51 @@ class Asset extends IdModel {
         - terminated: Asset becomes terminated once the 'cancel' request type is fulfilled.
         - suspended: Asset becomes suspended once 'suspend' request type is fulfilled.
     **/
-    public var status(default, null): String;
+    public var status: String;
 
 
     /** Identification for asset object on eCommerce. **/
-    public var externalId(default, null): String;
+    public var externalId: String;
 
 
     /** Id of asset in eCommerce system. **/
-    public var externalUid(default, null): String;
+    public var externalUid: String;
 
 
     /** Name of asset. **/
-    public var externalName(default, null): String;
+    public var externalName: String;
 
 
     /** Product object reference. **/
-    public var product(default, null): Product;
+    public var product: Product;
 
 
     /** Connection object reference. **/
-    public var connection(default, null): Connection;
+    public var connection: Connection;
 
 
     /** Contract object reference. **/
-    public var contract(default, null): Contract;
+    public var contract: Contract;
 
 
     /** Marketplace object reference. **/
-    public var marketplace(default, null): Marketplace;
+    public var marketplace: Marketplace;
 
 
     /** Collection of product parameters. **/
-    public var params(default, null): Collection<Param>;
+    public var params: Collection<Param>;
 
 
     /** Supply chain accounts. **/
-    public var tiers(default, null): Tiers;
+    public var tiers: Tiers;
 
 
     /** Collection of asset product items. **/
-    public var items(default, null): Collection<Item>;
+    public var items: Collection<Item>;
 
 
     /** Product and Marketplace Configuration Phase Parameter. **/
-    public var configuration(default, null): Configuration;
+    public var configuration: Configuration;
 
 
     /**

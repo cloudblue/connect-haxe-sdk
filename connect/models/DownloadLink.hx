@@ -6,12 +6,12 @@ package connect.models;
 **/
 class DownloadLink extends Model {
     /** Link title. **/
-    public var title(default, null): String;
+    public var title: String;
 
 
     /** Link URL. **/
-    public var url(default, null): String;
+    public var url: String;
 
     /** Link visibility. One of: admin, user. **/
-    public var visibleFor(default, null): String;
+    public var visibleFor: String;
 }

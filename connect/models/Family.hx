@@ -6,5 +6,5 @@ package connect.models;
 **/
 class Family extends IdModel {
     /** Family name. **/
-    public var name(default, null): String;
+    public var name: String;
 }
