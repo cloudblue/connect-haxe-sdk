@@ -20,8 +20,8 @@ class FulfillmentApiImpl implements IFulfillmentApi {
     }
 
 
-    public function createRequest(): Dynamic {
-        return Env.getApiClient().post(REQUESTS_PATH);
+    public function createRequest(body: String): Dynamic {
+        return Env.getApiClient().post(REQUESTS_PATH, null, null, body);
     }
 
 

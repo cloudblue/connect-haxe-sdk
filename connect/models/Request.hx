@@ -112,13 +112,21 @@ class Request extends IdModel {
 
 
     /**
-        Creates a new Request.
+        Creates a new Request, based on the data of the Request provided. The given Request is only
+        required to have a value in the following fields:
+
+        - type
+        - asset.externalUid
+        - asset.items
+        - asset.product.id
+        - asset.tiers
+        - marketplace.id
 
         @returns The created Request.
     **/
-    public static function create(): Request {
+    public static function create(request: Request): Request {
         try {
-            var request = Env.getFulfillmentApi().createRequest();
+            var request = Env.getFulfillmentApi().createRequest(request.toString());
             return Model.parse(Request, request);
         } catch (ex: Dynamic) {
             return null;

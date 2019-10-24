@@ -4,7 +4,7 @@ package connect.api;
 interface IFulfillmentApi {
     public function listRequests(filters: QueryParams): Array<Dynamic>;
     public function getRequest(id: String): Dynamic;
-    public function createRequest(): Dynamic;
+    public function createRequest(body: String): Dynamic;
     public function updateRequest(id: String, request: String): Dynamic;
     public function changeRequestStatus(id: String, status: String, data: String): Dynamic;
     public function assignRequest(id: String, assignee: String): Dynamic;
