@@ -28,8 +28,8 @@ class FulfillmentApiMock extends Mock implements IFulfillmentApi {
     }
 
 
-    public function createRequest(): Dynamic {
-        this.calledFunction('createRequest', []);
+    public function createRequest(body: String): Dynamic {
+        this.calledFunction('createRequest', [body]);
         return Reflect.copy(this.list[0]);
     }
 

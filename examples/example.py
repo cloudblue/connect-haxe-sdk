@@ -21,7 +21,8 @@ def trace_request_data(p, request_id):
         + ' : ' + p.getData('status'))
 
 def approve_request(p, _):
-    p.getRequest().approveByTemplate('TL-000-000-000')
+    pass
+    # p.getRequest().approveByTemplate('TL-000-000-000')
     # p.getRequest().approveByTile('Markdown text')
 
 

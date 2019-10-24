@@ -64,7 +64,7 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testCreate() {
         // Check subject
-        var request = Request.create();
+        var request = Request.create(new Request());
         assertTrue(request != null);
         assertEquals('PR-5852-1608-0000', request.id);
 
@@ -72,8 +72,19 @@ class RequestTest extends haxe.unit.TestCase {
         var apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('createRequest'));
         assertEquals(
-            [].toString(),
+            [new Request()].toString(),
             apiMock.callArgs('createRequest', 0).toString());
+    }
+
+
+    public function testCreateNull() {
+        // Check subject
+        var request = Request.create(null);
+        assertTrue(request == null);
+
+        // Check mocks
+        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        assertEquals(0, apiMock.callCount('createRequest'));
     }
 
 
