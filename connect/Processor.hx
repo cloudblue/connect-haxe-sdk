@@ -35,8 +35,8 @@ class Processor {
                 modelClass = untyped Type.resolveClass(cast(modelClass, String));
             default:
         }
-        
-        Env.getLogger().openSection('Running processor on ' + getDate());
+
+        Env.getLogger().openSection('Running ${this.getClassName()} on ' + getDate());
 
         // List requests
         Env.getLogger().openSection('Listing requests on ' + getDate());
@@ -65,8 +65,14 @@ class Processor {
             var lastRequestStr = '';
             var lastDataStr = '{}';
 
-
-            Env.getLogger().openSection('Processing request "${this.model.id}" on ' + getDate());
+            if (this.getRequest() != null) {
+                Env.getLogger().openSection('Processing request "' + this.model.id
+                    + '" for asset "' + this.getRequest().asset.id
+                    + '" on ' + getDate());
+            } else {
+                Env.getLogger().openSection('Processing request "${this.model.id}" on '
+                    + getDate());
+            }
 
             // For Fulfillment requests, check if we must skip due to pending migration
             if (this.getRequest() != null && this.getRequest().needsMigration()) {
@@ -166,8 +172,19 @@ class Processor {
     }
 
     
+    /**
+        This can be called within your steps to get the request being processed, as long as it
+        is of the `Request` type.
+
+        @returns The Fulfillment `Request` being processed, or `null` if current request is not of
+        Fulfillment api.
+    **/
     public function getRequest(): Request {
-        return cast(this.model, Request);
+        try {
+            return cast(this.model, Request);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
 
@@ -399,6 +416,19 @@ class Processor {
         }
 
         Reflect.callMethod(Env.getLogger(), func, ['']);
+    }
+
+
+    private function getClassName(): String {
+    #if js
+        return js.Syntax.code("{0}.constructor.name", this);
+    #elseif php
+        return php.Syntax.code("get_class({0})", this);
+    #elseif python
+        return python.Syntax.code("type({0}).__name__", this);
+    #else
+        return Type.getClassName(Type.getClass(this));
+    #end
     }
 }
 
