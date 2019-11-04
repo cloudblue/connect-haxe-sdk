@@ -12,20 +12,19 @@ Other platforms that will be added in the future:
 * C++.
 * C#.
 
-In order to compile the SDK, you must have Haxe 4.0 or higher installed on your machine. When this README was last updated, Haxe 4.0 was not officialy released, so installing from the official repositories of your distro will get you Haxe 3:
+In order to compile the SDK, you must have Haxe 4.0 or higher installed on your machine. On Debian-based Linux distributions, such as Ubuntu and Mint, Haxe can be installed by typing the following on a terminal:
 
 ```shell script
 $ sudo apt install haxe
 ```
 
-Haxelib and Neko are installed by default (you need Neko to run the unit tests) with this procedure, but while Haxe 4.0 is released to your distribution, you'll have to follow the installation instructions on the [Haxe webpage](https://haxe.org/).
+Haxelib and Neko are installed by default (you need Neko to run the unit tests) with this procedure. At the time of writing this README, Haxe 4.0 has not yet been published to the official repositories nor Haxe's PPA, so in the meantime you'll have to follow the installation instructions on the [Haxe webpage](https://haxe.org/). Using this procedure, Neko has to be installed separately.
 
 You need to install some libraries to build the SDK using Haxelib:
 
 ```shell script
 $ haxelib install dox
-$ haxelib install hxcpp
-$ haxelib install hxcs
+$ haxelib install hx3compat
 $ haxelib install hxjava
 $ haxelib install hxnodejs
 ```
@@ -45,6 +44,17 @@ $ haxe example.hxml
 ```
 
 This translates the file `examples/Example.hx` to PHP and runs it.
+
+To run examples written in Java, JavaScript, PHP or Python, respectively run the following on a terminal:
+
+```shell script
+$ ./example_java.sh
+$ ./example_js.sh
+$ ./example_php.sh
+$ ./example_py.sh
+```
+
+The Python version automatically creates a Python3 virtual environment with venv on the `_build` dir.
 
 To generate the documentation, type:
 

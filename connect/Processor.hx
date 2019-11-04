@@ -421,7 +421,11 @@ class Processor {
 
     private function getClassName(): String {
     #if js
-        return js.Syntax.code("{0}.constructor.name", this);
+        final constructorName = js.Syntax.code("{0}.constructor.name", this);
+        final className = (constructorName != 'Object')
+            ? constructorName
+            : Type.getClassName(Type.getClass(this));
+        return className;
     #elseif php
         return php.Syntax.code("get_class({0})", this);
     #elseif python
