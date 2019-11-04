@@ -92,9 +92,14 @@ class Processor {
                         input = stepData.input;
                         var fields: Array<String> = Reflect.fields(stepData.data);
                         for (field in fields) {
-                            var value = Reflect.field(stepData.data, field);
-                            var parsedData = this.parseSavedData(field, value);
-                            this.setData(field, parsedData);
+                            final fieldSplit = field.split('::');
+                            final fieldName = fieldSplit.slice(0, -1).join('::');
+                            final fieldClass = fieldSplit.slice(-1)[0];
+                            final value = Reflect.field(stepData.data, field);
+                            final parsedValue = (fieldClass != '')
+                                ? connect.models.Model.parse(Type.resolveClass(fieldClass), value)
+                                : value;
+                            this.setData(fieldName, parsedValue);
                         }
                     }
                     Env.getLogger().info('Resuming request from step ${firstIndex + 1}');
@@ -139,10 +144,18 @@ class Processor {
                                     this.getRequest().asset.getParamById(STEP_PARAM_ID) != null) {
                                 Env.getLogger().info('Saving step data.');
                                 var param = this.getRequest().asset.getParamById(STEP_PARAM_ID);
+                                final data: Dynamic = {};
+                                for (key in this.data.keys()) {
+                                    final value = this.data.get(key);
+                                    final className = Std.is(value, connect.models.Model)
+                                        ? Type.getClassName(Type.getClass(value))
+                                        : '';
+                                    Reflect.setField(data, '$key::$className', value);
+                                }
                                 param.value = haxe.Json.stringify({
                                     current_step: index,
                                     input: input,
-                                    data: this.data.toObject(),
+                                    data: data,
                                 });
                                 try {
                                     this.getRequest().update();
@@ -348,11 +361,6 @@ class Processor {
     private function skip(saveStep: Bool): Void {
         this.skip_ = true;
         this.saveStep = saveStep;
-    }
-
-
-    private function parseSavedData(key: String, value: Dynamic): Dynamic {
-        return value;
     }
 
 
