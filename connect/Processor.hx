@@ -1,7 +1,9 @@
 package connect;
 
+import haxe.Json;
 import connect.api.QueryParams;
 import connect.models.IdModel;
+import connect.models.Param;
 import connect.models.Request;
 import haxe.Constraints.Function;
 
@@ -85,21 +87,24 @@ class Processor {
                         && this.getRequest().asset.getParamById(STEP_PARAM_ID) != null
                         && this.getRequest().asset.getParamById(STEP_PARAM_ID).value != null
                         && this.getRequest().asset.getParamById(STEP_PARAM_ID).value != '') {
-                    var param = this.getRequest().asset.getParamById(STEP_PARAM_ID);
+                    final param = this.getRequest().asset.getParamById(STEP_PARAM_ID);
                     if (param.value != null && Inflection.isJsonObject(param.value)) {
-                        var stepData = haxe.Json.parse(param.value);
-                        firstIndex = stepData.current_step;
-                        input = stepData.input;
-                        var fields: Array<String> = Reflect.fields(stepData.data);
-                        for (field in fields) {
-                            final fieldSplit = field.split('::');
-                            final fieldName = fieldSplit.slice(0, -1).join('::');
-                            final fieldClass = fieldSplit.slice(-1)[0];
-                            final value = Reflect.field(stepData.data, field);
-                            final parsedValue = (fieldClass != '')
-                                ? connect.models.Model.parse(Type.resolveClass(fieldClass), value)
-                                : value;
-                            this.setData(fieldName, parsedValue);
+                        final storeData = haxe.Json.parse(param.value);
+                        if (Reflect.hasField(storeData, this.model.id)) {
+                            final stepData = Reflect.field(storeData, this.model.id);
+                            firstIndex = stepData.current_step;
+                            input = stepData.input;
+                            final fields: Array<String> = Reflect.fields(stepData.data);
+                            for (field in fields) {
+                                final fieldSplit = field.split('::');
+                                final fieldName = fieldSplit.slice(0, -1).join('::');
+                                final fieldClass = fieldSplit.slice(-1)[0];
+                                final value = Reflect.field(stepData.data, field);
+                                final parsedValue = (fieldClass != '')
+                                    ? connect.models.Model.parse(Type.resolveClass(fieldClass), value)
+                                    : value;
+                                this.setData(fieldName, parsedValue);
+                            }
                         }
                     }
                     Env.getLogger().info('Resuming request from step ${firstIndex + 1}');
@@ -136,14 +141,14 @@ class Processor {
                     }
 
                     if (this.skip_) {
-                        if (this.saveStep) {
+                        if (this.getRequest() != null && this.saveStep) {
                             Env.getLogger().info('Skipping request.');
 
                             // Save step data if request supports it
                             if (this.getRequest() != null &&
                                     this.getRequest().asset.getParamById(STEP_PARAM_ID) != null) {
                                 Env.getLogger().info('Saving step data.');
-                                var param = this.getRequest().asset.getParamById(STEP_PARAM_ID);
+                                
                                 final data: Dynamic = {};
                                 for (key in this.data.keys()) {
                                     final value = this.data.get(key);
@@ -152,11 +157,17 @@ class Processor {
                                         : '';
                                     Reflect.setField(data, '$key::$className', value);
                                 }
-                                param.value = haxe.Json.stringify({
+
+                                final storeData: Dynamic = {};
+                                Reflect.setField(storeData, this.model.id, {
                                     current_step: index,
                                     input: input,
                                     data: data,
                                 });
+
+                                final param = this.getRequest().asset.getParamById(STEP_PARAM_ID);
+                                param.value = haxe.Json.stringify(storeData);
+
                                 try {
                                     this.getRequest().update();
                                 } catch (ex: Dynamic) {
@@ -224,14 +235,10 @@ class Processor {
         the updated status.
     **/
     public function approveByTemplate(id: String): Request {
-        var request = this.getRequest();
+        final request = this.getRequest();
         if (request != null) {
-            var param = request.asset.getParamById(STEP_PARAM_ID);
-            if (param != null) {
-                param.value = '';
-            }
-            request.update();
-            var result = request.approveByTemplate(id);
+            removeStepData(request);
+            final result = request.approveByTemplate(id);
             this.skip(false);
             return result;
         } else {
@@ -252,14 +259,10 @@ class Processor {
         the updated status.
     **/
     public function approveByTile(text: String): Request {
-        var request = this.getRequest();
+        final request = this.getRequest();
         if (request != null) {
-            var param = request.asset.getParamById(STEP_PARAM_ID);
-            if (param != null) {
-                param.value = '';
-            }
-            request.update();
-            var result = request.approveByTile(text);
+            removeStepData(request);
+            final result = request.approveByTile(text);
             this.skip(false);
             return result;
         } else {
@@ -361,6 +364,19 @@ class Processor {
     private function skip(saveStep: Bool): Void {
         this.skip_ = true;
         this.saveStep = saveStep;
+    }
+
+
+    private static function removeStepData(request: Request): Void {
+        final param = request.asset.getParamById(STEP_PARAM_ID);
+        if (param != null && param.value != null && Inflection.isJsonObject(param.value)) {
+            final storeData = Json.parse(param.value);
+            if (Reflect.hasField(storeData, request.id)) {
+                Reflect.deleteField(storeData, request.id);
+            }
+            param.value = Json.stringify(storeData);
+            request.update();
+        }
     }
 
 
