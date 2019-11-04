@@ -11,12 +11,30 @@ import haxe.Constraints.Function;
 #if java
 typedef ProcessorStepFunc = connect.native.JavaBiFunction<Processor, String, String>;
 #else
+@:dox(hide)
 typedef ProcessorStepFunc = (Processor, String) -> String;
 #end
 
 
 /**
-    In development. Do not use by now...
+    The Processor helps automating the task of processing a list of requests, and updates the log
+    automatically with all operations performed.
+
+    A Processor splits the processing of a request into a series of steps, where each step is a
+    function that receives as arguments the processor itself (so you can subclass Processor and
+    add steps as instance methods) and the value that was returned from the previous step.
+
+    Once all steps have been defined, you must call the `run` method to process all requests
+    of a specific type.
+
+    If an exception is thrown on any step, the rest of the steps will be skipped, and the next
+    time the Processor runs, the request will be processed again. If the `Asset` of the request has
+    a parameter with the id "__sdk_processor_step" (without quotes), the data about the state of
+    the processing will be stored in Connect, and when the request is processed again, it will
+    resume from the step that failed, keeping all the data that was processed up until that point.
+
+    You can check the `examples` folder of the SDK to check how to use the Processor in the
+    supported target languages.
 **/
 class Processor {
     public function new() {
@@ -24,12 +42,31 @@ class Processor {
     }
 
 
+    /**
+        Defines a step of `this` Processor. Steps are executed sequentially by the Processor
+        when its `run` method is invoked.
+
+        @param description Description of what the step does, so the Processor can indicate it
+        in the log 
+        @param func The function to execute for this step. It can return a value that will be
+        passed to the next step, and the function receives two arguments: The first one is the
+        Processor itself (so you can subclass Processor and add steps as instance methods), and
+        the second one is the value returned from the previous step.
+        @returns `this` Processor, so calls to this method can be chained.
+    **/
     public function step(description: String, func: ProcessorStepFunc): Processor {
         this.steps.push(new Step(description, func));
         return this;
     }
 
 
+    /**
+        Runs `this` Processor, executing in sequence all the steps defined for it.
+
+        @param modelClass The class that represents the type of request to be parsed. It must be a
+        subclass of `Model` which has a `list` method, like `Request` or `TierConfig`.
+        @param filters Filters to be used for listing requests.
+    **/
     public function run<T>(modelClass: Class<T>, filters: QueryParams): Void {
         // On some targets, a string is received as modelClass, so obtain the real class from it
         switch (Type.typeof(modelClass)) {
@@ -212,12 +249,32 @@ class Processor {
     }
 
 
+    /**
+        Steps can pass data to the next one using the return value, but this data could be lost if
+        we need to access it several steps later. For this reason, every Processor has a dictionary
+        of keys and values to store custom data, that can be set with this method and retreived
+        later on with `getData`. It is VERY important for the correct function of the Processor
+        to only rely on the data set using this mechanism, and NEVER add additional properties
+        when creating a subclass of Processor, since this data would not be automatically saved
+        to support resuming in case processing fails.
+
+        @param key The name of the key that will be used to identify this data.
+        @param value The value to store. It is recommended to use primitive types, strings,
+        instances of `Model`, or other classes that implement a `toString` method so they
+        can be serialized.
+        @returns `this` Processor, so calls to this method can be chained.
+    **/
     public function setData(key: String, value: Dynamic): Processor {
         this.data.set(key, value);
         return this;
     }
     
     
+    /**
+        Retrieves Processor data previously set with `setData`.
+        @param key The name of the key that identifies the data to be obtained.
+        @returns The value of the data, or `null` if the key does not exist.
+    **/
     public function getData(key: String): Dynamic {
         return this.data.get(key);
     }

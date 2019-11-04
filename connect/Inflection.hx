@@ -5,6 +5,7 @@ package connect;
     This class provides static methods for string transformation. For example,
     to change casing (snake_case, camelCase, UpperCamelCase), or to singularize a word.
 **/
+@:dox(hide)
 class Inflection {
     /**
         Returns a string with the given text converted from snake_case to camelCase.

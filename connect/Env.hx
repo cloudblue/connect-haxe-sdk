@@ -22,7 +22,7 @@ import connect.api.impl.GeneralApiImpl;
     the `connect.api.IApiClient` interface.
 
     Since these dependencies must be globally available, the `Env` class contains static
-    method to obtain the default instances of these clases from anywhere. To minimize the
+    methods to obtain the default instances of these classes from anywhere. To minimize the
     side-effects that can be caused by changes in the values of global objects in a program,
     all environment objects are immutable, providing a side-effect free context for the program
     to run.
@@ -31,6 +31,9 @@ import connect.api.impl.GeneralApiImpl;
     are requested. In order to provide the connector configuration, a call to
     `Env.initConfig` or `Env.loadConfig` can be provided at the top of the program.
     Otherwise, the configuration will be automatically loaded from the "config.json" file.
+
+    Likewise, the `Logger` can be initialized with a call to `Env.initLogger`, assuming it has not
+    been done yet.
 
     Many of the objects returned by this class are defined in a public interface, with a default
     implementation provided by the environment. This is because when unit testing, these classes
@@ -170,7 +173,7 @@ class Env {
 
     /**
         @returns The Fulfillment API instance, used to make all fulfillment requests to the
-            platform.
+        platform.
         @throws String If a class implementing the IFulfillmentApi interface cannot be instanced.
     **/
     public static function getFulfillmentApi() : IFulfillmentApi {
