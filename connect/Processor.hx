@@ -3,7 +3,6 @@ package connect;
 import haxe.Json;
 import connect.api.QueryParams;
 import connect.models.IdModel;
-import connect.models.Param;
 import connect.models.Request;
 import haxe.Constraints.Function;
 
@@ -96,65 +95,29 @@ class Processor extends Base {
         
         // Process each request
         for (model in list) {
-            this.model = model;
-            this.data = new Dictionary();
-            this.abortRequested = false;
-            this.abortMessage = null;
-            var input: String = null;
-            var lastRequestStr = '';
-            var lastDataStr = '{}';
-
-            if (this.getRequest() != null) {
-                Env.getLogger().openSection('Processing request "' + this.model.id
-                    + '" for asset "' + this.getRequest().asset.id
-                    + '" on ' + getDate());
-            } else {
-                Env.getLogger().openSection('Processing request "${this.model.id}" on '
-                    + getDate());
-            }
-
-            // For Fulfillment requests, check if we must skip due to pending migration
-            if (this.getRequest() != null && this.getRequest().needsMigration()) {
-                Env.getLogger().info('Skipping request because it is pending migration.');
-            } else {
-                var firstIndex = 0;
-
+            if (this.prepareAndOpenLogSection(model)) {
                 // If there is stored step data, set data and jump to that step
-                if (this.getRequest() != null
-                        && this.getRequest().asset.getParamById(STEP_PARAM_ID) != null
-                        && this.getRequest().asset.getParamById(STEP_PARAM_ID).value != null
-                        && this.getRequest().asset.getParamById(STEP_PARAM_ID).value != '') {
-                    final param = this.getRequest().asset.getParamById(STEP_PARAM_ID);
-                    if (param.value != null && Inflection.isJsonObject(param.value)) {
-                        final storeData = haxe.Json.parse(param.value);
-                        if (Reflect.hasField(storeData, this.model.id)) {
-                            final stepData = Reflect.field(storeData, this.model.id);
-                            firstIndex = stepData.current_step;
-                            input = stepData.input;
-                            final fields: Array<String> = Reflect.fields(stepData.data);
-                            for (field in fields) {
-                                final fieldSplit = field.split('::');
-                                final fieldName = fieldSplit.slice(0, -1).join('::');
-                                final fieldClass = fieldSplit.slice(-1)[0];
-                                final value = Reflect.field(stepData.data, field);
-                                final parsedValue = (fieldClass != '')
-                                    ? connect.models.Model.parse(Type.resolveClass(fieldClass), value)
-                                    : value;
-                                this.setData(fieldName, parsedValue);
-                            }
-                        }
-                    }
-                    Env.getLogger().info('Resuming request from step ${firstIndex + 1}.');
+                final stepParam = (this.getRequest() != null)
+                    ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
+                    : null;
+                final stepData = StepStorage.load(this.model.id, stepParam);
+                var input = stepData.input;
+                this.data = stepData.data;
+                if (stepData.firstIndex != 0) {
+                    Env.getLogger().info('Resuming request from step ${stepData.firstIndex + 1}.');
                 }
 
                 // Process each step
-                for (index in firstIndex...this.steps.length) {
-                    var step = this.steps[index];
-                    var requestStr = Inflection.beautify(this.model.toString(),
+                var lastRequestStr = '';
+                var lastDataStr = '{}';
+                for (index in stepData.firstIndex...this.steps.length) {
+                    final step = this.steps[index];
+                    final requestStr = Inflection.beautify(this.model.toString(),
                         Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
-                    var dataStr = Std.string(this.data);
+                    final dataStr = Std.string(this.data);
                     
                     Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
+                    
                     this.logStepData(Env.getLogger().info, Inflection.beautify(input, false),
                         requestStr, dataStr, lastRequestStr, lastDataStr);
 
@@ -179,40 +142,23 @@ class Processor extends Base {
 
                     if (this.abortRequested) {
                         if (this.abortMessage == null) {
+                            final param = (this.getRequest() != null)
+                                ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
+                                : null;
+                            
                             // Save step data if request supports it
-                            if (this.getRequest() != null &&
-                                    this.getRequest().asset.getParamById(STEP_PARAM_ID) != null) {
-                                Env.getLogger().info('Skipping request. Saving step data.');
-                                
-                                final data: Dynamic = {};
-                                for (key in this.data.keys()) {
-                                    final value = this.data.get(key);
-                                    final className = Std.is(value, connect.models.Model)
-                                        ? Type.getClassName(Type.getClass(value))
-                                        : '';
-                                    Reflect.setField(data, '$key::$className', value);
-                                }
-
-                                final storeData: Dynamic = {};
-                                Reflect.setField(storeData, this.model.id, {
-                                    current_step: index,
-                                    input: input,
-                                    data: data,
-                                });
-
-                                final param = this.getRequest().asset.getParamById(STEP_PARAM_ID);
-                                param.value = haxe.Json.stringify(storeData);
-
-                                try {
-                                    this.getRequest().update();
-                                } catch (ex: Dynamic) {
-                                    Env.getLogger().error('```');
-                                    Env.getLogger().error(Std.string(ex));
-                                    Env.getLogger().error('```');
-                                    Env.getLogger().error('');
-                                }
-                            } else {
-                                Env.getLogger().info('Skipping request.');
+                            Env.getLogger().info('Skipping request. Trying to save step data.');
+                            final saveResult = StepStorage.save(this.model,
+                                new StepData(index, input, this.data),
+                                param,
+                                Reflect.field(model, 'update'));
+                            switch (saveResult) {
+                                case StoreConnect:
+                                    Env.getLogger().info('Step data saved in Connect.');
+                                case StoreLocal:
+                                    Env.getLogger().info('Step data saved locally.');
+                                case StoreFail:
+                                    Env.getLogger().info('Step data could not be saved.');
                             }
                         } else {
                             if (this.abortMessage != '') {
@@ -223,15 +169,14 @@ class Processor extends Base {
                         Env.getLogger().closeSection();
                         break;
                     } else {
-                        Env.getLogger().closeSection();
-
                         lastRequestStr = requestStr;
                         lastDataStr = dataStr;
+                        Env.getLogger().closeSection();
                     }
                 }
-            }
 
-            Env.getLogger().closeSection();
+                Env.getLogger().closeSection();
+            }
         }
         Env.getLogger().closeSection();
     }
@@ -416,6 +361,32 @@ class Processor extends Base {
     private var data: Dictionary;
     private var abortRequested: Bool;
     private var abortMessage: String;
+
+
+    private function prepareAndOpenLogSection(model: IdModel): Bool {
+        this.model = model;
+
+        // Open log section
+        if (this.getRequest() != null) {
+            Env.getLogger().openSection('Processing request "' + this.model.id
+                + '" for asset "' + this.getRequest().asset.id
+                + '" on ' + getDate());
+        } else {
+            Env.getLogger().openSection('Processing request "${this.model.id}" on '
+                + getDate());
+        }
+
+        // For Fulfillment requests, check if we must skip due to pending migration
+        if (this.getRequest() != null && this.getRequest().needsMigration()) {
+            Env.getLogger().info('Skipping request because it is pending migration.');
+            Env.getLogger().closeSection();
+            return false;
+        } else {
+            this.abortRequested = false;
+            this.abortMessage = null;
+            return true;
+        }
+    }
 
 
     /**
