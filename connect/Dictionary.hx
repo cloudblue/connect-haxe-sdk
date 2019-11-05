@@ -18,11 +18,18 @@ class Dictionary extends Base {
     }
 
 
+    /**
+        Removes all keys from `this` Dictionary.
+    **/
     public function clear(): Void {
         return map.clear();
     }
 
 
+    /**
+        Returns a shallow copy of `this` Dictionary.
+        The order of values is undefined.
+    **/
     public function copy(): Dictionary {
         final cp = new Dictionary();
         for (key in this.keys()) {
@@ -32,44 +39,48 @@ class Dictionary extends Base {
     }
 
 
+    /**
+        Returns true if `key` has a mapping, false otherwise.
+        If `key` is `null`, the result is unspecified.
+    **/
     public function exists(key: String): Bool {
         return map.exists(key);
     }
 
 
     /**
-		Returns the current mapping of `key` as an Object.
+        Returns the current mapping of `key` as an Object.
 
-		If no such mapping exists, null is returned.
+        If no such mapping exists, null is returned.
 
-		Note that a check like `dict.get(key) == null` can hold for two reasons:
+        Note that a check like `dict.get(key) == null` can hold for two reasons:
 
-		1. The dictionary has no mapping for `key`
-		2. The dictionary has a mapping with a value of `null`
+        1. The dictionary has no mapping for `key`
+        2. The dictionary has a mapping with a value of `null`
 
-		If it is important to distinguish these cases, `exists()` should be used.
+        If it is important to distinguish these cases, `exists()` should be used.
         
-		If `key` is null, the result is unspecified.
-	**/
+        If `key` is null, the result is unspecified.
+    **/
     public function get(key: String): Dynamic {
         return map.get(key);
     }
 
 
     /**
-		Returns the current mapping of `key` as a Bool.
+        Returns the current mapping of `key` as a Bool.
 
-		If no such mapping exists, false is returned.
+        If no such mapping exists, false is returned.
 
-		Note that a check like `dict.get(key) == false` can hold for two reasons:
+        Note that a check like `dict.get(key) == false` can hold for two reasons:
 
-		1. The dictionary has no mapping for `key`
-		2. The dictionary has a mapping with a value of `false`
+        1. The dictionary has no mapping for `key`
+        2. The dictionary has a mapping with a value of `false`
 
-		If it is important to distinguish these cases, `exists()` should be used.
+        If it is important to distinguish these cases, `exists()` should be used.
 
-		If `key` is null, the result is unspecified.
-	**/
+        If `key` is null, the result is unspecified.
+    **/
     public function getBool(key: String): Bool {
         if (this.exists(key)) {
             return this.get(key);
@@ -80,19 +91,19 @@ class Dictionary extends Base {
 
 
     /**
-		Returns the current mapping of `key` as an Int.
+        Returns the current mapping of `key` as an Int.
 
-		If no such mapping exists, 0 is returned.
+        If no such mapping exists, 0 is returned.
 
-		Note that a check like `dict.get(key) == 0` can hold for two reasons:
+        Note that a check like `dict.get(key) == 0` can hold for two reasons:
 
-		1. The dictionary has no mapping for `key`
-		2. The dictionary has a mapping with a value of `0`
+        1. The dictionary has no mapping for `key`
+        2. The dictionary has a mapping with a value of `0`
 
-		If it is important to distinguish these cases, `exists()` should be used.
+        If it is important to distinguish these cases, `exists()` should be used.
         
-		If `key` is null, the result is unspecified.
-	**/
+        If `key` is null, the result is unspecified.
+    **/
     public function getInt(key: String): Int {
         if (this.exists(key)) {
             return this.get(key);
@@ -103,19 +114,19 @@ class Dictionary extends Base {
 
 
     /**
-		Returns the current mapping of `key` as a Float.
+        Returns the current mapping of `key` as a Float.
 
-		If no such mapping exists, 0.0 is returned.
+        If no such mapping exists, 0.0 is returned.
 
-		Note that a check like `dict.get(key) == 0.0` can hold for two reasons:
+        Note that a check like `dict.get(key) == 0.0` can hold for two reasons:
 
-		1. The dictionary has no mapping for `key`
-		2. The dictionary has a mapping with a value of `0.0`
+        1. The dictionary has no mapping for `key`
+        2. The dictionary has a mapping with a value of `0.0`
 
-		If it is important to distinguish these cases, `exists()` should be used.
+        If it is important to distinguish these cases, `exists()` should be used.
         
-		If `key` is null, the result is unspecified.
-	**/
+        If `key` is null, the result is unspecified.
+    **/
     public function getFloat(key: String): Float {
         if (this.exists(key)) {
             return this.get(key);
@@ -126,19 +137,19 @@ class Dictionary extends Base {
 
 
     /**
-		Returns the current mapping of `key` as a String.
+        Returns the current mapping of `key` as a String.
 
-		If no such mapping exists, an empty string is returned.
+        If no such mapping exists, an empty string is returned.
 
-		Note that a check like `dict.get(key) == ""` can hold for two reasons:
+        Note that a check like `dict.get(key) == ""` can hold for two reasons:
 
-		1. The dictionary has no mapping for `key`
-		2. The dictionary has a mapping with a value of `""`
+        1. The dictionary has no mapping for `key`
+        2. The dictionary has a mapping with a value of `""`
 
-		If it is important to distinguish these cases, `exists()` should be used.
+        If it is important to distinguish these cases, `exists()` should be used.
         
-		If `key` is null, the result is unspecified.
-	**/
+        If `key` is null, the result is unspecified.
+    **/
     public function getString(key: String): String {
         if (this.exists(key)) {
             return this.get(key);
@@ -148,26 +159,39 @@ class Dictionary extends Base {
     }
 
 
+    /**
+        Returns an Iterator over the values of `this` Dictionary.
+        The order of values is undefined.
+    **/
     public function iterator(): Iterator<Dynamic> {
         return map.iterator();
     }
 
 
+    /**
+        Returns an Iterator over the keys of `this` Dictionary.
+        The order of keys is undefined.
+    **/
     public function keys(): Iterator<String> {
         return map.keys();
     }
 
 
+    /**
+        Removes the mapping of `key` and returns true if such a mapping existed,
+        false otherwise.
+        If `key` is `null`, the result is unspecified.
+    **/
     public function remove(key: String): Bool {
         return map.remove(key);
     }
 
 
     /**
-		Maps `key` to a `value`.
-		If `key` already has a mapping, the previous value disappears.
-		If `key` is null, the result is unspecified.
-	**/
+        Maps `key` to a `value`.
+        If `key` already has a mapping, the previous value disappears.
+        If `key` is null, the result is unspecified.
+    **/
     public function set(key: String, value: Dynamic): Dictionary {
         map.set(key, value);
         return this;
@@ -175,45 +199,49 @@ class Dictionary extends Base {
 
 
     /**
-		Maps `key` to a Bool `value`.
-		If `key` already has a mapping, the previous value disappears.
-		If `key` is null, the result is unspecified.
-	**/
+        Maps `key` to a Bool `value`.
+        If `key` already has a mapping, the previous value disappears.
+        If `key` is null, the result is unspecified.
+    **/
     public function setBool(key: String, x: Bool): Dictionary {
         return this.set(key, x);
     }
 
 
     /**
-		Maps `key` to an Int `value`.
-		If `key` already has a mapping, the previous value disappears.
-		If `key` is null, the result is unspecified.
-	**/
+        Maps `key` to an Int `value`.
+        If `key` already has a mapping, the previous value disappears.
+        If `key` is null, the result is unspecified.
+    **/
     public function setInt(key: String, x: Int): Dictionary {
         return this.set(key, x);
     }
 
 
     /**
-		Maps `key` to a Float `value`.
-		If `key` already has a mapping, the previous value disappears.
-		If `key` is null, the result is unspecified.
-	**/
+        Maps `key` to a Float `value`.
+        If `key` already has a mapping, the previous value disappears.
+        If `key` is null, the result is unspecified.
+    **/
     public function setFloat(key: String, x: Float): Dictionary {
         return this.set(key, x);
     }
 
 
     /**
-		Maps `key` to a String `value`.
-		If `key` already has a mapping, the previous value disappears.
-		If `key` is null, the result is unspecified.
-	**/
+        Maps `key` to a String `value`.
+        If `key` already has a mapping, the previous value disappears.
+        If `key` is null, the result is unspecified.
+    **/
     public function setString(key: String, x: String): Dictionary {
         return this.set(key, x);
     }
 
 
+    /**
+        Returns a String representation of `this` Dictionary.
+        The exact representation depends on the platform.
+    **/
     public function toString(): String {
         return map.toString();
     }
