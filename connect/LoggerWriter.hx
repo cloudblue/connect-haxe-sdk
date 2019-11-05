@@ -9,7 +9,7 @@ import haxe.ds.ListSort;
 
     The filename can be null if you do not want to write messages to a persistent file.
 **/
-class LoggerWriter {
+class LoggerWriter extends Base {
     public function new() {
         this.filename = null;
         this.file = null;

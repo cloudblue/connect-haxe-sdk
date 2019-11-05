@@ -9,13 +9,52 @@ import haxe.extern.EitherType;
     one type and then retrieved with a different type (for example, `setInt` ... `getObject`), the
     result is unspecified.
 **/
-class Dictionary extends StringMap<Dynamic> {
+class Dictionary extends Base {
     /**
         Creates a new Dictionary.
     **/
     public function new() {
-        super();
+        this.map = new StringMap<Dynamic>();
     }
+
+
+    public function clear(): Void {
+        return map.clear();
+    }
+
+
+    public function copy(): Dictionary {
+        final cp = new Dictionary();
+        for (key in this.keys()) {
+            cp.set(key, this.get(key));
+        }
+        return cp;
+    }
+
+
+    public function exists(key: String): Bool {
+        return map.exists(key);
+    }
+
+
+    /**
+		Returns the current mapping of `key` as an Object.
+
+		If no such mapping exists, null is returned.
+
+		Note that a check like `dict.get(key) == null` can hold for two reasons:
+
+		1. The dictionary has no mapping for `key`
+		2. The dictionary has a mapping with a value of `null`
+
+		If it is important to distinguish these cases, `exists()` should be used.
+        
+		If `key` is null, the result is unspecified.
+	**/
+    public function get(key: String): Dynamic {
+        return map.get(key);
+    }
+
 
     /**
 		Returns the current mapping of `key` as a Bool.
@@ -109,26 +148,29 @@ class Dictionary extends StringMap<Dynamic> {
     }
 
 
+    public function iterator(): Iterator<Dynamic> {
+        return map.iterator();
+    }
+
+
+    public function keys(): Iterator<String> {
+        return map.keys();
+    }
+
+
+    public function remove(key: String): Bool {
+        return map.remove(key);
+    }
+
+
     /**
-		Returns the current mapping of `key` as an Object.
-
-		If no such mapping exists, null is returned.
-
-		Note that a check like `dict.get(key) == null` can hold for two reasons:
-
-		1. The dictionary has no mapping for `key`
-		2. The dictionary has a mapping with a value of `null`
-
-		If it is important to distinguish these cases, `exists()` should be used.
-        
+		Maps `key` to a `value`.
+		If `key` already has a mapping, the previous value disappears.
 		If `key` is null, the result is unspecified.
 	**/
-    public function getObject(key: String): Dynamic {
-        if (this.exists(key)) {
-            return this.get(key);
-        } else {
-            return null;
-        }
+    public function set(key: String, value: Dynamic): Dictionary {
+        map.set(key, value);
+        return this;
     }
 
 
@@ -138,8 +180,7 @@ class Dictionary extends StringMap<Dynamic> {
 		If `key` is null, the result is unspecified.
 	**/
     public function setBool(key: String, x: Bool): Dictionary {
-        this.set(key, x);
-        return this;
+        return this.set(key, x);
     }
 
 
@@ -149,8 +190,7 @@ class Dictionary extends StringMap<Dynamic> {
 		If `key` is null, the result is unspecified.
 	**/
     public function setInt(key: String, x: Int): Dictionary {
-        this.set(key, x);
-        return this;
+        return this.set(key, x);
     }
 
 
@@ -160,8 +200,7 @@ class Dictionary extends StringMap<Dynamic> {
 		If `key` is null, the result is unspecified.
 	**/
     public function setFloat(key: String, x: Float): Dictionary {
-        this.set(key, x);
-        return this;
+        return this.set(key, x);
     }
 
 
@@ -171,19 +210,12 @@ class Dictionary extends StringMap<Dynamic> {
 		If `key` is null, the result is unspecified.
 	**/
     public function setString(key: String, x: String): Dictionary {
-        this.set(key, x);
-        return this;
+        return this.set(key, x);
     }
 
 
-    /**
-		Maps `key` to an Object `value`.
-		If `key` already has a mapping, the previous value disappears.
-		If `key` is null, the result is unspecified.
-	**/
-    public function setObject(key: String, x: Dynamic): Dictionary {
-        this.set(key, x);
-        return this;
+    public function toString(): String {
+        return map.toString();
     }
 
 
@@ -215,6 +247,9 @@ class Dictionary extends StringMap<Dynamic> {
     public static function fromObject(obj: Dynamic): Dictionary {
         return fromObject_r(obj);
     }
+
+
+    private final map: StringMap<Dynamic>;
 
 
     private static function toObject_r(x: Dynamic) : EitherType<Array<Dynamic>, Dynamic> {

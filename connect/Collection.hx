@@ -6,9 +6,9 @@ package connect;
     SDK.
 **/
 #if java
-class Collection<T> implements java.lang.Iterable<T> {
+class Collection<T> extends Base implements java.lang.Iterable<T> {
 #else
-class Collection<T> {
+class Collection<T> extends Base {
 #end
     /**
         Creates a new Collection.

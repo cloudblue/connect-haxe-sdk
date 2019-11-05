@@ -3,7 +3,7 @@ package connect;
 /**
     This class contains the configuration required for communication with the Connect platform.
 **/
-class Config {
+class Config extends Base {
     /**
         Creates a new Config object. You don't normally create objects of this class,
         since the SDK uses the default instance provided by `Env.getConfig()`.

@@ -1,7 +1,7 @@
 package connect.api.impl;
 
 
-class FulfillmentApiImpl implements IFulfillmentApi {
+class FulfillmentApiImpl extends Base implements IFulfillmentApi {
     private static inline var REQUESTS_PATH = 'requests';
     private static inline var TEMPLATES_PATH = 'templates';
     private static inline var ASSETS_PATH = 'assets';

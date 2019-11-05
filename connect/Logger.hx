@@ -4,7 +4,7 @@ package connect;
 /**
     This class is used to log events to a file and the output console.
 **/
-class Logger {
+class Logger extends Base {
     /** Only writes compact error messages. **/
     public static inline var LEVEL_ERROR = 0;
 

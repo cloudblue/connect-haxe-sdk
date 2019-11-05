@@ -1,6 +1,6 @@
 package connect.api;
 
-class Response {
+class Response extends Base {
     public var status(default, null) : Int;
     public var text(default, null) : String;
 

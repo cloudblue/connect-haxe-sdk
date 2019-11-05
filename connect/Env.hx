@@ -40,7 +40,7 @@ import connect.api.impl.GeneralApiImpl;
     get replaced through dependency injection by mocked ones, allowing to a sandboxed unit testing
     environment.
 **/
-class Env {
+class Env extends Base {
     /**
         Initializes the configuration object. It must have not been previously configured.
 

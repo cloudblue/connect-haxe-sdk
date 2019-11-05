@@ -36,7 +36,7 @@ typedef ProcessorStepFunc = (Processor, String) -> String;
     You can check the `examples` folder of the SDK to check how to use the Processor in the
     supported target languages.
 **/
-class Processor {
+class Processor extends Base {
     public function new() {
         this.steps = [];
     }
@@ -144,7 +144,7 @@ class Processor {
                             }
                         }
                     }
-                    Env.getLogger().info('Resuming request from step ${firstIndex + 1}');
+                    Env.getLogger().info('Resuming request from step ${firstIndex + 1}.');
                 }
 
                 // Process each step
@@ -179,12 +179,10 @@ class Processor {
 
                     if (this.abortRequested) {
                         if (this.abortMessage == null) {
-                            Env.getLogger().info('Skipping request.');
-
                             // Save step data if request supports it
                             if (this.getRequest() != null &&
                                     this.getRequest().asset.getParamById(STEP_PARAM_ID) != null) {
-                                Env.getLogger().info('Saving step data.');
+                                Env.getLogger().info('Skipping request. Saving step data.');
                                 
                                 final data: Dynamic = {};
                                 for (key in this.data.keys()) {
@@ -213,6 +211,8 @@ class Processor {
                                     Env.getLogger().error('```');
                                     Env.getLogger().error('');
                                 }
+                            } else {
+                                Env.getLogger().info('Skipping request.');
                             }
                         } else {
                             if (this.abortMessage != '') {

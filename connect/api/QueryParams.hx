@@ -3,7 +3,7 @@ package connect.api;
 import haxe.ds.StringMap;
 
 
-class QueryParams {
+class QueryParams extends Base {
     public function new() {
         this.map = new StringMap<String>();
     }
