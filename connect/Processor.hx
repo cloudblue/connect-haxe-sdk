@@ -290,7 +290,7 @@ class Processor extends Base {
 
         When using the Processor, this method should be used instead of
         `Request.approveByTemplate()`, since this take care of cleaning the stored step
-        information, and automatically calls `skip` to avoid processing any further steps.
+        information, and automatically skips any further steps.
 
         @returns The Request returned from the server, which should contain
         the updated status.
@@ -314,8 +314,8 @@ class Processor extends Base {
         the portal with the given Markdown `text`.
 
         When using the Processor, this method should be used instead of `Request.approveByTile()`,
-        since this take care of cleaning the stored step information, and automatically calls
-        `skip` to avoid processing any further steps.
+        since this take care of cleaning the stored step information, and automatically skips any
+        further steps.
 
         @returns The Request returned from the server, which should contain
         the updated status.
@@ -338,8 +338,8 @@ class Processor extends Base {
         Changes the status of the Request being processed to "failed".
 
         When using the Processor, this method should be used instead of `Request.fail()`,
-        since this take care of cleaning the stored step information, and automatically calls
-        `skip` to avoid processing any further steps.
+        since this take care of cleaning the stored step information, and automatically skips any
+        further steps.
 
         @returns The Request returned from the server, which should contain
         the updated status.
@@ -362,8 +362,8 @@ class Processor extends Base {
         Changes the status of the Request being processed to "inquiring".
 
         When using the Processor, this method should be used instead of `Request.inquire()`,
-        since this take care of cleaning the stored step information, and automatically calls
-        `skip` to avoid processing any further steps.
+        since this take care of cleaning the stored step information, and automatically skips any
+        further steps.
 
         @returns The Request returned from the server, which should contain
         the updated status.
@@ -386,8 +386,8 @@ class Processor extends Base {
         Changes the status of the Request being processed to "pending".
 
         When using the Processor, this method should be used instead of `Request.pend()`,
-        since this take care of cleaning the stored step information, and automatically calls
-        `skip` to avoid processing any further steps.
+        since this take care of cleaning the stored step information, and automatically skips any
+        further steps.
 
         @returns The Request returned from the server, which should contain
         the updated status.
