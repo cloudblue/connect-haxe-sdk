@@ -98,8 +98,8 @@ class Processor {
         for (model in list) {
             this.model = model;
             this.data = new Dictionary();
-            this.skip_ = false;
-            this.saveStep = false;
+            this.abortRequested = false;
+            this.abortMessage = null;
             var input: String = null;
             var lastRequestStr = '';
             var lastDataStr = '{}';
@@ -174,11 +174,11 @@ class Processor {
                         Env.getLogger().error(Std.string(ex));
                         Env.getLogger().error('```');
                         Env.getLogger().error('');
-                        this.skip(true);
+                        this.abort();
                     }
 
-                    if (this.skip_) {
-                        if (this.getRequest() != null && this.saveStep) {
+                    if (this.abortRequested) {
+                        if (this.abortMessage == null) {
                             Env.getLogger().info('Skipping request.');
 
                             // Save step data if request supports it
@@ -213,6 +213,10 @@ class Processor {
                                     Env.getLogger().error('```');
                                     Env.getLogger().error('');
                                 }
+                            }
+                        } else {
+                            if (this.abortMessage != '') {
+                                Env.getLogger().info(this.abortMessage);
                             }
                         }
 
@@ -295,8 +299,9 @@ class Processor {
         final request = this.getRequest();
         if (request != null) {
             removeStepData(request);
+            request.update();
             final result = request.approveByTemplate(id);
-            this.skip(false);
+            this.abort("");
             return result;
         } else {
             return null;
@@ -319,8 +324,9 @@ class Processor {
         final request = this.getRequest();
         if (request != null) {
             removeStepData(request);
+            request.update();
             final result = request.approveByTile(text);
-            this.skip(false);
+            this.abort("");
             return result;
         } else {
             return null;
@@ -341,13 +347,10 @@ class Processor {
     public function fail(reason: String): Request {
         var request = this.getRequest();
         if (request != null) {
-            var param = request.asset.getParamById(STEP_PARAM_ID);
-            if (param != null) {
-                param.value = '';
-            }
+            removeStepData(request);
             request.update();
             var result = request.fail(reason);
-            this.skip(false);
+            this.abort("Failing request");
             return result;
         } else {
             return null;
@@ -368,13 +371,10 @@ class Processor {
     public function inquire(): Request {
         var request = this.getRequest();
         if (request != null) {
-            var param = request.asset.getParamById(STEP_PARAM_ID);
-            if (param != null) {
-                param.value = '';
-            }
+            removeStepData(request);
             request.update();
             var result = request.inquire();
-            this.skip(false);
+            this.abort("Inquiring request");
             return result;
         } else {
             return null;
@@ -401,7 +401,7 @@ class Processor {
             }
             request.update();
             var result = request.pend();
-            this.skip(false);
+            this.abort("Pending request");
             return result;
         } else {
             return null;
@@ -414,13 +414,18 @@ class Processor {
     private var steps: Array<Step>;
     private var model: IdModel;
     private var data: Dictionary;
-    private var skip_: Bool;
-    private var saveStep: Bool;
+    private var abortRequested: Bool;
+    private var abortMessage: String;
 
 
-    private function skip(saveStep: Bool): Void {
-        this.skip_ = true;
-        this.saveStep = saveStep;
+    /**
+        Without a message, a skip is performed with the standard skip message, which
+        will try to store step data. If a message is provided, no data is stored, and that message
+        is printed instead as long as it is not an empty string.
+    **/
+    private function abort(?message: String): Void {
+        this.abortRequested = true;
+        this.abortMessage = message;
     }
 
 
@@ -432,7 +437,6 @@ class Processor {
                 Reflect.deleteField(storeData, request.id);
             }
             param.value = Json.stringify(storeData);
-            request.update();
         }
     }
 
