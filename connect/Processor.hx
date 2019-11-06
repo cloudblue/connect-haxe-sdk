@@ -95,88 +95,7 @@ class Processor extends Base {
         
         // Process each request
         for (model in list) {
-            if (this.prepareAndOpenLogSection(model)) {
-                // If there is stored step data, set data and jump to that step
-                final stepParam = (this.getRequest() != null)
-                    ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
-                    : null;
-                final stepData = StepStorage.load(this.model.id, stepParam);
-                var input = stepData.input;
-                this.data = stepData.data;
-                if (stepData.firstIndex != 0) {
-                    Env.getLogger().info('Resuming request from step ${stepData.firstIndex + 1}.');
-                }
-
-                // Process each step
-                var lastRequestStr = '';
-                var lastDataStr = '{}';
-                for (index in stepData.firstIndex...this.steps.length) {
-                    final step = this.steps[index];
-                    final requestStr = Inflection.beautify(this.model.toString(),
-                        Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
-                    final dataStr = Std.string(this.data);
-                    
-                    Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
-                    
-                    this.logStepData(Env.getLogger().info, Inflection.beautify(input, false),
-                        requestStr, dataStr, lastRequestStr, lastDataStr);
-
-                    // Execute step
-                    try {
-                        #if java
-                        input = step.func.apply(this, input);
-                        #else
-                        input = step.func(this, input);
-                        #end
-                    } catch (ex: Dynamic) {
-                        if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                            this.logStepData(Env.getLogger().error, Inflection.beautify(input, false),
-                                requestStr, dataStr, lastRequestStr, lastDataStr);
-                        }
-                        Env.getLogger().error('```');
-                        Env.getLogger().error(Std.string(ex));
-                        Env.getLogger().error('```');
-                        Env.getLogger().error('');
-                        this.abort();
-                    }
-
-                    if (this.abortRequested) {
-                        if (this.abortMessage == null) {
-                            final param = (this.getRequest() != null)
-                                ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
-                                : null;
-                            
-                            // Save step data if request supports it
-                            Env.getLogger().info('Skipping request. Trying to save step data.');
-                            final saveResult = StepStorage.save(this.model,
-                                new StepData(index, input, this.data),
-                                param,
-                                Reflect.field(model, 'update'));
-                            switch (saveResult) {
-                                case StoreConnect:
-                                    Env.getLogger().info('Step data saved in Connect.');
-                                case StoreLocal:
-                                    Env.getLogger().info('Step data saved locally.');
-                                case StoreFail:
-                                    Env.getLogger().info('Step data could not be saved.');
-                            }
-                        } else {
-                            if (this.abortMessage != '') {
-                                Env.getLogger().info(this.abortMessage);
-                            }
-                        }
-
-                        Env.getLogger().closeSection();
-                        break;
-                    } else {
-                        lastRequestStr = requestStr;
-                        lastDataStr = dataStr;
-                        Env.getLogger().closeSection();
-                    }
-                }
-
-                Env.getLogger().closeSection();
-            }
+            this.processRequest(model);
         }
         Env.getLogger().closeSection();
     }
@@ -361,6 +280,96 @@ class Processor extends Base {
     private var data: Dictionary;
     private var abortRequested: Bool;
     private var abortMessage: String;
+
+
+    private function processRequest(model: IdModel): Void {
+        if (this.prepareAndOpenLogSection(model)) {
+            // If there is stored step data, set data and jump to that step
+            final stepParam = (this.getRequest() != null)
+                ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
+                : null;
+            final stepData = StepStorage.load(this.model.id, stepParam);
+            var input = stepData.input;
+            this.data = stepData.data;
+            if (stepData.firstIndex != 0) {
+                Env.getLogger().info('Resuming request from step ${stepData.firstIndex + 1}.');
+            }
+
+            // Process each step
+            var lastRequestStr = '';
+            var lastDataStr = '{}';
+            for (index in stepData.firstIndex...this.steps.length) {
+                final step = this.steps[index];
+                final requestStr = Inflection.beautify(this.model.toString(),
+                    Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
+                final dataStr = Std.string(this.data);
+                
+                Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
+                
+                this.logStepData(Env.getLogger().info, Inflection.beautify(input, false),
+                    requestStr, dataStr, lastRequestStr, lastDataStr);
+
+                // Execute step
+                try {
+                    #if java
+                    input = step.func.apply(this, input);
+                    #else
+                    input = step.func(this, input);
+                    #end
+                } catch (ex: Dynamic) {
+                    if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
+                        this.logStepData(Env.getLogger().error, Inflection.beautify(input, false),
+                            requestStr, dataStr, lastRequestStr, lastDataStr);
+                    }
+                    final exStr = Std.string(ex);
+                    Env.getLogger().error('```');
+                    Env.getLogger().error(exStr);
+                    Env.getLogger().error('```');
+                    Env.getLogger().error('');
+                    if (this.getRequest() != null) {
+                        this.getRequest()._updateConversation('Skipping request because an exception was thrown: $exStr');
+                    }
+                    this.abort();
+                }
+
+                if (this.abortRequested) {
+                    if (this.abortMessage == null) {
+                        final param = (this.getRequest() != null)
+                            ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
+                            : null;
+                        
+                        // Save step data if request supports it
+                        Env.getLogger().info('Skipping request. Trying to save step data.');
+                        final saveResult = StepStorage.save(this.model,
+                            new StepData(index, input, this.data),
+                            param,
+                            Reflect.field(model, 'update'));
+                        switch (saveResult) {
+                            case StoreConnect:
+                                Env.getLogger().info('Step data saved in Connect.');
+                            case StoreLocal:
+                                Env.getLogger().info('Step data saved locally.');
+                            case StoreFail:
+                                Env.getLogger().info('Step data could not be saved.');
+                        }
+                    } else {
+                        if (this.abortMessage != '') {
+                            Env.getLogger().info(this.abortMessage);
+                        }
+                    }
+
+                    Env.getLogger().closeSection();
+                    break;
+                } else {
+                    lastRequestStr = requestStr;
+                    lastDataStr = dataStr;
+                    Env.getLogger().closeSection();
+                }
+            }
+
+            Env.getLogger().closeSection();
+        }
+    }
 
 
     private function prepareAndOpenLogSection(model: IdModel): Bool {

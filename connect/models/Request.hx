@@ -161,6 +161,7 @@ class Request extends IdModel {
             'approve',
             haxe.Json.stringify({template_id: id})
         );
+        this._updateConversation('Request approved using template $id.');
         return Model.parse(Request, request);
     }
 
@@ -178,6 +179,7 @@ class Request extends IdModel {
             'approve',
             haxe.Json.stringify({activation_tile: text})
         );
+        this._updateConversation('Request approved using custom activation tile.');
         return Model.parse(Request, request);
     }
 
@@ -194,6 +196,7 @@ class Request extends IdModel {
             'fail',
             haxe.Json.stringify({reason: reason})
         );
+        this._updateConversation('Request failed: $reason.');
         return Model.parse(Request, request);
     }
 
@@ -210,6 +213,7 @@ class Request extends IdModel {
             'inquire',
             haxe.Json.stringify({})
         );
+        this._updateConversation('Request inquired.');
         return Model.parse(Request, request);
     }
 
@@ -226,6 +230,7 @@ class Request extends IdModel {
             'pend',
             haxe.Json.stringify({})
         );
+        this._updateConversation('Request pended.');
         return Model.parse(Request, request);
     }
 
@@ -241,6 +246,7 @@ class Request extends IdModel {
             this.id,
             assigneeId
         );
+        this._updateConversation('Request assigned to $assigneeId.');
         return Model.parse(Request, request);
     }
 
@@ -274,5 +280,18 @@ class Request extends IdModel {
             // Assigne could be an object, so force conversion to string
             'assignee' => 'String'
         ]);
+    }
+
+
+    @:dox(hide)
+    public function _updateConversation(message: String): Void {
+        final conversation = this.getConversation();
+        if (conversation != null) {
+            try {
+                conversation.createMessage(message);
+            } catch (ex: Dynamic) {
+                Env.getLogger().error('Error updating conversation for request ${this.id}: $message');
+            }
+        }
     }
 }
