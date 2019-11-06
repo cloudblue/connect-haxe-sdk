@@ -20,20 +20,6 @@ class Message extends IdModel {
     /** Actual message. **/
     public var text: String;
 
-
-    /**
-        Creates a new message, linked to the given `conversationId`, and with the specified `text`.
-
-        @returns The created Conversation.
-    **/
-    public static function create(conversationId: String, text: String): Message {
-        var msg = Env.getGeneralApi().createConversationMessage(
-            conversationId,
-            haxe.Json.stringify({ text: text }));
-        return Model.parse(Message, msg);
-    }
-
-
     public function new() {
         super();
         this._setFieldClassNames([

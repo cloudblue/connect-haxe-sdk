@@ -126,8 +126,8 @@ class Request extends IdModel {
     **/
     public static function create(request: Request): Request {
         try {
-            var request = Env.getFulfillmentApi().createRequest(request.toString());
-            return Model.parse(Request, request);
+            var newRequest = Env.getFulfillmentApi().createRequest(request.toString());
+            return Model.parse(Request, newRequest);
         } catch (ex: Dynamic) {
             return null;
         }

@@ -68,14 +68,23 @@ class Conversation extends IdModel {
 
 
     /**
-        Creates a new message in `this` Conversation with the given `text`.
+        Creates a new message in `this` Conversation with the given `text`, as long as the text
+        is not the same as the one in the last `Message`.
 
-        This is a shortcut for calling `Message.create`.
+        @returns The created `Message`, or `null` if the last message in the `Conversation` is
+        the same as this one.
     **/
     public function createMessage(text: String): Message {
-        var msg = Message.create(this.id, text);
-        this.messages.push(msg);
-        return msg;
+        if (isDifferentToLastMessage(text)) {
+            final msg = Env.getGeneralApi().createConversationMessage(
+                this.id,
+                haxe.Json.stringify({ text: text }));
+            return Model.parse(Message, msg);
+            this.messages.push(msg);
+            return msg;
+        } else {
+            return null;
+        }
     }
 
 
@@ -84,5 +93,15 @@ class Conversation extends IdModel {
         this._setFieldClassNames([
             'creator' => 'User'
         ]);
+    }
+
+
+    private function isDifferentToLastMessage(msg: String): Bool {
+        final length = this.messages.length();
+        if (length > 0 && this.messages.get(length-1).text == msg) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
