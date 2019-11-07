@@ -149,7 +149,7 @@ class UsageFile extends IdModel {
 
 
     /**
-        Updates the UsageFile in the server with the data changed in `this` model.
+        Updates `this` UsageFile in the server with the data changed in `this` model.
 
         @returns The UsageFile returned from the server, which should contain
         the same data as `this` UsageFile.
@@ -163,55 +163,96 @@ class UsageFile extends IdModel {
 
 
     /**
-        Deletes the UsageFile in the server.
+        Deletes `this` UsageFile in the server.
     **/
     public function delete(): Void {
         Env.getUsageApi().deleteUsageFile(this.id);
     }
 
 
-    public function upload(file: Bytes): UsageFile {
-        final usageFile = Env.getUsageApi().uploadUsageFile(this.id, file);
+    /**
+        Uploads the specified contents to `this` UsageFile.
+
+        @param content The contents of an XLSX file.
+        @returns The UsageFile returned from the server.
+    **/
+    public function upload(content: Bytes): UsageFile {
+        final usageFile = Env.getUsageApi().uploadUsageFile(this.id, content);
         return Model.parse(UsageFile, usageFile);
     }
 
 
+    /**
+        Submits `this` UsageFile.
+
+        @returns The UsageFile returned from the server.
+    **/
     public function submit(): UsageFile {
         final usageFile = Env.getUsageApi().submitUsageFileAction(this.id);
         return Model.parse(UsageFile, usageFile);
     }
 
 
+    /**
+        Accepts `this` UsageFile.
+
+        @returns The UsageFile returned from the server.
+    **/
     public function accept(note: String): UsageFile {
         final usageFile = Env.getUsageApi().acceptUsageFileAction(this.id, note);
         return Model.parse(UsageFile, usageFile);
     }
 
 
+    /**
+        Rejects `this` UsageFile.
+
+        @returns The UsageFile returned from the server.
+    **/
     public function reject(note: String): UsageFile {
         final usageFile = Env.getUsageApi().rejectUsageFileAction(this.id, note);
         return Model.parse(UsageFile, usageFile);
     }
 
 
+    /**
+        Cancels `this` UsageFile.
+
+        @returns The UsageFile returned from the server.
+    **/
     public function close(): UsageFile {
         final usageFile = Env.getUsageApi().closeUsageFileAction(this.id);
         return Model.parse(UsageFile, usageFile);
     }
 
 
+    /**
+        Gets the product specific file template URL for `this` UsageFile.
+    **/
     public function getTemplateLink(): String {
         final link = Env.getUsageApi().getProductSpecificUsageFileTemplate(this.id);
         return link.template_link;
     }
 
 
+    /**
+        Uploads the specified contents to `this` UsageFile.
+
+        @param content The contents of an XLSX file.
+        @returns The UsageFile returned from the server.
+    **/
     public function uploadReconciliation(file: Bytes): UsageFile {
         final usageFile = Env.getUsageApi().uploadReconciliationFileFromProvider(this.id, file);
         return Model.parse(UsageFile, usageFile);
     }
 
 
+    /**
+        Reprocesses a processed file. This is called by the provider after the provider closes
+        some usage records manually.
+
+        @returns The UsageFile returned from the server.
+    **/
     public function reprocess(): UsageFile {
         final usageFile = Env.getUsageApi().reprocessProcessedFile(this.id);
         return Model.parse(UsageFile, usageFile);
