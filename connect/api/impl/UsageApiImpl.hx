@@ -15,8 +15,8 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function createUsageFile(): Dynamic {
-        return Env.getApiClient().post(USAGE_FILES_PATH);
+    public function createUsageFile(file: String): Dynamic {
+        return Env.getApiClient().post(USAGE_FILES_PATH, null, null, file);
     }
 
 

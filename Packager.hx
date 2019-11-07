@@ -47,6 +47,8 @@ import connect.models.Request;
 import connect.models.Template;
 import connect.models.TierAccount;
 import connect.models.Tiers;
+import connect.models.UsageFile;
+import connect.models.UsageRecords;
 import connect.models.User;
 #end
 

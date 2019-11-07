@@ -3,7 +3,7 @@ package connect.api;
 
 interface IUsageApi {
     public function listUsageFiles(filters: QueryParams): Array<Dynamic>;
-    public function createUsageFile(): Dynamic;
+    public function createUsageFile(file: String): Dynamic;
     public function getUsageFile(id: String): Dynamic;
     public function updateUsageFile(id: String, file: String): Dynamic;
     public function deleteUsageFile(id: String): Void;

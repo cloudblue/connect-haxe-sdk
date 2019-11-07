@@ -1,14 +1,15 @@
 package connect.api.impl;
 
 import haxe.Constraints.Function;
+import haxe.io.Bytes;
 #if !js
-import haxe.io.StringInput;
+import haxe.io.BytesInput;
 #end
 
 
 class ApiClientImpl extends Base implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: String) : Response {        
+            fileArg: String, fileName: String, fileContent: Bytes) : Response {        
         // Write call info
         writeRequestCall(Env.getLogger().info, method, url, headers, body);
 
@@ -144,7 +145,7 @@ class ApiClientImpl extends Base implements IApiClient {
                 http.fileTransfer(
                     fileArg,
                     fileName,
-                    new StringInput(fileContent),
+                    new BytesInput(fileContent),
                     fileContent.length,
                     'multipart/form-data'
                 );

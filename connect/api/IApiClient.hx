@@ -1,5 +1,7 @@
 package connect.api;
 
+import haxe.io.Bytes;
+
 
 interface IApiClient {
     /**
@@ -15,7 +17,7 @@ interface IApiClient {
         @returns A `Response` object.
     **/
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: String) : Response;
+            fileArg: String, fileName: String, fileContent: Bytes) : Response;
     
 
     /**
