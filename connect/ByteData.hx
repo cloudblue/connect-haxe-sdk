@@ -15,6 +15,18 @@ class ByteData {
     }
 
 
+    /** @returns The number of bytes contained in the object. **/
+    public function length(): Int {
+        return bytes.length;
+    }
+
+
+    @:dox(hide)
+    public static function _fromBytes(bytes: Bytes): ByteData {
+        return new ByteData(bytes);
+    }
+    
+    
     @:dox(hide)
     public function _getBytes(): Bytes {
         return bytes;

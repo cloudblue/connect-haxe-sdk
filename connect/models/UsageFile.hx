@@ -176,7 +176,7 @@ class UsageFile extends IdModel {
         @returns The UsageFile returned from the server.
     **/
     public function upload(content: ByteData): UsageFile {
-        final usageFile = Env.getUsageApi().uploadUsageFile(this.id, content._getBytes());
+        final usageFile = Env.getUsageApi().uploadUsageFile(this.id, content);
         return Model.parse(UsageFile, usageFile);
     }
 
@@ -225,6 +225,17 @@ class UsageFile extends IdModel {
     }
 
 
+    public function getTemplate(): ByteData {
+        try {
+            final link = getTemplateLink();
+            final response = Env.getApiClient().syncRequest('GET', link, null, null, null, null, null);
+            return response.data;
+        } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+
     /**
         Gets the product specific file template URL for `this` UsageFile.
     **/
@@ -240,8 +251,8 @@ class UsageFile extends IdModel {
         @param content The contents of an XLSX file.
         @returns The UsageFile returned from the server.
     **/
-    public function uploadReconciliation(file: ByteData): UsageFile {
-        final usageFile = Env.getUsageApi().uploadReconciliationFileFromProvider(this.id, file._getBytes());
+    public function uploadReconciliation(content: ByteData): UsageFile {
+        final usageFile = Env.getUsageApi().uploadReconciliationFileFromProvider(this.id, content);
         return Model.parse(UsageFile, usageFile);
     }
 

@@ -1,7 +1,6 @@
 package connect.api.impl;
 
 import haxe.Constraints.Function;
-import haxe.io.Bytes;
 #if python
 import haxe.io.UInt8Array;
 #end
@@ -12,7 +11,7 @@ import haxe.io.BytesInput;
 
 class ApiClientImpl extends Base implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Bytes) : Response {
+            fileArg: String, fileName: String, fileContent: ByteData) : Response {
         // Write call info
         writeRequestCall(Env.getLogger().info, method, url, headers, body);
 
@@ -33,7 +32,7 @@ class ApiClientImpl extends Base implements IApiClient {
                 xhr.send(body);
             } else if (fileArg != null && fileName != null && fileContent != null) {
                 final formData = new js.html.FormData();
-                final blob = new js.html.Blob([fileContent.getData()]);
+                final blob = new js.html.Blob([fileContent._getBytes().getData()]);
                 formData.append(fileArg, blob, fileName);
                 xhr.send(formData);
             } else {
@@ -51,7 +50,7 @@ class ApiClientImpl extends Base implements IApiClient {
                     : 'Error sending ${method} request to "${url}."';
             }
 
-            final response = new Response(xhr.status, xhr.responseText);
+            final response = new Response(xhr.status, xhr.responseText, xhr.response);
         #elseif use_tink
             final methods = [
                 'GET' => tink.http.Method.GET,
@@ -114,7 +113,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
             var response: Response = null;
             try {
-                final contentsArr = [for (b in UInt8Array.fromBytes(fileContent)) b];
+                final contentsArr = [for (b in UInt8Array.fromBytes(fileContent._getBytes())) b];
                 final pythonBytes = (contentsArr.length > 0)
                     ? new python.Bytes(contentsArr)
                     : null;
@@ -149,8 +148,8 @@ class ApiClientImpl extends Base implements IApiClient {
                 http.fileTransfer(
                     fileArg,
                     fileName,
-                    new BytesInput(fileContent),
-                    fileContent.length,
+                    new BytesInput(fileContent._getBytes()),
+                    fileContent.length(),
                     'multipart/form-data'
                 );
             }
@@ -168,7 +167,8 @@ class ApiClientImpl extends Base implements IApiClient {
             http.customRequest(false, responseBytes, null, method.toUpperCase());
 
             while (status == null) {} // Wait for async request
-            final response = new Response(status, responseBytes.getBytes().toString());
+            final bytes = responseBytes.getBytes();
+            final response = new Response(status, bytes.toString(), ByteData._fromBytes(bytes));
         #end
 
         // If error response, write call to error log level
@@ -212,7 +212,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
 
     public function postFile(resource: String, ?id: String, ?suffix: String,
-        fileArg: String, fileName: String, fileContents: Bytes): Dynamic {
+        fileArg: String, fileName: String, fileContents: ByteData): Dynamic {
         return checkResponse(connectSyncRequest('POST', parsePath(resource, id, suffix),
             getHeaders('multipart/form-data'), null, fileArg, fileName, fileContents));
     }
@@ -228,7 +228,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
     private function connectSyncRequest(method: String, path: String, headers: Dictionary,
             ?params: QueryParams, ?data: String,
-            ?fileArg: String, ?fileName: String, ?fileContent: Bytes) : Response {
+            ?fileArg: String, ?fileName: String, ?fileContent: ByteData) : Response {
         final url = Env.getConfig().getApiUrl() + path + ((params != null) ? params.toString() : '');
         return this.syncRequest(method, url, headers, data, fileArg, fileName, fileContent);
     }

@@ -1,7 +1,5 @@
 package connect.api.impl;
 
-import haxe.io.Bytes;
-
 
 class UsageApiImpl extends Base implements IUsageApi {
     private static inline var USAGE_FILES_PATH = 'usage/files';
@@ -37,7 +35,7 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function uploadUsageFile(id: String, file: Bytes): Dynamic {
+    public function uploadUsageFile(id: String, file: ByteData): Dynamic {
         return Env.getApiClient().postFile(
             USAGE_FILES_PATH,
             id,
@@ -76,7 +74,7 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function uploadReconciliationFileFromProvider(id: String, file: Bytes): Dynamic {
+    public function uploadReconciliationFileFromProvider(id: String, file: ByteData): Dynamic {
         return Env.getApiClient().postFile(
             USAGE_FILES_PATH,
             id,

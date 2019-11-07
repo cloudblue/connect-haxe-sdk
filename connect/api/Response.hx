@@ -1,12 +1,13 @@
 package connect.api;
 
 class Response extends Base {
-    public var status(default, null) : Int;
-    public var text(default, null) : String;
+    public final status: Int;
+    public final text: String;
+    public final data: ByteData;
 
-
-    public function new(status:Int, text:String) {
+    public function new(status:Int, text:String, data:ByteData) {
         this.status = status;
         this.text = text;
+        this.data = data;
     }
 }
