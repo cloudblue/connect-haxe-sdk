@@ -126,6 +126,7 @@ class Packager {
         createPath('_packages/connect.java');
         copyLicense('_packages/connect.java');
         sys.io.File.copy('_build/java/Packager.jar', '_packages/connect.java/connect.jar');
+        sys.io.File.copy('stuff/pom.xml', '_packages/connect.java/pom.xml');
     }
 
 
