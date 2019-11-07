@@ -1,7 +1,6 @@
 package connect.models;
 
 import connect.api.QueryParams;
-import haxe.io.Bytes;
 
 
 /**
@@ -176,8 +175,8 @@ class UsageFile extends IdModel {
         @param content The contents of an XLSX file.
         @returns The UsageFile returned from the server.
     **/
-    public function upload(content: Bytes): UsageFile {
-        final usageFile = Env.getUsageApi().uploadUsageFile(this.id, content);
+    public function upload(content: ByteData): UsageFile {
+        final usageFile = Env.getUsageApi().uploadUsageFile(this.id, content._getBytes());
         return Model.parse(UsageFile, usageFile);
     }
 
@@ -236,13 +235,13 @@ class UsageFile extends IdModel {
 
 
     /**
-        Uploads the specified contents to `this` UsageFile.
+        Uploads the contents of a reconciliation file to `this` UsageFile.
 
         @param content The contents of an XLSX file.
         @returns The UsageFile returned from the server.
     **/
-    public function uploadReconciliation(file: Bytes): UsageFile {
-        final usageFile = Env.getUsageApi().uploadReconciliationFileFromProvider(this.id, file);
+    public function uploadReconciliation(file: ByteData): UsageFile {
+        final usageFile = Env.getUsageApi().uploadReconciliationFileFromProvider(this.id, file._getBytes());
         return Model.parse(UsageFile, usageFile);
     }
 
