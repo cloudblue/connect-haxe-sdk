@@ -174,4 +174,46 @@ class UsageFile extends IdModel {
         final usageFile = Env.getUsageApi().uploadUsageFile(this.id, file);
         return Model.parse(UsageFile, usageFile);
     }
+
+
+    public function submit(): UsageFile {
+        final usageFile = Env.getUsageApi().submitUsageFileAction(this.id);
+        return Model.parse(UsageFile, usageFile);
+    }
+
+
+    public function accept(note: String): UsageFile {
+        final usageFile = Env.getUsageApi().acceptUsageFileAction(this.id, note);
+        return Model.parse(UsageFile, usageFile);
+    }
+
+
+    public function reject(note: String): UsageFile {
+        final usageFile = Env.getUsageApi().rejectUsageFileAction(this.id, note);
+        return Model.parse(UsageFile, usageFile);
+    }
+
+
+    public function close(): UsageFile {
+        final usageFile = Env.getUsageApi().closeUsageFileAction(this.id);
+        return Model.parse(UsageFile, usageFile);
+    }
+
+
+    public function getTemplateLink(): String {
+        final link = Env.getUsageApi().getProductSpecificUsageFileTemplate(this.id);
+        return link.template_link;
+    }
+
+
+    public function uploadReconciliation(file: Bytes): UsageFile {
+        final usageFile = Env.getUsageApi().uploadReconciliationFileFromProvider(this.id, file);
+        return Model.parse(UsageFile, usageFile);
+    }
+
+
+    public function reprocess(): UsageFile {
+        final usageFile = Env.getUsageApi().reprocessProcessedFile(this.id);
+        return Model.parse(UsageFile, usageFile);
+    }
 }

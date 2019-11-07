@@ -122,7 +122,7 @@ class Request extends IdModel {
         - asset.tiers
         - marketplace.id
 
-        @returns The created Request.
+        @returns The created Request, or `null` if it couldn't be created.
     **/
     public static function create(request: Request): Request {
         try {

@@ -54,13 +54,15 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function acceptUsageFileAction(id: String): Dynamic {
-        return Env.getApiClient().post(USAGE_FILES_PATH, id, 'accept');
+    public function acceptUsageFileAction(id: String, note: String): Dynamic {
+        return Env.getApiClient().post(USAGE_FILES_PATH, id, 'accept',
+            haxe.Json.stringify({acceptance_note: note}));
     }
 
 
-    public function rejectUsageFileAction(id: String): Dynamic {
-        return Env.getApiClient().post(USAGE_FILES_PATH, id, 'reject');
+    public function rejectUsageFileAction(id: String, note: String): Dynamic {
+        return Env.getApiClient().post(USAGE_FILES_PATH, id, 'reject',
+            haxe.Json.stringify({rejection_note: note}));
     }
 
 

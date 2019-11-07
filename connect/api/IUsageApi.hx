@@ -11,8 +11,8 @@ interface IUsageApi {
     public function deleteUsageFile(id: String): Void;
     public function uploadUsageFile(id: String, file: Bytes): Dynamic;
     public function submitUsageFileAction(id: String): Dynamic;
-    public function acceptUsageFileAction(id: String): Dynamic;
-    public function rejectUsageFileAction(id: String): Dynamic;
+    public function acceptUsageFileAction(id: String, note: String): Dynamic;
+    public function rejectUsageFileAction(id: String, node: String): Dynamic;
     public function closeUsageFileAction(id: String): Dynamic;
     public function getProductSpecificUsageFileTemplate(product_id: String): Dynamic;
     public function uploadReconciliationFileFromProvider(id: String, file: Bytes): Dynamic;
