@@ -79,9 +79,9 @@ class Conversation extends IdModel {
             final msg = Env.getGeneralApi().createConversationMessage(
                 this.id,
                 haxe.Json.stringify({ text: text }));
-            return Model.parse(Message, msg);
-            this.messages.push(msg);
-            return msg;
+            final message = Model.parse(Message, msg);
+            this.messages.push(message);
+            return message;
         } else {
             return null;
         }
