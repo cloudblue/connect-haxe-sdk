@@ -86,7 +86,7 @@ interface IApiClient {
         @throws String if the request fails.
     **/
     public function postFile(resource: String, ?id: String, ?suffix: String,
-        argname: String, filename: String, contents: String): Dynamic;
+        argname: String, filename: String, contents: Bytes): Dynamic;
 
 
     /**

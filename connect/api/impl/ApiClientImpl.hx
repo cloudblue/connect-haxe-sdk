@@ -2,6 +2,9 @@ package connect.api.impl;
 
 import haxe.Constraints.Function;
 import haxe.io.Bytes;
+#if python
+import haxe.io.UInt8Array;
+#end
 #if !js
 import haxe.io.BytesInput;
 #end
@@ -9,20 +12,19 @@ import haxe.io.BytesInput;
 
 class ApiClientImpl extends Base implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Bytes) : Response {        
+            fileArg: String, fileName: String, fileContent: Bytes) : Response {
         // Write call info
         writeRequestCall(Env.getLogger().info, method, url, headers, body);
 
         #if js
             initXMLHttpRequest();
 
-            var xhr = new js.html.XMLHttpRequest();
+            final xhr = new js.html.XMLHttpRequest();
             xhr.timeout = 300000;
             xhr.open(method.toUpperCase(), url, false);
 
             if (headers != null) {
-                var keys = headers.keys();
-                for (key in keys) {
+                for (key in headers.keys()) {
                     xhr.setRequestHeader(key, headers.get(key));
                 }
             }
@@ -30,8 +32,9 @@ class ApiClientImpl extends Base implements IApiClient {
             if (body != null) {
                 xhr.send(body);
             } else if (fileArg != null && fileName != null && fileContent != null) {
-                var formData = new js.html.FormData();
-                formData.append(fileArg, fileContent);
+                final formData = new js.html.FormData();
+                final blob = new js.html.Blob([fileContent.getData()]);
+                formData.append(fileArg, blob, fileName);
                 xhr.send(formData);
             } else {
                 xhr.send();
@@ -48,9 +51,9 @@ class ApiClientImpl extends Base implements IApiClient {
                     : 'Error sending ${method} request to "${url}."';
             }
 
-            var response = new Response(xhr.status, xhr.responseText);
+            final response = new Response(xhr.status, xhr.responseText);
         #elseif use_tink
-            var methods = [
+            final methods = [
                 'GET' => tink.http.Method.GET,
                 'PUT' => tink.http.Method.PUT,
                 'POST' => tink.http.Method.POST
@@ -69,15 +72,14 @@ class ApiClientImpl extends Base implements IApiClient {
 
             var response: Response = null;
 
-            var parsedHeaders = new Array<tink.http.Header.HeaderField>();
+            final parsedHeaders = new Array<tink.http.Header.HeaderField>();
             if (headers != null) {
-                var keys = headers.keys();
-                for (key in keys) {
+                for (key in headers.keys()) {
                     parsedHeaders.push(new tink.http.Header.HeaderField(key, headers.get(key)));
                 }
             }
 
-            var options = new Dictionary();
+            final options = new Dictionary();
             options.set('method', tinkMethod);
             if (parsedHeaders.keys().length > 0) {
                 options.set('headers', parsedHeaders);
@@ -103,18 +105,21 @@ class ApiClientImpl extends Base implements IApiClient {
             // Wait for async request
             while (response == null) {}
         #elseif python
-            var parsedHeaders = new python.Dict<String, Dynamic>();
+            final parsedHeaders = new python.Dict<String, Dynamic>();
             if (headers != null) {
-                var keys = headers.keys();
-                for (key in keys) {
+                for (key in headers.keys()) {
                     parsedHeaders.set(key, headers.get(key));
                 }
             }
 
             var response: Response = null;
             try {
+                final contentsArr = [for (b in UInt8Array.fromBytes(fileContent)) b];
+                final pythonBytes = (contentsArr.length > 0)
+                    ? new python.Bytes(contentsArr)
+                    : null;
                 response = connect.native.PythonRequest.request(
-                    method, url, parsedHeaders, body, 300);
+                    method, url, parsedHeaders, body, fileArg, fileName, pythonBytes, 300);
             } catch (ex: Dynamic) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                     writeRequestCall(Env.getLogger().error, method, url, headers, body);
@@ -125,14 +130,13 @@ class ApiClientImpl extends Base implements IApiClient {
             }
         #else
             var status:Null<Int> = null;
-            var responseBytes = new haxe.io.BytesOutput();
+            final responseBytes = new haxe.io.BytesOutput();
 
-            var http = new haxe.Http(url);
+            final http = new haxe.Http(url);
             http.cnxTimeout = 300;
 
             if (headers != null) {
-                var keys = headers.keys();
-                for (key in keys) {
+                for (key in headers.keys()) {
                     http.setHeader(key, headers.get(key));
                 }
             }
@@ -164,7 +168,7 @@ class ApiClientImpl extends Base implements IApiClient {
             http.customRequest(false, responseBytes, null, method.toUpperCase());
 
             while (status == null) {} // Wait for async request
-            var response = new Response(status, responseBytes.getBytes().toString());
+            final response = new Response(status, responseBytes.getBytes().toString());
         #end
 
         // If error response, write call to error log level
@@ -208,7 +212,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
 
     public function postFile(resource: String, ?id: String, ?suffix: String,
-        fileArg: String, fileName: String, fileContents: String): Dynamic {
+        fileArg: String, fileName: String, fileContents: Bytes): Dynamic {
         return checkResponse(connectSyncRequest('POST', parsePath(resource, id, suffix),
             getHeaders('multipart/form-data'), null, fileArg, fileName, fileContents));
     }
@@ -224,14 +228,14 @@ class ApiClientImpl extends Base implements IApiClient {
 
     private function connectSyncRequest(method: String, path: String, headers: Dictionary,
             ?params: QueryParams, ?data: String,
-            ?fileArg: String, ?fileName: String, ?fileContent: String) : Response {
-        var url = Env.getConfig().getApiUrl() + path + ((params != null) ? params.toString() : '');
+            ?fileArg: String, ?fileName: String, ?fileContent: Bytes) : Response {
+        final url = Env.getConfig().getApiUrl() + path + ((params != null) ? params.toString() : '');
         return this.syncRequest(method, url, headers, data, fileArg, fileName, fileContent);
     }
 
 
     private function getHeaders(contentType: String = 'application/json'): Dictionary {
-        var headers = new Dictionary();
+        final headers = new Dictionary();
         headers.set('Authorization', Env.getConfig().getApiKey());
         headers.set('Content-Type', contentType);
         return headers;
@@ -247,9 +251,9 @@ class ApiClientImpl extends Base implements IApiClient {
                 if (key == 'Authorization') {
                     var auth = Std.string(headers.get('Authorization'));
                     if (StringTools.startsWith(auth, 'ApiKey ')) {
-                        var parts = auth.split(':');
+                        final parts = auth.split(':');
                         if (parts.length > 1) {
-                            var join = parts.slice(1).join(':');
+                            final join = parts.slice(1).join(':');
                             auth = parts[0] + ':'
                                 + StringTools.lpad(join.substr(join.length - 4), '*', join.length);
                         } else {
@@ -279,9 +283,9 @@ class ApiClientImpl extends Base implements IApiClient {
         }
         if (body != null) {
             if (Inflection.isJson(body)) {
-                var compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
-                var prefix = compact ? '> * Body (compact):' : '> * Body:';
-                var formatted = getFormattedData(body, prefix, compact);
+                final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
+                final prefix = compact ? '> * Body (compact):' : '> * Body:';
+                final formatted = getFormattedData(body, prefix, compact);
                 Reflect.callMethod(Env.getLogger(), loggerFunc, [formatted]);
             } else {
                 body = StringTools.lpad(body.substr(body.length - 4), '*', body.length);
@@ -294,9 +298,9 @@ class ApiClientImpl extends Base implements IApiClient {
     private function writeRequestResponse(loggerFunc: Function, response: Response) {
         Reflect.callMethod(Env.getLogger(), loggerFunc, ['> * Status: ${response.status}']);
         if (Inflection.isJson(response.text)) {
-            var compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
-            var prefix = compact ? '> * Response (compact):' : '> * Response:';
-            var formatted = getFormattedData(response.text, prefix, compact);
+            final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
+            final prefix = compact ? '> * Response (compact):' : '> * Response:';
+            final formatted = getFormattedData(response.text, prefix, compact);
             Reflect.callMethod(Env.getLogger(), loggerFunc, [formatted]);
         } else {
             var text = response.text;
@@ -308,7 +312,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
 
     private function getFormattedData(data: String, prefix: String, compact: Bool): String {
-        var beautified = Inflection.beautify(data, compact);
+        final beautified = Inflection.beautify(data, compact);
         if (!compact || Inflection.isJsonArray(beautified)) {
             return prefix + '\r\n'
                 + '> ```json' + '\r\n'

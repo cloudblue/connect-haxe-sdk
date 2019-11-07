@@ -1,5 +1,7 @@
 package connect.api.impl;
 
+import haxe.io.Bytes;
+
 
 class UsageApiImpl extends Base implements IUsageApi {
     private static inline var USAGE_FILES_PATH = 'usage/files';
@@ -35,8 +37,15 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function uploadUsageFile(id: String, file: String): Dynamic {
-        return Env.getApiClient().post(USAGE_FILES_PATH, id, 'upload', file);
+    public function uploadUsageFile(id: String, file: Bytes): Dynamic {
+        return Env.getApiClient().postFile(
+            USAGE_FILES_PATH,
+            id,
+            'upload',
+            'usage_file',
+            'usage_file.xlsx',
+            file
+        );
     }
 
 
@@ -65,7 +74,7 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function uploadReconciliationFileFromProvider(id: String, file: String): Dynamic {
+    public function uploadReconciliationFileFromProvider(id: String, file: Bytes): Dynamic {
         return Env.getApiClient().postFile(
             USAGE_FILES_PATH,
             id,

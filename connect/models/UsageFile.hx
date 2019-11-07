@@ -1,6 +1,7 @@
 package connect.models;
 
 import connect.api.QueryParams;
+import haxe.io.Bytes;
 
 
 /**
@@ -109,15 +110,15 @@ class UsageFile extends IdModel {
         @returns A Collection of Requests.
     **/
     public static function list(filters: QueryParams) : Collection<UsageFile> {
-        var requests = Env.getUsageApi().listUsageFiles(filters);
-        return Model.parseArray(UsageFile, requests);
+        final usageFiles = Env.getUsageApi().listUsageFiles(filters);
+        return Model.parseArray(UsageFile, usageFiles);
     }
 
 
     /** @returns The UsageFile with the given id, or `null` if it was not found. **/
     public static function get(id: String): UsageFile {
         try {
-            var usageFile = Env.getUsageApi().getUsageFile(id);
+            final usageFile = Env.getUsageApi().getUsageFile(id);
             return Model.parse(UsageFile, usageFile);
         } catch (ex: Dynamic) {
             return null;
@@ -139,7 +140,7 @@ class UsageFile extends IdModel {
     **/
     public static function create(usageFile: UsageFile): UsageFile {
         try {
-            var newUsageFile = Env.getUsageApi().createUsageFile(usageFile.toString());
+            final newUsageFile = Env.getUsageApi().createUsageFile(usageFile.toString());
             return Model.parse(UsageFile, newUsageFile);
         } catch (ex: Dynamic) {
             return null;
@@ -154,10 +155,10 @@ class UsageFile extends IdModel {
         the same data as `this` UsageFile.
     **/
     public function update(): UsageFile {
-        var request = Env.getUsageApi().updateUsageFile(
+        final usageFile = Env.getUsageApi().updateUsageFile(
             this.id,
             this.toString());
-        return Model.parse(UsageFile, request);
+        return Model.parse(UsageFile, usageFile);
     }
 
 
@@ -169,7 +170,8 @@ class UsageFile extends IdModel {
     }
 
 
-    public function upload(): UsageFile {
-
+    public function upload(file: Bytes): UsageFile {
+        final usageFile = Env.getUsageApi().uploadUsageFile(this.id, file);
+        return Model.parse(UsageFile, usageFile);
     }
 }
