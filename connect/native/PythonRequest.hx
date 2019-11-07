@@ -16,7 +16,7 @@ class PythonRequest {
                 "requests.request({0}, {1}, headers={2}, data={3}.encode() if {3} else None, timeout={4})",
                 method, url, headers, body, timeout)
             : python.Syntax.code(
-                "requests.request({0}, {1}, headers={2}, files={{3}: ({4}: {5})}, timeout={6})",
+                "requests.request({0}, {1}, headers={2}, files={ {3}: ({4}, {5}) }, timeout={6})",
                 method, url, headers, fileArg, fileName, fileContent, timeout);
         return new Response(resp.status_code, resp.text);
     }
