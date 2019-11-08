@@ -1,5 +1,6 @@
 package tests.unit;
 
+import connect.Collection;
 import connect.Dictionary;
 import connect.Env;
 import connect.models.Account;
@@ -14,10 +15,15 @@ class AccountTest extends haxe.unit.TestCase {
 
 
     public function testList() {
-        // Check subject
+        // Check accounts list
         var accounts = Account.list(null);
+        assertTrue(Std.is(accounts, Collection));
         assertEquals(1, accounts.length());
-        assertEquals('VA-044-420', accounts.get(0).id);
+
+        // Check first account
+        var account = accounts.get(0);
+        assertTrue(Std.is(account, Account));
+        assertEquals('VA-044-420', account.id);
 
         // Check mocks
         var apiMock = cast(Env.getGeneralApi(), Mock);
@@ -29,9 +35,10 @@ class AccountTest extends haxe.unit.TestCase {
 
 
     public function testCreate() {
-        // Check subject
+        // Check account
         var account = Account.create();
         assertTrue(account != null);
+        assertTrue(Std.is(account, Account));
         assertEquals('VA-044-420', account.id);
 
         // Check mocks
@@ -47,6 +54,7 @@ class AccountTest extends haxe.unit.TestCase {
         // Check subject
         var account = Account.get('VA-044-420');
         assertTrue(account != null);
+        assertTrue(Std.is(account, Account));
 
         // Check mocks
         var apiMock = cast(Env.getGeneralApi(), Mock);
@@ -74,14 +82,19 @@ class AccountTest extends haxe.unit.TestCase {
     public function testListUsers() {
         var users = Account.get('VA-044-420').listUsers();
         assertTrue(users != null);
+        assertTrue(Std.is(users, Collection));
         assertEquals(1, users.length());
-        assertEquals('UR-460-012-274', users.get(0).id);
+
+        var user = users.get(0);
+        assertTrue(Std.is(user, User));
+        assertEquals('UR-460-012-274', user.id);
     }
 
 
     public function testGetUserOk() {
         var user = Account.get('VA-044-420').getUser('UR-460-012-274');
         assertTrue(user != null);
+        assertTrue(Std.is(user, User));
         assertEquals('UR-460-012-274', user.id);
     }
 
