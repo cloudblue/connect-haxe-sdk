@@ -1,5 +1,6 @@
 package tests.unit;
 
+import connect.Collection;
 import connect.Dictionary;
 import connect.Env;
 import connect.models.Asset;
@@ -16,13 +17,22 @@ class AssetTest extends haxe.unit.TestCase {
 
     public function testList() {
         // Check subject
-        var assets = Asset.list(null);
+        final assets = Asset.list(null);
+        assertTrue(Std.is(assets, Collection));
         assertEquals(2, assets.length());
-        assertEquals('AS-392-283-000-0', assets.get(0).id);
-        assertEquals('AS-392-283-001-0', assets.get(1).id);
+
+        // Check first assert
+        final asset0 = assets.get(0);
+        assertTrue(Std.is(asset0, Asset));
+        assertEquals('AS-392-283-000-0', asset0.id);
+
+        // Check second asset
+        final asset1 = assets.get(1);
+        assertTrue(Std.is(asset1, Asset));
+        assertEquals('AS-392-283-001-0', asset1.id);
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('listRequests'));
         assertEquals(
             [null].toString(),
@@ -32,11 +42,13 @@ class AssetTest extends haxe.unit.TestCase {
 
     public function testGetOk() {
         // Check subject
-        var asset = Asset.get('AS-392-283-000-0');
+        final asset = Asset.get('AS-392-283-000-0');
         assertTrue(asset != null);
+        assertTrue(Std.is(asset, Asset));
+        assertTrue(Std.is(asset.id, String));
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('getAsset'));
         assertEquals(
             ['AS-392-283-000-0'].toString(),
@@ -46,11 +58,11 @@ class AssetTest extends haxe.unit.TestCase {
 
     public function testGetKo() {
         // Check subject
-        var asset = Asset.get('AS-XXX-XXX-XXX-X');
+        final asset = Asset.get('AS-XXX-XXX-XXX-X');
         assertTrue(asset == null);
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('getAsset'));
         assertEquals(
             ['AS-XXX-XXX-XXX-X'].toString(),
@@ -60,13 +72,13 @@ class AssetTest extends haxe.unit.TestCase {
 
     public function testGetRequests() {
         // Check subject
-        var asset = Asset.get('AS-392-283-000-0');
-        var requests = asset.getRequests();
+        final asset = Asset.get('AS-392-283-000-0');
+        final requests = asset.getRequests();
         assertEquals(1, requests.length());
         assertEquals('PR-5852-1608-0000', requests.get(0).id);
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('getAssetRequests'));
         assertEquals(
             ['AS-392-283-000-0'].toString(),
@@ -76,12 +88,12 @@ class AssetTest extends haxe.unit.TestCase {
 
     public function testGetRequestsEmpty() {
         // Check subject
-        var asset = Model.parse(Asset, {id: 'AS-XXX-XXX-XXX-X'});
-        var requests = asset.getRequests();
+        final asset = Model.parse(Asset, {id: 'AS-XXX-XXX-XXX-X'});
+        final requests = asset.getRequests();
         assertEquals(0, requests.length());
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('getAssetRequests'));
         assertEquals(
             ['AS-XXX-XXX-XXX-X'].toString(),
@@ -90,8 +102,8 @@ class AssetTest extends haxe.unit.TestCase {
 
 
     public function testGetNewItems() {
-        var asset = Asset.get('AS-392-283-000-0');
-        var newItems = asset.getNewItems();
+        final asset = Asset.get('AS-392-283-000-0');
+        final newItems = asset.getNewItems();
         assertEquals(2, newItems.length());
         assertEquals('TEAM_ST3L2T1Y', newItems.get(0).id);
         assertEquals('100', newItems.get(0).quantity);
@@ -103,8 +115,8 @@ class AssetTest extends haxe.unit.TestCase {
 
 
     public function testGetChangedItems() {
-        var asset = Asset.get('AS-392-283-000-0');
-        var changedItems = asset.getChangedItems();
+        final asset = Asset.get('AS-392-283-000-0');
+        final changedItems = asset.getChangedItems();
         assertEquals(2, changedItems.length());
         assertEquals('UPSIZE_TEST', changedItems.get(0).id);
         assertEquals('201', changedItems.get(0).quantity);
@@ -116,8 +128,8 @@ class AssetTest extends haxe.unit.TestCase {
 
 
     public function testGetRemovedItems() {
-        var asset = Asset.get('AS-392-283-000-0');
-        var removedItems = asset.getRemovedItems();
+        final asset = Asset.get('AS-392-283-000-0');
+        final removedItems = asset.getRemovedItems();
         assertEquals(1, removedItems.length());
         assertEquals('DELETE_TEST', removedItems.get(0).id);
         assertEquals('0', removedItems.get(0).quantity);
@@ -126,61 +138,61 @@ class AssetTest extends haxe.unit.TestCase {
 
 
     public function testGetParamByIdOk() {
-        var asset = Asset.get('AS-392-283-000-0');
-        var param = asset.getParamById('activationCode');
+        final asset = Asset.get('AS-392-283-000-0');
+        final param = asset.getParamById('activationCode');
         assertTrue(param != null);
         assertEquals('activationCode', param.id);
     }
 
 
     public function testGetParamByIdKo() {
-        var asset = Asset.get('AS-392-283-000-0');
-        var param = asset.getParamById('invalid-id');
+        final asset = Asset.get('AS-392-283-000-0');
+        final param = asset.getParamById('invalid-id');
         assertTrue(param == null);
     }
 
 
     public function testGetItemByIdOk() {
-        var asset = Asset.get('AS-392-283-000-0');
-        var item = asset.getItemById('TEAM_ST3L2T1Y');
+        final asset = Asset.get('AS-392-283-000-0');
+        final item = asset.getItemById('TEAM_ST3L2T1Y');
         assertTrue(item != null);
         assertEquals('TEAM_ST3L2T1Y', item.id);
     }
 
 
     public function testGetItemByIdKo() {
-        var asset = Asset.get('AS-392-283-000-0');
-        var item = asset.getItemById('invalid-id');
+        final asset = Asset.get('AS-392-283-000-0');
+        final item = asset.getItemById('invalid-id');
         assertTrue(item == null);
     }
 
 
     public function testGetItemByMpnOk() {
-        var asset = Asset.get('AS-392-283-000-0');
-        var item = asset.getItemByMpn('TEAM-ST3L2T1Y');
+        final asset = Asset.get('AS-392-283-000-0');
+        final item = asset.getItemByMpn('TEAM-ST3L2T1Y');
         assertTrue(item != null);
         assertEquals('TEAM-ST3L2T1Y', item.mpn);
     }
 
 
     public function testGetItemByMpnKo() {
-        var asset = Asset.get('AS-392-283-000-0');
-        var item = asset.getItemByMpn('invalid-mpn');
+        final asset = Asset.get('AS-392-283-000-0');
+        final item = asset.getItemByMpn('invalid-mpn');
         assertTrue(item == null);
     }
 
 
     public function testGetItemByGlobalIdOk() {
-        var asset = Asset.get('AS-392-283-000-0');
-        var item = asset.getItemByGlobalId('XXX');
+        final asset = Asset.get('AS-392-283-000-0');
+        final item = asset.getItemByGlobalId('XXX');
         assertTrue(item != null);
         assertEquals('XXX', item.globalId);
     }
 
 
     public function testGetItemByGlobalIdKo() {
-        var asset = Asset.get('AS-392-283-000-0');
-        var item = asset.getItemByGlobalId('invalid-id');
+        final asset = Asset.get('AS-392-283-000-0');
+        final item = asset.getItemByGlobalId('invalid-id');
         assertTrue(item == null);
     }
 }
