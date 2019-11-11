@@ -58,13 +58,8 @@ class AccountTest extends haxe.unit.TestCase {
         final account = Account.get('VA-044-420');
         assertTrue(account != null);
         assertTrue(Std.is(account, Account));
-        assertTrue(Std.is(account.id, String));
         assertTrue(Std.is(account.events, Events));
         assertTrue(Std.is(account.events.created, Event));
-        assertTrue(Std.is(account.events.created.at, String));
-        assertTrue(Std.is(account.brand, String));
-        assertTrue(Std.is(account.externalId, String));
-        assertTrue(Std.is(account.sourcing, Bool));
         assertEquals('VA-044-420', account.id);
         assertEquals('2018-06-04T13:19:10+00:00', account.events.created.at);
         assertEquals(null, account.events.created.by);
