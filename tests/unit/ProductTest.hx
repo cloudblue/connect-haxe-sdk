@@ -1,5 +1,6 @@
 package tests.unit;
 
+import connect.models.Account;
 import connect.Collection;
 import connect.Dictionary;
 import connect.Env;
@@ -11,6 +12,7 @@ import connect.models.Connection;
 import connect.models.CustomerUiSettings;
 import connect.models.Document;
 import connect.models.DownloadLink;
+import connect.models.Hub;
 import connect.models.Media;
 import connect.models.Model;
 import connect.models.Product;
@@ -228,8 +230,19 @@ class ProductTest extends haxe.unit.TestCase {
         final connections = product.getConnections();
         assertTrue(Std.is(connections, Collection));
         assertEquals(1, connections.length());
-
-        assertEquals('CT-5887-6537', connections.get(0).id);
+        final connection = connections.get(0);
+        assertTrue(Std.is(connection, Connection));
+        assertTrue(Std.is(connection.provider, Account));
+        assertTrue(Std.is(connection.vendor, Account));
+        assertTrue(Std.is(connection.hub, Hub));
+        assertEquals('CT-5887-6537', connection.id);
+        assertEquals('test', connection.type);
+        assertEquals('PA-855-748', connection.provider.id);
+        assertEquals('CB Demo Staging Provider Brand 507', connection.provider.name);
+        assertEquals('VA-840-266', connection.vendor.id);
+        assertEquals('Adrian\'s Inc', connection.vendor.name);
+        assertEquals('HB-5304-5271', connection.hub.id);
+        assertEquals('cb1.conn.rocks', connection.hub.name);
 
         // Check mocks
         final apiMock = cast(Env.getGeneralApi(), Mock);
@@ -243,6 +256,7 @@ class ProductTest extends haxe.unit.TestCase {
     public function testGetConnectionsKo() {
         // Check subject
         final connections = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'}).getConnections();
+        assertTrue(Std.is(connections, Collection));
         assertEquals(0, connections.length());
 
         // Check mocks
