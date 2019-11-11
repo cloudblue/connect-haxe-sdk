@@ -58,7 +58,7 @@ class AssetTest extends haxe.unit.TestCase {
 
 
     public function testGetOk() {
-        // Check subject
+        // Check asset
         final asset = Asset.get('AS-392-283-000-0');
         assertTrue(asset != null);
         assertTrue(Std.is(asset, Asset));
