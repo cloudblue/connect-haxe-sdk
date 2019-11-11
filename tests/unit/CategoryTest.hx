@@ -17,14 +17,14 @@ class CategoryTest extends haxe.unit.TestCase {
 
     public function testList() {
         // Check subject
-        var categories = Category.list(null);
+        final categories = Category.list(null);
         assertTrue(Std.is(categories, Collection));
         assertEquals(1, categories.length());
         assertTrue(Std.is(categories.get(0), Category));
         assertEquals('CAT-00012', categories.get(0).id);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listCategories'));
         assertEquals(
             [null].toString(),
@@ -34,7 +34,7 @@ class CategoryTest extends haxe.unit.TestCase {
 
     public function testGetOk() {
         // Check category
-        var category = Category.get('CAT-00012');
+        final category = Category.get('CAT-00012');
         assertTrue(category != null);
         assertTrue(Std.is(category, Category));
         assertTrue(Std.is(category.parent, Category));
@@ -47,7 +47,7 @@ class CategoryTest extends haxe.unit.TestCase {
         assertEquals('Root family', category.family.name);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getCategory'));
         assertEquals(
             ['CAT-00012'].toString(),
@@ -57,11 +57,11 @@ class CategoryTest extends haxe.unit.TestCase {
 
     public function testGetKo() {
         // Check subject
-        var category = Category.get('CAT-XXXXX');
+        final category = Category.get('CAT-XXXXX');
         assertTrue(category == null);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getCategory'));
         assertEquals(
             ['CAT-XXXXX'].toString(),
