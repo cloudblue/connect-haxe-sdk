@@ -12,6 +12,7 @@ class DownloadLink extends Model {
     /** Link URL. **/
     public var url: String;
 
+
     /** Link visibility. One of: admin, user. **/
     public var visibleFor: String;
 }

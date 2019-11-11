@@ -1,10 +1,19 @@
 package tests.unit;
 
+import connect.Collection;
 import connect.Dictionary;
 import connect.Env;
+import connect.models.Account;
+import connect.models.Category;
+import connect.models.Configurations;
+import connect.models.CustomerUiSettings;
+import connect.models.Document;
+import connect.models.DownloadLink;
 import connect.models.Media;
 import connect.models.Model;
 import connect.models.Product;
+import connect.models.ProductStats;
+import connect.models.ProductStatsInfo;
 import connect.models.ProductConfigurationParam;
 import tests.mocks.Mock;
 
@@ -18,12 +27,14 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testList() {
         // Check subject
-        var products = Product.list(null);
+        final products = Product.list(null);
+        assertTrue(Std.is(products, Collection));
         assertEquals(1, products.length());
+        assertTrue(Std.is(products.get(0), Product));
         assertEquals('PRD-783-317-575', products.get(0).id);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listProducts'));
         assertEquals(
             [null].toString(),
@@ -33,11 +44,53 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testGetOk() {
         // Check subject
-        var product = Product.get('PRD-783-317-575');
+        final product = Product.get('PRD-783-317-575');
         assertTrue(product != null);
+        assertTrue(Std.is(product, Product));
+        assertTrue(Std.is(product.configurations, Configurations));
+        assertTrue(Std.is(product.customerUiSettings, CustomerUiSettings));
+        assertTrue(Std.is(product.customerUiSettings.downloadLinks, Collection));
+        assertEquals(2, product.customerUiSettings.downloadLinks.length());
+        assertTrue(Std.is(product.customerUiSettings.downloadLinks.get(0), DownloadLink));
+        assertTrue(Std.is(product.customerUiSettings.documents, Collection));
+        assertEquals(2, product.customerUiSettings.documents.length());
+        assertTrue(Std.is(product.customerUiSettings.documents.get(0), Document));
+        assertTrue(Std.is(product.category, Category));
+        assertTrue(Std.is(product.owner, Account));
+        assertTrue(Std.is(product.stats, ProductStats));
+        assertTrue(Std.is(product.stats.agreements, ProductStatsInfo));
+        assertTrue(Std.is(product.stats.contracts, ProductStatsInfo));
+        assertEquals('PRD-783-317-575', product.id);
+        assertEquals('Test Product', product.name);
+        assertEquals('https://provider.connect.cloud.im/media/dapper-lynxes-35/mj301/media/mj301-logo.png', product.icon);
+        assertEquals('', product.shortDescription);
+        assertEquals('', product.detailedDescription);
+        assertEquals(2, product.version);
+        assertEquals('', product.publishedAt);
+        assertEquals(true, product.configurations.suspendResumeSupported);
+        assertEquals(true, product.configurations.requiresResellerInformation);
+        assertEquals('description', product.customerUiSettings.description);
+        assertEquals('short description', product.customerUiSettings.gettingStarted);
+        final link = product.customerUiSettings.downloadLinks.get(0);
+        assertEquals('Windows', link.title);
+        assertEquals('https://fallball.io/download/windows', link.url);
+        final document = product.customerUiSettings.documents.get(0);
+        assertEquals('Admin Manual', document.title);
+        assertEquals('https://fallball.io/manual/admin', document.url);
+        assertEquals('CAT-00000', product.category.id);
+        assertEquals('Category', product.category.name);
+        assertEquals('VA-000-000', product.owner.id);
+        assertEquals('Vendor', product.owner.name);
+        assertEquals(false, product.latest);
+        final stats = product.stats;
+        assertEquals(0, stats.listings);
+        assertEquals(0, stats.agreements.distribution);
+        assertEquals(0, stats.agreements.sourcing);
+        assertEquals(0, stats.contracts.distribution);
+        assertEquals(0, stats.contracts.sourcing);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProduct'));
         assertEquals(
             ['PRD-783-317-575'].toString(),
@@ -47,11 +100,11 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testGetKo() {
         // Check subject
-        var product = Product.get('PRD-XXX-XXX-XXX');
+        final product = Product.get('PRD-XXX-XXX-XXX');
         assertTrue(product == null);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getProduct'));
         assertEquals(
             ['PRD-XXX-XXX-XXX'].toString(),
@@ -61,12 +114,12 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testListActionsOk() {
         // Check subject
-        var actions = Product.get('PRD-783-317-575').listActions(null);
+        final actions = Product.get('PRD-783-317-575').listActions(null);
         assertEquals(1, actions.length());
         assertEquals('sso_action', actions.get(0).id);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listProductActions'));
         assertEquals(
             ['PRD-783-317-575', null].toString(),
