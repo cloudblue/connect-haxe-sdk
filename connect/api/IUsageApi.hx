@@ -12,7 +12,7 @@ interface IUsageApi {
     public function acceptUsageFileAction(id: String, note: String): Dynamic;
     public function rejectUsageFileAction(id: String, note: String): Dynamic;
     public function closeUsageFileAction(id: String): Dynamic;
-    public function getProductSpecificUsageFileTemplate(product_id: String): Dynamic;
+    public function getProductSpecificUsageFileTemplate(productId: String): Dynamic;
     public function uploadReconciliationFileFromProvider(id: String, file: ByteData): Dynamic;
     public function reprocessProcessedFile(id: String): Dynamic;
     public function listUsageRecords(filters: QueryParams): Array<Dynamic>;

@@ -69,8 +69,8 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function getProductSpecificUsageFileTemplate(product_id: String): Dynamic {
-        return Env.getApiClient().get(USAGE_PRODUCTS_PATH, product_id, 'template');
+    public function getProductSpecificUsageFileTemplate(productId: String): Dynamic {
+        return Env.getApiClient().get(USAGE_PRODUCTS_PATH, productId, 'template');
     }
 
 
