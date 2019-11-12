@@ -1,4 +1,5 @@
 import connect.Env;
+import connect.Flow;
 import connect.Logger;
 import connect.Processor;
 import connect.api.QueryParams;
@@ -12,30 +13,34 @@ class Example {
         Env.loadConfig('examples/config.json');
         Env.initLogger('examples/log.md', Logger.LEVEL_INFO, null);
 
-        // Process requests
-        new Processor()
-            .step('Add dummy data', function(p, input) {
-                p.setData('assetId', p.getRequest().asset.id)
-                    .setData('connectionId', p.getRequest().asset.connection.id)
-                    .setData('productId', p.getRequest().asset.product.id)
-                    .setData('status', p.getRequest().status);
-                return p.getRequest().id;
+        // Define purchase flow
+        var purchase = new Flow(null)
+            .step('Add dummy data', function(f, input) {
+                f.setData('assetId', f.getRequest().asset.id)
+                    .setData('connectionId', f.getRequest().asset.connection.id)
+                    .setData('productId', f.getRequest().asset.product.id)
+                    .setData('status', f.getRequest().status);
+                return f.getRequest().id;
             })
-            .step('Trace request data', function(p, requestId) {
+            .step('Trace request data', function(f, requestId) {
                 Sys.println(requestId
-                    + ' : ' + p.getData('assetId')
-                    + ' : ' + p.getData('connectionId')
-                    + ' : ' + p.getData('productId')
-                    + ' : ' + p.getData('status'));
+                    + ' : ' + f.getData('assetId')
+                    + ' : ' + f.getData('connectionId')
+                    + ' : ' + f.getData('productId')
+                    + ' : ' + f.getData('status'));
                 return '';
-            })
+            });
             /*
-            .step('Approve request', function(p, input) {
-                p.getRequest().approveByTemplate('TL-000-000-000');
-                p.getRequest().approveByTile('Markdown text');
+            .step('Approve request', function(f, input) {
+                f.getRequest().approveByTemplate('TL-000-000-000');
+                f.getRequest().approveByTile('Markdown text');
                 return '';
             })
             */
+
+        // Process requests
+        new Processor()
+            .flow(purchase)
             .run(Request, new QueryParams()
                 .set('asset.product.id__in', Env.getConfig().getProductsString())
                 .set('status', 'pending'));
