@@ -1,8 +1,11 @@
 package tests.unit;
 
+import connect.Collection;
 import connect.Dictionary;
 import connect.Env;
 import connect.models.Conversation;
+import connect.models.Message;
+import connect.models.User;
 import tests.mocks.Mock;
 
 
@@ -15,12 +18,14 @@ class ConversationTest extends haxe.unit.TestCase {
 
     public function testList() {
         // Check subject
-        var conversations = Conversation.list(null);
+        final conversations = Conversation.list(null);
+        assertTrue(Std.is(conversations, Collection));
         assertEquals(1, conversations.length());
+        assertTrue(Std.is(conversations.get(0), Conversation));
         assertEquals('CO-000-000-000', conversations.get(0).id);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listConversations'));
         assertEquals(
             [null].toString(),
@@ -30,14 +35,14 @@ class ConversationTest extends haxe.unit.TestCase {
 
     public function testCreate() {
         // Check subject
-        var conversation = Conversation.create('XXX', 'Nothing in particular');
-        assertTrue(conversation != null);
+        final conversation = Conversation.create('XXX', 'Nothing in particular');
+        assertTrue(Std.is(conversation, Conversation));
         assertEquals('CO-000-000-000', conversation.id);
         assertEquals('XXX', conversation.instanceId);
         assertEquals('Nothing in particular', conversation.topic);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('createConversation'));
         assertEquals(
             [haxe.Json.stringify({
@@ -50,11 +55,32 @@ class ConversationTest extends haxe.unit.TestCase {
 
     public function testGetOk() {
         // Check subject
-        var conversation = Conversation.get('CO-000-000-000');
-        assertTrue(conversation != null);
+        final conversation = Conversation.get('CO-000-000-000');
+        assertTrue(Std.is(conversation, Conversation));
+        assertTrue(Std.is(conversation.messages, Collection));
+        assertEquals(1, conversation.messages.length());
+        assertTrue(Std.is(conversation.messages.get(0), Message));
+        assertTrue(Std.is(conversation.messages.get(0).creator, User));
+        assertTrue(Std.is(conversation.creator, User));
+        assertEquals('CO-000-000-000', conversation.id);
+        assertEquals('PR-5852-1608-0000', conversation.instanceId);
+        assertEquals('2018-12-18T12:49:34+00:00', conversation.created);
+        assertEquals('Topic', conversation.topic);
+        
+        final message = conversation.messages.get(0);
+        assertEquals('ME-000-000-000', message.id);
+        assertEquals('CO-000-000-000', message.conversation);
+        assertEquals('2018-12-18T13:03:30+00:00', message.created);
+        assertEquals('UR-000-000-000', message.creator.id);
+        assertEquals('Some User', message.creator.name);
+        assertEquals('Message', message.text);
+        
+        final creator = conversation.creator;
+        assertEquals('UR-922-977-649', creator.id);
+        assertEquals('Some User', creator.name);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getConversation'));
         assertEquals(
             ['CO-000-000-000'].toString(),
@@ -64,11 +90,11 @@ class ConversationTest extends haxe.unit.TestCase {
 
     public function testGetKo() {
         // Check subject
-        var conversation = Conversation.get('CO-XXX-XXX-XXX');
+        final conversation = Conversation.get('CO-XXX-XXX-XXX');
         assertTrue(conversation == null);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getConversation'));
         assertEquals(
             ['CO-XXX-XXX-XXX'].toString(),
@@ -78,11 +104,11 @@ class ConversationTest extends haxe.unit.TestCase {
 
     public function testCreateMessage() {
         // Check subject
-        var message = Conversation.get('CO-000-000-000').createMessage('Hello, world!');
-        assertTrue(message != null);
+        final message = Conversation.get('CO-000-000-000').createMessage('Hello, world!');
+        assertTrue(Std.is(message, Message));
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('createConversationMessage'));
         assertEquals(
             ['CO-000-000-000', haxe.Json.stringify({text: 'Hello, world!'})].toString(),

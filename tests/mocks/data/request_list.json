@@ -16,7 +16,9 @@
       },
       "external_id": "1001000",
       "external_uid": "f90e2ed2-b267-4831-93e6-a6b06874e000",
+      "external_name": "Fallball 498c84b1-d53318a6",
       "id": "AS-392-283-000-0",
+      "status": "processing",
       "items": [
         {
           "id": "TEAM_ST3L2T1Y",
@@ -172,6 +174,18 @@
           "id": "TA-0-7042-5000-3000",
           "name": "Name"
         }
+      },
+      "marketplace": {
+        "id": "MP-12345",
+        "icon": "/media/PA-239-689/marketplaces/MP-54865/icon.png",
+        "name": "France and territories"
+      },
+      "contract": {
+        "id": "CRP-00000-00000-00000",
+        "name": "Contract of Program Agreement"
+      },
+      "configuration": {
+        "params": []
       }
     },
     "contract": {

@@ -50,7 +50,7 @@ class Request extends IdModel {
 
 
     /** Details of note. **/
-    public var note(default, default): String;
+    public var note: String;
 
 
     /** Asset object **/

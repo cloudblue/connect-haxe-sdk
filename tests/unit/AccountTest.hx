@@ -1,8 +1,12 @@
 package tests.unit;
 
+import connect.Collection;
 import connect.Dictionary;
 import connect.Env;
 import connect.models.Account;
+import connect.models.Event;
+import connect.models.Events;
+import connect.models.User;
 import tests.mocks.Mock;
 
 
@@ -14,13 +18,18 @@ class AccountTest extends haxe.unit.TestCase {
 
 
     public function testList() {
-        // Check subject
-        var accounts = Account.list(null);
+        // Check accounts list
+        final accounts = Account.list(null);
+        assertTrue(Std.is(accounts, Collection));
         assertEquals(1, accounts.length());
-        assertEquals('VA-044-420', accounts.get(0).id);
+
+        // Check first account
+        final account = accounts.get(0);
+        assertTrue(Std.is(account, Account));
+        assertEquals('VA-044-420', account.id);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listAccounts'));
         assertEquals(
             [null].toString(),
@@ -29,13 +38,14 @@ class AccountTest extends haxe.unit.TestCase {
 
 
     public function testCreate() {
-        // Check subject
-        var account = Account.create();
+        // Check account
+        final account = Account.create();
         assertTrue(account != null);
+        assertTrue(Std.is(account, Account));
         assertEquals('VA-044-420', account.id);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('createAccount'));
         assertEquals(
             [].toString(),
@@ -45,11 +55,30 @@ class AccountTest extends haxe.unit.TestCase {
 
     public function testGetOk() {
         // Check subject
-        var account = Account.get('VA-044-420');
+        final account = Account.get('VA-044-420');
         assertTrue(account != null);
+        assertTrue(Std.is(account, Account));
+        assertTrue(Std.is(account.events, Events));
+        assertTrue(Std.is(account.events.created, Event));
+        assertEquals('VA-044-420', account.id);
+        assertEquals('2018-06-04T13:19:10+00:00', account.events.created.at);
+        assertEquals(null, account.events.created.by);
+        assertEquals(null, account.events.inquired);
+        assertEquals(null, account.events.pended);
+        assertEquals(null, account.events.validated);
+        assertEquals(null, account.events.updated);
+        assertEquals(null, account.events.approved);
+        assertEquals(null, account.events.uploaded);
+        assertEquals(null, account.events.submitted);
+        assertEquals(null, account.events.accepted);
+        assertEquals(null, account.events.rejected);
+        assertEquals(null, account.events.closed);
+        assertEquals('BR-704', account.brand);
+        assertEquals('5b3e4e1d-f9f6-e811-a95a-000d3a1f74d1', account.externalId);
+        assertEquals(false, account.sourcing);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getAccount'));
         assertEquals(
             ['VA-044-420'].toString(),
@@ -59,11 +88,11 @@ class AccountTest extends haxe.unit.TestCase {
 
     public function testGetKo() {
         // Check subject
-        var account = Account.get('VA-XXX-XXX');
+        final account = Account.get('VA-XXX-XXX');
         assertTrue(account == null);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('getAccount'));
         assertEquals(
             ['VA-XXX-XXX'].toString(),
@@ -72,22 +101,27 @@ class AccountTest extends haxe.unit.TestCase {
 
 
     public function testListUsers() {
-        var users = Account.get('VA-044-420').listUsers();
+        final users = Account.get('VA-044-420').listUsers();
         assertTrue(users != null);
+        assertTrue(Std.is(users, Collection));
         assertEquals(1, users.length());
-        assertEquals('UR-460-012-274', users.get(0).id);
+
+        final user = users.get(0);
+        assertTrue(Std.is(user, User));
+        assertEquals('UR-460-012-274', user.id);
     }
 
 
     public function testGetUserOk() {
-        var user = Account.get('VA-044-420').getUser('UR-460-012-274');
+        final user = Account.get('VA-044-420').getUser('UR-460-012-274');
         assertTrue(user != null);
+        assertTrue(Std.is(user, User));
         assertEquals('UR-460-012-274', user.id);
     }
 
 
     public function testGetUserKo() {
-        var user = Account.get('VA-044-420').getUser('UR-XXX-XXX-XXX');
+        final user = Account.get('VA-044-420').getUser('UR-XXX-XXX-XXX');
         assertTrue(user == null);
     }
 }

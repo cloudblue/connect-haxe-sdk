@@ -6,7 +6,7 @@ package connect.models;
 **/
 class ProductStats extends Model {
     /** Number of listings (direct use of product by provider). **/
-    public var listing: Int;
+    public var listings: Int;
 
 
     /** Agreements related to the product. **/
