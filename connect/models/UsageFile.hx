@@ -83,7 +83,7 @@ class UsageFile extends IdModel {
 
 
     /** Note provider by the provider in case of rejection of the usage file. **/
-    public var rejectionNode: String;
+    public var rejectionNote: String;
 
 
     /** In case of invalid file, this field will contain errors related to the file. **/
@@ -266,5 +266,15 @@ class UsageFile extends IdModel {
     public function reprocess(): UsageFile {
         final usageFile = Env.getUsageApi().reprocessProcessedFile(this.id);
         return Model.parse(UsageFile, usageFile);
+    }
+
+
+    public function new() {
+        super();
+        this._setFieldClassNames([
+            'vendor' => 'Account',
+            'provider' => 'Account',
+            'records' => 'UsageRecords'
+        ]);
     }
 }
