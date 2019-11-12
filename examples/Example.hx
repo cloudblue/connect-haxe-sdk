@@ -13,8 +13,8 @@ class Example {
         Env.loadConfig('examples/config.json');
         Env.initLogger('examples/log.md', Logger.LEVEL_INFO, null);
 
-        // Define purchase flow
-        var purchase = new Flow(null)
+        // Define main flow
+        var flow = new Flow(null)
             .step('Add dummy data', function(f, input) {
                 f.setData('assetId', f.getRequest().asset.id)
                     .setData('connectionId', f.getRequest().asset.connection.id)
@@ -40,7 +40,7 @@ class Example {
 
         // Process requests
         new Processor()
-            .flow(purchase)
+            .flow(flow)
             .run(Request, new QueryParams()
                 .set('asset.product.id__in', Env.getConfig().getProductsString())
                 .set('status', 'pending'));

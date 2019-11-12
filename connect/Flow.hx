@@ -18,7 +18,7 @@ typedef StepFunc = (Flow, String) -> String;
 
 /**
     A Flow represents a set of steps within a `Processor` which are executed for all requests
-    that return `true` for a given function.
+    that return `true` for a given function. If `null` is passed, all requests will be processed.
 **/
 class Flow extends Base {
     /**
