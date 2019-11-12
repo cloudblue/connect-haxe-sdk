@@ -113,7 +113,9 @@ class ApiClientImpl extends Base implements IApiClient {
 
             var response: Response = null;
             try {
-                final contentsArr = [for (b in UInt8Array.fromBytes(fileContent._getBytes())) b];
+                final contentsArr = (fileArg != null && fileName != null && fileContent != null)
+                    ? [for (b in UInt8Array.fromBytes(fileContent._getBytes())) b]
+                    : [];
                 final pythonBytes = (contentsArr.length > 0)
                     ? new python.Bytes(contentsArr)
                     : null;
