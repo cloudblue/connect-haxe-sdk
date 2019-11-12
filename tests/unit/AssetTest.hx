@@ -60,7 +60,6 @@ class AssetTest extends haxe.unit.TestCase {
     public function testGetOk() {
         // Check asset
         final asset = Asset.get('AS-392-283-000-0');
-        assertTrue(asset != null);
         assertTrue(Std.is(asset, Asset));
         assertTrue(Std.is(asset.product, Product));
         assertTrue(Std.is(asset.connection, Connection));
@@ -254,7 +253,7 @@ class AssetTest extends haxe.unit.TestCase {
     public function testGetParamByIdOk() {
         final asset = Asset.get('AS-392-283-000-0');
         final param = asset.getParamById('activationCode');
-        assertTrue(param != null);
+        assertTrue(Std.is(param, Param));
         assertEquals('activationCode', param.id);
     }
 
@@ -269,7 +268,7 @@ class AssetTest extends haxe.unit.TestCase {
     public function testGetItemByIdOk() {
         final asset = Asset.get('AS-392-283-000-0');
         final item = asset.getItemById('TEAM_ST3L2T1Y');
-        assertTrue(item != null);
+        assertTrue(Std.is(item, Item));
         assertEquals('TEAM_ST3L2T1Y', item.id);
     }
 
@@ -284,7 +283,7 @@ class AssetTest extends haxe.unit.TestCase {
     public function testGetItemByMpnOk() {
         final asset = Asset.get('AS-392-283-000-0');
         final item = asset.getItemByMpn('TEAM-ST3L2T1Y');
-        assertTrue(item != null);
+        assertTrue(Std.is(item, Item));
         assertEquals('TEAM-ST3L2T1Y', item.mpn);
     }
 
@@ -299,7 +298,7 @@ class AssetTest extends haxe.unit.TestCase {
     public function testGetItemByGlobalIdOk() {
         final asset = Asset.get('AS-392-283-000-0');
         final item = asset.getItemByGlobalId('XXX');
-        assertTrue(item != null);
+        assertTrue(Std.is(item, Item));
         assertEquals('XXX', item.globalId);
     }
 

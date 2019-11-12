@@ -23,7 +23,7 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testList() {
         // Check subject
-        var requests = Request.list(null);
+        final requests = Request.list(null);
         assertTrue(Std.is(requests, Collection));
         assertEquals(2, requests.length());
         assertTrue(Std.is(requests.get(0), Request));
@@ -33,7 +33,7 @@ class RequestTest extends haxe.unit.TestCase {
         assertEquals(haxe.Json.stringify({id: 'XXX'}), requests.get(1).assignee);
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('listRequests'));
         assertEquals(
             [null].toString(),
@@ -43,7 +43,7 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testGetOk() {
         // Check subject
-        var request = Request.get('PR-5852-1608-0000');
+        final request = Request.get('PR-5852-1608-0000');
         assertTrue(Std.is(request, Request));
         assertTrue(Std.is(request.asset, Asset));
         assertTrue(Std.is(request.contract, Contract));
@@ -63,7 +63,7 @@ class RequestTest extends haxe.unit.TestCase {
         assertEquals('ApiKey XXX', request.assignee);
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('getRequest'));
         assertEquals(
             ['PR-5852-1608-0000'].toString(),
@@ -73,11 +73,11 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testGetKo() {
         // Check subject
-        var request = Request.get('PR-XXXX-XXXX-XXXX');
+        final request = Request.get('PR-XXXX-XXXX-XXXX');
         assertTrue(request == null);
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('getRequest'));
         assertEquals(
             ['PR-XXXX-XXXX-XXXX'].toString(),
@@ -87,12 +87,12 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testCreate() {
         // Check subject
-        var request = Request.create(new Request());
+        final request = Request.create(new Request());
         assertTrue(Std.is(request, Request));
         assertEquals('PR-5852-1608-0000', request.id);
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('createRequest'));
         assertEquals(
             [new Request()].toString(),
@@ -102,26 +102,26 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testCreateNull() {
         // Check subject
-        var request = Request.create(null);
+        final request = Request.create(null);
         assertTrue(request == null);
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(0, apiMock.callCount('createRequest'));
     }
 
 
     public function testUpdate() {
         // Check subject
-        var request = Request.get('PR-5852-1608-0000');
+        final request = Request.get('PR-5852-1608-0000');
         request.note = 'Hello, world!';
-        var updatedRequest = request.update();
+        final updatedRequest = request.update();
         assertTrue(Std.is(updatedRequest, Request));
         assertEquals(Request.get('PR-5852-1608-0000').toString(), updatedRequest.toString());
         // ^ The mock returns that request
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('updateRequest'));
         assertEquals(
             [request.id, request.toString()].toString(),
@@ -131,12 +131,12 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testApproveByTemplate() {
         // Check subject
-        var request = Request.get('PR-5852-1608-0000');
-        var approvedRequest = request.approveByTemplate('TL-XXX-XXX-XXX');
+        final request = Request.get('PR-5852-1608-0000');
+        final approvedRequest = request.approveByTemplate('TL-XXX-XXX-XXX');
         assertTrue(Std.is(approvedRequest, Request));
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('changeRequestStatus'));
         assertEquals(
             ['PR-5852-1608-0000', 'approve', '{"template_id":"TL-XXX-XXX-XXX"}'].toString(),
@@ -146,12 +146,12 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testApproveByTile() {
         // Check subject
-        var request = Request.get('PR-5852-1608-0000');
-        var approvedRequest = request.approveByTile('Hello, world!');
+        final request = Request.get('PR-5852-1608-0000');
+        final approvedRequest = request.approveByTile('Hello, world!');
         assertTrue(Std.is(approvedRequest, Request));
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('changeRequestStatus'));
         assertEquals(
             ['PR-5852-1608-0000', 'approve', '{"activation_tile":"Hello, world!"}'].toString(),
@@ -161,12 +161,12 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testFail() {
         // Check subject
-        var request = Request.get('PR-5852-1608-0000');
-        var failedRequest = request.fail("Failing...");
+        final request = Request.get('PR-5852-1608-0000');
+        final failedRequest = request.fail("Failing...");
         assertTrue(Std.is(failedRequest, Request));
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('changeRequestStatus'));
         assertEquals(
             ['PR-5852-1608-0000', 'fail', '{"reason":"Failing..."}'].toString(),
@@ -176,12 +176,12 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testInquire() {
         // Check subject
-        var request = Request.get('PR-5852-1608-0000');
-        var inquiredRequest = request.inquire();
+        final request = Request.get('PR-5852-1608-0000');
+        final inquiredRequest = request.inquire();
         assertTrue(Std.is(inquiredRequest, Request));
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('changeRequestStatus'));
         assertEquals(
             ['PR-5852-1608-0000', 'inquire', '{}'].toString(),
@@ -191,12 +191,12 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testPend() {
         // Check subject
-        var request = Request.get('PR-5852-1608-0000');
-        var pendedRequest = request.pend();
+        final request = Request.get('PR-5852-1608-0000');
+        final pendedRequest = request.pend();
         assertTrue(Std.is(pendedRequest, Request));
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('changeRequestStatus'));
         assertEquals(
             ['PR-5852-1608-0000', 'pend', '{}'].toString(),
@@ -206,13 +206,13 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testAssign() {
         // Check subject
-        var request = Request.get('PR-5852-1608-0000');
-        var assignedRequest = request.assign('XXX');
+        final request = Request.get('PR-5852-1608-0000');
+        final assignedRequest = request.assign('XXX');
         assertTrue(Std.is(assignedRequest, Request));
         assertEquals('XXX', assignedRequest.assignee);
 
         // Check mocks
-        var apiMock = cast(Env.getFulfillmentApi(), Mock);
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('assignRequest'));
         assertEquals(
             ['PR-5852-1608-0000', 'XXX'].toString(),
@@ -222,14 +222,14 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testNeedsMigrationFalse() {
         // Check subject
-        var request = Request.get('PR-5852-1608-0000');
+        final request = Request.get('PR-5852-1608-0000');
         assertFalse(request.needsMigration());
     }
 
 
     public function testNeedsMigrationFalse2() {
         // Check subject
-        var request = Request.get('PR-5852-1608-0000');
+        final request = Request.get('PR-5852-1608-0000');
         request.asset.params.push(Model.parse(Param, {
             id: 'migration_info',
             value: ''
@@ -240,7 +240,7 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testNeedsMigrationTrue() {
         // Check subject
-        var request = Request.get('PR-5852-1608-0000');
+        final request = Request.get('PR-5852-1608-0000');
         request.asset.params.push(Model.parse(Param, {
             id: 'migration_info',
             value: '{}'
@@ -251,13 +251,13 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testGetConversation() {
         // Check subject
-        var request = Request.get('PR-5852-1608-0000');
-        var conv = request.getConversation();
+        final request = Request.get('PR-5852-1608-0000');
+        final conv = request.getConversation();
         assertTrue(Std.is(conv, Conversation));
         assertEquals('PR-5852-1608-0000', conv.instanceId);
 
         // Check mocks
-        var apiMock = cast(Env.getGeneralApi(), Mock);
+        final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listConversations'));
         assertEquals(
             ['?instance_id=PR-5852-1608-0000'].toString(),

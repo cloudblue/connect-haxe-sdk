@@ -36,7 +36,6 @@ class ConversationTest extends haxe.unit.TestCase {
     public function testCreate() {
         // Check subject
         final conversation = Conversation.create('XXX', 'Nothing in particular');
-        assertTrue(conversation != null);
         assertTrue(Std.is(conversation, Conversation));
         assertEquals('CO-000-000-000', conversation.id);
         assertEquals('XXX', conversation.instanceId);
@@ -57,7 +56,6 @@ class ConversationTest extends haxe.unit.TestCase {
     public function testGetOk() {
         // Check subject
         final conversation = Conversation.get('CO-000-000-000');
-        assertTrue(conversation != null);
         assertTrue(Std.is(conversation, Conversation));
         assertTrue(Std.is(conversation.messages, Collection));
         assertEquals(1, conversation.messages.length());
@@ -107,7 +105,7 @@ class ConversationTest extends haxe.unit.TestCase {
     public function testCreateMessage() {
         // Check subject
         final message = Conversation.get('CO-000-000-000').createMessage('Hello, world!');
-        assertTrue(message != null);
+        assertTrue(Std.is(message, Message));
 
         // Check mocks
         final apiMock = cast(Env.getGeneralApi(), Mock);

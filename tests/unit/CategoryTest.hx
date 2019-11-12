@@ -35,7 +35,6 @@ class CategoryTest extends haxe.unit.TestCase {
     public function testGetOk() {
         // Check category
         final category = Category.get('CAT-00012');
-        assertTrue(category != null);
         assertTrue(Std.is(category, Category));
         assertTrue(Std.is(category.parent, Category));
         assertTrue(Std.is(category.family, Family));

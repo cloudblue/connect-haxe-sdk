@@ -49,7 +49,6 @@ class ProductTest extends haxe.unit.TestCase {
     public function testGetOk() {
         // Check subject
         final product = Product.get('PRD-783-317-575');
-        assertTrue(product != null);
         assertTrue(Std.is(product, Product));
         assertTrue(Std.is(product.configurations, Configurations));
         assertTrue(Std.is(product.customerUiSettings, CustomerUiSettings));
@@ -152,7 +151,6 @@ class ProductTest extends haxe.unit.TestCase {
         // Check subject
         final product = Product.get('PRD-783-317-575');
         final action = product.getAction('sso_action');
-        assertTrue(action != null);
         assertTrue(Std.is(action, Action));
         assertEquals('sso_action', action.id);
 
