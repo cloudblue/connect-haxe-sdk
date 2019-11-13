@@ -1,6 +1,8 @@
 // Include all mock classes here to make sure they are accesible to reflection
+import tests.mocks.ApiClientMock;
 import tests.mocks.FulfillmentApiMock;
 import tests.mocks.GeneralApiMock;
+import tests.mocks.UsageApiMock;
 
 
 class UnitTests {
@@ -14,6 +16,7 @@ class UnitTests {
         runner.add(new tests.unit.ConversationTest());
         runner.add(new tests.unit.ProductTest());
         runner.add(new tests.unit.RequestTest());
+        runner.add(new tests.unit.UsageFileTest());
 
         runner.run();
     }

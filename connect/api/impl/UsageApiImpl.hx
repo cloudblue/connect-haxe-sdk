@@ -15,8 +15,8 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function createUsageFile(file: String): Dynamic {
-        return Env.getApiClient().post(USAGE_FILES_PATH, null, null, file);
+    public function createUsageFile(body: String): Dynamic {
+        return Env.getApiClient().post(USAGE_FILES_PATH, null, null, body);
     }
 
 
@@ -25,8 +25,8 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function updateUsageFile(id: String, file: String): Dynamic {
-        return Env.getApiClient().put(USAGE_FILES_PATH, id, file);
+    public function updateUsageFile(id: String, body: String): Dynamic {
+        return Env.getApiClient().put(USAGE_FILES_PATH, id, body);
     }
 
 
@@ -69,8 +69,8 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function getProductSpecificUsageFileTemplate(product_id: String): Dynamic {
-        return Env.getApiClient().get(USAGE_PRODUCTS_PATH, product_id, 'template');
+    public function getProductSpecificUsageFileTemplate(productId: String): Dynamic {
+        return Env.getApiClient().get(USAGE_PRODUCTS_PATH, productId, 'template');
     }
 
 
