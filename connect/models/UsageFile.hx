@@ -334,14 +334,10 @@ class UsageFile extends IdModel {
         entries.add(zipEntry('xl/worksheets/sheet1.xml', parseSheet(sheet)));
         entries.add(zipEntry('xl/sharedStrings.xml', parseSheetStrings(sheet)));
         entries.add(zipEntry('xl/styles.xml', STYLES));
-        entries.add(zipEntry('xl/workbook.xml', StringTools.replace(STYLES, '%NAME%', name)));
+        entries.add(zipEntry('xl/workbook.xml', StringTools.replace(WORKBOOK, '%NAME%', name)));
         entries.add(zipEntry('xl/_rels/workbook.xml.rels', RELS2));
         entries.add(zipEntry('[Content_Types].xml', CONTENT_TYPES));
 
-        final output_ = sys.io.File.write('output.xlsx');
-        new haxe.zip.Writer(output_).write(entries);
-        output_.close();
-        
         final output = new BytesOutput();
         new haxe.zip.Writer(output).write(entries);
         return output.getBytes();
