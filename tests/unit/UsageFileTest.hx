@@ -100,7 +100,7 @@ class UsageFileTest extends haxe.unit.TestCase {
 
     public function testCreate() {
         // Check subject
-        final usageFile = UsageFile.create(new UsageFile());
+        final usageFile = new UsageFile().create();
         assertTrue(Std.is(usageFile, UsageFile));
         assertEquals('UF-2018-11-9878764342', usageFile.id);
 
@@ -110,17 +110,6 @@ class UsageFileTest extends haxe.unit.TestCase {
         assertEquals(
             [new UsageFile()].toString(),
             apiMock.callArgs('createUsageFile', 0).toString());
-    }
-
-
-    public function testCreateNull() {
-        // Check subject
-        final usageFile = UsageFile.create(null);
-        assertTrue(usageFile == null);
-
-        // Check mocks
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        assertEquals(0, apiMock.callCount('createUsageFile'));
     }
 
 

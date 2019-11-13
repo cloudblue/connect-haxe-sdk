@@ -112,8 +112,8 @@ class Request extends IdModel {
 
 
     /**
-        Creates a new Request, based on the data of the Request provided. The given Request is only
-        required to have a value in the following fields:
+        Creates a new Request registered on Connect, based on the data of `this` Request, which
+        should have a value at least in the following fields:
 
         - type
         - asset.externalUid
@@ -124,10 +124,10 @@ class Request extends IdModel {
 
         @returns The created Request, or `null` if it couldn't be created.
     **/
-    public static function create(request: Request): Request {
+    public function create(): Request {
         try {
-            var newRequest = Env.getFulfillmentApi().createRequest(request.toString());
-            return Model.parse(Request, newRequest);
+            final request = Env.getFulfillmentApi().createRequest(this.toString());
+            return Model.parse(Request, request);
         } catch (ex: Dynamic) {
             return null;
         }

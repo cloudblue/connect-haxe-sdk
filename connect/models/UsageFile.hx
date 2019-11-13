@@ -126,20 +126,18 @@ class UsageFile extends IdModel {
 
 
     /**
-        Creates a new UsageFile, based on the data of the UsageFile provided. The given UsageFile
-        is only required to have a value in the following fields:
+        Creates a new UsageFile registered on Connect, based on the data of `this` UsageFile, which
+        should have a value at least in the following fields:
 
         - name
-        - description
-        - note
         - product.id
         - contract.id
 
         @returns The created UsageFile.
     **/
-    public static function create(usageFile: UsageFile): UsageFile {
+    public function create(): UsageFile {
         try {
-            final newUsageFile = Env.getUsageApi().createUsageFile(usageFile.toString());
+            final newUsageFile = Env.getUsageApi().createUsageFile(this.toString());
             return Model.parse(UsageFile, newUsageFile);
         } catch (ex: Dynamic) {
             return null;
