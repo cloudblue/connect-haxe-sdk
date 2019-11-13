@@ -1,9 +1,6 @@
 package connect.models;
 
 import connect.api.QueryParams;
-import haxe.crypto.Crc32;
-import haxe.io.Bytes;
-import haxe.io.BytesOutput;
 
 
 /**
@@ -297,7 +294,7 @@ class UsageFile extends IdModel {
     private static inline var WORKBOOK = '<workbook xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><workbookPr /><workbookProtection /><bookViews><workbookView activeTab="0" autoFilterDateGrouping="1" firstSheet="0" minimized="0" showHorizontalScroll="1" showSheetTabs="1" showVerticalScroll="1" tabRatio="600" visibility="visible" /></bookViews><sheets><sheet name="%NAME%" sheetId="1" state="visible" r:id="rId1" /></sheets><definedNames /><calcPr calcId="124519" fullCalcOnLoad="1" /></workbook>';
 
 
-    private static function createSpreadsheet(records: Array<UsageRecord>): Bytes {
+    private static function createSpreadsheet(records: Array<UsageRecord>): haxe.io.Bytes {
         final sheet: Sheet = [];
         sheet.push([
             'usage_record_id',
@@ -325,7 +322,7 @@ class UsageFile extends IdModel {
     }
 
 
-    private static function zipSheet(name: String, sheet: Sheet): Bytes {
+    private static function zipSheet(name: String, sheet: Sheet): haxe.io.Bytes {
         final entries = new List<haxe.zip.Entry>();
         entries.add(zipEntry('_rels/.rels', RELS1));
         entries.add(zipEntry('docProps/app.xml', APP));
@@ -338,7 +335,7 @@ class UsageFile extends IdModel {
         entries.add(zipEntry('xl/_rels/workbook.xml.rels', RELS2));
         entries.add(zipEntry('[Content_Types].xml', CONTENT_TYPES));
 
-        final output = new BytesOutput();
+        final output = new haxe.io.BytesOutput();
         new haxe.zip.Writer(output).write(entries);
         return output.getBytes();
     }
@@ -360,11 +357,13 @@ class UsageFile extends IdModel {
             buf.add('<row r="${r+1}" spans="1:${sheet[r].length}">');
             for (c in 0...rowNames.length) {
                 final elem = sheet[r][c];
-                final type = Std.is(elem, String) ? 's' : 'n';
-                final value = Std.is(elem, String) ? strings.indexOf(elem) : cast(elem, Int);
-                buf.add('<c r="${rowNames[c]}" t="$type">');
-                buf.add('<v>$value</v>');
-                buf.add('</c>');
+                if (elem != null) {
+                    final type = Std.is(elem, String) ? 's' : 'n';
+                    final value = Std.is(elem, String) ? strings.indexOf(elem) : cast(elem, Int);
+                    buf.add('<c r="${rowNames[c]}" t="$type">');
+                    buf.add('<v>$value</v>');
+                    buf.add('</c>');
+                }
             }
             buf.add('</row>');
         }
@@ -388,17 +387,19 @@ class UsageFile extends IdModel {
 
 
     private static function zipEntry(name: String, content: String): haxe.zip.Entry {
-        final bytes = Bytes.ofString(content);
+        final bytes = haxe.io.Bytes.ofString(content);
         final entry = {
             compressed: false,
-            crc32: Crc32.make(bytes),
+            crc32: haxe.crypto.Crc32.make(bytes),
             data: bytes,
             dataSize: 0,
             fileName: name,
             fileSize: bytes.length,
             fileTime: Date.now()
         };
+    #if !python
         haxe.zip.Tools.compress(entry, 9);
+    #end
         return entry;
     }
 
