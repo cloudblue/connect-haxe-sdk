@@ -9,6 +9,7 @@ import connect.models.Contract;
 import connect.models.Marketplace;
 import connect.models.Product;
 import connect.models.UsageFile;
+import connect.models.UsageRecord;
 import connect.models.UsageRecords;
 import tests.mocks.Mock;
 
@@ -141,6 +142,32 @@ class UsageFileTest extends haxe.unit.TestCase {
         assertEquals(
             ['UF-2018-11-9878764342'].toString(),
             apiMock.callArgs('deleteUsageFile', 0).toString());
+    }
+
+
+    public function testUploadRecords() {
+        // Create date
+        final today = Date.now();
+        final yesterday = new Date(
+            today.getFullYear(), today.getMonth(), today.getDate() - 1,
+            today.getHours(), today.getMinutes(), today.getSeconds());
+
+        // Create record
+        final record = new UsageRecord();
+        record.usageRecordId = 'Unique record value';
+        record.itemSearchCriteria = 'item.mpn';
+        record.itemSearchValue = 'SKUA';
+        record.quantity = 1;
+        record.startTimeUtc = connect.Util.getDate(yesterday);
+        record.endTimeUtc = connect.Util.getDate(today);
+        record.assetSearchCriteria = 'parameter.param_b';
+        record.assetSearchValue = 'tenant2';
+
+        // Create file
+        final fileTemplate = new UsageFile();
+        fileTemplate.name = 'sdk test';
+        final usageFile = fileTemplate.create();
+        usageFile.uploadRecords(new Collection<UsageRecord>().push(record));
     }
 
 

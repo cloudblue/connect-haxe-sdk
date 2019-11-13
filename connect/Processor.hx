@@ -73,10 +73,10 @@ class Processor extends Base {
             default:
         }
 
-        Env.getLogger().openSection('Running Processor on ' + Util.getDate());
+        Env.getLogger().openSection('Running Processor on ' + Util.getDate() + ' UTC');
 
         // List requests
-        Env.getLogger().openSection('Listing requests on ' + Util.getDate());
+        Env.getLogger().openSection('Listing requests on ' + Util.getDate() + ' UTC');
         var list: Collection<IdModel> = null;
         try {
             var listMethod: Function = Reflect.field(modelClass, 'list');

@@ -225,7 +225,8 @@ class Flow extends Base {
 
     @:dox(hide)
     public function _run<T>(list: Collection<T>): Void {
-        Env.getLogger().openSection('Running ${this.getClassName()} on ' + Util.getDate());
+        Env.getLogger().openSection(
+            'Running ${this.getClassName()} on ' + Util.getDate() + ' UTC');
 
         // Filter requests
         final filteredList = (filterFunc != null)
@@ -355,10 +356,10 @@ class Flow extends Base {
         if (this.getRequest() != null) {
             Env.getLogger().openSection('Processing request "' + this.model.id
                 + '" for asset "' + this.getRequest().asset.id
-                + '" on ' + Util.getDate());
+                + '" on ' + Util.getDate() + ' UTC');
         } else {
             Env.getLogger().openSection('Processing request "${this.model.id}" on '
-                + Util.getDate());
+                + Util.getDate() + ' UTC');
         }
 
         // For Fulfillment requests, check if we must skip due to pending migration
