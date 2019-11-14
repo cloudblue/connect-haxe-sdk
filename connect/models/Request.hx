@@ -112,7 +112,7 @@ class Request extends IdModel {
 
 
     /**
-        Creates a new Request registered on Connect, based on the data of `this` Request, which
+        Registers a new Request on Connect, based on the data of `this` Request, which
         should have a value at least in the following fields:
 
         - type
@@ -122,9 +122,9 @@ class Request extends IdModel {
         - asset.tiers
         - marketplace.id
 
-        @returns The created Request, or `null` if it couldn't be created.
+        @returns The new Request, or `null` if it couldn't be created.
     **/
-    public function create(): Request {
+    public function register(): Request {
         try {
             final request = Env.getFulfillmentApi().createRequest(this.toString());
             return Model.parse(Request, request);

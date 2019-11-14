@@ -99,9 +99,9 @@ class UsageFileTest extends haxe.unit.TestCase {
     }
 
 
-    public function testCreate() {
+    public function testRegister() {
         // Check subject
-        final usageFile = new UsageFile().create();
+        final usageFile = new UsageFile().register();
         assertTrue(Std.is(usageFile, UsageFile));
         assertEquals('UF-2018-11-9878764342', usageFile.id);
 
@@ -146,7 +146,15 @@ class UsageFileTest extends haxe.unit.TestCase {
 
 
     public function testUploadRecords() {
-        // Create date
+    /*
+    #if python
+        final sheetName = 'tests/mocks/data/sheet_py.xlsx';
+    #else
+        final sheetName = 'tests/mocks/data/sheet.xlsx';
+    #end
+    */
+
+        // Create dates
         final today = Date.now();
         final yesterday = new Date(
             today.getFullYear(), today.getMonth(), today.getDate() - 1,
@@ -162,12 +170,24 @@ class UsageFileTest extends haxe.unit.TestCase {
         record.endTimeUtc = connect.Util.getDate(today);
         record.assetSearchCriteria = 'parameter.param_b';
         record.assetSearchValue = 'tenant2';
+        final records = new Collection<UsageRecord>().push(record);
 
-        // Create file
-        final fileTemplate = new UsageFile();
-        fileTemplate.name = 'sdk test';
-        final usageFile = fileTemplate.create();
-        usageFile.uploadRecords(new Collection<UsageRecord>().push(record));
+        // Check subject
+        final usageFile = new UsageFile().register();
+        final newFile = usageFile.uploadRecords(records);
+        assertTrue(Std.is(newFile, UsageFile));
+        assertEquals(UsageFile.get('UF-2018-11-9878764342').toString(), newFile.toString());
+        // ^ The mock returns that file
+
+        // Check mocks (does not work because the generated file always differs in date)
+        /*
+        final args: Array<Dynamic> = [usageFile.id, ByteData.load(sheetName)];
+        final apiMock = cast(Env.getUsageApi(), Mock);
+        assertEquals(1, apiMock.callCount('uploadUsageFile'));
+        assertEquals(
+            args.toString(),
+            apiMock.callArgs('uploadUsageFile', 0).toString());
+        */
     }
 
 
