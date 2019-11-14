@@ -42,7 +42,9 @@ class Flow extends Base {
         need to perform independently of whether you are resuming from a previous execution
         or not, you can override this method and write your initialization tasks.
 
-        If you are resuming from a previous execution
+        If you are resuming from a previous execution and this method writes information with
+        `Flow.setData`, that information will be overridden with the one restored from the
+        previous execution.
     **/
     public function setup(): Void {}
 
