@@ -90,7 +90,8 @@ class AssetTest extends haxe.unit.TestCase {
         assertTrue(Std.is(asset.items.get(0).params.get(0).events.created.by, User));
         assertTrue(Std.is(asset.configuration, Configuration));
         assertTrue(Std.is(asset.configuration.params, Collection));
-        assertEquals(0, asset.configuration.params.length());
+        assertEquals(1, asset.configuration.params.length());
+        assertTrue(Std.is(asset.configuration.params.get(0), Param));
         assertEquals('AS-392-283-000-0', asset.id);
         assertEquals('processing', asset.status);
         assertEquals('1001000', asset.externalId);
