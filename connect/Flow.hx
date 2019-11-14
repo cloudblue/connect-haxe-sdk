@@ -37,6 +37,17 @@ class Flow extends Base {
 
 
     /**
+        The setup function is always called before executing the steps, independently of what is
+        the first step that will be run. If you need some initialization tasks that you always
+        need to perform independently of whether you are resuming from a previous execution
+        or not, you can override this method and write your initialization tasks.
+
+        If you are resuming from a previous execution
+    **/
+    public function setup(): Void {}
+
+
+    /**
         Defines a step of `this` Flow. Steps are executed sequentially by the Flow
         when its `run` method is invoked.
 
@@ -259,7 +270,7 @@ class Flow extends Base {
         
         // Process each model
         for (model in filteredList) {
-            this.processRequest(cast(model, IdModel));
+            this.process(cast(model, IdModel));
         }
 
         Env.getLogger().closeSection();
@@ -277,8 +288,13 @@ class Flow extends Base {
     private var abortMessage: String;
 
 
-    private function processRequest(model: IdModel): Void {
+    private function process(model: IdModel): Void {
         if (this.prepareAndOpenLogSection(model)) {
+            // Run setup function
+            Env.getLogger().openSection('Setup');
+            this.setup();
+            Env.getLogger().closeSection();
+
             // If there is stored step data, set data and jump to that step
             final stepParam = (this.getRequest() != null)
                 ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
