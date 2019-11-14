@@ -10,11 +10,11 @@ class Logger extends Base {
 
 
     /** Only writes compact error & info level messages. **/
-    public static inline var LEVEL_INFO = 1;
+    public static inline var LEVEL_INFO = 2;
 
 
     /** Writes detailed messages of all levels. **/
-    public static inline var LEVEL_DEBUG = 2;
+    public static inline var LEVEL_DEBUG = 3;
 
 
     /**
@@ -57,7 +57,7 @@ class Logger extends Base {
         Writes a debug message to the log.
     **/
     public function debug(message: String): Void {
-        if (this.level == LEVEL_DEBUG) {
+        if (this.level >= LEVEL_DEBUG) {
             this.write(message);
         }
     }
