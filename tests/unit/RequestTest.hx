@@ -85,9 +85,9 @@ class RequestTest extends haxe.unit.TestCase {
     }
 
 
-    public function testCreate() {
+    public function testRegister() {
         // Check subject
-        final request = new Request().create();
+        final request = new Request().register();
         assertTrue(Std.is(request, Request));
         assertEquals('PR-5852-1608-0000', request.id);
 

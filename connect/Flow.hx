@@ -2,6 +2,7 @@ package connect;
 
 import connect.models.IdModel;
 import connect.models.Request;
+import connect.models.UsageFile;
 import haxe.Constraints.Function;
 import haxe.Json;
 
@@ -12,6 +13,7 @@ typedef StepFunc = connect.native.JavaBiFunction<Flow, String, String>;
 #else
 @:dox(hide)
 typedef FilterFunc = (IdModel) -> Bool;
+@:dox(hide)
 typedef StepFunc = (Flow, String) -> String;
 #end
 
@@ -61,6 +63,22 @@ class Flow extends Base {
     public function getRequest(): Request {
         try {
             return cast(this.model, Request);
+        } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+
+    /**
+        This can be called within your steps to get the request being processed, as long as it
+        is of the `UsageFile` type.
+
+        @returns The `USageFile` being processed, or `null` if current request is not of
+        Usage api.
+    **/
+    public function getUsageFile(): UsageFile {
+        try {
+            return cast(this.model, UsageFile);
         } catch (ex: Dynamic) {
             return null;
         }
@@ -225,7 +243,8 @@ class Flow extends Base {
 
     @:dox(hide)
     public function _run<T>(list: Collection<T>): Void {
-        Env.getLogger().openSection('Running ${this.getClassName()} on ' + Util.getDate());
+        Env.getLogger().openSection(
+            'Running ${this.getClassName()} on ' + Util.getDate() + ' UTC');
 
         // Filter requests
         final filteredList = (filterFunc != null)
@@ -355,10 +374,10 @@ class Flow extends Base {
         if (this.getRequest() != null) {
             Env.getLogger().openSection('Processing request "' + this.model.id
                 + '" for asset "' + this.getRequest().asset.id
-                + '" on ' + Util.getDate());
+                + '" on ' + Util.getDate() + ' UTC');
         } else {
             Env.getLogger().openSection('Processing request "${this.model.id}" on '
-                + Util.getDate());
+                + Util.getDate() + ' UTC');
         }
 
         // For Fulfillment requests, check if we must skip due to pending migration

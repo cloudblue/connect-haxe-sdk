@@ -2,15 +2,9 @@ package connect;
 
 import connect.api.QueryParams;
 import connect.models.IdModel;
+import connect.models.Request;
+import connect.models.UsageFile;
 import haxe.Constraints.Function;
-
-
-#if java
-typedef ProcessorStepFunc = connect.native.JavaBiFunction<Processor, String, String>;
-#else
-@:dox(hide)
-typedef ProcessorStepFunc = (Processor, String) -> String;
-#end
 
 
 /**
@@ -26,8 +20,9 @@ typedef ProcessorStepFunc = (Processor, String) -> String;
     arguments the flow itself (so you can subclass `Flow` and add steps as instance methods) and
     the value that was returned from the previous step.
 
-    Once all flows have been defined, you must call the `run` method to process all requests
-    of a specific type.
+    Once all flows have been defined, you must call the `Processor.processRequests`,
+    `Processor.processUsageFiles`, or `Processor.processTierConfigRequests` method to process
+    requests, depending on the type you want to process.
 
     If an exception is thrown on any step, the rest of the steps will be skipped, and the next
     time the Processor runs, the request will be processed again. If the `Asset` of the request has
@@ -59,13 +54,33 @@ class Processor extends Base {
 
 
     /**
-        Runs `this` Processor, executing in sequence all the flows defined for it.
+        Processes all `UsageFile` objects that match the given filters,
+        executing in sequence all the flows defined for them.
 
-        @param modelClass The class that represents the type of request to be parsed. It must be a
-        subclass of `Model` which has a `list` method, like `Request`, `UsageFile` or `TierConfig`.
-        @param filters Filters to be used for listing requests.
+        @param filters Filters to be used for listing requests. It can contain
+        any of the filters specified for the `Request.list` method.
     **/
-    public function run<T>(modelClass: Class<T>, filters: QueryParams): Void {
+    public function processRequests(filters: QueryParams): Void {
+        run(Request, filters);
+    }
+
+
+    /**
+        Processes all fullfilment `Request` objects that match the given filters,
+        executing in sequence all the flows defined for them.
+
+        @param filters Filters to be used for listing requests. It can contain
+        any of the filters specified for the `UsageFile.list` method.
+    **/
+    public function processUsageFiles(filters: QueryParams): Void {
+        run(UsageFile, filters);
+    }
+
+
+    private var flows: Array<Flow>;
+
+
+    private function run<T>(modelClass: Class<T>, filters: QueryParams): Void {
         // On some targets, a string is received as modelClass, so obtain the real class from it
         switch (Type.typeof(modelClass)) {
             case TClass(String):
@@ -73,10 +88,10 @@ class Processor extends Base {
             default:
         }
 
-        Env.getLogger().openSection('Running Processor on ' + Util.getDate());
+        Env.getLogger().openSection('Running Processor on ' + Util.getDate() + ' UTC');
 
         // List requests
-        Env.getLogger().openSection('Listing requests on ' + Util.getDate());
+        Env.getLogger().openSection('Listing requests on ' + Util.getDate() + ' UTC');
         var list: Collection<IdModel> = null;
         try {
             var listMethod: Function = Reflect.field(modelClass, 'list');
@@ -99,7 +114,4 @@ class Processor extends Base {
 
         Env.getLogger().closeSection();
     }
-
-    
-    private var flows: Array<Flow>;
 }

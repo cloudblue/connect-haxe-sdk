@@ -21,6 +21,12 @@ class ByteData {
     }
 
 
+    /** @returns A String representation of the data interpreted as UTF-8. **/
+    public function toString(): String {
+        return bytes.toString();
+    }
+
+
     @:dox(hide)
     public static function _fromBytes(bytes: Bytes): ByteData {
         return new ByteData(bytes);

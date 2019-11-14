@@ -38,6 +38,6 @@ if __name__ == '__main__':
     # Process requests
     Processor() \
         .flow(flow) \
-        .run(Request, QueryParams() \
+        .processRequests(QueryParams() \
             .set('asset.product.id__in', Env.getConfig().getProductsString()) \
             .set('status', 'pending'))
