@@ -15,26 +15,25 @@ class Example {
 
         // Define main flow
         var flow = new Flow(null)
-            .step('Add dummy data', function(f, input) {
-                f.setData('assetId', f.getRequest().asset.id)
+            .step('Add dummy data', function(f) {
+                f.setData('requestId', f.getRequest().id)
+                    .setData('assetId', f.getRequest().asset.id)
                     .setData('connectionId', f.getRequest().asset.connection.id)
                     .setData('productId', f.getRequest().asset.product.id)
                     .setData('status', f.getRequest().status);
                 return f.getRequest().id;
             })
-            .step('Trace request data', function(f, requestId) {
-                Sys.println(requestId
+            .step('Trace request data', function(f) {
+                Sys.println(f.getData('requestId')
                     + ' : ' + f.getData('assetId')
                     + ' : ' + f.getData('connectionId')
                     + ' : ' + f.getData('productId')
                     + ' : ' + f.getData('status'));
-                return null;
             });
             /*
-            .step('Approve request', function(f, input) {
+            .step('Approve request', function(f) {
                 f.getRequest().approveByTemplate('TL-000-000-000');
                 f.getRequest().approveByTile('Markdown text');
-                return null;
             })
             */
 

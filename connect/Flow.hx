@@ -9,12 +9,12 @@ import haxe.Json;
 
 #if java
 typedef FilterFunc = connect.native.JavaFunction<IdModel, Bool>;
-typedef StepFunc = connect.native.JavaBiFunction<Flow, java.lang.Object, java.lang.Object>;
+typedef StepFunc = connect.native.JavaConsumer<Flow>;
 #else
 @:dox(hide)
 typedef FilterFunc = (IdModel) -> Bool;
 @:dox(hide)
-typedef StepFunc = (Flow, Dynamic) -> Dynamic;
+typedef StepFunc = (Flow) -> Void;
 #end
 
 
@@ -55,9 +55,8 @@ class Flow extends Base {
 
         @param description Description of what the step does, so the Flow can indicate it
         in the log.
-        @param func The function to execute for this step. It can return a value that will be
-        passed to the next step, and the function receives two arguments: The first one is `this`
-        Flow, and the second one is the value returned from the previous step.
+        @param func The function to execute for this step. It receives `this` Flow as argument,
+        and it cannot return a value.
         @returns `this` Flow, so calls to this method can be chained.
     **/
     public function step(description: String, func: StepFunc): Flow {
@@ -302,7 +301,6 @@ class Flow extends Base {
                 ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
                 : null;
             final stepData = StepStorage.load(this.model.id, stepParam);
-            var input = stepData.input;
             this.data = stepData.data;
             if (stepData.firstIndex != 0) {
                 Env.getLogger().info('Resuming request from step ${stepData.firstIndex + 1}.');
@@ -320,20 +318,18 @@ class Flow extends Base {
                 Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
                 
                 this.logStepData(Env.getLogger().info,
-                    Inflection.beautify(Std.string(input), false),
                     requestStr, dataStr, lastRequestStr, lastDataStr);
 
                 // Execute step
                 try {
                     #if java
-                    input = step.func.apply(this, input);
+                    step.func.accept(this);
                     #else
-                    input = step.func(this, input);
+                    step.func(this);
                     #end
                 } catch (ex: Dynamic) {
                     if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                         this.logStepData(Env.getLogger().error,
-                            Inflection.beautify(Std.string(input), false),
                             requestStr, dataStr, lastRequestStr, lastDataStr);
                     }
                     final exStr = Std.string(ex);
@@ -356,7 +352,7 @@ class Flow extends Base {
                         // Save step data if request supports it
                         Env.getLogger().info('Skipping request. Trying to save step data.');
                         final saveResult = StepStorage.save(this.model,
-                            new StepData(index, input, this.data),
+                            new StepData(index, this.data),
                             param,
                             Reflect.field(model, 'update'));
                         switch (saveResult) {
@@ -436,18 +432,8 @@ class Flow extends Base {
     }
 
 
-    private function logStepData(func: Function, input: String, request: String, data: String,
+    private function logStepData(func: Function, request: String, data: String,
             lastRequest: String, lastData: String) {
-        // Log input
-        if (input != null && Inflection.isJson(input)) {
-            Reflect.callMethod(Env.getLogger(), func, ['* Input: ']);
-            Reflect.callMethod(Env.getLogger(), func, ['```json']);
-            Reflect.callMethod(Env.getLogger(), func, [input]);
-            Reflect.callMethod(Env.getLogger(), func, ['```']);
-        } else {
-            Reflect.callMethod(Env.getLogger(), func, ['* Input: ${input}']);
-        }
-
         // Log request
         if (request != lastRequest) {
             if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {

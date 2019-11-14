@@ -4,12 +4,10 @@ package connect;
 @:dox(hide)
 class StepData {
     public final firstIndex: Int;
-    public final input: Dynamic;
     public final data: Dictionary;
 
-    public function new(firstIndex: Int, input: Dynamic, data: Dynamic) {
+    public function new(firstIndex: Int, data: Dynamic) {
         this.firstIndex = firstIndex;
-        this.input = input;
         this.data = new Dictionary();
         if (Std.is(data, Dictionary)) {
             // Store model class names with key
