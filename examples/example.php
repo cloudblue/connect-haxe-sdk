@@ -13,7 +13,7 @@ use connect\models\Request;
 //Env::initLogger('log.md', Logger::LEVEL_ERROR, null);
 
 // Define main flow
-(new Flow(null))
+$flow = (new Flow(null))
     ->step('Add dummy data', function($p, $input) {
         $p->setData('assetId', $p->getRequest()->asset->id)
             ->setData('connectionId', $p->getRequest()->asset->connection->id)
@@ -38,7 +38,7 @@ use connect\models\Request;
 
 // Process requests
 (new Processor())
-    ->flow(flow)
-    ->run(Request::class, (new QueryParams())
+    ->flow($flow)
+    ->processRequests((new QueryParams())
         ->set('asset.product.id__in', Env::getConfig()->getProductsString())
         ->set('status', 'pending'));

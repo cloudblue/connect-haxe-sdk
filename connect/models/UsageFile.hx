@@ -168,7 +168,7 @@ class UsageFile extends IdModel {
 
 
     /**
-        Uploads the `Collection` of `UsageRecord`s to `this` UsageFile in Connect.
+        Uploads the `Collection` of `UsageRecord` objects to `this` UsageFile in Connect.
         The SDK automatically generates a Microsoft Excel XLSX file with the records
         and uploads it, so this is a more convenient version of the `UsageFile.upload()`
         method, which requires you to generate the Excel file contents yourself.

@@ -149,8 +149,11 @@ class Request extends IdModel {
 
 
     /**
-        Changes `this` Request status to "approved", sending the id
-        of a Template to render on the portal.
+        Changes `this` Request status to "approved", sending the id of a Template to render
+        on the portal.
+
+        When processing requests within a `Flow`, you should use the `Flow.approveByTemplate`
+        method instead of this one, since it finishes the flow and logs the information.
 
         @returns The Request returned from the server, which should contain
         the updated status.
@@ -170,6 +173,9 @@ class Request extends IdModel {
         Changes `this` Request status to "approved", rendering a tile on the portal with
         the given Markdown `text`.
 
+        When processing requests within a `Flow`, you should use the `Flow.approveByTile`
+        method instead of this one, since it finishes the flow and logs the information.
+
         @returns The Request returned from the server, which should contain
         the updated status.
     **/
@@ -186,6 +192,9 @@ class Request extends IdModel {
 
     /**
         Changes the status of `this` Request to "failed".
+
+        When processing requests within a `Flow`, you should use the `Flow.fail`
+        method instead of this one, since it finishes the flow and logs the information.
 
         @returns The Request returned from the server, which should contain
         the updated status.
@@ -204,6 +213,9 @@ class Request extends IdModel {
     /**
         Changes the status of `this` Request to "inquiring".
 
+        When processing requests within a `Flow`, you should use the `Flow.inquire`
+        method instead of this one, since it finishes the flow and logs the information.
+
         @returns The Request returned from the server, which should contain
         the updated status.
     **/
@@ -220,6 +232,9 @@ class Request extends IdModel {
 
     /**
         Changes the status of `this` Request to "pending".
+
+        When processing requests within a `Flow`, you should use the `Flow.pend`
+        method instead of this one, since it finishes the flow and logs the information.
 
         @returns The Request returned from the server, which should contain
         the updated status.

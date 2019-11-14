@@ -41,7 +41,7 @@ class Example {
         // Process requests
         new Processor()
             .flow(flow)
-            .run(Request, new QueryParams()
+            .processRequests(new QueryParams()
                 .set('asset.product.id__in', Env.getConfig().getProductsString())
                 .set('status', 'pending'));
 

@@ -2,6 +2,7 @@ package connect;
 
 import connect.models.IdModel;
 import connect.models.Request;
+import connect.models.UsageFile;
 import haxe.Constraints.Function;
 import haxe.Json;
 
@@ -12,6 +13,7 @@ typedef StepFunc = connect.native.JavaBiFunction<Flow, String, String>;
 #else
 @:dox(hide)
 typedef FilterFunc = (IdModel) -> Bool;
+@:dox(hide)
 typedef StepFunc = (Flow, String) -> String;
 #end
 
@@ -61,6 +63,22 @@ class Flow extends Base {
     public function getRequest(): Request {
         try {
             return cast(this.model, Request);
+        } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+
+    /**
+        This can be called within your steps to get the request being processed, as long as it
+        is of the `UsageFile` type.
+
+        @returns The `USageFile` being processed, or `null` if current request is not of
+        Usage api.
+    **/
+    public function getUsageFile(): UsageFile {
+        try {
+            return cast(this.model, UsageFile);
         } catch (ex: Dynamic) {
             return null;
         }
