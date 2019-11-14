@@ -185,7 +185,11 @@
         "name": "Contract of Program Agreement"
       },
       "configuration": {
-        "params": []
+        "params": [
+          {
+            "id": "configParamId"
+          }
+        ]
       }
     },
     "contract": {
