@@ -13,26 +13,26 @@ public class Example {
         
         // Define main flow
         Flow flow = new Flow((IdModel m) -> true)
-            .step("Add dummy data", (Flow f, String input) -> {
+            .step("Add dummy data", (Flow f, Object input) -> {
                 f.setData("assetId", f.getRequest().asset.id)
                     .setData("connectionId", f.getRequest().asset.connection.id)
                     .setData("productId", f.getRequest().asset.product.id)
                     .setData("status", f.getRequest().status);
                 return f.getRequest().id;
             })
-            .step("Trace request data", (Flow f, String requestId) -> {
+            .step("Trace request data", (Flow f, Object requestId) -> {
                 System.out.println(requestId
                     + " : " + f.getData("assetId")
                     + " : " + f.getData("connectionId")
                     + " : " + f.getData("productId")
                     + " : " + f.getData("status"));
-                return "";
+                return null;
             });
             /*
             .step("Approve request", (Processor p, String input) -> {
                 p.getRequest().approveByTemplate("TL-000-000-000");
                 p.getRequest().approveByTile("Markdown text");
-                return "";
+                return null;
             })
             */
         

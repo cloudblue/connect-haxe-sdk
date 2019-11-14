@@ -28,13 +28,13 @@ class Example {
                     + ' : ' + f.getData('connectionId')
                     + ' : ' + f.getData('productId')
                     + ' : ' + f.getData('status'));
-                return '';
+                return null;
             });
             /*
             .step('Approve request', function(f, input) {
                 f.getRequest().approveByTemplate('TL-000-000-000');
                 f.getRequest().approveByTile('Markdown text');
-                return '';
+                return null;
             })
             */
 

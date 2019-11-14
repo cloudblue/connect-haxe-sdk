@@ -9,7 +9,7 @@ import haxe.Json;
 
 #if java
 typedef FilterFunc = connect.native.JavaFunction<IdModel, Bool>;
-typedef StepFunc = connect.native.JavaBiFunction<Flow, Dynamic, Dynamic>;
+typedef StepFunc = connect.native.JavaBiFunction<Flow, java.lang.Object, java.lang.Object>;
 #else
 @:dox(hide)
 typedef FilterFunc = (IdModel) -> Bool;
