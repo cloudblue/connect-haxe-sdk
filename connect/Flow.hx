@@ -9,12 +9,12 @@ import haxe.Json;
 
 #if java
 typedef FilterFunc = connect.native.JavaFunction<IdModel, Bool>;
-typedef StepFunc = connect.native.JavaBiFunction<Flow, String, String>;
+typedef StepFunc = connect.native.JavaBiFunction<Flow, java.lang.Object, java.lang.Object>;
 #else
 @:dox(hide)
 typedef FilterFunc = (IdModel) -> Bool;
 @:dox(hide)
-typedef StepFunc = (Flow, String) -> String;
+typedef StepFunc = (Flow, Dynamic) -> Dynamic;
 #end
 
 
@@ -301,7 +301,8 @@ class Flow extends Base {
                 
                 Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
                 
-                this.logStepData(Env.getLogger().info, Inflection.beautify(input, false),
+                this.logStepData(Env.getLogger().info,
+                    Inflection.beautify(Std.string(input), false),
                     requestStr, dataStr, lastRequestStr, lastDataStr);
 
                 // Execute step
@@ -313,7 +314,8 @@ class Flow extends Base {
                     #end
                 } catch (ex: Dynamic) {
                     if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                        this.logStepData(Env.getLogger().error, Inflection.beautify(input, false),
+                        this.logStepData(Env.getLogger().error,
+                            Inflection.beautify(Std.string(input), false),
                             requestStr, dataStr, lastRequestStr, lastDataStr);
                     }
                     final exStr = Std.string(ex);
