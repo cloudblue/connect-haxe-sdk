@@ -167,6 +167,12 @@ class UsageFile extends IdModel {
     }
 
 
+    /**
+        Uploads the `Collection` of `UsageRecord`s to `this` UsageFile in Connect.
+        The SDK automatically generates a Microsoft Excel XLSX file with the records
+        and uploads it, so this is a more convenient version of the `UsageFile.upload()`
+        method, which requires you to generate the Excel file contents yourself.
+    **/
     public function uploadRecords(records: Collection<UsageRecord>): UsageFile {
         final sheet = createSpreadsheet(records.toArray());
         final data = ByteData._fromBytes(sheet);
@@ -175,7 +181,7 @@ class UsageFile extends IdModel {
 
 
     /**
-        Uploads the specified contents to `this` UsageFile.
+        Uploads the specified contents to `this` UsageFile in Connect.
 
         @param content The contents of an XLSX file.
         @returns The UsageFile returned from the server.
@@ -230,6 +236,9 @@ class UsageFile extends IdModel {
     }
 
 
+    /**
+        Gets the contents of the product specific file template for `this` UsageFile.
+    **/
     public function getTemplate(): ByteData {
         try {
             final link = getTemplateLink();
