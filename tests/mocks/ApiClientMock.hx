@@ -1,6 +1,6 @@
 package tests.mocks;
 
-import connect.ByteData;
+import connect.Blob;
 import connect.Dictionary;
 import connect.api.Response;
 import connect.api.IApiClient;
@@ -9,7 +9,7 @@ import connect.api.QueryParams;
 
 class ApiClientMock extends Mock implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: ByteData) : Response {
+            fileArg: String, fileName: String, fileContent: Blob) : Response {
         this.calledFunction('syncRequest', [method, url, headers, body, fileArg, fileName, fileContent]);
         return new Response(200, null, null);
     }
@@ -38,7 +38,7 @@ class ApiClientMock extends Mock implements IApiClient {
 
 
     public function postFile(resource: String, ?id: String, ?suffix: String,
-            argname: String, filename: String, contents: ByteData): Dynamic {
+            argname: String, filename: String, contents: Blob): Dynamic {
         return null;
     }
 
