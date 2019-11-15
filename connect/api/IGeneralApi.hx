@@ -1,5 +1,6 @@
 package connect.api;
 
+@:dox(hide)
 interface IGeneralApi {
     public function listAccounts(filters: QueryParams): Array<Dynamic>;
     public function createAccount(): Dynamic;
