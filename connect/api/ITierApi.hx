@@ -4,7 +4,7 @@ package connect.api;
 @:dox(hide)
 interface ITierApi {
     public function listTierConfigRequests(filters: QueryParams): Array<Dynamic>;
-    public function createTierConfigRequest(): Dynamic;
+    public function createTierConfigRequest(body: String): Dynamic;
     public function getTierConfigRequest(id: String): Dynamic;
     public function updateTierConfigRequest(id: String, tcr: String): Dynamic;
     public function pendTierConfigRequest(id: String): Dynamic;

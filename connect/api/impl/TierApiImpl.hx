@@ -15,8 +15,8 @@ class TierApiImpl extends Base implements ITierApi {
     }
 
 
-    public function createTierConfigRequest(): Dynamic {
-        return Env.getApiClient().post(TCR_PATH);
+    public function createTierConfigRequest(body: String): Dynamic {
+        return Env.getApiClient().post(TCR_PATH, null, null, body);
     }
 
 

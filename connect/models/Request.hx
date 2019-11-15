@@ -257,7 +257,7 @@ class Request extends IdModel {
         the updated assignee.
     **/
     public function assign(assigneeId: String): Request {
-       var request = Env.getFulfillmentApi().assignRequest(
+        var request = Env.getFulfillmentApi().assignRequest(
             this.id,
             assigneeId
         );
