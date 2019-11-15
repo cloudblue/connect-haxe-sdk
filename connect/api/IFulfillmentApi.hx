@@ -1,6 +1,7 @@
 package connect.api;
 
 
+@:dox(hide)
 interface IFulfillmentApi {
     public function listRequests(filters: QueryParams): Array<Dynamic>;
     public function getRequest(id: String): Dynamic;

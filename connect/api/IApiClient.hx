@@ -15,7 +15,7 @@ interface IApiClient {
         @returns A `Response` object.
     **/
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: ByteData) : Response;
+            fileArg: String, fileName: String, fileContent: Blob) : Response;
     
 
     /**
@@ -28,6 +28,7 @@ interface IApiClient {
         @returns An object with the requested resource, or a string if parse == false.
         @throws String if the request fails.
     **/
+    @:dox(hide)
     public function get(resource: String, ?id: String, ?suffix: String,
             ?params: QueryParams): Dynamic;
 
@@ -42,6 +43,7 @@ interface IApiClient {
         @returns A string with the response.
         @throws String if the request fails.
     **/
+    @:dox(hide)
     public function getString(resource: String, ?id: String, ?suffix: String,
             ?params: QueryParams): String;
 
@@ -55,6 +57,7 @@ interface IApiClient {
         @returns An object with the modified resource.
         @throws String if the request fails.
     **/
+    @:dox(hide)
     public function put(resource: String, id: String, body: String): Dynamic;
 
 
@@ -68,6 +71,7 @@ interface IApiClient {
         @returns An object.
         @throws String if the request fails.
     **/
+    @:dox(hide)
     public function post(resource: String, ?id: String, ?suffix: String, ?body: String): Dynamic;
 
 
@@ -83,8 +87,9 @@ interface IApiClient {
         @returns An object.
         @throws String if the request fails.
     **/
+    @:dox(hide)
     public function postFile(resource: String, ?id: String, ?suffix: String,
-        argname: String, filename: String, contents: ByteData): Dynamic;
+        argname: String, filename: String, contents: Blob): Dynamic;
 
 
     /**
@@ -96,5 +101,6 @@ interface IApiClient {
         @returns An object.
         @throws String if the request fails.
     **/
+    @:dox(hide)
     public function delete(resource: String, id: String, ?suffix: String): Dynamic;
 }

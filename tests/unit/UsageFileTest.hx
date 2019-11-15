@@ -1,6 +1,5 @@
 package tests.unit;
 
-import connect.ByteData;
 import connect.Collection;
 import connect.Dictionary;
 import connect.Env;

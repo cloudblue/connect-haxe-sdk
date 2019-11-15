@@ -176,6 +176,7 @@ class Env extends Base {
         platform.
         @throws String If a class implementing the IFulfillmentApi interface cannot be instanced.
     **/
+    @:dox(hide)
     public static function getFulfillmentApi() : IFulfillmentApi {
         if (fulfillmentApi == null) {
             fulfillmentApi = createInstance('IFulfillmentApi');
@@ -188,6 +189,7 @@ class Env extends Base {
         @returns The Usage API instance, used to make all usage requests to the platform.
         @throws String If a class implementing the IUsageApi interface cannot be instanced.
     **/
+    @:dox(hide)
     public static function getUsageApi() : IUsageApi {
         if (usageApi == null) {
             usageApi = createInstance('IUsageApi');
@@ -200,6 +202,7 @@ class Env extends Base {
         @returns The Tier API instance, used to make all tier requests to the platform.
         @throws String If a class implementing the ITierApi interface cannot be instanced.
     **/
+    @:dox(hide)
     public static function getTierApi() : ITierApi {
         if (tierApi == null) {
             tierApi = createInstance('ITierApi');
@@ -212,6 +215,7 @@ class Env extends Base {
         @returns The General API instance, used to make all general requests to the platform.
         @throws String If a class implementing the IGeneralApi interface cannot be instanced.
     **/
+    @:dox(hide)
     public static function getGeneralApi() : IGeneralApi {
         if (generalApi == null) {
             generalApi = createInstance('IGeneralApi');
