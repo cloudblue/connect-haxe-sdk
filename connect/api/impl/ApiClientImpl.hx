@@ -11,7 +11,7 @@ import haxe.io.BytesInput;
 
 class ApiClientImpl extends Base implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: ByteData) : Response {
+            fileArg: String, fileName: String, fileContent: Blob) : Response {
         // Write call info
         writeRequestCall(Env.getLogger().info, method, url, headers, body);
 
@@ -170,7 +170,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
             while (status == null) {} // Wait for async request
             final bytes = responseBytes.getBytes();
-            final response = new Response(status, bytes.toString(), ByteData._fromBytes(bytes));
+            final response = new Response(status, bytes.toString(), Blob._fromBytes(bytes));
         #end
 
         // If error response, write call to error log level
@@ -214,7 +214,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
 
     public function postFile(resource: String, ?id: String, ?suffix: String,
-        fileArg: String, fileName: String, fileContents: ByteData): Dynamic {
+        fileArg: String, fileName: String, fileContents: Blob): Dynamic {
         return checkResponse(connectSyncRequest('POST', parsePath(resource, id, suffix),
             getHeaders('multipart/form-data'), null, fileArg, fileName, fileContents));
     }
@@ -230,7 +230,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
     private function connectSyncRequest(method: String, path: String, headers: Dictionary,
             ?params: QueryParams, ?data: String,
-            ?fileArg: String, ?fileName: String, ?fileContent: ByteData) : Response {
+            ?fileArg: String, ?fileName: String, ?fileContent: Blob) : Response {
         final url = Env.getConfig().getApiUrl() + path + ((params != null) ? params.toString() : '');
         return this.syncRequest(method, url, headers, data, fileArg, fileName, fileContent);
     }
