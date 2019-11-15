@@ -15,7 +15,7 @@ interface IApiClient {
         @returns A `Response` object.
     **/
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: ByteData) : Response;
+            fileArg: String, fileName: String, fileContent: Blob) : Response;
     
 
     /**
@@ -89,7 +89,7 @@ interface IApiClient {
     **/
     @:dox(hide)
     public function postFile(resource: String, ?id: String, ?suffix: String,
-        argname: String, filename: String, contents: ByteData): Dynamic;
+        argname: String, filename: String, contents: Blob): Dynamic;
 
 
     /**

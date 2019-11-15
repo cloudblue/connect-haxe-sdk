@@ -35,7 +35,7 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function uploadUsageFile(id: String, file: ByteData): Dynamic {
+    public function uploadUsageFile(id: String, file: Blob): Dynamic {
         return Env.getApiClient().postFile(
             USAGE_FILES_PATH,
             id,
@@ -74,7 +74,7 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function uploadReconciliationFileFromProvider(id: String, file: ByteData): Dynamic {
+    public function uploadReconciliationFileFromProvider(id: String, file: Blob): Dynamic {
         return Env.getApiClient().postFile(
             USAGE_FILES_PATH,
             id,

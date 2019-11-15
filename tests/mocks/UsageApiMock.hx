@@ -1,6 +1,6 @@
 package tests.mocks;
 
-import connect.ByteData;
+import connect.Blob;
 import connect.api.IUsageApi;
 import connect.api.QueryParams;
 
@@ -46,7 +46,7 @@ class UsageApiMock extends Mock implements IUsageApi {
     }
 
 
-    public function uploadUsageFile(id: String, file: ByteData): Dynamic {
+    public function uploadUsageFile(id: String, file: Blob): Dynamic {
         this.calledFunction('uploadUsageFile', [id, file]);
         return this.getUsageFile(id);
     }
@@ -84,7 +84,7 @@ class UsageApiMock extends Mock implements IUsageApi {
     }
 
 
-    public function uploadReconciliationFileFromProvider(id: String, file: ByteData): Dynamic {
+    public function uploadReconciliationFileFromProvider(id: String, file: Blob): Dynamic {
         this.calledFunction('uploadReconciliationFileFromProvider', [id, file]);
         return this.getUsageFile(id);
     }

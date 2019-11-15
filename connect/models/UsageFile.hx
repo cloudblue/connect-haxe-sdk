@@ -175,7 +175,7 @@ class UsageFile extends IdModel {
     **/
     public function uploadRecords(records: Collection<UsageRecord>): UsageFile {
         final sheet = createSpreadsheet(records.toArray());
-        final data = ByteData._fromBytes(sheet);
+        final data = Blob._fromBytes(sheet);
         return upload(data);
     }
 
@@ -186,7 +186,7 @@ class UsageFile extends IdModel {
         @param content The contents of an XLSX file.
         @returns The UsageFile returned from the server.
     **/
-    public function upload(content: ByteData): UsageFile {
+    public function upload(content: Blob): UsageFile {
         final usageFile = Env.getUsageApi().uploadUsageFile(this.id, content);
         return Model.parse(UsageFile, usageFile);
     }
@@ -239,7 +239,7 @@ class UsageFile extends IdModel {
     /**
         Gets the contents of the product specific file template for `this` UsageFile.
     **/
-    public function getTemplate(): ByteData {
+    public function getTemplate(): Blob {
         try {
             final link = getTemplateLink();
             final response = Env.getApiClient().syncRequest('GET', link, null, null, null, null, null);
@@ -265,7 +265,7 @@ class UsageFile extends IdModel {
         @param content The contents of an XLSX file.
         @returns The UsageFile returned from the server.
     **/
-    public function uploadReconciliation(content: ByteData): UsageFile {
+    public function uploadReconciliation(content: Blob): UsageFile {
         final usageFile = Env.getUsageApi().uploadReconciliationFileFromProvider(this.id, content);
         return Model.parse(UsageFile, usageFile);
     }
