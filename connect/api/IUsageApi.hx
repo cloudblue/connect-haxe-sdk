@@ -1,6 +1,7 @@
 package connect.api;
 
 
+@:dox(hide)
 interface IUsageApi {
     public function listUsageFiles(filters: QueryParams): Array<Dynamic>;
     public function createUsageFile(body: String): Dynamic;
