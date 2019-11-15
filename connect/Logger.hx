@@ -53,6 +53,12 @@ class Logger extends Base {
     }
 
 
+    @:dox(hide)
+    public function trace(message: String): Void {
+        this.debug(message);
+    }
+
+
     /**
         Writes a debug message to the log.
     **/
@@ -70,6 +76,12 @@ class Logger extends Base {
         if (this.level >= LEVEL_INFO) {
             this.write(message);
         }
+    }
+
+
+    @:dox(hide)
+    public function warning(message: String): Void {
+        this.info(message);
     }
 
 
