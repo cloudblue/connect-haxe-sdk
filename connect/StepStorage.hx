@@ -21,10 +21,10 @@ class StepStorage {
             final storedData = haxe.Json.parse(param.value);
             if (Reflect.hasField(storedData, requestId)) {
                 final stepData = Reflect.field(storedData, requestId);
-                return new StepData(stepData.current_step, stepData.input, stepData.data);
+                return new StepData(stepData.current_step, stepData.data);
             }
         }
-        return new StepData(0, null, {});
+        return new StepData(0, {});
     }
 
 
@@ -34,7 +34,6 @@ class StepStorage {
             final dataToSave: Dynamic = {};
             Reflect.setField(dataToSave, request.id, {
                 current_step: stepData.firstIndex,
-                input: stepData.input,
                 data: stepData.data.toObject(),
             });
             param.value = haxe.Json.stringify(dataToSave);

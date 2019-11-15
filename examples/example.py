@@ -6,22 +6,22 @@ from connect.api import QueryParams
 from connect.models import Request
 
 
-def add_dummy_data(p, _):
-    p.setData('assetId', p.getRequest().asset.id) \
+def add_dummy_data(p):
+    p.setData('requestId', p.getRequest().id) \
+        .setData('assetId', p.getRequest().asset.id) \
         .setData('connectionId', p.getRequest().asset.connection.id) \
         .setData('productId', p.getRequest().asset.product.id) \
         .setData('status', p.getRequest().status)
-    return p.getRequest().id
 
 
-def trace_request_data(p, request_id):
-    print(request_id \
+def trace_request_data(p):
+    print(p.getData('requestId') \
         + ' : ' + p.getData('assetId') \
         + ' : ' + p.getData('connectionId') \
         + ' : ' + p.getData('productId') \
         + ' : ' + p.getData('status'))
 
-def approve_request(p, _):
+def approve_request(p):
     pass
     # p.getRequest().approveByTemplate('TL-000-000-000')
     # p.getRequest().approveByTile('Markdown text')

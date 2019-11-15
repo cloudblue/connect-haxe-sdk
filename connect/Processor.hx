@@ -16,9 +16,8 @@ import haxe.Constraints.Function;
     flow. For example, you can create one flow for requests of type "purchase", another for the
     ones of type "cancel", etc.
 
-    Then, each flow consist of a series of steps, where each step is a function that receives as
-    arguments the flow itself (so you can subclass `Flow` and add steps as instance methods) and
-    the value that was returned from the previous step.
+    Then, each flow consist of a series of steps, where each step is a function that receives
+    the flow itself as argument (so you can subclass `Flow` and add steps as instance methods).
 
     Once all flows have been defined, you must call the `Processor.processRequests`,
     `Processor.processUsageFiles`, or `Processor.processTierConfigRequests` method to process

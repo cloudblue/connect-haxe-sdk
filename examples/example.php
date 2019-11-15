@@ -14,15 +14,15 @@ use connect\models\Request;
 
 // Define main flow
 $flow = (new Flow(null))
-    ->step('Add dummy data', function($p, $input) {
-        $p->setData('assetId', $p->getRequest()->asset->id)
+    ->step('Add dummy data', function($p) {
+        $p->setData('requestId', $p->getRequest()->id)
+            ->setData('assetId', $p->getRequest()->asset->id)
             ->setData('connectionId', $p->getRequest()->asset->connection->id)
             ->setData('productId', $p->getRequest()->asset->product->id)
             ->setData('status', $p->getRequest()->status);
-        return $p->getRequest()->id;
     })
-    ->step('Trace request data', function($p, $requestId) {
-        echo $requestId
+    ->step('Trace request data', function($p) {
+        echo $p->getData('requestId')
             . ' : ' . $p->getData('assetId')
             . ' : ' . $p->getData('connectionId')
             . ' : ' . $p->getData('productId')
@@ -30,7 +30,7 @@ $flow = (new Flow(null))
             . PHP_EOL;
     });
     /*
-    ->step('Approve request', function($p, $input) {
+    ->step('Approve request', function($p) {
         $p->getRequest()->approveByTemplate('TL-000-000-000');
         $p->getRequest()->approveByTile('Markdown text');
     })
