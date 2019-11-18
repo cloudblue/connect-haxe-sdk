@@ -2,6 +2,7 @@ package connect.models;
 
 import connect.Inflection;
 import haxe.ds.StringMap;
+import haxe.Json;
 
 
 /**
@@ -55,52 +56,53 @@ class Model extends Base {
 
     /** @returns A String with the JSON representation of `this` Model. **/
     public function toString(): String {
-        return haxe.Json.stringify(this.toObject());
+        return Json.stringify(this.toObject());
     }
 
 
     /**
-        Parses the given Haxe dynamic object as a Model of the specified class.
+        Parses the given string-encoded Json as a Model of the specified class.
 
         @returns The parsel model.
         @throws String If `obj` is not a dynamic object or if the class for a field was not
             found.
     **/
-    public static function parse<T>(modelClass: Class<T>, obj: Dynamic): T {
+    public static function parse<T>(modelClass: Class<T>, body: String): T {
+        final obj = Json.parse(body);
         if (Type.typeof(obj) != TObject) {
-            throw 'Model.parse should receive a dynamic object, not a ${Type.typeof(obj)}';
+            throw 'Model.parse can only parse a Json that contains an object.';
         }
-        var model = Type.createInstance(modelClass, []);
-        var castedModel = cast(model, Model);
-        var fields = Type.getInstanceFields(modelClass);
+        final instance = Type.createInstance(modelClass, []);
+        final model = cast(instance, Model);
+        final fields = Type.getInstanceFields(modelClass);
         for (field in fields) {
-            var snakeField = Inflection.toSnakeCase(field);
+            final snakeField = Inflection.toSnakeCase(field);
+            final camelField = Inflection.toCamelCase(field, true);
             if (Reflect.hasField(obj, snakeField)) {
-                var val: Dynamic = Reflect.field(obj, snakeField);
+                final val: Dynamic = Reflect.field(obj, snakeField);
                 //trace('Injecting "${field}" in ' + Type.getClassName(modelClass));
                 switch (Type.typeof(val)) {
                     case TClass(Array):
-                        var className = castedModel._getFieldClassName(field);
-                        if (className == null) {
-                            var camelField = 'connect.models.' + Inflection.toCamelCase(field, true);
-                            className = Inflection.toSingular(camelField);
-                        }
-                        var classObj = Type.resolveClass(className);
-                        Reflect.setProperty(model, field, parseArray(classObj, val));
+                        final fieldClassName = model._getFieldClassName(field);
+                        final className = (fieldClassName == null)
+                            ? Inflection.toSingular('connect.models.' + camelField)
+                            : fieldClassName;
+                        final classObj = Type.resolveClass(className);
+                        Reflect.setProperty(model, field, parseArray(classObj, Json.stringify(val)));
                     case TObject:
-                        var className = castedModel._getFieldClassName(field);
-                        if (className == null) {
-                            className = 'connect.models.' + Inflection.toCamelCase(field, true);
-                        }
-                        var classObj = Type.resolveClass(className);
+                        final fieldClassName = model._getFieldClassName(field);
+                        final className = (fieldClassName == null)
+                            ? 'connect.models.' + camelField
+                            : fieldClassName;
+                        final classObj = Type.resolveClass(className);
                         if (classObj != null) {
                             if (className != 'String') {
-                                Reflect.setProperty(model, field, parse(classObj, val));
+                                Reflect.setProperty(model, field, parse(classObj, Json.stringify(val)));
                             } else {
-                                Reflect.setProperty(model, field, haxe.Json.stringify(val));
+                                Reflect.setProperty(model, field, Json.stringify(val));
                             }
                         } else {
-                            throw 'Cannot find class "${className}"';
+                            throw 'Cannot find class "$className"';
                         }
                     default:
                         try {
@@ -112,15 +114,19 @@ class Model extends Base {
                 }
             }
         }
-        return model;
+        return instance;
     }
 
 
     /** Parses the given Haxe dynamic object as a Collection of Models of the specified class. **/
-    public static function parseArray<T>(modelClass: Class<T>, array: Array<Dynamic>): Collection<T> {
-        var result = new Collection<T>();
+    public static function parseArray<T>(modelClass: Class<T>, body: String): Collection<T> {
+        final array: Array<Dynamic> = Json.parse(body);
+        if (!Std.is(array, Array)) {
+            throw 'Model.parseArray can only parse a Json that contains an array.';
+        }
+        final result = new Collection<T>();
         for (obj in array) {
-            result.push(parse(modelClass, obj));
+            result.push(parse(modelClass, Json.stringify(obj)));
         }
         return result;
     }
@@ -137,12 +143,11 @@ class Model extends Base {
     @:dox(hide)
     public function _getFieldClassName(field: String): String {
         if (this.fieldClassNames != null && this.fieldClassNames.exists(field)) {
-            var className = this.fieldClassNames.get(field);
-            var exceptions = ['String'];
-            if (exceptions.indexOf(className) == -1) {
-                className = 'connect.models.' + className;
-            }
-            return className;
+            final nameInField: String = this.fieldClassNames.get(field);
+            final exceptions = ['String'];
+            return (exceptions.indexOf(nameInField) == -1)
+                ? 'connect.models.' + nameInField
+                : nameInField;
         } else {
             return null;
         }

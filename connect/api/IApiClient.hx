@@ -25,26 +25,11 @@ interface IApiClient {
         @param id Optional id of the resource to get.
         @param suffix Optional path suffix (i.e. "approve").
         @param params Query params.
-        @returns An object with the requested resource, or a string if parse == false.
-        @throws String if the request fails.
-    **/
-    @:dox(hide)
-    public function get(resource: String, ?id: String, ?suffix: String,
-            ?params: QueryParams): Dynamic;
-
-
-    /**
-        Send a GET request to Connect that returns a string.
-
-        @param resource Resource path (e.g. "requests" for the Fulfillment API).
-        @param id Optional id of the resource to get.
-        @param suffix Optional path suffix (i.e. "approve").
-        @param params Query params.
         @returns A string with the response.
         @throws String if the request fails.
     **/
     @:dox(hide)
-    public function getString(resource: String, ?id: String, ?suffix: String,
+    public function get(resource: String, ?id: String, ?suffix: String,
             ?params: QueryParams): String;
 
 
@@ -54,11 +39,11 @@ interface IApiClient {
         @param resource Resource path (e.g. "requests" for the Fulfillment API).
         @param id Id of the resource to put data on.
         @param body The body to put (normally the modified resource).
-        @returns An object with the modified resource.
+        @returns A string with the response.
         @throws String if the request fails.
     **/
     @:dox(hide)
-    public function put(resource: String, id: String, body: String): Dynamic;
+    public function put(resource: String, id: String, body: String): String;
 
 
     /**
@@ -72,7 +57,7 @@ interface IApiClient {
         @throws String if the request fails.
     **/
     @:dox(hide)
-    public function post(resource: String, ?id: String, ?suffix: String, ?body: String): Dynamic;
+    public function post(resource: String, ?id: String, ?suffix: String, ?body: String): String;
 
 
     /**
@@ -98,9 +83,9 @@ interface IApiClient {
         @param resource Resource path (e.g. "requests" for the Fulfillment API).
         @param id Id of the resource to delete.
         @param suffix Optional path suffix (i.e. "delete").
-        @returns An object.
+        @returns A string with the response.
         @throws String if the request fails.
     **/
     @:dox(hide)
-    public function delete(resource: String, id: String, ?suffix: String): Dynamic;
+    public function delete(resource: String, id: String, ?suffix: String): String;
 }

@@ -134,7 +134,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testListActionsKo() {
         // Check subject
-        final actions = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'}).listActions(null);
+        final actions = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}').listActions(null);
         assertTrue(Std.is(actions, Collection));
         assertEquals(0, actions.length());
 
@@ -180,7 +180,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testGetActionKo2() {
         // Check subject
-        final action = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'}).getAction('sso_action');
+        final action = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}').getAction('sso_action');
         assertTrue(action == null);
 
         // Check mocks
@@ -253,7 +253,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testGetConnectionsKo() {
         // Check subject
-        final connections = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'}).getConnections();
+        final connections = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}').getConnections();
         assertTrue(Std.is(connections, Collection));
         assertEquals(0, connections.length());
 
@@ -285,7 +285,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testGetItemsKo() {
         // Check subject
-        final product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
+        final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
         final items = product.getItems();
         assertEquals(0, items.length());
 
@@ -317,7 +317,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testGetParametersKo() {
         // Check subject
-        final product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
+        final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
         final params = product.getParameters();
         assertEquals(0, params.length());
 
@@ -350,7 +350,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testGetTemplatesKo() {
         // Check subject
-        final product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
+        final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
         final templates = product.getTemplates();
         assertEquals(0, templates.length());
 
@@ -382,7 +382,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testGetVersionsKo() {
         // Check subject
-        final product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
+        final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
         final versions = product.getVersions();
         assertEquals(0, versions.length());
 
@@ -444,7 +444,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testGetVersionActionsKo() {
         // Check subject
-        final product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
+        final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
         final actions = product.getVersionActions(2);
         assertEquals(0, actions.length());
 
@@ -504,7 +504,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testGetVersionActionLinkKo() {
         // Check subject
-        final product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
+        final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
         final link = product.getVersionActionLink(2, 'sso_action');
         assertEquals('', link);
 
@@ -536,7 +536,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testGetVersionItemsKo() {
         // Check subject
-        final product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
+        final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
         final items = product.getVersionItems(2);
         assertEquals(0, items.length());
 
@@ -568,7 +568,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testGetVersionParametersKo() {
         // Check subject
-        final product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
+        final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
         final params = product.getVersionParameters(2);
         assertEquals(0, params.length());
 
@@ -601,7 +601,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testGetVersionTemplatesKo() {
         // Check subject
-        final product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
+        final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
         final templates = product.getVersionTemplates(2);
         assertEquals(0, templates.length());
 
@@ -632,7 +632,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testListConfigurationsKo() {
         // Check subject
-        final product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
+        final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
         final configs = product.listConfigurations(null);
         assertEquals(0, configs.length());
 
@@ -647,7 +647,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testSetProductConfigurationParamOk() {
         // Check subject
-        final param = Model.parse(ProductConfigurationParam, { parameter: { id: 'XXX' } });
+        final param = Model.parse(ProductConfigurationParam, '{"parameter": {"id": "XXX"}}');
         final product = Product.get('PRD-783-317-575');
         final result = product.setConfigurationParam(param);
         assertEquals('XXX', result.parameter.id);
@@ -663,8 +663,8 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testSetProductConfigurationParamKo() {
         // Check subject
-        final param = Model.parse(ProductConfigurationParam, { parameter: { id: 'XXX' } });
-        final product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
+        final param = Model.parse(ProductConfigurationParam, '{"parameter": {"id": "XXX"}}');
+        final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
         final result = product.setConfigurationParam(param);
         assertTrue(result == null);
 
@@ -695,7 +695,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testListAgreementsKo() {
         // Check subject
-        final product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
+        final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
         final agreements = product.listAgreements(null);
         assertEquals(0, agreements.length());
 
@@ -726,7 +726,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testListMediaKo() {
         // Check subject
-        final product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
+        final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
         final media = product.listMedia(null);
         assertEquals(0, media.length());
 
@@ -756,7 +756,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testCreateMediaKo() {
         // Check subject
-        final product = Model.parse(Product, {id: 'PRD-XXX-XXX-XXX'});
+        final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
         final media = product.createMedia();
         assertEquals(null, media);
 
@@ -801,7 +801,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testUpdateMediaOk() {
         // Check subject
-        final media = Model.parse(Media, {id: 'PRM-00000-00000-00000'});
+        final media = Model.parse(Media, '{"id": "PRM-00000-00000-00000"}');
         final product = Product.get('PRD-783-317-575');
         final result = product.updateMedia(media);
         assertEquals('PRM-00000-00000-00000', result.id);
@@ -817,7 +817,7 @@ class ProductTest extends haxe.unit.TestCase {
 
     public function testUpdateMediaKo() {
         // Check subject
-        final media = Model.parse(Media, {id: 'PRM-XXXXX-XXXXX-XXXXX'});
+        final media = Model.parse(Media, '{"id": "PRM-XXXXX-XXXXX-XXXXX"}');
         final product = Product.get('PRD-783-317-575');
         final result = product.updateMedia(media);
         assertEquals(null, result);
