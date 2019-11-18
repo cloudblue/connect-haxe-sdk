@@ -43,8 +43,7 @@ class Mock {
 
 
     public static function parseJsonFile(filename: String): Dynamic {
-        var content = sys.io.File.getContent(filename);
-        return haxe.Json.parse(content);
+        return haxe.Json.parse(sys.io.File.getContent(filename));
     }
 
 
