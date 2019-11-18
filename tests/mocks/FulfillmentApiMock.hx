@@ -2,6 +2,7 @@ package tests.mocks;
 
 import connect.api.IFulfillmentApi;
 import connect.api.QueryParams;
+import haxe.Json;
 
 
 class FulfillmentApiMock extends Mock implements IFulfillmentApi {
@@ -11,48 +12,48 @@ class FulfillmentApiMock extends Mock implements IFulfillmentApi {
     }
 
 
-    public function listRequests(filters: QueryParams): Array<Dynamic> {
+    public function listRequests(filters: QueryParams): String {
         this.calledFunction('listRequests', [filters]);
-        return this.list.map(function(request) { return Reflect.copy(request); });
+        return Json.stringify(this.list);
     }
 
 
-    public function getRequest(id: String): Dynamic {
+    public function getRequest(id: String): String {
         this.calledFunction('getRequest', [id]);
-        var requests = this.list.filter(function(request) { return request.id == id; });
+        final requests = this.list.filter((request) -> request.id == id);
         if (requests.length > 0) {
-            return Reflect.copy(requests[0]);
+            return Json.stringify(requests[0]);
         } else {
             throw 'Http Error #404';
         }
     }
 
 
-    public function createRequest(body: String): Dynamic {
+    public function createRequest(body: String): String {
         this.calledFunction('createRequest', [body]);
-        return Reflect.copy(this.list[0]);
+        return Json.stringify(this.list[0]);
     }
 
 
-    public function updateRequest(id: String, request: String): Dynamic {
+    public function updateRequest(id: String, request: String): String {
         this.calledFunction('updateRequest', [id, request]);
         return this.getRequest(id);
     }
 
 
-    public function changeRequestStatus(id: String, status: String, data: String): Dynamic {
+    public function changeRequestStatus(id: String, status: String, data: String): String {
         this.calledFunction('changeRequestStatus', [id, status, data]);
-        var request = this.getRequest(id);
+        final request = Json.parse(this.getRequest(id));
         request.status = status;
-        return request;
+        return Json.stringify(request);
     }
 
 
-    public function assignRequest(id: String, assignee: String): Dynamic {
+    public function assignRequest(id: String, assignee: String): String {
         this.calledFunction('assignRequest', [id, assignee]);
-        var request = this.getRequest(id);
+        final request = Json.parse(this.getRequest(id));
         request.assignee = assignee;
-        return request;
+        return Json.stringify(request);
     }
 
 
@@ -62,32 +63,29 @@ class FulfillmentApiMock extends Mock implements IFulfillmentApi {
     }
 
 
-    public function listAssets(filters: QueryParams): Array<Dynamic> {
+    public function listAssets(filters: QueryParams): String {
         this.calledFunction('listAssets', [filters]);
-        var requests = this.listRequests(filters);
-        return requests.map(function (request) { return Reflect.copy(request.asset); });
+        return Json.stringify(this.list.map((request) -> request.asset));
     }
 
 
-    public function getAsset(id: String): Dynamic {
+    public function getAsset(id: String): String {
         this.calledFunction('getAsset', [id]);
-        var assets = this.listAssets(null).filter(function(asset) { return asset.id == id; });
+        final assets: Array<Dynamic> = Json.parse(this.listAssets(null))
+            .filter((asset) -> asset.id == id);
         if (assets.length > 0) {
-            return Reflect.copy(assets[0]);
+            return Json.stringify(assets[0]);
         } else {
             throw 'Http Error #404';
         }
-        return null;
     }
 
 
-    public function getAssetRequests(id: String): Array<Dynamic> {
+    public function getAssetRequests(id: String): String {
         this.calledFunction('getAssetRequests', [id]);
-        return this.listRequests(null)
-            .filter(function(request) { return request.asset.id == id; })
-            .map(function(request) { return Reflect.copy(request); });
+        return Json.stringify(this.list.filter((request) -> request.asset.id == id));
     }
 
 
-    private var list: Array<Dynamic>;
+    private final list: Array<Dynamic>;
 }

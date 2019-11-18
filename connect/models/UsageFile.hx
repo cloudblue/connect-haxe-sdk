@@ -254,7 +254,8 @@ class UsageFile extends IdModel {
         Gets the product specific file template URL for `this` UsageFile.
     **/
     public function getTemplateLink(): String {
-        final link = Env.getUsageApi().getProductSpecificUsageFileTemplate(this.id);
+        final link = haxe.Json.parse(
+            Env.getUsageApi().getProductSpecificUsageFileTemplate(this.id));
         return link.template_link;
     }
 

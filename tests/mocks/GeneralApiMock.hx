@@ -2,6 +2,7 @@ package tests.mocks;
 
 import connect.api.IGeneralApi;
 import connect.api.QueryParams;
+import haxe.Json;
 
 
 class GeneralApiMock extends Mock implements IGeneralApi {
@@ -23,119 +24,115 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listAccounts(filters: QueryParams): Array<Dynamic> {
+    public function listAccounts(filters: QueryParams): String {
         this.calledFunction('listAccounts', [filters]);
-        return this.accountList.map(function(account) { return Reflect.copy(account); });
+        return Json.stringify(this.accountList);
     }
 
 
-    public function createAccount(): Dynamic {
+    public function createAccount(): String {
         this.calledFunction('createAccount', []);
-        return Reflect.copy(this.accountList[0]);
+        return Json.stringify(this.accountList[0]);
     }
 
 
-    public function getAccount(id: String): Dynamic {
+    public function getAccount(id: String): String {
         this.calledFunction('getAccount', [id]);
-        var accounts = this.accountList.filter(function(account) { return account.id == id; });
+        final accounts = this.accountList.filter((account) -> account.id == id);
         if (accounts.length > 0) {
-            return Reflect.copy(accounts[0]);
+            return Json.stringify(accounts[0]);
         } else {
             throw 'Http Error #404';
         }
     }
 
 
-    public function listAccountUsers(id: String): Array<Dynamic> {
+    public function listAccountUsers(id: String): String {
         this.calledFunction('listAccountUsers', [id]);
-        return this.userList.map(function(user) { return Reflect.copy(user); });
+        return Json.stringify(this.userList);
     }
 
 
-    public function getAccountUser(id: String, userId: String): Dynamic {
+    public function getAccountUser(id: String, userId: String): String {
         this.calledFunction('getAccountUser', [id, userId]);
-        var users = this.userList.filter(function(user) { return user.id == userId; });
+        final users = this.userList.filter((user) -> user.id == userId);
         if (users.length > 0) {
-            return Reflect.copy(users[0]);
+            return Json.stringify(users[0]);
         } else {
             throw 'Http Error #404';
         }
     }
 
 
-    public function listConversations(filters: QueryParams): Array<Dynamic> {
+    public function listConversations(filters: QueryParams): String {
         this.calledFunction('listConversations', [filters]);
-        return this.conversationList.map(function(conv) { return Reflect.copy(conv); });
+        return Json.stringify(this.conversationList);
     }
 
 
-    public function createConversation(data: String): Dynamic {
+    public function createConversation(data: String): String {
         this.calledFunction('createConversation', [data]);
-        var conv = Reflect.copy(this.conversationList[0]);
-        var dataObj = haxe.Json.parse(data);
-        var fields = Reflect.fields(dataObj);
-        for (field in fields) {
+        final conv = Reflect.copy(this.conversationList[0]);
+        final dataObj = Json.parse(data);
+        for (field in Reflect.fields(dataObj)) {
             Reflect.setField(conv, field, Reflect.field(dataObj, field));
         }
-        return conv;
+        return Json.stringify(conv);
     }
 
 
-    public function getConversation(id: String): Dynamic {
+    public function getConversation(id: String): String {
         this.calledFunction('getConversation', [id]);
-        var convs = this.conversationList.filter(function(conv) { return conv.id == id; });
+        final convs = this.conversationList.filter((conv) -> conv.id == id);
         if (convs.length > 0) {
-            return Reflect.copy(convs[0]);
+            return Json.stringify(convs[0]);
         } else {
             throw 'Http Error #404';
         }
     }
 
 
-    public function createConversationMessage(id: String, data: String): Dynamic {
+    public function createConversationMessage(id: String, data: String): String {
         this.calledFunction('createConversationMessage', [id, data]);
-        var msg = Reflect.copy(this.conversationList[0].messages[0]);
-        var dataObj = haxe.Json.parse(data);
-        var fields = Reflect.fields(dataObj);
-        for (field in fields) {
+        final msg = Reflect.copy(this.conversationList[0].messages[0]);
+        final dataObj = Json.parse(data);
+        for (field in Reflect.fields(dataObj)) {
             Reflect.setField(msg, field, Reflect.field(dataObj, field));
         }
-        return msg;
+        return Json.stringify(msg);
     }
 
 
-    public function listProducts(filters: QueryParams): Array<Dynamic> {
+    public function listProducts(filters: QueryParams): String {
         this.calledFunction('listProducts', [filters]);
-        return this.productList.map(function(product) { return Reflect.copy(product); });
+        return Json.stringify(this.productList);
     }
 
 
-    public function getProduct(id: String): Dynamic {
+    public function getProduct(id: String): String {
         this.calledFunction('getProduct', [id]);
-        var products = this.productList.filter(function(product) { return product.id == id; });
+        final products = this.productList.filter((product) -> product.id == id);
         if (products.length > 0) {
-            return Reflect.copy(products[0]);
+            return Json.stringify(products[0]);
         } else {
             throw 'Http Error #404';
         }
     }
 
 
-    public function listProductActions(id: String, filters: QueryParams): Array<Dynamic> {
+    public function listProductActions(id: String, filters: QueryParams): String {
         this.calledFunction('listProductActions', [id, filters]);
-        if (this.getProduct(id) != null) {
-            return this.actionList.map(function(action) { return Reflect.copy(action); });
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProduct(id);
+        return Json.stringify(this.actionList);
     }
 
 
-    public function getProductAction(id: String, actionId: String): Dynamic {
+    public function getProductAction(id: String, actionId: String): String {
         this.calledFunction('getProductAction', [id, actionId]);
-        var actions = this.actionList.filter(function(action) { return action.id == actionId; });
-        if (this.getProduct(id) != null && actions.length > 0) {
-            return Reflect.copy(actions[0]);
+        this.getProduct(id);
+        final actions = this.actionList.filter((action) -> action.id == actionId);
+        if (actions.length > 0) {
+            return Json.stringify(actions[0]);
         } else {
             throw 'Http Error #404';
         }
@@ -144,83 +141,62 @@ class GeneralApiMock extends Mock implements IGeneralApi {
 
     public function getProductActionLink(id: String, actionId: String): String {
         this.calledFunction('getProductActionLink', [id, actionId]);
-        var action = this.getProductAction(id, actionId);
-        if (action != null) {
-            return 'https://stub-dot-mydevball.appspot.com/?jwt=eyJhbGciOi';
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProductAction(id, actionId);
+        return 'https://stub-dot-mydevball.appspot.com/?jwt=eyJhbGciOi';
     }
 
 
-    public function getProductConnections(id: String): Array<Dynamic> {
+    public function getProductConnections(id: String): String {
         this.calledFunction('getProductConnections', [id]);
-        if (this.getProduct(id) != null) {
-            return this.connectionList.map(function(connection) {
-                return Reflect.copy(connection);
-            });
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProduct(id);
+        return Json.stringify(this.connectionList);
     }
 
 
-    public function getProductItems(id: String): Array<Dynamic> {
+    public function getProductItems(id: String): String {
         this.calledFunction('getProductItems', [id]);
-        if (this.getProduct(id) != null) {
-            return this.itemList.map(function(item) { return Reflect.copy(item); });
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProduct(id);
+        return Json.stringify(this.itemList);
     }
 
 
-    public function getProductParameters(id: String): Array<Dynamic> {
+    public function getProductParameters(id: String): String {
         this.calledFunction('getProductParameters', [id]);
-        if (this.getProduct(id) != null) {
-            return this.paramList.map(function(param) { return Reflect.copy(param); });
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProduct(id);
+        return Json.stringify(this.paramList);
     }
 
 
-    public function getProductTemplates(id: String): Array<Dynamic> {
+    public function getProductTemplates(id: String): String {
         this.calledFunction('getProductTemplates', [id]);
-        if (this.getProduct(id) != null) {
-            return this.templateList.map(function(template) { return Reflect.copy(template); });
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProduct(id);
+        return Json.stringify(this.templateList);
     }
 
 
-    public function getProductVersions(id: String): Array<Dynamic> {
+    public function getProductVersions(id: String): String {
         this.calledFunction('getProductVersions', [id]);
-        if (this.getProduct(id) != null) {
-            return this.productList.map(function(product) { return Reflect.copy(product); });
-        } else {
-            return [];
-        }
+        this.getProduct(id);
+        return Json.stringify(this.productList);
     }
 
 
-    public function getProductVersion(id: String, version: Int): Dynamic {
+    public function getProductVersion(id: String, version: Int): String {
         this.calledFunction('getProductVersion', [id, version]);
-        var product = this.getProduct(id);
-        if (product != null && product.version == version) {
-            return product;
+        final product = Json.parse(this.getProduct(id));
+        if (product.version == version) {
+            return Json.stringify(product);
         } else {
             throw 'Http Error #404';
         }
     }
 
 
-    public function getProductVersionActions(id: String, version: Int): Array<Dynamic> {
+    public function getProductVersionActions(id: String, version: Int): String {
         this.calledFunction('getProductVersionActions', [id, version]);
-        var product = this.getProduct(id);
-        if (product != null && product.version == version) {
-            return this.actionList.map(function(action) { return Reflect.copy(action); });
+        final product = Json.parse(this.getProduct(id));
+        if (product.version == version) {
+            return Json.stringify(this.actionList);
         } else {
             throw 'Http Error #404';
         }
@@ -228,165 +204,130 @@ class GeneralApiMock extends Mock implements IGeneralApi {
 
 
     public function getProductVersionAction(id: String, version: Int,
-            actionId: String): Dynamic {
+            actionId: String): String {
         this.calledFunction('getProductVersionAction', [id, version, actionId]);
-        return this.getProductVersionActions(id, version).filter(function(action) {
-            return action.id == actionId;
-        })[0];
+        final actions = Json.parse(this.getProductVersionActions(id, version));
+        return Json.stringify(actions.filter((action) -> action.id == actionId)[0]);
     }
     
 
     public function getProductVersionActionLink(id: String, version: Int,
             actionId: String): String {
         this.calledFunction('getProductVersionActionLink', [id, version, actionId]);
-        if (this.getProductVersionAction(id, version, actionId) != null) {
-            return 'https://stub-dot-mydevball.appspot.com/?jwt=eyJhbGciOi';
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProductVersionAction(id, version, actionId);
+        return 'https://stub-dot-mydevball.appspot.com/?jwt=eyJhbGciOi';
     }
 
 
-    public function getProductVersionItems(id: String, version: Int): Array<Dynamic> {
+    public function getProductVersionItems(id: String, version: Int): String {
         this.calledFunction('getProductVersionItems', [id, version]);
-        if (this.getProductVersion(id, version) != null) {
-            return this.getProductItems(id);
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProductVersion(id, version);
+        return this.getProductItems(id);
     }
 
 
-    public function getProductVersionParameters(id: String, version: Int): Array<Dynamic> {
+    public function getProductVersionParameters(id: String, version: Int): String {
         this.calledFunction('getProductVersionParameters', [id, version]);
-        if (this.getProductVersion(id, version) != null) {
-            return this.getProductParameters(id);
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProductVersion(id, version);
+        return this.getProductParameters(id);
     }
 
 
-    public function getProductVersionTemplates(id: String, version: Int): Array<Dynamic> {
+    public function getProductVersionTemplates(id: String, version: Int): String {
         this.calledFunction('getProductVersionTemplates', [id, version]);
-        if (this.getProductVersion(id, version) != null) {
-            return this.getProductTemplates(id);
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProductVersion(id, version);
+        return this.getProductTemplates(id);
     }
 
 
-    public function listProductConfigurations(id: String, filters: QueryParams): Array<Dynamic> {
+    public function listProductConfigurations(id: String, filters: QueryParams): String {
         this.calledFunction('listProductConfigurations', [id, filters]);
-        if (this.getProduct(id) != null) {
-            return this.configurationList.map(function(conf) { return Reflect.copy(conf); });
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProduct(id);
+        return Json.stringify(this.configurationList);
     }
 
 
-    public function setProductConfigurationParam(id: String, param: String): Dynamic {
+    public function setProductConfigurationParam(id: String, param: String): String {
         this.calledFunction('setProductConfigurationParam', [id, param]);
-        if (this.getProduct(id) != null) {
-            return haxe.Json.parse(param);
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProduct(id);
+        return param;
     }
 
 
-    public function listProductAgreements(id: String, filters: QueryParams): Array<Dynamic> {
+    public function listProductAgreements(id: String, filters: QueryParams): String {
         this.calledFunction('listProductAgreements', [id, filters]);
-        if (this.getProduct(id) != null) {
-            return this.agreementList.map(function(agreement) { return Reflect.copy(agreement); });
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProduct(id);
+        return Json.stringify(this.agreementList);
     }
 
 
-    public function listProductMedia(id: String, filters: QueryParams): Array<Dynamic> {
+    public function listProductMedia(id: String, filters: QueryParams): String {
         this.calledFunction('listProductMedia', [id, filters]);
-        if (this.getProduct(id) != null) {
-            return this.mediaList.map(function(media) { return Reflect.copy(media); });
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProduct(id);
+        return Json.stringify(this.mediaList);
     }
 
 
-    public function createProductMedia(id: String): Dynamic {
+    public function createProductMedia(id: String): String {
         this.calledFunction('createProductMedia', [id]);
-        if (this.getProduct(id) != null) {
-            return Reflect.copy(this.mediaList[0]);
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProduct(id);
+        return Json.stringify(this.mediaList[0]);
     }
 
 
-    public function getProductMedia(id: String, mediaId: String): Dynamic {
+    public function getProductMedia(id: String, mediaId: String): String {
         this.calledFunction('getProductMedia', [id, mediaId]);
-        if (this.getProduct(id) != null) {
-            var media = this.mediaList.filter(function(media) { return media.id == mediaId; });
-            if (media.length > 0) {
-                return media[0];
-            } else {
-                throw 'Http Error #404';
-            }
+        this.getProduct(id);
+        final media = this.mediaList.filter((media) -> media.id == mediaId);
+        if (media.length > 0) {
+            return Json.stringify(media[0]);
         } else {
             throw 'Http Error #404';
         }
     }
 
 
-    public function updateProductMedia(id: String, mediaId: String, media: String): Dynamic {
+    public function updateProductMedia(id: String, mediaId: String, media: String): String {
         this.calledFunction('updateProductMedia', [id, mediaId, media]);
-        if (this.getProductMedia(id, mediaId) != null) {
-            return haxe.Json.parse(media);
-        } else {
-            throw 'Http Error #404';
-        }
+        this.getProductMedia(id, mediaId);
+        return media;
     }
 
 
-    public function deleteProductMedia(id: String, mediaId: String): Dynamic {
+    public function deleteProductMedia(id: String, mediaId: String): String {
         this.calledFunction('deleteProductMedia', [id, mediaId]);
         return this.getProductMedia(id, mediaId);
     }
 
 
-    public function listCategories(filters: QueryParams): Array<Dynamic> {
+    public function listCategories(filters: QueryParams): String {
         this.calledFunction('listCategories', [filters]);
-        return this.categoryList.map(function(cat) { return Reflect.copy(cat); });
+        return Json.stringify(this.categoryList);
     }
 
 
-    public function getCategory(id: String): Dynamic {
+    public function getCategory(id: String): String {
         this.calledFunction('getCategory', [id]);
-        var categories = this.categoryList.filter(function(cat) { return cat.id == id; });
+        final categories = this.categoryList.filter((cat) -> cat.id == id);
         if (categories.length > 0) {
-            return Reflect.copy(categories[0]);
+            return Json.stringify(categories[0]);
         } else {
             throw 'Http Error #404';
         }
-        return null;
     }
 
 
-    private var accountList: Array<Dynamic>;
-    private var actionList: Array<Dynamic>;
-    private var agreementList: Array<Dynamic>;
-    private var categoryList: Array<Dynamic>;
-    private var configurationList: Array<Dynamic>;
-    private var connectionList: Array<Dynamic>;
-    private var conversationList: Array<Dynamic>;
-    private var itemList: Array<Dynamic>;
-    private var mediaList: Array<Dynamic>;
-    private var paramList: Array<Dynamic>;
-    private var productList: Array<Dynamic>;
-    private var templateList: Array<Dynamic>;
-    private var userList: Array<Dynamic>;
+    private final accountList: Array<Dynamic>;
+    private final actionList: Array<Dynamic>;
+    private final agreementList: Array<Dynamic>;
+    private final categoryList: Array<Dynamic>;
+    private final configurationList: Array<Dynamic>;
+    private final connectionList: Array<Dynamic>;
+    private final conversationList: Array<Dynamic>;
+    private final itemList: Array<Dynamic>;
+    private final mediaList: Array<Dynamic>;
+    private final paramList: Array<Dynamic>;
+    private final productList: Array<Dynamic>;
+    private final templateList: Array<Dynamic>;
+    private final userList: Array<Dynamic>;
 }

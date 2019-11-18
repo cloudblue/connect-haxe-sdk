@@ -50,7 +50,7 @@ class AssetTest extends haxe.unit.TestCase {
 
         // Check mocks
         final apiMock = cast(Env.getFulfillmentApi(), Mock);
-        assertEquals(1, apiMock.callCount('listRequests'));
+        assertEquals(1, apiMock.callCount('listAssets'));
         assertEquals(
             [null].toString(),
             apiMock.callArgs('listAssets', 0).toString());
@@ -202,7 +202,7 @@ class AssetTest extends haxe.unit.TestCase {
 
     public function testGetRequestsEmpty() {
         // Check subject
-        final asset = Model.parse(Asset, {id: 'AS-XXX-XXX-XXX-X'});
+        final asset = Model.parse(Asset, '{"id": "AS-XXX-XXX-XXX-X"}');
         final requests = asset.getRequests();
         assertEquals(0, requests.length());
 

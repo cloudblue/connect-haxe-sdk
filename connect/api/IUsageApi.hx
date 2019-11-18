@@ -3,21 +3,21 @@ package connect.api;
 
 @:dox(hide)
 interface IUsageApi {
-    public function listUsageFiles(filters: QueryParams): Array<Dynamic>;
-    public function createUsageFile(body: String): Dynamic;
-    public function getUsageFile(id: String): Dynamic;
-    public function updateUsageFile(id: String, body: String): Dynamic;
+    public function listUsageFiles(filters: QueryParams): String;
+    public function createUsageFile(body: String): String;
+    public function getUsageFile(id: String): String;
+    public function updateUsageFile(id: String, body: String): String;
     public function deleteUsageFile(id: String): Void;
-    public function uploadUsageFile(id: String, file: Blob): Dynamic;
-    public function submitUsageFileAction(id: String): Dynamic;
-    public function acceptUsageFileAction(id: String, note: String): Dynamic;
-    public function rejectUsageFileAction(id: String, note: String): Dynamic;
-    public function closeUsageFileAction(id: String): Dynamic;
-    public function getProductSpecificUsageFileTemplate(productId: String): Dynamic;
-    public function uploadReconciliationFileFromProvider(id: String, file: Blob): Dynamic;
-    public function reprocessProcessedFile(id: String): Dynamic;
-    public function listUsageRecords(filters: QueryParams): Array<Dynamic>;
-    public function getUsageRecord(id: String): Dynamic;
-    public function updateUsageRecord(id: String, record: String): Dynamic;
-    public function closeUsageRecord(id: String, record: String): Dynamic;
+    public function uploadUsageFile(id: String, file: Blob): String;
+    public function submitUsageFileAction(id: String): String;
+    public function acceptUsageFileAction(id: String, note: String): String;
+    public function rejectUsageFileAction(id: String, note: String): String;
+    public function closeUsageFileAction(id: String): String;
+    public function getProductSpecificUsageFileTemplate(productId: String): String;
+    public function uploadReconciliationFileFromProvider(id: String, file: Blob): String;
+    public function reprocessProcessedFile(id: String): String;
+    public function listUsageRecords(filters: QueryParams): String;
+    public function getUsageRecord(id: String): String;
+    public function updateUsageRecord(id: String, record: String): String;
+    public function closeUsageRecord(id: String, record: String): String;
 }

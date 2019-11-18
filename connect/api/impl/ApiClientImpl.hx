@@ -188,26 +188,19 @@ class ApiClientImpl extends Base implements IApiClient {
 
 
     public function get(resource: String, ?id: String, ?suffix: String,
-            ?params: QueryParams): Dynamic {
+            ?params: QueryParams): String {
         return checkResponse(connectSyncRequest('GET', parsePath(resource, id, suffix),
             getHeaders(), params));
     }
 
 
-    public function getString(resource: String, ?id: String, ?suffix: String,
-            ?params: QueryParams): String {
-        return checkStringResponse(connectSyncRequest('GET', parsePath(resource, id, suffix),
-            getHeaders(), params));
-    }
-
-
-    public function put(resource: String, id: String, body: String): Dynamic {
+    public function put(resource: String, id: String, body: String): String {
         return checkResponse(connectSyncRequest('PUT', parsePath(resource, id),
             getHeaders(), body));
     }
 
 
-    public function post(resource: String, ?id: String, ?suffix: String, ?body: String): Dynamic {
+    public function post(resource: String, ?id: String, ?suffix: String, ?body: String): String {
         return checkResponse(connectSyncRequest('POST', parsePath(resource, id, suffix),
             getHeaders(), body));
     }
@@ -220,7 +213,7 @@ class ApiClientImpl extends Base implements IApiClient {
     }
 
 
-    public function delete(resource: String, id: String, ?suffix: String): Dynamic {
+    public function delete(resource: String, id: String, ?suffix: String): String {
         return checkResponse(connectSyncRequest('DELETE', parsePath(resource, id, suffix), getHeaders()));
     }
 
@@ -333,16 +326,7 @@ class ApiClientImpl extends Base implements IApiClient {
     }
 
 
-    private function checkResponse(response: Response): Dynamic {
-        if (response.status < 400) {
-            return haxe.Json.parse(response.text);
-        } else {
-            throw response.text;
-        }
-    }
-
-
-    private function checkStringResponse(response: Response): String {
+    private function checkResponse(response: Response): String {
         if (response.status < 400) {
             return response.text;
         } else {
