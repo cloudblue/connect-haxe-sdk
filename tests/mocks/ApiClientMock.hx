@@ -16,7 +16,7 @@ class ApiClientMock extends Mock implements IApiClient {
     
 
     public function get(resource: String, ?id: String, ?suffix: String,
-            ?params: QueryParams): Dynamic {
+            ?params: QueryParams): String {
         return null;
     }
 
@@ -27,12 +27,12 @@ class ApiClientMock extends Mock implements IApiClient {
     }
 
 
-    public function put(resource: String, id: String, body: String): Dynamic {
+    public function put(resource: String, id: String, body: String): String {
         return null;
     }
 
 
-    public function post(resource: String, ?id: String, ?suffix: String, ?body: String): Dynamic {
+    public function post(resource: String, ?id: String, ?suffix: String, ?body: String): String {
         return null;
     }
 
@@ -43,7 +43,7 @@ class ApiClientMock extends Mock implements IApiClient {
     }
 
 
-    public function delete(resource: String, id: String, ?suffix: String): Dynamic {
+    public function delete(resource: String, id: String, ?suffix: String): String {
         return null;
     }
 }

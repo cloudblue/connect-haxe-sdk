@@ -219,10 +219,7 @@ class RequestTest extends haxe.unit.TestCase {
     public function testNeedsMigrationFalse2() {
         // Check subject
         final request = Request.get('PR-5852-1608-0000');
-        request.asset.params.push(Model.parse(Param, {
-            id: 'migration_info',
-            value: ''
-        }));
+        request.asset.params.push(Model.parse(Param, '{"id": "migration_info", "value": ""}'));
         assertFalse(request.needsMigration());
     }
 
@@ -230,10 +227,7 @@ class RequestTest extends haxe.unit.TestCase {
     public function testNeedsMigrationTrue() {
         // Check subject
         final request = Request.get('PR-5852-1608-0000');
-        request.asset.params.push(Model.parse(Param, {
-            id: 'migration_info',
-            value: '{}'
-        }));
+        request.asset.params.push(Model.parse(Param, '{"id": "migration_info", "value": "..."}'));
         assertTrue(request.needsMigration());
     }
 

@@ -10,22 +10,22 @@ class UsageApiImpl extends Base implements IUsageApi {
     public function new() {}
 
 
-    public function listUsageFiles(filters: QueryParams): Array<Dynamic> {
+    public function listUsageFiles(filters: QueryParams): String {
         return Env.getApiClient().get(USAGE_FILES_PATH, null, null, filters);
     }
 
 
-    public function createUsageFile(body: String): Dynamic {
+    public function createUsageFile(body: String): String {
         return Env.getApiClient().post(USAGE_FILES_PATH, null, null, body);
     }
 
 
-    public function getUsageFile(id: String): Dynamic {
+    public function getUsageFile(id: String): String {
         return Env.getApiClient().get(USAGE_FILES_PATH, id);
     }
 
 
-    public function updateUsageFile(id: String, body: String): Dynamic {
+    public function updateUsageFile(id: String, body: String): String {
         return Env.getApiClient().put(USAGE_FILES_PATH, id, body);
     }
 
@@ -35,7 +35,7 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function uploadUsageFile(id: String, file: Blob): Dynamic {
+    public function uploadUsageFile(id: String, file: Blob): String {
         return Env.getApiClient().postFile(
             USAGE_FILES_PATH,
             id,
@@ -47,34 +47,34 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function submitUsageFileAction(id: String): Dynamic {
+    public function submitUsageFileAction(id: String): String {
         return Env.getApiClient().post(USAGE_FILES_PATH, id, 'submit');
     }
 
 
-    public function acceptUsageFileAction(id: String, note: String): Dynamic {
+    public function acceptUsageFileAction(id: String, note: String): String {
         return Env.getApiClient().post(USAGE_FILES_PATH, id, 'accept',
             haxe.Json.stringify({acceptance_note: note}));
     }
 
 
-    public function rejectUsageFileAction(id: String, note: String): Dynamic {
+    public function rejectUsageFileAction(id: String, note: String): String {
         return Env.getApiClient().post(USAGE_FILES_PATH, id, 'reject',
             haxe.Json.stringify({rejection_note: note}));
     }
 
 
-    public function closeUsageFileAction(id: String): Dynamic {
+    public function closeUsageFileAction(id: String): String {
         return Env.getApiClient().post(USAGE_FILES_PATH, id, 'close');
     }
 
 
-    public function getProductSpecificUsageFileTemplate(productId: String): Dynamic {
+    public function getProductSpecificUsageFileTemplate(productId: String): String {
         return Env.getApiClient().get(USAGE_PRODUCTS_PATH, productId, 'template');
     }
 
 
-    public function uploadReconciliationFileFromProvider(id: String, file: Blob): Dynamic {
+    public function uploadReconciliationFileFromProvider(id: String, file: Blob): String {
         return Env.getApiClient().postFile(
             USAGE_FILES_PATH,
             id,
@@ -86,27 +86,27 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function reprocessProcessedFile(id: String): Dynamic {
+    public function reprocessProcessedFile(id: String): String {
         return Env.getApiClient().post(USAGE_FILES_PATH, id, 'reprocess');
     }
 
 
-    public function listUsageRecords(filters: QueryParams): Array<Dynamic> {
+    public function listUsageRecords(filters: QueryParams): String {
         return Env.getApiClient().get(USAGE_RECORDS_PATH, null, null, filters);
     }
 
 
-    public function getUsageRecord(id: String): Dynamic {
+    public function getUsageRecord(id: String): String {
         return Env.getApiClient().get(USAGE_RECORDS_PATH, id);
     }
 
 
-    public function updateUsageRecord(id: String, record: String): Dynamic {
+    public function updateUsageRecord(id: String, record: String): String {
         return Env.getApiClient().put(USAGE_RECORDS_PATH, id, record);
     }
 
 
-    public function closeUsageRecord(id: String, record: String): Dynamic {
+    public function closeUsageRecord(id: String, record: String): String {
         return Env.getApiClient().post(USAGE_RECORDS_PATH, id, 'close', record);
     }
 }

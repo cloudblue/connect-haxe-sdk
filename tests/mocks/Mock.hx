@@ -1,6 +1,5 @@
 package tests.mocks;
 
-import connect.Dictionary;
 import haxe.ds.StringMap;
 
 
@@ -16,7 +15,7 @@ class Mock {
 
 
     public function calledFunction(name: String, args: Array<Dynamic>): Void {
-        var argsList = this.funcCalls.exists(name)
+        final argsList = this.funcCalls.exists(name)
             ? this.funcCalls.get(name)
             : [];
         argsList.push(args);
@@ -34,7 +33,7 @@ class Mock {
 
 
     public function callArgs(name: String, callIndex: Int): Array<Dynamic> {
-        var funcCalls = this.funcCalls.exists(name) ? this.funcCalls.get(name) : null;
+        final funcCalls = this.funcCalls.exists(name) ? this.funcCalls.get(name) : null;
         if (funcCalls != null && callIndex >= 0 && callIndex < funcCalls.length) {
             return funcCalls[callIndex];
         } else {
@@ -44,8 +43,7 @@ class Mock {
 
 
     public static function parseJsonFile(filename: String): Dynamic {
-        var content = sys.io.File.getContent(filename);
-        return haxe.Json.parse(content);
+        return haxe.Json.parse(sys.io.File.getContent(filename));
     }
 
 

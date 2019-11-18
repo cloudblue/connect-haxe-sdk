@@ -40,7 +40,7 @@ class Account extends IdModel {
         @returns A Collection of Accounts.
     **/
     public static function list(filters: QueryParams): Collection<Account> {
-        var accounts = Env.getGeneralApi().listAccounts(filters);
+        final accounts = Env.getGeneralApi().listAccounts(filters);
         return Model.parseArray(Account, accounts);
     }
 
@@ -51,7 +51,7 @@ class Account extends IdModel {
         @returns The created Account.
     **/
     public static function create(): Account {
-        var account = Env.getGeneralApi().createAccount();
+        final account = Env.getGeneralApi().createAccount();
         return Model.parse(Account, account);
     }
 
@@ -59,7 +59,7 @@ class Account extends IdModel {
     /** @returns The Account with the given id, or `null` if it was not found. **/
     public static function get(id: String): Account {
         try {
-            var account = Env.getGeneralApi().getAccount(id);
+            final account = Env.getGeneralApi().getAccount(id);
             return Model.parse(Account, account);
         } catch (ex: Dynamic) {
             return null;
@@ -69,7 +69,7 @@ class Account extends IdModel {
 
     /** @returns A Collection of Users of `this` Account. **/
     public function listUsers(): Collection<User> {
-        var users = Env.getGeneralApi().listAccountUsers(this.id);
+        final users = Env.getGeneralApi().listAccountUsers(this.id);
         return Model.parseArray(User, users);
     }
 
@@ -79,9 +79,7 @@ class Account extends IdModel {
         or `null` if it was not found.
     **/
     public function getUser(userId: String): User {
-        var users = this.listUsers().toArray().filter(function(user) {
-            return user.id == userId;
-        });
+        final users = this.listUsers().toArray().filter((user) -> user.id == userId);
         if (users.length > 0) {
             return users[0];
         } else {
