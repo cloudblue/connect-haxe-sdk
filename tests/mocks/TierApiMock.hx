@@ -10,65 +10,71 @@ class TierApiMock extends Mock implements ITierApi {
         super();
         this.accountList = Mock.parseJsonFile('tests/mocks/data/tieraccount_list.json');
         this.configList = Mock.parseJsonFile('tests/mocks/data/tierconfig_list.json');
+        this.requestList = Mock.parseJsonFile('tests/mocks/data/tierconfigrequest_list.json');
     }
 
 
     public function listTierConfigRequests(filters: QueryParams): String {
         this.calledFunction('listTierConfigRequests', [filters]);
-        return null;
+        return Json.stringify(this.requestList);
     }
 
 
     public function createTierConfigRequest(body: String): String {
         this.calledFunction('createTierConfigRequest', [body]);
-        return null;
+        return Json.stringify(this.requestList[0]);
     }
 
 
     public function getTierConfigRequest(id: String): String {
         this.calledFunction('getTierConfigRequest', [id]);
-        return null;
+        final requests = this.requestList.filter((request) -> request.id == id);
+        if (requests.length > 0) {
+            return Json.stringify(requests[0]);
+        } else {
+            throw 'Http Error #404';
+        }
     }
 
     public function updateTierConfigRequest(id: String, tcr: String): String {
         this.calledFunction('updateTierConfigRequest', [id, tcr]);
-        return null;
+        return this.getTierConfigRequest(id);
     }
 
 
     public function pendTierConfigRequest(id: String): String {
         this.calledFunction('pendTierConfigRequest', [id]);
-        return null;
+        return this.getTierConfigRequest(id);
     }
 
 
     public function inquireTierConfigRequest(id: String): String {
         this.calledFunction('inquireTierConfigRequest', [id]);
-        return null;
+        return this.getTierConfigRequest(id);
     }
 
 
     public function approveTierConfigRequest(id: String, data: String): String {
         this.calledFunction('approveTierConfigRequest', [id, data]);
-        return null;
+        return this.getTierConfigRequest(id);
     }
 
 
     public function failTierConfigRequest(id: String, data: String): String {
         this.calledFunction('failTierConfigRequest', [id, data]);
-        return null;
+        return this.getTierConfigRequest(id);
     }
 
 
     public function assignTierConfigRequest(id: String): String {
         this.calledFunction('assignTierConfigRequest', [id]);
-        return null;
+        return this.getTierConfigRequest(id);
     }
 
 
     public function unassignTierConfigRequest(id: String): String {
         this.calledFunction('unassignTierConfigRequest', [id]);
-        return null;
+        return this.getTierConfigRequest(id);
     }
 
 
@@ -108,4 +114,5 @@ class TierApiMock extends Mock implements ITierApi {
 
     private final accountList: Array<Dynamic>;
     private final configList: Array<Dynamic>;
+    private final requestList: Array<Dynamic>;
 }
