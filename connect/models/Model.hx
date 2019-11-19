@@ -70,6 +70,7 @@ class Model extends Base {
     public static function parse<T>(modelClass: Class<T>, body: String): T {
         final obj = Json.parse(body);
         if (Type.typeof(obj) != TObject) {
+            trace('=============== $body : ${Type.typeof(obj)}');
             throw 'Model.parse can only parse a Json that contains an object.';
         }
         final instance = Type.createInstance(modelClass, []);

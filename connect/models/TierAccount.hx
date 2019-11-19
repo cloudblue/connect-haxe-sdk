@@ -66,9 +66,10 @@ class TierAccount extends IdModel {
     /** @returns The TierAccount with the given id, or `null` if it was not found. **/
     public static function get(id: String): TierAccount {
         try {
-            final account = Env.getTierApi().getTierConfigRequest(id);
+            final account = Env.getTierApi().getTierAccount(id);
             return Model.parse(TierAccount, account);
         } catch (ex: Dynamic) {
+            trace('!!!!!! $ex');
             return null;
         }
     }

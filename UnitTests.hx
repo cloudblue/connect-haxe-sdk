@@ -2,6 +2,7 @@
 import tests.mocks.ApiClientMock;
 import tests.mocks.FulfillmentApiMock;
 import tests.mocks.GeneralApiMock;
+import tests.mocks.TierApiMock;
 import tests.mocks.UsageApiMock;
 
 
@@ -18,6 +19,7 @@ class UnitTests {
         runner.add(new tests.unit.ItemTest());
         runner.add(new tests.unit.ProductTest());
         runner.add(new tests.unit.RequestTest());
+        runner.add(new tests.unit.TierAccountTest());
         runner.add(new tests.unit.UsageFileTest());
 
         runner.run();
