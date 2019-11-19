@@ -187,54 +187,7 @@ class ApiClientImpl extends Base implements IApiClient {
     }
 
 
-    public function get(resource: String, ?id: String, ?suffix: String,
-            ?params: QueryParams): String {
-        return checkResponse(connectSyncRequest('GET', parsePath(resource, id, suffix),
-            getHeaders(), params));
-    }
-
-
-    public function put(resource: String, id: String, body: String): String {
-        return checkResponse(connectSyncRequest('PUT', parsePath(resource, id),
-            getHeaders(), body));
-    }
-
-
-    public function post(resource: String, ?id: String, ?suffix: String, ?body: String): String {
-        return checkResponse(connectSyncRequest('POST', parsePath(resource, id, suffix),
-            getHeaders(), body));
-    }
-
-
-    public function postFile(resource: String, ?id: String, ?suffix: String,
-        fileArg: String, fileName: String, fileContents: Blob): Dynamic {
-        return checkResponse(connectSyncRequest('POST', parsePath(resource, id, suffix),
-            getHeaders('multipart/form-data'), null, fileArg, fileName, fileContents));
-    }
-
-
-    public function delete(resource: String, id: String, ?suffix: String): String {
-        return checkResponse(connectSyncRequest('DELETE', parsePath(resource, id, suffix), getHeaders()));
-    }
-
-
     public function new() {}
-
-
-    private function connectSyncRequest(method: String, path: String, headers: Dictionary,
-            ?params: QueryParams, ?data: String,
-            ?fileArg: String, ?fileName: String, ?fileContent: Blob) : Response {
-        final url = Env.getConfig().getApiUrl() + path + ((params != null) ? params.toString() : '');
-        return this.syncRequest(method, url, headers, data, fileArg, fileName, fileContent);
-    }
-
-
-    private function getHeaders(contentType: String = 'application/json'): Dictionary {
-        final headers = new Dictionary();
-        headers.set('Authorization', Env.getConfig().getApiKey());
-        headers.set('Content-Type', contentType);
-        return headers;
-    }
 
 
     private function writeRequestCall(loggerFunc: Function, method: String, url: String,
@@ -315,22 +268,6 @@ class ApiClientImpl extends Base implements IApiClient {
                 + '> ```';
         } else {
             return '${prefix} ${beautified}';
-        }
-    }
-
-
-    private function parsePath(resource: String, ?id: String, ?suffix: String): String {
-        return resource
-            + (id != null ? "/" + id : "")
-            + (suffix != null ? "/" + suffix : "");
-    }
-
-
-    private function checkResponse(response: Response): String {
-        if (response.status < 400) {
-            return response.text;
-        } else {
-            throw response.text;
         }
     }
 

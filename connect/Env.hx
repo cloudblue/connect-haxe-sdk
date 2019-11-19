@@ -1,5 +1,6 @@
 package connect;
 
+import connect.api.ConnectHelper;
 import connect.api.IApiClient;
 import connect.api.IFulfillmentApi;
 import connect.api.IUsageApi;
