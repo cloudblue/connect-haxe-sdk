@@ -15,7 +15,7 @@ class Configuration extends Model {
 
 
     /** @returns The `Param` with the given id, or `null` if it was not found. **/
-    public function getParamById(paramId: String) {
+    public function getParamById(paramId: String): Param {
         final params = this.params.toArray().filter(function(param) {
             return param.id == paramId;
         });

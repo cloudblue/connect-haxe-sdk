@@ -1,0 +1,38 @@
+[
+    {
+        "id": "TA-9861-7949-8492",
+        "external_id": "12435",
+        "external_uid": "518e10e8-3b1b-49b5-a480-b67675af4ae5",
+        "name": "string",
+        "environment": "test",
+        "scope": ["tier1", "customer"],
+        "contact_info": {
+            "address_line1": "Yalı Mahallesi",
+            "address_line2": "",
+            "city": "Erdek",
+            "state": "string",
+            "postal_code": "10500",
+            "country": "tr",
+            "contact": {
+                "first_name": "Quickstart",
+                "last_name": "Long Running Operation",
+                "email": "qlro@softcom.com",
+                "phone_number": {
+                    "country_code": "+90",
+                    "area_code": "546",
+                    "phone_number": "6317546",
+                    "extension": ""
+                }
+            }
+        },
+        "marketplace": {
+            "icon": "/media/PA-239-689/marketplaces/MP-54865/icon.png",
+            "id": "MP-54865",
+            "name": "Germany"
+        },
+        "hub": {
+            "id": "HB-12345-12345",
+            "name": "Provider Production Hub"
+        }
+    }
+]

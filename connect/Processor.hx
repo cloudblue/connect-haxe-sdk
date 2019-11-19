@@ -3,6 +3,7 @@ package connect;
 import connect.api.QueryParams;
 import connect.models.IdModel;
 import connect.models.Request;
+import connect.models.TierConfigRequest;
 import connect.models.UsageFile;
 import haxe.Constraints.Function;
 
@@ -53,7 +54,7 @@ class Processor extends Base {
 
 
     /**
-        Processes all `UsageFile` objects that match the given filters,
+        Processes all fullfilment `UsageFile` objects that match the given filters,
         executing in sequence all the flows defined for them.
 
         @param filters Filters to be used for listing requests. It can contain
@@ -65,7 +66,19 @@ class Processor extends Base {
 
 
     /**
-        Processes all fullfilment `Request` objects that match the given filters,
+        Processes all `TierConfigRequest` objects that match the given filters,
+        executing in sequence all the flows defined for them.
+
+        @param filters Filters to be used for listing requests. It can contain
+        any of the filters specified for the `TierConfigRequest.list` method.
+    **/
+    public function processTierConfigRequests(filters: QueryParams): Void {
+        run(TierConfigRequest, filters);
+    }
+
+
+    /**
+        Processes all `UsageFile` objects that match the given filters,
         executing in sequence all the flows defined for them.
 
         @param filters Filters to be used for listing requests. It can contain
@@ -93,7 +106,7 @@ class Processor extends Base {
         Env.getLogger().openSection('Listing requests on ' + Util.getDate() + ' UTC');
         var list: Collection<IdModel> = null;
         try {
-            var listMethod: Function = Reflect.field(modelClass, 'list');
+            final listMethod: Function = Reflect.field(modelClass, 'list');
             list = Reflect.callMethod(modelClass, listMethod, [filters]);
         } catch (ex: Dynamic) {
             Env.getLogger().error('```');

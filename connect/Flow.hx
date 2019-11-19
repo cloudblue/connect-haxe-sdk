@@ -2,6 +2,7 @@ package connect;
 
 import connect.models.IdModel;
 import connect.models.Request;
+import connect.models.TierConfigRequest;
 import connect.models.UsageFile;
 import haxe.Constraints.Function;
 import haxe.Json;
@@ -83,6 +84,22 @@ class Flow extends Base {
 
     /**
         This can be called within your steps to get the request being processed, as long as it
+        is of the `TierConfigRequest` type.
+
+        @returns The `TierConfigRequest` being processed, or `null` if current request is not of
+        Tier api.
+    **/
+    public function getTierConfigRequest(): TierConfigRequest {
+        try {
+            return cast(this.model, TierConfigRequest);
+        } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+
+    /**
+        This can be called within your steps to get the request being processed, as long as it
         is of the `UsageFile` type.
 
         @returns The `USageFile` being processed, or `null` if current request is not of
@@ -132,23 +149,22 @@ class Flow extends Base {
         Changes the status of the Request being processed to "approved", sending the id
         of a Template to render on the portal.
 
-        When using the Flow, this method should be used instead of `Request.approveByTemplate()`,
-        since this take care of cleaning the stored step information, and automatically skips any
-        further steps.
-
-        @returns The Request returned from the server, which should contain
-        the updated status.
+        When using the Flow, this method should be used instead of `Request.approveByTemplate()` or
+        `TierConfigRequest.approveByTemplate()`, since this take care of cleaning the stored step
+        information, and automatically skips any further steps.
     **/
-    public function approveByTemplate(id: String): Request {
+    public function approveByTemplate(id: String): Void {
         final request = this.getRequest();
+        final tcr = this.getTierConfigRequest();
         if (request != null) {
             removeStepData(request);
             request.update();
-            final result = request.approveByTemplate(id);
+            request.approveByTemplate(id);
             this.abort("");
-            return result;
-        } else {
-            return null;
+        } else if (tcr != null) {
+            tcr.update();
+            tcr.approveByTemplate(id);
+            this.abort("");
         }
     }
 
@@ -157,23 +173,22 @@ class Flow extends Base {
         Changes the status of the Request being processed to "approved", rendering a tile on
         the portal with the given Markdown `text`.
 
-        When using the Flow, this method should be used instead of `Request.approveByTile()`,
-        since this take care of cleaning the stored step information, and automatically skips any
-        further steps.
-
-        @returns The Request returned from the server, which should contain
-        the updated status.
+        When using the Flow, this method should be used instead of `Request.approveByTile()` or
+        `TierConfigRequest.approveByTile()`, since this take care of cleaning the stored step
+        information, and automatically skips any further steps.
     **/
-    public function approveByTile(text: String): Request {
+    public function approveByTile(text: String): Void {
         final request = this.getRequest();
+        final tcr = this.getTierConfigRequest();
         if (request != null) {
             removeStepData(request);
             request.update();
-            final result = request.approveByTile(text);
+            request.approveByTile(text);
             this.abort("");
-            return result;
-        } else {
-            return null;
+        } else if (tcr != null) {
+            tcr.update();
+            tcr.approveByTile(text);
+            this.abort("");
         }
     }
 
@@ -181,23 +196,22 @@ class Flow extends Base {
     /**
         Changes the status of the Request being processed to "failed".
 
-        When using the Flow, this method should be used instead of `Request.fail()`,
-        since this take care of cleaning the stored step information, and automatically skips any
-        further steps.
-
-        @returns The Request returned from the server, which should contain
-        the updated status.
+        When using the Flow, this method should be used instead of `Request.fail()` or
+        `TierConfigRequest.fail()`, since this takes care of cleaning the stored step
+        information, and automatically skips any further steps.
     **/
-    public function fail(reason: String): Request {
+    public function fail(reason: String): Void {
         final request = this.getRequest();
+        final tcr = this.getTierConfigRequest();
         if (request != null) {
             removeStepData(request);
             request.update();
-            final result = request.fail(reason);
+            request.fail(reason);
             this.abort("Failing request");
-            return result;
-        } else {
-            return null;
+        } else if (tcr != null) {
+            tcr.update();
+            tcr.fail(reason);
+            this.abort("Failing request");
         }
     }
 
@@ -205,23 +219,22 @@ class Flow extends Base {
     /**
         Changes the status of the Request being processed to "inquiring".
 
-        When using the Flow, this method should be used instead of `Request.inquire()`,
-        since this take care of cleaning the stored step information, and automatically skips any
-        further steps.
-
-        @returns The Request returned from the server, which should contain
-        the updated status.
+        When using the Flow, this method should be used instead of `Request.inquire()` or
+        `TierConfigRequest.inquire()`, since this take care of cleaning the stored step
+        information, and automatically skips any further steps.
     **/
-    public function inquire(): Request {
+    public function inquire(): Void {
         final request = this.getRequest();
+        final tcr = this.getTierConfigRequest();
         if (request != null) {
             removeStepData(request);
             request.update();
-            final result = request.inquire();
+            request.inquire();
             this.abort("Inquiring request");
-            return result;
-        } else {
-            return null;
+        } else if (tcr != null) {
+            tcr.update();
+            tcr.inquire();
+            this.abort("Inquiring request");
         }
     }
 
@@ -229,26 +242,25 @@ class Flow extends Base {
     /**
         Changes the status of the Request being processed to "pending".
 
-        When using the Flow, this method should be used instead of `Request.pend()`,
-        since this take care of cleaning the stored step information, and automatically skips any
-        further steps.
-
-        @returns The Request returned from the server, which should contain
-        the updated status.
+        When using the Flow, this method should be used instead of `Request.pend()` or
+        `TierConfigRequest.pend()`, since this take care of cleaning the stored step
+        information, and automatically skips any further steps.
     **/
-    public function pend(): Request {
+    public function pend(): Void {
         final request = this.getRequest();
+        final tcr = this.getTierConfigRequest();
         if (request != null) {
             final param = request.asset.getParamById(STEP_PARAM_ID);
             if (param != null) {
                 param.value = '';
             }
             request.update();
-            final result = request.pend();
+            request.pend();
             this.abort("Pending request");
-            return result;
-        } else {
-            return null;
+        } else if (tcr != null) {
+            tcr.update();
+            tcr.update();
+            this.abort("Pending request");
         }
     }
 

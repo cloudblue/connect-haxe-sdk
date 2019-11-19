@@ -4,7 +4,7 @@ package connect.api;
 @:dox(hide)
 interface ITierApi {
     public function listTierConfigRequests(filters: QueryParams): String;
-    public function createTierConfigRequest(): String;
+    public function createTierConfigRequest(body: String): String;
     public function getTierConfigRequest(id: String): String;
     public function updateTierConfigRequest(id: String, tcr: String): String;
     public function pendTierConfigRequest(id: String): String;

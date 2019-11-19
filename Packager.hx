@@ -46,6 +46,8 @@ import connect.models.Renewal;
 import connect.models.Request;
 import connect.models.Template;
 import connect.models.TierAccount;
+import connect.models.TierConfig;
+import connect.models.TierConfigRequest;
 import connect.models.Tiers;
 import connect.models.UsageFile;
 import connect.models.UsageRecord;

@@ -207,7 +207,12 @@ class GeneralApiMock extends Mock implements IGeneralApi {
             actionId: String): String {
         this.calledFunction('getProductVersionAction', [id, version, actionId]);
         final actions = Json.parse(this.getProductVersionActions(id, version));
-        return Json.stringify(actions.filter((action) -> action.id == actionId)[0]);
+        final filtered: Array<Dynamic> = actions.filter((action) -> action.id == actionId);
+        if (filtered.length > 0) {
+            return Json.stringify(filtered[0]);
+        } else {
+            throw 'Http Error #404';
+        }
     }
     
 
