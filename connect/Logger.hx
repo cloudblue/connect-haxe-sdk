@@ -53,6 +53,12 @@ class Logger extends Base {
     }
 
 
+    @:dox(hide)
+    public function log(message: String): Void {
+        this.error(message);
+    }
+
+
     /**
         Writes a debug message to the log.
     **/
@@ -73,11 +79,41 @@ class Logger extends Base {
     }
 
 
+    @:dox(hide)
+    public function notice(message: String): Void {
+        this.info(message);
+    }
+
+
+    @:dox(hide)
+    public function warning(message: String): Void {
+        this.error(message);
+    }
+
+
     /**
         Writes an error message to the log
     **/
     public function error(message: String): Void {
         this.write(message);
+    }
+
+
+    @:dox(hide)
+    public function critical(message: String): Void {
+        this.error(message);
+    }
+
+
+    @:dox(hide)
+    public function alert(message: String): Void {
+        this.error(message);
+    }
+
+
+    @:dox(hide)
+    public function emergency(message: String): Void {
+        this.error(message);
     }
 
 
