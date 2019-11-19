@@ -33,11 +33,6 @@
         "hub": {
             "id": "HB-12345-12345",
             "name": "Provider Production Hub"
-        },
-        "events" : {
-            "created": {
-                 "at": "2018-05-19 07:29:43.700054"
-            }
         }
     }
 ]

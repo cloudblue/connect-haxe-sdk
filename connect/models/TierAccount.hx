@@ -69,7 +69,6 @@ class TierAccount extends IdModel {
             final account = Env.getTierApi().getTierAccount(id);
             return Model.parse(TierAccount, account);
         } catch (ex: Dynamic) {
-            trace('!!!!!! $ex');
             return null;
         }
     }

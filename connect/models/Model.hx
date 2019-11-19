@@ -69,14 +69,41 @@ class Model extends Base {
     **/
     public static function parse<T>(modelClass: Class<T>, body: String): T {
         final obj = Json.parse(body);
-        if (Type.typeof(obj) != TObject) {
-            trace('=============== $body : ${Type.typeof(obj)}');
-            throw 'Model.parse can only parse a Json that contains an object.';
+        if (Std.is(obj, Array)) {
+            throw 'Model.parse cannot parse a Json that contains an array.';
         }
+        return _parse(modelClass, obj);
+    }
+
+
+    /** Parses the given Haxe dynamic object as a Collection of Models of the specified class. **/
+    public static function parseArray<T>(modelClass: Class<T>, body: String): Collection<T> {
+        final array: Array<Dynamic> = Json.parse(body);
+        if (!Std.is(array, Array)) {
+            throw 'Model.parseArray can only parse a Json that contains an array.';
+        }
+        return _parseArray(modelClass, array);
+    }
+
+
+    @:dox(hide)
+    public function _setFieldClassNames(map: StringMap<String>): Void {
+        if (this.fieldClassNames == null) {
+            this.fieldClassNames = map;
+        }
+    }
+
+
+    public function new() {}
+
+
+    private var fieldClassNames: StringMap<String>;
+
+
+    private static function _parse<T>(modelClass: Class<T>, obj: Dynamic): T {
         final instance = Type.createInstance(modelClass, []);
         final model = cast(instance, Model);
-        final fields = Type.getInstanceFields(modelClass);
-        for (field in fields) {
+        for (field in Type.getInstanceFields(modelClass)) {
             final snakeField = Inflection.toSnakeCase(field);
             final camelField = Inflection.toCamelCase(field, true);
             if (Reflect.hasField(obj, snakeField)) {
@@ -84,21 +111,21 @@ class Model extends Base {
                 //trace('Injecting "${field}" in ' + Type.getClassName(modelClass));
                 switch (Type.typeof(val)) {
                     case TClass(Array):
-                        final fieldClassName = model._getFieldClassName(field);
+                        final fieldClassName = model.getFieldClassName(field);
                         final className = (fieldClassName == null)
                             ? Inflection.toSingular('connect.models.' + camelField)
                             : fieldClassName;
                         final classObj = Type.resolveClass(className);
-                        Reflect.setProperty(model, field, parseArray(classObj, Json.stringify(val)));
+                        Reflect.setProperty(model, field, _parseArray(classObj, val));
                     case TObject:
-                        final fieldClassName = model._getFieldClassName(field);
+                        final fieldClassName = model.getFieldClassName(field);
                         final className = (fieldClassName == null)
                             ? 'connect.models.' + camelField
                             : fieldClassName;
                         final classObj = Type.resolveClass(className);
                         if (classObj != null) {
                             if (className != 'String') {
-                                Reflect.setProperty(model, field, parse(classObj, Json.stringify(val)));
+                                Reflect.setProperty(model, field, _parse(classObj, val));
                             } else {
                                 Reflect.setProperty(model, field, Json.stringify(val));
                             }
@@ -119,30 +146,20 @@ class Model extends Base {
     }
 
 
-    /** Parses the given Haxe dynamic object as a Collection of Models of the specified class. **/
-    public static function parseArray<T>(modelClass: Class<T>, body: String): Collection<T> {
-        final array: Array<Dynamic> = Json.parse(body);
-        if (!Std.is(array, Array)) {
-            throw 'Model.parseArray can only parse a Json that contains an array.';
-        }
+    private static function _parseArray<T>(modelClass: Class<T>, array: Array<Dynamic>): Collection<T> {
         final result = new Collection<T>();
         for (obj in array) {
-            result.push(parse(modelClass, Json.stringify(obj)));
+            if (modelClass != null) {
+                result.push(_parse(modelClass, obj));
+            } else {
+                result.push(obj);
+            }
         }
         return result;
     }
 
 
-    @:dox(hide)
-    public function _setFieldClassNames(map: StringMap<String>): Void {
-        if (this.fieldClassNames == null) {
-            this.fieldClassNames = map;
-        }
-    }
-
-
-    @:dox(hide)
-    public function _getFieldClassName(field: String): String {
+    private function getFieldClassName(field: String): String {
         if (this.fieldClassNames != null && this.fieldClassNames.exists(field)) {
             final nameInField: String = this.fieldClassNames.get(field);
             final exceptions = ['String'];
@@ -153,10 +170,4 @@ class Model extends Base {
             return null;
         }
     }
-
-
-    public function new() {}
-
-
-    private var fieldClassNames: StringMap<String>;
 }
