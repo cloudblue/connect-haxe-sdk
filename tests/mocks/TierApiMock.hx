@@ -9,6 +9,7 @@ class TierApiMock extends Mock implements ITierApi {
     public function new() {
         super();
         this.accountList = Mock.parseJsonFile('tests/mocks/data/tieraccount_list.json');
+        this.configList = Mock.parseJsonFile('tests/mocks/data/tierconfig_list.json');
     }
 
 
@@ -90,15 +91,21 @@ class TierApiMock extends Mock implements ITierApi {
 
     public function listTierConfigs(filters: QueryParams): String {
         this.calledFunction('listTierConfigs', [filters]);
-        return null;
+        return Json.stringify(this.configList);
     }
 
 
     public function getTierConfig(id: String): String {
         this.calledFunction('getTierConfig', [id]);
-        return null;
+        final configs = this.configList.filter((config) -> config.id == id);
+        if (configs.length > 0) {
+            return Json.stringify(configs[0]);
+        } else {
+            throw 'Http Error #404';
+        }
     }
 
 
     private final accountList: Array<Dynamic>;
+    private final configList: Array<Dynamic>;
 }

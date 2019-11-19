@@ -106,7 +106,8 @@ class TierConfig extends IdModel {
     public function new() {
         super();
         this._setFieldClassNames([
-            'account' => 'TierAccount'
+            'account' => 'TierAccount',
+            'openRequest' => 'TierConfigRequest',
         ]);
     }
 }

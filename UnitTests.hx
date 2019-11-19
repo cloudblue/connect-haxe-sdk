@@ -20,6 +20,7 @@ class UnitTests {
         runner.add(new tests.unit.ProductTest());
         runner.add(new tests.unit.RequestTest());
         runner.add(new tests.unit.TierAccountTest());
+        runner.add(new tests.unit.TierConfigTest());
         runner.add(new tests.unit.UsageFileTest());
 
         runner.run();
