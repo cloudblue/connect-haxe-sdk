@@ -221,8 +221,15 @@ class Packager {
             }
             file.writeString(EOL + EOL);
 
+            if (pkg == 'connect') {
+                file.writeString('SYNCREQUEST_PATH = \'connect.autogen.connect_api_impl_ApiClientImpl.syncRequest\'' + EOL + EOL);
+            }
+
             // Write __all__
             file.writeString('__all__ = [' + EOL);
+            if (pkg == 'connect') {
+                file.writeString('    \'SYNCREQUEST_PATH\',' + EOL);
+            }
             for (cls in pkgClasses) {
                 file.writeString('    \'${cls}\',' + EOL);
             }
