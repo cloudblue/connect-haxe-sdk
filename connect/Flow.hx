@@ -34,6 +34,7 @@ class Flow extends Base {
     public function new(filterFunc: FilterFunc) {
         this.filterFunc = filterFunc;
         this.steps = [];
+        this.data = new Dictionary();
     }
 
 
