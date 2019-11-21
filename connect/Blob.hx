@@ -8,7 +8,7 @@ import haxe.io.Bytes;
     This object represents a buffer of binary data. Just as the contents of a text file can be
     represented by a string, the contents of binary files can be represented by a Blob.
 **/
-class Blob {
+class Blob extends Base {
     /** Loads the contents of the file at the specified path as a Blob object. **/
     public static function load(path: String): Blob {
         return new Blob(sys.io.File.getBytes(path));

@@ -28,5 +28,12 @@ class Base {
         }
         return python.Syntax.code("super().__setattr__({0}, {1})", key, value);
     }
+
+
+    private function __eq__(other: Dynamic): Bool {
+        final thisType = Syntax.code("type({0})", this);
+        final otherType = Syntax.code("type({0})", other);
+        return thisType == otherType && Std.string(this) == Std.string(other);
+    }
 #end
 }
