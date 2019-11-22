@@ -52,7 +52,7 @@ class LoggerWriter extends Base {
             this.file = sys.io.File.append(this.filename);
         #else
             final content: String = sys.FileSystem.exists(this.filename)
-                    && !sys.FileSystem.isDirectory(this.filename))
+                    && !sys.FileSystem.isDirectory(this.filename)
                 ? sys.io.File.getContent(this.filename)
                 : null;
             this.file = sys.io.File.write(this.filename);
