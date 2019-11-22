@@ -1,5 +1,7 @@
 package connect;
 
+import haxe.Json;
+
 
 @:dox(hide)
 class StepData {
@@ -24,7 +26,7 @@ class StepData {
                 final fieldSplit = field.split('::');
                 final fieldName = fieldSplit.slice(0, -1).join('::');
                 final fieldClass = fieldSplit.slice(-1)[0];
-                final value = Reflect.field(data, field);
+                final value = Json.stringify(Reflect.field(data, field));
                 final parsedValue = (fieldClass != '')
                     ? connect.models.Model.parse(Type.resolveClass(fieldClass), value)
                     : value;

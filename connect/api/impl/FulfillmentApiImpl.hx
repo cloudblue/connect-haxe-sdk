@@ -11,52 +11,52 @@ class FulfillmentApiImpl extends Base implements IFulfillmentApi {
 
 
     public function listRequests(filters: QueryParams): String {
-        return Env.getApiClient().get(REQUESTS_PATH, null, null, filters);
+        return ConnectHelper.get(REQUESTS_PATH, null, null, filters);
     }
 
 
     public function getRequest(id: String): String {
-        return Env.getApiClient().get(REQUESTS_PATH, id);
+        return ConnectHelper.get(REQUESTS_PATH, id);
     }
 
 
     public function createRequest(body: String): String {
-        return Env.getApiClient().post(REQUESTS_PATH, null, null, body);
+        return ConnectHelper.post(REQUESTS_PATH, null, null, body);
     }
 
 
     public function updateRequest(id: String, request: String): String {
-        return Env.getApiClient().put(REQUESTS_PATH, id, request);
+        return ConnectHelper.put(REQUESTS_PATH, id, request);
     }
 
 
     public function changeRequestStatus(id: String, status: String, data: String): String {
-        return Env.getApiClient().post(REQUESTS_PATH, id, status, data);
+        return ConnectHelper.post(REQUESTS_PATH, id, status, data);
     }
 
 
     public function assignRequest(id: String, assignee: String): String {
-        return Env.getApiClient().post(REQUESTS_PATH, id, 'assign/' + assignee);
+        return ConnectHelper.post(REQUESTS_PATH, id, 'assign/' + assignee);
     }
 
 
     public function renderTemplate(id: String, request_id: String): String {
-        return Env.getApiClient().get(TEMPLATES_PATH, id, 'render',
+        return ConnectHelper.get(TEMPLATES_PATH, id, 'render',
             new QueryParams().set('request_id', request_id));
     }
 
 
     public function listAssets(filters: QueryParams): String {
-        return Env.getApiClient().get(ASSETS_PATH, null, null, filters);
+        return ConnectHelper.get(ASSETS_PATH, null, null, filters);
     }
 
 
     public function getAsset(id: String): String {
-        return Env.getApiClient().get(ASSETS_PATH, id);
+        return ConnectHelper.get(ASSETS_PATH, id);
     }
 
 
     public function getAssetRequests(id: String): String {
-        return Env.getApiClient().get(ASSETS_PATH, id, 'requests');
+        return ConnectHelper.get(ASSETS_PATH, id, 'requests');
     }
 }

@@ -12,123 +12,123 @@ class GeneralApiImpl extends Base implements IGeneralApi {
 
 
     public function listAccounts(filters: QueryParams): String {
-        return Env.getApiClient().get(ACCOUNTS_PATH, null, null, filters);
+        return ConnectHelper.get(ACCOUNTS_PATH, null, null, filters);
     }
 
 
     public function createAccount(): String {
-        return Env.getApiClient().post(ACCOUNTS_PATH);
+        return ConnectHelper.post(ACCOUNTS_PATH);
     }
 
 
     public function getAccount(id: String): String {
-        return Env.getApiClient().get(ACCOUNTS_PATH, id);
+        return ConnectHelper.get(ACCOUNTS_PATH, id);
     }
 
 
     public function listAccountUsers(id: String): String {
-        return Env.getApiClient().get(ACCOUNTS_PATH, id, 'users');
+        return ConnectHelper.get(ACCOUNTS_PATH, id, 'users');
     }
 
 
     public function getAccountUser(id: String, userId: String): String {
-        return Env.getApiClient().get(ACCOUNTS_PATH, id, 'users/${userId}');
+        return ConnectHelper.get(ACCOUNTS_PATH, id, 'users/${userId}');
     }
 
 
     public function listConversations(filters: QueryParams): String {
-        return Env.getApiClient().get(CONVERSATIONS_PATH, null, null, filters);
+        return ConnectHelper.get(CONVERSATIONS_PATH, null, null, filters);
     }
 
 
     public function createConversation(data: String): String {
-        return Env.getApiClient().post(CONVERSATIONS_PATH, null, null, data);
+        return ConnectHelper.post(CONVERSATIONS_PATH, null, null, data);
     }
 
 
     public function getConversation(id: String): String {
-        return Env.getApiClient().get(CONVERSATIONS_PATH, id);
+        return ConnectHelper.get(CONVERSATIONS_PATH, id);
     }
 
 
     public function createConversationMessage(id: String, data: String): String {
-        return Env.getApiClient().post(CONVERSATIONS_PATH, id, 'messages', data);
+        return ConnectHelper.post(CONVERSATIONS_PATH, id, 'messages', data);
     }
 
 
     public function listProducts(filters: QueryParams): String {
-        return Env.getApiClient().get(PRODUCTS_PATH, null, null, filters);
+        return ConnectHelper.get(PRODUCTS_PATH, null, null, filters);
     }
 
 
     public function getProduct(id: String): String {
-        return Env.getApiClient().get(PRODUCTS_PATH, id);
+        return ConnectHelper.get(PRODUCTS_PATH, id);
     }
 
 
     public function listProductActions(id: String, filters: QueryParams): String {
-        return Env.getApiClient().get(PRODUCTS_PATH, id, 'actions', filters);
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'actions', filters);
     }
 
 
     public function getProductAction(id: String, actionId: String): String {
-        return Env.getApiClient().get(PRODUCTS_PATH, id, 'actions/${actionId}');
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'actions/${actionId}');
     }
 
 
     public function getProductActionLink(id: String, actionId: String): String {
-        final response = haxe.Json.parse(Env.getApiClient()
+        final response = haxe.Json.parse(ConnectHelper
             .get(PRODUCTS_PATH, id, 'actions/${actionId}/actionLink'));
         return response.link;
     }
 
 
     public function getProductConnections(id: String): String {
-        return Env.getApiClient().get(PRODUCTS_PATH, id, 'connections');
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'connections');
     }
 
 
     public function getProductItems(id: String): String {
-        return Env.getApiClient().get(PRODUCTS_PATH, id, 'items');
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'items');
     }
 
 
     public function getProductParameters(id: String): String {
-        return Env.getApiClient().get(PRODUCTS_PATH, id, 'parameters');
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'parameters');
     }
 
 
     public function getProductTemplates(id: String): String {
-        return Env.getApiClient().get(PRODUCTS_PATH, id, 'templates');
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'templates');
     }
 
 
     public function getProductVersions(id: String): String {
-        return Env.getApiClient().get(PRODUCTS_PATH, id, 'versions');
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'versions');
     }
 
 
     public function getProductVersion(id: String, version: Int): String {
-        return Env.getApiClient().get(PRODUCTS_PATH, id, 'versions/${version}');
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'versions/${version}');
     }
 
 
     public function getProductVersionActions(id: String, version: Int): String {
         return 
-            Env.getApiClient().get(PRODUCTS_PATH, id, 'versions/${version}/actions');
+            ConnectHelper.get(PRODUCTS_PATH, id, 'versions/${version}/actions');
     }
 
 
     public function getProductVersionAction(id: String, version: Int,
             actionId: String): String {
-        return Env.getApiClient().get(PRODUCTS_PATH, id,
+        return ConnectHelper.get(PRODUCTS_PATH, id,
             'versions/${version}/actions/${actionId}');
     }
 
 
     public function getProductVersionActionLink(id: String, version: Int,
             actionId: String): String {
-        final response = haxe.Json.parse(Env.getApiClient()
+        final response = haxe.Json.parse(ConnectHelper
             .get(PRODUCTS_PATH, id, 'versions/${version}/actions/${actionId}/actionLink'));
         return response.link;
     }
@@ -136,69 +136,69 @@ class GeneralApiImpl extends Base implements IGeneralApi {
 
     public function getProductVersionItems(id: String, version: Int): String {
         return 
-            Env.getApiClient().get(PRODUCTS_PATH, id, 'versions/${version}/items');
+            ConnectHelper.get(PRODUCTS_PATH, id, 'versions/${version}/items');
     }
 
 
     public function getProductVersionParameters(id: String, version: Int): String {
         return 
-            Env.getApiClient().get(PRODUCTS_PATH, id, 'versions/${version}/parameters');
+            ConnectHelper.get(PRODUCTS_PATH, id, 'versions/${version}/parameters');
     }
 
 
     public function getProductVersionTemplates(id: String, version: Int): String {
         return 
-            Env.getApiClient().get(PRODUCTS_PATH, id, 'versions/${version}/templates');
+            ConnectHelper.get(PRODUCTS_PATH, id, 'versions/${version}/templates');
     }
 
 
     public function listProductConfigurations(id: String, filters: QueryParams): String {
         return 
-            Env.getApiClient().get(PRODUCTS_PATH, id, 'configurations', filters);
+            ConnectHelper.get(PRODUCTS_PATH, id, 'configurations', filters);
     }
 
 
     public function setProductConfigurationParam(id: String, param: String): String {
-        return Env.getApiClient().post(PRODUCTS_PATH, id, 'configurations', param);
+        return ConnectHelper.post(PRODUCTS_PATH, id, 'configurations', param);
     }
 
 
     public function listProductAgreements(id: String, filters: QueryParams): String {
-        return Env.getApiClient().get(PRODUCTS_PATH, id, 'agreements', filters);
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'agreements', filters);
     }
 
 
     public function listProductMedia(id: String, filters: QueryParams): String {
-        return Env.getApiClient().get(PRODUCTS_PATH, id, 'media', filters);
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'media', filters);
     }
 
 
     public function createProductMedia(id: String): String {
-        return Env.getApiClient().post(PRODUCTS_PATH, id, 'media');
+        return ConnectHelper.post(PRODUCTS_PATH, id, 'media');
     }
 
 
     public function getProductMedia(id: String, mediaId: String): String {
-        return Env.getApiClient().post(PRODUCTS_PATH, id, 'media/${mediaId}');
+        return ConnectHelper.post(PRODUCTS_PATH, id, 'media/${mediaId}');
     }
 
 
     public function updateProductMedia(id: String, mediaId: String, media: String): String {
-        return Env.getApiClient().put(PRODUCTS_PATH, '${id}/media/${mediaId}', media);
+        return ConnectHelper.put(PRODUCTS_PATH, '${id}/media/${mediaId}', media);
     }
 
 
     public function deleteProductMedia(id: String, mediaId: String): String {
-        return Env.getApiClient().delete(PRODUCTS_PATH, id, 'media/${mediaId}');
+        return ConnectHelper.delete(PRODUCTS_PATH, id, 'media/${mediaId}');
     }
 
 
     public function listCategories(filters: QueryParams): String {
-        return Env.getApiClient().get(CATEGORIES_PATH, null, null, filters);
+        return ConnectHelper.get(CATEGORIES_PATH, null, null, filters);
     }
 
 
     public function getCategory(id: String): String {
-        return Env.getApiClient().get(CATEGORIES_PATH, id);
+        return ConnectHelper.get(CATEGORIES_PATH, id);
     }
 }
