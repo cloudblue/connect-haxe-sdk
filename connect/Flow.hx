@@ -304,94 +304,112 @@ class Flow extends Base {
 
     private function process(model: IdModel): Void {
         if (this.prepareAndOpenLogSection(model)) {
-            // Run setup function
-            Env.getLogger().openSection('Setup');
-            this.setup();
-            Env.getLogger().closeSection();
+            this.processSetup();
+            final stepData = this.loadStepDataIfStored();
+            final steps = [for (i in stepData.firstIndex...this.steps.length) this.steps[i]];
 
-            // If there is stored step data, set data and jump to that step
-            final stepParam = (this.getRequest() != null)
-                ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
-                : null;
-            final stepData = StepStorage.load(this.model.id, stepParam);
-            this.data = stepData.data;
-            if (stepData.firstIndex != 0) {
-                Env.getLogger().info('Resuming request from step ${stepData.firstIndex + 1}.');
-            }
-
-            // Process each step
-            var lastRequestStr = '';
-            var lastDataStr = '{}';
-            for (index in stepData.firstIndex...this.steps.length) {
-                final step = this.steps[index];
-                final requestStr = Inflection.beautify(this.model.toString(),
-                    Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
-                final dataStr = Std.string(this.data);
-                
-                Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
-                
-                this.logStepData(Env.getLogger().info,
-                    requestStr, dataStr, lastRequestStr, lastDataStr);
-
-                // Execute step
-                try {
-                    #if java
-                    step.func.accept(this);
-                    #else
-                    step.func(this);
-                    #end
-                } catch (ex: Dynamic) {
-                    if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                        this.logStepData(Env.getLogger().error,
-                            requestStr, dataStr, lastRequestStr, lastDataStr);
-                    }
-                    final exStr = Std.string(ex);
-                    Env.getLogger().error('```');
-                    Env.getLogger().error(exStr);
-                    Env.getLogger().error('```');
-                    Env.getLogger().error('');
-                    if (this.getRequest() != null) {
-                        this.getRequest()._updateConversation('Skipping request because an exception was thrown: $exStr');
-                    }
-                    this.abort();
-                }
-
-                if (this.abortRequested) {
-                    if (this.abortMessage == null) {
-                        final param = (this.getRequest() != null)
-                            ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
-                            : null;
-                        
-                        // Save step data if request supports it
-                        Env.getLogger().info('Skipping request. Trying to save step data.');
-                        final saveResult = StepStorage.save(this.model,
-                            new StepData(index, this.data),
-                            param,
-                            Reflect.field(model, 'update'));
-                        switch (saveResult) {
-                            case StoreConnect:
-                                Env.getLogger().info('Step data saved in Connect.');
-                            case StoreLocal:
-                                Env.getLogger().info('Step data saved locally.');
-                            case StoreFail:
-                                Env.getLogger().info('Step data could not be saved.');
-                        }
+            // Process all steps
+            F.reduce(
+                steps,
+                function(prevResult, step, i) {
+                    if (prevResult != null) {
+                        return processStep(step, stepData.firstIndex + i, prevResult.lastRequestStr, prevResult.lastDataStr);
                     } else {
-                        if (this.abortMessage != '') {
-                            Env.getLogger().info(this.abortMessage);
-                        }
+                        return null;
                     }
+                },
+                {lastRequestStr: '', lastDataStr: '{}'});
 
-                    Env.getLogger().closeSection();
-                    break;
-                } else {
-                    lastRequestStr = requestStr;
-                    lastDataStr = dataStr;
-                    Env.getLogger().closeSection();
+            Env.getLogger().closeSection();
+        }
+    }
+
+
+    private function processSetup(): Void {
+        Env.getLogger().openSection('Setup');
+        this.setup();
+        Env.getLogger().closeSection();
+    }
+
+
+    private function loadStepDataIfStored(): StepData {
+        final stepParam = (this.getRequest() != null)
+            ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
+            : null;
+        final stepData = StepStorage.load(this.model.id, stepParam);
+        this.data = stepData.data;
+        if (stepData.firstIndex != 0) {
+            Env.getLogger().info('Resuming request from step ${stepData.firstIndex + 1}.');
+        }
+        return stepData;
+    }
+
+
+    private function processStep(step: Step, index: Int, lastRequestStr: String,
+            lastDataStr: String): {lastRequestStr: String, lastDataStr: String} {
+        final requestStr = Inflection.beautify(this.model.toString(),
+            Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
+        final dataStr = Std.string(this.data);
+        
+        Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
+        
+        this.logStepData(Env.getLogger().info,
+            requestStr, dataStr, lastRequestStr, lastDataStr);
+
+        // Execute step
+        try {
+            #if java
+            step.func.accept(this);
+            #else
+            step.func(this);
+            #end
+        } catch (ex: Dynamic) {
+            if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
+                this.logStepData(Env.getLogger().error,
+                    requestStr, dataStr, lastRequestStr, lastDataStr);
+            }
+            final exStr = Std.string(ex);
+            Env.getLogger().error('```');
+            Env.getLogger().error(exStr);
+            Env.getLogger().error('```');
+            Env.getLogger().error('');
+            if (this.getRequest() != null) {
+                this.getRequest()._updateConversation('Skipping request because an exception was thrown: $exStr');
+            }
+            this.abort();
+        }
+
+        if (this.abortRequested) {
+            if (this.abortMessage == null) {
+                final param = (this.getRequest() != null)
+                    ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
+                    : null;
+                
+                // Save step data if request supports it
+                Env.getLogger().info('Skipping request. Trying to save step data.');
+                final saveResult = StepStorage.save(this.model,
+                    new StepData(index, this.data),
+                    param,
+                    Reflect.field(model, 'update'));
+                switch (saveResult) {
+                    case StoreConnect:
+                        Env.getLogger().info('Step data saved in Connect.');
+                    case StoreLocal:
+                        Env.getLogger().info('Step data saved locally.');
+                    case StoreFail:
+                        Env.getLogger().info('Step data could not be saved.');
+                }
+            } else {
+                if (this.abortMessage != '') {
+                    Env.getLogger().info(this.abortMessage);
                 }
             }
 
             Env.getLogger().closeSection();
+            return null;
+        } else {
+            Env.getLogger().closeSection();
+            return {lastRequestStr: requestStr, lastDataStr: dataStr};
         }
     }
 
