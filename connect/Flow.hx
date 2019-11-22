@@ -291,7 +291,7 @@ class Flow extends Base {
     }
 
 
-    private static inline var STEP_PARAM_ID = '__sdk_processor_step';
+    private static final STEP_PARAM_ID = '__sdk_processor_step';
 
 
     private final filterFunc: FilterFunc;

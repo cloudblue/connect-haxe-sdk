@@ -51,11 +51,10 @@ class LoggerWriter extends Base {
         #if !js
             this.file = sys.io.File.append(this.filename);
         #else
-            var content: String = null;
-            if (sys.FileSystem.exists(this.filename)
-                    && !sys.FileSystem.isDirectory(this.filename)) {
-                content = sys.io.File.getContent(this.filename);
-            }
+            final content: String = sys.FileSystem.exists(this.filename)
+                    && !sys.FileSystem.isDirectory(this.filename))
+                ? sys.io.File.getContent(this.filename)
+                : null;
             this.file = sys.io.File.write(this.filename);
             if (content != null) {
                 this.file.writeString(content);

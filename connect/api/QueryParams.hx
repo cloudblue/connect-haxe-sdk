@@ -35,5 +35,5 @@ class QueryParams extends Base {
     }
 
 
-    private var map: StringMap<String>;
+    private final map: StringMap<String>;
 }

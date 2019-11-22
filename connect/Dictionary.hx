@@ -283,16 +283,16 @@ class Dictionary extends Base {
     private static function toObject_r(x: Dynamic) : EitherType<Array<Dynamic>, Dynamic> {
         switch (Type.typeof(x)) {
             case TClass(Collection):
-                var col: Collection<Dictionary> = x;
-                var arr = new Array<Dynamic>();
+                final col: Collection<Dictionary> = x;
+                final arr = new Array<Dynamic>();
                 for (elem in col) {
                     arr.push(toObject_r(elem));
                 }
                 return arr;
             case TClass(Dictionary):
-                var dict: Dictionary = x;
-                var obj = {};
-                var keys = dict.keys();
+                final dict: Dictionary = x;
+                final obj = {};
+                final keys = dict.keys();
                 for (key in keys) {
                     Reflect.setField(obj, key, toObject_r(dict.get(key)));
                 }
@@ -307,15 +307,15 @@ class Dictionary extends Base {
             : EitherType<Collection<Dictionary>, Dictionary> {
         switch (Type.typeof(x)) {
             case TClass(Array):
-                var arr: Array<Dynamic> = x;
-                var col = new Collection<Dictionary>();
+                final arr: Array<Dynamic> = x;
+                final col = new Collection<Dictionary>();
                 for (elem in arr) {
                     col.push(fromObject_r(elem));
                 }
                 return col;
             case TObject:
-                var dict = new Dictionary();
-                var fields = Reflect.fields(x);
+                final dict = new Dictionary();
+                final fields = Reflect.fields(x);
                 for (field in fields) {
                     dict.set(field, fromObject_r(Reflect.field(x, field)));
                 }

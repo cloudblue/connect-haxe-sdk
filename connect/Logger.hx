@@ -6,15 +6,15 @@ package connect;
 **/
 class Logger extends Base {
     /** Only writes compact error messages. **/
-    public static inline var LEVEL_ERROR = 0;
+    public static final LEVEL_ERROR = 0;
 
 
     /** Only writes compact error & info level messages. **/
-    public static inline var LEVEL_INFO = 2;
+    public static final LEVEL_INFO = 2;
 
 
     /** Writes detailed messages of all levels. **/
-    public static inline var LEVEL_DEBUG = 3;
+    public static final LEVEL_DEBUG = 3;
 
 
     /**
@@ -117,9 +117,9 @@ class Logger extends Base {
     }
 
 
-    private var level: Int;
-    private var sections: Array<LoggerSection>;
-    private var writer: LoggerWriter;
+    private final level: Int;
+    private final sections: Array<LoggerSection>;
+    private final writer: LoggerWriter;
 
 
     private function write(message: String): Void {
@@ -136,7 +136,7 @@ class Logger extends Base {
     private function writeSections(): Void {
         for (i in 0...this.sections.length) {
             if (!this.sections[i].written) {
-                var prefix = StringTools.rpad('', '#', i+1);
+                final prefix = StringTools.rpad('', '#', i+1);
                 this.writer.writeLine(prefix + ' ' + this.sections[i].name);
                 this.writer.writeLine('');
                 this.sections[i].written = true;
@@ -147,7 +147,7 @@ class Logger extends Base {
 
 
 private class LoggerSection {
-    public var name: String;
+    public final name: String;
     public var written: Bool;
 
     public function new(name: String) {

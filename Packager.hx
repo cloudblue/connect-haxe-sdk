@@ -69,7 +69,7 @@ class Packager {
     }
 
 #if packager
-    private static inline var EOL = '\r\n';
+    private static final EOL = '\r\n';
 
     private static function getClassNames(): Array<String> {
         var xmlContent = sys.io.File.getContent('_build/connect.xml');

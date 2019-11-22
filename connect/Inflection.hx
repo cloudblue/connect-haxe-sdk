@@ -13,10 +13,10 @@ class Inflection {
         If `capitalizeFirst` is true, then the string is returned as UpperCamelCase.
     **/
     public static function toCamelCase(text: String, capitalizeFirst: Bool = false): String {
-        var buffer = new StringBuf();
+        final buffer = new StringBuf();
         var lastWasUnderscore = capitalizeFirst;
         for (i in 0...text.length) {
-            var char = lastWasUnderscore ? text.charAt(i).toUpperCase() : text.charAt(i);
+            final char = lastWasUnderscore ? text.charAt(i).toUpperCase() : text.charAt(i);
             if (char != '_') {
                 buffer.add(char);
                 lastWasUnderscore = false;
@@ -45,9 +45,9 @@ class Inflection {
         snake_case.
     **/
     public static function toSnakeCase(text: String): String {
-        var r1 = ~/(.)([A-Z][a-z]+)/g;
-        var r2 = ~/([a-z0-9])([A-Z])/g;
-        var s1 = r1.replace(text, '$1_$2');
+        final r1 = ~/(.)([A-Z][a-z]+)/g;
+        final r2 = ~/([a-z0-9])([A-Z])/g;
+        final s1 = r1.replace(text, '$1_$2');
         return r2.replace(s1, '$1_$2').toLowerCase();
     }
 
@@ -60,7 +60,7 @@ class Inflection {
     */
     public static function beautify(text: String, onlyIdOrKeys: Bool): String {
         try {
-            var parsed: Dynamic = haxe.Json.parse(text);
+            final parsed: Dynamic = haxe.Json.parse(text);
             if (onlyIdOrKeys) {
                 if (Type.typeof(parsed) == TObject) {
                     // Json contains an object
@@ -71,8 +71,8 @@ class Inflection {
                     }
                 } else {
                     // Json contains an array
-                    var arr: Array<Dynamic> = parsed;
-                    var mapped = arr.map(function(obj) {
+                    final arr: Array<Dynamic> = parsed;
+                    final mapped = arr.map(function(obj) {
                         return Reflect.hasField(obj, 'id')
                             ? obj.id
                             : (Type.typeof(obj) == TObject)

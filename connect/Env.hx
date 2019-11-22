@@ -70,18 +70,16 @@ class Env extends Base {
     **/
     public static function loadConfig(filename: String): Void {
         if (config == null) {
-            var content = sys.io.File.getContent(filename);
-            var dict = Dictionary.fromObject(haxe.Json.parse(content));
-            var apiUrl = dict.get('apiEndpoint');
-            var apiKey = dict.get('apiKey');
-            var products: Collection<String> = null;
-            switch (Type.typeof(dict.get('products'))) {
-                case TClass(String):
-                    products = Collection._fromArray([dict.getString('products')]);
-                case TClass(Collection):
-                    products = dict.get('products');
-                default:
-            }
+            final content = sys.io.File.getContent(filename);
+            final dict = Dictionary.fromObject(haxe.Json.parse(content));
+            final apiUrl = dict.get('apiEndpoint');
+            final apiKey = dict.get('apiKey');
+            final configProducts: Dynamic = dict.get('products');
+            final products: Collection<String> = Std.is(configProducts, Collection)
+                ? configProducts
+                : Std.is(configProducts, String)
+                ? Collection._fromArray([configProducts])
+                : null;
             dict.remove('apiEndpoint');
             dict.remove('apiKey');
             dict.remove('products');
@@ -255,7 +253,7 @@ class Env extends Base {
         if (dependencies == null) {
             dependencies = new Dictionary();
             if (deps != null) {
-                var keys = deps.keys();
+                final keys = deps.keys();
                 for (key in keys) {
                     if (defaultDependencies.exists(key)) {
                         dependencies.setString(key, deps.getString(key));
@@ -280,10 +278,10 @@ class Env extends Base {
 
     private static function createInstance(interfaceName: String): Dynamic {
         init();
-        var className = (dependencies.exists(interfaceName))
+        final className = (dependencies.exists(interfaceName))
             ? dependencies.getString(interfaceName)
             : defaultDependencies.getString(interfaceName);
-        var classObj = Type.resolveClass(className);
+        final classObj = Type.resolveClass(className);
         if (classObj != null) {
             return Type.createInstance(classObj, []);
         } else {

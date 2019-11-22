@@ -95,7 +95,7 @@ class Request extends IdModel {
         @returns A Collection of Requests.
     **/
     public static function list(filters: QueryParams) : Collection<Request> {
-        var requests = Env.getFulfillmentApi().listRequests(filters);
+        final requests = Env.getFulfillmentApi().listRequests(filters);
         return Model.parseArray(Request, requests);
     }
 
@@ -103,7 +103,7 @@ class Request extends IdModel {
     /** @returns The Request with the given id, or `null` if it was not found. **/
     public static function get(id: String): Request {
         try {
-            var request = Env.getFulfillmentApi().getRequest(id);
+            final request = Env.getFulfillmentApi().getRequest(id);
             return Model.parse(Request, request);
         } catch (ex: Dynamic) {
             return null;
@@ -141,7 +141,7 @@ class Request extends IdModel {
         the same data as `this` Request.
     **/
     public function update(): Request {
-        var request = Env.getFulfillmentApi().updateRequest(
+        final request = Env.getFulfillmentApi().updateRequest(
             this.id,
             this.toString());
         return Model.parse(Request, request);
@@ -159,7 +159,7 @@ class Request extends IdModel {
         the updated status.
     **/
     public function approveByTemplate(id: String): Request {
-        var request = Env.getFulfillmentApi().changeRequestStatus(
+        final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
             haxe.Json.stringify({template_id: id})
@@ -180,7 +180,7 @@ class Request extends IdModel {
         the updated status.
     **/
     public function approveByTile(text: String): Request {
-        var request = Env.getFulfillmentApi().changeRequestStatus(
+        final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
             haxe.Json.stringify({activation_tile: text})
@@ -200,7 +200,7 @@ class Request extends IdModel {
         the updated status.
     **/
     public function fail(reason: String): Request {
-        var request = Env.getFulfillmentApi().changeRequestStatus(
+        final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'fail',
             haxe.Json.stringify({reason: reason})
@@ -220,7 +220,7 @@ class Request extends IdModel {
         the updated status.
     **/
     public function inquire(): Request {
-        var request = Env.getFulfillmentApi().changeRequestStatus(
+        final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'inquire',
             haxe.Json.stringify({})
@@ -240,7 +240,7 @@ class Request extends IdModel {
         the updated status.
     **/
     public function pend(): Request {
-        var request = Env.getFulfillmentApi().changeRequestStatus(
+        final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'pend',
             haxe.Json.stringify({})
@@ -257,7 +257,7 @@ class Request extends IdModel {
         the updated assignee.
     **/
     public function assign(assigneeId: String): Request {
-        var request = Env.getFulfillmentApi().assignRequest(
+        final request = Env.getFulfillmentApi().assignRequest(
             this.id,
             assigneeId
         );
@@ -272,15 +272,15 @@ class Request extends IdModel {
         presence of a parameter (by default name "migration_info") that contains JSON data.
     **/
     public function needsMigration(key: String = 'migration_info'): Bool {
-        var param = this.asset.getParamById(key);
+        final param = this.asset.getParamById(key);
         return param != null && param.value != null && param.value != '';
     }
 
 
     /** @returns The Conversation assigned to `this` Request, or `null` if there is none. **/
     public function getConversation(): Conversation {
-        var convs = Conversation.list(new QueryParams().set('instance_id', this.id));
-        var conv = (convs.length() > 0) ? convs.get(0) : null;
+        final convs = Conversation.list(new QueryParams().set('instance_id', this.id));
+        final conv = (convs.length() > 0) ? convs.get(0) : null;
         if  (conv != null && conv.id != null && conv.id != '') {
             return Conversation.get(conv.id);
         } else {

@@ -2,10 +2,10 @@ package connect.api.impl;
 
 
 class GeneralApiImpl extends Base implements IGeneralApi {
-    private static inline var ACCOUNTS_PATH = 'accounts';
-    private static inline var CONVERSATIONS_PATH = 'conversations';
-    private static inline var PRODUCTS_PATH = 'products';
-    private static inline var CATEGORIES_PATH = 'categories';
+    private static final ACCOUNTS_PATH = 'accounts';
+    private static final CONVERSATIONS_PATH = 'conversations';
+    private static final PRODUCTS_PATH = 'products';
+    private static final CATEGORIES_PATH = 'categories';
 
 
     public function new() {}

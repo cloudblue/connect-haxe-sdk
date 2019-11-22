@@ -5,10 +5,10 @@ import connect.Config;
 
 
 class ConfigTest extends haxe.unit.TestCase {
-    private static inline var API_URL = 'http://localhost:8080/api/public/v1/';
-    private static inline var API_KEY = 'ApiKey XXXX:YYYYY';
-    private static inline var PRODUCT1 = 'XX-000-000-000';
-    private static inline var PRODUCT2 = 'XX-111-000-000';
+    private static final API_URL = 'http://localhost:8080/api/public/v1/';
+    private static final API_KEY = 'ApiKey XXXX:YYYYY';
+    private static final PRODUCT1 = 'XX-000-000-000';
+    private static final PRODUCT2 = 'XX-111-000-000';
 
 
     public function test() {
