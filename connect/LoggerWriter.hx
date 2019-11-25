@@ -1,6 +1,9 @@
 package connect;
 
+import sys.io.FileSeek;
 import haxe.ds.ListSort;
+import haxe.io.Path;
+import sys.FileSystem;
 
 
 /**
@@ -18,15 +21,23 @@ class LoggerWriter extends Base {
 
     /**
         Sets the filename of the log file if it has not been previously set.
+
+        @returns `true` if file has been reset, `false` otherwise.
     **/
-    public function setFilename(filename: String): Void {
-        if (this.filename == null) {
-            this.filename = filename;
+    public function setFilename(filename: String): Bool {
+        final currentFilename = this.filename;
+        this.filename = filename;
+        if (filename != currentFilename && this.file != null) {
+            this.file.close();
+            this.file = null;
+            return true;
+        } else {
+            return false;
         }
     }
 
 
-    /** @returns The filename of the log file. **/
+    /** @returns The last filename that was set. **/
     public function getFilename(): String {
         return this.filename;
     }
@@ -48,6 +59,10 @@ class LoggerWriter extends Base {
 
     private function getFile(): sys.io.FileOutput {
         if (this.file == null && this.filename != null) {
+            final path = Path.directory(this.filename);
+            if (path != '' && !FileSystem.exists(path)) {
+                FileSystem.createDirectory(path);
+            }
         #if !js
             this.file = sys.io.File.append(this.filename);
         #else

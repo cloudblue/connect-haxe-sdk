@@ -100,6 +100,8 @@ class Processor extends Base {
             default:
         }
 
+        final prevLogName = Env.getLogger().getFilename();
+        Env.getLogger().setFilename(null);
         Env.getLogger().openSection('Running Processor on ' + Util.getDate() + ' UTC');
 
         try {
@@ -123,5 +125,6 @@ class Processor extends Base {
         }
 
         Env.getLogger().closeSection();
+        Env.getLogger().setFilename(null);
     }
 }

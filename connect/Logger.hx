@@ -21,17 +21,49 @@ class Logger extends Base {
         Creates a new Logger object. You don't normally create objects of this class,
         since the SDK uses the default instance provided by `Env.getLogger()`.
     **/
-    public function new(filename: String, level: Int, writer: LoggerWriter) {
+    public function new(path: String, level: Int, writer: LoggerWriter) {
+        if (path != null) {
+            this.path = (path.charAt(path.length - 1) == '/') ? path : (path + '/');
+        } else {
+            this.path = null;
+        }
         this.level = Std.int(Math.min(Math.max(level, LEVEL_ERROR), LEVEL_DEBUG));
-        this.sections = [];
         this.writer = (writer != null) ? writer : new LoggerWriter();
-        this.writer.setFilename(filename);
+        this.sections = [];
+        this.setFilename('log.md');
     }
 
 
     /** @returns The level of the log. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`. **/
     public function getLevel(): Int {
         return this.level;
+    }
+
+
+    /**
+        Sets the filename of the log. All future log messages will get printed to this file.
+        Use `null` to only write to standard output.
+    **/
+    public function setFilename(filename: String): Void {
+        final fullname = (this.path != null && filename != null)
+            ? this.path + filename
+            : null;
+
+        if (this.writer.setFilename(fullname) && fullname != null) {
+            for (section in this.sections) {
+                section.written = false;
+            }
+        }
+    }
+
+
+    /** @returns The last filename that was set. **/
+    public function getFilename(): String {
+        final filename = this.writer.getFilename();
+        final fixedFilename = (filename != null && filename.indexOf(this.path) == 0)
+            ? filename.substr(filename.length)
+            : filename;
+        return fixedFilename;
     }
 
 
@@ -117,9 +149,10 @@ class Logger extends Base {
     }
 
 
+    private final path: String;
     private final level: Int;
-    private final sections: Array<LoggerSection>;
     private final writer: LoggerWriter;
+    private final sections: Array<LoggerSection>;
 
 
     private function write(message: String): Void {

@@ -101,8 +101,7 @@ class Env extends Base {
     /**
         Initializes the logger. It must have not been previously configured.
 
-        @param filename Name of the file (can include path) where the log will the stored.
-            Use `null` to only write to standard output.
+        @param path Path where logs will be stored.
         @param level Level of log.
             One of: `Logger.LEVEL_ERROR`, `Logger.LEVEL_INFO`, `Logger.LEVEL_DEBUG`.
         @param writer The logger writer. Pass `null` to use the default writer, or if you
@@ -111,9 +110,9 @@ class Env extends Base {
             class here.
         @throws String If the logger is already initialized.
     **/
-    public static function initLogger(filename: String, level: Int, writer: LoggerWriter) {
+    public static function initLogger(path: String, level: Int, writer: LoggerWriter) {
         if (logger == null) {
-            logger = new Logger(filename, level, writer);
+            logger = new Logger(path, level, writer);
         } else {
             throw "Logger instance is already initialized.";
         }
@@ -152,7 +151,7 @@ class Env extends Base {
     **/
     public static function getLogger(): Logger {
         if (!isLoggerInitialized()) {
-            initLogger('log.md', Logger.LEVEL_INFO, null);
+            initLogger('logs', Logger.LEVEL_INFO, null);
         }
         return logger;
     }

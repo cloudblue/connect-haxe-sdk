@@ -417,15 +417,18 @@ class Flow extends Base {
     private function prepareAndOpenLogSection(model: IdModel): Bool {
         this.model = model;
 
-        // Open log section
+        // Set log filename
         if (this.getRequest() != null) {
-            Env.getLogger().openSection('Processing request "' + this.model.id
-                + '" for asset "' + this.getRequest().asset.id
-                + '" on ' + Util.getDate() + ' UTC');
-        } else {
-            Env.getLogger().openSection('Processing request "${this.model.id}" on '
-                + Util.getDate() + ' UTC');
+            Env.getLogger().setFilename('${this.getRequest().asset.id}.md');
+        } else if (this.getTierConfigRequest() != null) {
+            Env.getLogger().setFilename('${this.getTierConfigRequest().configuration.id}.md');
+        } else if (this.getUsageFile() != null) {
+            Env.getLogger().setFilename('${this.getUsageFile().id}.md');
         }
+
+        // Open log section
+        Env.getLogger().openSection('Processing request "${this.model.id}" on '
+            + Util.getDate() + ' UTC');
 
         // For Fulfillment requests, check if we must skip due to pending migration
         if (this.getRequest() != null && this.getRequest().needsMigration()) {
