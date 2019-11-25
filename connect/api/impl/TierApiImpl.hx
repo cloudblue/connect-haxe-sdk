@@ -2,9 +2,9 @@ package connect.api.impl;
 
 
 class TierApiImpl extends Base implements ITierApi {
-    private static inline var TCR_PATH = 'tier/config-requests';
-    private static inline var TA_PATH = 'tier/accounts';
-    private static inline var TC_PATH = 'tier/configs';
+    private static final TCR_PATH = 'tier/config-requests';
+    private static final TA_PATH = 'tier/accounts';
+    private static final TC_PATH = 'tier/configs';
 
     public function new() {}
 

@@ -23,7 +23,7 @@ class JavaIterator<T> implements java.util.Iterator<T> {
     }
 
 
-    private var array: Array<T>;
+    private final array: Array<T>;
     private var index: Int;
 }
 #end

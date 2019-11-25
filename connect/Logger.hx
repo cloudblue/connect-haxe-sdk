@@ -6,32 +6,64 @@ package connect;
 **/
 class Logger extends Base {
     /** Only writes compact error messages. **/
-    public static inline var LEVEL_ERROR = 0;
+    public static final LEVEL_ERROR = 0;
 
 
     /** Only writes compact error & info level messages. **/
-    public static inline var LEVEL_INFO = 2;
+    public static final LEVEL_INFO = 2;
 
 
     /** Writes detailed messages of all levels. **/
-    public static inline var LEVEL_DEBUG = 3;
+    public static final LEVEL_DEBUG = 3;
 
 
     /**
         Creates a new Logger object. You don't normally create objects of this class,
         since the SDK uses the default instance provided by `Env.getLogger()`.
     **/
-    public function new(filename: String, level: Int, writer: LoggerWriter) {
+    public function new(path: String, level: Int, writer: LoggerWriter) {
+        if (path != null) {
+            this.path = (path.charAt(path.length - 1) == '/') ? path : (path + '/');
+        } else {
+            this.path = null;
+        }
         this.level = Std.int(Math.min(Math.max(level, LEVEL_ERROR), LEVEL_DEBUG));
-        this.sections = [];
         this.writer = (writer != null) ? writer : new LoggerWriter();
-        this.writer.setFilename(filename);
+        this.sections = [];
+        this.setFilename('log.md');
     }
 
 
     /** @returns The level of the log. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`. **/
     public function getLevel(): Int {
         return this.level;
+    }
+
+
+    /**
+        Sets the filename of the log. All future log messages will get printed to this file.
+        Use `null` to only write to standard output.
+    **/
+    public function setFilename(filename: String): Void {
+        final fullname = (this.path != null && filename != null)
+            ? this.path + filename
+            : null;
+
+        if (this.writer.setFilename(fullname) && fullname != null) {
+            for (section in this.sections) {
+                section.written = false;
+            }
+        }
+    }
+
+
+    /** @returns The last filename that was set. **/
+    public function getFilename(): String {
+        final filename = this.writer.getFilename();
+        final fixedFilename = (filename != null && filename.indexOf(this.path) == 0)
+            ? filename.substr(filename.length)
+            : filename;
+        return fixedFilename;
     }
 
 
@@ -117,9 +149,10 @@ class Logger extends Base {
     }
 
 
-    private var level: Int;
-    private var sections: Array<LoggerSection>;
-    private var writer: LoggerWriter;
+    private final path: String;
+    private final level: Int;
+    private final writer: LoggerWriter;
+    private final sections: Array<LoggerSection>;
 
 
     private function write(message: String): Void {
@@ -136,7 +169,7 @@ class Logger extends Base {
     private function writeSections(): Void {
         for (i in 0...this.sections.length) {
             if (!this.sections[i].written) {
-                var prefix = StringTools.rpad('', '#', i+1);
+                final prefix = StringTools.rpad('', '#', i+1);
                 this.writer.writeLine(prefix + ' ' + this.sections[i].name);
                 this.writer.writeLine('');
                 this.sections[i].written = true;
@@ -147,7 +180,7 @@ class Logger extends Base {
 
 
 private class LoggerSection {
-    public var name: String;
+    public final name: String;
     public var written: Bool;
 
     public function new(name: String) {

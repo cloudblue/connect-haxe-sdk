@@ -104,7 +104,7 @@ class Asset extends IdModel {
         @returns A Collection of Assets.
     **/
     public static function list(filters: QueryParams) : Collection<Asset> {
-        var assets = Env.getFulfillmentApi().listAssets(filters);
+        final assets = Env.getFulfillmentApi().listAssets(filters);
         return Model.parseArray(Asset, assets);
     }
 
@@ -113,7 +113,7 @@ class Asset extends IdModel {
     /** @returns The Asset with the given id, or `null` if it was not found. **/
     public static function get(id: String): Asset {
         try {
-            var asset = Env.getFulfillmentApi().getAsset(id);
+            final asset = Env.getFulfillmentApi().getAsset(id);
             return Model.parse(Asset, asset);
         } catch (ex: Dynamic) {
             return null;
@@ -123,7 +123,7 @@ class Asset extends IdModel {
 
     /** @returns A collection with all the requests for the `this` Asset. **/
     public function getRequests(): Collection<Request> {
-        var requests = Env.getFulfillmentApi().getAssetRequests(this.id);
+        final requests = Env.getFulfillmentApi().getAssetRequests(this.id);
         return Model.parseArray(Request, requests);
     }
 
@@ -154,7 +154,7 @@ class Asset extends IdModel {
 
     /** @returns The param with the given id, or `null` if it was not found. **/
     public function getParamById(paramId: String): Param {
-        var params = this.params.toArray().filter(function(param) {
+        final params = this.params.toArray().filter(function(param) {
             return param.id == paramId;
         });
         return (params.length > 0) ? params[0] : null;
@@ -163,7 +163,7 @@ class Asset extends IdModel {
 
     /** @returns The item with the given id, or `null` if it was not found. **/
     public function getItemById(itemId: String): Item {
-        var items = this.items.toArray().filter(function(item) {
+        final items = this.items.toArray().filter(function(item) {
             return item.id == itemId;
         });
         return (items.length > 0) ? items[0] : null;
@@ -172,7 +172,7 @@ class Asset extends IdModel {
 
     /** @returns The item with the given Manufacture Part Number, or `null` if it was not found. **/
     public function getItemByMpn(mpn: String): Item {
-        var items = this.items.toArray().filter(function(item) {
+        final items = this.items.toArray().filter(function(item) {
             return item.mpn == mpn;
         });
         return (items.length > 0) ? items[0] : null;
@@ -181,7 +181,7 @@ class Asset extends IdModel {
 
     /** @returns The item with the given global id, or `null` if it was not found. **/
     public function getItemByGlobalId(globalId: String): Item {
-        var items = this.items.toArray().filter(function(item) {
+        final items = this.items.toArray().filter(function(item) {
             return item.globalId == globalId;
         });
         return (items.length > 0) ? items[0] : null;

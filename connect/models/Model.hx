@@ -11,21 +11,21 @@ import haxe.Json;
 class Model extends Base {
     /** @returns A Haxe dynamic object with a shallow copy of `this` model's properties. **/
     public function toObject(): Dynamic {
-        var obj = {};
-        var fields = Type.getInstanceFields(Type.getClass(this));
+        final obj = {};
+        final fields = Type.getInstanceFields(Type.getClass(this));
         for (field in fields) {
-            var value = Reflect.field(this, field);
+            final value = Reflect.field(this, field);
             if (field != 'fieldClassNames' && value != null) {
                 switch (Type.typeof(value)) {
                     case TClass(String):
                         Reflect.setField(obj, Inflection.toSnakeCase(field), Std.string(value));
                     case TClass(class_):
-                        var className = Type.getClassName(class_);
+                        final className = Type.getClassName(class_);
                         if (className.indexOf('connect.Collection') == 0) {
-                            var col = cast(value, Collection<Dynamic>);
-                            var arr = new Array<Dynamic>();
+                            final col = cast(value, Collection<Dynamic>);
+                            final arr = new Array<Dynamic>();
                             for (elem in col) {
-                                var elemClassName = Type.getClassName(Type.getClass(elem));
+                                final elemClassName = Type.getClassName(Type.getClass(elem));
                                 if (elemClassName.indexOf('connect.models.') == 0) {
                                     arr.push(elem.toObject());
                                 } else {
@@ -36,7 +36,7 @@ class Model extends Base {
                                 Reflect.setField(obj, Inflection.toSnakeCase(field), arr);
                             }
                         } else if (className.indexOf('connect.models.') == 0) {
-                            var model = cast(value, Model).toObject();
+                            final model = cast(value, Model).toObject();
                             if (Reflect.fields(model).length != 0) {
                                 Reflect.setField(obj, Inflection.toSnakeCase(field), model);
                             }

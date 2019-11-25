@@ -1,6 +1,5 @@
 package connect;
 
-import connect.models.Contract;
 import haxe.io.Bytes;
 
 

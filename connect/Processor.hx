@@ -100,30 +100,31 @@ class Processor extends Base {
             default:
         }
 
+        final prevLogName = Env.getLogger().getFilename();
+        Env.getLogger().setFilename(null);
         Env.getLogger().openSection('Running Processor on ' + Util.getDate() + ' UTC');
 
-        // List requests
-        Env.getLogger().openSection('Listing requests on ' + Util.getDate() + ' UTC');
-        var list: Collection<IdModel> = null;
         try {
+            // List requests
+            Env.getLogger().openSection('Listing requests on ' + Util.getDate() + ' UTC');
             final listMethod: Function = Reflect.field(modelClass, 'list');
-            list = Reflect.callMethod(modelClass, listMethod, [filters]);
+            final list = Reflect.callMethod(modelClass, listMethod, [filters]);
+            Env.getLogger().closeSection();
+            
+            // Call each flow
+            for (flow in flows) {
+                flow._run(list);
+            }
         } catch (ex: Dynamic) {
+            // Catch exception when listing
             Env.getLogger().error('```');
             Env.getLogger().error(Std.string(ex));
             Env.getLogger().error('```');
             Env.getLogger().error('');
             Env.getLogger().closeSection();
-            Env.getLogger().closeSection();
-            return;
-        }
-        Env.getLogger().closeSection();
-        
-        // Call each flow
-        for (flow in flows) {
-            flow._run(list);
         }
 
         Env.getLogger().closeSection();
+        Env.getLogger().setFilename(null);
     }
 }
