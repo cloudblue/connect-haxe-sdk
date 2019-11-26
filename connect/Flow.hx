@@ -307,31 +307,45 @@ class Flow extends Base {
 
     private function process(model: IdModel): Void {
         if (this.prepareRequestAndOpenLogSection(model)) {
-            this.processSetup();
-            final stepData = this.loadStepDataIfStored();
-            final steps = [for (i in stepData.firstIndex...this.steps.length) this.steps[i]];
+            if (this.processSetup()) {
+                final stepData = this.loadStepDataIfStored();
+                final steps = [for (i in stepData.firstIndex...this.steps.length) this.steps[i]];
 
-            // Process all steps
-            F.reduce(
-                steps,
-                function(prevResult, step, i) {
-                    if (prevResult != null) {
-                        return processStep(step, stepData.firstIndex + i, prevResult.lastRequestStr, prevResult.lastDataStr);
-                    } else {
-                        return null;
-                    }
-                },
-                {lastRequestStr: '', lastDataStr: '{}'});
-
+                // Process all steps
+                F.reduce(
+                    steps,
+                    function(prevResult, step, i) {
+                        if (prevResult != null) {
+                            return processStep(step, stepData.firstIndex + i, prevResult.lastRequestStr, prevResult.lastDataStr);
+                        } else {
+                            return null;
+                        }
+                    },
+                    {lastRequestStr: '', lastDataStr: '{}'});
+            }
             Env.getLogger().closeSection();
         }
     }
 
 
-    private function processSetup(): Void {
+    private function processSetup(): Bool {
         Env.getLogger().openSection('Setup');
-        this.setup();
+        try {
+            this.setup();
+        } catch (ex: Dynamic) {
+            final exStr = Std.string(ex);
+            Env.getLogger().error('```');
+            Env.getLogger().error(exStr);
+            Env.getLogger().error('```');
+            Env.getLogger().error('');
+            if (this.getRequest() != null) {
+                this.getRequest()._updateConversation('Skipping request because an exception was thrown: $exStr');
+            }
+            Env.getLogger().closeSection();
+            return false;
+        }
         Env.getLogger().closeSection();
+        return true;
     }
 
 

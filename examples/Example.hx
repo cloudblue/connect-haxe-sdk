@@ -3,7 +3,7 @@ import connect.Flow;
 import connect.Logger;
 import connect.Processor;
 import connect.api.QueryParams;
-import connect.models.Request;
+
 
 class Example {
     public static function main() {
