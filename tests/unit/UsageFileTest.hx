@@ -180,7 +180,7 @@ class UsageFileTest extends haxe.unit.TestCase {
 
         // Check mocks (does not work because the generated file always differs in date)
         /*
-        final args: Array<Dynamic> = [usageFile.id, ByteData.load(sheetName)];
+        final args: Array<Dynamic> = [usageFile.id, Blob.load(sheetName)];
         final apiMock = cast(Env.getUsageApi(), Mock);
         assertEquals(1, apiMock.callCount('uploadUsageFile'));
         assertEquals(

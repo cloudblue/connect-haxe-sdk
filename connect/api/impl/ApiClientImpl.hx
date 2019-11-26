@@ -1,9 +1,6 @@
 package connect.api.impl;
 
 import haxe.Constraints.Function;
-#if python
-import haxe.io.UInt8Array;
-#end
 #if !js
 import haxe.io.BytesInput;
 #end
@@ -104,23 +101,10 @@ class ApiClientImpl extends Base implements IApiClient {
             // Wait for async request
             while (response == null) {}
         #elseif python
-            final parsedHeaders = new python.Dict<String, Dynamic>();
-            if (headers != null) {
-                for (key in headers.keys()) {
-                    parsedHeaders.set(key, headers.get(key));
-                }
-            }
-
             var response: Response = null;
             try {
-                final contentsArr = (fileArg != null && fileName != null && fileContent != null)
-                    ? [for (b in UInt8Array.fromBytes(fileContent._getBytes())) b]
-                    : [];
-                final pythonBytes = (contentsArr.length > 0)
-                    ? new python.Bytes(contentsArr)
-                    : null;
                 response = connect.native.PythonRequest.request(
-                    method, url, parsedHeaders, body, fileArg, fileName, pythonBytes, 300);
+                    method, url, headers, body, fileArg, fileName, fileContent, 300);
             } catch (ex: Dynamic) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                     writeRequestCall(Env.getLogger().error, method, url, headers, body);

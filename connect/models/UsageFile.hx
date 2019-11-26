@@ -407,7 +407,12 @@ class UsageFile extends IdModel {
             fileSize: bytes.length,
             fileTime: Date.now()
         };
-    #if !python
+    #if python
+        final compressed = connect.native.PythonZlib.compress(bytes, 9);
+        entry.compressed = true;
+        entry.data = compressed.sub(2, compressed.length - 6);
+        entry.dataSize = entry.data.length;
+    #else
         haxe.zip.Tools.compress(entry, 9);
     #end
         return entry;
