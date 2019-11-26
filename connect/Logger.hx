@@ -34,6 +34,12 @@ class Logger extends Base {
     }
 
 
+    /** @returns The path where logs are stored. **/
+    public function getPath(): String {
+        return this.path;
+    }
+
+
     /** @returns The level of the log. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`. **/
     public function getLevel(): Int {
         return this.level;

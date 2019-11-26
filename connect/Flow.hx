@@ -1,6 +1,7 @@
 package connect;
 
 import connect.models.IdModel;
+import connect.models.Param;
 import connect.models.Request;
 import connect.models.TierConfigRequest;
 import connect.models.UsageFile;
@@ -103,7 +104,7 @@ class Flow extends Base {
         This can be called within your steps to get the request being processed, as long as it
         is of the `UsageFile` type.
 
-        @returns The `USageFile` being processed, or `null` if current request is not of
+        @returns The `UsageFile` being processed, or `null` if current request is not of
         Usage api.
     **/
     public function getUsageFile(): UsageFile {
@@ -158,11 +159,12 @@ class Flow extends Base {
         final request = this.getRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
-            removeStepData(request);
+            StepStorage.removeStepData(request.id, getStepParam());
             request.update();
             request.approveByTemplate(id);
             this.abort("");
         } else if (tcr != null) {
+            StepStorage.removeStepData(tcr.id, getStepParam());
             tcr.update();
             tcr.approveByTemplate(id);
             this.abort("");
@@ -182,11 +184,12 @@ class Flow extends Base {
         final request = this.getRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
-            removeStepData(request);
+            StepStorage.removeStepData(request.id, getStepParam());
             request.update();
             request.approveByTile(text);
             this.abort("");
         } else if (tcr != null) {
+            StepStorage.removeStepData(tcr.id, getStepParam());
             tcr.update();
             tcr.approveByTile(text);
             this.abort("");
@@ -205,11 +208,12 @@ class Flow extends Base {
         final request = this.getRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
-            removeStepData(request);
+            StepStorage.removeStepData(request.id, getStepParam());
             request.update();
             request.fail(reason);
             this.abort("Failing request");
         } else if (tcr != null) {
+            StepStorage.removeStepData(tcr.id, getStepParam());
             tcr.update();
             tcr.fail(reason);
             this.abort("Failing request");
@@ -228,11 +232,12 @@ class Flow extends Base {
         final request = this.getRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
-            removeStepData(request);
+            StepStorage.removeStepData(request.id, getStepParam());
             request.update();
             request.inquire();
             this.abort("Inquiring request");
         } else if (tcr != null) {
+            StepStorage.removeStepData(tcr.id, getStepParam());
             tcr.update();
             tcr.inquire();
             this.abort("Inquiring request");
@@ -251,14 +256,12 @@ class Flow extends Base {
         final request = this.getRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
-            final param = request.asset.getParamById(STEP_PARAM_ID);
-            if (param != null) {
-                param.value = '';
-            }
+            StepStorage.removeStepData(request.id, getStepParam());
             request.update();
             request.pend();
             this.abort("Pending request");
         } else if (tcr != null) {
+            StepStorage.removeStepData(tcr.id, getStepParam());
             tcr.update();
             tcr.update();
             this.abort("Pending request");
@@ -303,7 +306,7 @@ class Flow extends Base {
 
 
     private function process(model: IdModel): Void {
-        if (this.prepareAndOpenLogSection(model)) {
+        if (this.prepareRequestAndOpenLogSection(model)) {
             this.processSetup();
             final stepData = this.loadStepDataIfStored();
             final steps = [for (i in stepData.firstIndex...this.steps.length) this.steps[i]];
@@ -333,15 +336,20 @@ class Flow extends Base {
 
 
     private function loadStepDataIfStored(): StepData {
-        final stepParam = (this.getRequest() != null)
-            ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
-            : null;
-        final stepData = StepStorage.load(this.model.id, stepParam);
+        final stepData = StepStorage.load(this.model.id, getStepParam());
         this.data = stepData.data;
-        if (stepData.firstIndex != 0) {
-            Env.getLogger().info('Resuming request from step ${stepData.firstIndex + 1}.');
+        if (stepData.storage != FailedStorage) {
+            final message = 'Resuming request from step ${stepData.firstIndex + 1} with ${stepData.storage}.';
+            Env.getLogger().info(message);
         }
         return stepData;
+    }
+
+
+    private function getStepParam(): Param {
+        return (this.getRequest() != null)
+            ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
+            : null;
     }
 
 
@@ -379,42 +387,11 @@ class Flow extends Base {
             this.abort();
         }
 
-        if (this.abortRequested) {
-            if (this.abortMessage == null) {
-                final param = (this.getRequest() != null)
-                    ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
-                    : null;
-                
-                // Save step data if request supports it
-                Env.getLogger().info('Skipping request. Trying to save step data.');
-                final saveResult = StepStorage.save(this.model,
-                    new StepData(index, this.data),
-                    param,
-                    Reflect.field(model, 'update'));
-                switch (saveResult) {
-                    case StoreConnect:
-                        Env.getLogger().info('Step data saved in Connect.');
-                    case StoreLocal:
-                        Env.getLogger().info('Step data saved locally.');
-                    case StoreFail:
-                        Env.getLogger().info('Step data could not be saved.');
-                }
-            } else {
-                if (this.abortMessage != '') {
-                    Env.getLogger().info(this.abortMessage);
-                }
-            }
-
-            Env.getLogger().closeSection();
-            return null;
-        } else {
-            Env.getLogger().closeSection();
-            return {lastRequestStr: requestStr, lastDataStr: dataStr};
-        }
+        return this.processAbortAndCloseLogSection(index, requestStr, dataStr);
     }
 
 
-    private function prepareAndOpenLogSection(model: IdModel): Bool {
+    private function prepareRequestAndOpenLogSection(model: IdModel): Bool {
         this.model = model;
 
         // Set log filename
@@ -443,6 +420,43 @@ class Flow extends Base {
     }
 
 
+    private function processAbortAndCloseLogSection(index: Int, requestStr: String,
+            dataStr: String) : {lastRequestStr: String, lastDataStr: String} {
+        if (this.abortRequested) {
+            if (this.abortMessage == null) {
+                final param = (this.getRequest() != null)
+                    ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
+                    : null;
+                
+                // Save step data if request supports it
+                Env.getLogger().info('Skipping request. Trying to save step data.');
+                final saveResult = StepStorage.save(this.model,
+                    new StepData(index, this.data, ConnectStorage),
+                    param,
+                    Reflect.field(model, 'update'));
+                switch (saveResult) {
+                    case ConnectStorage:
+                        Env.getLogger().info('Step data saved in Connect.');
+                    case LocalStorage:
+                        Env.getLogger().info('Step data saved locally.');
+                    case FailedStorage:
+                        Env.getLogger().info('Step data could not be saved.');
+                }
+            } else {
+                if (this.abortMessage != '') {
+                    Env.getLogger().info(this.abortMessage);
+                }
+            }
+
+            Env.getLogger().closeSection();
+            return null;
+        } else {
+            Env.getLogger().closeSection();
+            return {lastRequestStr: requestStr, lastDataStr: dataStr};
+        }
+    }
+
+
     /**
         Without a message, a skip is performed with the standard skip message, which
         will try to store step data. If a message is provided, no data is stored, and that message
@@ -451,18 +465,6 @@ class Flow extends Base {
     private function abort(?message: String): Void {
         this.abortRequested = true;
         this.abortMessage = message;
-    }
-
-
-    private static function removeStepData(request: Request): Void {
-        final param = request.asset.getParamById(STEP_PARAM_ID);
-        if (param != null && param.value != null && Inflection.isJsonObject(param.value)) {
-            final storeData = Json.parse(param.value);
-            if (Reflect.hasField(storeData, request.id)) {
-                Reflect.deleteField(storeData, request.id);
-            }
-            param.value = Json.stringify(storeData);
-        }
     }
 
 

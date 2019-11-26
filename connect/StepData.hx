@@ -4,13 +4,23 @@ import haxe.Json;
 
 
 @:dox(hide)
+enum StorageType {
+    ConnectStorage;
+    LocalStorage;
+    FailedStorage;
+}
+
+
+@:dox(hide)
 class StepData {
     public final firstIndex: Int;
     public final data: Dictionary;
+    public final storage: StorageType;
 
-    public function new(firstIndex: Int, data: Dynamic) {
+    public function new(firstIndex: Int, data: Dynamic, storage: StorageType) {
         this.firstIndex = firstIndex;
         this.data = new Dictionary();
+        this.storage = storage;
         if (Std.is(data, Dictionary)) {
             // Store model class names with key
             for (key in cast(data, Dictionary).keys()) {
