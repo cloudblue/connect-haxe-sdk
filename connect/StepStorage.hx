@@ -4,6 +4,8 @@ import connect.StepData.StorageType;
 import connect.models.IdModel;
 import connect.models.Param;
 import haxe.Constraints.Function;
+import haxe.crypto.Base64;
+import haxe.io.Bytes;
 import haxe.Json;
 import sys.FileSystem;
 import sys.io.File;
@@ -29,9 +31,9 @@ class StepStorage {
         // Save new data in available storage
         final paramObj = objWithRequestData(loadAllFromParam(param), request.id, stepData);
         final fileObj = objWithRequestData(loadAllFromFile(), request.id, stepData);
-        if (saveInConnect(request, paramObj, param, updateFunc)) {
+        if (saveInConnect(request, encodeData(paramObj), param, updateFunc)) {
             return ConnectStorage;
-        } else if (saveInFile(fileObj)) {
+        } else if (saveInFile(encodeData(fileObj))) {
             return LocalStorage;
         } else {
             return FailedStorage;
@@ -44,8 +46,7 @@ class StepStorage {
 
         final paramObj = loadAllFromParam(param);
         if (paramObj != null && Reflect.hasField(paramObj, requestId)) {
-            final paramData = objWithoutRequestData(paramObj, requestId);
-            param.value = Json.stringify(paramData);
+            param.value = encodeData(objWithoutRequestData(paramObj, requestId));
             return true; // Request needs updating
         }
         
@@ -57,7 +58,7 @@ class StepStorage {
         final fileObj = loadAllFromFile();
         if (fileObj != null && Reflect.hasField(fileObj, requestId)) {
             final fileData = objWithoutRequestData(fileObj, requestId);
-            saveInFile(fileData);
+            saveInFile(encodeData(fileData));
         }
     }
 
@@ -102,9 +103,8 @@ class StepStorage {
 
     private static function loadAllFromParam(param: Param) : Dynamic {
         try {
-            if (param != null && param.value != null && param.value != ''
-                    && Inflection.isJsonObject(param.value)) {
-                return Json.parse(param.value);
+            if (param != null && param.value != null && param.value != '') {
+                return decodeData(param.value);
             }
         }
         return null;
@@ -114,7 +114,7 @@ class StepStorage {
     private static function loadAllFromFile(): Dynamic {
         final dataFilename = getDataFilename();
         if (FileSystem.exists(dataFilename) && !FileSystem.isDirectory(dataFilename)) {
-            return Json.parse(File.getContent(dataFilename));
+            return decodeData(File.getContent(dataFilename));
         }
         return null;
     }
@@ -123,15 +123,15 @@ class StepStorage {
     /**
      * Saves data for all requests in Connect.
      * @param request A Request or TierConfigRequest whose update method will be called.
-     * @param data Dynamic object with for all requests for the given asset or TierConfig.
+     * @param data Encoded string with all requests for the given asset or TierConfig.
      * @param param Param to be updated.
      * @param updateFunc The update function to be called (TODO: Get this using reflection).
      * @return Bool Whether the data could be saved in Connect or not.
      */
-    private static function saveInConnect(request: IdModel, data: Dynamic,
+    private static function saveInConnect(request: IdModel, data: String,
             param: Param, updateFunc: Function) : Bool {
         if (param != null) {
-            param.value = Json.stringify(data);
+            param.value = data;
             try {
                 Reflect.callMethod(request, updateFunc, []);
                 return true;
@@ -148,13 +148,13 @@ class StepStorage {
 
     /**
      * Saves data for all requests in the local file.
-     * @param data Dynamic object with for all requests for the given asset or TierConfig.
+     * @param data Encoded string with all requests for the given asset or TierConfig.
      * @return Bool Whether the data could be saved in the file or not.
      */
-    private static function saveInFile(data: Dynamic): Bool {
+    private static function saveInFile(data: String): Bool {
         final dataFilename = getDataFilename();
         try {
-            File.saveContent(dataFilename, Json.stringify(data));
+            File.saveContent(dataFilename, data);
             return true;
         } catch (ex: Dynamic) {
             return false;
@@ -177,5 +177,27 @@ class StepStorage {
         return (logPath != null)
             ? (logPath + filename)
             : filename;
+    }
+
+
+    private static function encodeData(data: Dynamic): String {
+        final bytes = Bytes.ofString(Json.stringify(data));
+    #if python
+        final compressed = connect.native.PythonZlib.compress(bytes, 9);
+    #else
+        final compressed = haxe.zip.Compress.run(bytes, 9);
+    #end
+        return Base64.encode(compressed);
+    }
+
+
+    private static function decodeData(data: String): Dynamic {
+        final decoded = Base64.decode(data);
+    #if python
+        final decompressed = connect.native.PythonZlib.decompress(decoded);
+    #else
+        final decompressed = haxe.zip.Uncompress.run(decoded);
+    #end
+        return Json.parse(decompressed.toString());
     }
 }

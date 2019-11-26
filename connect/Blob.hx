@@ -1,6 +1,7 @@
 package connect;
 
 import haxe.io.Bytes;
+import haxe.io.UInt8Array;
 
 
 /**
@@ -35,6 +36,18 @@ class Blob extends Base {
     @:dox(hide)
     public function _getBytes(): Bytes {
         return bytes;
+    }
+
+
+    @:dox(hide)
+    public function _toArray(): Array<Int> {
+        return _bytesToArray(_getBytes());
+    }
+
+
+    @:dox(hide)
+    public static function _bytesToArray(bytes: Bytes): Array<Int> {
+        return [for (b in UInt8Array.fromBytes(bytes)) b];
     }
 
 
