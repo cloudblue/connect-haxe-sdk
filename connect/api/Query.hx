@@ -166,6 +166,24 @@ class Query extends Base {
     }
 
 
+    public function toPlain(): String {
+        final rql = new Array<String>();
+
+        if (this.relOps.exists('eq')) {
+            final arguments = this.relOps.get('eq');
+            for (argument in arguments) {
+                rql.push('${argument.key}=${argument.value}');
+            }
+        }
+
+        if (rql.length > 0) {
+            return '?' + rql.join('&');
+        } else {
+            return '';
+        }
+    }
+
+
     private var in__: StringMap<Array<String>>;
     private var out_: StringMap<Array<String>>;
     private var limit_: Null<Int>;

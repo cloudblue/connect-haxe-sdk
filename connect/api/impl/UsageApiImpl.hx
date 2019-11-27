@@ -10,7 +10,7 @@ class UsageApiImpl extends Base implements IUsageApi {
     public function new() {}
 
 
-    public function listUsageFiles(filters: QueryParams): String {
+    public function listUsageFiles(filters: Query): String {
         return ConnectHelper.get(USAGE_FILES_PATH, null, null, filters);
     }
 
@@ -91,7 +91,7 @@ class UsageApiImpl extends Base implements IUsageApi {
     }
 
 
-    public function listUsageRecords(filters: QueryParams): String {
+    public function listUsageRecords(filters: Query): String {
         return ConnectHelper.get(USAGE_RECORDS_PATH, null, null, filters);
     }
 

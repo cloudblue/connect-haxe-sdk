@@ -1,6 +1,6 @@
 package connect.models;
 
-import connect.api.QueryParams;
+import connect.api.Query;
 
 
 /**
@@ -79,7 +79,7 @@ class Product extends IdModel {
 
         @returns A Collection of Products.
     **/
-    public static function list(filters: QueryParams) : Collection<Product> {
+    public static function list(filters: Query) : Collection<Product> {
         final products = Env.getGeneralApi().listProducts(filters);
         return Model.parseArray(Product, products);
     }
@@ -103,7 +103,7 @@ class Product extends IdModel {
 
         @returns A Collection of Actions.
     **/
-    public function listActions(filters: QueryParams) : Collection<Action> {
+    public function listActions(filters: Query) : Collection<Action> {
         try {
             final actions = Env.getGeneralApi().listProductActions(this.id, filters);
             return Model.parseArray(Action, actions);
@@ -312,7 +312,7 @@ class Product extends IdModel {
 
         @returns A Collection of ProductConfigurationParams for `this` Product.
     **/
-    public function listConfigurations(filters: QueryParams) : Collection<ProductConfigurationParam> {
+    public function listConfigurations(filters: Query) : Collection<ProductConfigurationParam> {
         try {
             final templates = Env.getGeneralApi().listProductConfigurations(this.id, filters);
             return Model.parseArray(ProductConfigurationParam, templates);
@@ -341,7 +341,7 @@ class Product extends IdModel {
     /**
         @returns A Collection of Agreements for `this` Product.
     **/
-    public function listAgreements(filters: QueryParams) : Collection<Agreement> {
+    public function listAgreements(filters: Query) : Collection<Agreement> {
         try {
             final agreements = Env.getGeneralApi().listProductAgreements(this.id, filters);
             return Model.parseArray(Agreement, agreements);
@@ -361,7 +361,7 @@ class Product extends IdModel {
 
         @returns A Collection of Media for `this` Product.
     **/
-    public function listMedia(filters: QueryParams) : Collection<Media> {
+    public function listMedia(filters: Query) : Collection<Media> {
         try {
             final media = Env.getGeneralApi().listProductMedia(this.id, filters);
             return Model.parseArray(Media, media);

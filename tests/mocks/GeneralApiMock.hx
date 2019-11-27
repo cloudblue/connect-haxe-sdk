@@ -1,7 +1,7 @@
 package tests.mocks;
 
 import connect.api.IGeneralApi;
-import connect.api.QueryParams;
+import connect.api.Query;
 import haxe.Json;
 
 
@@ -24,7 +24,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listAccounts(filters: QueryParams): String {
+    public function listAccounts(filters: Query): String {
         this.calledFunction('listAccounts', [filters]);
         return Json.stringify(this.accountList);
     }
@@ -64,7 +64,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listConversations(filters: QueryParams): String {
+    public function listConversations(filters: Query): String {
         this.calledFunction('listConversations', [filters]);
         return Json.stringify(this.conversationList);
     }
@@ -103,7 +103,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listProducts(filters: QueryParams): String {
+    public function listProducts(filters: Query): String {
         this.calledFunction('listProducts', [filters]);
         return Json.stringify(this.productList);
     }
@@ -120,7 +120,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listProductActions(id: String, filters: QueryParams): String {
+    public function listProductActions(id: String, filters: Query): String {
         this.calledFunction('listProductActions', [id, filters]);
         this.getProduct(id);
         return Json.stringify(this.actionList);
@@ -245,7 +245,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listProductConfigurations(id: String, filters: QueryParams): String {
+    public function listProductConfigurations(id: String, filters: Query): String {
         this.calledFunction('listProductConfigurations', [id, filters]);
         this.getProduct(id);
         return Json.stringify(this.configurationList);
@@ -259,14 +259,14 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listProductAgreements(id: String, filters: QueryParams): String {
+    public function listProductAgreements(id: String, filters: Query): String {
         this.calledFunction('listProductAgreements', [id, filters]);
         this.getProduct(id);
         return Json.stringify(this.agreementList);
     }
 
 
-    public function listProductMedia(id: String, filters: QueryParams): String {
+    public function listProductMedia(id: String, filters: Query): String {
         this.calledFunction('listProductMedia', [id, filters]);
         this.getProduct(id);
         return Json.stringify(this.mediaList);
@@ -305,7 +305,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function listCategories(filters: QueryParams): String {
+    public function listCategories(filters: Query): String {
         this.calledFunction('listCategories', [filters]);
         return Json.stringify(this.categoryList);
     }

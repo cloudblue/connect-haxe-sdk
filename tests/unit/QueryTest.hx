@@ -114,4 +114,19 @@ class QueryTest extends haxe.unit.TestCase {
             .ordering(['property1', 'property2']);
         this.assertEquals('?ordering(property1,property2)', rql.toString());
     }
+
+
+    public function testPlain() {
+        final rql = new Query()
+            .equal('property', 'value');
+        this.assertEquals('?property=value', rql.toPlain());
+    }
+
+
+    public function testPlainWithOtherProperties() {
+        final rql = new Query()
+            .equal('property1', 'value1')
+            .notEqual('property2', 'value2');
+        this.assertEquals('?property1=value1', rql.toPlain());
+    }
 }

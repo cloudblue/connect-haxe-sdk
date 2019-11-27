@@ -2,7 +2,7 @@ import connect.Env;
 import connect.Flow;
 import connect.Logger;
 import connect.Processor;
-import connect.api.QueryParams;
+import connect.api.Query;
 import connect.models.IdModel;
 import connect.models.Request;
 
@@ -37,7 +37,7 @@ public class Example {
         // Process requests
         new Processor()
             .flow(flow)
-            .processRequests(new QueryParams()
+            .processRequests(new Query()
                 .set("asset.product.id__in", Env.getConfig().getProductsString())
                 .set("status", "pending"));
     }

@@ -9,7 +9,7 @@ class TierApiImpl extends Base implements ITierApi {
     public function new() {}
 
 
-    public function listTierConfigRequests(filters: QueryParams): String {
+    public function listTierConfigRequests(filters: Query): String {
         return ConnectHelper.get(TCR_PATH, null, null, filters);
     }
 
@@ -59,7 +59,7 @@ class TierApiImpl extends Base implements ITierApi {
     }
 
 
-    public function listTierAccounts(filters: QueryParams): String {
+    public function listTierAccounts(filters: Query): String {
         return ConnectHelper.get(TA_PATH, null, null, filters);
     }
 
@@ -69,7 +69,7 @@ class TierApiImpl extends Base implements ITierApi {
     }
 
 
-    public function listTierConfigs(filters: QueryParams): String {
+    public function listTierConfigs(filters: Query): String {
         return ConnectHelper.get(TC_PATH, null, null, filters);
     }
 

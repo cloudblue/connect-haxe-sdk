@@ -1,6 +1,6 @@
 package connect.models;
 
-import connect.api.QueryParams;
+import connect.api.Query;
 
 
 /**
@@ -94,7 +94,7 @@ class Request extends IdModel {
 
         @returns A Collection of Requests.
     **/
-    public static function list(filters: QueryParams) : Collection<Request> {
+    public static function list(filters: Query) : Collection<Request> {
         final requests = Env.getFulfillmentApi().listRequests(filters);
         return Model.parseArray(Request, requests);
     }
@@ -279,7 +279,7 @@ class Request extends IdModel {
 
     /** @returns The Conversation assigned to `this` Request, or `null` if there is none. **/
     public function getConversation(): Conversation {
-        final convs = Conversation.list(new QueryParams().set('instance_id', this.id));
+        final convs = Conversation.list(new Query().equal('instance_id', this.id));
         final conv = (convs.length() > 0) ? convs.get(0) : null;
         if  (conv != null && conv.id != null && conv.id != '') {
             return Conversation.get(conv.id);

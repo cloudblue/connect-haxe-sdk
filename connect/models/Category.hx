@@ -1,6 +1,6 @@
 package connect.models;
 
-import connect.api.QueryParams;
+import connect.api.Query;
 
 
 /**
@@ -31,7 +31,7 @@ class Category extends IdModel {
 
         @returns A Collection of Categories.
     **/
-    public static function list(filters: QueryParams) : Collection<Category> {
+    public static function list(filters: Query) : Collection<Category> {
         final categories = Env.getGeneralApi().listCategories(filters);
         return Model.parseArray(Category, categories);
     }

@@ -1,6 +1,6 @@
 package connect.models;
 
-import connect.api.QueryParams;
+import connect.api.Query;
 
 
 /**
@@ -103,7 +103,7 @@ class Asset extends IdModel {
 
         @returns A Collection of Assets.
     **/
-    public static function list(filters: QueryParams) : Collection<Asset> {
+    public static function list(filters: Query) : Collection<Asset> {
         final assets = Env.getFulfillmentApi().listAssets(filters);
         return Model.parseArray(Asset, assets);
     }

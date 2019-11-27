@@ -1,7 +1,7 @@
 package tests.mocks;
 
 import connect.api.IFulfillmentApi;
-import connect.api.QueryParams;
+import connect.api.Query;
 import haxe.Json;
 
 
@@ -12,7 +12,7 @@ class FulfillmentApiMock extends Mock implements IFulfillmentApi {
     }
 
 
-    public function listRequests(filters: QueryParams): String {
+    public function listRequests(filters: Query): String {
         this.calledFunction('listRequests', [filters]);
         return Json.stringify(this.list);
     }
@@ -63,7 +63,7 @@ class FulfillmentApiMock extends Mock implements IFulfillmentApi {
     }
 
 
-    public function listAssets(filters: QueryParams): String {
+    public function listAssets(filters: Query): String {
         this.calledFunction('listAssets', [filters]);
         return Json.stringify(this.list.map((request) -> request.asset));
     }

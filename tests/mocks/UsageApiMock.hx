@@ -2,7 +2,7 @@ package tests.mocks;
 
 import connect.Blob;
 import connect.api.IUsageApi;
-import connect.api.QueryParams;
+import connect.api.Query;
 import haxe.Json;
 
 
@@ -13,7 +13,7 @@ class UsageApiMock extends Mock implements IUsageApi {
     }
 
 
-    public function listUsageFiles(filters: QueryParams): String {
+    public function listUsageFiles(filters: Query): String {
         this.calledFunction('listUsageFiles', [filters]);
         return Json.stringify(this.list);
     }
@@ -95,7 +95,7 @@ class UsageApiMock extends Mock implements IUsageApi {
     }
 
 
-    public function listUsageRecords(filters: QueryParams): String {
+    public function listUsageRecords(filters: Query): String {
         return null;
     }
 

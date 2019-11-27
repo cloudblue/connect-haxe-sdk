@@ -10,7 +10,7 @@ class FulfillmentApiImpl extends Base implements IFulfillmentApi {
     public function new() {}
 
 
-    public function listRequests(filters: QueryParams): String {
+    public function listRequests(filters: Query): String {
         return ConnectHelper.get(REQUESTS_PATH, null, null, filters);
     }
 
@@ -42,11 +42,11 @@ class FulfillmentApiImpl extends Base implements IFulfillmentApi {
 
     public function renderTemplate(id: String, request_id: String): String {
         return ConnectHelper.get(TEMPLATES_PATH, id, 'render',
-            new QueryParams().set('request_id', request_id));
+            new Query().equal('request_id', request_id));
     }
 
 
-    public function listAssets(filters: QueryParams): String {
+    public function listAssets(filters: Query): String {
         return ConnectHelper.get(ASSETS_PATH, null, null, filters);
     }
 

@@ -1,6 +1,6 @@
 package connect.models;
 
-import connect.api.QueryParams;
+import connect.api.Query;
 
 
 /**
@@ -57,7 +57,7 @@ class TierAccount extends IdModel {
 
         @returns A Collection of TierAccounts.
     **/
-    public static function list(filters: QueryParams) : Collection<TierAccount> {
+    public static function list(filters: Query) : Collection<TierAccount> {
         final accounts = Env.getTierApi().listTierAccounts(filters);
         return Model.parseArray(TierAccount, accounts);
     }

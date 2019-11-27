@@ -4,7 +4,7 @@ import connect.Blob;
 import connect.Dictionary;
 import connect.api.Response;
 import connect.api.IApiClient;
-import connect.api.QueryParams;
+import connect.api.Query;
 
 
 class ApiClientMock extends Mock implements IApiClient {
@@ -16,13 +16,13 @@ class ApiClientMock extends Mock implements IApiClient {
     
 
     public function get(resource: String, ?id: String, ?suffix: String,
-            ?params: QueryParams): String {
+            ?params: Query): String {
         return null;
     }
 
 
     public function getString(resource: String, ?id: String, ?suffix: String,
-            ?params: QueryParams): String {
+            ?params: Query): String {
         return null;
     }
 
