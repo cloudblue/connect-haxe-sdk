@@ -3,7 +3,7 @@ const Env = connect.Env;
 const Flow = connect.Flow;
 const Logger = connect.Logger;
 const Processor = connect.Processor;
-const QueryParams = connect.api.QueryParams;
+const Query = connect.api.Query;
 const Request = connect.models.Request;
 
 //Env.initLogger("log.md", Logger.LEVEL_ERROR, null);
@@ -34,6 +34,6 @@ const flow = new Flow(null)
 // Process requests
 new Processor()
     .flow(flow)
-    .processRequests(new QueryParams()
+    .processRequests(new Query()
         .set("asset.product.id__in", Env.getConfig().getProductsString())
         .set("status", "pending"));

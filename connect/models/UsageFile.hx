@@ -1,6 +1,6 @@
 package connect.models;
 
-import connect.api.QueryParams;
+import connect.api.Query;
 
 
 /**
@@ -108,7 +108,7 @@ class UsageFile extends IdModel {
 
         @returns A Collection of Requests.
     **/
-    public static function list(filters: QueryParams) : Collection<UsageFile> {
+    public static function list(filters: Query) : Collection<UsageFile> {
         final usageFiles = Env.getUsageApi().listUsageFiles(filters);
         return Model.parseArray(UsageFile, usageFiles);
     }

@@ -2,7 +2,7 @@ from connect import Env
 from connect import Flow
 from connect import Logger
 from connect import Processor
-from connect.api import QueryParams
+from connect.api import Query
 from connect.models import Request
 
 
@@ -38,6 +38,6 @@ if __name__ == '__main__':
     # Process requests
     Processor() \
         .flow(flow) \
-        .processRequests(QueryParams() \
+        .processRequests(Query() \
             .set('asset.product.id__in', Env.getConfig().getProductsString()) \
             .set('status', 'pending'))

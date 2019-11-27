@@ -16,7 +16,7 @@ class ConnectHelper {
         @throws String if the request fails.
     **/
     public static function get(resource: String, ?id: String, ?suffix: String,
-            ?params: QueryParams): String {
+            ?params: Query): String {
         return checkResponse(connectSyncRequest('GET', parsePath(resource, id, suffix),
             getHeaders(), params));
     }
@@ -87,9 +87,10 @@ class ConnectHelper {
 
 
     private static function connectSyncRequest(method: String, path: String, headers: Dictionary,
-            ?params: QueryParams, ?data: String,
+            ?params: Query, ?data: String,
             ?fileArg: String, ?fileName: String, ?fileContent: Blob) : Response {
-        final url = Env.getConfig().getApiUrl() + path + ((params != null) ? params.toString() : '');
+        final url = Env.getConfig().getApiUrl() + path
+            + ((params != null) ? params.toPlain() : '');
         return Env.getApiClient().syncRequest(method, url, headers, data, fileArg, fileName, fileContent);
     }
 

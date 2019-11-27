@@ -18,6 +18,7 @@ class UnitTests {
         runner.add(new tests.unit.ConversationTest());
         runner.add(new tests.unit.ItemTest());
         runner.add(new tests.unit.ProductTest());
+        runner.add(new tests.unit.QueryTest());
         runner.add(new tests.unit.RequestTest());
         runner.add(new tests.unit.TierAccountTest());
         runner.add(new tests.unit.TierConfigRequestTest());

@@ -6,7 +6,7 @@ use connect\Env;
 use connect\Flow;
 use connect\Logger;
 use connect\Processor;
-use connect\api\QueryParams;
+use connect\api\Query;
 use connect\models\Request;
 
 
@@ -39,6 +39,6 @@ $flow = (new Flow(null))
 // Process requests
 (new Processor())
     ->flow($flow)
-    ->processRequests((new QueryParams())
+    ->processRequests((new Query())
         ->set('asset.product.id__in', Env::getConfig()->getProductsString())
         ->set('status', 'pending'));

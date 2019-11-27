@@ -11,7 +11,7 @@ class GeneralApiImpl extends Base implements IGeneralApi {
     public function new() {}
 
 
-    public function listAccounts(filters: QueryParams): String {
+    public function listAccounts(filters: Query): String {
         return ConnectHelper.get(ACCOUNTS_PATH, null, null, filters);
     }
 
@@ -36,7 +36,7 @@ class GeneralApiImpl extends Base implements IGeneralApi {
     }
 
 
-    public function listConversations(filters: QueryParams): String {
+    public function listConversations(filters: Query): String {
         return ConnectHelper.get(CONVERSATIONS_PATH, null, null, filters);
     }
 
@@ -56,7 +56,7 @@ class GeneralApiImpl extends Base implements IGeneralApi {
     }
 
 
-    public function listProducts(filters: QueryParams): String {
+    public function listProducts(filters: Query): String {
         return ConnectHelper.get(PRODUCTS_PATH, null, null, filters);
     }
 
@@ -66,7 +66,7 @@ class GeneralApiImpl extends Base implements IGeneralApi {
     }
 
 
-    public function listProductActions(id: String, filters: QueryParams): String {
+    public function listProductActions(id: String, filters: Query): String {
         return ConnectHelper.get(PRODUCTS_PATH, id, 'actions', filters);
     }
 
@@ -152,7 +152,7 @@ class GeneralApiImpl extends Base implements IGeneralApi {
     }
 
 
-    public function listProductConfigurations(id: String, filters: QueryParams): String {
+    public function listProductConfigurations(id: String, filters: Query): String {
         return 
             ConnectHelper.get(PRODUCTS_PATH, id, 'configurations', filters);
     }
@@ -163,12 +163,12 @@ class GeneralApiImpl extends Base implements IGeneralApi {
     }
 
 
-    public function listProductAgreements(id: String, filters: QueryParams): String {
+    public function listProductAgreements(id: String, filters: Query): String {
         return ConnectHelper.get(PRODUCTS_PATH, id, 'agreements', filters);
     }
 
 
-    public function listProductMedia(id: String, filters: QueryParams): String {
+    public function listProductMedia(id: String, filters: Query): String {
         return ConnectHelper.get(PRODUCTS_PATH, id, 'media', filters);
     }
 
@@ -193,7 +193,7 @@ class GeneralApiImpl extends Base implements IGeneralApi {
     }
 
 
-    public function listCategories(filters: QueryParams): String {
+    public function listCategories(filters: Query): String {
         return ConnectHelper.get(CATEGORIES_PATH, null, null, filters);
     }
 

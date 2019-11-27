@@ -1,6 +1,6 @@
 package connect.models;
 
-import connect.api.QueryParams;
+import connect.api.Query;
 
 
 /**
@@ -39,7 +39,7 @@ class Account extends IdModel {
 
         @returns A Collection of Accounts.
     **/
-    public static function list(filters: QueryParams): Collection<Account> {
+    public static function list(filters: Query): Collection<Account> {
         final accounts = Env.getGeneralApi().listAccounts(filters);
         return Model.parseArray(Account, accounts);
     }

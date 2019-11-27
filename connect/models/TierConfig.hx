@@ -1,6 +1,6 @@
 package connect.models;
 
-import connect.api.QueryParams;
+import connect.api.Query;
 
 
 /** This class represents the configuration of a Tier. **/
@@ -77,7 +77,7 @@ class TierConfig extends IdModel {
 
         @returns A Collection of TierConfigs.
     **/
-    public static function list(filters: QueryParams) : Collection<TierConfig> {
+    public static function list(filters: Query) : Collection<TierConfig> {
         final configs = Env.getTierApi().listTierConfigs(filters);
         return Model.parseArray(TierConfig, configs);
     }

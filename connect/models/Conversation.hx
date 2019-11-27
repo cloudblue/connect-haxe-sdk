@@ -1,6 +1,6 @@
 package connect.models;
 
-import connect.api.QueryParams;
+import connect.api.Query;
 
 
 /**
@@ -35,7 +35,7 @@ class Conversation extends IdModel {
 
         @returns A collection of Conversations.
     **/
-    public static function list(filters: QueryParams) : Collection<Conversation> {
+    public static function list(filters: Query) : Collection<Conversation> {
         final convs = Env.getGeneralApi().listConversations(filters);
         return Model.parseArray(Conversation, convs);
     }

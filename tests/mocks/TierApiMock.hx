@@ -1,7 +1,7 @@
 package tests.mocks;
 
 import connect.api.ITierApi;
-import connect.api.QueryParams;
+import connect.api.Query;
 import haxe.Json;
 
 
@@ -14,7 +14,7 @@ class TierApiMock extends Mock implements ITierApi {
     }
 
 
-    public function listTierConfigRequests(filters: QueryParams): String {
+    public function listTierConfigRequests(filters: Query): String {
         this.calledFunction('listTierConfigRequests', [filters]);
         return Json.stringify(this.requestList);
     }
@@ -78,7 +78,7 @@ class TierApiMock extends Mock implements ITierApi {
     }
 
 
-    public function listTierAccounts(filters: QueryParams): String {
+    public function listTierAccounts(filters: Query): String {
         this.calledFunction('listTierAccounts', [filters]);
         return Json.stringify(this.accountList);
     }
@@ -95,7 +95,7 @@ class TierApiMock extends Mock implements ITierApi {
     }
 
 
-    public function listTierConfigs(filters: QueryParams): String {
+    public function listTierConfigs(filters: Query): String {
         this.calledFunction('listTierConfigs', [filters]);
         return Json.stringify(this.configList);
     }

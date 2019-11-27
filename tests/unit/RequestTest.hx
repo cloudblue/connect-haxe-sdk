@@ -243,7 +243,7 @@ class RequestTest extends haxe.unit.TestCase {
         final apiMock = cast(Env.getGeneralApi(), Mock);
         assertEquals(1, apiMock.callCount('listConversations'));
         assertEquals(
-            ['?instance_id=PR-5852-1608-0000'].toString(),
+            ['?eq(instance_id,PR-5852-1608-0000)'].toString(),
             apiMock.callArgs('listConversations', 0).toString());
     }
 }

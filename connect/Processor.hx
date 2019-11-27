@@ -1,6 +1,6 @@
 package connect;
 
-import connect.api.QueryParams;
+import connect.api.Query;
 import connect.models.IdModel;
 import connect.models.Request;
 import connect.models.TierConfigRequest;
@@ -60,7 +60,7 @@ class Processor extends Base {
         @param filters Filters to be used for listing requests. It can contain
         any of the filters specified for the `Request.list` method.
     **/
-    public function processRequests(filters: QueryParams): Void {
+    public function processRequests(filters: Query): Void {
         run(Request, filters);
     }
 
@@ -72,7 +72,7 @@ class Processor extends Base {
         @param filters Filters to be used for listing requests. It can contain
         any of the filters specified for the `TierConfigRequest.list` method.
     **/
-    public function processTierConfigRequests(filters: QueryParams): Void {
+    public function processTierConfigRequests(filters: Query): Void {
         run(TierConfigRequest, filters);
     }
 
@@ -84,7 +84,7 @@ class Processor extends Base {
         @param filters Filters to be used for listing requests. It can contain
         any of the filters specified for the `UsageFile.list` method.
     **/
-    public function processUsageFiles(filters: QueryParams): Void {
+    public function processUsageFiles(filters: Query): Void {
         run(UsageFile, filters);
     }
 
@@ -92,7 +92,7 @@ class Processor extends Base {
     private var flows: Array<Flow>;
 
 
-    private function run<T>(modelClass: Class<T>, filters: QueryParams): Void {
+    private function run<T>(modelClass: Class<T>, filters: Query): Void {
         // On some targets, a string is received as modelClass, so obtain the real class from it
         switch (Type.typeof(modelClass)) {
             case TClass(String):
