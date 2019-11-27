@@ -11,26 +11,6 @@ class QueryTest extends haxe.unit.TestCase {
     }
 
 
-    public function testArrayBackwardsCompatibilityString() {
-        final rql = new Query()
-            .equal('product.id', 'PRD-123123123')
-            .ordering(['test1', 'test2'])
-            .limit(10)
-            .offset(4)
-            .orderBy('property');
-        this.assertEquals(
-            '?eq(product.id,PRD-123123123)&ordering(test1,test2)&limit=10&order_by=property&offset=4',
-            rql.toString());
-    }
-
-
-    public function testArrayBackwardsCompatibilityArray() {
-        final rql = new Query()
-            .in_('product.id', ['PRD-123123123', 'PRD-123123123']);
-        this.assertEquals('?in(product.id,(PRD-123123123,PRD-123123123))', rql.toString());
-    }
-
-
     public function testEqual() {
         final rql = new Query()
             .equal('key', 'value');
