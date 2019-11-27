@@ -13,90 +13,191 @@ class Query extends Base {
     }
 
 
+    /**
+     * Select objects where the specified property value is in the provided array.
+     * @param property
+     * @param array
+     * @return Query
+     */
     public function in_(property: String, array: Array<String>): Query {
         this.in__.set(property, array.copy());
         return this;
     }
 
 
+    /**
+     * Select objects where the specified property value is not in the provided array.
+     * @param property 
+     * @param array 
+     * @return Query
+     */
     public function out(property: String, array: Array<String>): Query {
         this.out_.set(property, array.copy());
         return this;
     }
 
 
+    /**
+     * Indicates the given number of objects from the start position.
+     * @param amount 
+     * @return Query
+     */
     public function limit(amount: Int): Query {
         this.limit_ = amount;
         return this;
     }
 
 
+    /**
+     * Order list by given property
+     * @param property 
+     * @return Query
+     */
     public function orderBy(property: String): Query {
         this.orderBy_ = property;
         return this;
     }
 
 
+    /**
+     * Offset (page) to return on paged queries
+     * @param page 
+     * @return Query
+     */
     public function offset(page: Int): Query {
         this.offset_ = page;
         return this;
     }
 
 
+    /**
+     * Order list of objects by the given properties (unlimited number of properties).
+     * The list is ordered first by the first specified property, then by the second, and
+     * so on. The order is specified by the prefix: + ascending order, - descending.
+     * @param propertyList 
+     * @return Query
+     */
     public function ordering(propertyList: Array<String>): Query {
         this.ordering_ = propertyList.copy();
         return this;
     }
 
 
+    /**
+     * Search for the specified pattern in the specified property. The function is similar
+     * to the SQL LIKE operator, though it uses the * wildcard instead of %. To specify in
+     * a pattern the * symbol itself, it must be percent-encoded, that is, you need to specify
+     * %2A instead of *, see the usage examples below. In addition, it is possible to use the
+     * ? wildcard in the pattern to specify that any symbol will be valid in this position.
+     * @param property 
+     * @param pattern 
+     * @return Query
+     */
     public function like(property: String, pattern: String): Query {
         this.like_.set(property, pattern);
         return this;
     }
 
 
+    /**
+     * Same as like but case unsensitive.
+     * @param property 
+     * @param pattern 
+     * @return Query
+     */
     public function ilike(property: String, pattern: String): Query {
         this.ilike_.set(property, pattern);
         return this;
     }
 
 
+    /**
+     * The function is applicable to a list of resources (hereafter base resources). It receives
+     * the list of attributes (up to 100 attributes) that can be primitive properties of the base
+     * resources, relation names, and relation names combined with properties of related resources.
+     * The output is the list of objects presenting the selected properties and related (linked)
+     * resources. Normally, when relations are selected, the base resource properties are also presented
+     * in the output.
+     * @param attributes 
+     * @return Query
+     */
     public function select(attributes: Array<String>): Query {
         this.select_ = attributes.copy();
         return this;
     }
 
 
+    /**
+     * Select objects with a $property value equal to $value.
+     * @param property 
+     * @param value 
+     * @return Query
+     */
     public function equal(property: String, value: String): Query {
         return addRelOp('eq', property, value);
     }
 
 
+    /**
+     * Select objects with a $property value not equal to $value.
+     * @param property 
+     * @param value 
+     * @return Query
+     */
     public function notEqual(property: String, value: String): Query {
         return addRelOp('ne', property, value);
     }
 
 
+    /**
+     * Select objects with a $property value greater than the $value.
+     * @param property 
+     * @param value 
+     * @return Query
+     */
     public function greater(property: String, value: String): Query {
         return addRelOp('gt', property, value);
     }
 
 
+    /**
+     * Select objects with a $property value equal or greater than the $value.
+     * @param property 
+     * @param value 
+     * @return Query
+     */
     public function greaterOrEqual(property: String, value: String): Query {
         return addRelOp('ge', property, value);
     }
 
 
+    /**
+     * Select objects with a $property value less than the $value.
+     * @param property 
+     * @param value 
+     * @return Query
+     */
     public function lesser(property: String, value: String): Query {
         return addRelOp('lt', property, value);
     }
 
 
+    /**
+     * Select objects with a $property value equal or less than the $value.
+     * @param property 
+     * @param value 
+     * @return Query
+     */
     public function lesserOrEqual(property: String, value: String): Query {
         return addRelOp('le', property, value);
     }
 
 
+    /**
+     * Returns a string representation of `this` query in RQL syntax that can be appended
+     * to a URL.
+     * @return String
+     */
     public function toString(): String {
         final rql = new Array<String>();
 
@@ -166,6 +267,11 @@ class Query extends Base {
     }
 
 
+    /**
+     * Returns a string representation of `this` Query with the parameters
+     * compatible with query params syntax. It can be appended to a URL.
+     * @return String
+     */
     public function toPlain(): String {
         final rql = new Array<String>();
 
@@ -174,6 +280,18 @@ class Query extends Base {
             for (argument in arguments) {
                 rql.push('${argument.key}=${argument.value}');
             }
+        }
+
+        if (this.limit_ != null) {
+            rql.push('limit=${this.limit_}');
+        }
+
+        if (this.orderBy_ != null) {
+            rql.push('order_by=${this.orderBy_}');
+        }
+
+        if (this.offset_ != null) {
+            rql.push('offset=${this.offset_}');
         }
 
         if (rql.length > 0) {
