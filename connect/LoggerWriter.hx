@@ -49,7 +49,10 @@ class LoggerWriter extends Base {
             this.getFile().writeString(line + '\r\n');
             this.getFile().flush();
         }
-        Sys.println(line);
+        try {
+            // This can fail if stdout has been overriden
+            Sys.println(line);
+        } catch (ex: Dynamic) {}
     }
 
 
