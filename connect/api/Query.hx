@@ -60,7 +60,7 @@ class Query extends Base {
 
 
     /**
-     * Offset (page) to return on paged queries
+     * Offset (page) to return on paged queries.
      * @param page 
      * @return Query
      */
@@ -128,7 +128,7 @@ class Query extends Base {
 
 
     /**
-     * Select objects with a $property value equal to $value.
+     * Select objects with a property value equal to value.
      * @param property 
      * @param value 
      * @return Query
@@ -139,7 +139,7 @@ class Query extends Base {
 
 
     /**
-     * Select objects with a $property value not equal to $value.
+     * Select objects with a property value not equal to value.
      * @param property 
      * @param value 
      * @return Query
@@ -150,7 +150,7 @@ class Query extends Base {
 
 
     /**
-     * Select objects with a $property value greater than the $value.
+     * Select objects with a property value greater than the value.
      * @param property 
      * @param value 
      * @return Query
@@ -161,7 +161,7 @@ class Query extends Base {
 
 
     /**
-     * Select objects with a $property value equal or greater than the $value.
+     * Select objects with a property value equal or greater than the value.
      * @param property 
      * @param value 
      * @return Query
@@ -172,7 +172,7 @@ class Query extends Base {
 
 
     /**
-     * Select objects with a $property value less than the $value.
+     * Select objects with a property value less than the value.
      * @param property 
      * @param value 
      * @return Query
@@ -183,7 +183,7 @@ class Query extends Base {
 
 
     /**
-     * Select objects with a $property value equal or less than the $value.
+     * Select objects with a property value equal or less than the value.
      * @param property 
      * @param value 
      * @return Query
@@ -259,11 +259,7 @@ class Query extends Base {
             rql.push('offset=${this.offset_}');
         }
 
-        if (rql.length > 0) {
-            return '?' + rql.join('&');
-        } else {
-            return '';
-        }
+        return (rql.length > 0) ? ('?' + rql.join('&')) : '';
     }
 
 
