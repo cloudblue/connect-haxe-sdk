@@ -161,7 +161,7 @@ class UsageFileTest extends haxe.unit.TestCase {
 
         // Create record
         final record = new UsageRecord();
-        record.usageRecordId = 'Unique record value';
+        record.recordId = 'Unique record value';
         record.itemSearchCriteria = 'item.mpn';
         record.itemSearchValue = 'SKUA';
         record.quantity = 1;
