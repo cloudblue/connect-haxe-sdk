@@ -60,6 +60,12 @@ class Product extends IdModel {
     public var stats: ProductStats;
 
 
+    // Undocumented fields (they appear in PHP SDK)
+
+
+    public var status: String;
+
+
     /**
         Lists all Products that match the given filters. Supported filters are:
 
