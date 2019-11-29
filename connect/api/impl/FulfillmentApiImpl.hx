@@ -47,7 +47,7 @@ class FulfillmentApiImpl extends Base implements IFulfillmentApi {
 
 
     public function listAssets(filters: Query): String {
-        return ConnectHelper.get(ASSETS_PATH, null, null, filters);
+        return ConnectHelper.get(ASSETS_PATH, null, null, filters, true);
     }
 
 

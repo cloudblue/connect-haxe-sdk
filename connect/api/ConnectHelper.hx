@@ -16,9 +16,9 @@ class ConnectHelper {
         @throws String if the request fails.
     **/
     public static function get(resource: String, ?id: String, ?suffix: String,
-            ?params: Query): String {
+            ?params: Query, rqlParams: Bool = false): String {
         return checkResponse(connectSyncRequest('GET', parsePath(resource, id, suffix),
-            getHeaders(), params));
+            getHeaders(), params, rqlParams));
     }
 
 
@@ -68,7 +68,7 @@ class ConnectHelper {
     public static function postFile(resource: String, ?id: String, ?suffix: String,
         fileArg: String, fileName: String, fileContents: Blob): Dynamic {
         return checkResponse(connectSyncRequest('POST', parsePath(resource, id, suffix),
-            getHeaders('multipart/form-data'), null, fileArg, fileName, fileContents));
+            getHeaders('multipart/form-data'), null, false, fileArg, fileName, fileContents));
     }
 
 
@@ -87,10 +87,12 @@ class ConnectHelper {
 
 
     private static function connectSyncRequest(method: String, path: String, headers: Dictionary,
-            ?params: Query, ?data: String,
+            ?params: Query, rqlParams: Bool = false, ?data: String,
             ?fileArg: String, ?fileName: String, ?fileContent: Blob) : Response {
-        final url = Env.getConfig().getApiUrl() + path
-            + ((params != null) ? params.toPlain() : '');
+        final paramsStr = (params != null)
+            ? (rqlParams) ? params.toString() : params.toPlain()
+            : '';
+        final url = Env.getConfig().getApiUrl() + path + paramsStr;
         return Env.getApiClient().syncRequest(method, url, headers, data, fileArg, fileName, fileContent);
     }
 

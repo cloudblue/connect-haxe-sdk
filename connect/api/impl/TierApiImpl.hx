@@ -70,7 +70,7 @@ class TierApiImpl extends Base implements ITierApi {
 
 
     public function listTierConfigs(filters: Query): String {
-        return ConnectHelper.get(TC_PATH, null, null, filters);
+        return ConnectHelper.get(TC_PATH, null, null, filters, true);
     }
 
 
