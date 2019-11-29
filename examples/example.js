@@ -35,5 +35,5 @@ const flow = new Flow(null)
 new Processor()
     .flow(flow)
     .processRequests(new Query()
-        .set("asset.product.id__in", Env.getConfig().getProductsString())
-        .set("status", "pending"));
+        .equal("asset.product.id__in", Env.getConfig().getProductsString())
+        .equal("status", "pending"));
