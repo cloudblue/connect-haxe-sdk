@@ -314,7 +314,7 @@ class Flow extends Base {
                 // Process all steps
                 F.reduce(
                     steps,
-                    function(prevResult, step, i) {
+                    function(prevResult, step, i, _) {
                         if (prevResult != null) {
                             return processStep(step, stepData.firstIndex + i, prevResult.lastRequestStr, prevResult.lastDataStr);
                         } else {
