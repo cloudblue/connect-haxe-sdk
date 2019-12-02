@@ -1,0 +1,23 @@
+-main UnitTests
+-lib hx3compat
+--each
+
+-cmd echo "[Running unit tests on Java]"
+-java _build/unittests/java
+-cmd java -jar _build/unittests/java/UnitTests.jar
+--next
+
+-cmd echo "[Running unit tests on JavaScript]"
+-lib hxnodejs
+-js _build/unittests/unittests.js
+-cmd node _build/unittests/unittests.js
+--next
+
+-cmd echo "[Running unit tests on PHP]"
+-php _build/unittests/php
+-cmd php _build/unittests/php/index.php
+--next
+
+-cmd echo "[Running unit tests on Python]"
+-python _build/unittests/unittests.py
+-cmd python3 _build/unittests/unittests.py
