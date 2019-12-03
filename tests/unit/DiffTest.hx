@@ -94,6 +94,44 @@ class DiffTest extends haxe.unit.TestCase {
     }
 
 
+    public function testChangesObjectAddition() {
+        final a = {x: {y: 'Hello'}};
+        final b = {x: {y: 'Hello', z: 'World'}};
+        final diff = new Diff(a, b);
+        final expected = {
+            additions: {},
+            deletions: {},
+            changes: {
+                x: {
+                    additions: {z: 'World'},
+                    deletions: {},
+                    changes: {}
+                }
+            }
+        };
+        this.assertEquals(Json.stringify(expected), diff.toString());
+    }
+
+
+    public function testChangesObjectDeletion() {
+        final a = {x: {y: 'Hello', z: 'World'}};
+        final b = {x: {y: 'Hello'}};
+        final diff = new Diff(a, b);
+        final expected = {
+            additions: {},
+            deletions: {},
+            changes: {
+                x: {
+                    additions: {},
+                    deletions: {z: 'World'},
+                    changes: {}
+                }
+            }
+        };
+        this.assertEquals(Json.stringify(expected), diff.toString());
+    }
+
+
     public function testChangesObjectChange() {
         final a = {x: {y: 'Hello', z: 'Hi', w: 'Other'}};
         final b = {x: {y: 'World', z: 'He', w: 'Other'}};
@@ -116,26 +154,45 @@ class DiffTest extends haxe.unit.TestCase {
     }
 
 
-    public function testChangesObjectAddition() {
-        final a = {x: {y: 'Hello'}};
-        final b = {x: {y: 'Hello', z: 'World'}};
+    public function testChangesArrayAdd() {
+        final a = {x: [10, 20]};
+        final b = {x: [10, 20, 30]};
         final diff = new Diff(a, b);
         final expected = {
             additions: {},
             deletions: {},
             changes: {
-                x: {
-                    additions: {z: 'World'},
-                    deletions: {},
-                    changes: {}
-                }
+                x: [
+                    [30],
+                    [],
+                    []
+                ]
             }
         };
         this.assertEquals(Json.stringify(expected), diff.toString());
     }
 
 
-    public function testChangesArray() {
+    public function testChangesArrayDelete() {
+        final a = {x: [10, 20, 30]};
+        final b = {x: [10, 20]};
+        final diff = new Diff(a, b);
+        final expected = {
+            additions: {},
+            deletions: {},
+            changes: {
+                x: [
+                    [],
+                    [30],
+                    []
+                ]
+            }
+        };
+        this.assertEquals(Json.stringify(expected), diff.toString());
+    }
+
+
+    public function testChangesArraySimpleChange() {
         final a = {x: [10, 20]};
         final b = {x: [10, 30]};
         final diff = new Diff(a, b);
@@ -143,9 +200,87 @@ class DiffTest extends haxe.unit.TestCase {
             additions: {},
             deletions: {},
             changes: {
-                x: [
-                    [10, 20],
-                    [10, 30]
+                x: untyped [
+                    [],
+                    [],
+                    [
+                        [1, 20, 30]
+                    ]
+                ]
+            }
+        };
+        this.assertEquals(Json.stringify(expected), diff.toString());
+    }
+
+
+    public function testChangesArraySimpleChangeAndDelete() {
+        final a = {x: [10, 20, 100]};
+        final b = {x: [10, 30]};
+        final diff = new Diff(a, b);
+        final expected = {
+            additions: {},
+            deletions: {},
+            changes: {
+                x: untyped [
+                    [],
+                    [100],
+                    [
+                        [1, 20, 30]
+                    ]
+                ]
+            }
+        };
+        this.assertEquals(Json.stringify(expected), diff.toString());
+    }
+
+
+    public function testChangesArrayArrayChange() {
+        final a = {x: untyped [10, [20]]};
+        final b = {x: untyped [10, [30]]};
+        final diff = new Diff(a, b);
+        final expected = {
+            additions: {},
+            deletions: {},
+            changes: {
+                x: untyped [
+                    [],
+                    [],
+                    [
+                        [1, [
+                            [],
+                            [],
+                            [
+                                [0, 20, 30]
+                            ]
+                        ]]
+                    ]
+                ]
+            }
+        };
+        this.assertEquals(Json.stringify(expected), diff.toString());
+    }
+
+
+    public function testChangesArrayObjectChange() {
+        final a = {x: untyped [10, {y: 20}]};
+        final b = {x: untyped [10, {y: 30}]};
+        final diff = new Diff(a, b);
+        final expected = {
+            additions: {},
+            deletions: {},
+            changes: {
+                x: untyped [
+                    [],
+                    [],
+                    [
+                        [1, {
+                            additions: {},
+                            deletions: {},
+                            changes: {
+                                y: [20, 30]
+                            }
+                        }]
+                    ]
                 ]
             }
         };
