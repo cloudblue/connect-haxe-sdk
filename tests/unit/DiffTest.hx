@@ -34,9 +34,9 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: 'Hello', y: 'World'};
         final diff = new Diff(a, b);
         final expected = {
-            additions: {y: 'World'},
-            deletions: {},
-            changes: {}
+            a: {y: 'World'},
+            d: {},
+            c: {}
         };
         this.assertEquals(Json.stringify(expected), diff.toString());
     }
@@ -47,9 +47,9 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {y: 'World'};
         final diff = new Diff(a, b);
         final expected = {
-            additions: {},
-            deletions: {x: 'Hello'},
-            changes: {}
+            a: {},
+            d: {x: 'Hello'},
+            c: {}
         };
         this.assertEquals(Json.stringify(expected), diff.toString());
     }
@@ -60,9 +60,9 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: 'Hello'};
         final diff = new Diff(a, b);
         final expected = {
-            additions: {},
-            deletions: {},
-            changes: {}
+            a: {},
+            d: {},
+            c: {}
         };
         this.assertEquals(Json.stringify(expected), diff.toString());
     }
@@ -73,9 +73,9 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: 10};
         final diff = new Diff(a, b);
         final expected = {
-            additions: {},
-            deletions: {},
-            changes: {x: untyped ['10', 10]}
+            a: {},
+            d: {},
+            c: {x: untyped ['10', 10]}
         };
         this.assertEquals(Json.stringify(expected), diff.toString());
     }
@@ -86,9 +86,9 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: 'World'};
         final diff = new Diff(a, b);
         final expected = {
-            additions: {},
-            deletions: {},
-            changes: {x: ['Hello', 'World']}
+            a: {},
+            d: {},
+            c: {x: ['Hello', 'World']}
         };
         this.assertEquals(Json.stringify(expected), diff.toString());
     }
@@ -99,13 +99,13 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: {y: 'Hello', z: 'World'}};
         final diff = new Diff(a, b);
         final expected = {
-            additions: {},
-            deletions: {},
-            changes: {
+            a: {},
+            d: {},
+            c: {
                 x: {
-                    additions: {z: 'World'},
-                    deletions: {},
-                    changes: {}
+                    a: {z: 'World'},
+                    d: {},
+                    c: {}
                 }
             }
         };
@@ -118,13 +118,13 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: {y: 'Hello'}};
         final diff = new Diff(a, b);
         final expected = {
-            additions: {},
-            deletions: {},
-            changes: {
+            a: {},
+            d: {},
+            c: {
                 x: {
-                    additions: {},
-                    deletions: {z: 'World'},
-                    changes: {}
+                    a: {},
+                    d: {z: 'World'},
+                    c: {}
                 }
             }
         };
@@ -137,13 +137,13 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: {y: 'World', z: 'He', w: 'Other'}};
         final diff = new Diff(a, b);
         final expected = {
-            additions: {},
-            deletions: {},
-            changes: {
+            a: {},
+            d: {},
+            c: {
                 x: {
-                    additions: {},
-                    deletions: {},
-                    changes: {
+                    a: {},
+                    d: {},
+                    c: {
                         y: ['Hello', 'World'],
                         z: ['Hi', 'He']
                     }
@@ -159,9 +159,9 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: [10, 20, 30]};
         final diff = new Diff(a, b);
         final expected = {
-            additions: {},
-            deletions: {},
-            changes: {
+            a: {},
+            d: {},
+            c: {
                 x: [
                     [30],
                     [],
@@ -178,9 +178,9 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: [10, 20]};
         final diff = new Diff(a, b);
         final expected = {
-            additions: {},
-            deletions: {},
-            changes: {
+            a: {},
+            d: {},
+            c: {
                 x: [
                     [],
                     [30],
@@ -197,9 +197,9 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: [10, 30]};
         final diff = new Diff(a, b);
         final expected = {
-            additions: {},
-            deletions: {},
-            changes: {
+            a: {},
+            d: {},
+            c: {
                 x: untyped [
                     [],
                     [],
@@ -218,9 +218,9 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: [10, 30]};
         final diff = new Diff(a, b);
         final expected = {
-            additions: {},
-            deletions: {},
-            changes: {
+            a: {},
+            d: {},
+            c: {
                 x: untyped [
                     [],
                     [100],
@@ -239,9 +239,9 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: untyped [10, [30]]};
         final diff = new Diff(a, b);
         final expected = {
-            additions: {},
-            deletions: {},
-            changes: {
+            a: {},
+            d: {},
+            c: {
                 x: untyped [
                     [],
                     [],
@@ -266,22 +266,69 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: untyped [10, {y: 30}]};
         final diff = new Diff(a, b);
         final expected = {
-            additions: {},
-            deletions: {},
-            changes: {
+            a: {},
+            d: {},
+            c: {
                 x: untyped [
                     [],
                     [],
                     [
                         [1, {
-                            additions: {},
-                            deletions: {},
-                            changes: {
+                            a: {},
+                            d: {},
+                            c: {
                                 y: [20, 30]
                             }
                         }]
                     ]
                 ]
+            }
+        };
+        this.assertEquals(Json.stringify(expected), diff.toString());
+    }
+
+
+    public function testComplexObjects() {
+        final first = {
+            title: 'Hello',
+            forkCount: 20,
+            stargazers: ['/users/20', '/users/30'],
+            settings: {
+                assignees: [100, 101, 201]
+            }
+        };
+        final second = {
+            title: 'Hellooo',
+            forkCount: 20,
+            stargazers: ['/users/20', '/users/30', '/users/40'],
+            settings: {
+                assignees: [100, 101, 202]
+            }
+        };
+        final diff = new Diff(first, second);
+        final expected = {
+            a: {},
+            d: {},
+            c: {
+                title: ['Hello', 'Hellooo'],
+                stargazers: [
+                    ['/users/40'],
+                    [],
+                    []
+                ],
+                settings: {
+                    a: {},
+                    d: {},
+                    c: {
+                        assignees: [
+                            [],
+                            [],
+                            [
+                                [2, 201, 202]
+                            ]
+                        ]
+                    }
+                }
             }
         };
         this.assertEquals(Json.stringify(expected), diff.toString());

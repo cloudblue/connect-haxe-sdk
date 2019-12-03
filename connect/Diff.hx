@@ -5,11 +5,6 @@ import haxe.ds.StringMap;
 
 @:dox(hide)
 class Diff {
-    public final additions: StringMap<Dynamic>;
-    public final deletions: StringMap<Dynamic>;
-    public final changes: StringMap<Dynamic>;
-
-
     public function new(first: Dynamic, second: Dynamic) {
         checkStructs(first, second);
         final firstFields = Reflect.fields(first);
@@ -22,25 +17,25 @@ class Diff {
         });
 
         // Set additions
-        this.additions = new StringMap<Dynamic>();
-        Lambda.iter(addedFields, (f) -> this.additions.set(f, Reflect.field(second, f)));
+        this.a = new StringMap<Dynamic>();
+        Lambda.iter(addedFields, (f) -> this.a.set(f, Reflect.field(second, f)));
 
         // Set deletions
-        this.deletions = new StringMap<Dynamic>();
-        Lambda.iter(deletedFields, (f) -> this.deletions.set(f, Reflect.field(first, f)));
+        this.d = new StringMap<Dynamic>();
+        Lambda.iter(deletedFields, (f) -> this.d.set(f, Reflect.field(first, f)));
 
         // Set changes
-        this.changes = new StringMap<Dynamic>();
+        this.c = new StringMap<Dynamic>();
         Lambda.iter(changedFields, function(f) {
             final a = Reflect.field(first, f);
             final b = Reflect.field(second, f);
             checkSupported(a, b);
             if (isStruct(a) && isStruct(b)) {
-                this.changes.set(f, new Diff(a, b));
+                this.c.set(f, new Diff(a, b));
             } else if (isArray(a) && isArray(b)) {
-                this.changes.set(f, parseArrays(a, b));
+                this.c.set(f, parseArrays(a, b));
             } else {
-                this.changes.set(f, [a, b]);
+                this.c.set(f, [a, b]);
             }
         });
     }
@@ -58,11 +53,16 @@ class Diff {
 
     public function toString(): String {
         return haxe.Json.stringify({
-            additions: this.additions,
-            deletions: this.deletions,
-            changes: this.changes
+            a: this.a,
+            d: this.d,
+            c: this.c
         });
     }
+
+
+    private final a: StringMap<Dynamic>; // Additions
+    private final d: StringMap<Dynamic>; // Deletions
+    private final c: StringMap<Dynamic>; // Changes
 
 
     private static function parseArrays(first: Array<Dynamic>, second: Array<Dynamic>): Array<Array<Dynamic>> {        
