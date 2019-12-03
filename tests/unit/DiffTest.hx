@@ -136,6 +136,19 @@ class DiffTest extends haxe.unit.TestCase {
 
 
     public function testChangesArray() {
-
+        final a = {x: [10, 20]};
+        final b = {x: [10, 30]};
+        final diff = new Diff(a, b);
+        final expected = {
+            additions: {},
+            deletions: {},
+            changes: {
+                x: [
+                    [10, 20],
+                    [10, 30]
+                ]
+            }
+        };
+        this.assertEquals(Json.stringify(expected), diff.toString());
     }
 }

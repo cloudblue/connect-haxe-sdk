@@ -42,6 +42,7 @@ class Diff {
             if (isStruct(a) && isStruct(b)) {
                 this.changes.set(f, new Diff(a, b));
             } else if (isArray(a) && isArray(b)) {
+                this.changes.set(f, parseArrays(a, b));
             } else {
                 this.changes.set(f, [a, b]);
             }
@@ -55,6 +56,11 @@ class Diff {
             deletions: this.deletions,
             changes: this.changes
         });
+    }
+
+
+    private static function parseArrays(first: Array<Dynamic>, second: Array<Dynamic>): Array<Array<Dynamic>> {        
+        return [first, second];
     }
 
 
