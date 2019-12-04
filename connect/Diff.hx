@@ -79,7 +79,31 @@ class Diff {
 
 
     public function swap(): Diff {
-        return Reflect.copy(this);
+        final additions = this.d;
+        final deletions = this.a;
+        final changes = new StringMap<Dynamic>();
+        final changedKeys = [for (k in this.c.keys()) k];
+        Lambda.iter(changedKeys, function(k) {
+            final change = this.c.get(k);
+            if (Std.is(change, Array)) {
+                if (change.length == 2) {
+                    // [old, new]
+                    changes.set(k, [change[1], change[0]]);
+                } else {
+                    // [[a], [d], [c]]
+                    changes.set(k, swapArray(change));
+                }
+            } else {
+                // Diff
+                changes.set(k, change.swap());
+            }
+        });
+
+        final diff = Type.createEmptyInstance(Diff);
+        Reflect.setField(diff, 'a', additions);
+        Reflect.setField(diff, 'd', deletions);
+        Reflect.setField(diff, 'c', changes);
+        return diff;
     }
 
 
@@ -103,16 +127,35 @@ class Diff {
 
         // Apply changes
         final out = added;
-        Lambda.iter(arr[2], function(change: Dynamic) {
+        Lambda.iter(arr[2], function(change: Array<Dynamic>) {
             final i = change[0];
             out[i] = (change.length == 3)
                 ? change[2] // [i, old, new]
                 : (Std.is(change[1], Array))
-                    ? applyArray(out[i], change[1]) // [i, [[], [], []]]
+                    ? applyArray(out[i], change[1]) // [i, [[a], [d], [c]]]
                     : change[1].apply(out[i]); // [i, Diff]
         });
 
         return out;
+    }
+
+
+    private static function swapArray(arr: Array<Array<Dynamic>>): Array<Array<Dynamic>> {
+        final additions = arr[1];
+        final deletions = arr[0];
+        final changes = arr[2].map(function(change: Array<Dynamic>) {
+            final i = change[0];
+            return (change.length == 3)
+                ? [i, change[2], change[1]]
+                : (Std.is(change[1], Array))
+                    ? [i, swapArray(change[1])]
+                    : [i, change[1].swap()];
+        });
+        return [
+            additions,
+            deletions,
+            changes
+        ];
     }
     
     
