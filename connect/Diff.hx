@@ -44,55 +44,8 @@ class Diff {
 
 
     public function apply(obj: Dynamic): Dynamic {
-        return applyTo(Reflect.copy(obj));
-    }
+        final out = Reflect.copy(obj);
 
-
-    public function swap(): Diff {
-        final additions = this.d;
-        final deletions = this.a;
-        final changes = new StringMap<Dynamic>();
-        final changedKeys = [for (k in this.c.keys()) k];
-        Lambda.iter(changedKeys, function(k) {
-            final change = this.c.get(k);
-            if (Std.is(change, Array)) {
-                if (change.length == 2) {
-                    // [old, new]
-                    changes.set(k, [change[1], change[0]]);
-                } else {
-                    // [[a], [d], [c]]
-                    changes.set(k, swapArray(change));
-                }
-            } else {
-                // Diff
-                changes.set(k, change.swap());
-            }
-        });
-
-        final diff = Type.createEmptyInstance(Diff);
-        Reflect.setField(diff, 'a', additions);
-        Reflect.setField(diff, 'd', deletions);
-        Reflect.setField(diff, 'c', changes);
-        return diff;
-    }
-
-
-    public function build(): Dynamic {
-        return applyTo({});
-    }
-
-
-    public function toString(): String {
-        return haxe.Json.stringify({a: this.a, d: this.d, c: this.c});
-    }
-
-
-    private final a: StringMap<Dynamic>; // Additions
-    private final d: StringMap<Dynamic>; // Deletions
-    private final c: StringMap<Dynamic>; // Changes
-
-
-    private function applyTo(out: Dynamic): Dynamic {
         // Additions
         final addedKeys = [for (k in this.a.keys()) k];
         Lambda.iter(addedKeys, k -> Reflect.setField(out, k, this.a.get(k)));
@@ -125,6 +78,45 @@ class Diff {
 
         return out;
     }
+
+
+    public function swap(): Diff {
+        final additions = this.d;
+        final deletions = this.a;
+        final changes = new StringMap<Dynamic>();
+        final changedKeys = [for (k in this.c.keys()) k];
+        Lambda.iter(changedKeys, function(k) {
+            final change = this.c.get(k);
+            if (Std.is(change, Array)) {
+                if (change.length == 2) {
+                    // [old, new]
+                    changes.set(k, [change[1], change[0]]);
+                } else {
+                    // [[a], [d], [c]]
+                    changes.set(k, swapArray(change));
+                }
+            } else {
+                // Diff
+                changes.set(k, change.swap());
+            }
+        });
+
+        final diff = Type.createEmptyInstance(Diff);
+        Reflect.setField(diff, 'a', additions);
+        Reflect.setField(diff, 'd', deletions);
+        Reflect.setField(diff, 'c', changes);
+        return diff;
+    }
+
+
+    public function toString(): String {
+        return haxe.Json.stringify({a: this.a, d: this.d, c: this.c});
+    }
+
+
+    private final a: StringMap<Dynamic>; // Additions
+    private final d: StringMap<Dynamic>; // Deletions
+    private final c: StringMap<Dynamic>; // Changes
 
 
     private static function applyArray(obj: Array<Dynamic>, arr: Array<Array<Dynamic>>)

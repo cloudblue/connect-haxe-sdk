@@ -550,7 +550,7 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: 'Hello', y: 'World'};
         final diff = new Diff(a, b);
         final expected = {y: 'World'};
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
     }
 
 
@@ -559,7 +559,7 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {y: 'World'};
         final diff = new Diff(a, b);
         final expected = {};
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
     }
 
 
@@ -568,7 +568,7 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: 'Hello'};
         final diff = new Diff(a, b);
         final expected = {};
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
     }
 
 
@@ -577,7 +577,7 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: 10};
         final diff = new Diff(a, b);
         final expected = {x: 10};
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
     }
 
 
@@ -586,7 +586,7 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: 'World'};
         final diff = new Diff(a, b);
         final expected = {x: 'World'};
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
     }
 
 
@@ -595,7 +595,7 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: {y: 'Hello', z: 'World'}};
         final diff = new Diff(a, b);
         final expected = {x: {z: 'World'}};
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
     }
 
 
@@ -604,7 +604,7 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: {y: 'Hello'}};
         final diff = new Diff(a, b);
         final expected = {x: {}};
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
     }
 
 
@@ -613,7 +613,7 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: {y: 'World', z: 'He', w: 'Other'}};
         final diff = new Diff(a, b);
         final expected = {x: {y: 'World', z: 'He'}};
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
     }
 
 
@@ -622,7 +622,7 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: [10, 20, 30]};
         final diff = new Diff(a, b);
         final expected = {x: [30]};
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
     }
 
 
@@ -631,7 +631,7 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: [10, 20]};
         final diff = new Diff(a, b);
         final expected = {x: []};
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
     }
 
 
@@ -640,7 +640,7 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: [10, 30]};
         final diff = new Diff(a, b);
         final expected = {x: [null, 30]};
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
     }
 
 
@@ -649,7 +649,7 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: [10, 30]};
         final diff = new Diff(a, b);
         final expected = {x: [null, 30]};
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
     }
 
 
@@ -658,7 +658,7 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: untyped [10, [30]]};
         final diff = new Diff(a, b);
         final expected = {x: [null, [30]]};
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
     }
 
 
@@ -667,7 +667,7 @@ class DiffTest extends haxe.unit.TestCase {
         final b = {x: untyped [10, {y: 30}]};
         final diff = new Diff(a, b);
         final expected = {x: [null, {y: 30}]};
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
     }
 
 
@@ -696,7 +696,7 @@ class DiffTest extends haxe.unit.TestCase {
                 assignees: [null, null, 202]
             }
         };
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
     }
 
 
