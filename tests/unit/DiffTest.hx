@@ -333,4 +333,121 @@ class DiffTest extends haxe.unit.TestCase {
         };
         this.assertEquals(Json.stringify(expected), diff.toString());
     }
+
+
+    public function testApplySame() {
+        final obj = {x: 'Hello'};
+        final diff = new Diff(obj, obj);
+        this.assertEquals(Std.string(obj), Std.string(diff.apply(obj)));
+    }
+
+
+    public function testApplyWithAddition() {
+        final a = {x: 'Hello'};
+        final b = {x: 'Hello', y: 'World'};
+        final diff = new Diff(a, b);
+        this.assertEquals(Std.string(b), Std.string(diff.apply(a)));
+    }
+
+
+    public function testApplyWithDeletion() {
+        final a = {x: 'Hello', y: 'World'};
+        final b = {y: 'World'};
+        final diff = new Diff(a, b);
+        this.assertEquals(Std.string(b), Std.string(diff.apply(a)));
+    }
+
+
+    public function testApplyWithSimpleChange() {
+        final a = {x: 'Hello'};
+        final b = {x: 'World'};
+        final diff = new Diff(a, b);
+        this.assertEquals(Std.string(b), Std.string(diff.apply(a)));
+    }
+
+
+    public function testApplyWithObjectAddition() {
+        final a = {x: {y: 'Hello'}};
+        final b = {x: {y: 'Hello', z: 'World'}};
+        final diff = new Diff(a, b);
+        this.assertEquals(Std.string(b), Std.string(diff.apply(a)));
+    }
+
+
+    public function testApplyWithObjectChange() {
+        final a = {x: {y: 'Hello', z: 'Hi', w: 'Other'}};
+        final b = {x: {y: 'World', z: 'He', w: 'Other'}};
+        final diff = new Diff(a, b);
+        this.assertEquals(Std.string(b), Std.string(diff.apply(a)));
+    }
+
+
+    public function testApplyWithObjectDeletion() {
+        final a = {x: {y: 'Hello', z: 'World'}};
+        final b = {x: {y: 'Hello'}};
+        final diff = new Diff(a, b);
+        this.assertEquals(Std.string(b), Std.string(diff.apply(a)));
+    }
+
+
+    public function testApplyWithArrayAddition() {
+        final a = {x: [10, 20]};
+        final b = {x: [10, 20, 30]};
+        final diff = new Diff(a, b);
+        this.assertEquals(Std.string(b), Std.string(diff.apply(a)));
+    }
+
+
+    public function testApplyWithArrayDeletion() {
+        final a = {x: [10, 20, 30]};
+        final b = {x: [10, 20]};
+        final diff = new Diff(a, b);
+        this.assertEquals(Std.string(b), Std.string(diff.apply(a)));
+    }
+
+
+    public function testApplyWithArraySimpleChange() {
+        final a = {x: [10, 20]};
+        final b = {x: [10, 30]};
+        final diff = new Diff(a, b);
+        this.assertEquals(Std.string(b), Std.string(diff.apply(a)));
+    }
+
+
+    public function testApplyWithArrayArrayChange() {
+        final a = {x: untyped [10, [20]]};
+        final b = {x: untyped [10, [30]]};
+        final diff = new Diff(a, b);
+        this.assertEquals(Std.string(b), Std.string(diff.apply(a)));
+    }
+
+
+    public function testApplyWithArrayObjectChange() {
+        final a = {x: untyped [10, {y: 20}]};
+        final b = {x: untyped [10, {y: 30}]};
+        final diff = new Diff(a, b);
+        this.assertEquals(Std.string(b), Std.string(diff.apply(a)));
+    }
+
+
+    public function testApplyComplex() {
+        final first = {
+            title: 'Hello',
+            forkCount: 20,
+            stargazers: ['/users/20', '/users/30'],
+            settings: {
+                assignees: [100, 101, 201]
+            }
+        };
+        final second = {
+            title: 'Hellooo',
+            forkCount: 20,
+            stargazers: ['/users/20', '/users/30', '/users/40'],
+            settings: {
+                assignees: [100, 101, 202]
+            }
+        };
+        final diff = new Diff(first, second);
+        this.assertEquals(Std.string(second), Std.string(diff.apply(first)));
+    }
 }

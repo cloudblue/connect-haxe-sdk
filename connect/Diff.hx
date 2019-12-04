@@ -29,12 +29,14 @@ class Diff {
         Lambda.iter(changedFields, function(f) {
             final a = Reflect.field(first, f);
             final b = Reflect.field(second, f);
-            checkSupported(a, b);
             if (isStruct(a) && isStruct(b)) {
+                // Diff
                 this.c.set(f, new Diff(a, b));
             } else if (isArray(a) && isArray(b)) {
-                this.c.set(f, parseArrays(a, b));
+                // [[a], [d], [c]]
+                this.c.set(f, compareArrays(a, b));
             } else {
+                // [old, new]
                 this.c.set(f, [a, b]);
             }
         });
@@ -42,21 +44,47 @@ class Diff {
 
 
     public function apply(obj: Dynamic): Dynamic {
-        return Reflect.copy(obj);
+        final out = Reflect.copy(obj);
+
+        // Additions
+        final addedKeys = [for (k in this.a.keys()) k];
+        Lambda.iter(addedKeys, k -> Reflect.setField(out, k, this.a.get(k)));
+
+        // Deletions
+        final deletedKeys = [for (k in this.d.keys()) k];
+        Lambda.iter(deletedKeys, k -> Reflect.deleteField(out, k));
+
+        // Changes
+        final changedKeys = [for (k in this.c.keys()) k];
+        Lambda.iter(changedKeys, function(k) {
+            final change = this.c.get(k);
+            if (Std.is(change, Array)) {
+                if (change.length == 2) {
+                    // [old, new]
+                    Reflect.setField(out, k, change[1]);
+                } else {
+                    // [[a], [d], [c]]
+                    final original = Reflect.field(out, k);
+                    Reflect.setField(out, k, applyArray(original, change));
+                }
+            } else {
+                // Diff
+                final original = Reflect.field(out, k);
+                Reflect.setField(out, k, change.apply(original));
+            }
+        });
+
+        return out;
     }
 
 
-    public function revert(obj: Dynamic): Dynamic {
-        return Reflect.copy(obj);
+    public function swap(): Diff {
+        return Reflect.copy(this);
     }
 
 
     public function toString(): String {
-        return haxe.Json.stringify({
-            a: this.a,
-            d: this.d,
-            c: this.c
-        });
+        return haxe.Json.stringify({a: this.a, d: this.d, c: this.c});
     }
 
 
@@ -65,7 +93,30 @@ class Diff {
     private final c: StringMap<Dynamic>; // Changes
 
 
-    private static function parseArrays(first: Array<Dynamic>, second: Array<Dynamic>): Array<Array<Dynamic>> {        
+    private static function applyArray(obj: Array<Dynamic>, arr: Array<Array<Dynamic>>)
+            : Array<Dynamic> {
+        // Apply deletions
+        final deleted = obj.slice(0, obj.length - arr[1].length);
+
+        // Apply additions
+        final added = deleted.concat(arr[0]);
+
+        // Apply changes
+        final out = added;
+        Lambda.iter(arr[2], function(change: Dynamic) {
+            final i = change[0];
+            out[i] = (change.length == 3)
+                ? change[2] // [i, old, new]
+                : (Std.is(change[1], Array))
+                    ? applyArray(out[i], change[1]) // [i, [[], [], []]]
+                    : change[1].apply(out[i]); // [i, Diff]
+        });
+
+        return out;
+    }
+    
+    
+    private static function compareArrays(first: Array<Dynamic>, second: Array<Dynamic>): Array<Array<Dynamic>> {        
         final fixedFirst = (first.length <= second.length)
             ? first
             : first.slice(0, second.length);
@@ -78,7 +129,7 @@ class Diff {
                 if (isStruct(a) && isStruct(b)) {
                     return [i, new Diff(a, b)];
                 } else if (isArray(a) && isArray(b)) {
-                    return [i, parseArrays(a, b)];
+                    return [i, compareArrays(a, b)];
                 } else {
                     return [i, a, b];
                 }
@@ -113,14 +164,6 @@ class Diff {
 
     private static function isStruct(v: Dynamic): Bool {
         return Type.typeof(v) == TObject;
-    }
-
-
-    private static function checkSupported(first: Dynamic, second: Dynamic): Void {
-        if (!isSupported(first) || !isSupported(second)) {
-            throw 'Unsupported types in Diff. Values must be primitives, arrays or structs. '
-                    + 'Got: ${Type.typeof(first)}, ${Type.typeof(second)}';
-        }
     }
 
 
