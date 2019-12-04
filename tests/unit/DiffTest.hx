@@ -700,6 +700,15 @@ class DiffTest extends haxe.unit.TestCase {
     }
 
 
+    public function testBuildWithAddedId() {
+        final a = {x: 'Hello'};
+        final b = {x: 'Hello', y: 'World'};
+        final diff = new Diff(a, b);
+        final expected = {id: 'Identifier', y: 'World'};
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({id: 'Identifier'})));
+    }
+
+
     public function testNoObj() {
         final a = 0;
         final b = {x: 'Hello', y: 'World'};
