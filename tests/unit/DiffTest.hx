@@ -545,6 +545,161 @@ class DiffTest extends haxe.unit.TestCase {
     }
 
 
+    public function testBuildWithAdditions() {
+        final a = {x: 'Hello'};
+        final b = {x: 'Hello', y: 'World'};
+        final diff = new Diff(a, b);
+        final expected = {y: 'World'};
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+    }
+
+
+    public function testBuildWithDeletions() {
+        final a = {x: 'Hello', y: 'World'};
+        final b = {y: 'World'};
+        final diff = new Diff(a, b);
+        final expected = {};
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+    }
+
+
+    public function testBuildWithChangesNoChange() {
+        final a = {x: 'Hello'};
+        final b = {x: 'Hello'};
+        final diff = new Diff(a, b);
+        final expected = {};
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+    }
+
+
+    public function testBuildWithChangesTypeChange() {
+        final a = {x: '10'};
+        final b = {x: 10};
+        final diff = new Diff(a, b);
+        final expected = {x: 10};
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+    }
+
+
+    public function testBuildWithChangesSimpleChange() {
+        final a = {x: 'Hello'};
+        final b = {x: 'World'};
+        final diff = new Diff(a, b);
+        final expected = {x: 'World'};
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+    }
+
+
+    public function testBuildWithChangesObjectAddition() {
+        final a = {x: {y: 'Hello'}};
+        final b = {x: {y: 'Hello', z: 'World'}};
+        final diff = new Diff(a, b);
+        final expected = {x: {z: 'World'}};
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+    }
+
+
+    public function testBuildWithChangesObjectDeletion() {
+        final a = {x: {y: 'Hello', z: 'World'}};
+        final b = {x: {y: 'Hello'}};
+        final diff = new Diff(a, b);
+        final expected = {x: {}};
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+    }
+
+
+    public function testBuildWithChangesObjectChange() {
+        final a = {x: {y: 'Hello', z: 'Hi', w: 'Other'}};
+        final b = {x: {y: 'World', z: 'He', w: 'Other'}};
+        final diff = new Diff(a, b);
+        final expected = {x: {y: 'World', z: 'He'}};
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+    }
+
+
+    public function testBuildWithChangesArrayAdd() {
+        final a = {x: [10, 20]};
+        final b = {x: [10, 20, 30]};
+        final diff = new Diff(a, b);
+        final expected = {x: [30]};
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+    }
+
+
+    public function testBuildWithChangesArrayDelete() {
+        final a = {x: [10, 20, 30]};
+        final b = {x: [10, 20]};
+        final diff = new Diff(a, b);
+        final expected = {x: []};
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+    }
+
+
+    public function testBuildWithChangesArraySimpleChange() {
+        final a = {x: [10, 20]};
+        final b = {x: [10, 30]};
+        final diff = new Diff(a, b);
+        final expected = {x: [null, 30]};
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+    }
+
+
+    public function testBuildWithChangesArraySimpleChangeAndDelete() {
+        final a = {x: [10, 20, 100]};
+        final b = {x: [10, 30]};
+        final diff = new Diff(a, b);
+        final expected = {x: [null, 30]};
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+    }
+
+
+    public function testBuildWithChangesArrayArrayChange() {
+        final a = {x: untyped [10, [20]]};
+        final b = {x: untyped [10, [30]]};
+        final diff = new Diff(a, b);
+        final expected = {x: [null, [30]]};
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+    }
+
+
+    public function testBuildWithChangesArrayObjectChange() {
+        final a = {x: untyped [10, {y: 20}]};
+        final b = {x: untyped [10, {y: 30}]};
+        final diff = new Diff(a, b);
+        final expected = {x: [null, {y: 30}]};
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+    }
+
+
+    public function testBuildWithComplexObjects() {
+        final first = {
+            title: 'Hello',
+            forkCount: 20,
+            stargazers: ['/users/20', '/users/30'],
+            settings: {
+                assignees: [100, 101, 201]
+            }
+        };
+        final second = {
+            title: 'Hellooo',
+            forkCount: 20,
+            stargazers: ['/users/20', '/users/30', '/users/40'],
+            settings: {
+                assignees: [100, 101, 202]
+            }
+        };
+        final diff = new Diff(first, second);
+        final expected = {
+            title: 'Hellooo',
+            stargazers: ['/users/40'],
+            settings: {
+                assignees: [null, null, 202]
+            }
+        };
+        this.assertEquals(Json.stringify(expected), Json.stringify(diff.build()));
+    }
+
+
     public function testNoObj() {
         final a = 0;
         final b = {x: 'Hello', y: 'World'};

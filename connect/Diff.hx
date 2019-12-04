@@ -44,37 +44,7 @@ class Diff {
 
 
     public function apply(obj: Dynamic): Dynamic {
-        final out = Reflect.copy(obj);
-
-        // Additions
-        final addedKeys = [for (k in this.a.keys()) k];
-        Lambda.iter(addedKeys, k -> Reflect.setField(out, k, this.a.get(k)));
-
-        // Deletions
-        final deletedKeys = [for (k in this.d.keys()) k];
-        Lambda.iter(deletedKeys, k -> Reflect.deleteField(out, k));
-
-        // Changes
-        final changedKeys = [for (k in this.c.keys()) k];
-        Lambda.iter(changedKeys, function(k) {
-            final change = this.c.get(k);
-            if (Std.is(change, Array)) {
-                if (change.length == 2) {
-                    // [old, new]
-                    Reflect.setField(out, k, change[1]);
-                } else {
-                    // [[a], [d], [c]]
-                    final original = Reflect.field(out, k);
-                    Reflect.setField(out, k, applyArray(original, change));
-                }
-            } else {
-                // Diff
-                final original = Reflect.field(out, k);
-                Reflect.setField(out, k, change.apply(original));
-            }
-        });
-
-        return out;
+        return applyTo(Reflect.copy(obj));
     }
 
 
@@ -107,6 +77,11 @@ class Diff {
     }
 
 
+    public function build(): Dynamic {
+        return applyTo({});
+    }
+
+
     public function toString(): String {
         return haxe.Json.stringify({a: this.a, d: this.d, c: this.c});
     }
@@ -117,10 +92,46 @@ class Diff {
     private final c: StringMap<Dynamic>; // Changes
 
 
+    private function applyTo(out: Dynamic): Dynamic {
+        // Additions
+        final addedKeys = [for (k in this.a.keys()) k];
+        Lambda.iter(addedKeys, k -> Reflect.setField(out, k, this.a.get(k)));
+
+        // Deletions
+        final deletedKeys = [for (k in this.d.keys()) k];
+        Lambda.iter(deletedKeys, k -> Reflect.deleteField(out, k));
+
+        // Changes
+        final changedKeys = [for (k in this.c.keys()) k];
+        Lambda.iter(changedKeys, function(k) {
+            final change = this.c.get(k);
+            if (Std.is(change, Array)) {
+                if (change.length == 2) {
+                    // [old, new]
+                    Reflect.setField(out, k, change[1]);
+                } else {
+                    // [[a], [d], [c]]
+                    final field = Reflect.field(out, k);
+                    final original = (field != null) ? field : [];
+                    Reflect.setField(out, k, applyArray(original, change));
+                }
+            } else {
+                // Diff
+                final field = Reflect.field(out, k);
+                final original = (field != null) ? field : {};
+                Reflect.setField(out, k, change.apply(original));
+            }
+        });
+
+        return out;
+    }
+
+
     private static function applyArray(obj: Array<Dynamic>, arr: Array<Array<Dynamic>>)
             : Array<Dynamic> {
         // Apply deletions
-        final deleted = obj.slice(0, obj.length - arr[1].length);
+        final slice = obj.slice(0, obj.length - arr[1].length);
+        final deleted = (slice != null) ? slice : [];
 
         // Apply additions
         final added = deleted.concat(arr[0]);
@@ -129,11 +140,13 @@ class Diff {
         final out = added;
         Lambda.iter(arr[2], function(change: Array<Dynamic>) {
             final i = change[0];
+            final originalArray = (out.length > i) ? out[i] : [];
+            final originalObject = (out.length > i) ? out[i] : {};
             out[i] = (change.length == 3)
                 ? change[2] // [i, old, new]
                 : (Std.is(change[1], Array))
-                    ? applyArray(out[i], change[1]) // [i, [[a], [d], [c]]]
-                    : change[1].apply(out[i]); // [i, Diff]
+                    ? applyArray(originalArray, change[1]) // [i, [[a], [d], [c]]]
+                    : change[1].apply(originalObject); // [i, Diff]
         });
 
         return out;
