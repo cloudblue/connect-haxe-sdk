@@ -29,10 +29,10 @@ class Diff {
         Lambda.iter(changedFields, function(f) {
             final a = Reflect.field(first, f);
             final b = Reflect.field(second, f);
-            if (isStruct(a) && isStruct(b)) {
+            if (Util.isStruct(a) && Util.isStruct(b)) {
                 // Diff
                 this.c.set(f, new Diff(a, b));
-            } else if (isArray(a) && isArray(b)) {
+            } else if (Util.isArray(a) && Util.isArray(b)) {
                 // [[a], [d], [c]]
                 this.c.set(f, compareArrays(a, b));
             } else {
@@ -162,6 +162,58 @@ class Diff {
             changes
         ];
     }
+
+
+    private static function parse(obj: Dynamic): Diff {
+        // Parse additions
+        final additions = new StringMap<Dynamic>();
+        Lambda.iter(Reflect.fields(obj.a), f -> additions.set(f, Reflect.field(obj.a, f)));
+
+        // Parse deletions
+        final deletions = new StringMap<Dynamic>();
+        Lambda.iter(Reflect.fields(obj.d), f -> deletions.set(f, Reflect.field(obj.d, f)));
+
+        // Parse changes
+        final changes = new StringMap<Dynamic>();
+        Lambda.iter(Reflect.fields(obj.c), function(f) {
+            final change: Dynamic = Reflect.field(obj.c, f);
+            if (Std.is(change, Array)) {
+                if (change.length == 2) {
+                    // [old, new]
+                    changes.set(f, change);
+                } else {
+                    // [[a], [d], [c]]
+                    changes.set(f, parseArray(change));
+                }
+            } else {
+                // Diff
+                changes.set(f, Diff.parse(change));
+            }
+        });
+
+        final diff = Type.createEmptyInstance(Diff);
+        Reflect.setField(diff, 'a', additions);
+        Reflect.setField(diff, 'd', deletions);
+        Reflect.setField(diff, 'c', changes);
+        return diff;
+    }
+
+
+    private static function parseArray(arr: Array<Array<Dynamic>>): Array<Array<Dynamic>> {
+        final additions = arr[0];
+        final deletions = arr[1];
+        final changes = arr[2].map(function(el): Array<Dynamic> {
+            final i = el[0];
+            if (el.length == 3) {
+                return [i, el[1], el[2]];
+            } else if (Std.is(el[1], Array)) {
+                return [i, parseArray(el[1])];
+            } else {
+                return [i, Diff.parse(el[1])];
+            }
+        });
+        return [additions, deletions, changes];
+    }
     
     
     private static function compareArrays(first: Array<Dynamic>, second: Array<Dynamic>): Array<Array<Dynamic>> {        
@@ -174,9 +226,9 @@ class Diff {
             if (areEqual(a, b)) {
                 return null;
             } else {
-                if (isStruct(a) && isStruct(b)) {
+                if (Util.isStruct(a) && Util.isStruct(b)) {
                     return [i, new Diff(a, b)];
-                } else if (isArray(a) && isArray(b)) {
+                } else if (Util.isArray(a) && Util.isArray(b)) {
                     return [i, compareArrays(a, b)];
                 } else {
                     return [i, a, b];
@@ -201,22 +253,12 @@ class Diff {
     private static function isSupported(v: Dynamic): Bool {
         final cls = Type.getClass(v);
         final isSimple = cls == null || Type.getClassName(cls) == null || Std.is(v, String);
-        return isSimple || isArray(v) || isStruct(v);
-    }
-
-
-    private static function isArray(v: Dynamic): Bool {
-        return Std.is(v, Array);
-    }
-
-
-    private static function isStruct(v: Dynamic): Bool {
-        return Type.typeof(v) == TObject;
+        return isSimple || Util.isArray(v) || Util.isStruct(v);
     }
 
 
     private static function checkStructs(first: Dynamic, second: Dynamic): Void {
-        if (!isStruct(first) || !isStruct(second)) {
+        if (!Util.isStruct(first) || !Util.isStruct(second)) {
             throw 'Unsupported types in Diff. Values must be structs. '
                     + 'Got: ${Type.typeof(first)}, ${Type.typeof(second)}';
         }
