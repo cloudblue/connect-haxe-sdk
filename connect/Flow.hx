@@ -369,7 +369,7 @@ class Flow extends Base {
 
     private function processStep(step: Step, index: Int, lastRequestStr: String,
             lastDataStr: String): {lastRequestStr: String, lastDataStr: String} {
-        final requestStr = Inflection.beautify(this.model.toString(),
+        final requestStr = Util.beautifyObject(this.model.toObject(),
             Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
         final dataStr = Std.string(this.data);
         
@@ -487,9 +487,21 @@ class Flow extends Base {
         // Log request
         if (request != lastRequest) {
             if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
+                final lastRequestObj = Util.isJsonObject(lastRequest)
+                    ? Json.parse(lastRequest)
+                    : null;
+                final requestObj = (Util.isJsonObject(request) && lastRequestObj != null)
+                    ? Json.parse(request)
+                    : null;
+                final diff = (lastRequestObj != null && requestObj != null)
+                    ? new Diff(lastRequestObj, requestObj)
+                    : null;
+                final requestStr = (diff != null)
+                    ? Util.beautifyObject(diff.apply({id: requestObj.id}), false)
+                    : request;
                 Reflect.callMethod(Env.getLogger(), func, ['* Request:']);
                 Reflect.callMethod(Env.getLogger(), func, ['```json']);
-                Reflect.callMethod(Env.getLogger(), func, [request]);
+                Reflect.callMethod(Env.getLogger(), func, [requestStr]);
                 Reflect.callMethod(Env.getLogger(), func, ['```']);
             } else {
                 Reflect.callMethod(Env.getLogger(), func, ['* Request (id): ${request}']);
