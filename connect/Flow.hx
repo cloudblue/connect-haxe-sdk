@@ -494,9 +494,7 @@ class Flow extends Base {
                     ? Json.parse(request)
                     : null;
                 final diff = (lastRequestObj != null && requestObj != null)
-                    ? Util.addIdsToObject(
-                        new Diff(lastRequestObj, requestObj).apply({id: requestObj.id}),
-                        lastRequestObj)
+                    ? Util.createObjectDiff(requestObj, lastRequestObj)
                     : null;
                 final requestStr = (diff != null)
                     ? Util.beautifyObject(diff, false)

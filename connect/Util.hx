@@ -87,6 +87,31 @@ class Util {
 
 
     /**
+     * Creates an object with the differences between the two passed objects. The objects must
+     * contain an id field.
+     * @param object The updated object.
+     * @param previous The object prior to the updates.
+     * This method is used for example when updating a request, to send only the modified data.
+     * @return The object with only the differences.
+     */
+    public static function createObjectDiff(object: Dynamic, previous: Dynamic): Dynamic {
+        return Util.addIdsToObject(
+            new Diff(previous, object).apply({id: object.id}),
+            previous);
+    }
+
+
+    public static function isArray(value: Dynamic): Bool {
+        return Std.is(value, Array);
+    }
+
+
+    public static function isStruct(value: Dynamic): Bool {
+        return Type.typeof(value) == TObject;
+    }
+
+
+    /**
      * Creates a new dynamic object that contains the sames fields as `object`.
      * When a field contains a subobject that has no `id` field, but the respective
      * subobject in `original` contains an id field, the value is copied.
@@ -94,7 +119,7 @@ class Util {
      * This method is used for example when updating a request, to send only the modified data.
      * @return A new dynamic object with the updated data.
      */
-    public static function addIdsToObject(object: Dynamic, original: Dynamic): Dynamic {
+    private static function addIdsToObject(object: Dynamic, original: Dynamic): Dynamic {
         final out = {};
         final id = 'id';
         if (!Reflect.hasField(object, id) && Reflect.hasField(original, id)) {
@@ -126,7 +151,7 @@ class Util {
      * the value of the same object in the `second` array.
      * @return A new array containing only the modified elements.
      */
-    public static function compactArray(array: Array<Dynamic>, second: Array<Dynamic>)
+    private static function compactArray(array: Array<Dynamic>, second: Array<Dynamic>)
             : Array<Dynamic> {
         final out = [];
         for (i in 0...array.length) {
@@ -141,15 +166,5 @@ class Util {
             }
         }
         return out;
-    }
-
-
-    public static function isArray(value: Dynamic): Bool {
-        return Std.is(value, Array);
-    }
-
-
-    public static function isStruct(value: Dynamic): Bool {
-        return Type.typeof(value) == TObject;
     }
 }
