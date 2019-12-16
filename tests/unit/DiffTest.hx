@@ -731,4 +731,35 @@ class DiffTest extends haxe.unit.TestCase {
             this.assertTrue(true);
         }
     }
+
+
+    // TODO: The following tests should be in a Util class test
+
+
+    public function testAddIdsToObject() {
+        final old = {
+            id: 'XXX',
+            params: [
+                {id: 'YYY'},
+                {id: 'ZZZ'}
+            ]
+        };
+        final diff = {
+            id: 'XXX',
+            params: untyped [null, {value: 'value'}]
+        };
+        final result = connect.Util.addIdsToObject(diff, old);
+        final expected = {
+            id: 'XXX',
+            params: untyped [
+                {
+                    id: 'ZZZ',
+                    value: 'value'
+                }
+            ]
+        };
+        this.assertEquals(
+            Json.stringify(expected),
+            Json.stringify(result));
+    }
 }

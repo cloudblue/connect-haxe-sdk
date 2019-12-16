@@ -494,12 +494,17 @@ class Flow extends Base {
                     ? Json.parse(request)
                     : null;
                 final diff = (lastRequestObj != null && requestObj != null)
-                    ? new Diff(lastRequestObj, requestObj)
+                    ? Util.addIdsToObject(
+                        new Diff(lastRequestObj, requestObj).apply({id: requestObj.id}),
+                        lastRequestObj)
                     : null;
                 final requestStr = (diff != null)
-                    ? Util.beautifyObject(diff.apply({id: requestObj.id}), false)
+                    ? Util.beautifyObject(diff, false)
                     : request;
-                Reflect.callMethod(Env.getLogger(), func, ['* Request:']);
+                final requestTitle = (diff != null)
+                    ? '* Request (changes):'
+                    : '* Request:';
+                Reflect.callMethod(Env.getLogger(), func, [requestTitle]);
                 Reflect.callMethod(Env.getLogger(), func, ['```json']);
                 Reflect.callMethod(Env.getLogger(), func, [requestStr]);
                 Reflect.callMethod(Env.getLogger(), func, ['```']);
@@ -507,7 +512,7 @@ class Flow extends Base {
                 Reflect.callMethod(Env.getLogger(), func, ['* Request (id): ${request}']);
             }
         } else {
-            Reflect.callMethod(Env.getLogger(), func, ['* Request: (Same as previous step).']);
+            Reflect.callMethod(Env.getLogger(), func, ['* Request: Same as previous step.']);
         }
 
         // Log data

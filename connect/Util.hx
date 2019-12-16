@@ -87,25 +87,32 @@ class Util {
 
 
     /**
-     * Updates the object on the left with the data in the object on the right
-     * @return Dynamic The updated object
+     * Creates a new dynamic object that contains the sames fields as `object`.
+     * When a field contains a subobject that has no `id` field, but the respective
+     * subobject in `original` contains an id field, the value is copied.
+     * If a field contains an array, `compactArray` is called on it.
+     * This method is used for example when updating a request, to send only the modified data.
+     * @return A new dynamic object with the updated data.
      */
-    public static function updateObject(left: Dynamic, right: Dynamic): Dynamic {
-        final out = Reflect.copy(left);
-        Lambda.iter(Reflect.fields(right), function(field) {
-            final value = Reflect.field(right, field);
-            if (!Reflect.hasField(out, field)) {
-                Reflect.setField(out, field, value);
-            } else {
-                if (isStruct(value)) {
-                    final leftObject = Reflect.field(left, field);
-                    Reflect.setField(out, field, updateObject(leftObject, field));
-                } else if (isArray(value)) {
-                    final leftArray = Reflect.field(left, field);
-                    Reflect.setField(out, field, updateArray(leftArray, value));
+    public static function addIdsToObject(object: Dynamic, original: Dynamic): Dynamic {
+        final out = {};
+        final id = 'id';
+        if (!Reflect.hasField(object, id) && Reflect.hasField(original, id)) {
+            Reflect.setField(out, id, Reflect.field(original, id));
+        }
+        Lambda.iter(Reflect.fields(object), function(field) {
+            final value = Reflect.field(object, field);
+            if (Reflect.hasField(original, field)) {
+                final originalValue = Reflect.field(original, field);
+                if (isStruct(value) && isStruct(originalValue)) {
+                    Reflect.setField(out, field, addIdsToObject(value, originalValue));
+                } else if (isArray(value) && isArray(originalValue)) {
+                    Reflect.setField(out, field, compactArray(value, originalValue));
                 } else {
                     Reflect.setField(out, field, value);
                 }
+            } else {
+                Reflect.setField(out, field, value);
             }
         });
         return out;
@@ -113,24 +120,36 @@ class Util {
 
 
     /**
-     * Updates the array on the left with the data in the array on the right. If the
-     * value on the right is null, the value on the left is left as it was.
-     * @return Dynamic The updated object
+     * Creates a new array containing only the non-null elements of `array`.
+     * If the value of an element is an array, the method is called recursively.
+     * If the value of an element is an object, `addIdsToObject` is called, passing also
+     * the value of the same object in the `second` array.
+     * @return A new array containing only the modified elements.
      */
-    public static function updateArray(left: Array<Dynamic>, right: Array<Dynamic>)
+    public static function compactArray(array: Array<Dynamic>, second: Array<Dynamic>)
             : Array<Dynamic> {
-        final out = Reflect.copy(left);
-
-        //return out;
+        final out = [];
+        for (i in 0...array.length) {
+            final value = array[i];
+            final secondValue = second[i];
+            if (isStruct(value) && isStruct(secondValue)) {
+                out.push(addIdsToObject(value, secondValue));
+            } else if (isArray(value) && isArray(secondValue)) {
+                out.push(compactArray(value, secondValue));
+            } else if (value != null) {
+                out.push(value);
+            }
+        }
+        return out;
     }
 
 
-    public static function isArray(v: Dynamic): Bool {
-        return Std.is(v, Array);
+    public static function isArray(value: Dynamic): Bool {
+        return Std.is(value, Array);
     }
 
 
-    public static function isStruct(v: Dynamic): Bool {
-        return Type.typeof(v) == TObject;
+    public static function isStruct(value: Dynamic): Bool {
+        return Type.typeof(value) == TObject;
     }
 }
