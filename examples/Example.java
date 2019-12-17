@@ -4,7 +4,6 @@ import connect.Logger;
 import connect.Processor;
 import connect.api.Query;
 import connect.models.IdModel;
-import connect.models.Request;
 
 
 public class Example {
@@ -14,11 +13,11 @@ public class Example {
         // Define main flow
         Flow flow = new Flow((IdModel m) -> true)
             .step("Add dummy data", (Flow f) -> {
-                f.setData("requestId", f.getRequest().id)
-                    .setData("assetId", f.getRequest().asset.id)
-                    .setData("connectionId", f.getRequest().asset.connection.id)
-                    .setData("productId", f.getRequest().asset.product.id)
-                    .setData("status", f.getRequest().status);
+                f.setData("requestId", f.getAssetRequest().id)
+                    .setData("assetId", f.getAssetRequest().asset.id)
+                    .setData("connectionId", f.getAssetRequest().asset.connection.id)
+                    .setData("productId", f.getAssetRequest().asset.product.id)
+                    .setData("status", f.getAssetRequest().status);
             })
             .step("Trace request data", (Flow f) -> {
                 System.out.println(f.getData("requestId")
@@ -29,8 +28,8 @@ public class Example {
             });
             /*
             .step("Approve request", (Processor p) -> {
-                p.getRequest().approveByTemplate("TL-000-000-000");
-                p.getRequest().approveByTile("Markdown text");
+                p.getAssetRequest().approveByTemplate("TL-000-000-000");
+                p.getAssetRequest().approveByTile("Markdown text");
             })
             */
         

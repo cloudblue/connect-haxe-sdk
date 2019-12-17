@@ -16,12 +16,12 @@ class Example {
         // Define main flow
         var flow = new Flow(null)
             .step('Add dummy data', function(f) {
-                f.setData('requestId', f.getRequest().id)
-                    .setData('assetId', f.getRequest().asset.id)
-                    .setData('connectionId', f.getRequest().asset.connection.id)
-                    .setData('productId', f.getRequest().asset.product.id)
-                    .setData('status', f.getRequest().status);
-                return f.getRequest().id;
+                f.setData('requestId', f.getAssetRequest().id)
+                    .setData('assetId', f.getAssetRequest().asset.id)
+                    .setData('connectionId', f.getAssetRequest().asset.connection.id)
+                    .setData('productId', f.getAssetRequest().asset.product.id)
+                    .setData('status', f.getAssetRequest().status);
+                return f.getAssetRequest().id;
             })
             .step('Trace request data', function(f) {
                 Sys.println(f.getData('requestId')

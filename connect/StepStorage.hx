@@ -122,7 +122,7 @@ class StepStorage {
 
     /**
      * Saves data for all requests in Connect.
-     * @param request A Request or TierConfigRequest whose update method will be called.
+     * @param request An AssetRequest or TierConfigRequest whose update method will be called.
      * @param data Encoded string with all requests for the given asset or TierConfig.
      * @param param Param to be updated.
      * @param updateFunc The update function to be called (TODO: Get this using reflection).

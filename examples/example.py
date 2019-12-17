@@ -3,15 +3,14 @@ from connect import Flow
 from connect import Logger
 from connect import Processor
 from connect.api import Query
-from connect.models import Request
 
 
 def add_dummy_data(p):
-    p.setData('requestId', p.getRequest().id) \
-        .setData('assetId', p.getRequest().asset.id) \
-        .setData('connectionId', p.getRequest().asset.connection.id) \
-        .setData('productId', p.getRequest().asset.product.id) \
-        .setData('status', p.getRequest().status)
+    p.setData('requestId', p.getAssetRequest().id) \
+        .setData('assetId', p.getAssetRequest().asset.id) \
+        .setData('connectionId', p.getAssetRequest().asset.connection.id) \
+        .setData('productId', p.getAssetRequest().asset.product.id) \
+        .setData('status', p.getAssetRequest().status)
 
 
 def trace_request_data(p):
@@ -23,8 +22,8 @@ def trace_request_data(p):
 
 def approve_request(p):
     pass
-    # p.getRequest().approveByTemplate('TL-000-000-000')
-    # p.getRequest().approveByTile('Markdown text')
+    # p.getAssetRequest().approveByTemplate('TL-000-000-000')
+    # p.getAssetRequest().approveByTile('Markdown text')
 
 
 if __name__ == '__main__':

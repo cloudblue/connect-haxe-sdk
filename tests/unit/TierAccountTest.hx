@@ -6,7 +6,6 @@ import connect.Env;
 import connect.models.Contact;
 import connect.models.ContactInfo;
 import connect.models.PhoneNumber;
-import connect.models.Request;
 import connect.models.TierAccount;
 import tests.mocks.Mock;
 

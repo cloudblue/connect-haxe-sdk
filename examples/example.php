@@ -7,7 +7,6 @@ use connect\Flow;
 use connect\Logger;
 use connect\Processor;
 use connect\api\Query;
-use connect\models\Request;
 
 
 //Env::initLogger('log.md', Logger::LEVEL_ERROR, null);
@@ -15,11 +14,11 @@ use connect\models\Request;
 // Define main flow
 $flow = (new Flow(null))
     ->step('Add dummy data', function($p) {
-        $p->setData('requestId', $p->getRequest()->id)
-            ->setData('assetId', $p->getRequest()->asset->id)
-            ->setData('connectionId', $p->getRequest()->asset->connection->id)
-            ->setData('productId', $p->getRequest()->asset->product->id)
-            ->setData('status', $p->getRequest()->status);
+        $p->setData('requestId', $p->getAssetRequest()->id)
+            ->setData('assetId', $p->getAssetRequest()->asset->id)
+            ->setData('connectionId', $p->getAssetRequest()->asset->connection->id)
+            ->setData('productId', $p->getAssetRequest()->asset->product->id)
+            ->setData('status', $p->getAssetRequest()->status);
     })
     ->step('Trace request data', function($p) {
         echo $p->getData('requestId')
@@ -31,8 +30,8 @@ $flow = (new Flow(null))
     });
     /*
     ->step('Approve request', function($p) {
-        $p->getRequest()->approveByTemplate('TL-000-000-000');
-        $p->getRequest()->approveByTile('Markdown text');
+        $p->getAssetRequest()->approveByTemplate('TL-000-000-000');
+        $p->getAssetRequest()->approveByTile('Markdown text');
     })
     */
 
