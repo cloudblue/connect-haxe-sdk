@@ -214,7 +214,7 @@ class ApiClientImpl extends Base implements IApiClient {
             }
         }
         if (body != null) {
-            if (Inflection.isJson(body)) {
+            if (Util.isJson(body)) {
                 final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
                 final prefix = compact ? '> * Body (compact):' : '> * Body:';
                 final formatted = getFormattedData(body, prefix, compact);
@@ -229,7 +229,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
     private function writeRequestResponse(loggerFunc: Function, response: Response) {
         Reflect.callMethod(Env.getLogger(), loggerFunc, ['> * Status: ${response.status}']);
-        if (Inflection.isJson(response.text)) {
+        if (Util.isJson(response.text)) {
             final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
             final prefix = compact ? '> * Response (compact):' : '> * Response:';
             final formatted = getFormattedData(response.text, prefix, compact);
@@ -244,8 +244,8 @@ class ApiClientImpl extends Base implements IApiClient {
 
 
     private function getFormattedData(data: String, prefix: String, compact: Bool): String {
-        final beautified = Inflection.beautify(data, compact);
-        if (!compact || Inflection.isJsonArray(beautified)) {
+        final beautified = Util.beautify(data, compact);
+        if (!compact || Util.isJsonArray(beautified)) {
             return prefix + '\r\n'
                 + '> ```json' + '\r\n'
                 + '> ${beautified}' + '\r\n'

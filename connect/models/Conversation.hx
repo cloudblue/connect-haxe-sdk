@@ -75,16 +75,12 @@ class Conversation extends IdModel {
         the same as this one.
     **/
     public function createMessage(text: String): Message {
-        if (isDifferentToLastMessage(text)) {
-            final msg = Env.getGeneralApi().createConversationMessage(
-                this.id,
-                haxe.Json.stringify({ text: text }));
-            final message = Model.parse(Message, msg);
-            this.messages.push(message);
-            return message;
-        } else {
-            return null;
-        }
+        final msg = Env.getGeneralApi().createConversationMessage(
+            this.id,
+            haxe.Json.stringify({ text: text }));
+        final message = Model.parse(Message, msg);
+        this.messages.push(message);
+        return message;
     }
 
 
@@ -93,15 +89,5 @@ class Conversation extends IdModel {
         this._setFieldClassNames([
             'creator' => 'User'
         ]);
-    }
-
-
-    private function isDifferentToLastMessage(msg: String): Bool {
-        final length = this.messages.length();
-        if (length > 0 && this.messages.get(length-1).text == msg) {
-            return false;
-        } else {
-            return true;
-        }
     }
 }

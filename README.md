@@ -64,8 +64,14 @@ $ haxe doc.hxml
 
 Documentation with be generated in the `doc` folder.
 
-To run the unit tests, type:
+To run the unit tests on Haxe's builtin interpreter, type:
 
 ```shell script
 $ haxe unittests.hxml
+```
+
+To run the unit tests on all supported platforms, type:
+
+```shell script
+$ haxe unittests_platforms.hxml
 ```

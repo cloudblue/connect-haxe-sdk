@@ -1,7 +1,7 @@
 package connect.models;
 
 class UsageRecord extends Model {
-    public var usageRecordId: String;
+    public var recordId: String;
     public var itemSearchCriteria: String;
     public var itemSearchValue: String;
     public var quantity: Int;

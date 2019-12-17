@@ -28,6 +28,15 @@ class Connection extends IdModel {
     public var hub: Hub;
 
 
+    // Undocumented fields (they appear in PHP SDK)
+
+
+    public var status: String;
+
+
+    public var createdAt: String;
+
+
     public function new() {
         super();
         this._setFieldClassNames([

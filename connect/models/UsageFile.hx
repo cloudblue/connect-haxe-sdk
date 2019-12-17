@@ -307,7 +307,7 @@ class UsageFile extends IdModel {
     private static function createSpreadsheet(records: Array<UsageRecord>): haxe.io.Bytes {
         final sheet: Sheet = [];
         sheet.push([
-            'usage_record_id',
+            'record_id',
             'item_search_criteria',
             'item_search_value',
             'quantity',
@@ -318,7 +318,7 @@ class UsageFile extends IdModel {
         ]);
         for (record in records) {
             sheet.push([
-                record.usageRecordId,
+                record.recordId,
                 record.itemSearchCriteria,
                 record.itemSearchValue,
                 record.quantity,

@@ -156,8 +156,8 @@ class Flow extends Base {
         information, and automatically skips any further steps.
     **/
     public function approveByTemplate(id: String): Void {
-        final request = this.getRequest();
-        final tcr = this.getTierConfigRequest();
+        final request = this.getRequestChanges();
+        final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
             request.update();
@@ -181,8 +181,8 @@ class Flow extends Base {
         information, and automatically skips any further steps.
     **/
     public function approveByTile(text: String): Void {
-        final request = this.getRequest();
-        final tcr = this.getTierConfigRequest();
+        final request = this.getRequestChanges();
+        final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
             request.update();
@@ -205,8 +205,8 @@ class Flow extends Base {
         information, and automatically skips any further steps.
     **/
     public function fail(reason: String): Void {
-        final request = this.getRequest();
-        final tcr = this.getTierConfigRequest();
+        final request = this.getRequestChanges();
+        final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
             request.update();
@@ -229,8 +229,8 @@ class Flow extends Base {
         information, and automatically skips any further steps.
     **/
     public function inquire(): Void {
-        final request = this.getRequest();
-        final tcr = this.getTierConfigRequest();
+        final request = this.getRequestChanges();
+        final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
             request.update();
@@ -253,8 +253,8 @@ class Flow extends Base {
         information, and automatically skips any further steps.
     **/
     public function pend(): Void {
-        final request = this.getRequest();
-        final tcr = this.getTierConfigRequest();
+        final request = this.getRequestChanges();
+        final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
             request.update();
@@ -300,6 +300,7 @@ class Flow extends Base {
     private final filterFunc: FilterFunc;
     private var steps: Array<Step>;
     private var model: IdModel;
+    private var originalModelStr: String;
     private var data: Dictionary;
     private var abortRequested: Bool;
     private var abortMessage: String;
@@ -314,7 +315,7 @@ class Flow extends Base {
                 // Process all steps
                 F.reduce(
                     steps,
-                    function(prevResult, step, i) {
+                    function(prevResult, step, i, _) {
                         if (prevResult != null) {
                             return processStep(step, stepData.firstIndex + i, prevResult.lastRequestStr, prevResult.lastDataStr);
                         } else {
@@ -369,7 +370,7 @@ class Flow extends Base {
 
     private function processStep(step: Step, index: Int, lastRequestStr: String,
             lastDataStr: String): {lastRequestStr: String, lastDataStr: String} {
-        final requestStr = Inflection.beautify(this.model.toString(),
+        final requestStr = Util.beautifyObject(this.model.toObject(),
             Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
         final dataStr = Std.string(this.data);
         
@@ -407,6 +408,7 @@ class Flow extends Base {
 
     private function prepareRequestAndOpenLogSection(model: IdModel): Bool {
         this.model = model;
+        this.originalModelStr = model.toString();
 
         // Set log filename
         if (this.getRequest() != null) {
@@ -487,15 +489,30 @@ class Flow extends Base {
         // Log request
         if (request != lastRequest) {
             if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
-                Reflect.callMethod(Env.getLogger(), func, ['* Request:']);
+                final lastRequestObj = Util.isJsonObject(lastRequest)
+                    ? Json.parse(lastRequest)
+                    : null;
+                final requestObj = (Util.isJsonObject(request) && lastRequestObj != null)
+                    ? Json.parse(request)
+                    : null;
+                final diff = (lastRequestObj != null && requestObj != null)
+                    ? Util.createObjectDiff(requestObj, lastRequestObj)
+                    : null;
+                final requestStr = (diff != null)
+                    ? Util.beautifyObject(diff, false)
+                    : request;
+                final requestTitle = (diff != null)
+                    ? '* Request (changes):'
+                    : '* Request:';
+                Reflect.callMethod(Env.getLogger(), func, [requestTitle]);
                 Reflect.callMethod(Env.getLogger(), func, ['```json']);
-                Reflect.callMethod(Env.getLogger(), func, [request]);
+                Reflect.callMethod(Env.getLogger(), func, [requestStr]);
                 Reflect.callMethod(Env.getLogger(), func, ['```']);
             } else {
                 Reflect.callMethod(Env.getLogger(), func, ['* Request (id): ${request}']);
             }
         } else {
-            Reflect.callMethod(Env.getLogger(), func, ['* Request: (Same as previous step).']);
+            Reflect.callMethod(Env.getLogger(), func, ['* Request: Same as previous step.']);
         }
 
         // Log data
@@ -523,6 +540,28 @@ class Flow extends Base {
         }
 
         Reflect.callMethod(Env.getLogger(), func, ['']);
+    }
+
+
+    private function getRequestChanges(): Request {
+        if (this.getRequest() != null) {
+            final originalModel = Json.parse(this.originalModelStr);
+            final diff = Util.createObjectDiff(this.model.toObject(), originalModel);
+            return connect.models.Model.parse(Request, Json.stringify(diff));
+        } else {
+            return null;
+        }
+    }
+
+
+    private function getTierConfigRequestChanges(): TierConfigRequest {
+        if (this.getTierConfigRequest() != null) {
+            final originalModel = Json.parse(this.originalModelStr);
+            final diff = Util.createObjectDiff(this.model.toObject(), originalModel);
+            return connect.models.Model.parse(TierConfigRequest, Json.stringify(diff));
+        } else {
+            return null;
+        }
     }
     
     
