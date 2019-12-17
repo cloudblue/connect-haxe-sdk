@@ -1,8 +1,8 @@
 package connect;
 
+import connect.models.AssetRequest;
 import connect.models.IdModel;
 import connect.models.Param;
-import connect.models.Request;
 import connect.models.TierConfigRequest;
 import connect.models.UsageFile;
 import haxe.Constraints.Function;
@@ -70,14 +70,14 @@ class Flow extends Base {
 
     /**
         This can be called within your steps to get the request being processed, as long as it
-        is of the `Request` type.
+        is of the `AssetRequest` type.
 
-        @returns The Fulfillment `Request` being processed, or `null` if current request is not of
+        @returns The `AssetRequest` being processed, or `null` if current request is not of
         Fulfillment api.
     **/
-    public function getRequest(): Request {
+    public function getAssetRequest(): AssetRequest {
         try {
-            return cast(this.model, Request);
+            return cast(this.model, AssetRequest);
         } catch (ex: Dynamic) {
             return null;
         }
@@ -148,15 +148,15 @@ class Flow extends Base {
 
 
     /**
-        Changes the status of the Request being processed to "approved", sending the id
+        Changes the status of the request being processed to "approved", sending the id
         of a Template to render on the portal.
 
-        When using the Flow, this method should be used instead of `Request.approveByTemplate()` or
+        When using the Flow, this method should be used instead of `AssetRequest.approveByTemplate()` or
         `TierConfigRequest.approveByTemplate()`, since this take care of cleaning the stored step
         information, and automatically skips any further steps.
     **/
     public function approveByTemplate(id: String): Void {
-        final request = this.getRequestChanges();
+        final request = this.getAssetRequestChanges();
         final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
@@ -173,15 +173,15 @@ class Flow extends Base {
 
 
     /**
-        Changes the status of the Request being processed to "approved", rendering a tile on
+        Changes the status of the request being processed to "approved", rendering a tile on
         the portal with the given Markdown `text`.
 
-        When using the Flow, this method should be used instead of `Request.approveByTile()` or
+        When using the Flow, this method should be used instead of `AssetRequest.approveByTile()` or
         `TierConfigRequest.approveByTile()`, since this take care of cleaning the stored step
         information, and automatically skips any further steps.
     **/
     public function approveByTile(text: String): Void {
-        final request = this.getRequestChanges();
+        final request = this.getAssetRequestChanges();
         final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
@@ -198,14 +198,14 @@ class Flow extends Base {
 
 
     /**
-        Changes the status of the Request being processed to "failed".
+        Changes the status of the request being processed to "failed".
 
-        When using the Flow, this method should be used instead of `Request.fail()` or
+        When using the Flow, this method should be used instead of `AssetRequest.fail()` or
         `TierConfigRequest.fail()`, since this takes care of cleaning the stored step
         information, and automatically skips any further steps.
     **/
     public function fail(reason: String): Void {
-        final request = this.getRequestChanges();
+        final request = this.getAssetRequestChanges();
         final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
@@ -222,14 +222,14 @@ class Flow extends Base {
 
 
     /**
-        Changes the status of the Request being processed to "inquiring".
+        Changes the status of the request being processed to "inquiring".
 
-        When using the Flow, this method should be used instead of `Request.inquire()` or
+        When using the Flow, this method should be used instead of `AssetRequest.inquire()` or
         `TierConfigRequest.inquire()`, since this take care of cleaning the stored step
         information, and automatically skips any further steps.
     **/
     public function inquire(): Void {
-        final request = this.getRequestChanges();
+        final request = this.getAssetRequestChanges();
         final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
@@ -246,14 +246,14 @@ class Flow extends Base {
 
 
     /**
-        Changes the status of the Request being processed to "pending".
+        Changes the status of the request being processed to "pending".
 
-        When using the Flow, this method should be used instead of `Request.pend()` or
+        When using the Flow, this method should be used instead of `AssetRequest.pend()` or
         `TierConfigRequest.pend()`, since this take care of cleaning the stored step
         information, and automatically skips any further steps.
     **/
     public function pend(): Void {
-        final request = this.getRequestChanges();
+        final request = this.getAssetRequestChanges();
         final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
@@ -339,8 +339,8 @@ class Flow extends Base {
             Env.getLogger().error(exStr);
             Env.getLogger().error('```');
             Env.getLogger().error('');
-            if (this.getRequest() != null) {
-                this.getRequest()._updateConversation('Skipping request because an exception was thrown: $exStr');
+            if (this.getAssetRequest() != null) {
+                this.getAssetRequest()._updateConversation('Skipping request because an exception was thrown: $exStr');
             }
             Env.getLogger().closeSection();
             return false;
@@ -362,8 +362,8 @@ class Flow extends Base {
 
 
     private function getStepParam(): Param {
-        return (this.getRequest() != null)
-            ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
+        return (this.getAssetRequest() != null)
+            ? this.getAssetRequest().asset.getParamById(STEP_PARAM_ID)
             : null;
     }
 
@@ -396,8 +396,8 @@ class Flow extends Base {
             Env.getLogger().error(exStr);
             Env.getLogger().error('```');
             Env.getLogger().error('');
-            if (this.getRequest() != null) {
-                this.getRequest()._updateConversation('Skipping request because an exception was thrown: $exStr');
+            if (this.getAssetRequest() != null) {
+                this.getAssetRequest()._updateConversation('Skipping request because an exception was thrown: $exStr');
             }
             this.abort();
         }
@@ -411,8 +411,8 @@ class Flow extends Base {
         this.originalModelStr = model.toString();
 
         // Set log filename
-        if (this.getRequest() != null) {
-            Env.getLogger().setFilename('${this.getRequest().asset.id}.md');
+        if (this.getAssetRequest() != null) {
+            Env.getLogger().setFilename('${this.getAssetRequest().asset.id}.md');
         } else if (this.getTierConfigRequest() != null) {
             Env.getLogger().setFilename('${this.getTierConfigRequest().configuration.id}.md');
         } else if (this.getUsageFile() != null) {
@@ -424,7 +424,7 @@ class Flow extends Base {
             + Util.getDate() + ' UTC');
 
         // For Fulfillment requests, check if we must skip due to pending migration
-        if (this.getRequest() != null && this.getRequest().needsMigration()) {
+        if (this.getAssetRequest() != null && this.getAssetRequest().needsMigration()) {
             Env.getLogger().info('Skipping request because it is pending migration.');
             Env.getLogger().closeSection();
             return false;
@@ -440,8 +440,8 @@ class Flow extends Base {
             dataStr: String) : {lastRequestStr: String, lastDataStr: String} {
         if (this.abortRequested) {
             if (this.abortMessage == null) {
-                final param = (this.getRequest() != null)
-                    ? this.getRequest().asset.getParamById(STEP_PARAM_ID)
+                final param = (this.getAssetRequest() != null)
+                    ? this.getAssetRequest().asset.getParamById(STEP_PARAM_ID)
                     : null;
                 
                 // Save step data if request supports it
@@ -543,11 +543,11 @@ class Flow extends Base {
     }
 
 
-    private function getRequestChanges(): Request {
-        if (this.getRequest() != null) {
+    private function getAssetRequestChanges(): AssetRequest {
+        if (this.getAssetRequest() != null) {
             final originalModel = Json.parse(this.originalModelStr);
             final diff = Util.createObjectDiff(this.model.toObject(), originalModel);
-            return connect.models.Model.parse(Request, Json.stringify(diff));
+            return connect.models.Model.parse(AssetRequest, Json.stringify(diff));
         } else {
             return null;
         }

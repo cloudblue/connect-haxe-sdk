@@ -4,16 +4,16 @@ import connect.Collection;
 import connect.Dictionary;
 import connect.Env;
 import connect.models.Asset;
+import connect.models.AssetRequest;
 import connect.models.Contract;
 import connect.models.Conversation;
 import connect.models.Marketplace;
 import connect.models.Model;
 import connect.models.Param;
-import connect.models.Request;
 import tests.mocks.Mock;
 
 
-class RequestTest extends haxe.unit.TestCase {
+class AssetRequestTest extends haxe.unit.TestCase {
     override public function setup() {
         Env._reset(new Dictionary()
             .setString('IFulfillmentApi', 'tests.mocks.FulfillmentApiMock')
@@ -23,10 +23,10 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testList() {
         // Check subject
-        final requests = Request.list(null);
+        final requests = AssetRequest.list(null);
         assertTrue(Std.is(requests, Collection));
         assertEquals(2, requests.length());
-        assertTrue(Std.is(requests.get(0), Request));
+        assertTrue(Std.is(requests.get(0), AssetRequest));
         assertEquals('PR-5852-1608-0000', requests.get(0).id);
         assertEquals('PR-5852-1608-0001', requests.get(1).id);
         assertEquals('ApiKey XXX', requests.get(0).assignee);
@@ -43,8 +43,8 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testGetOk() {
         // Check subject
-        final request = Request.get('PR-5852-1608-0000');
-        assertTrue(Std.is(request, Request));
+        final request = AssetRequest.get('PR-5852-1608-0000');
+        assertTrue(Std.is(request, AssetRequest));
         assertTrue(Std.is(request.asset, Asset));
         assertTrue(Std.is(request.contract, Contract));
         assertTrue(Std.is(request.marketplace, Marketplace));
@@ -73,7 +73,7 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testGetKo() {
         // Check subject
-        final request = Request.get('PR-XXXX-XXXX-XXXX');
+        final request = AssetRequest.get('PR-XXXX-XXXX-XXXX');
         assertTrue(request == null);
 
         // Check mocks
@@ -87,26 +87,26 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testRegister() {
         // Check subject
-        final request = new Request().register();
-        assertTrue(Std.is(request, Request));
+        final request = new AssetRequest().register();
+        assertTrue(Std.is(request, AssetRequest));
         assertEquals('PR-5852-1608-0000', request.id);
 
         // Check mocks
         final apiMock = cast(Env.getFulfillmentApi(), Mock);
         assertEquals(1, apiMock.callCount('createRequest'));
         assertEquals(
-            [new Request()].toString(),
+            [new AssetRequest()].toString(),
             apiMock.callArgs('createRequest', 0).toString());
     }
 
 
     public function testUpdate() {
         // Check subject
-        final request = Request.get('PR-5852-1608-0000');
+        final request = AssetRequest.get('PR-5852-1608-0000');
         request.note = 'Hello, world!';
         final updatedRequest = request.update();
-        assertTrue(Std.is(updatedRequest, Request));
-        assertEquals(Request.get('PR-5852-1608-0000').toString(), updatedRequest.toString());
+        assertTrue(Std.is(updatedRequest, AssetRequest));
+        assertEquals(AssetRequest.get('PR-5852-1608-0000').toString(), updatedRequest.toString());
         // ^ The mock returns that request
 
         // Check mocks
@@ -120,9 +120,9 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testApproveByTemplate() {
         // Check subject
-        final request = Request.get('PR-5852-1608-0000');
+        final request = AssetRequest.get('PR-5852-1608-0000');
         final approvedRequest = request.approveByTemplate('TL-XXX-XXX-XXX');
-        assertTrue(Std.is(approvedRequest, Request));
+        assertTrue(Std.is(approvedRequest, AssetRequest));
 
         // Check mocks
         final apiMock = cast(Env.getFulfillmentApi(), Mock);
@@ -135,9 +135,9 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testApproveByTile() {
         // Check subject
-        final request = Request.get('PR-5852-1608-0000');
+        final request = AssetRequest.get('PR-5852-1608-0000');
         final approvedRequest = request.approveByTile('Hello, world!');
-        assertTrue(Std.is(approvedRequest, Request));
+        assertTrue(Std.is(approvedRequest, AssetRequest));
 
         // Check mocks
         final apiMock = cast(Env.getFulfillmentApi(), Mock);
@@ -150,9 +150,9 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testFail() {
         // Check subject
-        final request = Request.get('PR-5852-1608-0000');
+        final request = AssetRequest.get('PR-5852-1608-0000');
         final failedRequest = request.fail("Failing...");
-        assertTrue(Std.is(failedRequest, Request));
+        assertTrue(Std.is(failedRequest, AssetRequest));
 
         // Check mocks
         final apiMock = cast(Env.getFulfillmentApi(), Mock);
@@ -165,9 +165,9 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testInquire() {
         // Check subject
-        final request = Request.get('PR-5852-1608-0000');
+        final request = AssetRequest.get('PR-5852-1608-0000');
         final inquiredRequest = request.inquire();
-        assertTrue(Std.is(inquiredRequest, Request));
+        assertTrue(Std.is(inquiredRequest, AssetRequest));
 
         // Check mocks
         final apiMock = cast(Env.getFulfillmentApi(), Mock);
@@ -180,9 +180,9 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testPend() {
         // Check subject
-        final request = Request.get('PR-5852-1608-0000');
+        final request = AssetRequest.get('PR-5852-1608-0000');
         final pendedRequest = request.pend();
-        assertTrue(Std.is(pendedRequest, Request));
+        assertTrue(Std.is(pendedRequest, AssetRequest));
 
         // Check mocks
         final apiMock = cast(Env.getFulfillmentApi(), Mock);
@@ -195,9 +195,9 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testAssign() {
         // Check subject
-        final request = Request.get('PR-5852-1608-0000');
+        final request = AssetRequest.get('PR-5852-1608-0000');
         final assignedRequest = request.assign('XXX');
-        assertTrue(Std.is(assignedRequest, Request));
+        assertTrue(Std.is(assignedRequest, AssetRequest));
         assertEquals('XXX', assignedRequest.assignee);
 
         // Check mocks
@@ -211,14 +211,14 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testNeedsMigrationFalse() {
         // Check subject
-        final request = Request.get('PR-5852-1608-0000');
+        final request = AssetRequest.get('PR-5852-1608-0000');
         assertFalse(request.needsMigration());
     }
 
 
     public function testNeedsMigrationFalse2() {
         // Check subject
-        final request = Request.get('PR-5852-1608-0000');
+        final request = AssetRequest.get('PR-5852-1608-0000');
         request.asset.params.push(Model.parse(Param, '{"id": "migration_info", "value": ""}'));
         assertFalse(request.needsMigration());
     }
@@ -226,7 +226,7 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testNeedsMigrationTrue() {
         // Check subject
-        final request = Request.get('PR-5852-1608-0000');
+        final request = AssetRequest.get('PR-5852-1608-0000');
         request.asset.params.push(Model.parse(Param, '{"id": "migration_info", "value": "..."}'));
         assertTrue(request.needsMigration());
     }
@@ -234,7 +234,7 @@ class RequestTest extends haxe.unit.TestCase {
 
     public function testGetConversation() {
         // Check subject
-        final request = Request.get('PR-5852-1608-0000');
+        final request = AssetRequest.get('PR-5852-1608-0000');
         final conv = request.getConversation();
         assertTrue(Std.is(conv, Conversation));
         assertEquals('PR-5852-1608-0000', conv.instanceId);

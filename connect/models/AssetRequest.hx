@@ -6,7 +6,7 @@ import connect.api.Query;
 /**
     Represents a request of the Fulfillment Api.
 **/
-class Request extends IdModel {
+class AssetRequest extends IdModel {
     /** Type of request. One of: purchase, change, suspend, resume, renew, cancel. **/
     public var type: String;
 
@@ -73,7 +73,7 @@ class Request extends IdModel {
 
 
     /**
-        Lists all Requests that match the given filters. Supported filters are:
+        Lists all requests that match the given filters. Supported filters are:
 
         - status
         - created
@@ -92,19 +92,19 @@ class Request extends IdModel {
         - asset.tiers.tier2.id
         - asset.connection.type (test|production|preview)
 
-        @returns A Collection of Requests.
+        @returns A Collection of AssetRequests.
     **/
-    public static function list(filters: Query) : Collection<Request> {
+    public static function list(filters: Query) : Collection<AssetRequest> {
         final requests = Env.getFulfillmentApi().listRequests(filters);
-        return Model.parseArray(Request, requests);
+        return Model.parseArray(AssetRequest, requests);
     }
 
 
-    /** @returns The Request with the given id, or `null` if it was not found. **/
-    public static function get(id: String): Request {
+    /** @returns The AssetRequest with the given id, or `null` if it was not found. **/
+    public static function get(id: String): AssetRequest {
         try {
             final request = Env.getFulfillmentApi().getRequest(id);
-            return Model.parse(Request, request);
+            return Model.parse(AssetRequest, request);
         } catch (ex: Dynamic) {
             return null;
         }
@@ -112,7 +112,7 @@ class Request extends IdModel {
 
 
     /**
-        Registers a new Request on Connect, based on the data of `this` Request, which
+        Registers a new AssetRequest on Connect, based on the data of `this` AssetRequest, which
         should have a value at least in the following fields:
 
         - type
@@ -122,12 +122,12 @@ class Request extends IdModel {
         - asset.tiers
         - marketplace.id
 
-        @returns The new Request, or `null` if it couldn't be created.
+        @returns The new AssetRequest, or `null` if it couldn't be created.
     **/
-    public function register(): Request {
+    public function register(): AssetRequest {
         try {
             final request = Env.getFulfillmentApi().createRequest(this.toString());
-            return Model.parse(Request, request);
+            return Model.parse(AssetRequest, request);
         } catch (ex: Dynamic) {
             return null;
         }
@@ -135,140 +135,140 @@ class Request extends IdModel {
 
 
     /**
-        Updates the Request in the server with the data changed in `this` model.
+        Updates the request in the server with the data changed in `this` model.
 
-        @returns The Request returned from the server, which should contain
-        the same data as `this` Request.
+        @returns The AssetRequest returned from the server, which should contain
+        the same data as `this` AssetRequest.
     **/
-    public function update(): Request {
+    public function update(): AssetRequest {
         final request = Env.getFulfillmentApi().updateRequest(
             this.id,
             this.toString());
-        return Model.parse(Request, request);
+        return Model.parse(AssetRequest, request);
     }
 
 
     /**
-        Changes `this` Request status to "approved", sending the id of a Template to render
+        Changes `this` AssetRequest status to "approved", sending the id of a Template to render
         on the portal.
 
         When processing requests within a `Flow`, you should use the `Flow.approveByTemplate`
         method instead of this one, since it finishes the flow and logs the information.
 
-        @returns The Request returned from the server, which should contain
+        @returns The AssetRequest returned from the server, which should contain
         the updated status.
     **/
-    public function approveByTemplate(id: String): Request {
+    public function approveByTemplate(id: String): AssetRequest {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
             haxe.Json.stringify({template_id: id})
         );
         this._updateConversation('Request approved using template $id.');
-        return Model.parse(Request, request);
+        return Model.parse(AssetRequest, request);
     }
 
 
     /**
-        Changes `this` Request status to "approved", rendering a tile on the portal with
+        Changes `this` AssetRequest status to "approved", rendering a tile on the portal with
         the given Markdown `text`.
 
         When processing requests within a `Flow`, you should use the `Flow.approveByTile`
         method instead of this one, since it finishes the flow and logs the information.
 
-        @returns The Request returned from the server, which should contain
+        @returns The AssetRequest returned from the server, which should contain
         the updated status.
     **/
-    public function approveByTile(text: String): Request {
+    public function approveByTile(text: String): AssetRequest {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
             haxe.Json.stringify({activation_tile: text})
         );
         this._updateConversation('Request approved using custom activation tile.');
-        return Model.parse(Request, request);
+        return Model.parse(AssetRequest, request);
     }
 
 
     /**
-        Changes the status of `this` Request to "failed".
+        Changes the status of `this` AssetRequest to "failed".
 
         When processing requests within a `Flow`, you should use the `Flow.fail`
         method instead of this one, since it finishes the flow and logs the information.
 
-        @returns The Request returned from the server, which should contain
+        @returns The AssetRequest returned from the server, which should contain
         the updated status.
     **/
-    public function fail(reason: String): Request {
+    public function fail(reason: String): AssetRequest {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'fail',
             haxe.Json.stringify({reason: reason})
         );
         this._updateConversation('Request failed: $reason.');
-        return Model.parse(Request, request);
+        return Model.parse(AssetRequest, request);
     }
 
 
     /**
-        Changes the status of `this` Request to "inquiring".
+        Changes the status of `this` AssetRequest to "inquiring".
 
         When processing requests within a `Flow`, you should use the `Flow.inquire`
         method instead of this one, since it finishes the flow and logs the information.
 
-        @returns The Request returned from the server, which should contain
+        @returns The AssetRequest returned from the server, which should contain
         the updated status.
     **/
-    public function inquire(): Request {
+    public function inquire(): AssetRequest {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'inquire',
             haxe.Json.stringify({})
         );
         this._updateConversation('Request inquired.');
-        return Model.parse(Request, request);
+        return Model.parse(AssetRequest, request);
     }
 
 
     /**
-        Changes the status of `this` Request to "pending".
+        Changes the status of `this` AssetRequest to "pending".
 
         When processing requests within a `Flow`, you should use the `Flow.pend`
         method instead of this one, since it finishes the flow and logs the information.
 
-        @returns The Request returned from the server, which should contain
+        @returns The AssetRequest returned from the server, which should contain
         the updated status.
     **/
-    public function pend(): Request {
+    public function pend(): AssetRequest {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'pend',
             haxe.Json.stringify({})
         );
         this._updateConversation('Request pended.');
-        return Model.parse(Request, request);
+        return Model.parse(AssetRequest, request);
     }
 
 
     /**
         Assigns this request to the assignee with the given `assigneeId`.
 
-        @returns The Request returned from the server, which should contain
+        @returns The AssetRequest returned from the server, which should contain
         the updated assignee.
     **/
-    public function assign(assigneeId: String): Request {
+    public function assign(assigneeId: String): AssetRequest {
         final request = Env.getFulfillmentApi().assignRequest(
             this.id,
             assigneeId
         );
         this._updateConversation('Request assigned to $assigneeId.');
-        return Model.parse(Request, request);
+        return Model.parse(AssetRequest, request);
     }
 
 
     
     /**
-        @returns Whether `this` Request is pending migration. This is indicated by the
+        @returns Whether `this` AssetRequest is pending migration. This is indicated by the
         presence of a parameter (by default name "migration_info") that contains JSON data.
     **/
     public function needsMigration(key: String = 'migration_info'): Bool {
@@ -277,7 +277,7 @@ class Request extends IdModel {
     }
 
 
-    /** @returns The Conversation assigned to `this` Request, or `null` if there is none. **/
+    /** @returns The Conversation assigned to `this` AssetRequest, or `null` if there is none. **/
     public function getConversation(): Conversation {
         final convs = Conversation.list(new Query().equal('instance_id', this.id));
         final conv = (convs.length() > 0) ? convs.get(0) : null;

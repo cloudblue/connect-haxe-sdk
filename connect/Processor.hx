@@ -1,8 +1,7 @@
 package connect;
 
 import connect.api.Query;
-import connect.models.IdModel;
-import connect.models.Request;
+import connect.models.AssetRequest;
 import connect.models.TierConfigRequest;
 import connect.models.UsageFile;
 import haxe.Constraints.Function;
@@ -58,10 +57,10 @@ class Processor extends Base {
         executing in sequence all the flows defined for them.
 
         @param filters Filters to be used for listing requests. It can contain
-        any of the filters specified for the `Request.list` method.
+        any of the filters specified for the `AssetRequest.list` method.
     **/
     public function processRequests(filters: Query): Void {
-        run(Request, filters);
+        run(AssetRequest, filters);
     }
 
 

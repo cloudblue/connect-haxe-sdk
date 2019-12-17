@@ -12,6 +12,7 @@ class UnitTests {
         
         runner.add(new tests.unit.ConfigTest());
         runner.add(new tests.unit.AccountTest());
+        runner.add(new tests.unit.AssetRequestTest());
         runner.add(new tests.unit.AssetTest());
         runner.add(new tests.unit.CategoryTest());
         runner.add(new tests.unit.ConfigurationTest());
@@ -20,7 +21,6 @@ class UnitTests {
         runner.add(new tests.unit.ItemTest());
         runner.add(new tests.unit.ProductTest());
         runner.add(new tests.unit.QueryTest());
-        runner.add(new tests.unit.RequestTest());
         runner.add(new tests.unit.TierAccountTest());
         runner.add(new tests.unit.TierConfigRequestTest());
         runner.add(new tests.unit.TierConfigTest());

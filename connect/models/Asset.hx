@@ -122,9 +122,9 @@ class Asset extends IdModel {
 
 
     /** @returns A collection with all the requests for the `this` Asset. **/
-    public function getRequests(): Collection<Request> {
+    public function getRequests(): Collection<AssetRequest> {
         final requests = Env.getFulfillmentApi().getAssetRequests(this.id);
-        return Model.parseArray(Request, requests);
+        return Model.parseArray(AssetRequest, requests);
     }
 
 
