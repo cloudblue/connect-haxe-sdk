@@ -216,14 +216,18 @@ class AssetRequest extends IdModel {
         When processing requests within a `Flow`, you should use the `Flow.inquire`
         method instead of this one, since it finishes the flow and logs the information.
 
+        @param templateId Id of the template to use in the portal, or `null` to not use any.
         @returns The AssetRequest returned from the server, which should contain
         the updated status.
     **/
-    public function inquire(): AssetRequest {
+    public function inquire(templateId: String): AssetRequest {
+        final body = (templateId != null)
+            ? {template_id: templateId}
+            : {};
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'inquire',
-            haxe.Json.stringify({})
+            haxe.Json.stringify(body)
         );
         this._updateConversation('Request inquired.');
         return Model.parse(AssetRequest, request);

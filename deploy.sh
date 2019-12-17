@@ -1,7 +1,7 @@
 #!/bin/sh
 cd `dirname $0`
 
-echo "Deploying Java pacaking to Nexus repository using Maven..."
+echo "Deploying Java package to Nexus repository using Maven..."
 mvn deploy:deploy-file \
     -DpomFile=stuff/pom.xml \
     -Dfile=_build/java/Packager.jar \

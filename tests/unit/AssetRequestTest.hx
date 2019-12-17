@@ -166,7 +166,7 @@ class AssetRequestTest extends haxe.unit.TestCase {
     public function testInquire() {
         // Check subject
         final request = AssetRequest.get('PR-5852-1608-0000');
-        final inquiredRequest = request.inquire();
+        final inquiredRequest = request.inquire(null);
         assertTrue(Std.is(inquiredRequest, AssetRequest));
 
         // Check mocks
@@ -174,6 +174,21 @@ class AssetRequestTest extends haxe.unit.TestCase {
         assertEquals(1, apiMock.callCount('changeRequestStatus'));
         assertEquals(
             ['PR-5852-1608-0000', 'inquire', '{}'].toString(),
+            apiMock.callArgs('changeRequestStatus', 0).toString());
+    }
+
+
+    public function testInquireWithTemplate() {
+        // Check subject
+        final request = AssetRequest.get('PR-5852-1608-0000');
+        final inquiredRequest = request.inquire("TL-000");
+        assertTrue(Std.is(inquiredRequest, AssetRequest));
+
+        // Check mocks
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
+        assertEquals(1, apiMock.callCount('changeRequestStatus'));
+        assertEquals(
+            ['PR-5852-1608-0000', 'inquire', '{"template_id":"TL-000"}'].toString(),
             apiMock.callArgs('changeRequestStatus', 0).toString());
     }
 

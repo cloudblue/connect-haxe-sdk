@@ -227,14 +227,17 @@ class Flow extends Base {
         When using the Flow, this method should be used instead of `AssetRequest.inquire()` or
         `TierConfigRequest.inquire()`, since this take care of cleaning the stored step
         information, and automatically skips any further steps.
+        
+        @param templateId Id of the template to use in the portal, or `null` to not use any. This
+        is only used for AssetRequests.
     **/
-    public function inquire(): Void {
+    public function inquire(templateId: String): Void {
         final request = this.getAssetRequestChanges();
         final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
             request.update();
-            request.inquire();
+            request.inquire(templateId);
             this.abort("Inquiring request");
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
