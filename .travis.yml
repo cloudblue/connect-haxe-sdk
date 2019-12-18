@@ -1,0 +1,4 @@
+language: haxe
+haxe: "4.0.5"
+hxml:
+  - unittests.hxml
