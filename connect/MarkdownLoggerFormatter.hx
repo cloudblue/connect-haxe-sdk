@@ -1,6 +1,7 @@
 package connect;
 
 
+@:dox(hide)
 class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
     public function formatSection(level: Int, text: String): String {
         final hashes = StringTools.rpad('', '#', level);
