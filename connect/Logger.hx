@@ -108,9 +108,7 @@ class Logger extends Base {
         Writes a debug message to the log.
     **/
     public function debug(message: String): Void {
-        if (this.level >= LEVEL_DEBUG) {
-            this.write(message);
-        }
+        this.write(LEVEL_DEBUG, message);
     }
 
 
@@ -118,9 +116,7 @@ class Logger extends Base {
         Writes an info message to the log.
     **/
     public function info(message: String): Void {
-        if (this.level >= LEVEL_INFO) {
-            this.write(message);
-        }
+        this.write(LEVEL_INFO, message);
     }
 
 
@@ -140,7 +136,7 @@ class Logger extends Base {
         Writes an error message to the log
     **/
     public function error(message: String): Void {
-        this.write(message);
+        this.write(LEVEL_ERROR, message);
     }
 
 
@@ -162,30 +158,32 @@ class Logger extends Base {
     }
 
 
+    /**
+     * Writes a message to the log in the specified level.
+     * It adds a new line to the log after writing the message.
+     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`.
+     * @param message Message to print. The message is not formatted.
+     */
+    public function write(level: Int, message: String): Void {
+        if (this.level >= level) {
+            this.writeSections();
+            this.writer.writeLine(message);
+        }
+    }
+
+
     private final path: String;
     private final level: Int;
     private final writer: ILoggerWriter;
     private final formatter: ILoggerFormatter;
     private final sections: Array<LoggerSection>;
-
-
-    private function write(message: String): Void {
-        this.writeSections();
-        this.writer.writeLine(message);
-        if (this.sections.length > 0
-                && '>-*|{'.indexOf(StringTools.trim(message).charAt(0)) == -1
-                && message.substr(0, 3) != '```') {
-            this.writer.writeLine('');
-        }
-    }
     
     
     private function writeSections(): Void {
         for (i in 0...this.sections.length) {
             if (!this.sections[i].written) {
-                final prefix = StringTools.rpad('', '#', i+1);
-                this.writer.writeLine(prefix + ' ' + this.sections[i].name);
-                this.writer.writeLine('');
+                final section = this.formatter.formatSection(i+1, this.sections[i].name);
+                this.writer.writeLine(section);
                 this.sections[i].written = true;
             }
         }

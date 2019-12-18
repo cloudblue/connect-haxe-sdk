@@ -9,172 +9,255 @@ import haxe.io.BytesInput;
 class ApiClientImpl extends Base implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob) : Response {
-        // Write call info
-        writeRequestCall(Env.getLogger().info, method, url, headers, body);
-
         #if js
-            initXMLHttpRequest();
-
-            final xhr = new js.html.XMLHttpRequest();
-            xhr.timeout = 300000;
-            xhr.open(method.toUpperCase(), url, false);
-
-            if (headers != null) {
-                for (key in headers.keys()) {
-                    xhr.setRequestHeader(key, headers.get(key));
-                }
-            }
-
-            if (body != null) {
-                xhr.send(body);
-            } else if (fileArg != null && fileName != null && fileContent != null) {
-                final formData = new js.html.FormData();
-                final blob = new js.html.Blob([fileContent._getBytes().getData()]);
-                formData.append(fileArg, blob, fileName);
-                xhr.send(formData);
-            } else {
-                xhr.send();
-            }
-
-            if (xhr.readyState == js.html.XMLHttpRequest.UNSENT) {
-                if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, url, headers, body);
-                }
-                Env.getLogger().error('> * Exception: ${xhr.responseText}');
-                Env.getLogger().error('');
-                throw xhr.responseText != null
-                    ? xhr.responseText
-                    : 'Error sending ${method} request to "${url}."';
-            }
-
-            final response = new Response(xhr.status, xhr.responseText, xhr.response);
+            final response = syncRequestJS(method, url, headers, body, fileArg, fileName, fileContent);
         #elseif use_tink
-            final methods = [
-                'GET' => tink.http.Method.GET,
-                'PUT' => tink.http.Method.PUT,
-                'POST' => tink.http.Method.POST
-            ];
-
-            var tinkMethod: tink.http.Method = null;
-            try {
-                tinkMethod = methods.get(method.toUpperCase());
-            } catch (e: Dynamic) {
-                if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, url, headers, body);
-                }
-                Env.getLogger().error('');
-                throw 'Invalid request method ${method}';
-            }
-
-            var response: Response = null;
-
-            final parsedHeaders = new Array<tink.http.Header.HeaderField>();
-            if (headers != null) {
-                for (key in headers.keys()) {
-                    parsedHeaders.push(new tink.http.Header.HeaderField(key, headers.get(key)));
-                }
-            }
-
-            final options = new Dictionary();
-            options.set('method', tinkMethod);
-            if (parsedHeaders.keys().length > 0) {
-                options.set('headers', parsedHeaders);
-            }
-            if (body != null) {
-                options.set('body', body);
-            }
-
-            tink.http.Client.fetch(url, options.toObject()).all().handle(function(o) {
-                switch (o) {
-                    case Success(res):
-                        response = new Response(res.header.statusCode, res.body.toString());
-                    case Failure(res):
-                        if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                            writeRequestCall(Env.getLogger().error, method, url, headers, body);
-                        }
-                        Env.getLogger().error('> * Exception: ${res}');
-                        Env.getLogger().error('');
-                        throw res.toString();
-                }
-            });
-            
-            // Wait for async request
-            while (response == null) {}
+            final response = syncRequestTink(method, url, headers, body, fileArg, fileName, fileContent);
         #elseif python
-            var response: Response = null;
-            try {
-                response = connect.native.PythonRequest.request(
-                    method, url, headers, body, fileArg, fileName, fileContent, 300);
-            } catch (ex: Dynamic) {
-                if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, url, headers, body);
-                }
-                Env.getLogger().error('> * Exception: ${ex}');
-                Env.getLogger().error('');
-                throw ex;
-            }
+            final response = syncRequestPython(method, url, headers, body, fileArg, fileName, fileContent);
         #else
-            var status:Null<Int> = null;
-            final responseBytes = new haxe.io.BytesOutput();
-
-            final http = new haxe.Http(url);
-            http.cnxTimeout = 300;
-
-            if (headers != null) {
-                for (key in headers.keys()) {
-                    http.setHeader(key, headers.get(key));
-                }
-            }
-
-            if (body != null) {
-                http.setPostData(body);
-            }
-
-            if (fileArg != null && fileName != null && fileContent != null) {
-                http.fileTransfer(
-                    fileArg,
-                    fileName,
-                    new BytesInput(fileContent._getBytes()),
-                    fileContent.length(),
-                    'multipart/form-data'
-                );
-            }
-
-            http.onStatus = function(status_) { status = status_; };
-            http.onError = function(msg) {
-                if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                    writeRequestCall(Env.getLogger().error, method, url, headers, body);
-                }
-                Env.getLogger().error(
-                    '> * Exception (${status}): ${responseBytes.getBytes().toString()}');
-                Env.getLogger().error('');
-                throw msg;
-            }
-            http.customRequest(false, responseBytes, null, method.toUpperCase());
-
-            while (status == null) {} // Wait for async request
-            final bytes = responseBytes.getBytes();
-            final response = new Response(status, bytes.toString(), Blob._fromBytes(bytes));
+            final response = syncRequestStd(method, url, headers, body, fileArg, fileName, fileContent);
         #end
 
-        // If error response, write call to error log level
-        if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR && response.status >= 400) {
-            writeRequestCall(Env.getLogger().error, method, url, headers, body);
-        }
+        final level = (response.status >= 400 || response.status == -1)
+            ? Logger.LEVEL_ERROR
+            : Logger.LEVEL_INFO;
+        logRequest(level, method, url, headers, body, response);
 
-        // Write response to error or info level, depending on status
-        writeRequestResponse(
-            (response.status >= 400) ? Env.getLogger().error : Env.getLogger().info,
-            response);
-        
-        return response;
+        if (response.status != -1) {
+            return response;
+        } else {
+            throw response.text;
+        }
     }
 
 
     public function new() {}
 
 
-    private function writeRequestCall(loggerFunc: Function, method: String, url: String,
+#if js
+    private static function syncRequestJS(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob) : Response {
+        initXMLHttpRequest();
+
+        final xhr = new js.html.XMLHttpRequest();
+        xhr.timeout = 300000;
+        xhr.open(method.toUpperCase(), url, false);
+
+        if (headers != null) {
+            for (key in headers.keys()) {
+                xhr.setRequestHeader(key, headers.get(key));
+            }
+        }
+
+        if (body != null) {
+            xhr.send(body);
+        } else if (fileArg != null && fileName != null && fileContent != null) {
+            final formData = new js.html.FormData();
+            final blob = new js.html.Blob([fileContent._getBytes().getData()]);
+            formData.append(fileArg, blob, fileName);
+            xhr.send(formData);
+        } else {
+            xhr.send();
+        }
+
+        if (xhr.readyState == js.html.XMLHttpRequest.UNSENT) {
+            final message = (xhr.responseText != null)
+                ? xhr.responseText
+                : 'Error sending ${method} request to "${url}."';
+            return new Response(-1, message, xhr.response);
+        }
+
+        return new Response(xhr.status, xhr.responseText, xhr.response);
+    }
+
+
+#elseif use_tink
+    private static function syncRequestTink(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob) : Response {
+        final methods = [
+            'GET' => tink.http.Method.GET,
+            'PUT' => tink.http.Method.PUT,
+            'POST' => tink.http.Method.POST
+        ];
+
+        var tinkMethod: tink.http.Method = null;
+        try {
+            tinkMethod = methods.get(method.toUpperCase());
+        } catch (e: Dynamic) {
+            return new Response(-1, 'Invalid request method ${method}', null);
+        }
+
+        var response: Response = null;
+
+        final parsedHeaders = new Array<tink.http.Header.HeaderField>();
+        if (headers != null) {
+            for (key in headers.keys()) {
+                parsedHeaders.push(new tink.http.Header.HeaderField(key, headers.get(key)));
+            }
+        }
+
+        final options = new Dictionary();
+        options.set('method', tinkMethod);
+        if (parsedHeaders.keys().length > 0) {
+            options.set('headers', parsedHeaders);
+        }
+        if (body != null) {
+            options.set('body', body);
+        }
+
+        tink.http.Client.fetch(url, options.toObject()).all().handle(function(o) {
+            switch (o) {
+                case Success(res):
+                    response = new Response(res.header.statusCode, res.body.toString());
+                case Failure(res):
+                    response = new Response(-1, Std.string(res), null);
+            }
+        });
+        
+        // Wait for async request
+        while (response == null) {}
+
+        return response;
+    }
+
+
+#elseif python
+    private static function syncRequestPython(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob) : Response {
+        try {
+            return connect.native.PythonRequest.request(
+                method, url, headers, body, fileArg, fileName, fileContent, 300);
+        } catch (ex: Dynamic) {
+            return new Response(-1, Std.string(ex), null);
+        }
+    }
+
+
+#else
+    public function syncRequestStd(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob) : Response {
+        var status:Null<Int> = null;
+        final responseBytes = new haxe.io.BytesOutput();
+
+        final http = new haxe.Http(url);
+        http.cnxTimeout = 300;
+
+        if (headers != null) {
+            for (key in headers.keys()) {
+                http.setHeader(key, headers.get(key));
+            }
+        }
+
+        if (body != null) {
+            http.setPostData(body);
+        }
+
+        if (fileArg != null && fileName != null && fileContent != null) {
+            http.fileTransfer(
+                fileArg,
+                fileName,
+                new BytesInput(fileContent._getBytes()),
+                fileContent.length(),
+                'multipart/form-data'
+            );
+        }
+
+        http.onStatus = function(status_) { status = status_; };
+        http.onError = function(msg) {
+            status = -1;
+            responseBytes.writeString(msg);
+        }
+        http.customRequest(false, responseBytes, null, method.toUpperCase());
+
+        while (status == null) {} // Wait for async request
+        final bytes = responseBytes.getBytes();
+        return new Response(status, bytes.toString(), Blob._fromBytes(bytes));
+    }
+#end
+
+
+    private static function logRequest(level: Int, method: String, url: String,
+            headers: Dictionary, body: String, response: Response): Void {
+        final fmt = Env.getLogger().getFormatter();
+        
+        final firstMessage = 'Http ${method.toUpperCase()} request to ${url}';
+        
+        final requestList = new Collection<String>();
+        if (headers != null) {
+            requestList.push('Headers:${getHeadersTable(headers)}');
+        }
+        if (body != null) {
+            if (Util.isJson(body)) {
+                final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
+                final prefix = compact ? 'Body (compact):' : 'Body:';
+                final block = fmt.formatCodeBlock(Util.beautify(body, compact), 'json');
+                requestList.push('$prefix $block');
+            } else {
+                final fixedBody = StringTools.lpad(body.substr(body.length - 4), '*', body.length);
+                requestList.push('Body: $fixedBody');
+            }
+        }
+
+        if (response.status != -1) {
+            requestList.push('Status: ${response.status}');
+            if (Util.isJson(response.text)) {
+                final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
+                final prefix = compact ? 'Response (compact):' : 'Response:';
+                final block = fmt.formatCodeBlock(Util.beautify(response.text, compact), 'json');
+                requestList.push('$prefix $block');
+            } else {
+                final fixedResponse = StringTools.lpad(response.text.substr(response.text.length - 4), '*', response.text.length);
+                requestList.push('Response: $fixedResponse');
+            }
+        }
+
+        final requestBlock = fmt.formatBlock('$firstMessage${fmt.formatList(requestList)}');
+        Env.getLogger().write(level, requestBlock);
+    }
+
+
+    private static function getHeadersTable(headers: Dictionary): String {
+        final fixedHeaders = (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG)
+            ? headers
+            : maskHeaders(headers);
+        final headerKeys = [for (key in fixedHeaders.keys()) key];
+        final headersCol = new Collection<Collection<String>>()
+            .push(new Collection<String>().push('Name').push('Value'));
+        Lambda.iter(headerKeys, function(key) {
+            headersCol.push(new Collection<String>()
+                .push(key)
+                .push(fixedHeaders.get(key))
+            );
+        });
+        return Env.getLogger().getFormatter().formatTable(headersCol);
+    }
+
+
+    private static function maskHeaders(headers: Dictionary): Dictionary {
+        final masked = new Dictionary();
+        for (key in headers.keys()) {
+            if (key == 'Authorization') {
+                final auth = Std.string(headers.get('Authorization'));
+                final parts = auth.split(':');
+                final join = (parts.length > 1) ? parts.slice(1).join(':') : '';
+                final maskedAuth = StringTools.startsWith(auth, 'ApiKey ')
+                    ? (parts.length > 1)
+                        ? (parts[0] + ':' + StringTools.lpad(join.substr(join.length - 4), '*', join.length))
+                        : 'ApiKey ' + StringTools.lpad(auth.substr(auth.length - 4), '*', auth.length - 7)
+                    : StringTools.lpad(auth.substr(auth.length - 4), '*', auth.length);
+                masked.set('Authorization', maskedAuth);
+            } else {
+                masked.set(key, headers.get(key));
+            }
+        }
+        return masked;
+    }
+
+
+
+    /*
+    private static function writeRequestCall(loggerFunc: Function, method: String, url: String,
             headers: Dictionary, body: String) {
         var maskedHeaders = headers;
         if (loggerFunc != Env.getLogger().debug && headers != null) {
@@ -227,7 +310,7 @@ class ApiClientImpl extends Base implements IApiClient {
     }
 
 
-    private function writeRequestResponse(loggerFunc: Function, response: Response) {
+    private static function writeRequestResponse(loggerFunc: Function, response: Response) {
         Reflect.callMethod(Env.getLogger(), loggerFunc, ['> * Status: ${response.status}']);
         if (Util.isJson(response.text)) {
             final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
@@ -243,7 +326,7 @@ class ApiClientImpl extends Base implements IApiClient {
     }
 
 
-    private function getFormattedData(data: String, prefix: String, compact: Bool): String {
+    private static function getFormattedData(data: String, prefix: String, compact: Bool): String {
         final beautified = Util.beautify(data, compact);
         if (!compact || Util.isJsonArray(beautified)) {
             return prefix + '\r\n'
@@ -254,6 +337,7 @@ class ApiClientImpl extends Base implements IApiClient {
             return '${prefix} ${beautified}';
         }
     }
+    */
 
 
 #if js
