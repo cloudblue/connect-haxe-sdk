@@ -11,7 +11,7 @@ class Example {
         var initialTime = Date.now().getTime();
 
         Env.loadConfig('examples/config.json');
-        Env.initLogger('examples/log.md', Logger.LEVEL_INFO, null);
+        Env.initLogger('examples/log.md', Logger.LEVEL_INFO, null, null);
 
         // Define main flow
         var flow = new Flow(null)

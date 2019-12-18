@@ -9,7 +9,7 @@ use connect\Processor;
 use connect\api\Query;
 
 
-//Env::initLogger('log.md', Logger::LEVEL_ERROR, null);
+//Env::initLogger('log.md', Logger::LEVEL_ERROR, null, null);
 
 // Define main flow
 $flow = (new Flow(null))

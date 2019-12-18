@@ -5,7 +5,7 @@ const Logger = connect.Logger;
 const Processor = connect.Processor;
 const Query = connect.api.Query;
 
-//Env.initLogger("log.md", Logger.LEVEL_ERROR, null);
+//Env.initLogger("log.md", Logger.LEVEL_ERROR, null, null);
 
 // Define main flow
 const flow = new Flow(null)
