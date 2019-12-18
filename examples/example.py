@@ -27,7 +27,7 @@ def approve_request(p):
 
 
 if __name__ == '__main__':
-    # Env.initLogger('log.md', Logger.LEVEL_ERROR, None)
+    # Env.initLogger('log.md', Logger.LEVEL_ERROR, None, None)
 
     # Define main flow
     flow = Flow(None) \

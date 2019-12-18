@@ -21,14 +21,15 @@ class Logger extends Base {
         Creates a new Logger object. You don't normally create objects of this class,
         since the SDK uses the default instance provided by `Env.getLogger()`.
     **/
-    public function new(path: String, level: Int, writer: LoggerWriter) {
+    public function new(path: String, level: Int, writer: ILoggerWriter, formatter: ILoggerFormatter) {
         if (path != null) {
             this.path = (path.charAt(path.length - 1) == '/') ? path : (path + '/');
         } else {
             this.path = null;
         }
         this.level = Std.int(Math.min(Math.max(level, LEVEL_ERROR), LEVEL_DEBUG));
-        this.writer = (writer != null) ? writer : new LoggerWriter();
+        this.writer = (writer != null) ? writer : new FileLoggerWriter();
+        this.formatter = (formatter != null) ? formatter : new MarkdownLoggerFormatter();
         this.sections = [];
         this.setFilename('log.md');
     }
@@ -70,6 +71,12 @@ class Logger extends Base {
             ? filename.substr(filename.length)
             : filename;
         return fixedFilename;
+    }
+
+
+    /** @returns The formatter for this logger. **/
+    public function getFormatter(): ILoggerFormatter {
+        return this.formatter;
     }
 
 
@@ -157,7 +164,8 @@ class Logger extends Base {
 
     private final path: String;
     private final level: Int;
-    private final writer: LoggerWriter;
+    private final writer: ILoggerWriter;
+    private final formatter: ILoggerFormatter;
     private final sections: Array<LoggerSection>;
 
 

@@ -56,6 +56,12 @@ $ ./example_py.sh
 
 The Python version automatically creates a Python3 virtual environment with venv on the `_build` dir.
 
+If you want to run all the examples, run:
+
+```shell script
+$ ./run_examples.sh
+```
+
 To generate the documentation, type:
 
 ```shell script
