@@ -2,3 +2,13 @@ language: haxe
 haxe: "4.0.5"
 hxml:
   - unittests.hxml
+  - doc.hxml
+
+deploy:
+  provider: pages
+  local_dir: doc
+  github_token: $GITHUB_TOKEN
+  skip_cleanup: true
+  keep_history: false
+  on:
+    branch: master

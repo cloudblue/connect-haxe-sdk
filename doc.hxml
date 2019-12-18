@@ -1,5 +1,6 @@
 -D doc-gen
 --macro include('connect')
 -dce no
+-lib dox
 -xml doc/doc.xml
 -cmd haxelib run dox -i doc -o doc --title "Connect SDK Documentation" -in "^connect" -ex "connect.api.impl" -ex "connect.Arr" --toplevel-package connect
