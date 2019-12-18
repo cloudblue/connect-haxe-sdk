@@ -13,5 +13,21 @@ class MarkdownLogFormatterTest extends haxe.unit.TestCase {
     }
 
 
-    
+    public function testFormatBlock() {
+        final formatter = new MarkdownLogFormatter();
+        this.assertEquals('> Hello, world', formatter.formatBlock('Hello, world'));
+        this.assertEquals('> Hello\n> World', formatter.formatBlock('Hello\nWorld'));
+        this.assertEquals('> Hello\n> World', formatter.formatBlock('Hello\r\nWorld'));
+        this.assertEquals('> Hello\n> World', formatter.formatBlock('Hello\rWorld'));
+    }
+
+
+    public function testFormatCodeBlock() {
+        final expectedSimple = '```json\n{}\n```';
+        final formatter = new MarkdownLogFormatter();
+        this.assertEquals(expectedSimple, formatter.formatCodeBlock('{}', 'json'));
+        this.assertEquals('> Hello\n> World', formatter.formatBlock('Hello\nWorld'));
+        this.assertEquals('> Hello\n> World', formatter.formatBlock('Hello\r\nWorld'));
+        this.assertEquals('> Hello\n> World', formatter.formatBlock('Hello\rWorld'));
+    }
 }

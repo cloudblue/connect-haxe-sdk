@@ -12,11 +12,13 @@ class MarkdownLogFormatter implements ILogFormatter {
 
 
     public function formatBlock(text: String): String {
-        return null;
+        final lines = getLines(text);
+        final prefixedLines = [for (line in lines) '> $line'];
+        return prefixedLines.join('\n');
     }
 
 
-    public function formatCodeBlock(text: String): String {
+    public function formatCodeBlock(text: String, language: String): String {
         return null;
     }
 
