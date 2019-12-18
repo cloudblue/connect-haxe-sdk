@@ -1,29 +1,17 @@
 package connect;
 
-import sys.io.FileSeek;
-import haxe.ds.ListSort;
 import haxe.io.Path;
 import sys.FileSystem;
 
 
-/**
-    Represents the default LoggerWriter. The `Logger` uses an instance of this class
-    to write log messages (by default to the standard output and the given filename).
-
-    The filename can be null if you do not want to write messages to a persistent file.
-**/
-class LoggerWriter extends Base {
+@:dox(hide)
+class FileLoggerWriter extends Base implements ILoggerWriter {
     public function new() {
         this.filename = null;
         this.file = null;
     }
 
 
-    /**
-        Sets the filename of the log file if it has not been previously set.
-
-        @returns `true` if file has been reset, `false` otherwise.
-    **/
     public function setFilename(filename: String): Bool {
         final currentFilename = this.filename;
         this.filename = filename;
@@ -37,13 +25,11 @@ class LoggerWriter extends Base {
     }
 
 
-    /** @returns The last filename that was set. **/
     public function getFilename(): String {
         return this.filename;
     }
 
 
-    /** Writes a line to the log output. The line feed character is added by the method. **/
     public function writeLine(line: String): Void {
         if (this.getFile() != null) {
             this.getFile().writeString(line + '\r\n');
