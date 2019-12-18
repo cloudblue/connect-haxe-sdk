@@ -1,7 +1,7 @@
 package connect;
 
 
-class MarkdownLogFormatter implements ILogFormatter {
+class MarkdownLoggerFormatter implements ILoggerFormatter {
     public function formatSection(level: Int, text: String): String {
         final hashes = StringTools.rpad('', '#', level);
         final prefix = (hashes != '')

@@ -108,11 +108,15 @@ class Env extends Base {
             need to write logs in a custom way, create a class that extends `LoggerWriter`,
             override the required methods (usually `writeLine`), and pass an instance of the
             class here.
+        @param formatter The logger formatter. Pass `null` to use the default Markdown formatter,
+            or create your own formatter class that implements the `ILoggerFormatter` interface
+            and pass an instance here.
         @throws String If the logger is already initialized.
     **/
-    public static function initLogger(path: String, level: Int, writer: LoggerWriter) {
+    public static function initLogger(path: String, level: Int, writer: LoggerWriter,
+            formatter: ILoggerFormatter): Void {
         if (logger == null) {
-            logger = new Logger(path, level, writer);
+            logger = new Logger(path, level, writer, formatter);
         } else {
             throw "Logger instance is already initialized.";
         }
@@ -151,7 +155,7 @@ class Env extends Base {
     **/
     public static function getLogger(): Logger {
         if (!isLoggerInitialized()) {
-            initLogger('logs', Logger.LEVEL_INFO, null);
+            initLogger('logs', Logger.LEVEL_INFO, null, null);
         }
         return logger;
     }

@@ -1,12 +1,11 @@
 package tests.unit;
 
 import connect.Collection;
-import connect.MarkdownLogFormatter;
+import connect.MarkdownLoggerFormatter;
 
 
-class MarkdownLogFormatterTest extends haxe.unit.TestCase {
+class MarkdownLoggerFormatterTest extends haxe.unit.TestCase {
     public function testFormatSection() {
-        final fmt = new MarkdownLogFormatter();
         this.assertEquals('\n## Hello\n\n', fmt.formatSection(2, 'Hello'));
         this.assertEquals('\n# Hello\n\n', fmt.formatSection(1, 'Hello'));
         this.assertEquals('\nHello\n\n', fmt.formatSection(0, 'Hello'));
@@ -16,7 +15,6 @@ class MarkdownLogFormatterTest extends haxe.unit.TestCase {
 
 
     public function testFormatBlock() {
-        final fmt = new MarkdownLogFormatter();
         this.assertEquals('\n> Hello, world\n\n', fmt.formatBlock('Hello, world'));
         this.assertEquals('\n> Hello\n> World\n\n', fmt.formatBlock('Hello\nWorld'));
         this.assertEquals('\n> Hello\n> World\n\n', fmt.formatBlock('Hello\r\nWorld'));
@@ -26,7 +24,6 @@ class MarkdownLogFormatterTest extends haxe.unit.TestCase {
 
 
     public function testFormatCodeBlock() {
-        final fmt = new MarkdownLogFormatter();
         final expected = '\n```json\n{"key": "value"}\n```\n\n';
         this.assertEquals(expected, fmt.formatCodeBlock('{"key": "value"}', 'json'));
         this.assertEquals('\n```\n\n```\n\n', fmt.formatCodeBlock('', ''));
@@ -34,7 +31,6 @@ class MarkdownLogFormatterTest extends haxe.unit.TestCase {
 
 
     public function testFormatCodeBlockWithinBlock() {
-        final fmt = new MarkdownLogFormatter();
         final expected = '\n> \n> ```json\n> {"key": "value"}\n> ```\n> \n> \n\n';
         this.assertEquals(
             expected,
@@ -43,7 +39,6 @@ class MarkdownLogFormatterTest extends haxe.unit.TestCase {
 
 
     public function testFormatList() {
-        final fmt = new MarkdownLogFormatter();
         final expected = '\n* Hello\n* World\n\n';
         final list = new Collection<String>()
             .push('Hello')
@@ -54,7 +49,6 @@ class MarkdownLogFormatterTest extends haxe.unit.TestCase {
 
 
     public function testFormatTable() {
-        final fmt = new MarkdownLogFormatter();
         final expected = '\n| One | Two |\n| --- | --- |\n| 1 | 2 |\n\n';
         final table = new Collection<Collection<String>>()
             .push(new Collection<String>().push('One').push('Two'))
@@ -65,8 +59,10 @@ class MarkdownLogFormatterTest extends haxe.unit.TestCase {
 
 
     public function testFormatLine() {
-        final fmt = new MarkdownLogFormatter();
         final expected = 'Hello, world!\n';
         this.assertEquals(expected, fmt.formatLine('Hello, world!'));
     }
+
+
+    private final fmt = new MarkdownLoggerFormatter();
 }

@@ -1,7 +1,7 @@
 package connect;
 
 
-interface ILogFormatter {
+interface ILoggerFormatter {
     public function formatSection(level: Int, text: String): String;
     public function formatBlock(text: String): String;
     public function formatCodeBlock(text: String, language: String): String;
