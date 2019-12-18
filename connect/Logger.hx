@@ -74,6 +74,12 @@ class Logger extends Base {
     }
 
 
+    /** @returns The formatter for this logger. **/
+    public function getFormatter(): ILoggerFormatter {
+        return this.formatter;
+    }
+
+
     /**
         Opens a new section in the log. This will be output as a Markdown header with the right
         level, depending on the number of opened sections. For example, at the beginning of a
