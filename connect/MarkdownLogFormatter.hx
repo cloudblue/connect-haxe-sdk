@@ -14,12 +14,14 @@ class MarkdownLogFormatter implements ILogFormatter {
     public function formatBlock(text: String): String {
         final lines = getLines(text);
         final prefixedLines = [for (line in lines) '> $line'];
-        return prefixedLines.join('\n');
+        return '\n' + prefixedLines.join('\n') + '\n';
     }
 
 
     public function formatCodeBlock(text: String, language: String): String {
-        return null;
+        final header = '\n```$language\n';
+        final footer = '\n```\n';
+        return header + text + footer;
     }
 
 
