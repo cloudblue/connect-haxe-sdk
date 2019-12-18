@@ -8,8 +8,7 @@ import tests.mocks.UsageApiMock;
 
 class UnitTests {
     public static function main() {
-        var runner = new haxe.unit.TestRunner();
-        
+        final runner = new haxe.unit.TestRunner();
         runner.add(new tests.unit.ConfigTest());
         runner.add(new tests.unit.AccountTest());
         runner.add(new tests.unit.AssetRequestTest());
@@ -25,7 +24,7 @@ class UnitTests {
         runner.add(new tests.unit.TierConfigRequestTest());
         runner.add(new tests.unit.TierConfigTest());
         runner.add(new tests.unit.UsageFileTest());
-
-        runner.run();
+        final ok = runner.run();
+        Sys.exit(ok ? 0 : -1);
     }
 }
