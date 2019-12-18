@@ -5,38 +5,50 @@ class MarkdownLogFormatter implements ILogFormatter {
     public function formatSection(level: Int, text: String): String {
         final hashes = StringTools.rpad('', '#', level);
         final prefix = (hashes != '')
-            ? hashes + ' '
+            ? (hashes + ' ')
             : '';
-        return prefix + text;
+        return '\n$prefix$text\n\n';
     }
 
 
     public function formatBlock(text: String): String {
         final lines = getLines(text);
         final prefixedLines = [for (line in lines) '> $line'];
-        return '\n' + prefixedLines.join('\n') + '\n';
+        return '\n' + prefixedLines.join('\n') + '\n\n';
     }
 
 
     public function formatCodeBlock(text: String, language: String): String {
         final header = '\n```$language\n';
-        final footer = '\n```\n';
+        final footer = '\n```\n\n';
         return header + text + footer;
     }
 
 
-    public function formatList(content: Collection<String>): String {
-        return null;
+    public function formatList(lines: Collection<String>): String {
+        if (lines.length() > 0) {
+            final lines = [for (line in lines) '* $line'];
+            return '\n${lines.join('\n')}\n\n';
+        } else {
+            return '\n\n';
+        }
     }
 
 
-    public function formatTable(content: Dictionary): String {
-        return null;
+    public function formatTable(table: Collection<Collection<String>>): String {
+        if (table.length() > 0) {
+            final rows = [for (row in table) '| ${row.join(' | ')} |'];
+            final header = rows[0];
+            final rest = rows.slice(1);
+            return '\n$header\n| --- | --- |\n${rest.join('\n')}\n\n';
+        } else {
+            return '\n\n';
+        }
     }
 
 
-    public function formatText(text: String): String {
-        return null;
+    public function formatLine(text: String): String {
+        return text + '\n';
     }
 
 
