@@ -188,32 +188,15 @@ class ApiClientImpl extends Base implements IApiClient {
             requestList.push('Headers:${getHeadersTable(headers)}');
         }
         if (body != null) {
-            if (Util.isJson(body)) {
-                final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
-                final prefix = compact ? 'Body (compact):' : 'Body:';
-                final block = fmt.formatCodeBlock(Util.beautify(body, compact), 'json');
-                requestList.push('$prefix $block');
-            } else {
-                final fixedBody = StringTools.lpad(body.substr(body.length - 4), '*', body.length);
-                requestList.push('Body: $fixedBody');
-            }
+            requestList.push(getFormattedData(body, 'Body'));
         }
 
         if (response.status != -1) {
             requestList.push('Status: ${response.status}');
-            if (Util.isJson(response.text)) {
-                final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
-                final prefix = compact ? 'Response (compact):' : 'Response:';
-                final block = fmt.formatCodeBlock(Util.beautify(response.text, compact), 'json');
-                requestList.push('$prefix $block');
-            } else {
-                final fixedResponse = StringTools.lpad(response.text.substr(response.text.length - 4), '*', response.text.length);
-                requestList.push('Response: $fixedResponse');
-            }
+            requestList.push(getFormattedData(response.text, 'Response'));
         }
 
-        final requestBlock = fmt.formatBlock('$firstMessage${fmt.formatList(requestList)}');
-        Env.getLogger().write(level, requestBlock);
+        Env.getLogger().writeBlock(level, '$firstMessage${fmt.formatList(requestList)}');
     }
 
 
@@ -225,9 +208,10 @@ class ApiClientImpl extends Base implements IApiClient {
         final headersCol = new Collection<Collection<String>>()
             .push(new Collection<String>().push('Name').push('Value'));
         Lambda.iter(headerKeys, function(key) {
-            headersCol.push(new Collection<String>()
-                .push(key)
-                .push(fixedHeaders.get(key))
+            headersCol.push(
+                new Collection<String>()
+                    .push(key)
+                    .push(fixedHeaders.get(key))
             );
         });
         return Env.getLogger().getFormatter().formatTable(headersCol);
@@ -252,6 +236,20 @@ class ApiClientImpl extends Base implements IApiClient {
             }
         }
         return masked;
+    }
+
+
+    private static function getFormattedData(data: String, title: String): String {
+        if (Util.isJson(data)) {
+            final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
+            final prefix = compact ? '$title (compact):' : '$title:';
+            final block = Env.getLogger().getFormatter()
+                .formatCodeBlock(Util.beautify(data, compact), 'json');
+            return '$prefix $block';
+        } else {
+            final fixedBody = StringTools.lpad(data.substr(data.length - 4), '*', data.length);
+            return '$title: $fixedBody';
+        }
     }
 
 

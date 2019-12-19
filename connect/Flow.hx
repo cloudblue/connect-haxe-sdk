@@ -338,10 +338,7 @@ class Flow extends Base {
             this.setup();
         } catch (ex: Dynamic) {
             final exStr = Std.string(ex);
-            Env.getLogger().error('```');
-            Env.getLogger().error(exStr);
-            Env.getLogger().error('```');
-            Env.getLogger().error('');
+            Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, exStr, '');
             if (this.getAssetRequest() != null) {
                 this.getAssetRequest()._updateConversation('Skipping request because an exception was thrown: $exStr');
             }
@@ -357,8 +354,8 @@ class Flow extends Base {
         final stepData = StepStorage.load(this.model.id, getStepParam());
         this.data = stepData.data;
         if (stepData.storage != FailedStorage) {
-            final message = 'Resuming request from step ${stepData.firstIndex + 1} with ${stepData.storage}.';
-            Env.getLogger().info(message);
+            Env.getLogger().write(Logger.LEVEL_INFO,
+                'Resuming request from step ${stepData.firstIndex + 1} with ${stepData.storage}.');
         }
         return stepData;
     }
@@ -379,8 +376,7 @@ class Flow extends Base {
         
         Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
         
-        this.logStepData(Env.getLogger().info,
-            requestStr, dataStr, lastRequestStr, lastDataStr);
+        logStepData(Logger.LEVEL_INFO, requestStr, dataStr, lastRequestStr, lastDataStr);
 
         // Execute step
         try {
@@ -391,14 +387,10 @@ class Flow extends Base {
             #end
         } catch (ex: Dynamic) {
             if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                this.logStepData(Env.getLogger().error,
-                    requestStr, dataStr, lastRequestStr, lastDataStr);
+                logStepData(Logger.LEVEL_ERROR, requestStr, dataStr, lastRequestStr, lastDataStr);
             }
             final exStr = Std.string(ex);
-            Env.getLogger().error('```');
-            Env.getLogger().error(exStr);
-            Env.getLogger().error('```');
-            Env.getLogger().error('');
+            Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, exStr, '');
             if (this.getAssetRequest() != null) {
                 this.getAssetRequest()._updateConversation('Skipping request because an exception was thrown: $exStr');
             }
@@ -428,7 +420,8 @@ class Flow extends Base {
 
         // For Fulfillment requests, check if we must skip due to pending migration
         if (this.getAssetRequest() != null && this.getAssetRequest().needsMigration()) {
-            Env.getLogger().info('Skipping request because it is pending migration.');
+            Env.getLogger().write(Logger.LEVEL_INFO,
+                'Skipping request because it is pending migration.');
             Env.getLogger().closeSection();
             return false;
         } else {
@@ -448,22 +441,23 @@ class Flow extends Base {
                     : null;
                 
                 // Save step data if request supports it
-                Env.getLogger().info('Skipping request. Trying to save step data.');
+                Env.getLogger().write(Logger.LEVEL_INFO,
+                    'Skipping request. Trying to save step data.');
                 final saveResult = StepStorage.save(this.model,
                     new StepData(index, this.data, ConnectStorage),
                     param,
                     Reflect.field(model, 'update'));
                 switch (saveResult) {
                     case ConnectStorage:
-                        Env.getLogger().info('Step data saved in Connect.');
+                        Env.getLogger().write(Logger.LEVEL_INFO, 'Step data saved in Connect.');
                     case LocalStorage:
-                        Env.getLogger().info('Step data saved locally.');
+                        Env.getLogger().write(Logger.LEVEL_INFO, 'Step data saved locally.');
                     case FailedStorage:
-                        Env.getLogger().info('Step data could not be saved.');
+                        Env.getLogger().write(Logger.LEVEL_INFO, 'Step data could not be saved.');
                 }
             } else {
                 if (this.abortMessage != '') {
-                    Env.getLogger().info(this.abortMessage);
+                    Env.getLogger().write(Logger.LEVEL_INFO, this.abortMessage);
                 }
             }
 
@@ -487,6 +481,72 @@ class Flow extends Base {
     }
 
 
+    private function logStepData(level: Int, request: String, data: String,
+            lastRequest: String, lastData: String) {
+        final stepList = new Collection<String>();
+
+        if (request != lastRequest) {
+            if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
+                final lastRequestObj = Util.isJsonObject(lastRequest)
+                    ? Json.parse(lastRequest)
+                    : null;
+                final requestObj = (Util.isJsonObject(request) && lastRequestObj != null)
+                    ? Json.parse(request)
+                    : null;
+                final diff = (lastRequestObj != null && requestObj != null)
+                    ? Util.createObjectDiff(requestObj, lastRequestObj)
+                    : null;
+                final requestStr = (diff != null)
+                    ? Util.beautifyObject(diff, false)
+                    : request;
+                final requestTitle = (diff != null)
+                    ? 'Request (changes):'
+                    : 'Request:';
+                final fmt = Env.getLogger().getFormatter();
+                stepList.push('$requestTitle${fmt.formatCodeBlock(requestStr, 'json')}');
+            } else {
+                stepList.push('Request (id): ${request}');
+            }
+        } else {
+            stepList.push('Request: Same as in previous step.');
+        }
+
+        if (data != '{}') {
+            if (data != lastData) {
+                if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
+                    stepList.push('Data:${getDataTable(this.data)}');
+                } else {
+                    final keys = this.data.keys();
+                    final keysStr = [for (key in keys) key].join(', ');
+                    stepList.push('Data (keys): $keysStr.');
+                }
+            } else {
+                stepList.push('Data: Same as in previous step.');
+            }
+        } else {
+            stepList.push('Data: Empty.');
+        }
+
+        Env.getLogger().writeList(level, stepList);
+    }
+
+
+    private function getDataTable(data: Dictionary) {
+        final dataKeys = [for (key in data.keys()) key];
+        final dataCol = new Collection<Collection<String>>()
+            .push(new Collection<String>().push('Key').push('Value'));
+        Lambda.iter(dataKeys, function(key) {
+            dataCol.push(
+                new Collection<String>()
+                    .push(key)
+                    .push(data.get(key))
+            );
+        });
+        return Env.getLogger().getFormatter().formatTable(dataCol);
+    }
+
+
+    /*
     private function logStepData(func: Function, request: String, data: String,
             lastRequest: String, lastData: String) {
         // Log request
@@ -544,6 +604,7 @@ class Flow extends Base {
 
         Reflect.callMethod(Env.getLogger(), func, ['']);
     }
+    */
 
 
     private function getAssetRequestChanges(): AssetRequest {

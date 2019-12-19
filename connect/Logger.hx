@@ -98,23 +98,79 @@ class Logger extends Base {
     }
 
 
+    /**
+     * Writes a block to the log in the specified level.
+     * It adds a new line to the log after writing the block.
+     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`.
+     * @param block Block of text to log. Lines in the text are formatted to appear as a block.
+     */
+    public function writeBlock(level: Int, block: String): Void {
+        this.write(level, formatter.formatBlock(block));
+    }
+
+
+    /**
+     * Writes a code block to the log in the specified level.
+     * It adds a new line to the log after writing the block.
+     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`.
+     * @param code Code to log. Text is formatted to appear as a code block.
+     * @param language Language used in the block. For example, "json". Can be an empty string.
+     */
+    public function writeCodeBlock(level: Int, code: String, language: String): Void {
+        this.write(level, formatter.formatCodeBlock(code, language));
+    }
+
+
+    /**
+     * Writes a list to the log in the specified level.
+     * It adds a new line to the log after writing the list.
+     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`.
+     * @param list List to log. Lines are formatted to appear as a list.
+     */
+    public function writeList(level: Int, list: Collection<String>): Void {
+        this.write(level, formatter.formatList(list));
+    }
+
+
+    /**
+     * Writes a table to the log in the specified level. The first row should contain the
+     * table header.
+     * It adds a new line to the log after writing the list.
+     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`.
+     * @param table Table to log. Rows are formatted to appear as a table.
+     */
+    public function writeTable(level: Int, table: Collection<Collection<String>>): Void {
+        this.write(level, formatter.formatTable(table));
+    }
+
+
+    /**
+     * Writes a message to the log in the specified level.
+     * It adds a new line to the log after writing the message.
+     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`.
+     * @param message Message to log. The message is not formatted.
+     */
+    public function write(level: Int, message: String): Void {
+        if (this.level >= level) {
+            this.writeSections();
+            this.writer.writeLine(message);
+        }
+    }
+
+
     @:dox(hide)
     public function log(message: String): Void {
         this.error(message);
     }
 
 
-    /**
-        Writes a debug message to the log.
-    **/
+    @:dox(hide)
     public function debug(message: String): Void {
         this.write(LEVEL_DEBUG, message);
     }
 
 
-    /**
-        Writes an info message to the log.
-    **/
+    @:dox(hide)
     public function info(message: String): Void {
         this.write(LEVEL_INFO, message);
     }
@@ -132,9 +188,7 @@ class Logger extends Base {
     }
 
 
-    /**
-        Writes an error message to the log
-    **/
+    @:dox(hide)
     public function error(message: String): Void {
         this.write(LEVEL_ERROR, message);
     }
@@ -155,20 +209,6 @@ class Logger extends Base {
     @:dox(hide)
     public function emergency(message: String): Void {
         this.error(message);
-    }
-
-
-    /**
-     * Writes a message to the log in the specified level.
-     * It adds a new line to the log after writing the message.
-     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`.
-     * @param message Message to print. The message is not formatted.
-     */
-    public function write(level: Int, message: String): Void {
-        if (this.level >= level) {
-            this.writeSections();
-            this.writer.writeLine(message);
-        }
     }
 
 

@@ -136,10 +136,7 @@ class StepStorage {
                 Reflect.callMethod(request, updateFunc, []);
                 return true;
             } catch (ex: Dynamic) {
-                Env.getLogger().error('```');
-                Env.getLogger().error(Std.string(ex));
-                Env.getLogger().error('```');
-                Env.getLogger().error('');
+                Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, Std.string(ex), '');
             }
         }
         return false;

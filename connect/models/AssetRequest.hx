@@ -309,7 +309,9 @@ class AssetRequest extends IdModel {
             try {
                 conversation.createMessage(message);
             } catch (ex: Dynamic) {
-                Env.getLogger().error('Error updating conversation for request ${this.id}: $message');
+                Env.getLogger().write(
+                    Logger.LEVEL_ERROR,
+                    'Error updating conversation for request ${this.id}: $message');
             }
         }
     }
