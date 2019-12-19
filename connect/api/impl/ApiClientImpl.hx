@@ -190,7 +190,6 @@ class ApiClientImpl extends Base implements IApiClient {
         if (body != null) {
             requestList.push(getFormattedData(body, 'Body'));
         }
-
         if (response.status != -1) {
             requestList.push('Status: ${response.status}');
             requestList.push(getFormattedData(response.text, 'Response'));

@@ -483,8 +483,14 @@ class Flow extends Base {
 
     private function logStepData(level: Int, request: String, data: String,
             lastRequest: String, lastData: String) {
-        final stepList = new Collection<String>();
+        Env.getLogger().writeList(level, new Collection<String>()
+            .push(getFormattedRequest(request, lastRequest))
+            .push(getFormattedData(data, lastData, this.data))
+        );
+    }
 
+
+    private static function getFormattedRequest(request: String, lastRequest: String): String {
         if (request != lastRequest) {
             if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
                 final lastRequestObj = Util.isJsonObject(lastRequest)
@@ -503,35 +509,35 @@ class Flow extends Base {
                     ? 'Request (changes):'
                     : 'Request:';
                 final fmt = Env.getLogger().getFormatter();
-                stepList.push('$requestTitle${fmt.formatCodeBlock(requestStr, 'json')}');
+                return '$requestTitle${fmt.formatCodeBlock(requestStr, 'json')}';
             } else {
-                stepList.push('Request (id): ${request}');
+                return 'Request (id): ${request}';
             }
         } else {
-            stepList.push('Request: Same as in previous step.');
+            return 'Request: Same as in previous step.';
         }
-
-        if (data != '{}') {
-            if (data != lastData) {
-                if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
-                    stepList.push('Data:${getDataTable(this.data)}');
-                } else {
-                    final keys = this.data.keys();
-                    final keysStr = [for (key in keys) key].join(', ');
-                    stepList.push('Data (keys): $keysStr.');
-                }
-            } else {
-                stepList.push('Data: Same as in previous step.');
-            }
-        } else {
-            stepList.push('Data: Empty.');
-        }
-
-        Env.getLogger().writeList(level, stepList);
     }
 
 
-    private function getDataTable(data: Dictionary) {
+    private static function getFormattedData(data: String, lastData: String, dataDict: Dictionary): String {
+        if (data != '{}') {
+            if (data != lastData) {
+                if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
+                    return 'Data:${getDataTable(dataDict)}';
+                } else {
+                    final keysStr = [for (key in dataDict.keys()) key].join(', ');
+                    return 'Data (keys): $keysStr.';
+                }
+            } else {
+                return 'Data: Same as in previous step.';
+            }
+        } else {
+            return 'Data: Empty.';
+        }
+    }
+
+
+    private static function getDataTable(data: Dictionary) {
         final dataKeys = [for (key in data.keys()) key];
         final dataCol = new Collection<Collection<String>>()
             .push(new Collection<String>().push('Key').push('Value'));
@@ -544,67 +550,6 @@ class Flow extends Base {
         });
         return Env.getLogger().getFormatter().formatTable(dataCol);
     }
-
-
-    /*
-    private function logStepData(func: Function, request: String, data: String,
-            lastRequest: String, lastData: String) {
-        // Log request
-        if (request != lastRequest) {
-            if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
-                final lastRequestObj = Util.isJsonObject(lastRequest)
-                    ? Json.parse(lastRequest)
-                    : null;
-                final requestObj = (Util.isJsonObject(request) && lastRequestObj != null)
-                    ? Json.parse(request)
-                    : null;
-                final diff = (lastRequestObj != null && requestObj != null)
-                    ? Util.createObjectDiff(requestObj, lastRequestObj)
-                    : null;
-                final requestStr = (diff != null)
-                    ? Util.beautifyObject(diff, false)
-                    : request;
-                final requestTitle = (diff != null)
-                    ? '* Request (changes):'
-                    : '* Request:';
-                Reflect.callMethod(Env.getLogger(), func, [requestTitle]);
-                Reflect.callMethod(Env.getLogger(), func, ['```json']);
-                Reflect.callMethod(Env.getLogger(), func, [requestStr]);
-                Reflect.callMethod(Env.getLogger(), func, ['```']);
-            } else {
-                Reflect.callMethod(Env.getLogger(), func, ['* Request (id): ${request}']);
-            }
-        } else {
-            Reflect.callMethod(Env.getLogger(), func, ['* Request: Same as previous step.']);
-        }
-
-        // Log data
-        if (data != '{}') {
-            if (data != lastData) {
-                if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
-                    final keys = this.data.keys();
-                    Reflect.callMethod(Env.getLogger(), func, ['* Data:']);
-                    Reflect.callMethod(Env.getLogger(), func, ['| Key | Value |']);
-                    Reflect.callMethod(Env.getLogger(), func, ['| --- | ----- |']);
-                    for (key in keys) {
-                        final val = Std.string(this.getData(key));
-                        Reflect.callMethod(Env.getLogger(), func, ['| ${key} | ${val} |']);
-                    }
-                } else {
-                    final keys = this.data.keys();
-                    final keysStr = [for (key in keys) key].join(', ');
-                    Reflect.callMethod(Env.getLogger(), func, ['* Data (keys): ${keysStr}.']);
-                }
-            } else {
-                Reflect.callMethod(Env.getLogger(), func, ['* Data: (Same as previous step).']);
-            }
-        } else {
-            Reflect.callMethod(Env.getLogger(), func, ['* Data: (Empty).']);
-        }
-
-        Reflect.callMethod(Env.getLogger(), func, ['']);
-    }
-    */
 
 
     private function getAssetRequestChanges(): AssetRequest {
