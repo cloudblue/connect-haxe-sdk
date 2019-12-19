@@ -8,20 +8,20 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
         final prefix = (hashes != '')
             ? (hashes + ' ')
             : '';
-        return '\n$prefix$text\n\n';
+        return '\n$prefix$text\n';
     }
 
 
     public function formatBlock(text: String): String {
         final lines = getLines(text);
         final prefixedLines = [for (line in lines) '> $line'];
-        return '\n' + prefixedLines.join('\n') + '\n\n';
+        return '\n' + prefixedLines.join('\n') + '\n';
     }
 
 
     public function formatCodeBlock(text: String, language: String): String {
         final header = '\n```$language\n';
-        final footer = '\n```\n\n';
+        final footer = '\n```\n';
         return header + text + footer;
     }
 
@@ -29,7 +29,7 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
     public function formatList(lines: Collection<String>): String {
         if (lines.length() > 0) {
             final lines = [for (line in lines) '* $line'];
-            return '\n${lines.join('\n')}\n\n';
+            return '\n${lines.join('\n')}\n';
         } else {
             return '\n\n';
         }
@@ -41,15 +41,10 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
             final rows = [for (row in table) '| ${row.join(' | ')} |'];
             final header = rows[0];
             final rest = rows.slice(1);
-            return '\n$header\n| --- | --- |\n${rest.join('\n')}\n\n';
+            return '\n$header\n| --- | --- |\n${rest.join('\n')}\n';
         } else {
             return '\n\n';
         }
-    }
-
-
-    public function formatLine(text: String): String {
-        return text + '\n';
     }
 
 

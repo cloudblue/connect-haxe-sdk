@@ -116,10 +116,7 @@ class Processor extends Base {
             }
         } catch (ex: Dynamic) {
             // Catch exception when listing
-            Env.getLogger().error('```');
-            Env.getLogger().error(Std.string(ex));
-            Env.getLogger().error('```');
-            Env.getLogger().error('');
+            Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, Std.string(ex), '');
             Env.getLogger().closeSection();
         }
 
