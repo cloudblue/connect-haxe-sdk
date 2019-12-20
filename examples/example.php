@@ -6,10 +6,10 @@ use connect\Env;
 use connect\Flow;
 use connect\Processor;
 use connect\api\Query;
-use connect\logger\Logger;
+use connect\logger\LoggerConfig;
 
 
-Env::initLogger('log', Logger::$LEVEL_INFO, null, null);
+Env::initLogger((new LoggerConfig())->path('log'));
 
 // Define main flow
 $flow = (new Flow(null))

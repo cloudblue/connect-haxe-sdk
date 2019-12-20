@@ -3,9 +3,9 @@ const Env = connect.Env;
 const Flow = connect.Flow;
 const Processor = connect.Processor;
 const Query = connect.api.Query;
-const Logger = connect.logger.Logger;
+const LoggerConfig = connect.logger.LoggerConfig;
 
-Env.initLogger("log", Logger.LEVEL_INFO, null, null);
+Env.initLogger(new LoggerConfig().path('log'));
 
 // Define main flow
 const flow = new Flow(null)

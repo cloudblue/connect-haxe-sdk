@@ -1,5 +1,6 @@
 package connect;
 
+import connect.logger.ILoggerFormatter;
 import connect.logger.Logger;
 import connect.models.AssetRequest;
 import connect.models.IdModel;
@@ -483,14 +484,17 @@ class Flow extends Base {
 
     private function logStepData(level: Int, request: String, data: String,
             lastRequest: String, lastData: String) {
-        Env.getLogger().writeList(level, new Collection<String>()
-            .push(getFormattedRequest(request, lastRequest))
-            .push(getFormattedData(data, lastData, this.data))
-        );
+        for (output in Env.getLogger().getOutputs()) {
+            final list = new Collection<String>()
+                .push(getFormattedRequest(request, lastRequest, output.formatter))
+                .push(getFormattedData(data, lastData, this.data, output.formatter));
+            Env.getLogger()._writeToOutput(level, output.formatter.formatList(list), output);
+        }
     }
 
 
-    private static function getFormattedRequest(request: String, lastRequest: String): String {
+    private static function getFormattedRequest(request: String, lastRequest: String,
+            fmt: ILoggerFormatter): String {
         if (request != lastRequest) {
             if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
                 final lastRequestObj = Util.isJsonObject(lastRequest)
@@ -508,7 +512,6 @@ class Flow extends Base {
                 final requestTitle = (diff != null)
                     ? 'Request (changes):'
                     : 'Request:';
-                final fmt = Env.getLogger().getFormatter();
                 return '$requestTitle${fmt.formatCodeBlock(requestStr, 'json')}';
             } else {
                 return 'Request (id): ${request}';
@@ -519,11 +522,12 @@ class Flow extends Base {
     }
 
 
-    private static function getFormattedData(data: String, lastData: String, dataDict: Dictionary): String {
+    private static function getFormattedData(data: String, lastData: String, dataDict: Dictionary,
+            fmt: ILoggerFormatter): String {
         if (data != '{}') {
             if (data != lastData) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
-                    return 'Data:${getDataTable(dataDict)}';
+                    return 'Data:${getDataTable(dataDict, fmt)}';
                 } else {
                     final keysStr = [for (key in dataDict.keys()) key].join(', ');
                     return 'Data (keys): $keysStr.';
@@ -537,7 +541,7 @@ class Flow extends Base {
     }
 
 
-    private static function getDataTable(data: Dictionary) {
+    private static function getDataTable(data: Dictionary, fmt: ILoggerFormatter): String {
         final dataKeys = [for (key in data.keys()) key];
         final dataCol = new Collection<Collection<String>>()
             .push(new Collection<String>().push('Key').push('Value'));
@@ -548,7 +552,7 @@ class Flow extends Base {
                     .push(data.get(key))
             );
         });
-        return Env.getLogger().getFormatter().formatTable(dataCol);
+        return fmt.formatTable(dataCol);
     }
 
 

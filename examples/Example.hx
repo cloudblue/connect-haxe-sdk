@@ -2,7 +2,7 @@ import connect.Env;
 import connect.Flow;
 import connect.Processor;
 import connect.api.Query;
-import connect.logger.Logger;
+import connect.logger.LoggerConfig;
 
 
 class Example {
@@ -11,7 +11,7 @@ class Example {
         var initialTime = Date.now().getTime();
 
         Env.loadConfig('examples/config.json');
-        Env.initLogger('examples/log', Logger.LEVEL_INFO, null, null);
+        Env.initLogger(new LoggerConfig().path('examples/log'));
 
         // Define main flow
         var flow = new Flow(null)

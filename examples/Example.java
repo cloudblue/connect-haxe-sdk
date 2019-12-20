@@ -2,13 +2,13 @@ import connect.Env;
 import connect.Flow;
 import connect.Processor;
 import connect.api.Query;
-import connect.logger.Logger;
+import connect.logger.LoggerConfig;
 import connect.models.IdModel;
 
 
 public class Example {
     public static void main(String[] args) {
-        Env.initLogger("log", Logger.LEVEL_INFO, null, null);
+        Env.initLogger(new LoggerConfig().path("log"));
         
         // Define main flow
         Flow flow = new Flow((IdModel m) -> true)
