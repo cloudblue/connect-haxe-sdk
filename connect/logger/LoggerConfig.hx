@@ -1,30 +1,40 @@
 package connect.logger;
 
-/*
-    @param level Level of log.
-        One of: `Logger.LEVEL_ERROR`, `Logger.LEVEL_INFO`, `Logger.LEVEL_DEBUG`.
-    @param writer The logger writer. Pass `null` to use the default file writer,
-        or create your own writer class that implements the `ILoggerWriter` interface
-        and pass an instance here.
-    @param formatter The logger formatter. Pass `null` to use the default Markdown formatter,
-        or create your own formatter class that implements the `ILoggerFormatter` interface
-        and pass an instance here.
-    @throws String If the logger is already initialized.
-*/
 
+/**
+ * Represents the configuration of the logger. An instance can be passed to `Env.initConfig`
+ * to setup the logger behaviour.
+ */
 class LoggerConfig extends Base {
+    /**
+     * Sets the path where logs will be stored. Default is "logs".
+     * @param path Path for logs.
+     * @return `this` instance to support a fluent interface.
+     */
     public function path(path: String): LoggerConfig {
         this.path_ = path;
         return this;
     }
 
 
+    /**
+     * Sets the logging level. Default is `Logger.LEVEL_INFO`.
+     * @param level Level of log.
+     *  One of: `Logger.LEVEL_ERROR`, `Logger.LEVEL_INFO`, `Logger.LEVEL_DEBUG`.
+     * @return `this` instance to support a fluent interface.
+     */
     public function level(level: Int): LoggerConfig {
         this.level_ = level;
         return this;
     }
 
 
+    /**
+     * Sets the outputs for the logger. Default is an output with a Markdown formatter
+     * and a file writer.
+     * @param outputs Collection of outputs.
+     * @return LoggerConfig
+     */
     public function outputs(outputs: Collection<LoggerOutput>): LoggerConfig {
         this.outputs_ = outputs.copy();
         return this;

@@ -1,6 +1,10 @@
 package connect.logger;
 
 
+/**
+ * Represents a log formatter.The `Logger` uses an instance of a class that implements
+ * this interface (`MarkdownLoggerFormatter` by default) to write log messages.
+ */
 interface ILoggerFormatter {
     public function formatSection(level: Int, text: String): String;
     public function formatBlock(text: String): String;
