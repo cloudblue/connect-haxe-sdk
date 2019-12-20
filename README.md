@@ -7,10 +7,9 @@ This is a version of the SDK for Incram Micro's Connect platform, written in Hax
 * PHP.
 * Python.
 
-Other platforms that will be added in the future:
+C# support will be coming in the future.
 
-* C++.
-* C#.
+Documentation on how to use the SDK is available [here](https://cloudblue.github.io/connect-haxe-sdk/).
 
 In order to compile the SDK, you must have Haxe 4.0 or higher installed on your machine. On Debian-based Linux distributions, such as Ubuntu and Mint, Haxe can be installed by typing the following on a terminal:
 
