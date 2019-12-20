@@ -1,8 +1,8 @@
 import sys.FileSystem;
 #if !packager
 import connect.Env;
-import connect.Logger;
 import connect.Processor;
+import connect.logger.Logger;
 import connect.models.Account;
 import connect.models.Action;
 import connect.models.Activation;

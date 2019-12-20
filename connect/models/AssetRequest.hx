@@ -1,6 +1,7 @@
 package connect.models;
 
 import connect.api.Query;
+import connect.logger.Logger;
 
 
 /**

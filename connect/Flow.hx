@@ -1,11 +1,11 @@
 package connect;
 
+import connect.logger.Logger;
 import connect.models.AssetRequest;
 import connect.models.IdModel;
 import connect.models.Param;
 import connect.models.TierConfigRequest;
 import connect.models.UsageFile;
-import haxe.Constraints.Function;
 import haxe.Json;
 
 

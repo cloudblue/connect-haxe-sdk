@@ -1,8 +1,8 @@
 from connect import Env
 from connect import Flow
-from connect import Logger
 from connect import Processor
 from connect.api import Query
+from connect.logger import Logger
 
 
 def add_dummy_data(p):
@@ -27,7 +27,7 @@ def approve_request(p):
 
 
 if __name__ == '__main__':
-    # Env.initLogger('log.md', Logger.LEVEL_ERROR, None, None)
+    Env.initLogger('log', Logger.LEVEL_INFO, None, None)
 
     # Define main flow
     flow = Flow(None) \

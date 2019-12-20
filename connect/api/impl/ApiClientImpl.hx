@@ -1,6 +1,6 @@
 package connect.api.impl;
 
-import haxe.Constraints.Function;
+import connect.logger.Logger;
 #if !js
 import haxe.io.BytesInput;
 #end

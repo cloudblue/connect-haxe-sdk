@@ -6,6 +6,9 @@ import connect.api.IFulfillmentApi;
 import connect.api.IUsageApi;
 import connect.api.ITierApi;
 import connect.api.IGeneralApi;
+import connect.logger.ILoggerFormatter;
+import connect.logger.ILoggerWriter;
+import connect.logger.Logger;
 
 // Need to make sure that these get compiled
 import connect.api.impl.ApiClientImpl;
