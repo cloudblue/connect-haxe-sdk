@@ -6,6 +6,10 @@ import connect.api.IFulfillmentApi;
 import connect.api.IUsageApi;
 import connect.api.ITierApi;
 import connect.api.IGeneralApi;
+import connect.logger.ILoggerFormatter;
+import connect.logger.ILoggerWriter;
+import connect.logger.Logger;
+import connect.logger.LoggerConfig;
 
 // Need to make sure that these get compiled
 import connect.api.impl.ApiClientImpl;
@@ -101,21 +105,11 @@ class Env extends Base {
     /**
         Initializes the logger. It must have not been previously configured.
 
-        @param path Path where logs will be stored.
-        @param level Level of log.
-            One of: `Logger.LEVEL_ERROR`, `Logger.LEVEL_INFO`, `Logger.LEVEL_DEBUG`.
-        @param writer The logger writer. Pass `null` to use the default file writer,
-            or create your own writer class that implements the `ILoggerWriter` interface
-            and pass an instance here.
-        @param formatter The logger formatter. Pass `null` to use the default Markdown formatter,
-            or create your own formatter class that implements the `ILoggerFormatter` interface
-            and pass an instance here.
-        @throws String If the logger is already initialized.
+        @param config The configuration of the logger.
     **/
-    public static function initLogger(path: String, level: Int, writer: ILoggerWriter,
-            formatter: ILoggerFormatter): Void {
+    public static function initLogger(config: LoggerConfig): Void {
         if (logger == null) {
-            logger = new Logger(path, level, writer, formatter);
+            logger = new Logger(config);
         } else {
             throw "Logger instance is already initialized.";
         }
@@ -154,7 +148,7 @@ class Env extends Base {
     **/
     public static function getLogger(): Logger {
         if (!isLoggerInitialized()) {
-            initLogger('logs', Logger.LEVEL_INFO, null, null);
+            initLogger(null);
         }
         return logger;
     }

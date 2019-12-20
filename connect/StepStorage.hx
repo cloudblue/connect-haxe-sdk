@@ -1,6 +1,7 @@
 package connect;
 
 import connect.StepData.StorageType;
+import connect.logger.Logger;
 import connect.models.IdModel;
 import connect.models.Param;
 import haxe.Constraints.Function;

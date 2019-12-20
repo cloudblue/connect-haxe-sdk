@@ -1,6 +1,7 @@
 package connect.api.impl;
 
-import haxe.Constraints.Function;
+import connect.logger.ILoggerFormatter;
+import connect.logger.Logger;
 #if !js
 import haxe.io.BytesInput;
 #end
@@ -179,27 +180,29 @@ class ApiClientImpl extends Base implements IApiClient {
 
     private static function logRequest(level: Int, method: String, url: String,
             headers: Dictionary, body: String, response: Response): Void {
-        final fmt = Env.getLogger().getFormatter();
-        
         final firstMessage = 'Http ${method.toUpperCase()} request to ${url}';
-        
-        final requestList = new Collection<String>();
-        if (headers != null) {
-            requestList.push('Headers:${getHeadersTable(headers)}');
+        for (output in Env.getLogger().getOutputs()) {
+            final fmt = output.formatter;
+            final requestList = new Collection<String>();
+            if (headers != null) {
+                requestList.push('Headers:${getHeadersTable(headers, fmt)}');
+            }
+            if (body != null) {
+                requestList.push(getFormattedData(body, 'Body', fmt));
+            }
+            if (response.status != -1) {
+                requestList.push('Status: ${response.status}');
+                requestList.push(getFormattedData(response.text, 'Response', fmt));
+            }
+            Env.getLogger()._writeToOutput(
+                level,
+                fmt.formatBlock('$firstMessage${fmt.formatList(requestList)}'),
+                output);
         }
-        if (body != null) {
-            requestList.push(getFormattedData(body, 'Body'));
-        }
-        if (response.status != -1) {
-            requestList.push('Status: ${response.status}');
-            requestList.push(getFormattedData(response.text, 'Response'));
-        }
-
-        Env.getLogger().writeBlock(level, '$firstMessage${fmt.formatList(requestList)}');
     }
 
 
-    private static function getHeadersTable(headers: Dictionary): String {
+    private static function getHeadersTable(headers: Dictionary, fmt: ILoggerFormatter): String {
         final fixedHeaders = (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG)
             ? headers
             : maskHeaders(headers);
@@ -213,7 +216,7 @@ class ApiClientImpl extends Base implements IApiClient {
                     .push(fixedHeaders.get(key))
             );
         });
-        return Env.getLogger().getFormatter().formatTable(headersCol);
+        return fmt.formatTable(headersCol);
     }
 
 
@@ -238,12 +241,12 @@ class ApiClientImpl extends Base implements IApiClient {
     }
 
 
-    private static function getFormattedData(data: String, title: String): String {
+    private static function getFormattedData(data: String, title: String, fmt: ILoggerFormatter)
+            : String {
         if (Util.isJson(data)) {
             final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
             final prefix = compact ? '$title (compact):' : '$title:';
-            final block = Env.getLogger().getFormatter()
-                .formatCodeBlock(Util.beautify(data, compact), 'json');
+            final block = fmt.formatCodeBlock(Util.beautify(data, compact), 'json');
             return '$prefix $block';
         } else {
             final fixedBody = StringTools.lpad(data.substr(data.length - 4), '*', data.length);

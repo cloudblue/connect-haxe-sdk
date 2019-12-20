@@ -1,4 +1,4 @@
-package connect;
+package connect.logger;
 
 import haxe.io.Path;
 import sys.FileSystem;

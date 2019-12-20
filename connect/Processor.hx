@@ -1,6 +1,7 @@
 package connect;
 
 import connect.api.Query;
+import connect.logger.Logger;
 import connect.models.AssetRequest;
 import connect.models.TierConfigRequest;
 import connect.models.UsageFile;

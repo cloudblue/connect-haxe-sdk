@@ -4,12 +4,12 @@ require_once '../_packages/connect.php/connect.php';
 
 use connect\Env;
 use connect\Flow;
-use connect\Logger;
 use connect\Processor;
 use connect\api\Query;
+use connect\logger\LoggerConfig;
 
 
-//Env::initLogger('log.md', Logger::LEVEL_ERROR, null, null);
+Env::initLogger((new LoggerConfig())->path('log'));
 
 // Define main flow
 $flow = (new Flow(null))

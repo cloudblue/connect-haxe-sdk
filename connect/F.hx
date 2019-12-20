@@ -6,12 +6,13 @@ package connect;
 **/
 @:dox(hide)
 class F {
-    public static function reduce<A, B>(it: Iterable<A>, f: (B, A, Int, Iterable<A>) -> B, initialValue: B) {
+    public static function reduce<A, B>(it: Iterable<A>, f: (B, A, Int, Iterable<A>) -> B, initialValue: B): B {
         var value = initialValue;
         var i = 0;
         for (elem in it) {
             value = f(value, elem, i, it);
             ++i;
         }
+        return value;
     }
 }

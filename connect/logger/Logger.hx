@@ -1,4 +1,4 @@
-package connect;
+package connect.logger;
 
 
 /**
@@ -21,17 +21,14 @@ class Logger extends Base {
         Creates a new Logger object. You don't normally create objects of this class,
         since the SDK uses the default instance provided by `Env.getLogger()`.
     **/
-    public function new(path: String, level: Int, writer: ILoggerWriter, formatter: ILoggerFormatter) {
-        if (path != null) {
-            this.path = (path.charAt(path.length - 1) == '/') ? path : (path + '/');
-        } else {
-            this.path = null;
-        }
-        this.level = Std.int(Math.min(Math.max(level, LEVEL_ERROR), LEVEL_DEBUG));
-        this.writer = (writer != null) ? writer : new FileLoggerWriter();
-        this.formatter = (formatter != null) ? formatter : new MarkdownLoggerFormatter();
+    public function new(config: LoggerConfig) {
+        config = (config != null) ? config : new LoggerConfig();
+        this.path = (config.path_.charAt(config.path_.length - 1) == '/')
+            ? config.path_
+            : (config.path_ + '/');
+        this.level = Std.int(Math.min(Math.max(config.level_, LEVEL_ERROR), LEVEL_DEBUG));
+        this.outputs = config.outputs_.copy();
         this.sections = [];
-        this.setFilename('log.md');
     }
 
 
@@ -55,8 +52,10 @@ class Logger extends Base {
         final fullname = (this.path != null && filename != null)
             ? this.path + filename
             : null;
-
-        if (this.writer.setFilename(fullname) && fullname != null) {
+        final setFilenameResult = F.reduce(this.outputs, function(last, o, _, __) {
+            return last && o.writer.setFilename(fullname);
+        }, true);
+        if (setFilenameResult && fullname != null) {
             for (section in this.sections) {
                 section.written = false;
             }
@@ -66,17 +65,32 @@ class Logger extends Base {
 
     /** @returns The last filename that was set. **/
     public function getFilename(): String {
-        final filename = this.writer.getFilename();
-        final fixedFilename = (filename != null && filename.indexOf(this.path) == 0)
-            ? filename.substr(filename.length)
-            : filename;
+        final firstWriter = (this.outputs.length() > 0)
+            ? this.outputs.get(0).writer
+            : null;
+        if (firstWriter != null) {
+            final filename = firstWriter.getFilename();
+            final fixedFilename = (filename != null && filename.indexOf(this.path) == 0)
+                ? filename.substr(filename.length)
+                : filename;
         return fixedFilename;
+        } else {
+            return null;
+        }
     }
 
 
     /** @returns The formatter for this logger. **/
+    /*
     public function getFormatter(): ILoggerFormatter {
         return this.formatter;
+    }
+    */
+
+
+    /** @returns The defined outputs for this logger. Do not modify this collection. **/
+    public function getOutputs(): Collection<LoggerOutput> {
+        return this.outputs;
     }
 
 
@@ -105,7 +119,9 @@ class Logger extends Base {
      * @param block Block of text to log. Lines in the text are formatted to appear as a block.
      */
     public function writeBlock(level: Int, block: String): Void {
-        this.write(level, formatter.formatBlock(block));
+        for (output in this.outputs) {
+            this._writeToOutput(level, output.formatter.formatBlock(block), output);
+        }
     }
 
 
@@ -117,7 +133,9 @@ class Logger extends Base {
      * @param language Language used in the block. For example, "json". Can be an empty string.
      */
     public function writeCodeBlock(level: Int, code: String, language: String): Void {
-        this.write(level, formatter.formatCodeBlock(code, language));
+        for (output in this.outputs) {
+            this._writeToOutput(level, output.formatter.formatCodeBlock(code, language), output);
+        }
     }
 
 
@@ -128,7 +146,9 @@ class Logger extends Base {
      * @param list List to log. Lines are formatted to appear as a list.
      */
     public function writeList(level: Int, list: Collection<String>): Void {
-        this.write(level, formatter.formatList(list));
+        for (output in this.outputs) {
+            this._writeToOutput(level, output.formatter.formatList(list), output);
+        }
     }
 
 
@@ -140,7 +160,9 @@ class Logger extends Base {
      * @param table Table to log. Rows are formatted to appear as a table.
      */
     public function writeTable(level: Int, table: Collection<Collection<String>>): Void {
-        this.write(level, formatter.formatTable(table));
+        for (output in this.outputs) {
+            this._writeToOutput(level, output.formatter.formatTable(table), output);
+        }
     }
 
 
@@ -151,9 +173,8 @@ class Logger extends Base {
      * @param message Message to log. The message is not formatted.
      */
     public function write(level: Int, message: String): Void {
-        if (this.level >= level) {
-            this.writeSections();
-            this.writer.writeLine(message);
+        for (output in this.outputs) {
+            this._writeToOutput(level, message, output);
         }
     }
 
@@ -212,18 +233,29 @@ class Logger extends Base {
     }
 
 
+    @:dox(hide)
+    public function _writeToOutput(level: Int, message: String, output: LoggerOutput): Void {
+
+        if (this.level >= level) {
+            this.writeSections();
+            output.writer.writeLine(message);
+        }
+    }
+
+
     private final path: String;
     private final level: Int;
-    private final writer: ILoggerWriter;
-    private final formatter: ILoggerFormatter;
+    private final outputs: Collection<LoggerOutput>;
     private final sections: Array<LoggerSection>;
     
     
     private function writeSections(): Void {
         for (i in 0...this.sections.length) {
             if (!this.sections[i].written) {
-                final section = this.formatter.formatSection(i+1, this.sections[i].name);
-                this.writer.writeLine(section);
+                for (output in this.outputs) {
+                    final section = output.formatter.formatSection(i+1, this.sections[i].name);
+                    output.writer.writeLine(section);
+                }
                 this.sections[i].written = true;
             }
         }
