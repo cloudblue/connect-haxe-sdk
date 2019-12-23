@@ -2,7 +2,7 @@ package connect.logger;
 
 
 /**
-    Represents the the fucntionality of writing logs to some output. The `Logger` uses an
+    Represents the functionality of writing logs to some output. The `Logger` uses an
     instance of a class that implements this interface (`FileLoggerWriter` by default)
     to write log messages.
 **/
@@ -19,6 +19,6 @@ interface ILoggerWriter {
     public function getFilename(): String;
 
 
-    /** Writes a line to the log output. The line feed character is added by the method. **/
+    /** Writes a line to the log output. The new line character is added by the method. **/
     public function writeLine(line: String): Void;
 }
