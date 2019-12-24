@@ -3,6 +3,7 @@ package connect;
 
 @:dox(hide)
 class Util {
+    /*
     public static function reduce<A, B>(it: Iterable<A>, f: (B, A, Int, Iterable<A>) -> B, initialValue: B): B {
         var value = initialValue;
         var i = 0;
@@ -12,6 +13,7 @@ class Util {
         }
         return value;
     }
+    */
 
     
     public static function getDate(?dateOrNull: Date): String {

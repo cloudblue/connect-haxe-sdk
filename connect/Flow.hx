@@ -317,16 +317,16 @@ class Flow extends Base {
                 final steps = [for (i in stepData.firstIndex...this.steps.length) this.steps[i]];
 
                 // Process all steps
-                Util.reduce(
+                Lambda.fold(
                     steps,
-                    function(prevResult, step, i, _) {
-                        if (prevResult != null) {
-                            return processStep(step, stepData.firstIndex + i, prevResult.lastRequestStr, prevResult.lastDataStr);
+                    function(step, prev) {
+                        if (prev != null) {
+                            return processStep(step, stepData.firstIndex + prev.nextIndex, prev.lastRequestStr, prev.lastDataStr);
                         } else {
                             return null;
                         }
                     },
-                    {lastRequestStr: '', lastDataStr: '{}'});
+                    {nextIndex: 0, lastRequestStr: '', lastDataStr: '{}'});
             }
             Env.getLogger().closeSection();
         }
@@ -370,7 +370,7 @@ class Flow extends Base {
 
 
     private function processStep(step: Step, index: Int, lastRequestStr: String,
-            lastDataStr: String): {lastRequestStr: String, lastDataStr: String} {
+            lastDataStr: String): {nextIndex: Int, lastRequestStr: String, lastDataStr: String} {
         final requestStr = Util.beautifyObject(this.model.toObject(),
             Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
         final dataStr = Std.string(this.data);
@@ -434,7 +434,7 @@ class Flow extends Base {
 
 
     private function processAbortAndCloseLogSection(index: Int, requestStr: String,
-            dataStr: String) : {lastRequestStr: String, lastDataStr: String} {
+            dataStr: String) : {nextIndex: Int, lastRequestStr: String, lastDataStr: String} {
         if (this.abortRequested) {
             if (this.abortMessage == null) {
                 final param = (this.getAssetRequest() != null)
@@ -466,7 +466,7 @@ class Flow extends Base {
             return null;
         } else {
             Env.getLogger().closeSection();
-            return {lastRequestStr: requestStr, lastDataStr: dataStr};
+            return {nextIndex: index+1, lastRequestStr: requestStr, lastDataStr: dataStr};
         }
     }
 
