@@ -38,6 +38,6 @@ $flow = (new Flow(null))
 // Process requests
 (new Processor())
     ->flow($flow)
-    ->processRequests((new Query())
+    ->processAssetRequests((new Query())
         ->equal('asset.product.id__in', Env::getConfig()->getProductsString())
         ->equal('status', 'pending'));

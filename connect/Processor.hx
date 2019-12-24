@@ -54,13 +54,13 @@ class Processor extends Base {
 
 
     /**
-        Processes all fullfilment `UsageFile` objects that match the given filters,
+        Processes all `AssetRequest` objects that match the given filters,
         executing in sequence all the flows defined for them.
 
         @param filters Filters to be used for listing requests. It can contain
         any of the filters specified for the `AssetRequest.list` method.
     **/
-    public function processRequests(filters: Query): Void {
+    public function processAssetRequests(filters: Query): Void {
         run(AssetRequest, filters);
     }
 
