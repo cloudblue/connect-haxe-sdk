@@ -1,6 +1,6 @@
 # Connect Haxe SDK
 
-This is a version of the SDK for Incram Micro's Connect platform, written in Haxe. While it allows to write connectors in Haxe itself, the generated code can be used to write connectors in other languages:
+This is a version of the SDK for [CloudBlue Connect](https://www.cloudblue.com/connect/) platform, written in Haxe. While it allows to write connectors in Haxe itself, the generated code can be used to write connectors in other languages:
 
 * Java.
 * JavaScript.
