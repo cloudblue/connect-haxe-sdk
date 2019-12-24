@@ -72,7 +72,7 @@ class Util {
 
     /**
         @returns Whether the text seems to contain a JSON object or array.
-        NOTE: If the JSON string is malformed, this still returns `true`.
+        NOTE: This function could return `true` even if the JSON string is malformed.
     **/
     public static function isJson(text: String): Bool {
         return isJsonObject(text) || isJsonArray(text);
@@ -81,7 +81,7 @@ class Util {
 
     /**
         @returns Whether the text seems to contain a JSON object.
-        NOTE: If the JSON string is malformed, this still returns `true`.
+        NOTE: This function could return `true` even if the JSON string is malformed.
     **/
     public static function isJsonObject(text: String): Bool {
         return StringTools.trim(text).charAt(0) == '{';
@@ -90,7 +90,7 @@ class Util {
 
     /**
         @returns Whether the text seems to contain a JSON array.
-        NOTE: If the JSON string is malformed, this still returns `true`.
+        NOTE: This function could return `true` even if the JSON string is malformed.
     **/
     public static function isJsonArray(text: String): Bool {
         return StringTools.trim(text).charAt(0) == '[';
