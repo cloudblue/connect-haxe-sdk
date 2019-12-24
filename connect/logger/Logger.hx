@@ -52,7 +52,7 @@ class Logger extends Base {
         final fullname = (this.path != null && filename != null)
             ? this.path + filename
             : null;
-        final setFilenameResult = F.reduce(this.outputs, function(last, o, _, __) {
+        final setFilenameResult = Util.reduce(this.outputs, function(last, o, _, __) {
             return last && o.writer.setFilename(fullname);
         }, true);
         if (setFilenameResult && fullname != null) {

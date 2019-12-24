@@ -3,6 +3,17 @@ package connect;
 
 @:dox(hide)
 class Util {
+    public static function reduce<A, B>(it: Iterable<A>, f: (B, A, Int, Iterable<A>) -> B, initialValue: B): B {
+        var value = initialValue;
+        var i = 0;
+        for (elem in it) {
+            value = f(value, elem, i, it);
+            ++i;
+        }
+        return value;
+    }
+
+    
     public static function getDate(?dateOrNull: Date): String {
         final date = (dateOrNull != null) ? dateOrNull : Date.now();
         return new Date(
@@ -87,8 +98,8 @@ class Util {
 
 
     /**
-     * Creates an object with the differences between the two passed objects. The objects must
-     * contain an id field.
+     * Creates an object with the differences between the two passed objects (except
+     * for deletions). The objects must contain an id field.
      * @param object The updated object.
      * @param previous The object prior to the updates.
      * This method is used for example when updating a request, to send only the modified data.

@@ -317,7 +317,7 @@ class Flow extends Base {
                 final steps = [for (i in stepData.firstIndex...this.steps.length) this.steps[i]];
 
                 // Process all steps
-                F.reduce(
+                Util.reduce(
                     steps,
                     function(prevResult, step, i, _) {
                         if (prevResult != null) {
