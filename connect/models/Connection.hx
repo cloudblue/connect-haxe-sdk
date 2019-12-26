@@ -34,14 +34,15 @@ class Connection extends IdModel {
     public var status: String;
 
 
-    public var createdAt: String;
+    public var createdAt: DateTime;
 
 
     public function new() {
         super();
         this._setFieldClassNames([
             'provider' => 'Account',
-            'vendor' => 'Account'
+            'vendor' => 'Account',
+            'createdAt' => 'DateTime',
         ]);
     }
 }

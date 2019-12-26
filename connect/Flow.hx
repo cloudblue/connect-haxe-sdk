@@ -276,7 +276,7 @@ class Flow extends Base {
     @:dox(hide)
     public function _run<T>(list: Collection<T>): Void {
         Env.getLogger().openSection(
-            'Running ${this.getClassName()} on ${DateTime.now()} UTC');
+            'Running ${this.getClassName()} on ${DateTime.now()}');
 
         // Filter requests
         final filteredList = (filterFunc != null)
@@ -416,8 +416,7 @@ class Flow extends Base {
         }
 
         // Open log section
-        Env.getLogger().openSection(
-            'Processing request "${this.model.id}" on ${DateTime.now()} UTC');
+        Env.getLogger().openSection('Processing request "${this.model.id}" on ${DateTime.now()}');
 
         // For Fulfillment requests, check if we must skip due to pending migration
         if (this.getAssetRequest() != null && this.getAssetRequest().needsMigration()) {

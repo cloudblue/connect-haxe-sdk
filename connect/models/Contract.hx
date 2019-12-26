@@ -38,19 +38,19 @@ class Contract extends IdModel {
 
 
     /** Contract creation date. **/
-    public var created: String;
+    public var created: DateTime;
 
 
     /** Contract status update date. **/
-    public var updated: String;
+    public var updated: DateTime;
 
 
     /** Contract enrollment date. **/
-    public var enrolled: String;
+    public var enrolled: DateTime;
 
 
     /** Contract version creation date. **/
-    public var versionCreated: String;
+    public var versionCreated: DateTime;
 
 
     /** Activation informacion. **/
@@ -64,6 +64,10 @@ class Contract extends IdModel {
     public function new() {
         super();
         this._setFieldClassNames([
+            'created' => 'DateTime',
+            'updated' => 'DateTime',
+            'enrolled' => 'DateTime',
+            'versionCreated' => 'DateTime',
             'owner' => 'Account',
             'creator' => 'User',
             'signee' => 'User',

@@ -102,11 +102,11 @@ class Processor extends Base {
 
         final prevLogName = Env.getLogger().getFilename();
         Env.getLogger().setFilename(null);
-        Env.getLogger().openSection('Running Processor on ${DateTime.now()} UTC');
+        Env.getLogger().openSection('Running Processor on ${DateTime.now()}');
 
         try {
             // List requests
-            Env.getLogger().openSection('Listing requests on ${DateTime.now()} UTC');
+            Env.getLogger().openSection('Listing requests on ${DateTime.now()}');
             final listMethod: Function = Reflect.field(modelClass, 'list');
             final list = Reflect.callMethod(modelClass, listMethod, [filters]);
             Env.getLogger().closeSection();

@@ -6,7 +6,7 @@ package connect.models;
 **/
 class Event extends Model {
     /** Date when the event occurred. **/
-    public var at: String;
+    public var at: DateTime;
 
 
     /** User that caused the event. **/
@@ -16,6 +16,7 @@ class Event extends Model {
     public function new() {
         super();
         this._setFieldClassNames([
+            'at' => 'DateTime',
             'by' => 'User'
         ]);
     }

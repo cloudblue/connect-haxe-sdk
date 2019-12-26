@@ -19,6 +19,8 @@ class Model extends Base {
                 switch (Type.typeof(value)) {
                     case TClass(String):
                         Reflect.setField(obj, Inflection.toSnakeCase(field), Std.string(value));
+                    case TClass(connect.DateTime):
+                        Reflect.setField(obj, Inflection.toSnakeCase(field), value.toString());
                     case TClass(class_):
                         final className = Type.getClassName(class_);
                         if (className.indexOf('connect.Collection') == 0) {
@@ -133,11 +135,16 @@ class Model extends Base {
                             throw 'Cannot find class "$className"';
                         }
                     default:
-                        try {
-                            Reflect.setProperty(model, field, val);
-                        } catch (ex: Dynamic) {
-                            // It will fail if we are trying to set a protected property
-                            // (like __getattr__ or __setattr__ on Python)
+                        final fieldClassName = model.getFieldClassName(field);
+                        if (fieldClassName == 'DateTime') {
+                            Reflect.setProperty(model, field, DateTime.fromString(val));
+                        } else {
+                            try {
+                                Reflect.setProperty(model, field, val);
+                            } catch (ex: Dynamic) {
+                                // It will fail if we are trying to set a protected property
+                                // (like __getattr__ or __setattr__ on Python)
+                            }
                         }
                 }
             }
@@ -162,7 +169,7 @@ class Model extends Base {
     private function getFieldClassName(field: String): String {
         if (this.fieldClassNames != null && this.fieldClassNames.exists(field)) {
             final nameInField: String = this.fieldClassNames.get(field);
-            final exceptions = ['String'];
+            final exceptions = ['DateTime', 'String'];
             return (exceptions.indexOf(nameInField) == -1)
                 ? 'connect.models.' + nameInField
                 : nameInField;

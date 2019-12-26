@@ -15,7 +15,7 @@ class Conversation extends IdModel {
 
 
     /** Date of the Conversation creation. **/
-    public var created: String;
+    public var created: DateTime;
 
 
     /** Conversation topic. **/
@@ -87,6 +87,7 @@ class Conversation extends IdModel {
     public function new() {
         super();
         this._setFieldClassNames([
+            'created' => 'DateTime',
             'creator' => 'User'
         ]);
     }

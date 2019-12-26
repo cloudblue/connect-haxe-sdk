@@ -41,7 +41,7 @@ class UsageFile extends IdModel {
 
 
     /** Date of the creation of the UsageFile. **/
-    public var createdAt: String;
+    public var createdAt: DateTime;
 
 
     /**
@@ -287,6 +287,7 @@ class UsageFile extends IdModel {
     public function new() {
         super();
         this._setFieldClassNames([
+            'createdAt' => 'DateTime',
             'vendor' => 'Account',
             'provider' => 'Account',
             'records' => 'UsageRecords'
