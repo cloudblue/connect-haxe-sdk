@@ -1,6 +1,7 @@
 package tests.unit;
 
 import connect.Collection;
+import connect.DateTime;
 import connect.Dictionary;
 import connect.Env;
 import connect.models.Account;
@@ -154,9 +155,9 @@ class UsageFileTest extends haxe.unit.TestCase {
     */
 
         // Create dates
-        final today = Date.now();
-        final yesterday = new Date(
-            today.getFullYear(), today.getMonth(), today.getDate() - 1,
+        final today = DateTime.now();
+        final yesterday = new DateTime(
+            today.getYear(), today.getMonth(), today.getDay() - 1,
             today.getHours(), today.getMinutes(), today.getSeconds());
 
         // Create record
@@ -165,8 +166,8 @@ class UsageFileTest extends haxe.unit.TestCase {
         record.itemSearchCriteria = 'item.mpn';
         record.itemSearchValue = 'SKUA';
         record.quantity = 1;
-        record.startTimeUtc = connect.Util.getDate(yesterday);
-        record.endTimeUtc = connect.Util.getDate(today);
+        record.startTimeUtc = yesterday.toString();
+        record.endTimeUtc = today.toString();
         record.assetSearchCriteria = 'parameter.param_b';
         record.assetSearchValue = 'tenant2';
         final records = new Collection<UsageRecord>().push(record);

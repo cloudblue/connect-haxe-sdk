@@ -3,15 +3,6 @@ package connect;
 
 @:dox(hide)
 class Util {
-    public static function getDate(?dateOrNull: Date): String {
-        final date = (dateOrNull != null) ? dateOrNull : Date.now();
-        return new Date(
-            date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
-            date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()
-        ).toString();
-    }
-
-
     /*
         If the text contains a JSON string representation, it returns it beautified using two space
         indentation. Otherwise, returns the string as-is. If `compact` is `true` and the text
