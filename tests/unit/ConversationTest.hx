@@ -68,13 +68,13 @@ class ConversationTest extends haxe.unit.TestCase {
         assertTrue(Std.is(conversation.creator, User));
         assertEquals('CO-000-000-000', conversation.id);
         assertEquals('PR-5852-1608-0000', conversation.instanceId);
-        assertEquals('2018-12-18T12:49:34+00:00', conversation.created);
+        assertEquals('2018-12-18T12:49:34+00:00', conversation.created.toString());
         assertEquals('Topic', conversation.topic);
         
         final message = conversation.messages.get(0);
         assertEquals('ME-000-000-000', message.id);
         assertEquals('CO-000-000-000', message.conversation);
-        assertEquals('2018-12-18T13:03:30+00:00', message.created);
+        assertEquals('2018-12-18T13:03:30+00:00', message.created.toString());
         assertEquals('UR-000-000-000', message.creator.id);
         assertEquals('Some User', message.creator.name);
         assertEquals('Message', message.text);

@@ -58,13 +58,13 @@ class Processor extends Base {
 
 
     /**
-        Processes all fullfilment `UsageFile` objects that match the given filters,
+        Processes all `AssetRequest` objects that match the given filters,
         executing in sequence all the flows defined for them.
 
         @param filters Filters to be used for listing requests. It can contain
         any of the filters specified for the `AssetRequest.list` method.
     **/
-    public function processRequests(filters: Query): Void {
+    public function processAssetRequests(filters: Query): Void {
         run(AssetRequest, filters);
     }
 
@@ -106,11 +106,11 @@ class Processor extends Base {
 
         final prevLogName = Env.getLogger().getFilename();
         Env.getLogger().setFilename(null);
-        Env.getLogger().openSection('Running Processor on ' + Util.getDate() + ' UTC');
+        Env.getLogger().openSection('Running Processor on ${DateTime.now()}');
 
         try {
             // List requests
-            Env.getLogger().openSection('Listing requests on ' + Util.getDate() + ' UTC');
+            Env.getLogger().openSection('Listing requests on ${DateTime.now()}');
             final listMethod: Function = Reflect.field(modelClass, 'list');
             final list = Reflect.callMethod(modelClass, listMethod, [filters]);
             Env.getLogger().closeSection();

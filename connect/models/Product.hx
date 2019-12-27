@@ -37,7 +37,7 @@ class Product extends IdModel {
 
 
     /** Date of publishing. **/
-    public var publishedAt: String;
+    public var publishedAt: DateTime;
 
 
     /** Product configurations. **/
@@ -442,6 +442,7 @@ class Product extends IdModel {
     public function new() {
         super();
         this._setFieldClassNames([
+            'publishedAt' => 'DateTime',
             'owner' => 'Account',
             'stats' => 'ProductStats'
         ]);

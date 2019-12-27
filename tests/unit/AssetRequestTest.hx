@@ -54,8 +54,8 @@ class AssetRequestTest extends haxe.unit.TestCase {
         assertTrue(Std.is(request.marketplace, Marketplace));
         assertEquals('PR-5852-1608-0000', request.id);
         assertEquals('purchase', request.type);
-        assertEquals('2019-02-19T19:23:07.209244+00:00', request.created);
-        assertEquals('2019-02-19T19:28:11.053922+00:00', request.updated);
+        assertEquals('2019-02-19T19:23:07+00:00', request.created.toString());
+        assertEquals('2019-02-19T19:28:11+00:00', request.updated.toString());
         assertEquals('approved', request.status);
         assertEquals('###tile', request.activationKey);
         assertEquals('', request.reason);

@@ -158,10 +158,10 @@ class AssetTest extends haxe.unit.TestCase {
         assertEquals(false, itemParam.constraints.hidden);
         assertEquals(false, itemParam.constraints.required);
         assertEquals(false, itemParam.constraints.unique);
-        assertEquals('2019-08-26T10:42:56+00:00', itemParam.events.created.at);
+        assertEquals('2019-08-26T10:42:56+00:00', itemParam.events.created.at.toString());
         assertEquals('UR-841-574-187', itemParam.events.created.by.id);
         assertEquals('Marc Serrat', itemParam.events.created.by.name);
-        assertEquals('2019-08-27T14:21:23+00:00', itemParam.events.updated.at);
+        assertEquals('2019-08-27T14:21:23+00:00', itemParam.events.updated.at.toString());
         assertEquals('UR-841-574-187', itemParam.events.updated.by.id);
         assertEquals('Marc Serrat', itemParam.events.updated.by.name);
 

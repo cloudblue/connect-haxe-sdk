@@ -17,11 +17,11 @@ class AssetRequest extends IdModel {
 
 
     /** Date of request creation. **/
-    public var created: String;
+    public var created: DateTime;
 
 
     /** Date of last request modification. **/
-    public var updated: String;
+    public var updated: DateTime;
 
 
     /**
@@ -301,8 +301,9 @@ class AssetRequest extends IdModel {
     public function new() {
         super();
         this._setFieldClassNames([
-            // Assigne could be an object, so force conversion to string
-            'assignee' => 'String'
+            'created' => 'DateTime',
+            'updated' => 'DateTime',
+            'assignee' => 'String' // Assigne could be an object, so force conversion to string
         ]);
     }
 

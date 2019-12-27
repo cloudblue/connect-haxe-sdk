@@ -61,11 +61,11 @@ class TierConfigRequestTest extends haxe.unit.TestCase {
         assertEquals('Username', request.assignee.name);
         assertEquals('TP-000-000-000', request.template.id);
         assertEquals('http://example.com', request.activation.link);
-        assertEquals('2018-11-21T11:10:29+00:00', request.events.created.at);
-        assertEquals('2018-11-21T11:10:29+00:00', request.events.inquired.at);
+        assertEquals('2018-11-21T11:10:29+00:00', request.events.created.at.toString());
+        assertEquals('2018-11-21T11:10:29+00:00', request.events.inquired.at.toString());
         assertEquals('PA-000-000', request.events.inquired.by.id);
         assertEquals('Username', request.events.inquired.by.name);
-        assertEquals('2018-11-21T11:10:29+00:00', request.events.pended.at);
+        assertEquals('2018-11-21T11:10:29+00:00', request.events.pended.at.toString());
         assertEquals('PA-000-001', request.events.pended.by.id);
         assertEquals('Username1', request.events.pended.by.name);
 

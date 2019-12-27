@@ -14,7 +14,7 @@ class Message extends IdModel {
 
 
     /** Date of the Message creation. **/
-    public var created: String;
+    public var created: DateTime;
 
 
     /** User that created the message. **/
@@ -27,6 +27,7 @@ class Message extends IdModel {
     public function new() {
         super();
         this._setFieldClassNames([
+            'created' => 'DateTime',
             'creator' => 'User'
         ]);
     }

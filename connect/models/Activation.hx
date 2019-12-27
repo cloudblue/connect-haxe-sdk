@@ -18,5 +18,12 @@ class Activation extends Model {
 
 
     /** Activation date. **/
-    public var date: String;
+    public var date: DateTime;
+
+    public function new() {
+        super();
+        this._setFieldClassNames([
+            'date' => 'DateTime',
+        ]);
+    }
 }

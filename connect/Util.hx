@@ -7,15 +7,6 @@ package connect;
 
 @:dox(hide)
 class Util {
-    public static function getDate(?dateOrNull: Date): String {
-        final date = (dateOrNull != null) ? dateOrNull : Date.now();
-        return new Date(
-            date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
-            date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()
-        ).toString();
-    }
-
-
     /*
         If the text contains a JSON string representation, it returns it beautified using two space
         indentation. Otherwise, returns the string as-is. If `compact` is `true` and the text
@@ -65,7 +56,7 @@ class Util {
 
     /**
         @returns Whether the text seems to contain a JSON object or array.
-        NOTE: If the JSON string is malformed, this still returns `true`.
+        NOTE: This function could return `true` even if the JSON string is malformed.
     **/
     public static function isJson(text: String): Bool {
         return isJsonObject(text) || isJsonArray(text);
@@ -74,7 +65,7 @@ class Util {
 
     /**
         @returns Whether the text seems to contain a JSON object.
-        NOTE: If the JSON string is malformed, this still returns `true`.
+        NOTE: This function could return `true` even if the JSON string is malformed.
     **/
     public static function isJsonObject(text: String): Bool {
         return StringTools.trim(text).charAt(0) == '{';
@@ -83,7 +74,7 @@ class Util {
 
     /**
         @returns Whether the text seems to contain a JSON array.
-        NOTE: If the JSON string is malformed, this still returns `true`.
+        NOTE: This function could return `true` even if the JSON string is malformed.
     **/
     public static function isJsonArray(text: String): Bool {
         return StringTools.trim(text).charAt(0) == '[';
@@ -91,8 +82,8 @@ class Util {
 
 
     /**
-     * Creates an object with the differences between the two passed objects. The objects must
-     * contain an id field.
+     * Creates an object with the differences between the two passed objects (except
+     * for deletions). The objects must contain an id field.
      * @param object The updated object.
      * @param previous The object prior to the updates.
      * This method is used for example when updating a request, to send only the modified data.

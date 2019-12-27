@@ -45,7 +45,7 @@ class UsageFile extends IdModel {
 
 
     /** Date of the creation of the UsageFile. **/
-    public var createdAt: String;
+    public var createdAt: DateTime;
 
 
     /**
@@ -291,6 +291,7 @@ class UsageFile extends IdModel {
     public function new() {
         super();
         this._setFieldClassNames([
+            'createdAt' => 'DateTime',
             'vendor' => 'Account',
             'provider' => 'Account',
             'records' => 'UsageRecords'
@@ -340,7 +341,8 @@ class UsageFile extends IdModel {
         final entries = new List<haxe.zip.Entry>();
         entries.add(zipEntry('_rels/.rels', RELS1));
         entries.add(zipEntry('docProps/app.xml', APP));
-        entries.add(zipEntry('docProps/core.xml', StringTools.replace(CORE, '%DATE%', Date.now().toString())));
+        entries.add(zipEntry('docProps/core.xml', StringTools.replace(CORE, '%DATE%',
+            DateTime.now().toString())));
         entries.add(zipEntry('xl/theme/theme1.xml', THEME));
         entries.add(zipEntry('xl/worksheets/sheet1.xml', parseSheet(sheet)));
         entries.add(zipEntry('xl/sharedStrings.xml', parseSheetStrings(sheet)));

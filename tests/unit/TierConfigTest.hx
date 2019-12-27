@@ -80,8 +80,8 @@ class TierConfigTest extends haxe.unit.TestCase {
         assertEquals('MP-54865', config.marketplace.id);
         assertEquals('Germany', config.marketplace.name);
         assertEquals('/media/PA-239-689/marketplaces/MP-54865/icon.png', config.marketplace.icon);
-        assertEquals('2018-11-21T11:10:29+00:00', config.events.created.at);
-        assertEquals('2018-11-21T11:10:29+00:00', config.events.updated.at);
+        assertEquals('2018-11-21T11:10:29+00:00', config.events.created.at.toString());
+        assertEquals('2018-11-21T11:10:29+00:00', config.events.updated.at.toString());
         assertEquals('PA-000-000', config.events.updated.by.id);
         assertEquals('Username', config.events.updated.by.name);
 

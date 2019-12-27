@@ -40,6 +40,6 @@ if __name__ == '__main__':
     # Process requests
     Processor() \
         .flow(flow) \
-        .processRequests(Query() \
+        .processAssetRequests(Query() \
             .equal('asset.product.id__in', Env.getConfig().getProductsString()) \
             .equal('status', 'pending'))

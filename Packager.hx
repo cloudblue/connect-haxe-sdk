@@ -5,6 +5,7 @@
 
 import sys.FileSystem;
 #if !packager
+import connect.DateTime;
 import connect.Env;
 import connect.Processor;
 import connect.logger.Logger;

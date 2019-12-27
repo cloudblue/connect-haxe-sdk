@@ -73,7 +73,7 @@ class ProductTest extends haxe.unit.TestCase {
         assertEquals('', product.shortDescription);
         assertEquals('', product.detailedDescription);
         assertEquals(2, product.version);
-        assertEquals('', product.publishedAt);
+        assertEquals(null, product.publishedAt);
         assertEquals(true, product.configurations.suspendResumeSupported);
         assertEquals(true, product.configurations.requiresResellerInformation);
         assertEquals('description', product.customerUiSettings.description);
