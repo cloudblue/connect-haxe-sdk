@@ -1,3 +1,8 @@
+/*
+    This file is part of the Ingram Micro CloudBlue Connect SDK.
+    Copyright (c) 2019 Ingram Micro. All Rights Reserved.
+*/
+
 const connect = require("../_packages/connect.js/connect");
 const Env = connect.Env;
 const Flow = connect.Flow;

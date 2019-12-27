@@ -1,3 +1,8 @@
+/*
+    This file is part of the Ingram Micro CloudBlue Connect SDK.
+    Copyright (c) 2019 Ingram Micro. All Rights Reserved.
+*/
+
 // Include all mock classes here to make sure they are accesible to reflection
 import tests.mocks.ApiClientMock;
 import tests.mocks.FulfillmentApiMock;
