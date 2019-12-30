@@ -21,7 +21,8 @@ before_script:
 after_script:
   - cd _build/java
   - git add .
-  - git commit -m "Travis commit for ${doc_token}"
+  - git commit -m "Travis commit for ${TRAVIS_COMMIT}"
+  - echo ${TRAVIS_COMMIT}
   - git push origin master
   - cd ../..
 
