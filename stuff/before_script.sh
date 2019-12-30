@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ "$TRAVIS_BRANCH" == "master" ]; then
+if [ "$TRAVIS_BRANCH" == "CUSDK-51-push-java-code" ]; then
   mkdir -p _build/java
   cd _build/java
   git clone https://github.com/JaviCerveraIngram/connect-java-sdk.git .
