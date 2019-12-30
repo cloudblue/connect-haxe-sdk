@@ -11,20 +11,10 @@ before_install:
   - sdk install java 8.0.232.j9-adpt
 
 before_script:
-  - mkdir -p _build/java
-  - cd _build/java
-  - git clone https://github.com/JaviCerveraIngram/connect-java-sdk.git .
-  - git remote rm origin
-  - git remote add origin https://JaviCerveraIngram:${doc_token}@github.com/JaviCerveraIngram/connect-java-sdk.git
-  - cd ../..
-  - cp stuff/gitignore_java _build/java/.gitignore
+  - ./stuff/before_script.sh
 
 after_script:
-  - cd _build/java
-  - git add .
-  - git commit -m "Travis commit for ${TRAVIS_COMMIT}"
-  - git push origin master
-  - cd ../..
+  - ./stuff/after_script.sh
 
 deploy:
   provider: pages
