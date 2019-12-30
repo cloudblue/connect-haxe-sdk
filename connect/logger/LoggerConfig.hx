@@ -6,7 +6,7 @@ package connect.logger;
 
 
 /**
- * Represents the configuration of the logger. An instance can be passed to `Env.initConfig`
+ * Represents the configuration of the logger. An instance can be passed to `Env.initLogger`
  * to setup the logger behaviour.
  */
 class LoggerConfig extends Base {

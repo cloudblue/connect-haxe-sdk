@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 if [ "$TRAVIS_BRANCH" == "master" ]; then
   mkdir -p _build/java
   cd _build/java
