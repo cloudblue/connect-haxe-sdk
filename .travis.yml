@@ -16,7 +16,9 @@ before_script:
   - git remote rm origin
   - git remote add origin https://cloudblue:${doc_token}@github.com/cloudblue/connect-java-sdk.git
   - cp stuff/gitignore_java _build/java/.gitignore
-  - ls _build/java
+
+after_script:
+  - echo "I am on after_script!"
 
 deploy:
   provider: pages
