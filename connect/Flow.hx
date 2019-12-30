@@ -165,12 +165,16 @@ class Flow extends Base {
         final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
-            request.update();
+            if (request.asset != null) {
+                request.update();
+            }
             request.approveByTemplate(id);
             this.abort("");
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
-            tcr.update();
+            if (tcr.params != null) {
+                tcr.update();
+            }
             tcr.approveByTemplate(id);
             this.abort("");
         }
@@ -190,12 +194,16 @@ class Flow extends Base {
         final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
-            request.update();
+            if (request.asset != null) {
+                request.update();
+            }
             request.approveByTile(text);
             this.abort("");
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
-            tcr.update();
+            if (tcr.params != null) {
+                tcr.update();
+            }
             tcr.approveByTile(text);
             this.abort("");
         }
@@ -214,12 +222,16 @@ class Flow extends Base {
         final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
-            request.update();
+            if (request.asset != null) {
+                request.update();
+            }
             request.fail(reason);
             this.abort("Failing request");
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
-            tcr.update();
+            if (tcr.params != null) {
+                tcr.update();
+            }
             tcr.fail(reason);
             this.abort("Failing request");
         }
@@ -241,12 +253,16 @@ class Flow extends Base {
         final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
-            request.update();
+            if (request.asset != null) {
+                request.update();
+            }
             request.inquire(templateId);
             this.abort("Inquiring request");
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
-            tcr.update();
+            if (tcr.params != null) {
+                tcr.update();
+            }
             tcr.inquire();
             this.abort("Inquiring request");
         }
@@ -265,12 +281,16 @@ class Flow extends Base {
         final tcr = this.getTierConfigRequestChanges();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
-            request.update();
+            if (request.asset != null) {
+                request.update();
+            }
             request.pend();
             this.abort("Pending request");
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
-            tcr.update();
+            if (tcr.params != null) {
+                tcr.update();
+            }
             tcr.update();
             this.abort("Pending request");
         }
