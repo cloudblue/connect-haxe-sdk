@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ "$TRAVIS_BRANCH" == "CUSDK-51-push-java-code" ]; then
+if [ "$TRAVIS_BRANCH" == "master" ]; then
   mkdir -p _build/java
   cd _build/java
   git clone https://github.com/JaviCerveraIngram/connect-java-sdk.git .
@@ -7,4 +7,6 @@ if [ "$TRAVIS_BRANCH" == "CUSDK-51-push-java-code" ]; then
   git remote add origin https://JaviCerveraIngram:${doc_token}@github.com/JaviCerveraIngram/connect-java-sdk.git
   cd ../..
   cp stuff/gitignore_java _build/java/.gitignore
+else
+  echo "Skipping Java code cloning for branch $TRAVIS_BRANCH."
 fi
