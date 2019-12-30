@@ -12,10 +12,10 @@ before_install:
 
 before_script:
   - mkdir -p _build/java
-  - cp stuff/gitignore_java _build/java/.gitignore
   - git clone https://github.com/cloudblue/connect-java-sdk.git _build/java
   - git remote rm origin
   - git remote add origin https://cloudblue:${doc_token}@github.com/cloudblue/connect-java-sdk.git
+  - cp stuff/gitignore_java _build/java/.gitignore
   - ls _build/java
 
 deploy:
