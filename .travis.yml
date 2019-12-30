@@ -2,7 +2,19 @@ language: haxe
 haxe: "4.0.5"
 hxml:
   - unittests.hxml
+  - package.hxml
   - doc.hxml
+
+before_install:
+  - curl -s "https://get.sdkman.io" | bash
+  - source "/home/travis/.sdkman/bin/sdkman-init.sh"
+  - sdk install java 8.0.232.j9-adpt
+
+before_script:
+  - ./stuff/before_script.sh
+
+after_script:
+  - ./stuff/after_script.sh
 
 deploy:
   provider: pages
