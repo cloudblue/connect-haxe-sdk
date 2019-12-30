@@ -7,6 +7,7 @@ if [ "$TRAVIS_BRANCH" == "master" ]; then
   git remote add origin https://cloudblue:${doc_token}@github.com/cloudblue/connect-java-sdk.git
   cd ../..
   cp stuff/gitignore_java _build/java/.gitignore
+  cp stuff/JAVA_README.md _build/java/README.md
 else
   echo "Skipping Java code cloning for branch $TRAVIS_BRANCH."
 fi
