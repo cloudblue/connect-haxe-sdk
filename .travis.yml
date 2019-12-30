@@ -11,7 +11,7 @@ before_install:
   - sdk install java 8.0.232.j9-adpt
 
 before_script:
-  - mkdir _build/java
+  - mkdir -p _build/java
   - cp stuff/gitignore_java _build/java/.gitignore
   - git clone https://github.com/cloudblue/connect-java-sdk.git _build/java
   - git remote rm origin
