@@ -16,7 +16,7 @@ class Config extends Base {
             data: Dictionary) {
         this.apiUrl = (apiUrl.charAt(apiUrl.length - 1) == "/") ? apiUrl : apiUrl + "/";
         this.apiKey = (apiKey.indexOf("ApiKey ") == 0) ? apiKey : ("ApiKey " + apiKey);
-        this.products = products.copy();
+        this.products = (products != null) ? products.copy() : new Collection<String>();
         this.data = (data != null) ? data : new Dictionary();
     }
 
@@ -50,7 +50,8 @@ class Config extends Base {
 
 
     /**
-        Get the entire list of products supported by this configuration.
+        Get the entire list of products supported by this configuration, or an empty string
+        if the configuration does not contain a product list.
 
         @returns A string with a comma-separated list of products.
     **/

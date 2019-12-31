@@ -1,15 +1,17 @@
 # Connect Haxe SDK
 
-This is a version of the SDK for [CloudBlue Connect](https://www.cloudblue.com/connect/) platform, written in Haxe. While it allows to write connectors in Haxe itself, the generated code can be used to write connectors in other languages:
+This is a version of the SDK for [CloudBlue Connect](https://www.cloudblue.com/connect/) platform, written in Haxe. While it allows to write connectors in Haxe itself, the generated code can be used in other languages:
 
 * Java.
 * JavaScript.
 * PHP.
 * Python.
 
-C# support will be coming in the future.
+C# support will come in the future.
 
 Documentation on how to use the SDK is available [here](https://cloudblue.github.io/connect-haxe-sdk/).
+
+## Building
 
 In order to compile the SDK, you must have Haxe 4.0 or higher installed on your machine. On Debian-based Linux distributions, such as Ubuntu and Mint, Haxe can be installed by typing the following on a terminal:
 
@@ -36,6 +38,10 @@ $ haxe package.hxml
 
 A `_packages` folder will be generated with subfolders for every target language. For example, if you want to use it in Java, you should go to the `_packages/connect.java` folder, and copy `connect.jar` to your project.
 
+## Examples
+
+Examples require you to open the "examples/config.json" file and provide valid credentials.
+
 To run an example written in Haxe, type:
 
 ```shell script
@@ -60,6 +66,8 @@ If you want to run all the examples, run:
 ```shell script
 $ ./run_examples.sh
 ```
+
+## Generating docs and running tests
 
 To generate the documentation, type:
 

@@ -1,38 +1,5 @@
 {
-  "apiKey": "SU-879-835-543:9eef2442a3dd158e4ded00da5c77c2f5f79bd5dd",
+  "apiKey": "SU-XXX-XXX-XXX:...",
   "apiEndpoint": "https://api.conn.rocks/public/v1/",
-  "logLevel": 2,
-  "timeout": 10,
-  "sslVerifyHost": false,
-  "products": "PRD-032-547-713",
-  "service": {
-    "webhookSecret": "JWT-059a286a-3ac69858-9802435c-78ac3175",
-    "partnerConfig": {
-      "CT-0000-0000-0000": {
-        "default": {
-          "docusignUrl": "https://api-d.docusign.net",
-          "integratorKey": "9f076be3-f688-46d0-8a7b-712f2b1c3b63",
-          "PartnerId": "181df63a-c6e2-4940-8ee4-db78977f5480",
-          "tokenUrl": "https://account-d.docusign.com",
-          "privateKey": "-----BEGIN RSA PRIVATE KEY----- MIIEowIBAAKCAQEAhFgXVoxAHK43InyZXqoHy1VBucGAMsjVV0P+cVlVsZ+M5j2v Alg+WZYyc/uh0Ny7GS3wszOw4fllq5y6RqxpARVPUZnuBslQAh/VsWK2xNVz3LDe Wcw07uicCV5LriI4nDtJBj4DUSFkJSS3y5cbTTQiMOF1mFQ5iXda8R8mi47dU4Ew OO0+LTWGuyDlB10+6A99YmWBikQpmtIAiZaG8hB0D5lv3YbucG08bNwONwA5G0mx 7XZLAk512mgiWZogj+Cu43oxgbUyO0x41xNonWBnyakPcJzhxYvaPoHwBVw3Bebw pydeCNnoTnPYUheIkBWwiy6CrUcSdRJ7pP0oswIDAQABAoIBAAoDGBDmH1uMGoOz ZW7x8hEB7Cz/ZJFy/CDT9gXhOkhrx58Lf5fv0Re58ysvGDjS2hy3iwQjnvgZhAWN n9IE7RS15gBIYueEh1cBzYrT6vvNIizJ/KhSeJayZkuXJKaR1DKNkaK1Qk769baR po3yapBWp1eHVvwlMw0hSHIBZ0sbcP9NIf6yzxHvx9Lqi43LrWnTlSRdUywadpH3 vd743im7CYqgLfTgDgahTc7y1qh6n9UXUqelK1HfRHzFjPYAtxRcPVrNLmXdq8fg ulreMGkoiOwNnSJr6Dl6K6mEaAJHkRlw+/xXm7cr2qJ9lLxqp6gFKZSfRk/7X4Tu juNYBsECgYEA7ixSV7z4BsCoTkzSYIkxsHf1g7liBnMFLqn+pmwpGL9zX1pqCUC4 agMue9sFLT+zSYObzyScAV6AjLerbZlm15U0Yr7BWbfFgTED7pmJEoYtkzobJvPK W5OLw/C5nuCwPvidUSATWH12gIMFFDlwws0H4SN4zJh78NziBBKSB1ECgYEAjj/1 4NuKwnyeEL1+aMyxbo3KgzcV4udztxJfFMkfghjw+L1bkblO1QsSh/dRX9BNb6io oeH0rJ6cUuEpDCNakvdnVFngiflvjg5I1nj+jKZHResFiKdQlJTOkCzwnaEHFTl7 UwqPApzc26SXzZjWenHyXJU043Q6lSKQTv4utsMCgYEAouuSkA3lo8jZ2GXYasyu PsZwHWEMWtkHLHqAhRrrqdAcfZd9fULWYz415+dUTTWL0LfENxgV1yHr0VY6X8hV fxbDNODDpjl9UvhSdj50c0Vxm4pd1HFjdO0i6C+c6b9NEGZERqAoW5nHG/WD3efE 6JwTzb/T/DA6Z/LQcHS7i2ECgYB7qv+ITVWFX/HLe/K6Cbr38i1thiZw7eeb8UzY NUI/SI+2sGk7d28hqE6kBk+ojN/Fg0uX8WlV6U7efwHAm7vSqWQb4UdkrIZfaevJ CcfDX4v3LSvSciOMCRLMJUXKxIPz39VnjHZoPxeDnMSc6ZMNQKMD+nPQiuujXDk5 c6IJIQKBgBHkgo56u2NQc56v5aFTpnr4nLnhZ28hC+otiub70E7yD8yb6ozRydn4 RQuYu80zQO9sNP5rvMklgufep7ULZdz6SSW1yIoD44QRxMTQUmzVKp1YdLdUJeQx l8SUMiBNS/ldyPqbl8Tf5k7VNMExNaYNG1DZ8u+I9w1PIWb6rdw0 -----END RSA PRIVATE KEY-----",
-          "apiVersion": "1",
-          "VA-000-000": {
-            "tpl": {
-              "activation_template": ""
-            }
-          }
-        }
-      }
-    },
-    "default_templates": {
-      "tpl": {
-        "activation_template": "TL-038-476-618"
-      }
-    }
-  },
-  "runtimeServices": {
-    "docusign": "\\App\\WrapperAutomationProvider",
-    "migration": "\\App\\Providers\\MigrationServiceProvider",
-    "logger": "\\App\\Providers\\LoggerServiceProvider"
-  }
+  "products": ["PRD-XXX-XXX-XXX"]
 }

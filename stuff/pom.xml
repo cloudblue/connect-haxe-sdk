@@ -4,15 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.connect</groupId>
+    <groupId>com.cloudblue</groupId>
     <artifactId>connect-sdk</artifactId>
-    <version>0.17.5</version>
+    <version>18</version>
     <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <!-- dependencies version -->
         <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
     </properties>
 
@@ -40,4 +38,8 @@
             <url>http://nexus.spc.dev.cloud.im:8081/repository/maven-releases/</url>
         </repository>
     </distributionManagement>
+
+    <scm>
+        <url>http://nexus.spc.dev.cloud.im:8081/repository/maven-releases/</url>
+    </scm>
 </project>
