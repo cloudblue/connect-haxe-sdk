@@ -27,7 +27,7 @@ deploy:
   skip_cleanup: true
   keep_history: false
   on:
-    branch: master
+    branch: CUSDK-48-maven-deployment
 
 
 after_deploy:
