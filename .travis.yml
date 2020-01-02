@@ -13,6 +13,7 @@ before_install:
   - cp stuff/settings.xml ~/.m2/settings.xml
   - sed -i "s/__USER__/${mvn_user}/g" ~/.m2/settings.xml
   - sed -i "s/__PASSWORD__/${mvn_password}/g" ~/.m2/settings.xml
+  - sed -i "s/__PASSPHRASE__/${mvn_passphrase}/g" ~/.m2/settings.xml
 
 before_script:
   - ./stuff/before_script.sh
@@ -31,4 +32,4 @@ deploy:
 
 
 after_deploy:
-  - mvn deploy:deploy-file -DpomFile=stuff/pom.xml -Dfile=_build/java/Packager.jar -Durl=http://nexus.spc.dev.cloud.im:8081/repository/maven-releases/ -DrepositoryId=nexus
+  - mvn gpg:sign-and-deploy-file -DpomFile=stuff/pom.xml -Dfile=_build/java/Packager.jar -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=nexus
