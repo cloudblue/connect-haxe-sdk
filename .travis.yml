@@ -33,7 +33,10 @@ deploy:
 
 
 after_deploy:
-  - sed -i "s/__KEY__/${mvn_key}/g" stuff/key.gpg
+  - cat "-----BEGIN PGP PRIVATE KEY BLOCK-----" > stuff/key.gpg
+  - cat "${mvn_key}" >> stuff/key.gpg
+  - cat "-----END PGP PRIVATE KEY BLOCK-----" >> stuff/key.gpg
+#  - sed -i "s/__KEY__/${mvn_key}/g" stuff/key.gpg
   - cat stuff/key.gpg
   - gpg --import stuff/key.gpg
   - gpg --list-secret-keys
