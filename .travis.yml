@@ -36,6 +36,6 @@ after_deploy:
   - gpg --import key.gpg
   - rm key.gpg
   - gpg --list-secret-keys
-  - apt install gpg-agent
+  - sudo apt install gpg-agent -y
   - mvn -X gpg:sign-and-deploy-file -DpomFile=stuff/pom.xml -Dfile=_build/java/Packager.jar
     -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=nexus
