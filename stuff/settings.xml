@@ -10,7 +10,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <gpg.passphrase>__PASSPHRASE__</gpg.passphrase>
+                <gpg.keyname>__KEYNAME__</gpg.keyname>
             </properties>
         </profile>
     </profiles>
@@ -20,6 +20,7 @@
             <id>maven-central</id>
             <username>__USER__</username>
             <password>__PASSWORD__</password>
+            <passphrase>__PASSPHRASE__</passphrase>
         </server>
     </servers>
 </settings>
