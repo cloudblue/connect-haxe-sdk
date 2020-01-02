@@ -1,5 +1,5 @@
 language: haxe
-haxe: "4.0.5"
+haxe: 4.0.5
 hxml:
   - unittests.hxml
   - package.hxml
@@ -17,28 +17,27 @@ before_install:
   - sed -i "s/__KEYNAME__/${mvn_keyname}/g" ~/.m2/settings.xml
 
 before_script:
-  - ./stuff/before_script.sh
+  - "./stuff/before_script.sh"
 
 after_script:
-  - ./stuff/after_script.sh
+  - "./stuff/after_script.sh"
 
 deploy:
   provider: pages
   local_dir: doc
-  github_token: $doc_token
+  github_token: "$doc_token"
   skip_cleanup: true
   keep_history: false
   on:
     branch: CUSDK-48-maven-deployment
 
-
 after_deploy:
   - echo "-----BEGIN PGP PRIVATE KEY BLOCK-----" > key.gpg
   - echo "${mvn_key}" >> key.gpg
   - echo "-----END PGP PRIVATE KEY BLOCK-----" >> key.gpg
-#  - sed -i "s/__KEY__/${mvn_key}/g" stuff/key.gpg
   - cat key.gpg
   - gpg --import key.gpg
   - rm key.gpg
   - gpg --list-secret-keys
-  - mvn -X gpg:sign-and-deploy-file -DpomFile=stuff/pom.xml -Dfile=_build/java/Packager.jar -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=nexus
+  - mvn -X gpg:sign-and-deploy-file -DpomFile=stuff/pom.xml -Dfile=_build/java/Packager.jar
+    -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=nexus
