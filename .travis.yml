@@ -35,7 +35,9 @@ after_deploy:
   - openssl aes-256-cbc -K $encrypted_4ac79ed20675_key -iv $encrypted_4ac79ed20675_iv -in stuff/key.gpg.enc -out key.gpg -d
   - gpg --import key.gpg
   - rm key.gpg
-  - gpg --list-secret-keys
   - sudo apt install gpg-agent -y
-  - mvn -X gpg:sign-and-deploy-file -DpomFile=stuff/pom.xml -Dfile=_build/java/Packager.jar
-    -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=nexus
+  - mvn -X gpg:sign-and-deploy-file
+    -DpomFile=stuff/pom.xml
+    -Dfile=_build/java/Packager.jar
+    -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/
+    -DrepositoryId=maven-central
