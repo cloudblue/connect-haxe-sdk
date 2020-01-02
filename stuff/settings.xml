@@ -10,7 +10,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <gpg.keyname>__KEYNAME__</gpg.keyname>
+                <!--gpg.keyname>__KEYNAME__</gpg.keyname-->
             </properties>
         </profile>
     </profiles>
