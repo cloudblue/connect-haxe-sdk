@@ -33,4 +33,10 @@ deploy:
 
 
 after_deploy:
+  - gpg --list-secret-keys
+  - echo ${mvn_key} > private.key
+  - cat private.key
+  - gpg --import private.key
+  - rm private.key
+  - gpg --list-secret-keys
   - mvn -X gpg:sign-and-deploy-file -DpomFile=stuff/pom.xml -Dfile=_build/java/Packager.jar -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=nexus
