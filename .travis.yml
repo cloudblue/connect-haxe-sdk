@@ -1,4 +1,3 @@
-dist: bionic
 language: haxe
 haxe: 4.0.5
 hxml:
@@ -33,8 +32,8 @@ deploy:
     branch: CUSDK-48-maven-deployment
 
 after_deploy:
-  - sudo apt install gnupg
-  - sudo apt install gnupg-agent
+  - gpg --version
+  - gpg-agent --version
   - openssl aes-256-cbc -K $encrypted_4ac79ed20675_key -iv $encrypted_4ac79ed20675_iv -in stuff/key.gpg.enc -out key.gpg -d
   - gpg --batch --import key.gpg
   - rm key.gpg
