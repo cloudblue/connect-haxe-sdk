@@ -36,7 +36,7 @@ after_deploy:
   - openssl aes-256-cbc -K $encrypted_4ac79ed20675_key -iv $encrypted_4ac79ed20675_iv -in stuff/key.gpg.enc -out key.gpg -d
   - gpg2 --batch --passphrase ${mvn_passphrase} --import key.gpg
   - rm key.gpg
-  - mvn -e gpg:sign-and-deploy-file
+  - mvn -X gpg:sign-and-deploy-file
     -DpomFile=stuff/pom.xml
     -Dfile=_build/java/Packager.jar
     -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/
