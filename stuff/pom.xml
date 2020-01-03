@@ -69,7 +69,9 @@
                             <!--keyname>${gpg.keyname}</keyname>
                             <passphraseServerId>${gpg.keyname}</passphraseServerId-->
                             <gpgArguments>
-                                <arg>--batch</arg>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                                <!--arg>- -batch</arg-->
                             </gpgArguments>
                         </configuration>
                     </execution>

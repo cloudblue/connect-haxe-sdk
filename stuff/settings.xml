@@ -21,7 +21,7 @@
             <id>maven-central</id>
             <username>__USER__</username>
             <password>__PASSWORD__</password>
-            <passphrase>__PASSPHRASE__</passphrase>
+            <passphrase><![CDATA[__PASSPHRASE__]]></passphrase>
         </server>
     </servers>
 </settings>
