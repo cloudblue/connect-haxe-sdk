@@ -71,6 +71,7 @@
                             <gpgArguments>
                                 <arg>--batch</arg>
                             </gpgArguments>
+                            <useAgent>false</useAgent>
                         </configuration>
                     </execution>
                 </executions>
