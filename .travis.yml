@@ -32,10 +32,10 @@ deploy:
     branch: CUSDK-48-maven-deployment
 
 after_deploy:
-  - export GPG_TTY=$(tty)
+  - GPG_TTY=$(tty)
+  - export GPG_TTY
   - openssl aes-256-cbc -K $encrypted_4ac79ed20675_key -iv $encrypted_4ac79ed20675_iv -in stuff/key.gpg.enc -out key.gpg -d
   - gpg2 --batch --passphrase ${mvn_passphrase} --import key.gpg
-  - gpg2 --list-secret-keys
   - rm key.gpg
   - mvn gpg:sign-and-deploy-file
     -DpomFile=stuff/pom.xml
