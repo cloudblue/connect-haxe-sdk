@@ -2,10 +2,10 @@
 cd `dirname $0`
 
 echo "Deploying Java package to Nexus repository using Maven..."
-mvn deploy:deploy-file \
+mvn gpg:sign-and-deploy-file \
     -DpomFile=stuff/pom.xml \
     -Dfile=_build/java/Packager.jar \
-    -Durl=http://nexus.spc.dev.cloud.im:8081/repository/maven-releases/ \
-    -DrepositoryId=nexus
+    -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ \
+    -DrepositoryId=maven-central
 
 echo "Done."
