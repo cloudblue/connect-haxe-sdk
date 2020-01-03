@@ -32,6 +32,8 @@ deploy:
     branch: CUSDK-48-maven-deployment
 
 after_deploy:
+  - apt search gpg
+  - apt search gnupg
   - openssl aes-256-cbc -K $encrypted_4ac79ed20675_key -iv $encrypted_4ac79ed20675_iv -in stuff/key.gpg.enc -out key.gpg -d
   - cat key.gpg
   - gpg --batch --import key.gpg
