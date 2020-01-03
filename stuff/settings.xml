@@ -17,6 +17,10 @@
         </profile>
     </profiles>
 
+    <activeProfiles>
+        <activeProfile>maven-central</activeProfile>
+    </activeProfiles>
+
     <servers>
         <server>
             <id>maven-central</id>
