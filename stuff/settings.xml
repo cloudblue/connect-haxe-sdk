@@ -11,6 +11,7 @@
             </activation>
             <properties>
                 <gpg.executable>gpg2</gpg.executable>
+                <gpg.passphrase><![CDATA[__PASSPHRASE__]]></gpg.passphrase>
                 <!--gpg.keyname>__KEYNAME__</gpg.keyname-->
             </properties>
         </profile>
