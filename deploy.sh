@@ -6,3 +6,4 @@ mvn gpg:sign-and-deploy-file \
     -Dfile=_build/java/Packager.jar \
     -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ \
     -DrepositoryId=maven-central
+    -Dgpg.passphrase=passphrase
