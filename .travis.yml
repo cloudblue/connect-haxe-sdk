@@ -13,8 +13,8 @@ before_install:
   - cp stuff/settings.xml ~/.m2/settings.xml
   - sed -i "s/__USER__/${mvn_user}/g" ~/.m2/settings.xml
   - sed -i "s/__PASSWORD__/${mvn_password}/g" ~/.m2/settings.xml
-  - sed -i "s/__PASSPHRASE__/${mvn_passphrase}/g" ~/.m2/settings.xml
-  - sed -i "s/__PASSPHRASE__/${mvn_passphrase}/g" stuff/pom.xml
+#  - sed -i "s/__PASSPHRASE__/${mvn_passphrase}/g" ~/.m2/settings.xml
+#  - sed -i "s/__PASSPHRASE__/${mvn_passphrase}/g" stuff/pom.xml
 
 before_script:
   - "./stuff/before_script.sh"
@@ -33,9 +33,9 @@ deploy:
 
 after_deploy:
   - export GPG_TTY=$(tty)
-  - openssl aes-256-cbc -K $encrypted_4ac79ed20675_key -iv $encrypted_4ac79ed20675_iv -in stuff/private.gpg.enc -out stuff/private.gpg -d
-  - gpg2 --batch --passphrase ${mvn_passphrase} --import stuff/private.gpg
-  - rm stuff/private.gpg
+  - openssl aes-256-cbc -K $encrypted_4ac79ed20675_key -iv $encrypted_4ac79ed20675_iv -in stuff/key.gpg.enc -out stuff/key.gpg -d
+  - gpg2 --batch --passphrase ${mvn_passphrase} --import stuff/key.gpg
+  - rm stuff/key.gpg
   - mvn gpg:sign-and-deploy-file
     -DpomFile=stuff/pom.xml
     -Dfile=_build/java/Packager.jar
