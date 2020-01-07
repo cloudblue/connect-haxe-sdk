@@ -70,8 +70,8 @@
                             <!--keyname>${gpg.keyname}</keyname-->
                             <!--passphraseServerId>${gpg.keyname}</passphraseServerId-->
                             <gpgArguments>
-                                <arg>--pinentry-mode</arg>
-                                <arg>loopback</arg>
+                                <!--arg>- -pinentry-mode</arg-->
+                                <!--arg>loopback</arg-->
                                 <!--arg>- -batch</arg-->
                                 <!--arg>- -passphrase __PASSPHRASE__</arg-->
                             </gpgArguments>
