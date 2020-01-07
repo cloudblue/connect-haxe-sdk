@@ -65,17 +65,6 @@
                         <goals>
                             <goal>sign</goal>
                         </goals>
-                        <configuration>
-                            <!--executable>gpg2</executable-->
-                            <!--keyname>${gpg.keyname}</keyname-->
-                            <!--passphraseServerId>${gpg.keyname}</passphraseServerId-->
-                            <gpgArguments>
-                                <!--arg>- -pinentry-mode</arg-->
-                                <!--arg>loopback</arg-->
-                                <!--arg>- -batch</arg-->
-                                <!--arg>- -passphrase __PASSPHRASE__</arg-->
-                            </gpgArguments>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
