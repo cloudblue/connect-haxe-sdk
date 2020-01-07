@@ -14,7 +14,6 @@ before_install:
   - sed -i "s/__USER__/${mvn_user}/g" ~/.m2/settings.xml
   - sed -i "s/__PASSWORD__/${mvn_password}/g" ~/.m2/settings.xml
   - sed -i "s/__PASSPHRASE__/${mvn_passphrase}/g" ~/.m2/settings.xml
-  - sed -i "s/__KEYNAME__/${mvn_keyname}/g" ~/.m2/settings.xml
   - sed -i "s/__PASSPHRASE__/${mvn_passphrase}/g" stuff/pom.xml
 
 before_script:
