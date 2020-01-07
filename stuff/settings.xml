@@ -12,7 +12,7 @@
             <properties>
                 <!--gpg.executable>gpg2</gpg.executable-->
                 <gpg.passphrase>__PASSPHRASE__</gpg.passphrase>
-                <gpg.keyname>__KEYNAME__</gpg.keyname>
+                <!--gpg.keyname>__KEYNAME__</gpg.keyname-->
             </properties>
         </profile>
     </profiles>

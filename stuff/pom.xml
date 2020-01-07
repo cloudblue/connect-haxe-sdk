@@ -67,8 +67,8 @@
                         </goals>
                         <configuration>
                             <!--executable>gpg2</executable-->
-                            <keyname>${gpg.keyname}</keyname>
-                            <passphraseServerId>${gpg.keyname}</passphraseServerId>
+                            <!--keyname>${gpg.keyname}</keyname-->
+                            <!--passphraseServerId>${gpg.keyname}</passphraseServerId-->
                             <gpgArguments>
                                 <arg>--pinentry-mode</arg>
                                 <arg>loopback</arg>
