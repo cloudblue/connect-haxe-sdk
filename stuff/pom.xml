@@ -71,8 +71,7 @@
                             <gpgArguments>
                                 <arg>--pinentry-mode loopback</arg>
                                 <arg>--batch</arg>
-                                <!--arg>- -passphrase</arg>
-                                <arg>__PASSPHRASE__</arg-->
+                                <arg>--passphrase __PASSPHRASE__</arg>
                             </gpgArguments>
                         </configuration>
                     </execution>
