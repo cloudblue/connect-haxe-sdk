@@ -33,7 +33,7 @@ deploy:
 
 after_deploy:
   - export GPG_TTY=$(tty)
-  - openssl aes-256-cbc -K $encrypted_8fcf9febc15e_key -iv $encrypted_8fcf9febc15e_iv -in stuff/private.gpg.enc -out stuff/private.gpg -d
+  - openssl aes-256-cbc -K $encrypted_4ac79ed20675_key -iv $encrypted_4ac79ed20675_iv -in stuff/private.gpg.enc -out stuff/private.gpg -d
   - gpg2 --batch --passphrase ${mvn_passphrase} --import stuff/private.gpg
   - gpg2 --list-secret-keys
   - gpg2 --list-keys
