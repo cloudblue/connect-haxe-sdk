@@ -68,6 +68,7 @@
                         <configuration>
                             <gpgArguments>
                                 <arg>--batch</arg>
+                                <arg>--passphrase passphrase</arg>
                             </gpgArguments>
                         </configuration>
                     </execution>
