@@ -250,6 +250,7 @@ class Packager {
         file.writeString("setup(" + EOL);
         file.writeString("    name='cbconnect'," + EOL);
         file.writeString("    author='Ingram Micro'," + EOL);
+        file.writeString("    author_email='connect-service-account@ingrammicro.com'," + EOL);
         file.writeString("    version='18.0'," + EOL);
         file.writeString("    keywords='connect sdk cloudblue ingram micro ingrammicro cloud'," + EOL);
         file.writeString("    packages=[" + packages.map(function(pkg) { return '\'${pkg}\''; }).join(', ') + "]," + EOL);
