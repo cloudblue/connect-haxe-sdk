@@ -9,5 +9,5 @@ if [ "$TRAVIS_BRANCH" == "master" ]; then
   cp stuff/gitignore_java _build/java/.gitignore
   cp stuff/JAVA_README.md _build/java/README.md
 else
-  echo "Skipping Java code cloning for branch $TRAVIS_BRANCH."
+  echo "Skipping Java repo cloning for branch $TRAVIS_BRANCH."
 fi

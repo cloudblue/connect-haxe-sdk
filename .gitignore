@@ -4,3 +4,5 @@ _build/_venv/*
 _packages/*
 doc/*
 log.md
+*.gpg
+*.asc

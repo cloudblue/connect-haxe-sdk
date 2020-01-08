@@ -6,5 +6,5 @@ if [ "$TRAVIS_BRANCH" == "master" ]; then
   git push origin master
   cd ../..
 else
-  echo "Skipping Java code deployment for branch $TRAVIS_BRANCH."
+  echo "Skipping Java repo commit for branch $TRAVIS_BRANCH."
 fi
