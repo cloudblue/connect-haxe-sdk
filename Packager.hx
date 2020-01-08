@@ -248,13 +248,13 @@ class Packager {
         var file = sys.io.File.write('_packages/connect.py/setup.py');
         file.writeString("from setuptools import setup" + EOL + EOL + EOL);
         file.writeString("setup(" + EOL);
-        file.writeString("    name='connect'," + EOL);
+        file.writeString("    name='cbconnect'," + EOL);
         file.writeString("    author='Ingram Micro'," + EOL);
-        file.writeString("    version='0.0.0'," + EOL);
-        file.writeString("    keywords='connect ingram sdk'," + EOL);
+        file.writeString("    version='18.0'," + EOL);
+        file.writeString("    keywords='connect sdk cloudblue ingram micro ingrammicro cloud'," + EOL);
         file.writeString("    packages=[" + packages.map(function(pkg) { return '\'${pkg}\''; }).join(', ') + "]," + EOL);
-        file.writeString("    description='Connect Python SDK'," + EOL);
-        //file.writeString("    url='https://github.com/ingrammicro/connect-python-sdk'," + EOL);
+        file.writeString("    description='CloudBlue Connect SDK, generated from Haxe'," + EOL);
+        file.writeString("    url='https://github.com/cloudblue/connect-haxe-sdk'," + EOL);
         file.writeString("    license='Apache Software License'," + EOL);
         file.writeString("    install_requires=['requests==2.21.0']" + EOL);
         file.writeString(")" + EOL);
