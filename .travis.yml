@@ -15,10 +15,10 @@ before_install:
   - sed -i "s/__PASSWORD__/${mvn_password}/g" ~/.m2/settings.xml
 
 before_script:
-  - "./stuff/before_script.sh"
+  - "./stuff/java_clone.sh"
 
 after_script:
-  - "./stuff/after_script.sh"
+  - "./stuff/java_deploy.sh"
 
 deploy:
   provider: pages
