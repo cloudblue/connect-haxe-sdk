@@ -1,6 +1,6 @@
 #!/bin/sh
 cp stuff/pypirc ~/.pypirc
-sed -i "s/__PYPI_TOKEN__/${pypi_token}/g" ~/.pyppypircirc
+sed -i "s/__PYPI_TOKEN__/${pypi_token}/g" ~/.pypirc
 echo "******** print .pypirc"
 cat stuff/pypirc
 cat ~/.pypirc
