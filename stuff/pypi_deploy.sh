@@ -5,5 +5,6 @@ python3 setup.py sdist bdist_wheel
 export TWINE_USERNAME=__token__
 export TWINE_PASSWORD=${pypi_token}
 export TWINE_REPOSITORY_URL=https://test.pypi.org/legacy/
+export TWINE_NON_INTERACTIVE
 twine upload dist/*
 cd ../..
