@@ -27,7 +27,7 @@ deploy:
   skip_cleanup: true
   keep_history: false
   on:
-    branch: CUSDK-48-maven-deployment
+    branch: master
 
 after_deploy:
   - export GPG_TTY=$(tty)
