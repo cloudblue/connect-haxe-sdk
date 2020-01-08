@@ -18,7 +18,7 @@ before_script:
   - "./stuff/java_clone.sh"
 
 after_script:
-  - "./stuff/java_deploy.sh"
+  - "./stuff/java_commit.sh"
 
 deploy:
   provider: pages
