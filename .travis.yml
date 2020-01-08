@@ -34,8 +34,6 @@ after_deploy:
   - openssl aes-256-cbc -K $encrypted_4ac79ed20675_key -iv $encrypted_4ac79ed20675_iv -in stuff/key.gpg.enc -out stuff/key.gpg -d
   - gpg --batch --passphrase ${mvn_passphrase} --import stuff/key.gpg
   - rm stuff/key.gpg
-  - gpg --list-keys
-  - gpg --list-secret-keys
   - mvn gpg:sign-and-deploy-file
     -DpomFile=stuff/pom.xml
     -Dfile=_build/java/Packager.jar
