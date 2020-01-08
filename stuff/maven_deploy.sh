@@ -1,5 +1,4 @@
 #!/bin/sh
-echo $mvn_passphrase
 export GPG_TTY=$(tty)
 openssl aes-256-cbc -K $encrypted_6c315054a92d_key -iv $encrypted_6c315054a92d_iv -in stuff/key.gpg.enc -out stuff/key.gpg -d
 gpg --batch --passphrase ${mvn_passphrase} --import stuff/key.gpg
