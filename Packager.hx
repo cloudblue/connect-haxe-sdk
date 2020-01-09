@@ -237,7 +237,7 @@ class Packager {
         file.writeString("    README = fhandle.read()" + EOL + EOL + EOL);
         file.writeString("setup(" + EOL);
         file.writeString("    name='cbconnect'," + EOL);
-        file.writeString("    version='18.0'," + EOL);
+        file.writeString("    version='18.0.1'," + EOL);
         file.writeString("    description='CloudBlue Connect SDK, generated from Haxe'," + EOL);
         file.writeString("    long_description=README," + EOL);
         file.writeString("    long_description_content_type='text/markdown'," + EOL);
