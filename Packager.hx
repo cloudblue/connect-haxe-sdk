@@ -127,20 +127,19 @@ class Packager {
 
 
     private static function copyLicense(destPath: String): Void {
+        createPath(destPath);
         sys.io.File.copy('LICENSE', destPath + '/LICENSE');
     }
 
 
     private static function createJavaPackage(): Void {
-        createPath('_packages/connect.java');
-        copyLicense('_packages/connect.java');
-        sys.io.File.copy('_build/java/Packager.jar', '_packages/connect.java/connect.jar');
-        sys.io.File.copy('stuff/pom.xml', '_packages/connect.java/pom.xml');
+        final outDir = '_build/java';
+        copyLicense(outDir);
+        sys.io.File.copy('stuff/pom.xml', '$outDir/pom.xml');
     }
 
 
     private static function createJSPackage(classes: Array<String>): Void {
-        createPath('_packages/connect.js');
         copyLicense('_packages/connect.js');
 
         // Get list of packages
@@ -179,7 +178,6 @@ class Packager {
 
 
     private static function createPhpPackage(classes: Array<String>): Void {
-        createPath('_packages/connect.php');
         copyLicense('_packages/connect.php');
         final file = sys.io.File.write('_packages/connect.php/connect.php');
         file.writeString('<?php' + EOL + EOL);
@@ -210,9 +208,6 @@ class Packager {
             final pkgPath = StringTools.replace(pkg, '.', '/');
             createPath('$outDir/$pkgPath');
         }
-
-        // Copy haxe code
-        //sys.io.File.copy('_build/connect.py', '_packages/connect.py/connect/autogen.py');
 
         // Copy license
         copyLicense(outDir);
