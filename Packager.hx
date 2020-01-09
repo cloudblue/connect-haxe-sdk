@@ -176,21 +176,7 @@ class Packager {
 
 
     private static function createPhpPackage(classes: Array<String>): Void {
-        copyLicense('_packages/connect.php');
-        final file = sys.io.File.write('_packages/connect.php/connect.php');
-        file.writeString('<?php' + EOL + EOL);
-        file.writeString("set_include_path(get_include_path().PATH_SEPARATOR.__DIR__.'/lib');" + EOL);
-        file.writeString("spl_autoload_register(" + EOL);
-        file.writeString("    function($class){" + EOL);
-        file.writeString("        $file = stream_resolve_include_path(str_replace('\\\\', '/', $class) .'.php');" + EOL);
-        file.writeString("        if ($file) {" + EOL);
-        file.writeString("            include_once $file;" + EOL);
-        file.writeString("        }" + EOL);
-        file.writeString("    }" + EOL);
-        file.writeString(");" + EOL);
-        file.writeString("\\php\\Boot::__hx__init();" + EOL);
-        file.close();
-        copyPath('_build/php/lib', '_packages/connect.php/lib');
+        copyLicense('_build/php');
     }
 
 
