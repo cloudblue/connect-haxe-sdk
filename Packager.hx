@@ -135,6 +135,7 @@ class Packager {
     private static function createJavaPackage(): Void {
         final outDir = '_build/java';
         copyLicense(outDir);
+        sys.io.File.copy('stuff/PYTHON_README.md', '$outDir/README.md');
         sys.io.File.copy('stuff/pom.xml', '$outDir/pom.xml');
     }
 
@@ -193,8 +194,9 @@ class Packager {
             createPath('$outDir/$pkgPath');
         }
 
-        // Copy license
+        // Copy license and readme files
         copyLicense(outDir);
+        sys.io.File.copy('stuff/PYTHON_README.md', '$outDir/README.md');
 
         // Create __init__.py files
         for (pkg in packages) { 
@@ -228,15 +230,21 @@ class Packager {
 
         // Create setup.py file
         final file = sys.io.File.write('$outDir/setup.py');
+
+        file.writeString("from os import path" + EOL);
         file.writeString("from setuptools import setup" + EOL + EOL + EOL);
+        file.writeString("with open(path.join(path.abspath(path.dirname(__file__)), 'README.md')) as fhandle:" + EOL);
+        file.writeString("    README = fhandle.read()" + EOL + EOL + EOL);
         file.writeString("setup(" + EOL);
         file.writeString("    name='cbconnect'," + EOL);
+        file.writeString("    version='18.0'," + EOL);
+        file.writeString("    description='CloudBlue Connect SDK, generated from Haxe'," + EOL);
+        file.writeString("    long_description=README," + EOL);
+        file.writeString("    long_description_content_type='text/markdown'," + EOL);
         file.writeString("    author='Ingram Micro'," + EOL);
         file.writeString("    author_email='connect-service-account@ingrammicro.com'," + EOL);
-        file.writeString("    version='18.0'," + EOL);
         file.writeString("    keywords='connect sdk cloudblue ingram micro ingrammicro cloud'," + EOL);
         file.writeString("    packages=[" + packages.map(function(pkg) { return '\'${pkg}\''; }).join(', ') + "]," + EOL);
-        file.writeString("    description='CloudBlue Connect SDK, generated from Haxe'," + EOL);
         file.writeString("    url='https://github.com/cloudblue/connect-haxe-sdk'," + EOL);
         file.writeString("    license='Apache Software License'," + EOL);
         file.writeString("    install_requires=['requests==2.21.0']" + EOL);
