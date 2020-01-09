@@ -64,7 +64,7 @@ import connect.models.User;
 class Packager {
     public static function main() {
     #if packager
-        var classes = getClassNames();
+        final classes = getClassNames();
         createJavaPackage();
         createJSPackage(classes);
         createPhpPackage(classes);
@@ -78,9 +78,9 @@ class Packager {
     private static final EOL = '\r\n';
 
     private static function getClassNames(): Array<String> {
-        var xmlContent = sys.io.File.getContent('_build/connect.xml');
-        var root = Xml.parse(xmlContent).firstElement();
-        var iter = root.elementsNamed('class');
+        final xmlContent = sys.io.File.getContent('_build/connect.xml');
+        final root = Xml.parse(xmlContent).firstElement();
+        final iter = root.elementsNamed('class');
         return [
             for (class_ in iter)
                 if (StringTools.startsWith(class_.get('path'), 'connect.')
@@ -92,11 +92,11 @@ class Packager {
 
 
     private static function getPackages(classNames: Array<String>): Array<String> {
-        var packages: Array<String> = [];
+        final packages: Array<String> = [];
         for (className in classNames) {
-            var package_ = getPackage(className);
-            if (packages.indexOf(package_) == -1) {
-                packages.push(package_);
+            final pkg = getPackage(className);
+            if (packages.indexOf(pkg) == -1) {
+                packages.push(pkg);
             }
         }
         return packages;
@@ -144,7 +144,7 @@ class Packager {
         copyLicense('_packages/connect.js');
 
         // Get list of packages
-        var packages = getPackages(classes).map(function(pkg) {
+        final packages = getPackages(classes).map(function(pkg) {
             if (StringTools.startsWith(pkg, 'connect.')) {
                 return pkg.substr(8);
             } else if (StringTools.startsWith(pkg, 'connect')) {
@@ -158,15 +158,15 @@ class Packager {
         sys.io.File.copy('_build/connect.js', '_packages/connect.js/connect.js');
         
         // Append module exports
-        var file = sys.io.File.append('_packages/connect.js/connect.js');
+        final file = sys.io.File.append('_packages/connect.js/connect.js');
         file.writeString(EOL);
         file.writeString('module.exports = {' + EOL);
-        var pkgClasses = getClassesInPackage(classes, 'connect');
+        final pkgClasses = getClassesInPackage(classes, 'connect');
         for (cls in pkgClasses) {
             file.writeString('    ${cls}: global.$$hxClasses["connect.${cls}"],' + EOL);
         }
         for (pkg in packages) {
-            var pkgClasses = getClassesInPackage(classes, 'connect.' + pkg);
+            final pkgClasses = getClassesInPackage(classes, 'connect.' + pkg);
             file.writeString('    ${pkg}: {' + EOL);
             for (cls in pkgClasses) {
                 file.writeString('        ${cls}: global.$$hxClasses["connect.${pkg}.${cls}"],' + EOL);
@@ -181,7 +181,7 @@ class Packager {
     private static function createPhpPackage(classes: Array<String>): Void {
         createPath('_packages/connect.php');
         copyLicense('_packages/connect.php');
-        var file = sys.io.File.write('_packages/connect.php/connect.php');
+        final file = sys.io.File.write('_packages/connect.php/connect.php');
         file.writeString('<?php' + EOL + EOL);
         file.writeString("set_include_path(get_include_path().PATH_SEPARATOR.__DIR__.'/lib');" + EOL);
         file.writeString("spl_autoload_register(" + EOL);
@@ -199,30 +199,33 @@ class Packager {
 
 
     private static function createPythonPackage(classes: Array<String>): Void {
+        // Define output directory
+        final outDir = '_build/python';
+
         // Get list of packages
-        var packages = getPackages(classes);
+        final packages = getPackages(classes);
 
         // Create package folders
         for (pkg in packages) {
-            var pkgPath = StringTools.replace(pkg, '.', '/');
-            createPath('_packages/connect.py/${pkgPath}');
+            final pkgPath = StringTools.replace(pkg, '.', '/');
+            createPath('$outDir/$pkgPath');
         }
 
         // Copy haxe code
-        sys.io.File.copy('_build/connect.py', '_packages/connect.py/connect/autogen.py');
+        //sys.io.File.copy('_build/connect.py', '_packages/connect.py/connect/autogen.py');
 
         // Copy license
-        copyLicense('_packages/connect.py');
+        copyLicense(outDir);
 
         // Create __init__.py files
         for (pkg in packages) { 
-            var pkgPath = StringTools.replace(pkg, '.', '/');
-            var pkgClasses = getClassesInPackage(classes, pkg);
-            var file = sys.io.File.write('_packages/connect.py/${pkgPath}/__init__.py');
+            final pkgPath = StringTools.replace(pkg, '.', '/');
+            final pkgClasses = getClassesInPackage(classes, pkg);
+            final file = sys.io.File.write('$outDir/${pkgPath}/__init__.py');
             
             // Write imports
             for (cls in pkgClasses) {
-                var autogenName = StringTools.replace(pkg, '.', '_') + '_' + cls;
+                final autogenName = StringTools.replace(pkg, '.', '_') + '_' + cls;
                 file.writeString('from connect.autogen import ${autogenName} as ${cls}' + EOL);
             }
             file.writeString(EOL + EOL);
@@ -245,7 +248,7 @@ class Packager {
         }
 
         // Create setup.py file
-        var file = sys.io.File.write('_packages/connect.py/setup.py');
+        final file = sys.io.File.write('$outDir/setup.py');
         file.writeString("from setuptools import setup" + EOL + EOL + EOL);
         file.writeString("setup(" + EOL);
         file.writeString("    name='cbconnect'," + EOL);
@@ -265,10 +268,10 @@ class Packager {
 
     private static function copyPath(src: String, dest: String): Void {
         createPath(dest);
-        var dirContents = FileSystem.readDirectory(src);
+        final dirContents = FileSystem.readDirectory(src);
         for (entry in dirContents) {
-            var fullSrcName = '${src}/${entry}';
-            var fullDestName = '${dest}/${entry}';
+            final fullSrcName = '${src}/${entry}';
+            final fullDestName = '${dest}/${entry}';
             if (FileSystem.isDirectory(fullSrcName)) {
                 copyPath(fullSrcName, fullDestName);
             } else {

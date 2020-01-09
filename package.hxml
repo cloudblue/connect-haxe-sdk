@@ -11,7 +11,7 @@
 #-cpp _build/cpp
 #--next
 
--python _build/connect.py
+-python _build/python/connect/autogen.py
 --next
 
 -lib hxnodejs
