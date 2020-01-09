@@ -135,7 +135,7 @@ class Packager {
     private static function createJavaPackage(): Void {
         final outDir = '_build/java';
         copyLicense(outDir);
-        sys.io.File.copy('stuff/PYTHON_README.md', '$outDir/README.md');
+        sys.io.File.copy('stuff/JAVA_README.md', '$outDir/README.md');
         sys.io.File.copy('stuff/pom.xml', '$outDir/pom.xml');
     }
 
