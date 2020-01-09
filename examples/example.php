@@ -4,7 +4,7 @@
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
 
-require_once '../_packages/connect.php/connect.php';
+require_once '../_build/php/index.php';
 
 use connect\Env;
 use connect\Flow;
