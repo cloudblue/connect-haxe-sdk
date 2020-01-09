@@ -15,7 +15,7 @@
 --next
 
 -lib hxnodejs
--js _build/connect.js
+-js _build/js/connect.js
 --next
 
 #-cs _build/cs

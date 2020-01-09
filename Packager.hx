@@ -140,7 +140,8 @@ class Packager {
 
 
     private static function createJSPackage(classes: Array<String>): Void {
-        copyLicense('_packages/connect.js');
+        final outDir = '_build/js';
+        copyLicense(outDir);
 
         // Get list of packages
         final packages = getPackages(classes).map(function(pkg) {
@@ -151,13 +152,10 @@ class Packager {
             } else {
                 return pkg;
             }
-        }).filter(function(pkg) { return  pkg != ""; });
+        }).filter(pkg -> pkg != '');
 
-        // Copy JavaScript code
-        sys.io.File.copy('_build/connect.js', '_packages/connect.js/connect.js');
-        
         // Append module exports
-        final file = sys.io.File.append('_packages/connect.js/connect.js');
+        final file = sys.io.File.append('$outDir/connect.js');
         file.writeString(EOL);
         file.writeString('module.exports = {' + EOL);
         final pkgClasses = getClassesInPackage(classes, 'connect');
