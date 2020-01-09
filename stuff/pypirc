@@ -4,6 +4,7 @@ index-servers=
     testpypi
 
 [pypi]
+repository: https://upload.pypi.org/legacy/
 username: __token__
 password: __PYPI_TOKEN__
 
