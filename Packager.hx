@@ -64,7 +64,7 @@ import connect.models.User;
 class Packager {
     public static function main() {
     #if packager
-        var classes = getClassNames();
+        final classes = getClassNames();
         createJavaPackage();
         createJSPackage(classes);
         createPhpPackage(classes);
@@ -78,9 +78,9 @@ class Packager {
     private static final EOL = '\r\n';
 
     private static function getClassNames(): Array<String> {
-        var xmlContent = sys.io.File.getContent('_build/connect.xml');
-        var root = Xml.parse(xmlContent).firstElement();
-        var iter = root.elementsNamed('class');
+        final xmlContent = sys.io.File.getContent('_build/connect.xml');
+        final root = Xml.parse(xmlContent).firstElement();
+        final iter = root.elementsNamed('class');
         return [
             for (class_ in iter)
                 if (StringTools.startsWith(class_.get('path'), 'connect.')
@@ -92,11 +92,11 @@ class Packager {
 
 
     private static function getPackages(classNames: Array<String>): Array<String> {
-        var packages: Array<String> = [];
+        final packages: Array<String> = [];
         for (className in classNames) {
-            var package_ = getPackage(className);
-            if (packages.indexOf(package_) == -1) {
-                packages.push(package_);
+            final pkg = getPackage(className);
+            if (packages.indexOf(pkg) == -1) {
+                packages.push(pkg);
             }
         }
         return packages;
@@ -127,24 +127,26 @@ class Packager {
 
 
     private static function copyLicense(destPath: String): Void {
+        createPath(destPath);
         sys.io.File.copy('LICENSE', destPath + '/LICENSE');
     }
 
 
     private static function createJavaPackage(): Void {
-        createPath('_packages/connect.java');
-        copyLicense('_packages/connect.java');
-        sys.io.File.copy('_build/java/Packager.jar', '_packages/connect.java/connect.jar');
-        sys.io.File.copy('stuff/pom.xml', '_packages/connect.java/pom.xml');
+        final outDir = '_build/java';
+        copyLicense(outDir);
+        sys.io.File.copy('stuff/JAVA_README.md', '$outDir/README.md');
+        sys.io.File.copy('stuff/gitignore_java', '$outDir/.gitignore');
+        sys.io.File.copy('stuff/pom.xml', '$outDir/pom.xml');
     }
 
 
     private static function createJSPackage(classes: Array<String>): Void {
-        createPath('_packages/connect.js');
-        copyLicense('_packages/connect.js');
+        final outDir = '_build/js';
+        copyLicense(outDir);
 
         // Get list of packages
-        var packages = getPackages(classes).map(function(pkg) {
+        final packages = getPackages(classes).map(function(pkg) {
             if (StringTools.startsWith(pkg, 'connect.')) {
                 return pkg.substr(8);
             } else if (StringTools.startsWith(pkg, 'connect')) {
@@ -152,21 +154,18 @@ class Packager {
             } else {
                 return pkg;
             }
-        }).filter(function(pkg) { return  pkg != ""; });
+        }).filter(pkg -> pkg != '');
 
-        // Copy JavaScript code
-        sys.io.File.copy('_build/connect.js', '_packages/connect.js/connect.js');
-        
         // Append module exports
-        var file = sys.io.File.append('_packages/connect.js/connect.js');
+        final file = sys.io.File.append('$outDir/connect.js');
         file.writeString(EOL);
         file.writeString('module.exports = {' + EOL);
-        var pkgClasses = getClassesInPackage(classes, 'connect');
+        final pkgClasses = getClassesInPackage(classes, 'connect');
         for (cls in pkgClasses) {
             file.writeString('    ${cls}: global.$$hxClasses["connect.${cls}"],' + EOL);
         }
         for (pkg in packages) {
-            var pkgClasses = getClassesInPackage(classes, 'connect.' + pkg);
+            final pkgClasses = getClassesInPackage(classes, 'connect.' + pkg);
             file.writeString('    ${pkg}: {' + EOL);
             for (cls in pkgClasses) {
                 file.writeString('        ${cls}: global.$$hxClasses["connect.${pkg}.${cls}"],' + EOL);
@@ -179,50 +178,36 @@ class Packager {
 
 
     private static function createPhpPackage(classes: Array<String>): Void {
-        createPath('_packages/connect.php');
-        copyLicense('_packages/connect.php');
-        var file = sys.io.File.write('_packages/connect.php/connect.php');
-        file.writeString('<?php' + EOL + EOL);
-        file.writeString("set_include_path(get_include_path().PATH_SEPARATOR.__DIR__.'/lib');" + EOL);
-        file.writeString("spl_autoload_register(" + EOL);
-        file.writeString("    function($class){" + EOL);
-        file.writeString("        $file = stream_resolve_include_path(str_replace('\\\\', '/', $class) .'.php');" + EOL);
-        file.writeString("        if ($file) {" + EOL);
-        file.writeString("            include_once $file;" + EOL);
-        file.writeString("        }" + EOL);
-        file.writeString("    }" + EOL);
-        file.writeString(");" + EOL);
-        file.writeString("\\php\\Boot::__hx__init();" + EOL);
-        file.close();
-        copyPath('_build/php/lib', '_packages/connect.php/lib');
+        copyLicense('_build/php');
     }
 
 
     private static function createPythonPackage(classes: Array<String>): Void {
+        // Define output directory
+        final outDir = '_build/python';
+
         // Get list of packages
-        var packages = getPackages(classes);
+        final packages = getPackages(classes);
 
         // Create package folders
         for (pkg in packages) {
-            var pkgPath = StringTools.replace(pkg, '.', '/');
-            createPath('_packages/connect.py/${pkgPath}');
+            final pkgPath = StringTools.replace(pkg, '.', '/');
+            createPath('$outDir/$pkgPath');
         }
 
-        // Copy haxe code
-        sys.io.File.copy('_build/connect.py', '_packages/connect.py/connect/autogen.py');
-
-        // Copy license
-        copyLicense('_packages/connect.py');
+        // Copy license and readme files
+        copyLicense(outDir);
+        sys.io.File.copy('stuff/PYTHON_README.md', '$outDir/README.md');
 
         // Create __init__.py files
         for (pkg in packages) { 
-            var pkgPath = StringTools.replace(pkg, '.', '/');
-            var pkgClasses = getClassesInPackage(classes, pkg);
-            var file = sys.io.File.write('_packages/connect.py/${pkgPath}/__init__.py');
+            final pkgPath = StringTools.replace(pkg, '.', '/');
+            final pkgClasses = getClassesInPackage(classes, pkg);
+            final file = sys.io.File.write('$outDir/${pkgPath}/__init__.py');
             
             // Write imports
             for (cls in pkgClasses) {
-                var autogenName = StringTools.replace(pkg, '.', '_') + '_' + cls;
+                final autogenName = StringTools.replace(pkg, '.', '_') + '_' + cls;
                 file.writeString('from connect.autogen import ${autogenName} as ${cls}' + EOL);
             }
             file.writeString(EOL + EOL);
@@ -245,16 +230,23 @@ class Packager {
         }
 
         // Create setup.py file
-        var file = sys.io.File.write('_packages/connect.py/setup.py');
+        final file = sys.io.File.write('$outDir/setup.py');
+
+        file.writeString("from os import path" + EOL);
         file.writeString("from setuptools import setup" + EOL + EOL + EOL);
+        file.writeString("with open(path.join(path.abspath(path.dirname(__file__)), 'README.md')) as fhandle:" + EOL);
+        file.writeString("    README = fhandle.read()" + EOL + EOL + EOL);
         file.writeString("setup(" + EOL);
-        file.writeString("    name='connect'," + EOL);
+        file.writeString("    name='connect-sdk-haxe-port'," + EOL);
+        file.writeString("    version='18.0'," + EOL);
+        file.writeString("    description='CloudBlue Connect SDK, generated from Haxe'," + EOL);
+        file.writeString("    long_description=README," + EOL);
+        file.writeString("    long_description_content_type='text/markdown'," + EOL);
         file.writeString("    author='Ingram Micro'," + EOL);
-        file.writeString("    version='0.0.0'," + EOL);
-        file.writeString("    keywords='connect ingram sdk'," + EOL);
+        file.writeString("    author_email='connect-service-account@ingrammicro.com'," + EOL);
+        file.writeString("    keywords='connect sdk cloudblue ingram micro ingrammicro cloud automation'," + EOL);
         file.writeString("    packages=[" + packages.map(function(pkg) { return '\'${pkg}\''; }).join(', ') + "]," + EOL);
-        file.writeString("    description='Connect Python SDK'," + EOL);
-        //file.writeString("    url='https://github.com/ingrammicro/connect-python-sdk'," + EOL);
+        file.writeString("    url='https://github.com/cloudblue/connect-haxe-sdk'," + EOL);
         file.writeString("    license='Apache Software License'," + EOL);
         file.writeString("    install_requires=['requests==2.21.0']" + EOL);
         file.writeString(")" + EOL);
@@ -264,10 +256,10 @@ class Packager {
 
     private static function copyPath(src: String, dest: String): Void {
         createPath(dest);
-        var dirContents = FileSystem.readDirectory(src);
+        final dirContents = FileSystem.readDirectory(src);
         for (entry in dirContents) {
-            var fullSrcName = '${src}/${entry}';
-            var fullDestName = '${dest}/${entry}';
+            final fullSrcName = '${src}/${entry}';
+            final fullDestName = '${dest}/${entry}';
             if (FileSystem.isDirectory(fullSrcName)) {
                 copyPath(fullSrcName, fullDestName);
             } else {

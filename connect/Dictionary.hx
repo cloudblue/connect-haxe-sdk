@@ -308,11 +308,11 @@ class Dictionary extends Base {
 
 
     private static function fromObject_r(x: Dynamic)
-            : EitherType<Collection<Dictionary>, Dictionary> {
+            : Dynamic {
         switch (Type.typeof(x)) {
             case TClass(Array):
                 final arr: Array<Dynamic> = x;
-                final col = new Collection<Dictionary>();
+                final col = new Collection<Dynamic>();
                 for (elem in arr) {
                     col.push(fromObject_r(elem));
                 }

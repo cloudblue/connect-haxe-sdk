@@ -3,7 +3,7 @@
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
 
-const connect = require("../_packages/connect.js/connect");
+const connect = require("../_build/js/connect");
 const Env = connect.Env;
 const Flow = connect.Flow;
 const Processor = connect.Processor;

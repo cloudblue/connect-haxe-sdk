@@ -11,11 +11,11 @@
 #-cpp _build/cpp
 #--next
 
--python _build/connect.py
+-python _build/python/connect/autogen.py
 --next
 
 -lib hxnodejs
--js _build/connect.js
+-js _build/js/connect.js
 --next
 
 #-cs _build/cs

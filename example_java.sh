@@ -2,6 +2,6 @@
 cd `dirname $0`
 
 cd examples
-javac -cp ../_packages/connect.java/connect.jar Example.java
-java -cp .:../_packages/connect.java/connect.jar Example
+javac -cp ../_build/java/Packager.jar Example.java
+java -cp .:../_build/java/Packager.jar Example
 rm Example.class
