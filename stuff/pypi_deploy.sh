@@ -1,7 +1,4 @@
 #!/bin/sh
-echo "*** Creating .pypirc..."
-# cp stuff/pypirc ~/.pypirc
-# sed -i "s/__PYPI_TOKEN__/${pypi_token}/g" ~/.pypirc
 echo "*** Installing and upgrading pip..."
 sudo apt install python3-pip -y
 sudo -H pip3 install --upgrade pip
