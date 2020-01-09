@@ -244,7 +244,7 @@ class Packager {
         file.writeString("    long_description_content_type='text/markdown'," + EOL);
         file.writeString("    author='Ingram Micro'," + EOL);
         file.writeString("    author_email='connect-service-account@ingrammicro.com'," + EOL);
-        file.writeString("    keywords='connect sdk cloudblue ingram micro ingrammicro cloud'," + EOL);
+        file.writeString("    keywords='connect sdk cloudblue ingram micro ingrammicro cloud automation'," + EOL);
         file.writeString("    packages=[" + packages.map(function(pkg) { return '\'${pkg}\''; }).join(', ') + "]," + EOL);
         file.writeString("    url='https://github.com/cloudblue/connect-haxe-sdk'," + EOL);
         file.writeString("    license='Apache Software License'," + EOL);
