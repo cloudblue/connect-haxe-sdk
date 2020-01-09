@@ -237,8 +237,8 @@ class Packager {
         file.writeString("with open(path.join(path.abspath(path.dirname(__file__)), 'README.md')) as fhandle:" + EOL);
         file.writeString("    README = fhandle.read()" + EOL + EOL + EOL);
         file.writeString("setup(" + EOL);
-        file.writeString("    name='cbconnect'," + EOL);
-        file.writeString("    version='18.1'," + EOL);
+        file.writeString("    name='connect-sdk-haxe-port'," + EOL);
+        file.writeString("    version='18.0'," + EOL);
         file.writeString("    description='CloudBlue Connect SDK, generated from Haxe'," + EOL);
         file.writeString("    long_description=README," + EOL);
         file.writeString("    long_description_content_type='text/markdown'," + EOL);
