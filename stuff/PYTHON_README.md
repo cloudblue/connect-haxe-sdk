@@ -4,6 +4,5 @@ This is a Python 3 SDK for [CloudBlue Connect](https://www.cloudblue.com/connect
 
 Documentation is available [here](https://cloudblue.github.io/connect-haxe-sdk/).
 
-> NOTE: This package is in development stage.
-> Until a release with a stable API is released, it is recommended to use the
+> NOTE: This package is in development stage, please use the
 > [connect-sdk](https://pypi.org/project/connect-sdk/) package instead.
