@@ -27,7 +27,7 @@ deploy:
   skip_cleanup: true
   keep_history: false
   on:
-    branch: CUSDK-54-pypi-deployment
+    branch: master
 
 after_deploy:
   - "./stuff/maven_deploy.sh"
