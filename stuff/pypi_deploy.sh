@@ -1,7 +1,7 @@
 #!/bin/sh
 echo "*** Creating .pypirc..."
-cp stuff/pypirc ~/.pypirc
-sed -i "s/__PYPI_TOKEN__/${pypi_token}/g" ~/.pypirc
+# cp stuff/pypirc ~/.pypirc
+# sed -i "s/__PYPI_TOKEN__/${pypi_token}/g" ~/.pypirc
 echo "*** Installing and upgrading pip..."
 sudo apt install python3-pip -y
 sudo -H pip3 install --upgrade pip
@@ -12,6 +12,6 @@ sudo -H pip3 install twine
 echo "*** Packaging and uploading..."
 cd _build/python
 python3 setup.py sdist bdist_wheel
-twine upload -r pypi dist/*
+twine upload -u __token__ -p $pypi_token dist/*
 cd ../..
 echo "*** Done."
