@@ -65,8 +65,9 @@ class Packager {
     public static function main() {
     #if packager
         final classes = getClassNames();
+        //createCsPackage(classes);
         createJavaPackage();
-        createJSPackage(classes);
+        createJsPackage(classes);
         createPhpPackage(classes);
         createPythonPackage(classes);
     #elseif js
@@ -91,47 +92,22 @@ class Packager {
     }
 
 
-    private static function getPackages(classNames: Array<String>): Array<String> {
-        final packages: Array<String> = [];
-        for (className in classNames) {
-            final pkg = getPackage(className);
-            if (packages.indexOf(pkg) == -1) {
-                packages.push(pkg);
-            }
-        }
-        return packages;
+    private static function createCsPackage(classes: Array<String>): Void {
+        final outDir = '_build/cs';
+        copyLicense(outDir);
+        
+        // Create project file
+        final original = sys.io.File.getContent('$outDir/Packager.csproj');
+        final fixedType = StringTools.replace(original,
+            '<OutputType>Exe</OutputType>',
+            '<OutputType>Library</OutputType>');
+        final fixedName = StringTools.replace(fixedType,
+            '<AssemblyName>Packager</AssemblyName>',
+            '<AssemblyName>Connect</AssemblyName>');
+        sys.io.File.saveContent('$outDir/Connect.csproj', fixedName);
     }
-
-
-    private static function getPackage(className: String): String {
-        return className.split('.').slice(0, -1).join('.');
-    }
-
-
-    private static function getClassesInPackage(classNames: Array<String>, pkg: String)
-            : Array<String> {
-        return [for(cls in classNames) if (getPackage(cls) == pkg) stripPackage(cls)];
-    }
-
-
-    private static function stripPackage(className: String): String {
-        return className.split('.').pop();
-    }
-
-
-    private static function createPath(path: String): Void {
-        if (!FileSystem.exists(path)) {
-            FileSystem.createDirectory(path);
-        }
-    }
-
-
-    private static function copyLicense(destPath: String): Void {
-        createPath(destPath);
-        sys.io.File.copy('LICENSE', destPath + '/LICENSE');
-    }
-
-
+    
+    
     private static function createJavaPackage(): Void {
         final outDir = '_build/java';
         copyLicense(outDir);
@@ -141,7 +117,7 @@ class Packager {
     }
 
 
-    private static function createJSPackage(classes: Array<String>): Void {
+    private static function createJsPackage(classes: Array<String>): Void {
         final outDir = '_build/js';
         copyLicense(outDir);
 
@@ -251,6 +227,47 @@ class Packager {
         file.writeString("    install_requires=['requests==2.21.0']" + EOL);
         file.writeString(")" + EOL);
         file.close();
+    }
+
+
+    private static function getPackages(classNames: Array<String>): Array<String> {
+        final packages: Array<String> = [];
+        for (className in classNames) {
+            final pkg = getPackage(className);
+            if (packages.indexOf(pkg) == -1) {
+                packages.push(pkg);
+            }
+        }
+        return packages;
+    }
+
+
+    private static function getPackage(className: String): String {
+        return className.split('.').slice(0, -1).join('.');
+    }
+
+
+    private static function getClassesInPackage(classNames: Array<String>, pkg: String)
+            : Array<String> {
+        return [for(cls in classNames) if (getPackage(cls) == pkg) stripPackage(cls)];
+    }
+
+
+    private static function stripPackage(className: String): String {
+        return className.split('.').pop();
+    }
+
+
+    private static function createPath(path: String): Void {
+        if (!FileSystem.exists(path)) {
+            FileSystem.createDirectory(path);
+        }
+    }
+
+
+    private static function copyLicense(destPath: String): Void {
+        createPath(destPath);
+        sys.io.File.copy('LICENSE', destPath + '/LICENSE');
     }
 
 

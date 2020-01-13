@@ -18,8 +18,10 @@
 -js _build/js/connect.js
 --next
 
-#-cs _build/cs
-#--next
+-D cslib
+-D dll
+-cs _build/cs
+--next
 
 -xml _build/connect.xml
 --next

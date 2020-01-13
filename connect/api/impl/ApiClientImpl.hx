@@ -14,8 +14,10 @@ import haxe.io.BytesInput;
 class ApiClientImpl extends Base implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob) : Response {
-        #if js
-            final response = syncRequestJS(method, url, headers, body, fileArg, fileName, fileContent);
+        #if cs
+            final response = syncRequestCs(method, url, headers, body, fileArg, fileName, fileContent);
+        #elseif js
+            final response = syncRequestJs(method, url, headers, body, fileArg, fileName, fileContent);
         #elseif use_tink
             final response = syncRequestTink(method, url, headers, body, fileArg, fileName, fileContent);
         #elseif python
@@ -40,8 +42,37 @@ class ApiClientImpl extends Base implements IApiClient {
     public function new() {}
 
 
-#if js
-    private static function syncRequestJS(method: String, url: String, headers: Dictionary, body: String,
+    #if cs
+    private static function syncRequestCs(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob) : Response {
+        try {
+            final request = cast(connect.native.CsHttpWebRequest.Create(url), connect.native.CsHttpWebRequest);
+
+            if (headers != null) {
+                final csHeaders = new connect.native.CsWebHeaderCollection();
+                for (key in headers.keys()) {
+                    final value = headers.getString(key);
+                    if (key == 'Content-Type') {
+                        request.ContentType = value;
+                    } else {
+                        csHeaders.Add(key, value);
+                    }
+                }
+                request.Headers = csHeaders;
+            }
+
+            final response = cast(request.GetResponse(), connect.native.CsHttpWebResponse);
+            final reader = new cs.system.io.StreamReader(response.GetResponseStream());
+            return new Response(cast(response.StatusCode, Int), reader.ReadToEnd(), null);
+        } catch (ex: Dynamic) {
+            return new Response(-1, Std.string(ex), null);
+        }
+    }
+    #end
+
+
+    #if js
+    private static function syncRequestJs(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob) : Response {
         initXMLHttpRequest();
 
@@ -104,7 +135,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
         final options = new Dictionary();
         options.set('method', tinkMethod);
-        if (parsedHeaders.keys().length > 0) {
+        if (parsedHeaders.length > 0) {
             options.set('headers', parsedHeaders);
         }
         if (body != null) {
@@ -114,7 +145,7 @@ class ApiClientImpl extends Base implements IApiClient {
         tink.http.Client.fetch(url, options.toObject()).all().handle(function(o) {
             switch (o) {
                 case Success(res):
-                    response = new Response(res.header.statusCode, res.body.toString());
+                    response = new Response(res.header.statusCode, res.body.toString(), null);
                 case Failure(res):
                     response = new Response(-1, Std.string(res), null);
             }

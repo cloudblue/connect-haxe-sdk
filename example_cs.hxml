@@ -1,0 +1,5 @@
+--class-path examples
+-main Example
+-dce no
+-cs _build/example/cs
+-cmd mono _build/example/cs/bin/Example.exe
