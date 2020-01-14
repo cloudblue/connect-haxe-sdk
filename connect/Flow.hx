@@ -309,7 +309,7 @@ class Flow extends Base {
         final filteredList = (filterFunc != null)
             ? Collection._fromArray(list.toArray().filter(
             #if cslib
-                (m) -> untyped filterFunc(cast(m, IdModel))
+                (m) -> filterFunc.Invoke(cast(m, IdModel))
             #elseif java
                 (m) -> filterFunc.apply(cast(m, IdModel))
             #else
@@ -411,7 +411,7 @@ class Flow extends Base {
         // Execute step
         try {
             #if cslib
-            untyped step.func(this);
+            step.func.Invoke(this);
             #elseif java
             step.func.accept(this);
             #else

@@ -11,5 +11,8 @@ package connect.native;
 @:libType
 @:csNative
 @:native("System.Action")
-extern class CsAction<T> {}
+extern class CsAction<T> {
+    @:overload
+    function Invoke(obj: T): Void;
+}
 #end

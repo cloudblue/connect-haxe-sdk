@@ -39,10 +39,13 @@ class StepData {
             for (field in Reflect.fields(data)) {
                 final fieldSplit = field.split('::');
                 final fieldName = fieldSplit.slice(0, -1).join('::');
-                final fieldClass = fieldSplit.slice(-1)[0];
+                final fieldClassName = fieldSplit.slice(-1)[0];
+                final fieldClass = (fieldClassName != '')
+                    ? Type.resolveClass(fieldClassName)
+                    : null;
                 final value = Json.stringify(Reflect.field(data, field));
-                final parsedValue = (fieldClass != '')
-                    ? connect.models.Model.parse(Type.resolveClass(fieldClass), value)
+                final parsedValue: Dynamic = (fieldClass != null)
+                    ? connect.models.Model.parse(fieldClass, value)
                     : value;
                 this.data.set(fieldName, parsedValue);
             }

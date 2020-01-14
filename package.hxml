@@ -2,25 +2,25 @@
 -dce no
 --each
 
--php _build/php
---next
-
--java _build/java
---next
-
 #-cpp _build/cpp
 #--next
 
--python _build/python/connect/autogen.py
+-D cslib
+-D dll
+-cs _build/cs
+--next
+
+-java _build/java
 --next
 
 -lib hxnodejs
 -js _build/js/connect.js
 --next
 
--D cslib
--D dll
--cs _build/cs
+-php _build/php
+--next
+
+-python _build/python/connect/autogen.py
 --next
 
 -xml _build/connect.xml

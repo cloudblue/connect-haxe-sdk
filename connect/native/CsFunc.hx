@@ -11,5 +11,8 @@ package connect.native;
 @:libType
 @:csNative
 @:native("System.Func")
-extern class CsFunc<T, R> {}
+extern class CsFunc<T, R> {
+    @:overload
+    function Invoke(obj: T): R;
+}
 #end
