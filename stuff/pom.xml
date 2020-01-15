@@ -29,11 +29,11 @@
         </developer>
     </developers>
 
-    <scm>
+    <!--scm>
         <connection>scm:git:git://github.com/cloudblue/connect-java-sdk.git</connection>
         <developerConnection>scm:git:ssh://github.com:cloudblue/connect-java-sdk.git</developerConnection>
         <url>https://github.com/cloudblue/connect-java-sdk</url>
-    </scm>
+    </scm-->
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
