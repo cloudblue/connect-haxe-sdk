@@ -50,6 +50,7 @@
                         <configuration>
                             <repositoryId>maven-central</repositoryId>
                             <file>connect.jar</file>
+                            <useReleaseProfile>false</useReleaseProfile>
                         </configuration>
                     </execution>
                 </executions>
