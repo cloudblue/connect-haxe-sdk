@@ -83,11 +83,6 @@
     </build>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>maven-central</id>
-            <name>Snapshot</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
         <repository>
             <id>maven-central</id>
             <name>Release</name>
