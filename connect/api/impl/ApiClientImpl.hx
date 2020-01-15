@@ -47,6 +47,7 @@ class ApiClientImpl extends Base implements IApiClient {
             fileArg: String, fileName: String, fileContent: Blob) : Response {
         try {
             final request = cast(connect.native.CsHttpWebRequest.Create(url), connect.native.CsHttpWebRequest);
+            request.Method = method.toUpperCase();
 
             if (headers != null) {
                 final csHeaders = new connect.native.CsWebHeaderCollection();
@@ -59,6 +60,15 @@ class ApiClientImpl extends Base implements IApiClient {
                     }
                 }
                 request.Headers = csHeaders;
+            }
+
+            if (body != null) {
+                final encoding = cs.system.text.Encoding.UTF8;
+                final data = encoding.GetBytes(body);
+                final stream = request.GetRequestStream();
+                request.ContentLength = data.Length;
+                stream.Write(data, 0, data.Length);
+                //stream.Dispose();
             }
 
             final response = cast(request.GetResponse(), connect.native.CsHttpWebResponse);

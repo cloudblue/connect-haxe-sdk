@@ -8,10 +8,13 @@ package connect.native;
 @:csNative
 @:native("System.Net.WebRequest")
 extern class CsWebRequest {
+    var ContentLength: cs.StdTypes.Int64;
     var ContentType: String;
     var Headers: CsWebHeaderCollection;
+    var Method: String;
 
     static function Create(requestUriString: String): CsWebRequest;
+    function GetRequestStream(): cs.system.io.Stream;
     function GetResponse(): CsWebResponse;
 }
 #end
