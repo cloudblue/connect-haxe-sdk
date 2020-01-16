@@ -8,7 +8,6 @@ gpg --batch --passphrase ${mvn_passphrase} --import stuff/key.gpg
 rm stuff/key.gpg
 gpg --list-keys
 gpg --list-secret-keys
-ls _build/java
 ls stuff
 
 echo "*** Deploying to Maven Central..."
