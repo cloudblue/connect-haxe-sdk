@@ -9,7 +9,7 @@ rm stuff/key.gpg
 gpg --list-keys
 gpg --list-secret-keys
 
-echo "*** Deploying to Maven..."
+echo "*** Deploying to Maven Central..."
 mvn gpg:sign-and-deploy-file \
   -DpomFile=stuff/pom.xml \
   -Dfile=_build/java/Packager.jar \
