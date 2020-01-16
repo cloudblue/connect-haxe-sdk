@@ -10,7 +10,7 @@ gpg --list-keys
 gpg --list-secret-keys
 
 echo "*** Deploying to Maven Central..."
-mvn deploy:deploy-file \
+mvn gpg:sign-and-deploy-file \
   -DpomFile=stuff/pom.xml \
   -Dfile=_build/java/Packager.jar \
   -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2 \
