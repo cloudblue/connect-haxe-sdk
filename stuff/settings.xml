@@ -5,7 +5,7 @@
                             http://maven.apache.org/xsd/settings-1.0.0.xsd">
     <profiles>
         <profile>
-            <id>maven-central</id>
+            <id>connect</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -13,12 +13,12 @@
     </profiles>
 
     <activeProfiles>
-        <activeProfile>maven-central</activeProfile>
+        <activeProfile>connect</activeProfile>
     </activeProfiles>
 
     <servers>
         <server>
-            <id>maven-central</id>
+            <id>connect</id>
             <!-- These will be replaced by the proper env vars by the Travis script -->
             <username>__USER__</username>
             <password>__PASSWORD__</password>
