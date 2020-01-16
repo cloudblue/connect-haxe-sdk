@@ -10,10 +10,10 @@ gpg --list-keys
 gpg --list-secret-keys
 
 echo "*** Deploying to Maven Central..."
-mvn gpg:sign-and-deploy-file \
+mvn deploy:deploy-file \
   -DpomFile=stuff/pom.xml \
   -Dfile=_build/java/Packager.jar \
-  -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ \
+  -Durl=http://nexus.spc.dev.cloud.im:8081/repository/maven-releases/ \
   -DrepositoryId=connect \
   -Dgpg.passphrase=${mvn_passphrase}
 echo "*** Done."
