@@ -14,7 +14,7 @@ echo "*** Deploying to Maven Central..."
 mvn deploy:deploy-file \
   -DpomFile=stuff/pom.xml \
   -Dfile=_build/java/Packager.jar \
-  -Durl=http://nexus.spc.dev.cloud.im:8081/repository/maven-releases/ \
+  -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2 \
   -DrepositoryId=connect \
   -Dgpg.passphrase=${mvn_passphrase}
 echo "*** Done."
