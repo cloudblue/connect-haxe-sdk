@@ -19,6 +19,7 @@
     <servers>
         <server>
             <id>maven-central</id>
+            <!-- These will be replaced by the proper env vars by the Travis script -->
             <username>__USER__</username>
             <password>__PASSWORD__</password>
         </server>
