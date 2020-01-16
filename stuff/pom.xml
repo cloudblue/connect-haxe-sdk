@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.cloudblue</groupId>
-    <artifactId>connect-sdk</artifactId>
+    <artifactId>connect.sdk</artifactId>
     <version>18.0</version>
     <packaging>jar</packaging>
 
