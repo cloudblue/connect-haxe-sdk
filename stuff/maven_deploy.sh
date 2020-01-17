@@ -19,6 +19,7 @@ mvn gpg:sign-and-deploy-file \
   -DpomFile=_build/java/pom.xml \
   -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2 \
   -DrepositoryId=connect \
+  -Dkeyname= XDFEFV \
   -Dgpg.passphrase=${mvn_passphrase}
 
 echo "*** Deploying sources artifact to Maven Central..."
