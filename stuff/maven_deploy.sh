@@ -15,8 +15,10 @@ gpg --list-secret-keys
 echo "*** Deploying to Maven Central..."
 # For snapshots, change url to: https://oss.sonatype.org/content/repositories/snapshots
 mvn gpg:sign-and-deploy-file \
-  -DpomFile=_build/java/pom.xml \
   -Dfile=_build/java/connect.jar \
+  -DpomFile=_build/java/pom.xml \
+  -Dsources=_build/java/connect-sources.jar \
+  -Djavadoc=_build/java/connect-javadoc.jar \
   -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2 \
   -DrepositoryId=connect \
   -Dgpg.passphrase=${mvn_passphrase}
