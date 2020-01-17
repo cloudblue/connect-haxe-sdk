@@ -44,4 +44,10 @@ mvn gpg:sign-and-deploy-file \
 echo "*** Listing asc files..."
 find . -name "*.asc"
 
+echo "*** Verifying signatures..."
+gpg --verify _build/java/connect.jar.asc
+gpg --verify _build/java/connect-sources.jar.asc
+gpg --verify _build/java/connect-javadoc.jar.asc
+gpg --verify _build/java/pom.xml.asc
+
 echo "*** Done."
