@@ -12,15 +12,33 @@ echo "*** Listing imported keys..."
 gpg --list-keys
 gpg --list-secret-keys
 
-echo "*** Deploying to Maven Central..."
+echo "*** Deploying main artifact to Maven Central..."
 # For snapshots, change url to: https://oss.sonatype.org/content/repositories/snapshots
 mvn gpg:sign-and-deploy-file \
   -Dfile=_build/java/connect.jar \
   -DpomFile=_build/java/pom.xml \
-  -Dsources=_build/java/connect-sources.jar \
-  -Djavadoc=_build/java/connect-javadoc.jar \
   -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2 \
   -DrepositoryId=connect \
+  -Dgpg.passphrase=${mvn_passphrase}
+
+echo "*** Deploying sources artifact to Maven Central..."
+# For snapshots, change url to: https://oss.sonatype.org/content/repositories/snapshots
+mvn gpg:sign-and-deploy-file \
+  -Dfile=_build/java/connect-sources.jar \
+  -DpomFile=_build/java/pom.xml \
+  -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2 \
+  -DrepositoryId=connect \
+  -Dclassifier=sources \
+  -Dgpg.passphrase=${mvn_passphrase}
+
+echo "*** Deploying javadoc artifact to Maven Central..."
+# For snapshots, change url to: https://oss.sonatype.org/content/repositories/snapshots
+mvn gpg:sign-and-deploy-file \
+  -Dfile=_build/java/connect-javadoc.jar \
+  -DpomFile=_build/java/pom.xml \
+  -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2 \
+  -DrepositoryId=connect \
+  -Dclassifier=javadoc \
   -Dgpg.passphrase=${mvn_passphrase}
 
 echo "*** Listing asc files..."
