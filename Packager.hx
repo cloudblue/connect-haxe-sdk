@@ -138,6 +138,7 @@ class Packager {
         sys.io.File.copy('stuff/JAVA_README.md', '$outDir/README.md');
         sys.io.File.copy('stuff/gitignore_java', '$outDir/.gitignore');
         sys.io.File.copy('stuff/pom.xml', '$outDir/pom.xml');
+        FileSystem.rename('$outDir/Packager.jar', '$outDir/connect.jar');
     }
 
 
