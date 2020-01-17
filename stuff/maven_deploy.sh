@@ -12,8 +12,9 @@ echo "*** Listing imported keys..."
 gpg --list-keys
 gpg --list-secret-keys
 
-echo "*** Deploying main artifact to Maven Central..."
 # For snapshots, change url to: https://oss.sonatype.org/content/repositories/snapshots
+
+echo "*** Deploying main artifact to Maven Central..."
 mvn gpg:sign-and-deploy-file \
   -Dfile=_build/java/connect.sdk-18.0.jar \
   -DpomFile=_build/java/connect.sdk-18.0.pom \
@@ -22,7 +23,6 @@ mvn gpg:sign-and-deploy-file \
   -Dgpg.passphrase=${mvn_passphrase}
 
 echo "*** Deploying sources artifact to Maven Central..."
-# For snapshots, change url to: https://oss.sonatype.org/content/repositories/snapshots
 mvn gpg:sign-and-deploy-file \
   -Dfile=_build/java/connect.sdk-18.0-sources.jar \
   -DpomFile=_build/java/connect.sdk-18.0.pom \
@@ -32,7 +32,6 @@ mvn gpg:sign-and-deploy-file \
   -Dgpg.passphrase=${mvn_passphrase}
 
 echo "*** Deploying javadoc artifact to Maven Central..."
-# For snapshots, change url to: https://oss.sonatype.org/content/repositories/snapshots
 mvn gpg:sign-and-deploy-file \
   -Dfile=_build/java/connect.sdk-18.0-javadoc.jar \
   -DpomFile=_build/java/connect.sdk-18.0.pom \
