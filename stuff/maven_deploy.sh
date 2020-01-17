@@ -8,7 +8,7 @@ gpg --batch --passphrase ${mvn_passphrase} --import stuff/key.gpg
 rm stuff/key.gpg
 
 echo "*** Deploying to Maven Central..."
-mvn gpg:sign-and-deploy-file \
+mvn deploy:deploy-file \
   -DpomFile=stuff/pom.xml \
   -Dfile=_build/java/Packager.jar \
   -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2 \
