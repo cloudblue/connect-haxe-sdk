@@ -12,10 +12,6 @@ echo "*** Listing imported keys..."
 gpg --list-keys
 gpg --list-secret-keys
 
-echo "*** Listing dir contents..."
-sudo apt install tree -y
-tree .
-
 echo "*** Deploying to Maven Central..."
 mvn gpg:sign-and-deploy-file \
   -DpomFile=stuff/pom.xml \
@@ -23,5 +19,8 @@ mvn gpg:sign-and-deploy-file \
   -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2 \
   -DrepositoryId=connect \
   -Dgpg.passphrase=${mvn_passphrase}
+
+echo "*** Listing asc files..."
+find . -name "*.asc"
 
 echo "*** Done."
