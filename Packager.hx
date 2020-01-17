@@ -134,11 +134,17 @@ class Packager {
 
     private static function createJavaPackage(): Void {
         final outDir = '_build/java';
+        final outFile = '$outDir/connect.jar';
         copyLicense(outDir);
         sys.io.File.copy('stuff/JAVA_README.md', '$outDir/README.md');
         sys.io.File.copy('stuff/gitignore_java', '$outDir/.gitignore');
         sys.io.File.copy('stuff/pom.xml', '$outDir/pom.xml');
-        FileSystem.rename('$outDir/Packager.jar', '$outDir/connect.jar');
+        sys.io.File.copy('stuff/connect-sources.jar', '$outDir/connect-sources.jar');
+        sys.io.File.copy('stuff/connect-javadoc.jar', '$outDir/connect-javadoc.jar');
+        if (FileSystem.exists(outFile)) {
+            FileSystem.deleteFile(outFile);
+        }
+        FileSystem.rename('$outDir/Packager.jar', outFile);
     }
 
 
