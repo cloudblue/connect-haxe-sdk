@@ -19,8 +19,7 @@ mvn gpg:sign-and-deploy-file \
   -DpomFile=_build/java/pom.xml \
   -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2 \
   -DrepositoryId=connect \
-  -Dkeyname=XDFEFV \
-  -Dgpg.passphrase=${mvn_passphrase}
+  -Dpassphrase=${mvn_passphrase}
 
 echo "*** Deploying sources artifact to Maven Central..."
 # For snapshots, change url to: https://oss.sonatype.org/content/repositories/snapshots
@@ -30,7 +29,7 @@ mvn gpg:sign-and-deploy-file \
   -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2 \
   -DrepositoryId=connect \
   -Dclassifier=sources \
-  -Dgpg.passphrase=${mvn_passphrase}
+  -Dpassphrase=${mvn_passphrase}
 
 echo "*** Deploying javadoc artifact to Maven Central..."
 # For snapshots, change url to: https://oss.sonatype.org/content/repositories/snapshots
@@ -40,7 +39,7 @@ mvn gpg:sign-and-deploy-file \
   -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2 \
   -DrepositoryId=connect \
   -Dclassifier=javadoc \
-  -Dgpg.passphrase=${mvn_passphrase}
+  -Dpassphrase=${mvn_passphrase}
 
 echo "*** Listing asc files..."
 find . -name "*.asc"
