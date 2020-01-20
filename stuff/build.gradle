@@ -127,7 +127,7 @@ publishing {
                     password = '__PASSWORD__'
                 }
             } else {
-                url 'file:/${project.projectDir}'
+                url 'file://${project.projectDir}'
             }
     }
 }
