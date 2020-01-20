@@ -123,8 +123,8 @@ publishing {
             if (project.ext.pomFile.exists()) {
                 url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
                 credentials {
-                    username = __USER__
-                    password = __PASSWORD__
+                    username = '__USER__'
+                    password = '__PASSWORD__'
                 }
             } else {
                 url "file:/${project.projectDir}/artifacts"
