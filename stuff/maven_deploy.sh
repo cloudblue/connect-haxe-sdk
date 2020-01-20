@@ -19,8 +19,10 @@ gpg --list-keys
 gpg --list-secret-keys
 
 echo "*** Deploying to Maven Central using Gradle..."
+cd _build/java
 gradle clean pP publish
 gradle clean pP publish
+cd ../..
 
 # For snapshots, change url to: https://oss.sonatype.org/content/repositories/snapshots
 
