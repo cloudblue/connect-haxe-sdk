@@ -1,8 +1,6 @@
 #!/bin/sh
 
 echo "*** Initializing..."
-sdk install maven 3.6.3
-
 export GPG_TTY=$(tty)
 cp stuff/settings.xml ~/.m2/settings.xml
 sed -i "s/__USER__/${mvn_user}/g" ~/.m2/settings.xml
@@ -21,7 +19,6 @@ gpg --list-keys
 gpg --list-secret-keys
 
 echo "*** Deploying to Maven Central using Gradle..."
-sudo apt install gradle -y
 gradle clean pP publish
 gradle clean pP publish
 
