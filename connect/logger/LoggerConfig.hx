@@ -4,6 +4,8 @@
 */
 package connect.logger;
 
+import connect.util.Collection;
+
 
 /**
  * Represents the configuration of the logger. An instance can be passed to `Env.initLogger`

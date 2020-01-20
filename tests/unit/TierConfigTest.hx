@@ -4,8 +4,6 @@
 */
 package tests.unit;
 
-import connect.Collection;
-import connect.Dictionary;
 import connect.Env;
 import connect.models.Connection;
 import connect.models.Contract;
@@ -17,6 +15,8 @@ import connect.models.Template;
 import connect.models.TierAccount;
 import connect.models.TierConfig;
 import connect.models.TierConfigRequest;
+import connect.util.Collection;
+import connect.util.Dictionary;
 import tests.mocks.Mock;
 
 

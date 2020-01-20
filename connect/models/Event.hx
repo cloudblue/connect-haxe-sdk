@@ -4,6 +4,8 @@
 */
 package connect.models;
 
+import connect.util.DateTime;
+
 
 /**
     Represents the date and user that caused an event.

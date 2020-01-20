@@ -4,8 +4,6 @@
 */
 package tests.unit;
 
-import connect.Collection;
-import connect.Dictionary;
 import connect.Env;
 import connect.models.Asset;
 import connect.models.AssetRequest;
@@ -14,6 +12,8 @@ import connect.models.Conversation;
 import connect.models.Marketplace;
 import connect.models.Model;
 import connect.models.Param;
+import connect.util.Collection;
+import connect.util.Dictionary;
 import tests.mocks.Mock;
 
 

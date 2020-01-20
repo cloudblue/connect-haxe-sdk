@@ -5,7 +5,6 @@
 
 import sys.FileSystem;
 #if !packager
-import connect.DateTime;
 import connect.Env;
 import connect.Processor;
 import connect.logger.Logger;
@@ -59,6 +58,7 @@ import connect.models.UsageFile;
 import connect.models.UsageRecord;
 import connect.models.UsageRecords;
 import connect.models.User;
+import connect.util.DateTime;
 #end
 
 class Packager {
@@ -238,7 +238,7 @@ class Packager {
         file.writeString("    README = fhandle.read()" + EOL + EOL + EOL);
         file.writeString("setup(" + EOL);
         file.writeString("    name='connect-sdk-haxe-port'," + EOL);
-        file.writeString("    version='18.0.1'," + EOL);
+        file.writeString("    version='18.0.2'," + EOL);
         file.writeString("    description='CloudBlue Connect SDK, generated from Haxe'," + EOL);
         file.writeString("    long_description=README," + EOL);
         file.writeString("    long_description_content_type='text/markdown'," + EOL);

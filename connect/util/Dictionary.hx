@@ -2,7 +2,7 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-package connect;
+package connect.util;
 
 import haxe.ds.StringMap;
 import haxe.extern.EitherType;

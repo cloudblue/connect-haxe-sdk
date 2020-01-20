@@ -4,8 +4,8 @@
 */
 package tests.unit;
 
-import connect.Collection;
 import connect.Config;
+import connect.util.Collection;
 
 
 class ConfigTest extends haxe.unit.TestCase {

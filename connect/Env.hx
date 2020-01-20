@@ -4,16 +4,15 @@
 */
 package connect;
 
-import connect.api.ConnectHelper;
 import connect.api.IApiClient;
 import connect.api.IFulfillmentApi;
 import connect.api.IUsageApi;
 import connect.api.ITierApi;
 import connect.api.IGeneralApi;
-import connect.logger.ILoggerFormatter;
-import connect.logger.ILoggerWriter;
 import connect.logger.Logger;
 import connect.logger.LoggerConfig;
+import connect.util.Collection;
+import connect.util.Dictionary;
 
 // Need to make sure that these get compiled
 import connect.api.impl.ApiClientImpl;

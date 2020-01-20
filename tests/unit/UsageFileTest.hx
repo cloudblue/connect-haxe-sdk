@@ -4,9 +4,6 @@
 */
 package tests.unit;
 
-import connect.Collection;
-import connect.DateTime;
-import connect.Dictionary;
 import connect.Env;
 import connect.models.Account;
 import connect.models.Contract;
@@ -15,6 +12,9 @@ import connect.models.Product;
 import connect.models.UsageFile;
 import connect.models.UsageRecord;
 import connect.models.UsageRecords;
+import connect.util.Collection;
+import connect.util.DateTime;
+import connect.util.Dictionary;
 import tests.mocks.Mock;
 
 

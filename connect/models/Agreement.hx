@@ -4,6 +4,9 @@
 */
 package connect.models;
 
+import connect.util.Collection;
+import connect.util.DateTime;
+
 
 class Agreement extends IdModel {
     /** Type of the agreement. One of: distribution, program, service. **/

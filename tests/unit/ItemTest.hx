@@ -4,10 +4,10 @@
 */
 package tests.unit;
 
-import connect.Dictionary;
 import connect.Env;
 import connect.models.Asset;
 import connect.models.Param;
+import connect.util.Dictionary;
 
 
 class ItemTest extends haxe.unit.TestCase {

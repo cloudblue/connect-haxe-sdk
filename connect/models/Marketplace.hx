@@ -4,6 +4,8 @@
 */
 package connect.models;
 
+import connect.util.Collection;
+
 
 /**
     An object containing Distribution agreements with exact Hubs, enriched with additional

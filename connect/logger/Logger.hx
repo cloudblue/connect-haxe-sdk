@@ -4,6 +4,8 @@
 */
 package connect.logger;
 
+import connect.util.Collection;
+
 
 /**
     This class is used to log events to a file and the output console.
