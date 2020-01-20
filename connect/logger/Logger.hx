@@ -31,7 +31,7 @@ class Logger extends Base {
             ? config.path_
             : (config.path_ + '/');
         this.level = Std.int(Math.min(Math.max(config.level_, LEVEL_ERROR), LEVEL_DEBUG));
-        this.outputs = config.outputs_.copy();
+        this.handlers = config.handlers_.copy();
         this.sections = [];
     }
 
@@ -56,7 +56,7 @@ class Logger extends Base {
         final fullname = (this.path != null && filename != null)
             ? this.path + filename
             : null;
-        final setFilenameResult = Lambda.fold(this.outputs, function(o, last) {
+        final setFilenameResult = Lambda.fold(this.handlers, function(o, last) {
             return last && o.writer.setFilename(fullname);
         }, true);
         if (setFilenameResult && fullname != null) {
@@ -69,8 +69,8 @@ class Logger extends Base {
 
     /** @returns The last filename that was set. **/
     public function getFilename(): String {
-        final firstWriter = (this.outputs.length() > 0)
-            ? this.outputs.get(0).writer
+        final firstWriter = (this.handlers.length() > 0)
+            ? this.handlers.get(0).writer
             : null;
         if (firstWriter != null) {
             final filename = firstWriter.getFilename();
@@ -93,8 +93,8 @@ class Logger extends Base {
 
 
     /** @returns The defined outputs for this logger. Do not modify this collection. **/
-    public function getOutputs(): Collection<LoggerOutput> {
-        return this.outputs;
+    public function getOutputs(): Collection<LoggerHandler> {
+        return this.handlers;
     }
 
 
@@ -123,8 +123,8 @@ class Logger extends Base {
      * @param block Block of text to log. Lines in the text are formatted to appear as a block.
      */
     public function writeBlock(level: Int, block: String): Void {
-        for (output in this.outputs) {
-            this._writeToOutput(level, output.formatter.formatBlock(block), output);
+        for (output in this.handlers) {
+            this._writeToHandler(level, output.formatter.formatBlock(block), output);
         }
     }
 
@@ -137,8 +137,8 @@ class Logger extends Base {
      * @param language Language used in the block. For example, "json". Can be an empty string.
      */
     public function writeCodeBlock(level: Int, code: String, language: String): Void {
-        for (output in this.outputs) {
-            this._writeToOutput(level, output.formatter.formatCodeBlock(code, language), output);
+        for (output in this.handlers) {
+            this._writeToHandler(level, output.formatter.formatCodeBlock(code, language), output);
         }
     }
 
@@ -150,8 +150,8 @@ class Logger extends Base {
      * @param list List to log. Lines are formatted to appear as a list.
      */
     public function writeList(level: Int, list: Collection<String>): Void {
-        for (output in this.outputs) {
-            this._writeToOutput(level, output.formatter.formatList(list), output);
+        for (output in this.handlers) {
+            this._writeToHandler(level, output.formatter.formatList(list), output);
         }
     }
 
@@ -164,8 +164,8 @@ class Logger extends Base {
      * @param table Table to log. Rows are formatted to appear as a table.
      */
     public function writeTable(level: Int, table: Collection<Collection<String>>): Void {
-        for (output in this.outputs) {
-            this._writeToOutput(level, output.formatter.formatTable(table), output);
+        for (output in this.handlers) {
+            this._writeToHandler(level, output.formatter.formatTable(table), output);
         }
     }
 
@@ -177,8 +177,8 @@ class Logger extends Base {
      * @param message Message to log. The message is not formatted.
      */
     public function write(level: Int, message: String): Void {
-        for (output in this.outputs) {
-            this._writeToOutput(level, message, output);
+        for (output in this.handlers) {
+            this._writeToHandler(level, message, output);
         }
     }
 
@@ -238,25 +238,25 @@ class Logger extends Base {
 
 
     @:dox(hide)
-    public function _writeToOutput(level: Int, message: String, output: LoggerOutput): Void {
+    public function _writeToHandler(level: Int, message: String, handler: LoggerHandler): Void {
 
         if (this.level >= level) {
             this.writeSections();
-            output.writer.writeLine(message);
+            handler.writer.writeLine(message);
         }
     }
 
 
     private final path: String;
     private final level: Int;
-    private final outputs: Collection<LoggerOutput>;
+    private final handlers: Collection<LoggerHandler>;
     private final sections: Array<LoggerSection>;
     
     
     private function writeSections(): Void {
         for (i in 0...this.sections.length) {
             if (!this.sections[i].written) {
-                for (output in this.outputs) {
+                for (output in this.handlers) {
                     final section = output.formatter.formatSection(i+1, this.sections[i].name);
                     output.writer.writeLine(section);
                 }

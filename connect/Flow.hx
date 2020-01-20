@@ -511,7 +511,7 @@ class Flow extends Base {
             final list = new Collection<String>()
                 .push(getFormattedRequest(request, lastRequest, output.formatter))
                 .push(getFormattedData(data, lastData, this.data, output.formatter));
-            Env.getLogger()._writeToOutput(level, output.formatter.formatList(list), output);
+            Env.getLogger()._writeToHandler(level, output.formatter.formatList(list), output);
         }
     }
 
