@@ -126,6 +126,6 @@ class Processor extends Base {
         }
 
         Env.getLogger().closeSection();
-        Env.getLogger().setFilename(null);
+        Env.getLogger().setFilename(prevLogName);
     }
 }
