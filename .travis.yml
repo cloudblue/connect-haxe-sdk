@@ -10,7 +10,7 @@ before_install:
   - source "/home/travis/.sdkman/bin/sdkman-init.sh"
   - sdk install java 8.0.232.j9-adpt
   - sdk install maven 3.6.3
-  - sdk install gradle 6.1
+#  - sdk install gradle 6.1
 
 before_script:
   - "./stuff/java_clone.sh"
