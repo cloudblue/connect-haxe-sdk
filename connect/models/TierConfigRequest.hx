@@ -5,6 +5,7 @@
 package connect.models;
 
 import connect.api.Query;
+import connect.util.Collection;
 
 
 /** This class represents a request on a `TierConfig` **/

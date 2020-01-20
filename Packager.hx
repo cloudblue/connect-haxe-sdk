@@ -5,7 +5,6 @@
 
 import sys.FileSystem;
 #if !packager
-import connect.DateTime;
 import connect.Env;
 import connect.Processor;
 import connect.logger.Logger;
@@ -59,6 +58,7 @@ import connect.models.UsageFile;
 import connect.models.UsageRecord;
 import connect.models.UsageRecords;
 import connect.models.User;
+import connect.util.DateTime;
 #end
 
 class Packager {

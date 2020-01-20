@@ -1,8 +1,8 @@
 package tests.mocks;
 
-import connect.Blob;
 import connect.api.IUsageApi;
 import connect.api.Query;
+import connect.util.Blob;
 import haxe.Json;
 
 

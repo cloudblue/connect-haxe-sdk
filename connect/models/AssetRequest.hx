@@ -5,7 +5,8 @@
 package connect.models;
 
 import connect.api.Query;
-import connect.logger.Logger;
+import connect.util.Collection;
+import connect.util.DateTime;
 
 
 /**
@@ -316,7 +317,7 @@ class AssetRequest extends IdModel {
                 conversation.createMessage(message);
             } catch (ex: Dynamic) {
                 Env.getLogger().write(
-                    Logger.LEVEL_ERROR,
+                    connect.logger.Logger.LEVEL_ERROR,
                     'Error updating conversation for request ${this.id}: $message');
             }
         }

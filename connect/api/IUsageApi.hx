@@ -4,6 +4,8 @@
 */
 package connect.api;
 
+import connect.util.Blob;
+
 
 @:dox(hide)
 interface IUsageApi {

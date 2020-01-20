@@ -4,7 +4,7 @@
 */
 package tests.unit;
 
-import connect.Diff;
+import connect.util.Diff;
 import haxe.Json;
 
 
