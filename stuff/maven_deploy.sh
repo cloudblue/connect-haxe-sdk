@@ -2,7 +2,6 @@
 
 echo "*** Initializing..."
 sdk install maven 3.6.3
-sudo apt install gradle -y
 
 export GPG_TTY=$(tty)
 cp stuff/settings.xml ~/.m2/settings.xml
@@ -20,6 +19,11 @@ rm stuff/key.gpg
 echo "*** Listing imported keys..."
 gpg --list-keys
 gpg --list-secret-keys
+
+echo "*** Deploying to Maven Central using Gradle..."
+sudo apt install gradle -y
+gradle clean pP publish
+gradle clean pP publish
 
 # For snapshots, change url to: https://oss.sonatype.org/content/repositories/snapshots
 
