@@ -1,6 +1,15 @@
 #!/bin/sh
 
+echo "*** Initializing..."
+sdk install maven 3.6.3
+sudo apt install gradle -y
+
 export GPG_TTY=$(tty)
+cp stuff/settings.xml ~/.m2/settings.xml
+sed -i "s/__USER__/${mvn_user}/g" ~/.m2/settings.xml
+sed -i "s/__PASSWORD__/${mvn_password}/g" ~/.m2/settings.xml
+sed -i "s/__USER__/${mvn_user}/g" _build/java/build.gradle
+sed -i "s/__PASSWORD__/${mvn_password}/g" _build/java/build.gradle
 
 echo "*** Decrypting and importing PGP key..."
 #openssl aes-256-cbc -K $encrypted_6c315054a92d_key -iv $encrypted_6c315054a92d_iv -in stuff/key.gpg.enc -out stuff/key.gpg -d

@@ -139,6 +139,7 @@ class Packager {
         sys.io.File.copy('stuff/JAVA_README.md', '$outDir/README.md');
         sys.io.File.copy('stuff/gitignore_java', '$outDir/.gitignore');
         sys.io.File.copy('stuff/pom.xml', '$outDir/connect.sdk-18.0.pom');
+        sys.io.File.copy('stuff/build.gradle', '$outDir/build.gradle');
         sys.io.File.copy('stuff/connect-sources.jar', '$outDir/connect.sdk-18.0-sources.jar');
         sys.io.File.copy('stuff/connect-javadoc.jar', '$outDir/connect.sdk-18.0-javadoc.jar');
         if (FileSystem.exists(outFile)) {
