@@ -4,6 +4,9 @@
 */
 package connect.api;
 
+import connect.util.Blob;
+import connect.util.Dictionary;
+
 
 interface IApiClient {
     /**

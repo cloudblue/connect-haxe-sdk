@@ -4,7 +4,8 @@
 */
 package connect.models;
 
-import connect.Inflection;
+import connect.util.Collection;
+import connect.util.DateTime;
 import haxe.ds.StringMap;
 import haxe.Json;
 
@@ -23,7 +24,7 @@ class Model extends Base {
                 switch (Type.typeof(value)) {
                     case TClass(String):
                         Reflect.setField(obj, Inflection.toSnakeCase(field), Std.string(value));
-                    case TClass(connect.DateTime):
+                    case TClass(DateTime):
                         Reflect.setField(obj, Inflection.toSnakeCase(field), value.toString());
                     case TClass(class_):
                         final className = Type.getClassName(class_);

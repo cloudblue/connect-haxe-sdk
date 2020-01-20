@@ -4,6 +4,8 @@
 */
 package connect.models;
 
+import connect.util.DateTime;
+
 
 /**
     Message in a `Conversation`.

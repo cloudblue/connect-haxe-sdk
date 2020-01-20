@@ -4,6 +4,8 @@
 */
 package connect.models;
 
+import connect.util.Collection;
+
 
 /**
     Configuration Phase Parameter Context-Bound Data Object. To be used in parameter contexts:

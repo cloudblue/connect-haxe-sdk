@@ -1,10 +1,10 @@
 package tests.mocks;
 
-import connect.Blob;
-import connect.Dictionary;
 import connect.api.Response;
 import connect.api.IApiClient;
 import connect.api.Query;
+import connect.util.Blob;
+import connect.util.Dictionary;
 
 
 class ApiClientMock extends Mock implements IApiClient {
