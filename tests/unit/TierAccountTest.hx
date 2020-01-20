@@ -41,7 +41,7 @@ class TierAccountTest extends haxe.unit.TestCase {
         // Check subject
         final account = TierAccount.get('TA-9861-7949-8492');
         assertTrue(Std.is(account, TierAccount));
-        assertTrue(Std.is(account.scope, Collection));
+        assertTrue(Std.is(account.scopes, Collection));
         assertTrue(Std.is(account.contactInfo, ContactInfo));
         assertTrue(Std.is(account.contactInfo.contact, Contact));
         assertTrue(Std.is(account.contactInfo.contact.phoneNumber, PhoneNumber));
@@ -49,9 +49,9 @@ class TierAccountTest extends haxe.unit.TestCase {
         assertEquals('12435', account.externalId);
         assertEquals('string', account.name);
         assertEquals('test', account.environment);
-        assertEquals(2, account.scope.length());
-        assertEquals('tier1', account.scope.get(0));
-        assertEquals('customer', account.scope.get(1));
+        assertEquals(2, account.scopes.length());
+        assertEquals('tier1', account.scopes.get(0));
+        assertEquals('customer', account.scopes.get(1));
         assertEquals('Yalı Mahallesi', account.contactInfo.addressLine1);
         assertEquals('', account.contactInfo.addressLine2);
         assertEquals('tr', account.contactInfo.country);

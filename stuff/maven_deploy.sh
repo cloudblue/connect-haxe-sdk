@@ -44,9 +44,9 @@ echo "*** Listing asc files..."
 find . -name "*.asc"
 
 echo "*** Verifying signatures..."
-gpg --verify _build/java/connect-18.0.jar.asc
-gpg --verify _build/java/connect-18.0-sources.jar.asc
-gpg --verify _build/java/connect-18.0-javadoc.jar.asc
-gpg --verify _build/java/pom.xml.asc
+gpg --verify _build/java/connect.sdk-18.0.jar.asc
+gpg --verify _build/java/connect.sdk-18.0-sources.jar.asc
+gpg --verify _build/java/connect.sdk-18.0-javadoc.jar.asc
+gpg --verify _build/java/connect.sdk-18.0.pom.asc
 
 echo "*** Done."
