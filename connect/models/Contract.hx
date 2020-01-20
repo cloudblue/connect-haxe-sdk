@@ -4,6 +4,8 @@
 */
 package connect.models;
 
+import connect.util.DateTime;
+
 
 /**
     A contract in the Connect platform.

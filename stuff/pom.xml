@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.cloudblue</groupId>
-    <artifactId>connect-sdk</artifactId>
+    <artifactId>connect.sdk</artifactId>
     <version>18.0</version>
     <packaging>jar</packaging>
 
@@ -48,7 +48,7 @@
                 <executions>
                     <execution>
                         <configuration>
-                            <repositoryId>maven-central</repositoryId>
+                            <repositoryId>connect</repositoryId>
                             <file>connect.jar</file>
                         </configuration>
                     </execution>
@@ -68,19 +68,30 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.8</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <serverId>connect</serverId>
+                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
+            </plugin>
         </plugins>
     </build>
 
     <distributionManagement>
         <snapshotRepository>
-            <id>maven-central</id>
+            <id>connect</id>
             <name>Snapshot</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
-            <id>maven-central</id>
+            <id>connect</id>
             <name>Release</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
     </distributionManagement>
 </project>

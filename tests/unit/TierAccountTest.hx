@@ -4,13 +4,13 @@
 */
 package tests.unit;
 
-import connect.Collection;
-import connect.Dictionary;
 import connect.Env;
 import connect.models.Contact;
 import connect.models.ContactInfo;
 import connect.models.PhoneNumber;
 import connect.models.TierAccount;
+import connect.util.Collection;
+import connect.util.Dictionary;
 import tests.mocks.Mock;
 
 

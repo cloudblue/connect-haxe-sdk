@@ -4,6 +4,8 @@
 */
 package connect.models;
 
+import connect.util.Collection;
+
 
 /**
     Customer Ui Settings for a product.

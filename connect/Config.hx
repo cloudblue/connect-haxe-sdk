@@ -4,6 +4,10 @@
 */
 package connect;
 
+import connect.util.Collection;
+import connect.util.Dictionary;
+
+
 /**
     This class contains the configuration required for communication with the Connect platform.
 **/

@@ -4,11 +4,11 @@
 */
 package tests.unit;
 
-import connect.Collection;
-import connect.Dictionary;
 import connect.Env;
 import connect.models.Category;
 import connect.models.Family;
+import connect.util.Collection;
+import connect.util.Dictionary;
 import tests.mocks.Mock;
 
 

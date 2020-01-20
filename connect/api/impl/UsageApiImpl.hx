@@ -4,6 +4,8 @@
 */
 package connect.api.impl;
 
+import connect.util.Blob;
+
 
 class UsageApiImpl extends Base implements IUsageApi {
     private static final USAGE_FILES_PATH = 'usage/files';

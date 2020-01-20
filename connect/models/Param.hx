@@ -4,6 +4,8 @@
 */
 package connect.models;
 
+import connect.util.Collection;
+
 
 /**
     Parameters are used in product and asset definitions.

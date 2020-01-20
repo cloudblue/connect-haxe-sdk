@@ -3,9 +3,9 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
                             http://maven.apache.org/xsd/settings-1.0.0.xsd">
-    <profiles>
+    <!--profiles>
         <profile>
-            <id>maven-central</id>
+            <id>connect</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -13,12 +13,13 @@
     </profiles>
 
     <activeProfiles>
-        <activeProfile>maven-central</activeProfile>
-    </activeProfiles>
+        <activeProfile>connect</activeProfile>
+    </activeProfiles-->
 
     <servers>
         <server>
-            <id>maven-central</id>
+            <id>connect</id>
+            <!-- These will be replaced by the proper env vars by the Travis script -->
             <username>__USER__</username>
             <password>__PASSWORD__</password>
         </server>

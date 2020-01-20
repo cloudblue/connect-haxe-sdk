@@ -4,6 +4,9 @@
 */
 package connect.api;
 
+import connect.util.Blob;
+
+
 class Response extends Base {
     public final status: Int;
     public final text: String;

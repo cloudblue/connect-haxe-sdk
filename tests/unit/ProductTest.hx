@@ -4,9 +4,6 @@
 */
 package tests.unit;
 
-import connect.models.Account;
-import connect.Collection;
-import connect.Dictionary;
 import connect.Env;
 import connect.models.Account;
 import connect.models.Action;
@@ -23,6 +20,8 @@ import connect.models.Product;
 import connect.models.ProductStats;
 import connect.models.ProductStatsInfo;
 import connect.models.ProductConfigurationParam;
+import connect.util.Collection;
+import connect.util.Dictionary;
 import tests.mocks.Mock;
 
 

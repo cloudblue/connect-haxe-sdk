@@ -6,6 +6,10 @@ package connect.api.impl;
 
 import connect.logger.ILoggerFormatter;
 import connect.logger.Logger;
+import connect.util.Blob;
+import connect.util.Collection;
+import connect.util.Dictionary;
+import connect.util.Util;
 #if !js
 import haxe.io.BytesInput;
 #end

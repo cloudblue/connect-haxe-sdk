@@ -4,6 +4,8 @@
 */
 package connect.logger;
 
+import connect.util.Collection;
+
 
 /**
  * Represents a log formatter.The `Logger` uses an instance of a class that implements

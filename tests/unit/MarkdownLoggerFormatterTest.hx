@@ -4,8 +4,8 @@
 */
 package tests.unit;
 
-import connect.Collection;
 import connect.logger.MarkdownLoggerFormatter;
+import connect.util.Collection;
 
 
 class MarkdownLoggerFormatterTest extends haxe.unit.TestCase {
