@@ -5,6 +5,7 @@
 package connect.native;
 
 #if python
+import connect.util.Blob;
 import haxe.io.Bytes;
 import python.Syntax;
 

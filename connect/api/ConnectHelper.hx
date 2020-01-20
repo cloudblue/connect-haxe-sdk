@@ -5,6 +5,8 @@
 package connect.api;
 
 import connect.Env;
+import connect.util.Blob;
+import connect.util.Dictionary;
 
 
 @:dox(hide)

@@ -2,9 +2,9 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-package connect;
+package connect.storage;
 
-import connect.StepData.StorageType;
+import connect.storage.StepData.StorageType;
 import connect.logger.Logger;
 import connect.models.IdModel;
 import connect.models.Param;

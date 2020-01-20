@@ -4,13 +4,13 @@
 */
 package tests.unit;
 
-import connect.Collection;
-import connect.Dictionary;
 import connect.Env;
 import connect.models.Account;
 import connect.models.Event;
 import connect.models.Events;
 import connect.models.User;
+import connect.util.Collection;
+import connect.util.Dictionary;
 import tests.mocks.Mock;
 
 

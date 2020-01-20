@@ -4,6 +4,8 @@
 */
 package connect.models;
 
+import connect.util.DateTime;
+
 
 /**
     Represents a communication channel which provides the ability

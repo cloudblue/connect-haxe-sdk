@@ -4,6 +4,8 @@
 */
 package connect.models;
 
+import connect.util.DateTime;
+
 
 /**
     Contract activation information.

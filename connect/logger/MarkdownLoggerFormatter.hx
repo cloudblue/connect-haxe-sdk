@@ -4,6 +4,8 @@
 */
 package connect.logger;
 
+import connect.util.Collection;
+
 
 @:dox(hide)
 class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {

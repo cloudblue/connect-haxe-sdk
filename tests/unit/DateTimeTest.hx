@@ -4,7 +4,7 @@
 */
 package tests.unit;
 
-import connect.DateTime;
+import connect.util.DateTime;
 
 
 class DateTimeTest extends haxe.unit.TestCase {

@@ -4,8 +4,6 @@
 */
 package tests.unit;
 
-import connect.Collection;
-import connect.Dictionary;
 import connect.Env;
 import connect.models.Account;
 import connect.models.Asset;
@@ -26,6 +24,8 @@ import connect.models.Product;
 import connect.models.TierAccount;
 import connect.models.Tiers;
 import connect.models.User;
+import connect.util.Collection;
+import connect.util.Dictionary;
 import tests.mocks.Mock;
 
 
