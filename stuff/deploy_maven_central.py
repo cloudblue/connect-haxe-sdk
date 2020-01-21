@@ -52,7 +52,7 @@ def start() -> str:
         </data>
     </promoteRequest>
     """
-    response = curl('{}/{}/start'.format(profiles_url, mvn_profile), 'post', data)
+    response = curl('/'.join([profiles_url, mvn_profile, 'start']), 'post', data)
     root = parse_xml(response)
     if root.tag == 'promoteResponse':
         return root \
@@ -93,13 +93,13 @@ if __name__ == '__main__':
     repository_id = start()
 
     for file in files:
-        fullname = '{}/{}'.format(path, file)
+        fullname = '/'.join([path, file])
         ascname = fullname + '.asc'
-        print('Uploading "{}"...'.format(fullname))
+        print('Uploading "' + fullname + '"...'
         upload(repository_id, fullname)
-        print('Signing "{}"...'.format(fullname))
+        print('Signing "' + fullname + '"...'
         sign(fullname)
-        print('Uploading "{}"...'.format(ascname))
+        print('Uploading "' + ascname + '"...'
         upload(repository_id, ascname)
     
     print('Closing repository...')
