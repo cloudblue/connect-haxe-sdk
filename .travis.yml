@@ -28,5 +28,6 @@ deploy:
     branch: CUSDK-48-maven-deployment
 
 after_deploy:
+  - haxe -p stuff -m MavenCentralDeployer --interp
   - "./stuff/maven_deploy.sh"
   - "./stuff/pypi_deploy.sh"
