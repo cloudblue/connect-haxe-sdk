@@ -1,5 +1,3 @@
-package stuff;
-
 class MavenCentralDeployer {
     public static function main(): Void {
         final user = Sys.getEnv('mvn_user');
