@@ -95,11 +95,11 @@ if __name__ == '__main__':
     for file in files:
         fullname = '/'.join([path, file])
         ascname = fullname + '.asc'
-        print('Uploading "' + fullname + '"...'
+        print('Uploading "' + fullname + '"...')
         upload(repository_id, fullname)
-        print('Signing "' + fullname + '"...'
+        print('Signing "' + fullname + '"...')
         sign(fullname)
-        print('Uploading "' + ascname + '"...'
+        print('Uploading "' + ascname + '"...')
         upload(repository_id, ascname)
     
     print('Closing repository...')
