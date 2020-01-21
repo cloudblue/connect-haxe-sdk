@@ -12,7 +12,6 @@ mvn_user = os.environ['mvn_user']
 mvn_password = os.environ['mvn_password']
 mvn_passphrase = os.environ['mvn_passphrase']
 group_id = 'com.github.javicerveraingram'
-profile_id = 'com.github.javicerveraingram'
 
 
 def run(args: list) -> str:
@@ -20,7 +19,7 @@ def run(args: list) -> str:
     return subprocess.run(args, stdout=subprocess.PIPE).stdout.decode('utf-8')
 
 
-def curl(url: str, method: str, data: str) -> str:
+def curl(url: str, method: str, data: str = None) -> str:
     args = [
         'curl',
         '-s',
@@ -43,6 +42,17 @@ def parse_xml(content: str) -> object:
     return ElementTree.fromstring(content)
 
 
+def xml_error(elem: object) -> str:
+    if elem.tag == 'nexus-error':
+        return elem \
+            .find('errors') \
+            .find('error') \
+            .find('msg') \
+            .text
+    else:
+        return None
+
+
 def start() -> str:
     data = """
     <promoteRequest>
@@ -60,12 +70,7 @@ def start() -> str:
             .find('stagedRepositoryId') \
             .text
     else:
-        text = root \
-            .find('errors') \
-            .find('error') \
-            .find('msg') \
-            .text
-        raise Exception(text)
+        raise Exception(xml_error())
 
 
 def upload(repository_id: str, filename: str) -> str:
@@ -84,7 +89,7 @@ def upload(repository_id: str, filename: str) -> str:
     return response
 
 
-def finish(repository_id: str) -> str:
+def finish(profile_id: str, repository_id: str) -> str:
     data = """
     <promoteRequest>
         <data>
@@ -132,6 +137,12 @@ def sha1(filename: str) -> str:
     return digest
 
 
+def get_profile_id() -> str:
+    response = curl(profiles_url, 'get')
+    root = parse_xml(response)
+    return response
+
+
 if __name__ == '__main__':
     path = '_build/java'
     files = [
@@ -141,6 +152,8 @@ if __name__ == '__main__':
         'connect.sdk-18.0-javadoc.jar'
     ]
 
+    profile_id = get_profile_id()
+    profile_id = 'blabla'
     repository_id = start()
     # repository_id = 'comgithubjavicerveraingram-1065'
 
@@ -154,7 +167,7 @@ if __name__ == '__main__':
         print(sign(fullname))
         print(upload(repository_id, fullname + '.asc'))
     
-    print(finish())
+    print(finish(profile_id))
 
     release()
 
