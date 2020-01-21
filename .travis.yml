@@ -29,8 +29,9 @@ deploy:
 
 after_deploy:
 # Maven Central
-  - sudo apt install php php-mbstring -y
-  - haxe -cp stuff -m MavenCentralDeployer -php _build/MavenCentralDeployer
-  - php _build/MavenCentralDeployer/index.php
+- python3 stuff/deploy_maven_central.py
+#  - sudo apt install php php-mbstring -y
+#  - haxe -cp stuff -m MavenCentralDeployer -php _build/MavenCentralDeployer
+#  - php _build/MavenCentralDeployer/index.php
 #  - "./stuff/maven_deploy.sh"
 #  - "./stuff/pypi_deploy.sh"
