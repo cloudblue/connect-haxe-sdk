@@ -9,8 +9,8 @@ before_install:
   - curl -s "https://get.sdkman.io" | bash
   - source "/home/travis/.sdkman/bin/sdkman-init.sh"
   - sdk install java 8.0.232.j9-adpt
-  - sdk install maven 3.6.3
-#  - sdk install gradle 6.1
+  #- sdk install maven 3.6.3
+  #- sdk install gradle 6.1
 
 before_script:
   - "./stuff/java_clone.sh"
@@ -28,6 +28,6 @@ deploy:
     branch: CUSDK-48-maven-deployment
 
 after_deploy:
-  #- python3 stuff/deploy_maven_central.py
-  - "./stuff/maven_deploy.sh"
+  - python3 stuff/deploy_maven_central.py
+  #- "./stuff/maven_deploy.sh"
   #- "./stuff/pypi_deploy.sh"
