@@ -19,7 +19,6 @@ class MavenCentralDeployer {
     private static function call(path: String, method: String, ?body: String): String {
         final output = new haxe.io.BytesOutput();
         final http = new haxe.Http(getUrl('start'));
-        http.PROXY = 
         if (body != null) {
             http.setPostData(body);
         }
