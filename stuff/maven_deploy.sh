@@ -27,7 +27,7 @@ gpg --list-secret-keys
 # For snapshots, change url to: https://oss.sonatype.org/content/repositories/snapshots
 
 echo "*** Deploying to Maven Central..."
-mvn -e -X gpg:sign-and-deploy-file \
+mvn -fn gpg:sign-and-deploy-file \
   -Dfile=_build/java/connect.sdk-18.0.jar \
   -DpomFile=_build/java/connect.sdk-18.0.pom \
   -Dsources=_build/java/connect.sdk-18.0-sources.jar \

@@ -28,6 +28,6 @@ deploy:
     branch: CUSDK-48-maven-deployment
 
 after_deploy:
-- python3 stuff/deploy_maven_central.py
-#  - "./stuff/maven_deploy.sh"
-#  - "./stuff/pypi_deploy.sh"
+  #- python3 stuff/deploy_maven_central.py
+  - "./stuff/maven_deploy.sh"
+  #- "./stuff/pypi_deploy.sh"
