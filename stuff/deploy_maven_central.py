@@ -10,6 +10,7 @@ def curl(path: str, method: str, data: str, content_type: str = 'application/xml
     profile_id = 'JaviCerveraIngram'
     args = [
         'curl',
+        '-s',
         '-X', method.upper(),
         '-d', data,
         '-u', '{}:{}'.format(user, password),
@@ -17,6 +18,11 @@ def curl(path: str, method: str, data: str, content_type: str = 'application/xml
         '{}/{}/{}'.format(base_url, profile_id, path)
     ]
     return subprocess.run(args, stdout=subprocess.PIPE).stdout.decode('utf-8')
+
+
+def parse_xml(content: str) -> object:
+    from xml.etree import ElementTree
+    return ElementTree.fromstring(content)
 
 
 def start() -> str:
@@ -30,8 +36,39 @@ def start() -> str:
     </promoteRequest>
     """
     response = curl('start', 'post', data)
-    return response
+    root = parse_xml(response)
+    if root.tag != 'nexus-error':
+        return root \
+            .find('promoteResponse') \
+            .find('data') \
+            .find('stagedRepositoryId') \
+            .text
+    else:
+        text = root \
+            .find('errors') \
+            .find('error') \
+            .find('msg') \
+            .text
+        raise Exception(text)
+
+
+def upload(repository_id, filename: str) -> str:
+    pass
+
+
+def close() -> str:
+    pass
+
+
+def release() -> str:
+    pass
 
 
 if __name__ == '__main__':
-    print('Output: ' + start())
+    repository_id = start()
+    upload(repository_id, '_build/java/connect.sdk-18.0.jar')
+    upload(repository_id, '_build/java/connect.sdk-18.0.pom')
+    upload(repository_id, '_build/java/connect.sdk-18.0-sources.jar')
+    upload(repository_id, '_build/java/connect.sdk-18.0-javadoc.jar')
+    close()
+    release()
