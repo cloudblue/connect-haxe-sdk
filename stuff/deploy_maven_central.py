@@ -14,7 +14,7 @@ def curl(path: str, method: str, data: str) -> str:
     args = [
         'curl',
         '-X', method.upper(),
-        '-d', data
+        '-d', data,
         '-u', '{}:{}'.format(user, password),
         '-H', 'Content-Type:application/xml',
         '{}/{}/{}'.format(base_url, profile_id, path)
