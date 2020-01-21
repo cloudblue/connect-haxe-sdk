@@ -70,7 +70,7 @@ def start() -> str:
             .find('stagedRepositoryId') \
             .text
     else:
-        raise Exception(xml_error())
+        raise Exception(xml_error(root))
 
 
 def upload(repository_id: str, filename: str) -> str:
