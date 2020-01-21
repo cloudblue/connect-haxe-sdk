@@ -67,7 +67,8 @@ def start() -> str:
 
 
 def upload(repository_id, filename: str) -> str:
-    dash_split = filename.split('-')
+    strip_filename = filename.split('/')[-1]
+    dash_split = strip_filename.split('-')
     artifact_id = dash_split[0]
     dot_split = dash_split[1].split('.')
     version = dash_split[1] \
@@ -76,7 +77,7 @@ def upload(repository_id, filename: str) -> str:
     url_comps = [deploy_url, repository_id]
     url_comps.extend(group_id.split('.'))
     url_comps.append(version)
-    url_comps.append(filename)
+    url_comps.append(strip_filename)
     url = '/'.join(url_comps)
     print('Uploading "{}" to "{}"...'.format(filename, url))
     response = curl(url, '--upload-file', filename)
@@ -112,7 +113,7 @@ if __name__ == '__main__':
         fullname = '/'.join([path, file])
         ascname = fullname + '.asc'
         print(upload(repository_id, fullname))
-        sign(fullname)
+        print(sign(fullname))
         print(upload(repository_id, ascname))
     
     close()
