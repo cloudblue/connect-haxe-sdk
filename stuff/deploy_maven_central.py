@@ -53,7 +53,7 @@ def xml_error(elem: object) -> str:
         return None
 
 
-def start() -> str:
+def start(profile_id: str) -> str:
     data = """
     <promoteRequest>
         <data>
@@ -140,7 +140,12 @@ def sha1(filename: str) -> str:
 def get_profile_id() -> str:
     response = curl(profiles_url, 'get')
     root = parse_xml(response)
-    return response
+    if root.tag == 'stagingProfiles':
+        data = root.find('data')
+        profiles = [profile for profile in data if profile.find('name').text == group_id]
+        return profiles[0].find('id').text
+    else:
+        raise Exception(xml_error(root))
 
 
 if __name__ == '__main__':
@@ -153,8 +158,8 @@ if __name__ == '__main__':
     ]
 
     profile_id = get_profile_id()
-    profile_id = 'blabla'
-    repository_id = start()
+    print(profile_id)
+    repository_id = start(profile_id)
     # repository_id = 'comgithubjavicerveraingram-1065'
 
     for file in files:
