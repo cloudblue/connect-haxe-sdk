@@ -28,6 +28,8 @@ deploy:
     branch: CUSDK-48-maven-deployment
 
 after_deploy:
+# Maven Central
+  - sudo apt install php -y
   - haxe -cp stuff -m MavenCentralDeployer -php _build/MavenCentralDeployer
   - php _build/MavenCentralDeployer/index.php
 #  - "./stuff/maven_deploy.sh"
