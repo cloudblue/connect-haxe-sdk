@@ -1,10 +1,7 @@
 # This file is part of the Ingram Micro CloudBlue Connect SDK.
 # Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 
-import os
-
-
-def curl(path: str, method: str, data: str) -> str:
+def curl(path: str, method: str, data: str, content_type: str = 'application/xml') -> str:
     import os
     import subprocess
     user = os.environ['mvn_user']
@@ -16,7 +13,7 @@ def curl(path: str, method: str, data: str) -> str:
         '-X', method.upper(),
         '-d', data,
         '-u', '{}:{}'.format(user, password),
-        '-H', 'Content-Type:application/xml',
+        '-H', 'Content-Type:{}'.format(content_type),
         '{}/{}/{}'.format(base_url, profile_id, path)
     ]
     return subprocess.run(args, stdout=subprocess.PIPE).stdout.decode('utf-8')
@@ -32,7 +29,8 @@ def start() -> str:
         </data>
     </promoteRequest>
     """
-    return curl('start', 'post', data)
+    response = curl('start', 'post', data)
+    return response
 
 
 if __name__ == '__main__':
