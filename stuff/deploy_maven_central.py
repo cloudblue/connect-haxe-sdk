@@ -76,6 +76,7 @@ def upload(repository_id, filename: str) -> str:
         else '.'.join(dot_split[:-1])
     url_comps = [deploy_url, repository_id]
     url_comps.extend(group_id.split('.'))
+    url_comps.append(artifact_id)
     url_comps.append(version)
     url_comps.append(strip_filename)
     url = '/'.join(url_comps)
