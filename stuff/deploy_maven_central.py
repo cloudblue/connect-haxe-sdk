@@ -108,6 +108,18 @@ def md5(filename: str) -> str:
     return digest
 
 
+def sha1(filename: str) -> str:
+    import hashlib
+    print('Generating SHA1 checksum for file "' + filename + '"...')
+    with open(filename, 'rb') as f:
+        contents = f.read()
+    sha1 = hashlib.sha1(contents)
+    digest = sha1.hexdigest()
+    with open(filename + '.sha1', 'w') as f:
+        f.write(digest)
+    return digest
+
+
 if __name__ == '__main__':
     path = '_build/java'
     files = [
@@ -122,13 +134,13 @@ if __name__ == '__main__':
 
     for file in files:
         fullname = '/'.join([path, file])
-        md5name = fullname + '.md5'
-        ascname = fullname + '.asc'
         print(upload(repository_id, fullname))
         print(md5(fullname))
-        print(upload(repository_id, md5name))
+        print(upload(repository_id, fullname + '.md5'))
+        print(sha1(fullname))
+        print(upload(repository_id, fullname + '.sha1'))
         print(sign(fullname))
-        print(upload(repository_id, ascname))
+        print(upload(repository_id, fullname + '.asc'))
     
     close()
 
