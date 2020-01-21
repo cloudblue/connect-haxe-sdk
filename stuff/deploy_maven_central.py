@@ -19,8 +19,7 @@ def curl(path: str, method: str, data: str) -> str:
         '-H', 'Content-Type:application/xml',
         '{}/{}/{}'.format(base_url, profile_id, path)
     ]
-    subprocess.run(args)  # , stdout=subprocess.PIPE)
-    return ''
+    return subprocess.run(args, stdout=subprocess.PIPE).stdout.decode('utf-8')
 
 
 def start() -> str:
@@ -37,4 +36,4 @@ def start() -> str:
 
 
 if __name__ == '__main__':
-    start()
+    print('Output: ' + start())
