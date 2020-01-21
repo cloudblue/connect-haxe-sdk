@@ -6,6 +6,10 @@
 
 class MavenCentralDeployer {
     public static function main(): Void {
+        /*haxe.Http.PROXY = {
+            port = 83;
+
+        };*/
         //final user = Sys.getEnv('mvn_user');
         //final password = Sys.getEnv('mvn_password');
         call('start', 'post');
@@ -15,6 +19,7 @@ class MavenCentralDeployer {
     private static function call(path: String, method: String, ?body: String): String {
         final output = new haxe.io.BytesOutput();
         final http = new haxe.Http(getUrl('start'));
+        http.PROXY = 
         if (body != null) {
             http.setPostData(body);
         }
@@ -26,10 +31,10 @@ class MavenCentralDeployer {
         return output.getBytes().toString();
     }
     
-    
+
     private static function getUrl(path: String) {
         final profileId = 'com.github.javicerveraingram';
-        final baseUrl = 'http://localhost:8081/nexus/service/local/staging/profiles';
+        final baseUrl = 'https://oss.sonatype.org/service/local/staging/profiles';
         return '$baseUrl/$profileId/$path';
     }
 }
