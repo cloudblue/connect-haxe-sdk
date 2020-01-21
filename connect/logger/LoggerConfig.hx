@@ -36,13 +36,13 @@ class LoggerConfig extends Base {
 
 
     /**
-     * Sets the outputs for the logger. Default is an output with a Markdown formatter
+     * Sets the handlers for the logger. Default is a handler with a Markdown formatter
      * and a file writer.
-     * @param outputs Collection of outputs.
+     * @param handlers Collection of handlers.
      * @return LoggerConfig
      */
-    public function outputs(outputs: Collection<LoggerOutput>): LoggerConfig {
-        this.outputs_ = outputs.copy();
+    public function handlers(handlers: Collection<LoggerHandler>): LoggerConfig {
+        this.handlers_ = handlers.copy();
         return this;
     }
 
@@ -50,14 +50,14 @@ class LoggerConfig extends Base {
     public function new() {
         this.path_ = 'logs';
         this.level_ = Logger.LEVEL_INFO;
-        this.outputs_ = new Collection<LoggerOutput>()
+        this.handlers_ = new Collection<LoggerHandler>()
             .push(
-                new LoggerOutput(new MarkdownLoggerFormatter(),
+                new LoggerHandler(new MarkdownLoggerFormatter(),
                 new FileLoggerWriter()));
     }
 
 
     public var path_(default, null): String;
     public var level_(default, null): Int;
-    public var outputs_(default, null): Collection<LoggerOutput>;
+    public var handlers_(default, null): Collection<LoggerHandler>;
 }

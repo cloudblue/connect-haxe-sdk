@@ -202,7 +202,7 @@ class ApiClientImpl extends Base implements IApiClient {
                 requestList.push('Status: ${response.status}');
                 requestList.push(getFormattedData(response.text, 'Response', fmt));
             }
-            Env.getLogger()._writeToOutput(
+            Env.getLogger()._writeToHandler(
                 level,
                 fmt.formatBlock('$firstMessage${fmt.formatList(requestList)}'),
                 output);

@@ -436,20 +436,35 @@ class Flow extends Base {
         this.model = model;
         this.originalModelStr = model.toString();
 
+        final assetRequest = this.getAssetRequest();
+        final tierConfigRequest = this.getTierConfigRequest();
+        final usageFile = this.getUsageFile();
+
+        // Get product
+        final product = (assetRequest != null) ? assetRequest.asset.product
+            : (tierConfigRequest != null) ? tierConfigRequest.product
+            : (usageFile != null) ? usageFile.product
+            : null;
+
+        // Get product path
+        final productPath = (product != null)
+            ? product.id + '/'
+            : '';
+
         // Set log filename
-        if (this.getAssetRequest() != null) {
-            Env.getLogger().setFilename('${this.getAssetRequest().asset.id}.md');
-        } else if (this.getTierConfigRequest() != null) {
-            Env.getLogger().setFilename('${this.getTierConfigRequest().configuration.id}.md');
-        } else if (this.getUsageFile() != null) {
-            Env.getLogger().setFilename('${this.getUsageFile().id}.md');
+        if (assetRequest != null) {
+            Env.getLogger().setFilename('$productPath${assetRequest.asset.id}.md');
+        } else if (tierConfigRequest != null) {
+            Env.getLogger().setFilename('$productPath${tierConfigRequest.configuration.id}.md');
+        } else if (usageFile != null) {
+            Env.getLogger().setFilename('$productPath${usageFile.id}.md');
         }
 
         // Open log section
         Env.getLogger().openSection('Processing request "${this.model.id}" on ${DateTime.now()}');
 
-        // For Fulfillment requests, check if we must skip due to pending migration
-        if (this.getAssetRequest() != null && this.getAssetRequest().needsMigration()) {
+        // For asset requests, check if we must skip due to pending migration
+        if (assetRequest != null && assetRequest.needsMigration()) {
             Env.getLogger().write(Logger.LEVEL_INFO,
                 'Skipping request because it is pending migration.');
             Env.getLogger().closeSection();
@@ -517,7 +532,7 @@ class Flow extends Base {
             final list = new Collection<String>()
                 .push(getFormattedRequest(request, lastRequest, output.formatter))
                 .push(getFormattedData(data, lastData, this.data, output.formatter));
-            Env.getLogger()._writeToOutput(level, output.formatter.formatList(list), output);
+            Env.getLogger()._writeToHandler(level, output.formatter.formatList(list), output);
         }
     }
 
