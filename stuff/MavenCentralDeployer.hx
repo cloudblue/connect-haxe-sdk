@@ -9,7 +9,8 @@ class MavenCentralDeployer {
         start();
     }
 
-    private static final host = 'https://oss.sonatype.org';
+
+    private static final host = 'oss.sonatype.org';
 
 
     private static function start() {
@@ -40,7 +41,7 @@ class MavenCentralDeployer {
 
     private static function getUrl(path: String) {
         final profileId = 'com.github.javicerveraingram';
-        final baseUrl = '$host/service/local/staging/profiles';
+        final baseUrl = 'https://$host/service/local/staging/profiles';
         return '$baseUrl/$profileId/$path';
     }
 }
