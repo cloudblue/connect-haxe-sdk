@@ -6,12 +6,12 @@
 
 import os
 
-profiles_url = 'https://oss.sonatype.org/service/local/staging/profiles'
+group_id = 'com.github.javicerveraingram'
 deploy_url = 'https://oss.sonatype.org/service/local/staging/deployByRepositoryId'
+profiles_url = 'https://oss.sonatype.org/service/local/staging/profiles'
 mvn_user = os.environ['mvn_user']
 mvn_password = os.environ['mvn_password']
 mvn_passphrase = os.environ['mvn_passphrase']
-group_id = 'com.github.javicerveraingram'
 
 
 def run(args: list) -> str:
@@ -61,7 +61,7 @@ def start(profile_id: str) -> str:
         </data>
     </promoteRequest>
     """
-    print('Starting repository...')
+    print('*** Starting repository...')
     response = curl('/'.join([profiles_url, profile_id, 'start']), 'post', data)
     root = parse_xml(response)
     if root.tag == 'promoteResponse':
@@ -104,7 +104,7 @@ def finish(profile_id: str, repository_id: str) -> str:
 
 
 def release() -> str:
-    print('Releasing repository...')
+    print('*** Releasing repository...')
 
 
 def sign(filename: str) -> str:
@@ -114,7 +114,7 @@ def sign(filename: str) -> str:
 
 def md5(filename: str) -> str:
     import hashlib
-    print('Generating MD5 checksum for file "' + filename + '"...')
+    print('*** Generating MD5 checksum for file "' + filename + '"...')
     md5 = hashlib.md5()
     with open(filename, 'rb') as f:
         for chunk in iter(lambda: f.read(4096), b''):
@@ -127,7 +127,7 @@ def md5(filename: str) -> str:
 
 def sha1(filename: str) -> str:
     import hashlib
-    print('Generating SHA1 checksum for file "' + filename + '"...')
+    print('*** Generating SHA1 checksum for file "' + filename + '"...')
     with open(filename, 'rb') as f:
         contents = f.read()
     sha1 = hashlib.sha1(contents)
@@ -143,7 +143,9 @@ def get_profile_id() -> str:
     if root.tag == 'stagingProfiles':
         data = root.find('data')
         profiles = [profile for profile in data if profile.find('name').text == group_id]
-        return profiles[0].find('id').text
+        profile_id = profiles[0].find('id').text
+        print('*** Found profile id ' + profile_id)
+        return profile_id
     else:
         raise Exception(xml_error(root))
 
@@ -158,9 +160,7 @@ if __name__ == '__main__':
     ]
 
     profile_id = get_profile_id()
-    print(profile_id)
     repository_id = start(profile_id)
-    # repository_id = 'comgithubjavicerveraingram-1065'
 
     for file in files:
         fullname = '/'.join([path, file])
@@ -172,8 +172,8 @@ if __name__ == '__main__':
         print(sign(fullname))
         print(upload(repository_id, fullname + '.asc'))
     
-    print(finish(profile_id))
+    print(finish(profile_id, repository_id))
 
     release()
 
-    print('Done.')
+    print('*** Done.')
