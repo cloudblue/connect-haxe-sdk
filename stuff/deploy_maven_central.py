@@ -12,6 +12,7 @@ mvn_user = os.environ['mvn_user']
 mvn_password = os.environ['mvn_password']
 mvn_passphrase = os.environ['mvn_passphrase']
 group_id = 'com.github.javicerveraingram'
+profile_id = 'com.github.javicerveraingram'
 
 
 def run(args: list) -> str:
@@ -46,14 +47,12 @@ def start() -> str:
     data = """
     <promoteRequest>
         <data>
-            <description>
-                connect.sdk upload
-            </description>
+            <description>connect.sdk upload</description>
         </data>
     </promoteRequest>
     """
     print('Starting repository...')
-    response = curl('/'.join([profiles_url, mvn_profile, 'start']), 'post', data)
+    response = curl('/'.join([profiles_url, profile_id, 'start']), 'post', data)
     root = parse_xml(response)
     if root.tag == 'promoteResponse':
         return root \
@@ -69,7 +68,7 @@ def start() -> str:
         raise Exception(text)
 
 
-def upload(repository_id, filename: str) -> str:
+def upload(repository_id: str, filename: str) -> str:
     strip_filename = filename.split('/')[-1]
     dash_split = strip_filename.split('-')
     artifact_id = dash_split[0]
@@ -85,8 +84,18 @@ def upload(repository_id, filename: str) -> str:
     return response
 
 
-def close() -> str:
+def finish(repository_id: str) -> str:
+    data = """
+    <promoteRequest>
+        <data>
+            <stagedRepositoryId>{}</stagedRepositoryId>
+            <description>connect.sdk upload</description>
+        </data>
+    </promoteRequest>
+    """.format(repository_id)
     print('Closing repository...')
+    response = curl('/'.join([profiles_url, profile_id, 'finish']), 'post', data)
+    return response
 
 
 def release() -> str:
@@ -145,7 +154,7 @@ if __name__ == '__main__':
         print(sign(fullname))
         print(upload(repository_id, fullname + '.asc'))
     
-    close()
+    print(finish())
 
     release()
 
