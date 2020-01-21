@@ -91,8 +91,21 @@ def release() -> str:
 
 
 def sign(filename: str) -> str:
-    print('Signing "' + fullname + '"...')
+    print('Signing "' + filename + '"...')
     return run(['gpg', '--batch', '--yes', '--passphrase', mvn_passphrase, '-ab', filename])
+
+
+def md5(filename: str) -> str:
+    import hashlib
+    print('Generating MD5 checksum for file "' + filename + '"...')
+    md5 = hashlib.md5()
+    with open(filename, 'rb') as f:
+        for chunk in iter(lambda: f.read(4096), b''):
+            md5.update(chunk)
+    digest = md5.hexdigest()
+    with open(filename + '.md5', 'w') as f:
+        f.write(digest)
+    return digest
 
 
 if __name__ == '__main__':
@@ -109,8 +122,11 @@ if __name__ == '__main__':
 
     for file in files:
         fullname = '/'.join([path, file])
+        md5name = fullname + '.md5'
         ascname = fullname + '.asc'
         print(upload(repository_id, fullname))
+        print(md5(fullname))
+        print(upload(repository_id, md5name))
         print(sign(fullname))
         print(upload(repository_id, ascname))
     
