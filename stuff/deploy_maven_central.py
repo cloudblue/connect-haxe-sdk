@@ -70,10 +70,7 @@ def upload(repository_id, filename: str) -> str:
     strip_filename = filename.split('/')[-1]
     dash_split = strip_filename.split('-')
     artifact_id = dash_split[0]
-    dot_split = dash_split[1].split('.')
-    version = dash_split[1] \
-        if len(dot_split) == 2 \
-        else '.'.join(dot_split[:-1])
+    version = '.'.join([s for s in dash_split[1].split('.') if s.isdigit()])
     url_comps = [deploy_url, repository_id]
     url_comps.extend(group_id.split('.'))
     url_comps.append(artifact_id)
