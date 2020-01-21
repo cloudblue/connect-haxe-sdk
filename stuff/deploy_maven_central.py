@@ -1,6 +1,9 @@
 # This file is part of the Ingram Micro CloudBlue Connect SDK.
 # Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 
+# Developed following the instructions here:
+# https://support.sonatype.com/hc/en-us/articles/213465868?_ga=2.230043868.1594253912.1579542012-1885361292.1578410493
+
 import os
 
 profiles_url = 'https://oss.sonatype.org/service/local/staging/profiles'
@@ -129,8 +132,8 @@ if __name__ == '__main__':
         'connect.sdk-18.0-javadoc.jar'
     ]
 
-    # repository_id = start()
-    repository_id = 'comgithubjavicerveraingram-1065'
+    repository_id = start()
+    # repository_id = 'comgithubjavicerveraingram-1065'
 
     for file in files:
         fullname = '/'.join([path, file])
