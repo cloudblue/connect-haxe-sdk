@@ -6,12 +6,14 @@
 
 class MavenCentralDeployer {
     public static function main(): Void {
-        /*haxe.Http.PROXY = {
-            port = 83;
-
-        };*/
-        //final user = Sys.getEnv('mvn_user');
-        //final password = Sys.getEnv('mvn_password');
+        haxe.Http.PROXY = {
+            port: 443,
+            host: '',
+            auth: {
+                user: Sys.getEnv('mvn_user'),
+                pass: Sys.getEnv('mvn_password')
+            }
+        };
         call('start', 'post');
     }
 
