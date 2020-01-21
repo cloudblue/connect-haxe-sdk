@@ -1,9 +1,14 @@
 # This file is part of the Ingram Micro CloudBlue Connect SDK.
 # Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 
+import os
+
 profiles_url = 'https://oss.sonatype.org/service/local/staging/profiles'
 deploy_url = 'https://oss.sonatype.org/service/local/staging/deployByRepositoryId'
-profile_id = 'JaviCerveraIngram'
+mvn_user = os.environ['mvn_user']
+mvn_password = os.environ['mvn_password']
+mvn_passphrase = os.environ['mvn_passphrase']
+mvn_profile = 'JaviCerveraIngram'
 
 
 def run(args: list) -> str:
@@ -12,13 +17,10 @@ def run(args: list) -> str:
 
 
 def curl(url: str, method: str, data: str) -> str:
-    import os
-    user = os.environ['mvn_user']
-    password = os.environ['mvn_password']
     args = [
         'curl',
         '-s',
-        '-u', '{}:{}'.format(user, password),
+        '-u', '{}:{}'.format(mvn_user, mvn_password),
     ]
     if method.lower() == '--upload-file':
         args.extend(['-H', 'Content-Type:application/x-jar'])
@@ -32,9 +34,7 @@ def curl(url: str, method: str, data: str) -> str:
 
 
 def sign(filename: str) -> str:
-    import os
-    passphrase = os.environ['mvn_passphrase']
-    return run(['gpg', '--passphrase', passphrase, '-ab', filename])
+    return run(['gpg', '--passphrase', mvn_passphrase, '-ab', filename])
 
 
 def parse_xml(content: str) -> object:
@@ -52,11 +52,10 @@ def start() -> str:
         </data>
     </promoteRequest>
     """
-    response = curl('{}/{}/start'.format(profiles_url, profile_id), 'post', data)
+    response = curl('{}/{}/start'.format(profiles_url, mvn_profile), 'post', data)
     root = parse_xml(response)
-    if root.tag != 'nexus-error':
+    if root.tag == 'promoteResponse':
         return root \
-            .find('promoteResponse') \
             .find('data') \
             .find('stagedRepositoryId') \
             .text
