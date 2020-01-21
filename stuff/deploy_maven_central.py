@@ -6,9 +6,13 @@ deploy_url = 'https://oss.sonatype.org/service/local/staging/deployByRepositoryI
 profile_id = 'JaviCerveraIngram'
 
 
+def run(args: list) -> str:
+    import subprocess
+    return subprocess.run(args, stdout=subprocess.PIPE).stdout.decode('utf-8')
+
+
 def curl(url: str, method: str, data: str) -> str:
     import os
-    import subprocess
     user = os.environ['mvn_user']
     password = os.environ['mvn_password']
     args = [
@@ -16,7 +20,6 @@ def curl(url: str, method: str, data: str) -> str:
         '-s',
         '-u', '{}:{}'.format(user, password),
     ]
-    
     if method.lower() == '--upload-file':
         args.extend(['-H', 'Content-Type:application/x-jar'])
         args.extend(['--upload-file', data])
@@ -25,7 +28,13 @@ def curl(url: str, method: str, data: str) -> str:
         args.extend(['-X', method.upper()])
         args.extend(['-d', data])
     args.append(url)
-    return subprocess.run(args, stdout=subprocess.PIPE).stdout.decode('utf-8')
+    return run(args)
+
+
+def sign(filename: str) -> str:
+    import os
+    passphrase = os.environ['mvn_passphrase']
+    return run(['gpg', '--passphrase', passphrase, '-ab', filename])
 
 
 def parse_xml(content: str) -> object:
@@ -89,6 +98,8 @@ if __name__ == '__main__':
         ascname = fullname + '.asc'
         print('Uploading "{}"...'.format(fullname))
         upload(repository_id, fullname)
+        print('Signing "{}"...'.format(fullname))
+        sign(fullname)
         print('Uploading "{}"...'.format(ascname))
         upload(repository_id, ascname)
     
