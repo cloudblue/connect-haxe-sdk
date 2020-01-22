@@ -22,7 +22,7 @@ def run(args: list) -> str:
 def curl(url: str, method: str, data: str = None) -> str:
     args = [
         'curl',
-        '-s',
+        '-v',
         '-u', '{}:{}'.format(mvn_user, mvn_password),
     ]
     if method.lower() == '--upload-file':
