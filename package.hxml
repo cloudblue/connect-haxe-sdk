@@ -1,4 +1,4 @@
--main Packager
+-main Connect
 -dce no
 --each
 

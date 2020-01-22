@@ -61,11 +61,11 @@ import connect.models.User;
 import connect.util.DateTime;
 #end
 
-class Packager {
+class Connect {
     public static function main() {
     #if packager
         final classes = getClassNames();
-        //createCsPackage(classes);
+        createCsPackage(classes);
         createJavaPackage();
         createJsPackage(classes);
         createPhpPackage(classes);
@@ -95,16 +95,6 @@ class Packager {
     private static function createCsPackage(classes: Array<String>): Void {
         final outDir = '_build/cs';
         copyLicense(outDir);
-        
-        // Create project file
-        final original = sys.io.File.getContent('$outDir/Packager.csproj');
-        final fixedType = StringTools.replace(original,
-            '<OutputType>Exe</OutputType>',
-            '<OutputType>Library</OutputType>');
-        final fixedName = StringTools.replace(fixedType,
-            '<AssemblyName>Packager</AssemblyName>',
-            '<AssemblyName>Connect</AssemblyName>');
-        sys.io.File.saveContent('$outDir/Connect.csproj', fixedName);
     }
     
     
@@ -120,7 +110,7 @@ class Packager {
         if (FileSystem.exists(outFile)) {
             FileSystem.deleteFile(outFile);
         }
-        FileSystem.rename('$outDir/Packager.jar', outFile);
+        FileSystem.rename('$outDir/Connect.jar', outFile);
     }
 
 
