@@ -33,4 +33,4 @@ after_deploy:
   - rm stuff/key.gpg
   - python3 stuff/deploy_maven_central.py
 # Deploy to PyPI
-  #- "./stuff/pypi_deploy.sh"
+  - "./stuff/deploy_pypi.sh"
