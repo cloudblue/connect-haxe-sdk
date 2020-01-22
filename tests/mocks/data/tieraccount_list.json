@@ -5,7 +5,7 @@
         "external_uid": "518e10e8-3b1b-49b5-a480-b67675af4ae5",
         "name": "string",
         "environment": "test",
-        "scope": ["tier1", "customer"],
+        "scopes": ["tier1", "customer"],
         "contact_info": {
             "address_line1": "Yalı Mahallesi",
             "address_line2": "",
