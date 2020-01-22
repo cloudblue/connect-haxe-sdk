@@ -9,8 +9,6 @@ before_install:
   - curl -s "https://get.sdkman.io" | bash
   - source "/home/travis/.sdkman/bin/sdkman-init.sh"
   - sdk install java 8.0.232.j9-adpt
-  - sdk install maven 3.6.3
-  #- sdk install gradle 6.1
 
 before_script:
   - "./stuff/java_clone.sh"
@@ -34,6 +32,5 @@ after_deploy:
   - gpg --batch --passphrase ${mvn_passphrase} --import stuff/key.gpg
   - rm stuff/key.gpg
   - python3 stuff/deploy_maven_central.py
-  #- "./stuff/maven_deploy.sh"
 # Deploy to PyPI
   #- "./stuff/pypi_deploy.sh"

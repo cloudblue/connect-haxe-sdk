@@ -6,12 +6,12 @@
 
 import os
 
-group_id = 'com.github.javicerveraingram'
 deploy_url = 'https://oss.sonatype.org/service/local/staging/deployByRepositoryId'
 profiles_url = 'https://oss.sonatype.org/service/local/staging/profiles'
 mvn_user = os.environ['mvn_user']
 mvn_password = os.environ['mvn_password']
 mvn_passphrase = os.environ['mvn_passphrase']
+group_id = None  # Will be taken from pom on __main__
 
 
 def run(args: list) -> str:
@@ -169,6 +169,8 @@ if __name__ == '__main__':
         'connect.sdk-18.0-javadoc.jar'
     ]
 
+    with open('/'.join(path, files[1])) as f:
+        group_id = parse_xml(f.read()).find('groupId').text
     profile_id = get_profile_id()
     repository_id = start(profile_id)
 
