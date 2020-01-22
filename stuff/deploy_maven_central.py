@@ -182,8 +182,8 @@ if __name__ == '__main__':
         sha1(fullname)
         print(upload(repository_id, fullname + '.sha1'))
     
-    # print(finish(profile_id, repository_id))
+    print(finish(profile_id, repository_id))
 
-    # print(release())
+    print(release())
 
     print('*** Done.')
