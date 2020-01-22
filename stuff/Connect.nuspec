@@ -14,7 +14,7 @@
     <tags>connect sdk cloudblue ingram micro ingrammicro cloud automation</tags>
   </metadata>
   <files>
-    <file src="Connect.dll" target="lib/connect" />
+    <file src="Connect.dll" target="lib" />
     <file src="README.md" />
     <file src="LICENSE" />
   </files>
