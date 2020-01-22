@@ -171,8 +171,7 @@ if __name__ == '__main__':
 
     with open('/'.join([path, files[1]])) as f:
         xml = parse_xml(f.read())
-        print('/// ' + xml.tag)
-        group_id = xml.find('{http://maven.apache.org/POM/4.0.0}groupId').text
+    group_id = xml.find('{http://maven.apache.org/POM/4.0.0}groupId').text
     profile_id = get_profile_id()
     repository_id = start(profile_id)
 
