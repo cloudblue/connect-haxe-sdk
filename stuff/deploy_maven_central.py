@@ -84,7 +84,7 @@ def upload(repository_id: str, filename: str) -> str:
     url_comps.append(version)
     url_comps.append(strip_filename)
     url = '/'.join(url_comps)
-    print('Uploading "{}" to "{}"...'.format(filename, url))
+    print('*** Uploading "{}" to "{}"...'.format(filename, url))
     response = curl(url, '--upload-file', filename)
     return response
 
@@ -98,17 +98,27 @@ def finish(profile_id: str, repository_id: str) -> str:
         </data>
     </promoteRequest>
     """.format(repository_id)
-    print('Closing repository...')
+    print('*** Closing repository...')
     response = curl('/'.join([profiles_url, profile_id, 'finish']), 'post', data)
     return response
 
 
 def release() -> str:
+    data = """
+    <promoteRequest>
+        <data>
+            <stagedRepositoryId>{}</stagedRepositoryId>
+            <description>connect.sdk upload</description>
+        </data>
+    </promoteRequest>
+    """.format(repository_id)
     print('*** Releasing repository...')
+    response = curl('/'.join([profiles_url, profile_id, 'release']), 'post', data)
+    return response
 
 
 def sign(filename: str) -> str:
-    print('Signing "' + filename + '"...')
+    print('*** Signing "' + filename + '"...')
     return run(['gpg', '--batch', '--yes', '--passphrase', mvn_passphrase, '-ab', filename])
 
 
@@ -165,15 +175,15 @@ if __name__ == '__main__':
     for file in files:
         fullname = '/'.join([path, file])
         print(upload(repository_id, fullname))
-        print(md5(fullname))
-        print(upload(repository_id, fullname + '.md5'))
-        print(sha1(fullname))
-        print(upload(repository_id, fullname + '.sha1'))
-        print(sign(fullname))
+        sign(fullname)
         print(upload(repository_id, fullname + '.asc'))
+        md5(fullname)
+        print(upload(repository_id, fullname + '.md5'))
+        sha1(fullname)
+        print(upload(repository_id, fullname + '.sha1'))
     
-    print(finish(profile_id, repository_id))
+    # print(finish(profile_id, repository_id))
 
-    release()
+    # print(release())
 
     print('*** Done.')
