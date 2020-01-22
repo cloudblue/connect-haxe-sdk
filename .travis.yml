@@ -30,6 +30,7 @@ after_deploy:
 # Deploy to NuGet Gallery
   - sudo apt install nuget -y
   - cd _build/cs/bin
+  - cat ~/.config/NuGet/NuGet.Config
   - nuget pack Connect.nuspec
   - nuget push ConnectSDK.18.0.0.nupkg $nuget_token
   - cd ../../..
