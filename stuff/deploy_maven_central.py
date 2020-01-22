@@ -169,7 +169,7 @@ if __name__ == '__main__':
         'connect.sdk-18.0-javadoc.jar'
     ]
 
-    with open('/'.join(path, files[1])) as f:
+    with open('/'.join([path, files[1]])) as f:
         group_id = parse_xml(f.read()).find('groupId').text
     profile_id = get_profile_id()
     repository_id = start(profile_id)
