@@ -93,8 +93,10 @@ class Connect {
 
 
     private static function createCsPackage(classes: Array<String>): Void {
-        final outDir = '_build/cs';
+        final outDir = '_build/cs/bin';
         copyLicense(outDir);
+        sys.io.File.copy('stuff/CS_README.md', '$outDir/README.md');
+        sys.io.File.copy('stuff/Connect.nuspec', '$outDir/Connect.nuspec');
     }
     
     
