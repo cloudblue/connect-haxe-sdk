@@ -170,7 +170,9 @@ if __name__ == '__main__':
     ]
 
     with open('/'.join([path, files[1]])) as f:
-        group_id = parse_xml(f.read()).find('groupId').text
+        xml = parse_xml(f.read())
+        print('/// ' + xml.tag)
+        group_id = xml.find('groupId').text
     profile_id = get_profile_id()
     repository_id = start(profile_id)
 
