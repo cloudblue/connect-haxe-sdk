@@ -23,8 +23,8 @@ class TierAccount extends IdModel {
     public var environment: String;
 
 
-    /** Scope of the tier account in asset tier chain. Possible: tier-1, tier-2, customer **/
-    public var scope: Collection<String>;
+    /** Scopes of the tier account in asset tier chain. Possible: tier1, tier2, customer **/
+    public var scopes: Collection<String>;
 
 
     /** Tier ContactInfo object. **/
