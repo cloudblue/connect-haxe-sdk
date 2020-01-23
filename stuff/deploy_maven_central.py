@@ -212,7 +212,7 @@ if __name__ == '__main__':
     if status != 'closed':
         raise 'Repository could not be closed.'
     else:
-        print '*** Repository closed.'
+        print('*** Repository closed.')
 
     print(release(), flush=True)
 
