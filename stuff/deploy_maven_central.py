@@ -117,7 +117,6 @@ def is_staging_repository(profile_id: str, repository_id: str) -> str:
     return response
 
 
-
 def release() -> str:
     print('*** Releasing repository...')
     data = """
