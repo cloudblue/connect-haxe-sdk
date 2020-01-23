@@ -161,12 +161,15 @@ def get_profile_id() -> str:
 
 
 if __name__ == '__main__':
+    with open('VERSION') as f:
+        version = f.read().strip()
+
     path = '_build/java'
     files = [
-        'connect.sdk-18.0.jar',
-        'connect.sdk-18.0.pom',
-        'connect.sdk-18.0-sources.jar',
-        'connect.sdk-18.0-javadoc.jar'
+        'connect.sdk-{}.jar'.format(version),
+        'connect.sdk-{}.pom'.format(version),
+        'connect.sdk-{}-sources.jar'.format(version),
+        'connect.sdk-{}-javadoc.jar'.format(version)
     ]
 
     with open('/'.join([path, files[1]])) as f:

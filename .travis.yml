@@ -38,7 +38,7 @@ after_deploy:
   - sudo apt install nuget -y
   - cd _build/cs/bin
   - nuget pack Connect.nuspec
-  - nuget push Connect.SDK.18.0.0.nupkg $nuget_token -source https://api.nuget.org/v3/index.json
+  - nuget push Connect.SDK.$sdk_version.nupkg $nuget_token -source https://api.nuget.org/v3/index.json
   - cd ../../..
 # Deploy to Maven Central
   - echo "*** Deploying to Maven Central..."

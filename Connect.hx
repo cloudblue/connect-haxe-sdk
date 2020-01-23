@@ -64,12 +64,13 @@ import connect.util.DateTime;
 class Connect {
     public static function main() {
     #if packager
+        final version = StringTools.trim(sys.io.File.getContent('VERSION'));
         final classes = getClassNames();
-        createCsPackage(classes);
-        createJavaPackage();
+        createCsPackage(version, classes);
+        createJavaPackage(version);
         createJsPackage(classes);
         createPhpPackage(classes);
-        createPythonPackage(classes);
+        createPythonPackage(version, classes);
     #elseif js
         js.Syntax.code("global.$hxClasses = $hxClasses;");
     #end
@@ -92,23 +93,27 @@ class Connect {
     }
 
 
-    private static function createCsPackage(classes: Array<String>): Void {
+    private static function createCsPackage(version: String, classes: Array<String>): Void {
         final outDir = '_build/cs/bin';
         copyLicense(outDir);
         sys.io.File.copy('stuff/CS_README.md', '$outDir/README.md');
-        sys.io.File.copy('stuff/Connect.nuspec', '$outDir/Connect.nuspec');
+        final nuspec = sys.io.File.getContent('stuff/Connect.nuspec');
+        final fixedNuspec = StringTools.replace(nuspec, '__VERSION__', version);
+        sys.io.File.saveContent('$outDir/Connect.nuspec', fixedNuspec);
     }
     
     
-    private static function createJavaPackage(): Void {
+    private static function createJavaPackage(version: String): Void {
         final outDir = '_build/java';
-        final outFile = '$outDir/connect.sdk-18.0.jar';
+        final outFile = '$outDir/connect.sdk-$version.jar';
         copyLicense(outDir);
         sys.io.File.copy('stuff/JAVA_README.md', '$outDir/README.md');
         sys.io.File.copy('stuff/gitignore_java', '$outDir/.gitignore');
-        sys.io.File.copy('stuff/pom.xml', '$outDir/connect.sdk-18.0.pom');
-        sys.io.File.copy('stuff/connect-sources.jar', '$outDir/connect.sdk-18.0-sources.jar');
-        sys.io.File.copy('stuff/connect-javadoc.jar', '$outDir/connect.sdk-18.0-javadoc.jar');
+        sys.io.File.copy('stuff/connect-sources.jar', '$outDir/connect.sdk-$version-sources.jar');
+        sys.io.File.copy('stuff/connect-javadoc.jar', '$outDir/connect.sdk-$version-javadoc.jar');
+        final pom = sys.io.File.getContent('stuff/pom.xml');
+        final fixedPom = StringTools.replace(pom, '__VERSION__', version);
+        sys.io.File.saveContent('$outDir/connect.sdk-$version.pom', fixedPom);
         if (FileSystem.exists(outFile)) {
             FileSystem.deleteFile(outFile);
         }
@@ -157,7 +162,7 @@ class Connect {
     }
 
 
-    private static function createPythonPackage(classes: Array<String>): Void {
+    private static function createPythonPackage(version: String, classes: Array<String>): Void {
         // Define output directory
         final outDir = '_build/python';
 
@@ -213,7 +218,7 @@ class Connect {
         file.writeString("    README = fhandle.read()" + EOL + EOL + EOL);
         file.writeString("setup(" + EOL);
         file.writeString("    name='connect-sdk-haxe-port'," + EOL);
-        file.writeString("    version='18.0.3'," + EOL);
+        file.writeString("    version='" + version + "'," + EOL);
         file.writeString("    description='CloudBlue Connect SDK, generated from Haxe'," + EOL);
         file.writeString("    long_description=README," + EOL);
         file.writeString("    long_description_content_type='text/markdown'," + EOL);
