@@ -11,6 +11,7 @@ from xml.etree import ElementTree
 DEPLOY_URL = 'https://oss.sonatype.org/service/local/staging/deployByRepositoryId'
 PROFILES_URL = 'https://oss.sonatype.org/service/local/staging/profiles'
 PROFILE_REPOSITORIES_URL = 'https://oss.sonatype.org/service/local/staging/profile_repositories'
+PROMOTE_URL = 'https://oss.sonatype.org/service/local/staging/bulk/promote'
 MVN_USER = os.environ['mvn_user']
 MVN_PASSWORD = os.environ['mvn_password']
 MVN_PASSPHRASE = os.environ['mvn_passphrase']
@@ -67,7 +68,7 @@ def start(profile_id: str) -> str:
     data = """
     <promoteRequest>
         <data>
-            <description>connect.sdk upload</description>
+            <description>start</description>
         </data>
     </promoteRequest>
     """
@@ -104,7 +105,7 @@ def finish(profile_id: str, repository_id: str) -> str:
     <promoteRequest>
         <data>
             <stagedRepositoryId>{}</stagedRepositoryId>
-            <description>connect.sdk upload</description>
+            <description>finish</description>
         </data>
     </promoteRequest>
     """.format(repository_id)
@@ -130,11 +131,25 @@ def release() -> str:
     <promoteRequest>
         <data>
             <stagedRepositoryId>{}</stagedRepositoryId>
-            <description>connect.sdk upload</description>
+            <description>release</description>
         </data>
     </promoteRequest>
     """.format(repository_id)
     response = curl('/'.join([PROFILES_URL, profile_id, 'release']), 'post', data)
+    return response
+
+
+def promote(repository_id: str) -> str:
+    print('*** Releasing repository...')
+    data = """
+    {
+        "data": {
+            "stagedRepositoryIds": ["{}"],
+            "description": "promote"
+        }
+    }
+    """.format(repository_id)
+    response = curl(PROMOTE_URL), 'post', data)
     return response
 
 
@@ -201,12 +216,14 @@ if __name__ == '__main__':
 
     # Wait until the repository gets successfully closed
     print('Waiting until the repository is closed...', flush=True)
+    max_attempts = 5
     num_attempts = 0
     status = repository_status(profile_id, repository_id)
-    while num_attempts < 5 and status != 'closed':
+    while num_attempts < max_attempts and status != 'closed':
         print('*** Repository status is "' + status + '"', flush=True)
         num_attempts += 1
-        print('*** Sleeping for 1 minute...', flush=True)
+        print('*** Sleeping for 1 minute (attempt ' + num_attempts + '/' + max_attempts + ')...',
+            flush=True)
         time.sleep(60)
         status = repository_status(profile_id, repository_id)
     if status != 'closed':
@@ -214,6 +231,8 @@ if __name__ == '__main__':
     else:
         print('*** Repository closed.')
 
-    print(release(), flush=True)
+    # print(release(), flush=True)
+
+    print(promote(repository_id), flush=True)
 
     print('*** Done.', flush=True)
