@@ -141,14 +141,14 @@ def release() -> str:
 
 def promote(repository_id: str) -> str:
     print('*** Releasing repository...')
-    data = '''
+    data = """
     {
-        "data": {
-            "stagedRepositoryIds": ["aaa"],
-            "description": "promote"
+        \"data\": {
+            \"stagedRepositoryIds\": [\"{}\"],
+            \"description\": \"promote\"
         }
     }
-    '''  # .format(repository_id)
+    """.format(repository_id)
     print('//////// ' + data)
     response = curl(PROMOTE_URL, 'post', data)
     return response
