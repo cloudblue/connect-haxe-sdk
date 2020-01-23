@@ -34,7 +34,7 @@ def run(args: list) -> str:
     return subprocess.run(args, stdout=subprocess.PIPE).stdout.decode('utf-8')
 
 
-def curl(url: str, method: str, data: str = None) -> str:
+def curl(url: str, method: str, data: str = None, content_type: str = 'application/xml') -> str:
     args = [
         'curl',
         '-s',
@@ -46,7 +46,7 @@ def curl(url: str, method: str, data: str = None) -> str:
     else:
         args.extend(['-X', method.upper()])
         if data:
-            args.extend(['-H', 'Content-Type:application/xml'])
+            args.extend(['-H', 'Content-Type:' + content_type])
             args.extend(['-d', data])
     args.append(url)
     return run(args)
@@ -148,9 +148,8 @@ def promote(repository_id: str) -> str:
             \"description\": \"promote\"
         }
     }
-    '''  #.format(repository_id)
-    print('//////// ' + data)
-    response = curl(PROMOTE_URL, 'post', data)
+    '''
+    response = curl(PROMOTE_URL, 'post', data, 'application/json')
     return response
 
 
