@@ -23,7 +23,7 @@ deploy:
   skip_cleanup: true
   keep_history: false
   on:
-    branch: master
+    branch: CUSDK-60-model-toobject
 
 after_deploy:
 # Deploy to Maven Central

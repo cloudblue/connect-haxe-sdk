@@ -134,13 +134,13 @@ class Packager {
 
     private static function createJavaPackage(): Void {
         final outDir = '_build/java';
-        final outFile = '$outDir/connect.sdk-18.0.jar';
+        final outFile = '$outDir/connect.sdk-18.0.1.jar';
         copyLicense(outDir);
         sys.io.File.copy('stuff/JAVA_README.md', '$outDir/README.md');
         sys.io.File.copy('stuff/gitignore_java', '$outDir/.gitignore');
-        sys.io.File.copy('stuff/pom.xml', '$outDir/connect.sdk-18.0.pom');
-        sys.io.File.copy('stuff/connect-sources.jar', '$outDir/connect.sdk-18.0-sources.jar');
-        sys.io.File.copy('stuff/connect-javadoc.jar', '$outDir/connect.sdk-18.0-javadoc.jar');
+        sys.io.File.copy('stuff/pom.xml', '$outDir/connect.sdk-18.0.1.pom');
+        sys.io.File.copy('stuff/connect-sources.jar', '$outDir/connect.sdk-18.0.1-sources.jar');
+        sys.io.File.copy('stuff/connect-javadoc.jar', '$outDir/connect.sdk-18.0.1-javadoc.jar');
         if (FileSystem.exists(outFile)) {
             FileSystem.deleteFile(outFile);
         }
@@ -245,7 +245,7 @@ class Packager {
         file.writeString("    README = fhandle.read()" + EOL + EOL + EOL);
         file.writeString("setup(" + EOL);
         file.writeString("    name='connect-sdk-haxe-port'," + EOL);
-        file.writeString("    version='18.0.3'," + EOL);
+        file.writeString("    version='18.0.4'," + EOL);
         file.writeString("    description='CloudBlue Connect SDK, generated from Haxe'," + EOL);
         file.writeString("    long_description=README," + EOL);
         file.writeString("    long_description_content_type='text/markdown'," + EOL);

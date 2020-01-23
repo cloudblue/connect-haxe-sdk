@@ -6,12 +6,15 @@
 
 import os
 
-deploy_url = 'https://oss.sonatype.org/service/local/staging/deployByRepositoryId'
-profiles_url = 'https://oss.sonatype.org/service/local/staging/profiles'
-mvn_user = os.environ['mvn_user']
-mvn_password = os.environ['mvn_password']
-mvn_passphrase = os.environ['mvn_passphrase']
-group_id = None  # Will be taken from pom on __main__
+DEPLOY_URL = 'https://oss.sonatype.org/service/local/staging/deployByRepositoryId'
+PROFILES_URL = 'https://oss.sonatype.org/service/local/staging/profiles'
+PROFILE_REPOSITORIES_URL = 'https://oss.sonatype.org/service/local/staging/profile_repositories'
+MVN_USER = os.environ['mvn_user']
+MVN_PASSWORD = os.environ['mvn_password']
+MVN_PASSPHRASE = os.environ['mvn_passphrase']
+with open('/'.join([path, files[1]])) as f:
+    xml = parse_xml(f.read())
+GROUP_ID = xml.find('{http://maven.apache.org/POM/4.0.0}groupId').text
 
 
 def run(args: list) -> str:
@@ -23,7 +26,7 @@ def curl(url: str, method: str, data: str = None) -> str:
     args = [
         'curl',
         '-s',
-        '-u', '{}:{}'.format(mvn_user, mvn_password),
+        '-u', '{}:{}'.format(MVN_USER, MVN_PASSWORD),
     ]
     if method.lower() == '--upload-file':
         args.extend(['-H', 'Content-Type:application/x-jar'])
@@ -54,6 +57,7 @@ def xml_error(elem: object) -> str:
 
 
 def start(profile_id: str) -> str:
+    print('*** Starting repository...')
     data = """
     <promoteRequest>
         <data>
@@ -61,8 +65,7 @@ def start(profile_id: str) -> str:
         </data>
     </promoteRequest>
     """
-    print('*** Starting repository...')
-    response = curl('/'.join([profiles_url, profile_id, 'start']), 'post', data)
+    response = curl('/'.join([PROFILES_URL, profile_id, 'start']), 'post', data)
     root = parse_xml(response)
     if root.tag == 'promoteResponse':
         return root \
@@ -78,8 +81,8 @@ def upload(repository_id: str, filename: str) -> str:
     dash_split = strip_filename.split('-')
     artifact_id = dash_split[0]
     version = '.'.join([s for s in dash_split[1].split('.') if s.isdigit()])
-    url_comps = [deploy_url, repository_id]
-    url_comps.extend(group_id.split('.'))
+    url_comps = [DEPLOY_URL, repository_id]
+    url_comps.extend(GROUP_ID.split('.'))
     url_comps.append(artifact_id)
     url_comps.append(version)
     url_comps.append(strip_filename)
@@ -90,6 +93,7 @@ def upload(repository_id: str, filename: str) -> str:
 
 
 def finish(profile_id: str, repository_id: str) -> str:
+    print('*** Closing repository...')
     data = """
     <promoteRequest>
         <data>
@@ -98,12 +102,19 @@ def finish(profile_id: str, repository_id: str) -> str:
         </data>
     </promoteRequest>
     """.format(repository_id)
-    print('*** Closing repository...')
-    response = curl('/'.join([profiles_url, profile_id, 'finish']), 'post', data)
+    response = curl('/'.join([PROFILES_URL, profile_id, 'finish']), 'post', data)
     return response
 
 
+def is_staging_repository(profile_id: str, repository_id: str) -> str:
+    print('*** Getting staging repositories...')
+    response = curl('/'.join([PROFILE_REPOSITORIES_URL, profile_id]), 'get')
+    return response
+
+
+
 def release() -> str:
+    print('*** Releasing repository...')
     data = """
     <promoteRequest>
         <data>
@@ -112,19 +123,18 @@ def release() -> str:
         </data>
     </promoteRequest>
     """.format(repository_id)
-    print('*** Releasing repository...')
-    response = curl('/'.join([profiles_url, profile_id, 'release']), 'post', data)
+    response = curl('/'.join([PROFILES_URL, profile_id, 'release']), 'post', data)
     return response
 
 
 def sign(filename: str) -> str:
     print('*** Signing "' + filename + '"...')
-    return run(['gpg', '--batch', '--yes', '--passphrase', mvn_passphrase, '-ab', filename])
+    return run(['gpg', '--batch', '--yes', '--passphrase', MVN_PASSPHRASE, '-ab', filename])
 
 
 def md5(filename: str) -> str:
-    import hashlib
     print('*** Generating MD5 checksum for file "' + filename + '"...')
+    import hashlib
     md5 = hashlib.md5()
     with open(filename, 'rb') as f:
         for chunk in iter(lambda: f.read(4096), b''):
@@ -136,8 +146,8 @@ def md5(filename: str) -> str:
 
 
 def sha1(filename: str) -> str:
-    import hashlib
     print('*** Generating SHA1 checksum for file "' + filename + '"...')
+    import hashlib
     with open(filename, 'rb') as f:
         contents = f.read()
     sha1 = hashlib.sha1(contents)
@@ -148,11 +158,11 @@ def sha1(filename: str) -> str:
 
 
 def get_profile_id() -> str:
-    response = curl(profiles_url, 'get')
+    response = curl(PROFILES_URL, 'get')
     root = parse_xml(response)
     if root.tag == 'stagingProfiles':
         data = root.find('data')
-        profiles = [profile for profile in data if profile.find('name').text == group_id]
+        profiles = [profile for profile in data if profile.find('name').text == GROUP_ID]
         profile_id = profiles[0].find('id').text
         print('*** Found profile id ' + profile_id)
         return profile_id
@@ -163,15 +173,12 @@ def get_profile_id() -> str:
 if __name__ == '__main__':
     path = '_build/java'
     files = [
-        'connect.sdk-18.0.jar',
-        'connect.sdk-18.0.pom',
-        'connect.sdk-18.0-sources.jar',
-        'connect.sdk-18.0-javadoc.jar'
+        'connect.sdk-18.0.1.jar',
+        'connect.sdk-18.0.1.pom',
+        'connect.sdk-18.0.1-sources.jar',
+        'connect.sdk-18.0.1-javadoc.jar'
     ]
 
-    with open('/'.join([path, files[1]])) as f:
-        xml = parse_xml(f.read())
-    group_id = xml.find('{http://maven.apache.org/POM/4.0.0}groupId').text
     profile_id = get_profile_id()
     repository_id = start(profile_id)
 
@@ -187,6 +194,8 @@ if __name__ == '__main__':
     
     print(finish(profile_id, repository_id))
 
-    print(release())
+    print(is_staging_repository(profile_id, repository_id))
+
+    # print(release())
 
     print('*** Done.')
