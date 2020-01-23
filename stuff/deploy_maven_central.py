@@ -203,7 +203,7 @@ if __name__ == '__main__':
     print('Waiting until the repository is closed...', flush=True)
     num_attempts = 0
     status = repository_status(profile_id, repository_id)
-    while num_attempts < 10 and status != 'close':
+    while num_attempts < 10 and status != 'closed':
         print('*** Got repository status ' + status, flush=True)
         num_attempts += 1
         print('*** Sleeping for 30 seconds...', flush=True)
