@@ -144,11 +144,11 @@ def promote(repository_id: str) -> str:
     data = '''
     {
         "data": {
-            "stagedRepositoryIds": ["{}"],
+            "stagedRepositoryIds": ["aaa"],
             "description": "promote"
         }
     }
-    '''.format(repository_id)
+    '''  # .format(repository_id)
     print('//////// ' + data)
     response = curl(PROMOTE_URL, 'post', data)
     return response
