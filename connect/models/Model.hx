@@ -28,7 +28,7 @@ class Model extends Base {
                         Reflect.setField(obj, Inflection.toSnakeCase(field), value.toString());
                     case TClass(class_):
                         final className = Type.getClassName(class_);
-                        if (className.indexOf('connect.Collection') == 0) {
+                        if (className.indexOf('connect.util.Collection') == 0) {
                             final col = cast(value, Collection<Dynamic>);
                             final arr = new Array<Dynamic>();
                             for (elem in col) {
