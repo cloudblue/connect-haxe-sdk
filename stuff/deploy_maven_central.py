@@ -111,10 +111,16 @@ def finish(profile_id: str, repository_id: str) -> str:
     return response
 
 
-def is_staging_repository(profile_id: str, repository_id: str) -> str:
+def repository_status(profile_id: str, repository_id: str) -> str:
     print('*** Getting staging repositories...')
     response = curl('/'.join([PROFILE_REPOSITORIES_URL, profile_id]), 'get')
-    return response
+    root = ElementTree.fromstring(response)
+    if root.tag == 'stagingRepositories':
+        data = root.find('data')
+        repos = [repo for repo in data if repo.find('repositoryId').text == repository_id]
+        return repos[0].find('type').text
+    else:
+        raise Exception(xml_error(root))
 
 
 def release() -> str:
@@ -162,6 +168,7 @@ def sha1(filename: str) -> str:
 
 
 def get_profile_id() -> str:
+    print('*** Getting profiles...')
     response = curl(PROFILES_URL, 'get')
     root = ElementTree.fromstring(response)
     if root.tag == 'stagingProfiles':
@@ -190,7 +197,7 @@ if __name__ == '__main__':
     
     print(finish(profile_id, repository_id))
 
-    print(is_staging_repository(profile_id, repository_id))
+    print(repository_status(profile_id, repository_id))
 
     # print(release())
 
