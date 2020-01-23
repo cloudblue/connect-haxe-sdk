@@ -43,4 +43,11 @@ after_deploy:
   - rm stuff/key.gpg
   - python3 stuff/deploy_maven_central.py
 # Deploy to PyPI
-  - "./stuff/deploy_pypi.sh"
+  - sudo apt install python3-pip -y
+  - sudo -H pip3 install --upgrade pip
+  - sudo -H pip3 install wheel
+  - sudo -H pip3 install twine
+  - cd _build/python
+  - python3 setup.py sdist bdist_wheel
+  - twine upload -u __token__ -p $pypi_token dist/*
+  - cd ../..
