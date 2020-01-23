@@ -159,6 +159,7 @@ def promote(repository_id: str) -> str:
         </data>
     </promoteRequest>
     """.format(repository_id)
+    print('//////// ' + data)
     response = curl(PROMOTE_URL, 'post', data)
     return response
 
