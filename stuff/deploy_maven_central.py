@@ -141,14 +141,14 @@ def release() -> str:
 
 def promote(repository_id: str) -> str:
     print('*** Releasing repository...')
-    data = """
+    data = '''
     {
         "data": {
             "stagedRepositoryIds": ["{}"],
             "description": "promote"
         }
     }
-    """.format(repository_id)
+    '''.format(repository_id)
     response = curl(PROMOTE_URL, 'post', data)
     return response
 
@@ -215,7 +215,7 @@ if __name__ == '__main__':
     print(finish(profile_id, repository_id), flush=True)
 
     # Wait until the repository gets successfully closed
-    print('Waiting until the repository is closed...', flush=True)
+    print('*** Waiting until the repository is closed...', flush=True)
     max_attempts = 5
     num_attempts = 0
     status = repository_status(profile_id, repository_id)
