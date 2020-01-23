@@ -211,6 +211,8 @@ if __name__ == '__main__':
         status = repository_status(profile_id, repository_id)
     if status != 'closed':
         raise 'Repository could not be closed.'
+    else:
+        print '*** Repository closed.'
 
     print(release(), flush=True)
 
