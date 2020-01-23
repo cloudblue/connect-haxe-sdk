@@ -63,7 +63,7 @@ def xml_error(elem: ElementTree) -> str:
 
 
 def start(profile_id: str) -> str:
-    print('*** Starting repository...')
+    print('*** Starting repository...', flush=True)
     data = """
     <promoteRequest>
         <data>
@@ -93,13 +93,13 @@ def upload(repository_id: str, filename: str) -> str:
     url_comps.append(version)
     url_comps.append(strip_filename)
     url = '/'.join(url_comps)
-    print('*** Uploading "{}" to "{}"...'.format(filename, url))
+    print('*** Uploading "{}" to "{}"...'.format(filename, url), flush=True)
     response = curl(url, '--upload-file', filename)
     return response
 
 
 def finish(profile_id: str, repository_id: str) -> str:
-    print('*** Closing repository...')
+    print('*** Closing repository...', flush=True)
     data = """
     <promoteRequest>
         <data>
@@ -113,7 +113,7 @@ def finish(profile_id: str, repository_id: str) -> str:
 
 
 def repository_status(profile_id: str, repository_id: str) -> str:
-    print('*** Getting staging repositories...')
+    print('*** Getting staging repositories...', flush=True)
     response = curl('/'.join([PROFILE_REPOSITORIES_URL, profile_id]), 'get')
     root = ElementTree.fromstring(response)
     if root.tag == 'stagingRepositories':
@@ -125,7 +125,7 @@ def repository_status(profile_id: str, repository_id: str) -> str:
 
 
 def release() -> str:
-    print('*** Releasing repository...')
+    print('*** Releasing repository...', flush=True)
     data = """
     <promoteRequest>
         <data>
@@ -139,12 +139,12 @@ def release() -> str:
 
 
 def sign(filename: str) -> str:
-    print('*** Signing "' + filename + '"...')
+    print('*** Signing "' + filename + '"...', flush=True)
     return run(['gpg', '--batch', '--yes', '--passphrase', MVN_PASSPHRASE, '-ab', filename])
 
 
 def md5(filename: str) -> str:
-    print('*** Generating MD5 checksum for file "' + filename + '"...')
+    print('*** Generating MD5 checksum for file "' + filename + '"...', flush=True)
     import hashlib
     md5 = hashlib.md5()
     with open(filename, 'rb') as f:
@@ -157,7 +157,7 @@ def md5(filename: str) -> str:
 
 
 def sha1(filename: str) -> str:
-    print('*** Generating SHA1 checksum for file "' + filename + '"...')
+    print('*** Generating SHA1 checksum for file "' + filename + '"...', flush=True)
     import hashlib
     with open(filename, 'rb') as f:
         contents = f.read()
@@ -169,14 +169,14 @@ def sha1(filename: str) -> str:
 
 
 def get_profile_id() -> str:
-    print('*** Getting profiles...')
+    print('*** Getting profiles...', flush=True)
     response = curl(PROFILES_URL, 'get')
     root = ElementTree.fromstring(response)
     if root.tag == 'stagingProfiles':
         data = root.find('data')
         profiles = [profile for profile in data if profile.find('name').text == GROUP_ID]
         profile_id = profiles[0].find('id').text
-        print('*** Found profile id ' + profile_id)
+        print('*** Found profile id ' + profile_id, flush=True)
         return profile_id
     else:
         raise Exception(xml_error(root))
@@ -189,27 +189,27 @@ if __name__ == '__main__':
     # Upload all files, signatures and digests
     for file in FILES:
         fullname = '/'.join([PATH, file])
-        print(upload(repository_id, fullname))
+        print(upload(repository_id, fullname), flush=True)
         sign(fullname)
-        print(upload(repository_id, fullname + '.asc'))
+        print(upload(repository_id, fullname + '.asc'), flush=True)
         md5(fullname)
-        print(upload(repository_id, fullname + '.md5'))
+        print(upload(repository_id, fullname + '.md5'), flush=True)
         sha1(fullname)
-        print(upload(repository_id, fullname + '.sha1'))
+        print(upload(repository_id, fullname + '.sha1'), flush=True)
     
-    print(finish(profile_id, repository_id))
+    print(finish(profile_id, repository_id), flush=True)
 
     # Wait until the repository gets successfully closed
-    print('Waiting until the repository is closed...')
+    print('Waiting until the repository is closed...', flush=True)
     num_attempts = 0
     status = repository_status(profile_id, repository_id)
     while num_attempts < 10 and status != 'close':
-        print('*** Got repository status ' + status)
+        print('*** Got repository status ' + status, flush=True)
         num_attempts += 1
-        print('*** Sleeping for 30 seconds...')
+        print('*** Sleeping for 30 seconds...', flush=True)
         time.sleep(30)
         status = repository_status(profile_id, repository_id)
 
-    # print(release())
+    # print(release(), flush=True)
 
-    print('*** Done.')
+    print('*** Done.', flush=True)
