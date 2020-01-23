@@ -51,7 +51,7 @@ def curl(url: str, method: str, data: str = None) -> str:
     return run(args)
 
 
-def xml_error(elem: object) -> str:
+def xml_error(elem: ElementTree) -> str:
     if elem.tag == 'nexus-error':
         return elem \
             .find('errors') \
@@ -202,14 +202,13 @@ if __name__ == '__main__':
     # Wait until the repository gets successfully closed
     print('Waiting until the repository is closed...')
     num_attempts = 0
-    while (status = repository_status(profile_id, repository_id)) != 'close':
+    status = repository_status(profile_id, repository_id)
+    while num_attemps < 10 and status != 'close':
         print('*** Got repository status ' + status)
         num_attempts += 1
-        if num_attempts >= 10:
-            break
-        else:
-            print('*** Sleeping for 30 seconds...')
-            time.sleep(30)
+        print('*** Sleeping for 30 seconds...')
+        time.sleep(30)
+        status = repository_status(profile_id, repository_id)
 
     # print(release())
 
