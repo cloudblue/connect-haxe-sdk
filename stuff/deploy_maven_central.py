@@ -5,6 +5,7 @@
 # https://support.sonatype.com/hc/en-us/articles/213465868?_ga=2.230043868.1594253912.1579542012-1885361292.1578410493
 
 import os
+import time
 from xml.etree import ElementTree
 
 DEPLOY_URL = 'https://oss.sonatype.org/service/local/staging/deployByRepositoryId'
@@ -185,6 +186,7 @@ if __name__ == '__main__':
     profile_id = get_profile_id()
     repository_id = start(profile_id)
 
+    # Upload all files, signatures and digests
     for file in FILES:
         fullname = '/'.join([PATH, file])
         print(upload(repository_id, fullname))
@@ -197,8 +199,20 @@ if __name__ == '__main__':
     
     print(finish(profile_id, repository_id))
 
-    print(repository_status(profile_id, repository_id))
+    # Wait until the repository gets successfully closed
+    print('Waiting until the repository is closed...')
+    num_attempts = 0
+    while (status = repository_status(profile_id, repository_id)) != 'close':
+        print('*** Got repository status ' + status)
+        num_attempts += 1
+        if num_attempts >= 10:
+            break
+        else:
+            print('*** Sleeping for 30 seconds...')
+            time.sleep(30)
 
     # print(release())
+
+
 
     print('*** Done.')
