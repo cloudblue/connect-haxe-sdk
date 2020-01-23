@@ -5,6 +5,7 @@
 # https://support.sonatype.com/hc/en-us/articles/213465868?_ga=2.230043868.1594253912.1579542012-1885361292.1578410493
 
 import os
+from xml.etree import ElementTree
 
 DEPLOY_URL = 'https://oss.sonatype.org/service/local/staging/deployByRepositoryId'
 PROFILES_URL = 'https://oss.sonatype.org/service/local/staging/profiles'
@@ -12,9 +13,18 @@ PROFILE_REPOSITORIES_URL = 'https://oss.sonatype.org/service/local/staging/profi
 MVN_USER = os.environ['mvn_user']
 MVN_PASSWORD = os.environ['mvn_password']
 MVN_PASSPHRASE = os.environ['mvn_passphrase']
-with open('/'.join([path, files[1]])) as f:
-    xml = parse_xml(f.read())
-GROUP_ID = xml.find('{http://maven.apache.org/POM/4.0.0}groupId').text
+PATH = '_build/java'
+FILES = [
+    'connect.sdk-18.0.1.jar',
+    'connect.sdk-18.0.1.pom',
+    'connect.sdk-18.0.1-sources.jar',
+    'connect.sdk-18.0.1-javadoc.jar'
+]
+GROUP_ID = ElementTree \
+    .parse('/'.join([PATH, FILES[1]])) \
+    .getroot() \
+    .find('{http://maven.apache.org/POM/4.0.0}groupId') \
+    .text
 
 
 def run(args: list) -> str:
@@ -40,11 +50,6 @@ def curl(url: str, method: str, data: str = None) -> str:
     return run(args)
 
 
-def parse_xml(content: str) -> object:
-    from xml.etree import ElementTree
-    return ElementTree.fromstring(content)
-
-
 def xml_error(elem: object) -> str:
     if elem.tag == 'nexus-error':
         return elem \
@@ -66,7 +71,7 @@ def start(profile_id: str) -> str:
     </promoteRequest>
     """
     response = curl('/'.join([PROFILES_URL, profile_id, 'start']), 'post', data)
-    root = parse_xml(response)
+    root = ElementTree.fromstring(response)
     if root.tag == 'promoteResponse':
         return root \
             .find('data') \
@@ -159,7 +164,7 @@ def sha1(filename: str) -> str:
 
 def get_profile_id() -> str:
     response = curl(PROFILES_URL, 'get')
-    root = parse_xml(response)
+    root = ElementTree.fromstring(response)
     if root.tag == 'stagingProfiles':
         data = root.find('data')
         profiles = [profile for profile in data if profile.find('name').text == GROUP_ID]
@@ -171,19 +176,11 @@ def get_profile_id() -> str:
 
 
 if __name__ == '__main__':
-    path = '_build/java'
-    files = [
-        'connect.sdk-18.0.1.jar',
-        'connect.sdk-18.0.1.pom',
-        'connect.sdk-18.0.1-sources.jar',
-        'connect.sdk-18.0.1-javadoc.jar'
-    ]
-
     profile_id = get_profile_id()
     repository_id = start(profile_id)
 
-    for file in files:
-        fullname = '/'.join([path, file])
+    for file in FILES:
+        fullname = '/'.join([PATH, file])
         print(upload(repository_id, fullname))
         sign(fullname)
         print(upload(repository_id, fullname + '.asc'))
