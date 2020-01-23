@@ -149,7 +149,7 @@ def promote(repository_id: str) -> str:
         }
     }
     """.format(repository_id)
-    response = curl(PROMOTE_URL), 'post', data)
+    response = curl(PROMOTE_URL, 'post', data)
     return response
 
 
