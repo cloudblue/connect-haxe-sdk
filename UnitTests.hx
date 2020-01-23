@@ -25,6 +25,7 @@ class UnitTests {
         runner.add(new tests.unit.DiffTest());
         runner.add(new tests.unit.ItemTest());
         runner.add(new tests.unit.MarkdownLoggerFormatterTest());
+        runner.add(new tests.unit.ModelTest());
         runner.add(new tests.unit.ProductTest());
         runner.add(new tests.unit.QueryTest());
         runner.add(new tests.unit.TierAccountTest());
