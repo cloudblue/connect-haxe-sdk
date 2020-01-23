@@ -125,20 +125,6 @@ def repository_status(profile_id: str, repository_id: str) -> str:
         raise Exception(xml_error(root))
 
 
-def release() -> str:
-    print('*** Releasing repository...', flush=True)
-    data = """
-    <promoteRequest>
-        <data>
-            <stagedRepositoryId>{}</stagedRepositoryId>
-            <description>release</description>
-        </data>
-    </promoteRequest>
-    """.format(repository_id)
-    response = curl('/'.join([PROFILES_URL, profile_id, 'release']), 'post', data)
-    return response
-
-
 def promote(repository_id: str) -> str:
     print('*** Releasing repository...')
     data = '''
@@ -230,8 +216,6 @@ if __name__ == '__main__':
         raise 'Repository could not be closed.'
     else:
         print('*** Repository closed.')
-
-    # print(release(), flush=True)
 
     print(promote(repository_id), flush=True)
 
