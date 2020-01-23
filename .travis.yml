@@ -7,7 +7,7 @@ hxml:
 
 before_install:
   - export sdk_version=$(cat VERSION)
-  - echo "SDK Version is $sdk_version"
+  - echo "SDK Version is $sdk_version."
   - curl -s "https://get.sdkman.io" | bash
   - source "/home/travis/.sdkman/bin/sdkman-init.sh"
   - sdk install java 8.0.232.j9-adpt
