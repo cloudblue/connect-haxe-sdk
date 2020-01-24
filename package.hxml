@@ -2,9 +2,6 @@
 -dce no
 --each
 
-#-cpp _build/cpp
-#--next
-
 -D cslib
 -D dll
 -cs _build/cs
