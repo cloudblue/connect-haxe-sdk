@@ -19,7 +19,7 @@ class ApiClientImpl extends Base implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob) : Response {
         #if js
-            final response = syncRequestJS(method, url, headers, body, fileArg, fileName, fileContent);
+            final response = syncRequestJs(method, url, headers, body, fileArg, fileName, fileContent);
         #elseif use_tink
             final response = syncRequestTink(method, url, headers, body, fileArg, fileName, fileContent);
         #elseif python
@@ -45,7 +45,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
 
 #if js
-    private static function syncRequestJS(method: String, url: String, headers: Dictionary, body: String,
+    private static function syncRequestJs(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob) : Response {
         initXMLHttpRequest();
 
