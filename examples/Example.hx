@@ -13,13 +13,13 @@ import connect.logger.LoggerConfig;
 class Example {
     public static function main() {
         // Get initial time
-        var initialTime = Date.now().getTime();
+        final initialTime = Date.now().getTime();
 
         Env.loadConfig('examples/config.json');
         Env.initLogger(new LoggerConfig().path('examples/log'));
 
         // Define main flow
-        var flow = new Flow(null)
+        final flow = new Flow(null)
             .step('Add dummy data', function(f) {
                 f.setData('requestId', f.getAssetRequest().id)
                     .setData('assetId', f.getAssetRequest().asset.id)
@@ -50,7 +50,7 @@ class Example {
                 .equal('status', 'pending'));
 
         // Trace total time
-        var finalTime = Date.now().getTime();
+        final finalTime = Date.now().getTime();
         Sys.println('Total time: ' + ((finalTime - initialTime) / 1000) + ' secs.');
     }
 }

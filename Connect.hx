@@ -61,14 +61,15 @@ import connect.models.User;
 import connect.util.DateTime;
 #end
 
-class Packager {
+class Connect {
     public static function main() {
     #if packager
+        final version = StringTools.trim(sys.io.File.getContent('VERSION'));
         final classes = getClassNames();
-        createJavaPackage();
-        createJSPackage(classes);
+        createJavaPackage(version);
+        createJsPackage(classes);
         createPhpPackage(classes);
-        createPythonPackage(classes);
+        createPythonPackage(version, classes);
     #elseif js
         js.Syntax.code("global.$hxClasses = $hxClasses;");
     #end
@@ -91,64 +92,25 @@ class Packager {
     }
 
 
-    private static function getPackages(classNames: Array<String>): Array<String> {
-        final packages: Array<String> = [];
-        for (className in classNames) {
-            final pkg = getPackage(className);
-            if (packages.indexOf(pkg) == -1) {
-                packages.push(pkg);
-            }
-        }
-        return packages;
-    }
-
-
-    private static function getPackage(className: String): String {
-        return className.split('.').slice(0, -1).join('.');
-    }
-
-
-    private static function getClassesInPackage(classNames: Array<String>, pkg: String)
-            : Array<String> {
-        return [for(cls in classNames) if (getPackage(cls) == pkg) stripPackage(cls)];
-    }
-
-
-    private static function stripPackage(className: String): String {
-        return className.split('.').pop();
-    }
-
-
-    private static function createPath(path: String): Void {
-        if (!FileSystem.exists(path)) {
-            FileSystem.createDirectory(path);
-        }
-    }
-
-
-    private static function copyLicense(destPath: String): Void {
-        createPath(destPath);
-        sys.io.File.copy('LICENSE', destPath + '/LICENSE');
-    }
-
-
-    private static function createJavaPackage(): Void {
+    private static function createJavaPackage(version: String): Void {
         final outDir = '_build/java';
-        final outFile = '$outDir/connect.sdk-18.0.1.jar';
+        final outFile = '$outDir/connect.sdk-$version.jar';
         copyLicense(outDir);
         sys.io.File.copy('stuff/JAVA_README.md', '$outDir/README.md');
         sys.io.File.copy('stuff/gitignore_java', '$outDir/.gitignore');
-        sys.io.File.copy('stuff/pom.xml', '$outDir/connect.sdk-18.0.1.pom');
-        sys.io.File.copy('stuff/connect-sources.jar', '$outDir/connect.sdk-18.0.1-sources.jar');
-        sys.io.File.copy('stuff/connect-javadoc.jar', '$outDir/connect.sdk-18.0.1-javadoc.jar');
+        sys.io.File.copy('stuff/connect-sources.jar', '$outDir/connect.sdk-$version-sources.jar');
+        sys.io.File.copy('stuff/connect-javadoc.jar', '$outDir/connect.sdk-$version-javadoc.jar');
+        final pom = sys.io.File.getContent('stuff/pom.xml');
+        final fixedPom = StringTools.replace(pom, '__VERSION__', version);
+        sys.io.File.saveContent('$outDir/connect.sdk-$version.pom', fixedPom);
         if (FileSystem.exists(outFile)) {
             FileSystem.deleteFile(outFile);
         }
-        FileSystem.rename('$outDir/Packager.jar', outFile);
+        FileSystem.rename('$outDir/Connect.jar', outFile);
     }
 
 
-    private static function createJSPackage(classes: Array<String>): Void {
+    private static function createJsPackage(classes: Array<String>): Void {
         final outDir = '_build/js';
         copyLicense(outDir);
 
@@ -189,7 +151,7 @@ class Packager {
     }
 
 
-    private static function createPythonPackage(classes: Array<String>): Void {
+    private static function createPythonPackage(version: String, classes: Array<String>): Void {
         // Define output directory
         final outDir = '_build/python';
 
@@ -245,7 +207,7 @@ class Packager {
         file.writeString("    README = fhandle.read()" + EOL + EOL + EOL);
         file.writeString("setup(" + EOL);
         file.writeString("    name='connect-sdk-haxe-port'," + EOL);
-        file.writeString("    version='18.0.4'," + EOL);
+        file.writeString("    version='" + version + "'," + EOL);
         file.writeString("    description='CloudBlue Connect SDK, generated from Haxe'," + EOL);
         file.writeString("    long_description=README," + EOL);
         file.writeString("    long_description_content_type='text/markdown'," + EOL);
@@ -258,6 +220,47 @@ class Packager {
         file.writeString("    install_requires=['requests==2.21.0']" + EOL);
         file.writeString(")" + EOL);
         file.close();
+    }
+
+
+    private static function getPackages(classNames: Array<String>): Array<String> {
+        final packages: Array<String> = [];
+        for (className in classNames) {
+            final pkg = getPackage(className);
+            if (packages.indexOf(pkg) == -1) {
+                packages.push(pkg);
+            }
+        }
+        return packages;
+    }
+
+
+    private static function getPackage(className: String): String {
+        return className.split('.').slice(0, -1).join('.');
+    }
+
+
+    private static function getClassesInPackage(classNames: Array<String>, pkg: String)
+            : Array<String> {
+        return [for(cls in classNames) if (getPackage(cls) == pkg) stripPackage(cls)];
+    }
+
+
+    private static function stripPackage(className: String): String {
+        return className.split('.').pop();
+    }
+
+
+    private static function createPath(path: String): Void {
+        if (!FileSystem.exists(path)) {
+            FileSystem.createDirectory(path);
+        }
+    }
+
+
+    private static function copyLicense(destPath: String): Void {
+        createPath(destPath);
+        sys.io.File.copy('LICENSE', destPath + '/LICENSE');
     }
 
 

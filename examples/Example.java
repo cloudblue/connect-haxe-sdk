@@ -32,9 +32,9 @@ public class Example {
                     + " : " + f.getData("status"));
             });
             /*
-            .step("Approve request", (Processor p) -> {
-                p.getAssetRequest().approveByTemplate("TL-000-000-000");
-                p.getAssetRequest().approveByTile("Markdown text");
+            .step("Approve request", (Flow f) -> {
+                f.getAssetRequest().approveByTemplate("TL-000-000-000");
+                f.getAssetRequest().approveByTile("Markdown text");
             })
             */
         

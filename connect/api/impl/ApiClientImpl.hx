@@ -108,7 +108,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
         final options = new Dictionary();
         options.set('method', tinkMethod);
-        if (parsedHeaders.keys().length > 0) {
+        if (parsedHeaders.length > 0) {
             options.set('headers', parsedHeaders);
         }
         if (body != null) {
@@ -118,7 +118,7 @@ class ApiClientImpl extends Base implements IApiClient {
         tink.http.Client.fetch(url, options.toObject()).all().handle(function(o) {
             switch (o) {
                 case Success(res):
-                    response = new Response(res.header.statusCode, res.body.toString());
+                    response = new Response(res.header.statusCode, res.body.toString(), null);
                 case Failure(res):
                     response = new Response(-1, Std.string(res), null);
             }
