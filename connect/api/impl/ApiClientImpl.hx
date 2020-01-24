@@ -18,15 +18,15 @@ import haxe.io.BytesInput;
 class ApiClientImpl extends Base implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob) : Response {
-        #if js
-            final response = syncRequestJs(method, url, headers, body, fileArg, fileName, fileContent);
-        #elseif use_tink
-            final response = syncRequestTink(method, url, headers, body, fileArg, fileName, fileContent);
-        #elseif python
-            final response = syncRequestPython(method, url, headers, body, fileArg, fileName, fileContent);
-        #else
-            final response = syncRequestStd(method, url, headers, body, fileArg, fileName, fileContent);
-        #end
+    #if js
+        final response = syncRequestJs(method, url, headers, body, fileArg, fileName, fileContent);
+    #elseif use_tink
+        final response = syncRequestTink(method, url, headers, body, fileArg, fileName, fileContent);
+    #elseif python
+        final response = syncRequestPython(method, url, headers, body, fileArg, fileName, fileContent);
+    #else
+        final response = syncRequestStd(method, url, headers, body, fileArg, fileName, fileContent);
+    #end
 
         final level = (response.status >= 400 || response.status == -1)
             ? Logger.LEVEL_ERROR
