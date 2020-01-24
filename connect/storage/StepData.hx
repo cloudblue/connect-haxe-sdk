@@ -44,9 +44,9 @@ class StepData {
                 final fieldClass = (fieldClassName != '')
                     ? Type.resolveClass(fieldClassName)
                     : null;
-                final value = Json.stringify(Reflect.field(data, field));
+                final value = Reflect.field(data, field);
                 final parsedValue: Dynamic = (fieldClass != null)
-                    ? connect.models.Model.parse(fieldClass, value)
+                    ? connect.models.Model.parse(fieldClass, Json.stringify(value))
                     : value;
                 this.data.set(fieldName, parsedValue);
             }
