@@ -1,25 +1,22 @@
--main Packager
+-main Connect
 -dce no
 --each
 
--php _build/php
---next
-
--java _build/java
---next
-
-#-cpp _build/cpp
+#-cs _build/cs
 #--next
 
--python _build/python/connect/autogen.py
+-java _build/java
 --next
 
 -lib hxnodejs
 -js _build/js/connect.js
 --next
 
-#-cs _build/cs
-#--next
+-php _build/php
+--next
+
+-python _build/python/connect/autogen.py
+--next
 
 -xml _build/connect.xml
 --next

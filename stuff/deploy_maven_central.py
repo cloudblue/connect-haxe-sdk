@@ -8,6 +8,8 @@ import os
 import time
 from xml.etree import ElementTree
 
+with open('VERSION') as f:
+    VERSION = f.read().strip()
 DEPLOY_URL = 'https://oss.sonatype.org/service/local/staging/deployByRepositoryId'
 PROFILES_URL = 'https://oss.sonatype.org/service/local/staging/profiles'
 PROFILE_REPOSITORIES_URL = 'https://oss.sonatype.org/service/local/staging/profile_repositories'
@@ -17,10 +19,10 @@ MVN_PASSWORD = os.environ['mvn_password']
 MVN_PASSPHRASE = os.environ['mvn_passphrase']
 PATH = '_build/java'
 FILES = [
-    'connect.sdk-18.0.1.jar',
-    'connect.sdk-18.0.1.pom',
-    'connect.sdk-18.0.1-sources.jar',
-    'connect.sdk-18.0.1-javadoc.jar'
+    'connect.sdk-{}.jar'.format(VERSION),
+    'connect.sdk-{}.pom'.format(VERSION),
+    'connect.sdk-{}-sources.jar'.format(VERSION),
+    'connect.sdk-{}-javadoc.jar'.format(VERSION)
 ]
 GROUP_ID = ElementTree \
     .parse('/'.join([PATH, FILES[1]])) \
@@ -87,6 +89,7 @@ def upload(repository_id: str, filename: str) -> str:
     strip_filename = filename.split('/')[-1]
     dash_split = strip_filename.split('-')
     artifact_id = dash_split[0]
+    # Could this be replaced in favor of VERSION now?
     version = '.'.join([s for s in dash_split[1].split('.') if s.isdigit()])
     url_comps = [DEPLOY_URL, repository_id]
     url_comps.extend(GROUP_ID.split('.'))

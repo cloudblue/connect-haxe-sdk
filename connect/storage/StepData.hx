@@ -27,7 +27,7 @@ class StepData {
         this.data = new Dictionary();
         this.storage = storage;
         if (Std.is(data, Dictionary)) {
-            // Store model class names with key
+            // Create data from Dictionary. Store model class names with key
             for (key in cast(data, Dictionary).keys()) {
                 final value = data.get(key);
                 final className = Std.is(value, connect.models.Model)
@@ -36,14 +36,17 @@ class StepData {
                 this.data.set('$key::$className', value);
             }
         } else {
-            // For keys that have an attached class name, parse class
+            // Create data from anonymous structure. For keys that have an attached class name, parse class
             for (field in Reflect.fields(data)) {
                 final fieldSplit = field.split('::');
                 final fieldName = fieldSplit.slice(0, -1).join('::');
-                final fieldClass = fieldSplit.slice(-1)[0];
-                final value = Json.stringify(Reflect.field(data, field));
-                final parsedValue = (fieldClass != '')
-                    ? connect.models.Model.parse(Type.resolveClass(fieldClass), value)
+                final fieldClassName = fieldSplit.slice(-1)[0];
+                final fieldClass = (fieldClassName != '')
+                    ? Type.resolveClass(fieldClassName)
+                    : null;
+                final value = Reflect.field(data, field);
+                final parsedValue: Dynamic = (fieldClass != null)
+                    ? connect.models.Model.parse(fieldClass, Json.stringify(value))
                     : value;
                 this.data.set(fieldName, parsedValue);
             }
