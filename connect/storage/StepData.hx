@@ -36,14 +36,10 @@ class StepData {
                 this.data.set('$key::$className', value);
             }
         } else {
-            // reate data from anonymous structure. For keys that have an attached class name, parse class
+            // Create data from anonymous structure. For keys that have an attached class name, parse class
             for (field in Reflect.fields(data)) {
                 final fieldSplit = field.split('::');
                 final fieldName = fieldSplit.slice(0, -1).join('::');
-                final fieldClass = fieldSplit.slice(-1)[0];
-                final value = Json.stringify(Reflect.field(data, field));
-                final parsedValue = (fieldClass != '')
-                    ? connect.models.Model.parse(Type.resolveClass(fieldClass), value)
                 final fieldClassName = fieldSplit.slice(-1)[0];
                 final fieldClass = (fieldClassName != '')
                     ? Type.resolveClass(fieldClassName)
