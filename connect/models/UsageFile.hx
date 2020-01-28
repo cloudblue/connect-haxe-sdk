@@ -416,7 +416,20 @@ class UsageFile extends IdModel {
             fileSize: bytes.length,
             fileTime: Date.now()
         };
-    #if python
+    #if cs
+        final contentBytes = cs.system.text.Encoding.UTF8.GetBytes(content);
+        final outputStream = new cs.system.io.MemoryStream();
+        final compressionStream = new connect.native.CsDeflateStream(outputStream,
+            connect.native.CsCompressionMode.Compress);
+        compressionStream.Write(contentBytes, 0, contentBytes.Length);
+        compressionStream.Dispose();
+        outputStream.Dispose();
+
+        final compressed = haxe.io.Bytes.ofData(outputStream.GetBuffer());
+        entry.compressed = true;
+        entry.data = compressed;
+        entry.dataSize = entry.data.length;
+    #elseif python
         final compressed = connect.native.PythonZlib.compress(bytes, 9);
         entry.compressed = true;
         entry.data = compressed.sub(2, compressed.length - 6);

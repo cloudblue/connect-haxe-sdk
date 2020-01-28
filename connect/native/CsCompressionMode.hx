@@ -10,9 +10,9 @@ package connect.native;
 @:abstract
 @:libType
 @:csNative
-@:native("System.Net.WebHeaderCollection")
-extern class CsWebHeaderCollection {
-    function new();
-    function Add(name: String, value: String): Void;
+@:native("System.IO.Compression.CompressionMode")
+extern class CsCompressionMode {
+    public static final Compress: Int;
+    public static final Decompress: Int;
 }
 #end

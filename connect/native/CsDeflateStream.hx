@@ -10,9 +10,8 @@ package connect.native;
 @:abstract
 @:libType
 @:csNative
-@:native("System.Net.WebHeaderCollection")
-extern class CsWebHeaderCollection {
-    function new();
-    function Add(name: String, value: String): Void;
+@:native("System.IO.Compression.DeflateStream")
+extern class CsDeflateStream extends cs.system.io.Stream {
+    function new(stream: cs.system.io.Stream, mode: Int);
 }
 #end
