@@ -124,11 +124,6 @@ class Diff {
 
 
     private function toObject(): Dynamic {
-        /*return {
-            a: this.a,
-            d: this.d,
-            c: this.c
-        };*/
         final obj = {
             a: mapToObject(this.a),
             d: mapToObject(this.d),
