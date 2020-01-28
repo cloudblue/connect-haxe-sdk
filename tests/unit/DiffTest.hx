@@ -190,7 +190,7 @@ class DiffTest extends haxe.unit.TestCase {
                 ]
             }
         }'));
-        final result = Json.parse(diff.toString());
+        final result = sortObject(Json.parse(diff.toString()));
         this.assertEquals(Json.stringify(expected), Json.stringify(result));
     }
 
