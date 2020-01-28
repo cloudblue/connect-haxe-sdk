@@ -291,7 +291,7 @@ class DiffTest extends haxe.unit.TestCase {
             }
         };
         final diff = new Diff(first, second);
-        final expected = {
+        final expected = sortObject({
             a: {},
             d: {},
             c: {
@@ -315,8 +315,9 @@ class DiffTest extends haxe.unit.TestCase {
                     }
                 }
             }
-        };
-        this.assertEquals(Json.stringify(expected), diff.toString());
+        });
+        final result = sortObject(Json.parse(diff.toString()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(result));
     }
 
 
@@ -363,7 +364,9 @@ class DiffTest extends haxe.unit.TestCase {
         final a = {x: {y: 'Hello', z: 'Hi', w: 'Other'}};
         final b = {x: {y: 'World', z: 'He', w: 'Other'}};
         final diff = new Diff(a, b);
-        this.assertEquals(Std.string(b), Std.string(diff.apply(a)));
+        final expected = sortObject(b);
+        final result = sortObject(diff.apply(a));
+        this.assertEquals(Std.string(expected), Std.string(result));
     }
 
 
@@ -482,7 +485,9 @@ class DiffTest extends haxe.unit.TestCase {
         final a = {x: {y: 'Hello', z: 'Hi', w: 'Other'}};
         final b = {x: {y: 'World', z: 'He', w: 'Other'}};
         final diff = new Diff(a, b);
-        this.assertEquals(Std.string(a), Std.string(diff.swap().apply(b)));
+        final expected = sortObject(a);
+        final result = sortObject(diff.swap().apply(b));
+        this.assertEquals(Std.string(expected), Std.string(result));
     }
 
 
@@ -702,14 +707,15 @@ class DiffTest extends haxe.unit.TestCase {
             }
         };
         final diff = new Diff(first, second);
-        final expected = {
+        final expected = sortObject({
             title: 'Hellooo',
             stargazers: ['/users/40'],
             settings: {
                 assignees: [null, null, 202]
             }
-        };
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
+        });
+        final result = sortObject(diff.apply({}));
+        this.assertEquals(Json.stringify(expected), Json.stringify(result));
     }
 
 
