@@ -31,7 +31,7 @@ deploy:
   skip_cleanup: true
   keep_history: false
   on:
-    branch: CUSDK-55-csharp
+    branch: master
 
 after_deploy:
 # Deploy to NuGet Gallery
