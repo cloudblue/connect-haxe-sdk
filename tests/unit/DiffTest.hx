@@ -52,12 +52,13 @@ class DiffTest extends haxe.unit.TestCase {
         final a = {x: '10'};
         final b = {x: 10};
         final diff = new Diff(a, b);
-        final expected = Json.parse('{
+        final expected = sortObject(Json.parse('{
             "a": {},
             "d": {},
             "c": {"x": ["10", 10]}
-        }');
-        this.assertEquals(Json.stringify(expected), diff.toString());
+        }'));
+        final result = sortObject(Json.parse(diff.toString()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(result));
     }
 
 
