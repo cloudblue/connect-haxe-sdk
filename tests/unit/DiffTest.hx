@@ -177,7 +177,7 @@ class DiffTest extends haxe.unit.TestCase {
         final a = {x: [10, 20]};
         final b = {x: [10, 30]};
         final diff = new Diff(a, b);
-        final expected = Json.parse('{
+        final expected = sortObject(Json.parse('{
             "a": {},
             "d": {},
             "c": {
@@ -189,8 +189,9 @@ class DiffTest extends haxe.unit.TestCase {
                     ]
                 ]
             }
-        }');
-        this.assertEquals(Json.stringify(expected), diff.toString());
+        }'));
+        final result = Json.parse(diff.toString());
+        this.assertEquals(Json.stringify(expected), Json.stringify(result));
     }
 
 
@@ -198,7 +199,7 @@ class DiffTest extends haxe.unit.TestCase {
         final a = {x: [10, 20, 100]};
         final b = {x: [10, 30]};
         final diff = new Diff(a, b);
-        final expected = Json.parse('{
+        final expected = sortObject(Json.parse('{
             "a": {},
             "d": {},
             "c": {
@@ -210,8 +211,9 @@ class DiffTest extends haxe.unit.TestCase {
                     ]
                 ]
             }
-        }');
-        this.assertEquals(Json.stringify(expected), diff.toString());
+        }'));
+        final result = sortObject(Json.parse(diff.toString()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(result));
     }
 
 
@@ -219,7 +221,7 @@ class DiffTest extends haxe.unit.TestCase {
         final a = Json.parse('{"x": [10, [20]]}');
         final b = Json.parse('{"x": [10, [30]]}');
         final diff = new Diff(a, b);
-        final expected = Json.parse('{
+        final expected = sortObject(Json.parse('{
             "a": {},
             "d": {},
             "c": {
@@ -237,8 +239,9 @@ class DiffTest extends haxe.unit.TestCase {
                     ]
                 ]
             }
-        }');
-        this.assertEquals(Json.stringify(expected), diff.toString());
+        }'));
+        final result = sortObject(Json.parse(diff.toString()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(result));
     }
 
 
@@ -246,7 +249,7 @@ class DiffTest extends haxe.unit.TestCase {
         final a = Json.parse('{"x": [10, {"y": 20}]}');
         final b = Json.parse('{"x": [10, {"y": 30}]}');
         final diff = new Diff(a, b);
-        final expected = Json.parse('{
+        final expected = sortObject(Json.parse('{
             "a": {},
             "d": {},
             "c": {
@@ -264,8 +267,9 @@ class DiffTest extends haxe.unit.TestCase {
                     ]
                 ]
             }
-        }');
-        this.assertEquals(Json.stringify(expected), diff.toString());
+        }'));
+        final result = sortObject(Json.parse(diff.toString()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(result));
     }
 
     
