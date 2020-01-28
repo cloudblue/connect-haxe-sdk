@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <metadata>
-    <id>Connect.SDK</id>
+    <id>connect-sdk-haxe-port</id>
     <version>__VERSION__</version>
     <authors>Ingram Micro</authors>
     <owners>Ingram Micro</owners>
