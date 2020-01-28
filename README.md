@@ -2,12 +2,11 @@
 
 This is a version of the SDK for [CloudBlue Connect](https://www.cloudblue.com/connect/) platform, written in Haxe. While it allows to write connectors in Haxe itself, the generated code can be used in other languages:
 
+* C#.
 * Java.
 * JavaScript.
 * PHP.
 * Python.
-
-C# support will come in the future.
 
 Documentation on how to use the SDK is available [here](https://cloudblue.github.io/connect-haxe-sdk/).
 
@@ -26,6 +25,7 @@ You need to install some libraries to build the SDK using Haxelib:
 ```shell script
 $ haxelib install dox
 $ haxelib install hx3compat
+$ haxelib install hxcs
 $ haxelib install hxjava
 $ haxelib install hxnodejs
 ```
@@ -53,6 +53,7 @@ This translates the file `examples/Example.hx` to PHP and runs it.
 To run examples written in Java, JavaScript, PHP or Python, respectively run the following on a terminal:
 
 ```shell script
+$ ./example_cs.sh
 $ ./example_java.sh
 $ ./example_js.sh
 $ ./example_php.sh

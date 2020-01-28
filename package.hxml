@@ -2,8 +2,10 @@
 -dce no
 --each
 
-#-cs _build/cs
-#--next
+-D cslib
+-D dll
+-cs _build/cs
+--next
 
 -java _build/java
 --next

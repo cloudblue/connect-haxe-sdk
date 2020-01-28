@@ -20,7 +20,10 @@ import connect.util.Util;
 import haxe.Json;
 
 
-#if java
+#if cslib
+typedef FilterFunc = connect.native.CsFunc<IdModel, Bool>;
+typedef StepFunc = connect.native.CsAction<Flow>;
+#elseif java
 typedef FilterFunc = connect.native.JavaFunction<IdModel, Bool>;
 typedef StepFunc = connect.native.JavaConsumer<Flow>;
 #else
@@ -311,7 +314,9 @@ class Flow extends Base {
         // Filter requests
         final filteredList = (filterFunc != null)
             ? Collection._fromArray(list.toArray().filter(
-            #if java
+            #if cslib
+                (m) -> filterFunc.Invoke(cast(m, IdModel))
+            #elseif java
                 (m) -> filterFunc.apply(cast(m, IdModel))
             #else
                 (m) -> filterFunc(cast(m, IdModel))
@@ -411,7 +416,9 @@ class Flow extends Base {
 
         // Execute step
         try {
-            #if java
+            #if cslib
+            step.func.Invoke(this);
+            #elseif java
             step.func.accept(this);
             #else
             step.func(this);

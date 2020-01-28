@@ -18,7 +18,9 @@ import haxe.io.BytesInput;
 class ApiClientImpl extends Base implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob) : Response {
-    #if js
+    #if cs
+        final response = syncRequestCs(method, url, headers, body, fileArg, fileName, fileContent);
+    #elseif js
         final response = syncRequestJs(method, url, headers, body, fileArg, fileName, fileContent);
     #elseif use_tink
         final response = syncRequestTink(method, url, headers, body, fileArg, fileName, fileContent);
@@ -44,7 +46,71 @@ class ApiClientImpl extends Base implements IApiClient {
     public function new() {}
 
 
-#if js
+#if cs
+    private static function syncRequestCs(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob) : Response {
+        try {
+            final boundary = '---------------------------${StringTools.hex(Std.int(Date.now().getTime() * 1000))}';
+
+            final request = cast(connect.native.CsHttpWebRequest.Create(url), connect.native.CsHttpWebRequest);
+            request.Method = method.toUpperCase();
+
+            if (headers != null) {
+                final csHeaders = new connect.native.CsWebHeaderCollection();
+                for (key in headers.keys()) {
+                    final value = headers.getString(key);
+                    if (key == 'Content-Type') {
+                        if (value == 'multipart/form-data') {
+                            request.ContentType = 'multipart/form-data; boundary=' + boundary;
+                        } else {
+                            request.ContentType = value;
+                        }
+                    } else {
+                        csHeaders.Add(key, value);
+                    }
+                }
+                request.Headers = csHeaders;
+            }
+
+            if (body != null) {
+                final encoding = cs.system.text.Encoding.UTF8;
+                final data = encoding.GetBytes(body);
+                final stream = request.GetRequestStream();
+                request.ContentLength = data.Length;
+                stream.Write(data, 0, data.Length);
+                stream.Dispose();
+            } else if (fileArg != null && fileName != null && fileContent != null) {
+                final formItem = 'Content-Disposition: form-data; filename="$fileName";\r\nContent-Type: application/octet-stream\r\n\r\n';
+                final encoding = cs.system.text.Encoding.UTF8;
+                final boundaryBytes = encoding.GetBytes('\r\n--$boundary\r\n');
+                final formBytes = encoding.GetBytes(formItem);
+                final fileBytes = new cs.NativeArray<cs.types.UInt8>(4096);
+                final stream = request.GetRequestStream();
+                request.ServicePoint.Expect100Continue = false;
+                stream.Write(boundaryBytes, 0, boundaryBytes.Length);
+                stream.Write(formBytes, 0, formBytes.Length);
+                var current = 0;
+                while (current < fileContent.length()) {
+                    final amount = Std.int(Math.min(4096, fileContent.length() - current));
+                    for (offset in 0...amount) {
+                        fileBytes.SetValue(fileContent._getBytes().get(current + offset), offset);
+                    }
+                    stream.Write(fileBytes, 0, amount);
+                    current += amount;
+                }
+                stream.Dispose();
+            }
+
+            final response = cast(request.GetResponse(), connect.native.CsHttpWebResponse);
+            final reader = new cs.system.io.StreamReader(response.GetResponseStream());
+            return new Response(cast(response.StatusCode, Int), reader.ReadToEnd(), null);
+        } catch (ex: Dynamic) {
+            return new Response(-1, Std.string(ex), null);
+        }
+    }
+
+
+#elseif js
     private static function syncRequestJs(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob) : Response {
         initXMLHttpRequest();

@@ -52,12 +52,13 @@ class DiffTest extends haxe.unit.TestCase {
         final a = {x: '10'};
         final b = {x: 10};
         final diff = new Diff(a, b);
-        final expected = {
-            a: {},
-            d: {},
-            c: {x: untyped ['10', 10]}
-        };
-        this.assertEquals(Json.stringify(expected), diff.toString());
+        final expected = sortObject(Json.parse('{
+            "a": {},
+            "d": {},
+            "c": {"x": ["10", 10]}
+        }'));
+        final result = sortObject(Json.parse(diff.toString()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(result));
     }
 
 
@@ -176,11 +177,11 @@ class DiffTest extends haxe.unit.TestCase {
         final a = {x: [10, 20]};
         final b = {x: [10, 30]};
         final diff = new Diff(a, b);
-        final expected = {
-            a: {},
-            d: {},
-            c: {
-                x: untyped [
+        final expected = sortObject(Json.parse('{
+            "a": {},
+            "d": {},
+            "c": {
+                "x": [
                     [],
                     [],
                     [
@@ -188,8 +189,9 @@ class DiffTest extends haxe.unit.TestCase {
                     ]
                 ]
             }
-        };
-        this.assertEquals(Json.stringify(expected), diff.toString());
+        }'));
+        final result = sortObject(Json.parse(diff.toString()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(result));
     }
 
 
@@ -197,11 +199,11 @@ class DiffTest extends haxe.unit.TestCase {
         final a = {x: [10, 20, 100]};
         final b = {x: [10, 30]};
         final diff = new Diff(a, b);
-        final expected = {
-            a: {},
-            d: {},
-            c: {
-                x: untyped [
+        final expected = sortObject(Json.parse('{
+            "a": {},
+            "d": {},
+            "c": {
+                "x": [
                     [],
                     [100],
                     [
@@ -209,20 +211,21 @@ class DiffTest extends haxe.unit.TestCase {
                     ]
                 ]
             }
-        };
-        this.assertEquals(Json.stringify(expected), diff.toString());
+        }'));
+        final result = sortObject(Json.parse(diff.toString()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(result));
     }
 
 
     public function testChangesArrayArrayChange() {
-        final a = {x: untyped [10, [20]]};
-        final b = {x: untyped [10, [30]]};
+        final a = Json.parse('{"x": [10, [20]]}');
+        final b = Json.parse('{"x": [10, [30]]}');
         final diff = new Diff(a, b);
-        final expected = {
-            a: {},
-            d: {},
-            c: {
-                x: untyped [
+        final expected = sortObject(Json.parse('{
+            "a": {},
+            "d": {},
+            "c": {
+                "x": [
                     [],
                     [],
                     [
@@ -236,38 +239,40 @@ class DiffTest extends haxe.unit.TestCase {
                     ]
                 ]
             }
-        };
-        this.assertEquals(Json.stringify(expected), diff.toString());
+        }'));
+        final result = sortObject(Json.parse(diff.toString()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(result));
     }
 
 
     public function testChangesArrayObjectChange() {
-        final a = {x: untyped [10, {y: 20}]};
-        final b = {x: untyped [10, {y: 30}]};
+        final a = Json.parse('{"x": [10, {"y": 20}]}');
+        final b = Json.parse('{"x": [10, {"y": 30}]}');
         final diff = new Diff(a, b);
-        final expected = {
-            a: {},
-            d: {},
-            c: {
-                x: untyped [
+        final expected = sortObject(Json.parse('{
+            "a": {},
+            "d": {},
+            "c": {
+                "x": [
                     [],
                     [],
                     [
                         [1, {
-                            a: {},
-                            d: {},
-                            c: {
-                                y: [20, 30]
+                            "a": {},
+                            "d": {},
+                            "c": {
+                                "y": [20, 30]
                             }
                         }]
                     ]
                 ]
             }
-        };
-        this.assertEquals(Json.stringify(expected), diff.toString());
+        }'));
+        final result = sortObject(Json.parse(diff.toString()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(result));
     }
 
-
+    
     public function testComplexObjects() {
         final first = {
             title: 'Hello',
@@ -286,7 +291,7 @@ class DiffTest extends haxe.unit.TestCase {
             }
         };
         final diff = new Diff(first, second);
-        final expected = {
+        final expected = sortObject({
             a: {},
             d: {},
             c: {
@@ -310,8 +315,9 @@ class DiffTest extends haxe.unit.TestCase {
                     }
                 }
             }
-        };
-        this.assertEquals(Json.stringify(expected), diff.toString());
+        });
+        final result = sortObject(Json.parse(diff.toString()));
+        this.assertEquals(Json.stringify(expected), Json.stringify(result));
     }
 
 
@@ -358,7 +364,9 @@ class DiffTest extends haxe.unit.TestCase {
         final a = {x: {y: 'Hello', z: 'Hi', w: 'Other'}};
         final b = {x: {y: 'World', z: 'He', w: 'Other'}};
         final diff = new Diff(a, b);
-        this.assertEquals(Std.string(b), Std.string(diff.apply(a)));
+        final expected = sortObject(b);
+        final result = sortObject(diff.apply(a));
+        this.assertEquals(Std.string(expected), Std.string(result));
     }
 
 
@@ -395,16 +403,16 @@ class DiffTest extends haxe.unit.TestCase {
 
 
     public function testApplyWithArrayArrayChange() {
-        final a = {x: untyped [10, [20]]};
-        final b = {x: untyped [10, [30]]};
+        final a = Json.parse('{"x": [10, [20]]}');
+        final b = Json.parse('{"x": [10, [30]]}');
         final diff = new Diff(a, b);
         this.assertEquals(Std.string(b), Std.string(diff.apply(a)));
     }
 
 
     public function testApplyWithArrayObjectChange() {
-        final a = {x: untyped [10, {y: 20}]};
-        final b = {x: untyped [10, {y: 30}]};
+        final a = Json.parse('{"x": [10, {"y": 20}]}');
+        final b = Json.parse('{"x": [10, {"y": 30}]}');
         final diff = new Diff(a, b);
         this.assertEquals(Std.string(b), Std.string(diff.apply(a)));
     }
@@ -428,7 +436,9 @@ class DiffTest extends haxe.unit.TestCase {
             }
         };
         final diff = new Diff(first, second);
-        this.assertEquals(Std.string(second), Std.string(diff.apply(first)));
+        final expected = Std.string(sortObject(second));
+        final result = Std.string(sortObject(diff.apply(first)));
+        this.assertEquals(expected, result);
     }
 
 
@@ -449,7 +459,7 @@ class DiffTest extends haxe.unit.TestCase {
 
     public function testSwapWithDeletion() {
         final a = {x: 'Hello', y: 'World'};
-        final b = {y: 'World'};
+        final b = {x: 'Hello'};
         final diff = new Diff(a, b);
         this.assertEquals(Std.string(a), Std.string(diff.swap().apply(b)));
     }
@@ -475,7 +485,9 @@ class DiffTest extends haxe.unit.TestCase {
         final a = {x: {y: 'Hello', z: 'Hi', w: 'Other'}};
         final b = {x: {y: 'World', z: 'He', w: 'Other'}};
         final diff = new Diff(a, b);
-        this.assertEquals(Std.string(a), Std.string(diff.swap().apply(b)));
+        final expected = sortObject(a);
+        final result = sortObject(diff.swap().apply(b));
+        this.assertEquals(Std.string(expected), Std.string(result));
     }
 
 
@@ -512,16 +524,16 @@ class DiffTest extends haxe.unit.TestCase {
 
 
     public function testSwapWithArrayArrayChange() {
-        final a = {x: untyped [10, [20]]};
-        final b = {x: untyped [10, [30]]};
+        final a = Json.parse('{"x": [10, [20]]}');
+        final b = Json.parse('{"x": [10, [30]]}');
         final diff = new Diff(a, b);
         this.assertEquals(Std.string(a), Std.string(diff.swap().apply(b)));
     }
 
 
     public function testSwapWithArrayObjectChange() {
-        final a = {x: untyped [10, {y: 20}]};
-        final b = {x: untyped [10, {y: 30}]};
+        final a = Json.parse('{"x": [10, {"y": 20}]}');
+        final b = Json.parse('{"x": [10, {"y": 30}]}');
         final diff = new Diff(a, b);
         this.assertEquals(Std.string(a), Std.string(diff.swap().apply(b)));
     }
@@ -542,10 +554,12 @@ class DiffTest extends haxe.unit.TestCase {
             stargazers: ['/users/20', '/users/30', '/users/40'],
             settings: {
                 assignees: [100, 101, 202]
-            }
+            },
         };
         final diff = new Diff(first, second);
-        this.assertEquals(Std.string(first), Std.string(diff.swap().apply(second)));
+        final expected = Std.string(sortObject(first));
+        final result = Std.string(sortObject(diff.swap().apply(second)));
+        this.assertEquals(expected, result);
     }
 
 
@@ -658,8 +672,8 @@ class DiffTest extends haxe.unit.TestCase {
 
 
     public function testBuildWithChangesArrayArrayChange() {
-        final a = {x: untyped [10, [20]]};
-        final b = {x: untyped [10, [30]]};
+        final a = Json.parse('{"x": [10, [20]]}');
+        final b = Json.parse('{"x": [10, [30]]}');
         final diff = new Diff(a, b);
         final expected = {x: [null, [30]]};
         this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
@@ -667,8 +681,8 @@ class DiffTest extends haxe.unit.TestCase {
 
 
     public function testBuildWithChangesArrayObjectChange() {
-        final a = {x: untyped [10, {y: 20}]};
-        final b = {x: untyped [10, {y: 30}]};
+        final a = Json.parse('{"x": [10, {"y": 20}]}');
+        final b = Json.parse('{"x": [10, {"y": 30}]}');
         final diff = new Diff(a, b);
         final expected = {x: [null, {y: 30}]};
         this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
@@ -693,14 +707,15 @@ class DiffTest extends haxe.unit.TestCase {
             }
         };
         final diff = new Diff(first, second);
-        final expected = {
+        final expected = sortObject({
             title: 'Hellooo',
             stargazers: ['/users/40'],
             settings: {
                 assignees: [null, null, 202]
             }
-        };
-        this.assertEquals(Json.stringify(expected), Json.stringify(diff.apply({})));
+        });
+        final result = sortObject(diff.apply({}));
+        this.assertEquals(Json.stringify(expected), Json.stringify(result));
     }
 
 
@@ -734,5 +749,16 @@ class DiffTest extends haxe.unit.TestCase {
         } catch (ex: Dynamic) {
             this.assertTrue(true);
         }
+    }
+
+
+    private static function sortObject(obj: Dynamic): Dynamic {
+        final sortedObj = {};
+        final sortedFields = Reflect.fields(obj);
+        sortedFields.sort((a, b) -> (a == b) ? 0 : (a > b) ? 1 : -1);
+        for (field in sortedFields) {
+            Reflect.setField(sortedObj, field, Reflect.field(obj, field));
+        }
+        return sortedObj;
     }
 }

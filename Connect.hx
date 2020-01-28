@@ -66,6 +66,7 @@ class Connect {
     #if packager
         final version = StringTools.trim(sys.io.File.getContent('VERSION'));
         final classes = getClassNames();
+        createCsPackage(version, classes);
         createJavaPackage(version);
         createJsPackage(classes);
         createPhpPackage(classes);
@@ -92,6 +93,16 @@ class Connect {
     }
 
 
+    private static function createCsPackage(version: String, classes: Array<String>): Void {
+        final outDir = '_build/cs/bin';
+        copyLicense(outDir);
+        sys.io.File.copy('stuff/CS_README.md', '$outDir/README.md');
+        final nuspec = sys.io.File.getContent('stuff/Connect.nuspec');
+        final fixedNuspec = StringTools.replace(nuspec, '__VERSION__', version);
+        sys.io.File.saveContent('$outDir/Connect.nuspec', fixedNuspec);
+    }
+    
+    
     private static function createJavaPackage(version: String): Void {
         final outDir = '_build/java';
         final outFile = '$outDir/connect.sdk-$version.jar';

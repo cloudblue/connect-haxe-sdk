@@ -31,8 +31,8 @@ class Diff {
         // Set changes
         this.c = new StringMap<Dynamic>();
         Lambda.iter(changedFields, function(f) {
-            final a = Reflect.field(first, f);
-            final b = Reflect.field(second, f);
+            final a: Dynamic = Reflect.field(first, f);
+            final b: Dynamic = Reflect.field(second, f);
             if (Util.isStruct(a) && Util.isStruct(b)) {
                 // Diff
                 this.c.set(f, new Diff(a, b));
@@ -114,13 +114,37 @@ class Diff {
 
 
     public function toString(): String {
-        return haxe.Json.stringify({a: this.a, d: this.d, c: this.c});
+        return haxe.Json.stringify(this.toObject());
     }
 
 
     private final a: StringMap<Dynamic>; // Additions
     private final d: StringMap<Dynamic>; // Deletions
     private final c: StringMap<Dynamic>; // Changes
+
+
+    private function toObject(): Dynamic {
+        final obj = {
+            a: mapToObject(this.a),
+            d: mapToObject(this.d),
+            c: {}
+        };
+        final changedKeys = [for (k in this.c.keys()) k];
+        Lambda.iter(changedKeys, function(key) {
+            final value = this.c.get(key);
+            if (Std.is(value, Diff)) {
+                // Diff
+                Reflect.setField(obj.c, key, value.toObject());
+            } else if (Util.isArray(value) && value.length == 3) {
+                // [[a], [d], [c]]
+                Reflect.setField(obj.c, key, changeArrayToObject(value));
+            } else {
+                // [old, new]
+                Reflect.setField(obj.c, key, value);
+            }
+        });
+        return obj;
+    }
 
 
     private static function applyArray(obj: Array<Dynamic>, arr: Array<Array<Dynamic>>)
@@ -136,7 +160,7 @@ class Diff {
         final out = added;
         Lambda.iter(arr[2], function(change: Array<Dynamic>) {
             final i = change[0];
-            final originalArray = (out.length > i) ? out[i] : [];
+            final originalArray: Dynamic = (out.length > i) ? out[i] : [];
             final originalObject = (out.length > i) ? out[i] : {};
             out[i] = (change.length == 3)
                 ? change[2] // [i, old, new]
@@ -152,18 +176,25 @@ class Diff {
     private static function swapArray(arr: Array<Array<Dynamic>>): Array<Array<Dynamic>> {
         final additions = arr[1];
         final deletions = arr[0];
-        final changes = arr[2].map(function(change: Array<Dynamic>) {
-            final i = change[0];
-            return (change.length == 3)
-                ? [i, change[2], change[1]]
-                : (Std.is(change[1], Array))
-                    ? [i, swapArray(change[1])]
-                    : [i, change[1].swap()];
+        final changes = arr[2];
+        final swappedChanges: Array<Array<Dynamic>> = changes.map(function(change: Array<Dynamic>) {
+            final i: Dynamic = change[0];
+            final first: Dynamic = change[1];
+            final second: Dynamic = change[2];
+            final swappedChange: Array<Dynamic> =
+                (change.length == 3) ?
+                    [i, second, first]
+                : (Std.is(first, Array)) ?
+                    [i, swapArray(first)]
+                :
+                    [i, first.swap()];
+            return swappedChange;
         });
+
         return [
             additions,
             deletions,
-            changes
+            swappedChanges
         ];
     }
 
@@ -225,8 +256,8 @@ class Diff {
             ? first
             : first.slice(0, second.length);
         final changeList = Lambda.mapi(fixedFirst, function(i, el): Array<Dynamic> {
-            final a = el;
-            final b = second[i];
+            final a: Dynamic = el;
+            final b: Dynamic = second[i];
             if (areEqual(a, b)) {
                 return null;
             } else {
@@ -237,7 +268,7 @@ class Diff {
                 } else {
                     return [i, a, b];
                 }
-            };
+            }
         });
         final changes = [for (el in changeList) el].filter(el -> el != null);
         return [
@@ -266,5 +297,33 @@ class Diff {
             throw 'Unsupported types in Diff. Values must be structs. '
                     + 'Got: ${Type.typeof(first)}, ${Type.typeof(second)}';
         }
+    }
+
+
+    private static function mapToObject(map: StringMap<Dynamic>): Dynamic {
+        final keys = [for (k in map.keys()) k];
+        final obj = {};
+        Lambda.iter(keys, key -> Reflect.setField(obj, key, map.get(key)));
+        return obj;
+    }
+
+
+    private static function changeArrayToObject(arr: Array<Array<Dynamic>>): Array<Array<Dynamic>> {
+        final changesList = Lambda.map(arr[2], function(el: Array<Dynamic>): Array<Dynamic> {
+            if (Std.is(el[1], Diff)) {
+                return [el[0], el[1].toObject()];
+            } else if (Util.isArray(el[1])) {
+                return [el[0], changeArrayToObject(untyped el[1])];
+            } else {
+                return el;
+            }
+        });
+        final changes = [for (change in changesList) change];
+        final arr = [
+            arr[0],
+            arr[1],
+            changes
+        ];
+        return arr;
     }
 }
