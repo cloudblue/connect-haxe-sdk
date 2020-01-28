@@ -410,31 +410,28 @@ class DiffTest extends haxe.unit.TestCase {
     }
 
 
-    /*
     public function testApplyComplex() {
         final first = {
+            title: 'Hello',
             forkCount: 20,
+            stargazers: ['/users/20', '/users/30'],
             settings: {
                 assignees: [100, 101, 201]
-            },
-            stargazers: ['users20', 'users30'],
-            title: 'Hello'
+            }
         };
-        final secondJson = '{
-            "forkCount": 20,
-            "settings": {
-                "assignees": [100, 101, 202]
-            },
-            "stargazers": ["users20", "users30", "users40"],
-            "title": "Hellooo"
-        }';
-        final diff = new Diff(first, Json.parse(secondJson));
-        final secondNoLinesJson = StringTools.replace(StringTools.replace(secondJson, '\n', ''), '\r', '');
-        final expected = StringTools.replace(secondNoLinesJson, ' ', '');
-        final result = Json.stringify(diff.apply(first));
+        final second = {
+            title: 'Hellooo',
+            forkCount: 20,
+            stargazers: ['/users/20', '/users/30', '/users/40'],
+            settings: {
+                assignees: [100, 101, 202]
+            }
+        };
+        final diff = new Diff(first, second);
+        final expected = Std.string(sortObject(second));
+        final result = Std.string(sortObject(diff.apply(first)));
         this.assertEquals(expected, result);
     }
-    */
 
 
     public function testSwapSame() {
@@ -532,31 +529,28 @@ class DiffTest extends haxe.unit.TestCase {
     }
 
 
-    /*
     public function testSwapComplex() {
-        final firstJson = '{
-            "forkCount": 20,
-            "settings": {
-                "assignees": [100, 101, 201]
-            },
-            "stargazers": ["users20", "users30"],
-            "title": "Hello"
-        }';
-        final second = {
-            'forkCount': 20,
-            'settings': {
-                'assignees': [100, 101, 202]
-            },
-            'stargazers': ['users20', 'users30', 'users40'],
-            'title': 'Hellooo'
+        final first = {
+            title: 'Hello',
+            forkCount: 20,
+            stargazers: ['/users/20', '/users/30'],
+            settings: {
+                assignees: [100, 101, 201]
+            }
         };
-        final diff = new Diff(Json.parse(firstJson), second);
-        final firstNoLinesJson = StringTools.replace(StringTools.replace(firstJson, '\n', ''), '\r', '');
-        final expected = StringTools.replace(firstNoLinesJson, ' ', '');
-        final result = Json.stringify(diff.swap().apply(second));
+        final second = {
+            title: 'Hellooo',
+            forkCount: 20,
+            stargazers: ['/users/20', '/users/30', '/users/40'],
+            settings: {
+                assignees: [100, 101, 202]
+            },
+        };
+        final diff = new Diff(first, second);
+        final expected = Std.string(sortObject(first));
+        final result = Std.string(sortObject(diff.swap().apply(second)));
         this.assertEquals(expected, result);
     }
-    */
 
 
     public function testBuildWithAdditions() {
@@ -744,5 +738,16 @@ class DiffTest extends haxe.unit.TestCase {
         } catch (ex: Dynamic) {
             this.assertTrue(true);
         }
+    }
+
+
+    private static function sortObject(obj: Dynamic): Dynamic {
+        final sortedObj = {};
+        final sortedFields = Reflect.fields(obj);
+        sortedFields.sort((a, b) -> (a == b) ? 0 : (a > b) ? 1 : -1);
+        for (field in sortedFields) {
+            Reflect.setField(sortedObj, field, Reflect.field(obj, field));
+        }
+        return sortedObj;
     }
 }

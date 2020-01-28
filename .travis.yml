@@ -2,6 +2,7 @@ language: haxe
 haxe: 4.0.5
 hxml:
   - unittests.hxml
+  - unittests_platforms.hxml
   - package.hxml
   - doc.hxml
 
