@@ -6,3 +6,6 @@ doc/*
 log.md
 *.gpg
 *.asc
+stuff/.classpath
+stuff/.project
+stuff/.settings
