@@ -23,7 +23,12 @@ before_script:
   - "./stuff/java_clone.sh"
 
 after_script:
-  - "./stuff/java_commit.sh"
+# Push Java code
+  - "./stuff/java_push.sh"
+# Push repository tag
+  - git remote rm origin
+  - git remote add origin https://cloudblue:${doc_token}@github.com/cloudblue/connect-haxe-sdk.git
+  - python3 stuff/push_tag.py
 
 deploy:
   provider: pages
@@ -32,6 +37,7 @@ deploy:
   skip_cleanup: true
   keep_history: false
   on:
+    tags: true
     branch: master
 
 after_deploy:
