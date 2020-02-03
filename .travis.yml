@@ -24,7 +24,7 @@ before_script:
 
 after_script:
   - "./stuff/java_commit.sh"
-  - "./stuff/push_tag.py"
+  - python3 stuff/push_tag.py
 
 deploy:
   provider: pages
