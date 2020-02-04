@@ -1,4 +1,4 @@
-package tests.mocks;
+package test.mocks;
 
 import connect.api.ITierApi;
 import connect.api.Query;
@@ -8,9 +8,9 @@ import haxe.Json;
 class TierApiMock extends Mock implements ITierApi {
     public function new() {
         super();
-        this.accountList = Mock.parseJsonFile('tests/mocks/data/tieraccount_list.json');
-        this.configList = Mock.parseJsonFile('tests/mocks/data/tierconfig_list.json');
-        this.requestList = Mock.parseJsonFile('tests/mocks/data/tierconfigrequest_list.json');
+        this.accountList = Mock.parseJsonFile('test/mocks/data/tieraccount_list.json');
+        this.configList = Mock.parseJsonFile('test/mocks/data/tierconfig_list.json');
+        this.requestList = Mock.parseJsonFile('test/mocks/data/tierconfigrequest_list.json');
     }
 
 

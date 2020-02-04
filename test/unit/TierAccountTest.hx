@@ -2,7 +2,7 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-package tests.unit;
+package test.unit;
 
 import connect.Env;
 import connect.models.Contact;
@@ -12,14 +12,14 @@ import connect.models.TierAccount;
 import connect.util.Collection;
 import connect.util.Dictionary;
 import massive.munit.Assert;
-import tests.mocks.Mock;
+import test.mocks.Mock;
 
 
 class TierAccountTest {
     @Before
     public function setup() {
         Env._reset(new Dictionary()
-            .setString('ITierApi', 'tests.mocks.TierApiMock'));
+            .setString('ITierApi', 'test.mocks.TierApiMock'));
     }
 
 

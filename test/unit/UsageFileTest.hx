@@ -2,7 +2,7 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-package tests.unit;
+package test.unit;
 
 import connect.Env;
 import connect.models.Account;
@@ -16,15 +16,15 @@ import connect.util.Collection;
 import connect.util.DateTime;
 import connect.util.Dictionary;
 import massive.munit.Assert;
-import tests.mocks.Mock;
+import test.mocks.Mock;
 
 
 class UsageFileTest {
     @Before
     public function setup() {
         Env._reset(new Dictionary()
-            .setString('IUsageApi', 'tests.mocks.UsageApiMock')
-            .setString('IApiClient', 'tests.mocks.ApiClientMock'));
+            .setString('IUsageApi', 'test.mocks.UsageApiMock')
+            .setString('IApiClient', 'test.mocks.ApiClientMock'));
     }
 
 
@@ -161,9 +161,9 @@ class UsageFileTest {
     public function testUploadRecords() {
     /*
     #if python
-        final sheetName = 'tests/mocks/data/sheet_py.xlsx';
+        final sheetName = 'test/mocks/data/sheet_py.xlsx';
     #else
-        final sheetName = 'tests/mocks/data/sheet.xlsx';
+        final sheetName = 'test/mocks/data/sheet.xlsx';
     #end
     */
 

@@ -2,7 +2,7 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-package tests.unit;
+package test.unit;
 
 import connect.Env;
 import connect.models.Category;
@@ -10,14 +10,14 @@ import connect.models.Family;
 import connect.util.Collection;
 import connect.util.Dictionary;
 import massive.munit.Assert;
-import tests.mocks.Mock;
+import test.mocks.Mock;
 
 
 class CategoryTest {
     @Before
     public function setup() {
         Env._reset(new Dictionary()
-            .setString('IGeneralApi', 'tests.mocks.GeneralApiMock'));
+            .setString('IGeneralApi', 'test.mocks.GeneralApiMock'));
     }
 
 

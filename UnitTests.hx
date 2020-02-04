@@ -7,30 +7,30 @@ import massive.munit.TestRunner;
 import massive.munit.TestSuite;
 
 // Include all mock classes here to make sure they are accesible to reflection
-import tests.mocks.ApiClientMock;
-import tests.mocks.FulfillmentApiMock;
-import tests.mocks.GeneralApiMock;
-import tests.mocks.TierApiMock;
-import tests.mocks.UsageApiMock;
+import test.mocks.ApiClientMock;
+import test.mocks.FulfillmentApiMock;
+import test.mocks.GeneralApiMock;
+import test.mocks.TierApiMock;
+import test.mocks.UsageApiMock;
 
-import tests.unit.AccountTest;
-import tests.unit.AssetRequestTest;
-import tests.unit.AssetTest;
-import tests.unit.ConfigTest;
-import tests.unit.CategoryTest;
-import tests.unit.ConfigurationTest;
-import tests.unit.ConversationTest;
-import tests.unit.DateTimeTest;
-import tests.unit.DiffTest;
-import tests.unit.ItemTest;
-import tests.unit.MarkdownLoggerFormatterTest;
-import tests.unit.ModelTest;
-import tests.unit.ProductTest;
-import tests.unit.QueryTest;
-import tests.unit.TierAccountTest;
-import tests.unit.TierConfigRequestTest;
-import tests.unit.TierConfigTest;
-import tests.unit.UsageFileTest;
+import test.unit.AccountTest;
+import test.unit.AssetRequestTest;
+import test.unit.AssetTest;
+import test.unit.ConfigTest;
+import test.unit.CategoryTest;
+import test.unit.ConfigurationTest;
+import test.unit.ConversationTest;
+import test.unit.DateTimeTest;
+import test.unit.DiffTest;
+import test.unit.ItemTest;
+import test.unit.MarkdownLoggerFormatterTest;
+import test.unit.ModelTest;
+import test.unit.ProductTest;
+import test.unit.QueryTest;
+import test.unit.TierAccountTest;
+import test.unit.TierConfigRequestTest;
+import test.unit.TierConfigTest;
+import test.unit.UsageFileTest;
 
 
 class ConnectSuite extends TestSuite {

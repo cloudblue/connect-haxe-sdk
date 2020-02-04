@@ -1,4 +1,4 @@
-package tests.mocks;
+package test.mocks;
 
 import connect.api.IUsageApi;
 import connect.api.Query;
@@ -9,7 +9,7 @@ import haxe.Json;
 class UsageApiMock extends Mock implements IUsageApi {
     public function new() {
         super();
-        this.list = Mock.parseJsonFile('tests/mocks/data/usagefile_list.json');
+        this.list = Mock.parseJsonFile('test/mocks/data/usagefile_list.json');
     }
 
 
