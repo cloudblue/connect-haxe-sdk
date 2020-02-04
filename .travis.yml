@@ -23,6 +23,11 @@ before_install:
 before_script:
   - "./stuff/java_clone.sh"
 
+script:
+  - haxelib run munit test -cs -java -js -php -python -coverage
+  - haxe package.hxml
+  - haxe doc.hxml
+
 after_script:
 # Push Java code
   - "./stuff/java_push.sh"
