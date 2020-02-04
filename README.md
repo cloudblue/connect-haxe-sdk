@@ -82,8 +82,10 @@ To run the unit tests on Haxe's builtin interpreter, type:
 $ haxe unittests.hxml
 ```
 
-To run the unit tests on all supported platforms using munit with code coverage enabled, type:
+To run the unit tests on all supported platforms using munit, type:
 
 ```shell script
-$ haxelib run munit test -cs -java -js -php -python -coverage
+$ haxelib run munit test -cs -java -js -php -python
 ```
+
+To enable code coverage reporting, just add `-coverage` to the previous command. Right now, it does not work on JavaScript.
