@@ -1,36 +1,43 @@
+os: linux
+dist: xenial
 language: haxe
 haxe: 4.0.5
-hxml:
-  - unittests.hxml
-  - unittests_platforms.hxml
-  - package.hxml
-  - doc.hxml
 
-before_install:
+install:
+# Get SDK version
   - export sdk_version=$(cat VERSION)
   - echo "SDK Version is $sdk_version."
+# Install Java
   - curl -s "https://get.sdkman.io" | bash
   - source "/home/travis/.sdkman/bin/sdkman-init.sh"
   - sdk install java 8.0.242.j9-adpt
+# Install Mono
   - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
   - sudo apt install apt-transport-https ca-certificates -y
   - echo "deb https://download.mono-project.com/repo/ubuntu stable-xenial main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
   - sudo apt update
   - sudo apt install mono-devel -y
+# Install PHP
   - sudo apt install php php-mbstring -y
+# Install Haxe dependencies
+  - yes | haxelib install unittests.hxml
+  - yes | haxelib install package.hxml
+  - yes | haxelib install doc.hxml
 
 before_script:
   - "./stuff/java_clone.sh"
 
-after_script:
-# Push Java code
-  - "./stuff/java_push.sh"
-# Push repository tag
-  - git remote rm origin
-  - git remote add origin https://cloudblue:${doc_token}@github.com/cloudblue/connect-haxe-sdk.git
-  - python3 stuff/push_tag.py
+script:
+  - haxelib run munit test -neko -coverage
+  - haxelib run munit test -cs -java -js -php -python
+  - haxe package.hxml
+  - haxe doc.hxml
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 deploy:
+# Deploy documentation
   provider: pages
   local_dir: doc
   github_token: "$doc_token"
@@ -65,3 +72,11 @@ after_deploy:
   - python3 setup.py sdist bdist_wheel
   - twine upload -u __token__ -p $pypi_token dist/*
   - cd ../..
+
+after_script:
+# Push Java code
+  - "./stuff/java_push.sh"
+# Push repository tag
+  - git remote rm origin
+  - git remote add origin https://cloudblue:${doc_token}@github.com/cloudblue/connect-haxe-sdk.git
+  - python3 stuff/push_tag.py

@@ -1,4 +1,4 @@
-package tests.mocks;
+package test.mocks;
 
 import connect.api.IFulfillmentApi;
 import connect.api.Query;
@@ -8,7 +8,7 @@ import haxe.Json;
 class FulfillmentApiMock extends Mock implements IFulfillmentApi {
     public function new() {
         super();
-        this.list = Mock.parseJsonFile('tests/mocks/data/request_list.json');
+        this.list = Mock.parseJsonFile('test/mocks/data/request_list.json');
     }
 
 

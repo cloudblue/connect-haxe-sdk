@@ -1,4 +1,4 @@
-package tests.mocks;
+package test.mocks;
 
 import connect.api.Response;
 import connect.api.IApiClient;

@@ -1,4 +1,4 @@
-package tests.mocks;
+package test.mocks;
 
 import connect.api.IGeneralApi;
 import connect.api.Query;
@@ -8,19 +8,19 @@ import haxe.Json;
 class GeneralApiMock extends Mock implements IGeneralApi {
     public function new() {
         super();
-        this.accountList = Mock.parseJsonFile('tests/mocks/data/account_list.json');
-        this.actionList = Mock.parseJsonFile('tests/mocks/data/action_list.json');
-        this.agreementList = Mock.parseJsonFile('tests/mocks/data/agreement_list.json');
-        this.categoryList = Mock.parseJsonFile('tests/mocks/data/category_list.json');
-        this.configurationList = Mock.parseJsonFile('tests/mocks/data/configuration_list.json');
-        this.connectionList = Mock.parseJsonFile('tests/mocks/data/connection_list.json');
-        this.conversationList = Mock.parseJsonFile('tests/mocks/data/conversation_list.json');
-        this.itemList = Mock.parseJsonFile('tests/mocks/data/item_list.json');
-        this.mediaList = Mock.parseJsonFile('tests/mocks/data/media_list.json');
-        this.paramList = Mock.parseJsonFile('tests/mocks/data/param_list.json');
-        this.productList = Mock.parseJsonFile('tests/mocks/data/product_list.json');
-        this.templateList = Mock.parseJsonFile('tests/mocks/data/template_list.json');
-        this.userList = Mock.parseJsonFile('tests/mocks/data/user_list.json');
+        this.accountList = Mock.parseJsonFile('test/mocks/data/account_list.json');
+        this.actionList = Mock.parseJsonFile('test/mocks/data/action_list.json');
+        this.agreementList = Mock.parseJsonFile('test/mocks/data/agreement_list.json');
+        this.categoryList = Mock.parseJsonFile('test/mocks/data/category_list.json');
+        this.configurationList = Mock.parseJsonFile('test/mocks/data/configuration_list.json');
+        this.connectionList = Mock.parseJsonFile('test/mocks/data/connection_list.json');
+        this.conversationList = Mock.parseJsonFile('test/mocks/data/conversation_list.json');
+        this.itemList = Mock.parseJsonFile('test/mocks/data/item_list.json');
+        this.mediaList = Mock.parseJsonFile('test/mocks/data/media_list.json');
+        this.paramList = Mock.parseJsonFile('test/mocks/data/param_list.json');
+        this.productList = Mock.parseJsonFile('test/mocks/data/product_list.json');
+        this.templateList = Mock.parseJsonFile('test/mocks/data/template_list.json');
+        this.userList = Mock.parseJsonFile('test/mocks/data/user_list.json');
     }
 
 

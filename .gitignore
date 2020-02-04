@@ -1,11 +1,12 @@
+.temp
 .vscode
-_build/*
-_build/_venv/*
-_packages/*
-doc/*
+_build
+_report
+doc
 log.md
 *.gpg
 *.asc
 stuff/.classpath
 stuff/.project
 stuff/.settings
+coverage.json

@@ -24,10 +24,10 @@ You need to install some libraries to build the SDK using Haxelib:
 
 ```shell script
 $ haxelib install dox
-$ haxelib install hx3compat
 $ haxelib install hxcs
 $ haxelib install hxjava
 $ haxelib install hxnodejs
+$ haxelib install munit
 ```
 
 To build the SDK for all the available targets, type the following on a terminal:
@@ -35,8 +35,6 @@ To build the SDK for all the available targets, type the following on a terminal
 ```shell script
 $ haxe package.hxml
 ```
-
-A `_packages` folder will be generated with subfolders for every target language. For example, if you want to use it in Java, you should go to the `_packages/connect.java` folder, and copy `connect.jar` to your project.
 
 ## Examples
 
@@ -84,8 +82,10 @@ To run the unit tests on Haxe's builtin interpreter, type:
 $ haxe unittests.hxml
 ```
 
-To run the unit tests on all supported platforms, type:
+To run the unit tests on all supported platforms using munit, type:
 
 ```shell script
-$ haxe unittests_platforms.hxml
+$ haxelib run munit test -cs -java -js -php -python
 ```
+
+To enable code coverage reporting, just add `-coverage` to the previous command. Right now, it does not work on JavaScript.
