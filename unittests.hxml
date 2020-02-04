@@ -1,3 +1,81 @@
--main UnitTests
+## JavaScript
+-main TestMain
 -lib munit
---interp
+#-lib hamcrest
+-lib hxnodejs
+-cp test/unit
+
+-cp test/unit
+-js _build/js_test.js
+
+## Neko
+--next
+-main TestMain
+-lib munit
+#-lib hamcrest
+-cp test/unit
+
+-cp test/unit
+-neko _build/neko_test.n
+
+## CPP
+--next
+-main TestMain
+-lib munit
+#-lib hamcrest
+-cp test/unit
+
+-cp test/unit
+#-D HXCPP_M64
+-cpp _build/cpp_test
+
+## Java
+--next
+-main TestMain
+-lib munit
+#-lib hamcrest
+-cp test/unit
+
+-cp test/unit
+-java _build/java_test
+
+## CSharp
+--next
+-main TestMain
+-lib munit
+#-lib hamcrest
+-cp test/unit
+
+-cp test/unit
+-cs _build/cs_test
+
+## Python
+--next
+-main TestMain
+-lib munit
+#-lib hamcrest
+-cp test/unit
+
+-cp test/unit
+-python _build/python_test.py
+
+## PHP 7
+--next
+-main TestMain
+-lib munit
+#-lib hamcrest
+-cp test/unit
+
+-cp test/unit
+-D php7
+-php _build/php_test
+
+## HashLink
+--next
+-main TestMain
+-lib munit
+#-lib hamcrest
+-cp test/unit
+
+-cp test/unit
+-hl _build/hl_test.hl

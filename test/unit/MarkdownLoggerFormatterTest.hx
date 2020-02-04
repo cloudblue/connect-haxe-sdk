@@ -2,14 +2,18 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-package test.unit;
-
+import connect.logger.ILoggerFormatter;
 import connect.logger.MarkdownLoggerFormatter;
 import connect.util.Collection;
 import massive.munit.Assert;
 
 
 class MarkdownLoggerFormatterTest {
+    @BeforeClass
+    public function setup() {
+        fmt = new MarkdownLoggerFormatter();
+    }
+
     @Test
     public function testFormatSection() {
         Assert.areEqual('\n## Hello\n', fmt.formatSection(2, 'Hello'));
@@ -69,5 +73,5 @@ class MarkdownLoggerFormatterTest {
     }
 
 
-    private final fmt = new MarkdownLoggerFormatter();
+    private var fmt: ILoggerFormatter;
 }

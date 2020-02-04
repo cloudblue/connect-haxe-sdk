@@ -2,8 +2,6 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-package test.unit;
-
 import connect.util.Diff;
 import haxe.Json;
 import massive.munit.Assert;
@@ -377,7 +375,9 @@ class DiffTest {
         final a = {x: {y: 'Hello'}};
         final b = {x: {y: 'Hello', z: 'World'}};
         final diff = new Diff(a, b);
-        Assert.areEqual(Std.string(b), Std.string(diff.apply(a)));
+        final expected = sortObject(b);
+        final result = sortObject(diff.apply(a));
+        Assert.areEqual(Std.string(expected), Std.string(result));
     }
 
 

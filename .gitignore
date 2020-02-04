@@ -1,8 +1,8 @@
+.temp
 .vscode
-_build/*
-_build/_venv/*
-_packages/*
-doc/*
+_build
+_report
+doc
 log.md
 *.gpg
 *.asc

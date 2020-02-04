@@ -2,8 +2,6 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-package test.unit;
-
 import connect.api.Query;
 import test.mocks.Mock;
 import massive.munit.Assert;
