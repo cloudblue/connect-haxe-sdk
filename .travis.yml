@@ -28,7 +28,8 @@ before_script:
   - "./stuff/java_clone.sh"
 
 script:
-  - haxelib run munit test -cs -java -js -php -python -coverage
+  - haxelib run munit test -neko -coverage
+  - haxelib run munit test -cs -java -js -php -python
   - haxe package.hxml
   - haxe doc.hxml
 

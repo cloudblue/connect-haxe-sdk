@@ -4,6 +4,8 @@ import massive.munit.client.HTTPClient;
 import massive.munit.client.JUnitReportClient;
 import massive.munit.client.SummaryReportClient;
 import massive.munit.TestRunner;
+import mcover.coverage.client.CodecovJsonPrintClient;
+import mcover.coverage.MCoverage;
 
 // Include all mock classes here to make sure they are accesible to reflection
 import test.mocks.ApiClientMock;
@@ -28,6 +30,7 @@ class TestMain
 		#if MCOVER
 			var client = new mcover.coverage.munit.client.MCoverPrintClient();
 			var httpClient = new HTTPClient(new mcover.coverage.munit.client.MCoverSummaryReportClient());
+			MCoverage.getLogger().addClient(new CodecovJsonPrintClient());
 		#else
 			var client = new RichPrintClient();
 			var httpClient = new HTTPClient(new SummaryReportClient());
