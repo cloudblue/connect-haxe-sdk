@@ -32,7 +32,11 @@ script:
   - haxe package.hxml
   - haxe doc.hxml
 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
 deploy:
+# Deploy documentation
   provider: pages
   local_dir: doc
   github_token: "$doc_token"
