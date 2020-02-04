@@ -8,13 +8,15 @@ import connect.models.Model;
 import connect.models.Param;
 import connect.util.Collection;
 import connect.util.Util;
+import massive.munit.Assert;
 
 
-class ModelTest extends haxe.unit.TestCase {
+class ModelTest {
+    @Test
     public function testToObject() {
         final param = new Param();
         param.valueChoice = new Collection<String>().push('My choice');
         final expected = '{\n  "value_choice": [\n    "My choice"\n  ]\n}';
-        this.assertEquals(expected, Util.beautifyObject(param.toObject(), false));
+        Assert.areEqual(expected, Util.beautifyObject(param.toObject(), false));
     }
 }

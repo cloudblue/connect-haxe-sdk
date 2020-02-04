@@ -11,83 +11,88 @@ import connect.models.PhoneNumber;
 import connect.models.TierAccount;
 import connect.util.Collection;
 import connect.util.Dictionary;
+import massive.munit.Assert;
 import tests.mocks.Mock;
 
 
-class TierAccountTest extends haxe.unit.TestCase {
-    override public function setup() {
+class TierAccountTest {
+    @Before
+    public function setup() {
         Env._reset(new Dictionary()
             .setString('ITierApi', 'tests.mocks.TierApiMock'));
     }
 
 
+    @Test
     public function testList() {
         // Check subject
         final accounts = TierAccount.list(null);
-        assertTrue(Std.is(accounts, Collection));
-        assertEquals(1, accounts.length());
-        assertTrue(Std.is(accounts.get(0), TierAccount));
+        Assert.isType(accounts, Collection);
+        Assert.areEqual(1, accounts.length());
+        Assert.isType(accounts.get(0), TierAccount);
 
         // Check mocks
         final apiMock = cast(Env.getTierApi(), Mock);
-        assertEquals(1, apiMock.callCount('listTierAccounts'));
-        assertEquals(
+        Assert.areEqual(1, apiMock.callCount('listTierAccounts'));
+        Assert.areEqual(
             [null].toString(),
             apiMock.callArgs('listTierAccounts', 0).toString());
     }
 
 
+    @Test
     public function testGetOk() {
         // Check subject
         final account = TierAccount.get('TA-9861-7949-8492');
-        assertTrue(Std.is(account, TierAccount));
-        assertTrue(Std.is(account.scopes, Collection));
-        assertTrue(Std.is(account.contactInfo, ContactInfo));
-        assertTrue(Std.is(account.contactInfo.contact, Contact));
-        assertTrue(Std.is(account.contactInfo.contact.phoneNumber, PhoneNumber));
-        assertEquals('TA-9861-7949-8492', account.id);
-        assertEquals('12435', account.externalId);
-        assertEquals('string', account.name);
-        assertEquals('test', account.environment);
-        assertEquals(2, account.scopes.length());
-        assertEquals('tier1', account.scopes.get(0));
-        assertEquals('customer', account.scopes.get(1));
-        assertEquals('Yalı Mahallesi', account.contactInfo.addressLine1);
-        assertEquals('', account.contactInfo.addressLine2);
-        assertEquals('tr', account.contactInfo.country);
-        assertEquals('string', account.contactInfo.state);
-        assertEquals('10500', account.contactInfo.postalCode);
-        assertEquals('Quickstart', account.contactInfo.contact.firstName);
-        assertEquals('Long Running Operation', account.contactInfo.contact.lastName);
-        assertEquals('qlro@softcom.com', account.contactInfo.contact.email);
-        assertEquals('+90', account.contactInfo.contact.phoneNumber.countryCode);
-        assertEquals('546', account.contactInfo.contact.phoneNumber.areaCode);
-        assertEquals('6317546', account.contactInfo.contact.phoneNumber.phoneNumber);
-        assertEquals('', account.contactInfo.contact.phoneNumber.extension);
-        assertEquals('MP-54865', account.marketplace.id);
-        assertEquals('Germany', account.marketplace.name);
-        assertEquals('/media/PA-239-689/marketplaces/MP-54865/icon.png', account.marketplace.icon);
-        assertEquals('HB-12345-12345', account.hub.id);
-        assertEquals('Provider Production Hub', account.hub.name);
+        Assert.isType(account, TierAccount);
+        Assert.isType(account.scopes, Collection);
+        Assert.isType(account.contactInfo, ContactInfo);
+        Assert.isType(account.contactInfo.contact, Contact);
+        Assert.isType(account.contactInfo.contact.phoneNumber, PhoneNumber);
+        Assert.areEqual('TA-9861-7949-8492', account.id);
+        Assert.areEqual('12435', account.externalId);
+        Assert.areEqual('string', account.name);
+        Assert.areEqual('test', account.environment);
+        Assert.areEqual(2, account.scopes.length());
+        Assert.areEqual('tier1', account.scopes.get(0));
+        Assert.areEqual('customer', account.scopes.get(1));
+        Assert.areEqual('Yalı Mahallesi', account.contactInfo.addressLine1);
+        Assert.areEqual('', account.contactInfo.addressLine2);
+        Assert.areEqual('tr', account.contactInfo.country);
+        Assert.areEqual('string', account.contactInfo.state);
+        Assert.areEqual('10500', account.contactInfo.postalCode);
+        Assert.areEqual('Quickstart', account.contactInfo.contact.firstName);
+        Assert.areEqual('Long Running Operation', account.contactInfo.contact.lastName);
+        Assert.areEqual('qlro@softcom.com', account.contactInfo.contact.email);
+        Assert.areEqual('+90', account.contactInfo.contact.phoneNumber.countryCode);
+        Assert.areEqual('546', account.contactInfo.contact.phoneNumber.areaCode);
+        Assert.areEqual('6317546', account.contactInfo.contact.phoneNumber.phoneNumber);
+        Assert.areEqual('', account.contactInfo.contact.phoneNumber.extension);
+        Assert.areEqual('MP-54865', account.marketplace.id);
+        Assert.areEqual('Germany', account.marketplace.name);
+        Assert.areEqual('/media/PA-239-689/marketplaces/MP-54865/icon.png', account.marketplace.icon);
+        Assert.areEqual('HB-12345-12345', account.hub.id);
+        Assert.areEqual('Provider Production Hub', account.hub.name);
 
         // Check mocks
         final apiMock = cast(Env.getTierApi(), Mock);
-        assertEquals(1, apiMock.callCount('getTierAccount'));
-        assertEquals(
+        Assert.areEqual(1, apiMock.callCount('getTierAccount'));
+        Assert.areEqual(
             ['TA-9861-7949-8492'].toString(),
             apiMock.callArgs('getTierAccount', 0).toString());
     }
 
 
+    @Test
     public function testGetKo() {
         // Check subject
         final request = TierAccount.get('TA-XXXX-XXXX-XXXX');
-        assertTrue(request == null);
+        Assert.isNull(request);
 
         // Check mocks
         final apiMock = cast(Env.getTierApi(), Mock);
-        assertEquals(1, apiMock.callCount('getTierAccount'));
-        assertEquals(
+        Assert.areEqual(1, apiMock.callCount('getTierAccount'));
+        Assert.areEqual(
             ['TA-XXXX-XXXX-XXXX'].toString(),
             apiMock.callArgs('getTierAccount', 0).toString());
     }

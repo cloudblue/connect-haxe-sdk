@@ -26,291 +26,309 @@ import connect.models.Tiers;
 import connect.models.User;
 import connect.util.Collection;
 import connect.util.Dictionary;
+import massive.munit.Assert;
 import tests.mocks.Mock;
 
 
-class AssetTest extends haxe.unit.TestCase {
-    override public function setup() {
+class AssetTest {
+    @Before
+    public function setup() {
         Env._reset(new Dictionary()
             .setString('IFulfillmentApi', 'tests.mocks.FulfillmentApiMock'));
     }
 
 
+    @Test
     public function testList() {
         // Check subject
         final assets = Asset.list(null);
-        assertTrue(Std.is(assets, Collection));
-        assertEquals(2, assets.length());
+        Assert.isType(assets, Collection);
+        Assert.areEqual(2, assets.length());
 
         // Check first assert
         final asset0 = assets.get(0);
-        assertTrue(Std.is(asset0, Asset));
-        assertEquals('AS-392-283-000-0', asset0.id);
+        Assert.isType(asset0, Asset);
+        Assert.areEqual('AS-392-283-000-0', asset0.id);
 
         // Check second asset
         final asset1 = assets.get(1);
-        assertTrue(Std.is(asset1, Asset));
-        assertEquals('AS-392-283-001-0', asset1.id);
+        Assert.isType(asset1, Asset);
+        Assert.areEqual('AS-392-283-001-0', asset1.id);
 
         // Check mocks
         final apiMock = cast(Env.getFulfillmentApi(), Mock);
-        assertEquals(1, apiMock.callCount('listAssets'));
-        assertEquals(
+        Assert.areEqual(1, apiMock.callCount('listAssets'));
+        Assert.areEqual(
             [null].toString(),
             apiMock.callArgs('listAssets', 0).toString());
     }
 
 
+    @Test
     public function testGetOk() {
         // Check asset
         final asset = Asset.get('AS-392-283-000-0');
-        assertTrue(Std.is(asset, Asset));
-        assertTrue(Std.is(asset.product, Product));
-        assertTrue(Std.is(asset.connection, Connection));
-        assertTrue(Std.is(asset.connection.provider, Account));
-        assertTrue(Std.is(asset.connection.vendor, Account));
-        assertTrue(Std.is(asset.contract, Contract));
-        assertTrue(Std.is(asset.marketplace, Marketplace));
-        assertTrue(Std.is(asset.params, Collection));
-        assertEquals(1, asset.params.length());
-        assertTrue(Std.is(asset.params.get(0), Param));
-        assertTrue(Std.is(asset.params.get(0).valueChoices, Collection));
-        assertEquals(0, asset.params.get(0).valueChoices.length());
-        assertTrue(Std.is(asset.tiers, Tiers));
-        assertTrue(Std.is(asset.tiers.customer, TierAccount));
-        assertTrue(Std.is(asset.tiers.customer.contactInfo, ContactInfo));
-        assertTrue(Std.is(asset.tiers.customer.contactInfo.contact, Contact));
-        assertTrue(Std.is(asset.tiers.customer.contactInfo.contact.phoneNumber, PhoneNumber));
-        assertTrue(Std.is(asset.tiers.tier1, TierAccount));
-        assertTrue(Std.is(asset.items, Collection));
-        assertEquals(5, asset.items.length());
-        assertTrue(Std.is(asset.items.get(0), Item));
-        assertTrue(Std.is(asset.items.get(0).params, Collection));
-        assertEquals(2, asset.items.get(0).params.length());
-        assertTrue(Std.is(asset.items.get(0).params.get(0), Param));
-        assertTrue(Std.is(asset.items.get(0).params.get(0).constraints, Constraints));
-        assertTrue(Std.is(asset.items.get(0).params.get(0).events, Events));
-        assertTrue(Std.is(asset.items.get(0).params.get(0).events.created, Event));
-        assertTrue(Std.is(asset.items.get(0).params.get(0).events.created.by, User));
-        assertTrue(Std.is(asset.configuration, Configuration));
-        assertTrue(Std.is(asset.configuration.params, Collection));
-        assertEquals(1, asset.configuration.params.length());
-        assertTrue(Std.is(asset.configuration.params.get(0), Param));
-        assertEquals('AS-392-283-000-0', asset.id);
-        assertEquals('processing', asset.status);
-        assertEquals('1001000', asset.externalId);
-        assertEquals('f90e2ed2-b267-4831-93e6-a6b06874e000', asset.externalUid);
-        assertEquals('Fallball 498c84b1-d53318a6', asset.externalName);
-        assertEquals('CN-631-322-000', asset.product.id);
-        assertEquals('ProductName', asset.product.name);
-        assertEquals('CT-9344-000', asset.connection.id);
-        assertEquals('production', asset.connection.type);
-        assertEquals('PA-063-000', asset.connection.provider.id);
-        assertEquals('Connection name', asset.connection.provider.name);
-        assertEquals('VA-691-000', asset.connection.vendor.id);
-        assertEquals('Vendor Name', asset.connection.vendor.name);
-        assertEquals('CRP-00000-00000-00000', asset.contract.id);
-        assertEquals('Contract of Program Agreement', asset.contract.name);
-        assertEquals('MP-12345', asset.marketplace.id);
-        assertEquals('France and territories', asset.marketplace.name);
-        assertEquals('/media/PA-239-689/marketplaces/MP-54865/icon.png', asset.marketplace.icon);
+        Assert.isType(asset, Asset);
+        Assert.isType(asset.product, Product);
+        Assert.isType(asset.connection, Connection);
+        Assert.isType(asset.connection.provider, Account);
+        Assert.isType(asset.connection.vendor, Account);
+        Assert.isType(asset.contract, Contract);
+        Assert.isType(asset.marketplace, Marketplace);
+        Assert.isType(asset.params, Collection);
+        Assert.areEqual(1, asset.params.length());
+        Assert.isType(asset.params.get(0), Param);
+        Assert.isType(asset.params.get(0).valueChoices, Collection);
+        Assert.areEqual(0, asset.params.get(0).valueChoices.length());
+        Assert.isType(asset.tiers, Tiers);
+        Assert.isType(asset.tiers.customer, TierAccount);
+        Assert.isType(asset.tiers.customer.contactInfo, ContactInfo);
+        Assert.isType(asset.tiers.customer.contactInfo.contact, Contact);
+        Assert.isType(asset.tiers.customer.contactInfo.contact.phoneNumber, PhoneNumber);
+        Assert.isType(asset.tiers.tier1, TierAccount);
+        Assert.isType(asset.items, Collection);
+        Assert.areEqual(5, asset.items.length());
+        Assert.isType(asset.items.get(0), Item);
+        Assert.isType(asset.items.get(0).params, Collection);
+        Assert.areEqual(2, asset.items.get(0).params.length());
+        Assert.isType(asset.items.get(0).params.get(0), Param);
+        Assert.isType(asset.items.get(0).params.get(0).constraints, Constraints);
+        Assert.isType(asset.items.get(0).params.get(0).events, Events);
+        Assert.isType(asset.items.get(0).params.get(0).events.created, Event);
+        Assert.isType(asset.items.get(0).params.get(0).events.created.by, User);
+        Assert.isType(asset.configuration, Configuration);
+        Assert.isType(asset.configuration.params, Collection);
+        Assert.areEqual(1, asset.configuration.params.length());
+        Assert.isType(asset.configuration.params.get(0), Param);
+        Assert.areEqual('AS-392-283-000-0', asset.id);
+        Assert.areEqual('processing', asset.status);
+        Assert.areEqual('1001000', asset.externalId);
+        Assert.areEqual('f90e2ed2-b267-4831-93e6-a6b06874e000', asset.externalUid);
+        Assert.areEqual('Fallball 498c84b1-d53318a6', asset.externalName);
+        Assert.areEqual('CN-631-322-000', asset.product.id);
+        Assert.areEqual('ProductName', asset.product.name);
+        Assert.areEqual('CT-9344-000', asset.connection.id);
+        Assert.areEqual('production', asset.connection.type);
+        Assert.areEqual('PA-063-000', asset.connection.provider.id);
+        Assert.areEqual('Connection name', asset.connection.provider.name);
+        Assert.areEqual('VA-691-000', asset.connection.vendor.id);
+        Assert.areEqual('Vendor Name', asset.connection.vendor.name);
+        Assert.areEqual('CRP-00000-00000-00000', asset.contract.id);
+        Assert.areEqual('Contract of Program Agreement', asset.contract.name);
+        Assert.areEqual('MP-12345', asset.marketplace.id);
+        Assert.areEqual('France and territories', asset.marketplace.name);
+        Assert.areEqual('/media/PA-239-689/marketplaces/MP-54865/icon.png', asset.marketplace.icon);
         
         final param = asset.params.get(0);
-        assertEquals('activationCode', param.id);
-        assertEquals('Activation Code', param.name);
-        assertEquals('Activation Code', param.description);
-        assertEquals('text', param.type);
-        assertEquals('value param', param.value);
-        assertEquals('', param.valueError);
+        Assert.areEqual('activationCode', param.id);
+        Assert.areEqual('Activation Code', param.name);
+        Assert.areEqual('Activation Code', param.description);
+        Assert.areEqual('text', param.type);
+        Assert.areEqual('value param', param.value);
+        Assert.areEqual('', param.valueError);
 
         final customer = asset.tiers.customer;
-        assertEquals('TA-0-7304-8514-7000', customer.id);
-        assertEquals('Name', customer.name);
-        assertEquals('street A', customer.contactInfo.addressLine1);
-        assertEquals('2 2', customer.contactInfo.addressLine2);
-        assertEquals('es', customer.contactInfo.country);
-        assertEquals('', customer.contactInfo.state);
-        assertEquals('Moscow', customer.contactInfo.city);
-        assertEquals('08000', customer.contactInfo.postalCode);
-        assertEquals('First Name', customer.contactInfo.contact.firstName);
-        assertEquals('Last Name', customer.contactInfo.contact.lastName);
-        assertEquals('test@email.com', customer.contactInfo.contact.email);
-        assertEquals('+7', customer.contactInfo.contact.phoneNumber.countryCode);
-        assertEquals('', customer.contactInfo.contact.phoneNumber.areaCode);
-        assertEquals('8901298403', customer.contactInfo.contact.phoneNumber.phoneNumber);
-        assertEquals('', customer.contactInfo.contact.phoneNumber.extension);
-        assertEquals('1001000', customer.externalId);
+        Assert.areEqual('TA-0-7304-8514-7000', customer.id);
+        Assert.areEqual('Name', customer.name);
+        Assert.areEqual('street A', customer.contactInfo.addressLine1);
+        Assert.areEqual('2 2', customer.contactInfo.addressLine2);
+        Assert.areEqual('es', customer.contactInfo.country);
+        Assert.areEqual('', customer.contactInfo.state);
+        Assert.areEqual('Moscow', customer.contactInfo.city);
+        Assert.areEqual('08000', customer.contactInfo.postalCode);
+        Assert.areEqual('First Name', customer.contactInfo.contact.firstName);
+        Assert.areEqual('Last Name', customer.contactInfo.contact.lastName);
+        Assert.areEqual('test@email.com', customer.contactInfo.contact.email);
+        Assert.areEqual('+7', customer.contactInfo.contact.phoneNumber.countryCode);
+        Assert.areEqual('', customer.contactInfo.contact.phoneNumber.areaCode);
+        Assert.areEqual('8901298403', customer.contactInfo.contact.phoneNumber.phoneNumber);
+        Assert.areEqual('', customer.contactInfo.contact.phoneNumber.extension);
+        Assert.areEqual('1001000', customer.externalId);
 
         final item = asset.items.get(0);
-        assertEquals('TEAM_ST3L2T1Y', item.id);
-        assertEquals('TEAM-ST3L2T1Y', item.mpn);
-        assertEquals('100', item.quantity);
-        assertEquals('0', item.oldQuantity);
-        assertEquals('XXX', item.globalId);
+        Assert.areEqual('TEAM_ST3L2T1Y', item.id);
+        Assert.areEqual('TEAM-ST3L2T1Y', item.mpn);
+        Assert.areEqual('100', item.quantity);
+        Assert.areEqual('0', item.oldQuantity);
+        Assert.areEqual('XXX', item.globalId);
 
         final itemParam = item.params.get(0);
-        assertEquals('item_parameter', itemParam.id);
-        assertEquals('item_parameter', itemParam.description);
-        assertEquals('text', itemParam.type);
-        assertEquals('Value 1', itemParam.value);
-        assertEquals('item_parameter', itemParam.title);
-        assertEquals('item', itemParam.scope);
-        assertEquals(false, itemParam.constraints.hidden);
-        assertEquals(false, itemParam.constraints.required);
-        assertEquals(false, itemParam.constraints.unique);
-        assertEquals('2019-08-26T10:42:56+00:00', itemParam.events.created.at.toString());
-        assertEquals('UR-841-574-187', itemParam.events.created.by.id);
-        assertEquals('Marc Serrat', itemParam.events.created.by.name);
-        assertEquals('2019-08-27T14:21:23+00:00', itemParam.events.updated.at.toString());
-        assertEquals('UR-841-574-187', itemParam.events.updated.by.id);
-        assertEquals('Marc Serrat', itemParam.events.updated.by.name);
+        Assert.areEqual('item_parameter', itemParam.id);
+        Assert.areEqual('item_parameter', itemParam.description);
+        Assert.areEqual('text', itemParam.type);
+        Assert.areEqual('Value 1', itemParam.value);
+        Assert.areEqual('item_parameter', itemParam.title);
+        Assert.areEqual('item', itemParam.scope);
+        Assert.areEqual(false, itemParam.constraints.hidden);
+        Assert.areEqual(false, itemParam.constraints.required);
+        Assert.areEqual(false, itemParam.constraints.unique);
+        Assert.areEqual('2019-08-26T10:42:56+00:00', itemParam.events.created.at.toString());
+        Assert.areEqual('UR-841-574-187', itemParam.events.created.by.id);
+        Assert.areEqual('Marc Serrat', itemParam.events.created.by.name);
+        Assert.areEqual('2019-08-27T14:21:23+00:00', itemParam.events.updated.at.toString());
+        Assert.areEqual('UR-841-574-187', itemParam.events.updated.by.id);
+        Assert.areEqual('Marc Serrat', itemParam.events.updated.by.name);
 
         // Check mocks
         final apiMock = cast(Env.getFulfillmentApi(), Mock);
-        assertEquals(1, apiMock.callCount('getAsset'));
-        assertEquals(
+        Assert.areEqual(1, apiMock.callCount('getAsset'));
+        Assert.areEqual(
             ['AS-392-283-000-0'].toString(),
             apiMock.callArgs('getAsset', 0).toString());
     }
 
 
+    @Test
     public function testGetKo() {
         // Check subject
         final asset = Asset.get('AS-XXX-XXX-XXX-X');
-        assertTrue(asset == null);
+        Assert.isNull(asset);
 
         // Check mocks
         final apiMock = cast(Env.getFulfillmentApi(), Mock);
-        assertEquals(1, apiMock.callCount('getAsset'));
-        assertEquals(
+        Assert.areEqual(1, apiMock.callCount('getAsset'));
+        Assert.areEqual(
             ['AS-XXX-XXX-XXX-X'].toString(),
             apiMock.callArgs('getAsset', 0).toString());
     }
 
 
+    @Test
     public function testGetRequests() {
         // Check subject
         final asset = Asset.get('AS-392-283-000-0');
         final requests = asset.getRequests();
-        assertEquals(1, requests.length());
-        assertEquals('PR-5852-1608-0000', requests.get(0).id);
+        Assert.areEqual(1, requests.length());
+        Assert.areEqual('PR-5852-1608-0000', requests.get(0).id);
 
         // Check mocks
         final apiMock = cast(Env.getFulfillmentApi(), Mock);
-        assertEquals(1, apiMock.callCount('getAssetRequests'));
-        assertEquals(
+        Assert.areEqual(1, apiMock.callCount('getAssetRequests'));
+        Assert.areEqual(
             ['AS-392-283-000-0'].toString(),
             apiMock.callArgs('getAssetRequests', 0).toString());
     }
 
 
+    @Test
     public function testGetRequestsEmpty() {
         // Check subject
         final asset = Model.parse(Asset, '{"id": "AS-XXX-XXX-XXX-X"}');
         final requests = asset.getRequests();
-        assertEquals(0, requests.length());
+        Assert.areEqual(0, requests.length());
 
         // Check mocks
         final apiMock = cast(Env.getFulfillmentApi(), Mock);
-        assertEquals(1, apiMock.callCount('getAssetRequests'));
-        assertEquals(
+        Assert.areEqual(1, apiMock.callCount('getAssetRequests'));
+        Assert.areEqual(
             ['AS-XXX-XXX-XXX-X'].toString(),
             apiMock.callArgs('getAssetRequests', 0).toString());
     }
 
 
+    @Test
     public function testGetNewItems() {
         final asset = Asset.get('AS-392-283-000-0');
         final newItems = asset.getNewItems();
-        assertEquals(2, newItems.length());
-        assertEquals('TEAM_ST3L2T1Y', newItems.get(0).id);
-        assertEquals('100', newItems.get(0).quantity);
-        assertEquals('0', newItems.get(0).oldQuantity);
-        assertEquals('TEAM_ST3L2TAC1M', newItems.get(1).id);
-        assertEquals('200', newItems.get(1).quantity);
-        assertEquals('0', newItems.get(1).oldQuantity);
+        Assert.areEqual(2, newItems.length());
+        Assert.areEqual('TEAM_ST3L2T1Y', newItems.get(0).id);
+        Assert.areEqual('100', newItems.get(0).quantity);
+        Assert.areEqual('0', newItems.get(0).oldQuantity);
+        Assert.areEqual('TEAM_ST3L2TAC1M', newItems.get(1).id);
+        Assert.areEqual('200', newItems.get(1).quantity);
+        Assert.areEqual('0', newItems.get(1).oldQuantity);
     }
 
 
+    @Test
     public function testGetChangedItems() {
         final asset = Asset.get('AS-392-283-000-0');
         final changedItems = asset.getChangedItems();
-        assertEquals(2, changedItems.length());
-        assertEquals('UPSIZE_TEST', changedItems.get(0).id);
-        assertEquals('201', changedItems.get(0).quantity);
-        assertEquals('200', changedItems.get(0).oldQuantity);
-        assertEquals('DOWNSIZE_TEST', changedItems.get(1).id);
-        assertEquals('199', changedItems.get(1).quantity);
-        assertEquals('200', changedItems.get(1).oldQuantity);
+        Assert.areEqual(2, changedItems.length());
+        Assert.areEqual('UPSIZE_TEST', changedItems.get(0).id);
+        Assert.areEqual('201', changedItems.get(0).quantity);
+        Assert.areEqual('200', changedItems.get(0).oldQuantity);
+        Assert.areEqual('DOWNSIZE_TEST', changedItems.get(1).id);
+        Assert.areEqual('199', changedItems.get(1).quantity);
+        Assert.areEqual('200', changedItems.get(1).oldQuantity);
     }
 
 
+    @Test
     public function testGetRemovedItems() {
         final asset = Asset.get('AS-392-283-000-0');
         final removedItems = asset.getRemovedItems();
-        assertEquals(1, removedItems.length());
-        assertEquals('DELETE_TEST', removedItems.get(0).id);
-        assertEquals('0', removedItems.get(0).quantity);
-        assertEquals('200', removedItems.get(0).oldQuantity);
+        Assert.areEqual(1, removedItems.length());
+        Assert.areEqual('DELETE_TEST', removedItems.get(0).id);
+        Assert.areEqual('0', removedItems.get(0).quantity);
+        Assert.areEqual('200', removedItems.get(0).oldQuantity);
     }
 
 
+    @Test
     public function testGetParamByIdOk() {
         final asset = Asset.get('AS-392-283-000-0');
         final param = asset.getParamById('activationCode');
-        assertTrue(Std.is(param, Param));
-        assertEquals('activationCode', param.id);
+        Assert.isType(param, Param);
+        Assert.areEqual('activationCode', param.id);
     }
 
 
+    @Test
     public function testGetParamByIdKo() {
         final asset = Asset.get('AS-392-283-000-0');
         final param = asset.getParamById('invalid-id');
-        assertTrue(param == null);
+        Assert.isNull(param);
     }
 
 
+    @Test
     public function testGetItemByIdOk() {
         final asset = Asset.get('AS-392-283-000-0');
         final item = asset.getItemById('TEAM_ST3L2T1Y');
-        assertTrue(Std.is(item, Item));
-        assertEquals('TEAM_ST3L2T1Y', item.id);
+        Assert.isType(item, Item);
+        Assert.areEqual('TEAM_ST3L2T1Y', item.id);
     }
 
 
+    @Test
     public function testGetItemByIdKo() {
         final asset = Asset.get('AS-392-283-000-0');
         final item = asset.getItemById('invalid-id');
-        assertTrue(item == null);
+        Assert.isNull(item);
     }
 
 
+    @Test
     public function testGetItemByMpnOk() {
         final asset = Asset.get('AS-392-283-000-0');
         final item = asset.getItemByMpn('TEAM-ST3L2T1Y');
-        assertTrue(Std.is(item, Item));
-        assertEquals('TEAM-ST3L2T1Y', item.mpn);
+        Assert.isType(item, Item);
+        Assert.areEqual('TEAM-ST3L2T1Y', item.mpn);
     }
 
 
+    @Test
     public function testGetItemByMpnKo() {
         final asset = Asset.get('AS-392-283-000-0');
         final item = asset.getItemByMpn('invalid-mpn');
-        assertTrue(item == null);
+        Assert.isNull(item);
     }
 
 
+    @Test
     public function testGetItemByGlobalIdOk() {
         final asset = Asset.get('AS-392-283-000-0');
         final item = asset.getItemByGlobalId('XXX');
-        assertTrue(Std.is(item, Item));
-        assertEquals('XXX', item.globalId);
+        Assert.isType(item, Item);
+        Assert.areEqual('XXX', item.globalId);
     }
 
 
+    @Test
     public function testGetItemByGlobalIdKo() {
         final asset = Asset.get('AS-392-283-000-0');
         final item = asset.getItemByGlobalId('invalid-id');
-        assertTrue(item == null);
+        Assert.isNull(item);
     }
 }

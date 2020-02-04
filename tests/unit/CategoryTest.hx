@@ -9,64 +9,69 @@ import connect.models.Category;
 import connect.models.Family;
 import connect.util.Collection;
 import connect.util.Dictionary;
+import massive.munit.Assert;
 import tests.mocks.Mock;
 
 
-class CategoryTest extends haxe.unit.TestCase {
-    override public function setup() {
+class CategoryTest {
+    @Before
+    public function setup() {
         Env._reset(new Dictionary()
             .setString('IGeneralApi', 'tests.mocks.GeneralApiMock'));
     }
 
 
+    @Test
     public function testList() {
         // Check subject
         final categories = Category.list(null);
-        assertTrue(Std.is(categories, Collection));
-        assertEquals(1, categories.length());
-        assertTrue(Std.is(categories.get(0), Category));
-        assertEquals('CAT-00012', categories.get(0).id);
+        Assert.isType(categories, Collection);
+        Assert.areEqual(1, categories.length());
+        Assert.isType(categories.get(0), Category);
+        Assert.areEqual('CAT-00012', categories.get(0).id);
 
         // Check mocks
         final apiMock = cast(Env.getGeneralApi(), Mock);
-        assertEquals(1, apiMock.callCount('listCategories'));
-        assertEquals(
+        Assert.areEqual(1, apiMock.callCount('listCategories'));
+        Assert.areEqual(
             [null].toString(),
             apiMock.callArgs('listCategories', 0).toString());
     }
 
 
+    @Test
     public function testGetOk() {
         // Check category
         final category = Category.get('CAT-00012');
-        assertTrue(Std.is(category, Category));
-        assertTrue(Std.is(category.parent, Category));
-        assertTrue(Std.is(category.family, Family));
-        assertEquals('CAT-00012', category.id);
-        assertEquals('Mobile Antiviruses', category.name);
-        assertEquals('CAT-00011', category.parent.id);
-        assertEquals('Antiviruses', category.parent.name);
-        assertEquals('FAM-000', category.family.id);
-        assertEquals('Root family', category.family.name);
+        Assert.isType(category, Category);
+        Assert.isType(category.parent, Category);
+        Assert.isType(category.family, Family);
+        Assert.areEqual('CAT-00012', category.id);
+        Assert.areEqual('Mobile Antiviruses', category.name);
+        Assert.areEqual('CAT-00011', category.parent.id);
+        Assert.areEqual('Antiviruses', category.parent.name);
+        Assert.areEqual('FAM-000', category.family.id);
+        Assert.areEqual('Root family', category.family.name);
 
         // Check mocks
         final apiMock = cast(Env.getGeneralApi(), Mock);
-        assertEquals(1, apiMock.callCount('getCategory'));
-        assertEquals(
+        Assert.areEqual(1, apiMock.callCount('getCategory'));
+        Assert.areEqual(
             ['CAT-00012'].toString(),
             apiMock.callArgs('getCategory', 0).toString());
     }
 
 
+    @Test
     public function testGetKo() {
         // Check subject
         final category = Category.get('CAT-XXXXX');
-        assertTrue(category == null);
+        Assert.isNull(category);
 
         // Check mocks
         final apiMock = cast(Env.getGeneralApi(), Mock);
-        assertEquals(1, apiMock.callCount('getCategory'));
-        assertEquals(
+        Assert.areEqual(1, apiMock.callCount('getCategory'));
+        Assert.areEqual(
             ['CAT-XXXXX'].toString(),
             apiMock.callArgs('getCategory', 0).toString());
     }

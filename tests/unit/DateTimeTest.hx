@@ -5,41 +5,47 @@
 package tests.unit;
 
 import connect.util.DateTime;
+import massive.munit.Assert;
 
 
-class DateTimeTest extends haxe.unit.TestCase {
+class DateTimeTest {
+    @Test
     public function testFromString() {
         final dt = DateTime.fromString('2018-06-04T13:19:10.102670+00:00');
-        this.assertEquals(2018, dt.getYear());
-        this.assertEquals(5, dt.getMonth());
-        this.assertEquals(4, dt.getDay());
-        this.assertEquals(13, dt.getHours());
-        this.assertEquals(19, dt.getMinutes());
-        this.assertEquals(10, dt.getSeconds());
-        this.assertEquals('2018-06-04T13:19:10+00:00', dt.toString());
+        Assert.areEqual(2018, dt.getYear());
+        Assert.areEqual(5, dt.getMonth());
+        Assert.areEqual(4, dt.getDay());
+        Assert.areEqual(13, dt.getHours());
+        Assert.areEqual(19, dt.getMinutes());
+        Assert.areEqual(10, dt.getSeconds());
+        Assert.areEqual('2018-06-04T13:19:10+00:00', dt.toString());
     }
 
 
+    @Test
     public function testFromStringNoOffset() {
         final dt = DateTime.fromString('2018-06-04T13:19:10.102670');
-        this.assertEquals('2018-06-04T13:19:10+00:00', dt.toString());
+        Assert.areEqual('2018-06-04T13:19:10+00:00', dt.toString());
     }
 
 
+    @Test
     public function testFromStringNoTime() {
         final dt = DateTime.fromString('2018-06-04');
-        this.assertEquals('2018-06-04T00:00:00+00:00', dt.toString());
+        Assert.areEqual('2018-06-04T00:00:00+00:00', dt.toString());
     }
 
 
+    @Test
     public function testFromStringYearOnly() {
         final dt = DateTime.fromString('2018');
-        this.assertEquals('2018-01-01T00:00:00+00:00', dt.toString());
+        Assert.areEqual('2018-01-01T00:00:00+00:00', dt.toString());
     }
 
 
+    @Test
     public function testFromStringInvalid() {
         final dt = DateTime.fromString('Invalid');
-        this.assertEquals(null, dt);
+        Assert.isNull(dt);
     }
 }

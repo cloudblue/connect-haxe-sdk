@@ -6,59 +6,66 @@ package tests.unit;
 
 import connect.logger.MarkdownLoggerFormatter;
 import connect.util.Collection;
+import massive.munit.Assert;
 
 
-class MarkdownLoggerFormatterTest extends haxe.unit.TestCase {
+class MarkdownLoggerFormatterTest {
+    @Test
     public function testFormatSection() {
-        this.assertEquals('\n## Hello\n', fmt.formatSection(2, 'Hello'));
-        this.assertEquals('\n# Hello\n', fmt.formatSection(1, 'Hello'));
-        this.assertEquals('\nHello\n', fmt.formatSection(0, 'Hello'));
-        this.assertEquals('\nHello\n', fmt.formatSection(-1, 'Hello'));
-        this.assertEquals('\n# \n', fmt.formatSection(1, ''));
+        Assert.areEqual('\n## Hello\n', fmt.formatSection(2, 'Hello'));
+        Assert.areEqual('\n# Hello\n', fmt.formatSection(1, 'Hello'));
+        Assert.areEqual('\nHello\n', fmt.formatSection(0, 'Hello'));
+        Assert.areEqual('\nHello\n', fmt.formatSection(-1, 'Hello'));
+        Assert.areEqual('\n# \n', fmt.formatSection(1, ''));
     }
 
 
+    @Test
     public function testFormatBlock() {
-        this.assertEquals('\n> Hello, world\n', fmt.formatBlock('Hello, world'));
-        this.assertEquals('\n> Hello\n> World\n', fmt.formatBlock('Hello\nWorld'));
-        this.assertEquals('\n> Hello\n> World\n', fmt.formatBlock('Hello\r\nWorld'));
-        this.assertEquals('\n> Hello\n> World\n', fmt.formatBlock('Hello\rWorld'));
-        this.assertEquals('\n> \n', fmt.formatBlock(''));
+        Assert.areEqual('\n> Hello, world\n', fmt.formatBlock('Hello, world'));
+        Assert.areEqual('\n> Hello\n> World\n', fmt.formatBlock('Hello\nWorld'));
+        Assert.areEqual('\n> Hello\n> World\n', fmt.formatBlock('Hello\r\nWorld'));
+        Assert.areEqual('\n> Hello\n> World\n', fmt.formatBlock('Hello\rWorld'));
+        Assert.areEqual('\n> \n', fmt.formatBlock(''));
     }
 
 
+    @Test
     public function testFormatCodeBlock() {
         final expected = '\n```json\n{"key": "value"}\n```\n';
-        this.assertEquals(expected, fmt.formatCodeBlock('{"key": "value"}', 'json'));
-        this.assertEquals('\n```\n\n```\n', fmt.formatCodeBlock('', ''));
+        Assert.areEqual(expected, fmt.formatCodeBlock('{"key": "value"}', 'json'));
+        Assert.areEqual('\n```\n\n```\n', fmt.formatCodeBlock('', ''));
     }
 
 
+    @Test
     public function testFormatCodeBlockWithinBlock() {
         final expected = '\n> \n> ```json\n> {"key": "value"}\n> ```\n> \n';
-        this.assertEquals(
+        Assert.areEqual(
             expected,
             fmt.formatBlock(fmt.formatCodeBlock('{"key": "value"}', 'json')));
     }
 
 
+    @Test
     public function testFormatList() {
         final expected = '\n* Hello\n* World\n';
         final list = new Collection<String>()
             .push('Hello')
             .push('World');
-        this.assertEquals(expected, fmt.formatList(list));
-        this.assertEquals('\n\n', fmt.formatList(new Collection<String>()));
+        Assert.areEqual(expected, fmt.formatList(list));
+        Assert.areEqual('\n\n', fmt.formatList(new Collection<String>()));
     }
 
 
+    @Test
     public function testFormatTable() {
         final expected = '\n| One | Two |\n| --- | --- |\n| 1 | 2 |\n';
         final table = new Collection<Collection<String>>()
             .push(new Collection<String>().push('One').push('Two'))
             .push(new Collection<String>().push('1').push('2'));
-        this.assertEquals(expected, fmt.formatTable(table));
-        this.assertEquals('\n\n', fmt.formatTable(new Collection<Collection<String>>()));
+        Assert.areEqual(expected, fmt.formatTable(table));
+        Assert.areEqual('\n\n', fmt.formatTable(new Collection<Collection<String>>()));
     }
 
 
