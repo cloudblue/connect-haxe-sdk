@@ -3,7 +3,7 @@
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
 import connect.api.Query;
-import test.mocks.Mock;
+import haxe.Json;
 import massive.munit.Assert;
 
 
@@ -225,7 +225,7 @@ class QueryTest {
             }
         });
         final result = Helper.sortObject(rql.toObject());
-        Assert.areEqual(haxe.Json.stringify(expected), haxe.Json.stringify(result));
+        Assert.areEqual(Json.stringify(expected), Json.stringify(result));
     }
 
     @Test
@@ -299,7 +299,7 @@ class QueryTest {
             .lesserOrEqual('property', 'value')
             .orderBy('date')
             .ordering(['property1', 'property2']);
-        final result = Query.fromJson(haxe.Json.stringify(obj));
+        final result = Query.fromObject(obj);
         Assert.areEqual(expected.toJson(), result.toJson());
     }
 }

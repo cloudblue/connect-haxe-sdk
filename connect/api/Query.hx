@@ -308,7 +308,18 @@ class Query extends Base {
      * @return Dynamic
      */
     public function toObject(): Dynamic {
-        final obj = Json.parse(Json.stringify(this));
+        final obj = {
+            "in": stringMapToObject(this.in__),
+            "out": stringMapToObject(this.out_),
+            "limit": this.limit_,
+            "orderBy": this.orderBy_,
+            "offset": this.offset_,
+            "ordering": this.ordering_,
+            "like": stringMapToObject(this.like_),
+            "ilike": stringMapToObject(this.ilike_),
+            "select": this.select_,
+            "relOps": stringMapToObject(this.relOps),
+        };
         final keys = Reflect.fields(obj).filter(function(field) {
             final value = Reflect.field(obj, field);
             switch (Type.typeof(value)) {
@@ -321,14 +332,9 @@ class Query extends Base {
             }
             return true;
         });
-        final renamedKeys = keys.map(function(key) {
-            final index = key.indexOf('_');
-            final fixedIndex = (index > -1) ? index : key.length;
-            return key.substring(0, fixedIndex);
-        });
         final out = {};
         for (i in 0...keys.length) {
-            Reflect.setField(out, renamedKeys[i], Reflect.field(obj, keys[i]));
+            Reflect.setField(out, keys[i], Reflect.field(obj, keys[i]));
         }
         return out;
     }
@@ -344,59 +350,65 @@ class Query extends Base {
 
 
     public static function fromObject(obj: Dynamic): Query {
+        final select = Reflect.field(obj, 'select');
+        final like = Reflect.field(obj, 'like');
+        final ilike = Reflect.field(obj, 'ilike');
+        final in_ = Reflect.field(obj, 'in');
+        final out = Reflect.field(obj, 'out');
+        final relOps = Reflect.field(obj, 'relOps');
+        final ordering = Reflect.field(obj, 'ordering');
+        final limit = Reflect.field(obj, 'limit');
+        final orderBy = Reflect.field(obj, 'orderBy');
+        final offset = Reflect.field(obj, 'offset');
+
         final rql = new Query();
 
-        if (Reflect.hasField(obj, 'select')) {
-            rql.select_ = Reflect.field(obj, 'select');
+        if (select != null) {
+            rql.select_ = select;
         }
 
-        if (Reflect.hasField(obj, 'like')) {
-            final value = Reflect.field(obj, 'like');
-            final fields = Reflect.fields(value);
-            Lambda.iter(fields, field -> rql.like_.set(field, Reflect.field(value, field)));
+        if (like != null) {
+            final fields = Reflect.fields(like);
+            Lambda.iter(fields, field -> rql.like_.set(field, Reflect.field(like, field)));
         }
 
-        if (Reflect.hasField(obj, 'ilike')) {
-            final value = Reflect.field(obj, 'ilike');
-            final fields = Reflect.fields(value);
-            Lambda.iter(fields, field -> rql.ilike_.set(field, Reflect.field(value, field)));
+        if (ilike != null) {
+            final fields = Reflect.fields(ilike);
+            Lambda.iter(fields, field -> rql.ilike_.set(field, Reflect.field(ilike, field)));
         }
 
-        if (Reflect.hasField(obj, 'in')) {
-            final value = Reflect.field(obj, 'in');
-            final fields = Reflect.fields(value);
-            Lambda.iter(fields, field -> rql.in__.set(field, Reflect.field(value, field)));
+        if (in_ != null) {
+            final fields = Reflect.fields(in_);
+            Lambda.iter(fields, field -> rql.in__.set(field, Reflect.field(in_, field)));
         }
 
-        if (Reflect.hasField(obj, 'out')) {
-            final value = Reflect.field(obj, 'out');
-            final fields = Reflect.fields(value);
-            Lambda.iter(fields, field -> rql.out_.set(field, Reflect.field(value, field)));
+        if (out != null) {
+            final fields = Reflect.fields(out);
+            Lambda.iter(fields, field -> rql.out_.set(field, Reflect.field(out, field)));
         }
 
-        if (Reflect.hasField(obj, 'relOps')) {
-            final value = Reflect.field(obj, 'relOps');
-            final fields = Reflect.fields(value);
+        if (relOps != null) {
+            final fields = Reflect.fields(relOps);
             Lambda.iter(fields, function(field) {
-                final array: Array<Dynamic> = Reflect.field(value, field);
+                final array: Array<Dynamic> = Reflect.field(relOps, field);
                 rql.relOps.set(field, array.map(kv -> new KeyValue(kv.key, kv.value)));
             });
         }
 
-        if (Reflect.hasField(obj, 'ordering')) {
-            rql.ordering_ = Reflect.field(obj, 'ordering');
+        if (ordering != null) {
+            rql.ordering_ = ordering;
         }
 
-        if (Reflect.hasField(obj, 'limit')) {
-            rql.limit_ = Reflect.field(obj, 'limit');
+        if (limit != null) {
+            rql.limit_ = limit;
         }
 
-        if (Reflect.hasField(obj, 'orderBy')) {
-            rql.orderBy_ = Reflect.field(obj, 'orderBy');
+        if (orderBy != null) {
+            rql.orderBy_ = orderBy;
         }
 
-        if (Reflect.hasField(obj, 'offset')) {
-            rql.offset_ = Reflect.field(obj, 'offset');
+        if (offset != null) {
+            rql.offset_ = offset;
         }
 
         return rql;
@@ -426,6 +438,14 @@ class Query extends Base {
         }
         this.relOps.get(op).push(new KeyValue(property, value));
         return this;
+    }
+
+
+    private static function stringMapToObject(map: StringMap<Dynamic>): Dynamic {
+        final obj = {};
+        final fields = [for (k in map.keys()) k];
+        Lambda.iter(fields, field -> Reflect.setField(obj, field, map.get(field)));
+        return obj;
     }
 }
 
