@@ -444,8 +444,25 @@ class Query extends Base {
     private static function stringMapToObject(map: StringMap<Dynamic>): Dynamic {
         final obj = {};
         final fields = [for (k in map.keys()) k];
-        Lambda.iter(fields, field -> Reflect.setField(obj, field, map.get(field)));
+        Lambda.iter(fields, f -> Reflect.setField(obj, f, valueToObject(map.get(f))));
         return obj;
+    }
+
+
+    private static function valueToObject(value: Dynamic): Dynamic {
+        switch (Type.typeof(value)) {
+            case TClass(Array):
+                return arrayToObject(value);
+            case TClass(KeyValue):
+                return value.toObject();
+            default:
+                return value;
+        }
+    }
+
+
+    private static function arrayToObject(arr:Array<Dynamic>): Array<Dynamic> {
+        return Lambda.map(arr, elem -> valueToObject(elem));
     }
 }
 
@@ -458,5 +475,13 @@ private class KeyValue {
     public function new(key: String, value: String) {
         this.key = key;
         this.value = value;
+    }
+
+
+    public function toObject(): Dynamic {
+        return {
+            'key': this.key,
+            'value': this.value
+        };
     }
 }

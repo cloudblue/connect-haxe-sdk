@@ -183,7 +183,7 @@ class QueryTest {
             'select': ['attribute'],
             'like': {'product.id': 'PR-'},
             'ilike': {'product.id': 'PR-'},
-            'orderBy': "date",
+            'orderBy': 'date',
             'ordering': ['property1', 'property2'],
             'relOps': {
                 'eq': [
@@ -242,7 +242,7 @@ class QueryTest {
             'select': ['attribute'],
             'like': {'product.id': 'PR-'},
             'ilike': {'product.id': 'PR-'},
-            'orderBy': "date",
+            'orderBy': 'date',
             'ordering': ['property1', 'property2'],
             'relOps': {
                 'eq': [
