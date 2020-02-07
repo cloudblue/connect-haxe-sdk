@@ -152,4 +152,154 @@ class QueryTest {
             .limit(100);
         Assert.areEqual('?property1=value1&limit=100', rql.toPlain());
     }
+
+    @Test
+    public function testToObject() {
+        final rql = new Query()
+            .limit(100)
+            .offset(10)
+            .in_('key', ['value1', 'value2'])
+            .out('product.id', ['PR-', 'CN-'])
+            .select(['attribute'])
+            .like('product.id', 'PR-')
+            .ilike('product.id', 'PR-')
+            .equal('property1', 'value1')
+            .notEqual('property2', 'value2')
+            .greater('property', 'value')
+            .greaterOrEqual('property', 'value')
+            .lesser('property', 'value')
+            .lesserOrEqual('property', 'value')
+            .orderBy('date')
+            .ordering(['property1', 'property2']);
+        final expected = Helper.sortObject({
+            'limit': 100,
+            'offset': 10,
+            'in': {
+                'key': ['value1', 'value2']
+            },
+            'out': {
+                'product.id': ['PR-', 'CN-']
+            },
+            'select': ['attribute'],
+            'like': {'product.id': 'PR-'},
+            'ilike': {'product.id': 'PR-'},
+            'orderBy': "date",
+            'ordering': ['property1', 'property2'],
+            'relOps': {
+                'eq': [
+                    {
+                        'key': 'property1',
+                        'value': 'value1'
+                    }
+                ],
+                'ne': [
+                    {
+                        'key': 'property2',
+                        'value': 'value2'
+                    }
+                ],
+                'gt': [
+                    {
+                        'key': 'property',
+                        'value': 'value'
+                    }
+                ],
+                'ge': [
+                    {
+                        'key': 'property',
+                        'value': 'value'
+                    }
+                ],
+                'lt': [
+                    {
+                        'key': 'property',
+                        'value': 'value'
+                    }
+                ],
+                'le': [
+                    {
+                        'key': 'property',
+                        'value': 'value'
+                    }
+                ]
+            }
+        });
+        final result = Helper.sortObject(rql.toObject());
+        Assert.areEqual(haxe.Json.stringify(expected), haxe.Json.stringify(result));
+    }
+
+    @Test
+    public function testFromObject() {
+        final obj = {
+            'limit': 100,
+            'offset': 10,
+            'in': {
+                'key': ['value1', 'value2']
+            },
+            'out': {
+                'product.id': ['PR-', 'CN-']
+            },
+            'select': ['attribute'],
+            'like': {'product.id': 'PR-'},
+            'ilike': {'product.id': 'PR-'},
+            'orderBy': "date",
+            'ordering': ['property1', 'property2'],
+            'relOps': {
+                'eq': [
+                    {
+                        'key': 'property1',
+                        'value': 'value1'
+                    }
+                ],
+                'ne': [
+                    {
+                        'key': 'property2',
+                        'value': 'value2'
+                    }
+                ],
+                'gt': [
+                    {
+                        'key': 'property',
+                        'value': 'value'
+                    }
+                ],
+                'ge': [
+                    {
+                        'key': 'property',
+                        'value': 'value'
+                    }
+                ],
+                'lt': [
+                    {
+                        'key': 'property',
+                        'value': 'value'
+                    }
+                ],
+                'le': [
+                    {
+                        'key': 'property',
+                        'value': 'value'
+                    }
+                ]
+            }
+        };
+        final expected = new Query()
+            .limit(100)
+            .offset(10)
+            .in_('key', ['value1', 'value2'])
+            .out('product.id', ['PR-', 'CN-'])
+            .select(['attribute'])
+            .like('product.id', 'PR-')
+            .ilike('product.id', 'PR-')
+            .equal('property1', 'value1')
+            .notEqual('property2', 'value2')
+            .greater('property', 'value')
+            .greaterOrEqual('property', 'value')
+            .lesser('property', 'value')
+            .lesserOrEqual('property', 'value')
+            .orderBy('date')
+            .ordering(['property1', 'property2']);
+        final result = Query.fromJson(haxe.Json.stringify(obj));
+        Assert.areEqual(expected.toJson(), result.toJson());
+    }
 }

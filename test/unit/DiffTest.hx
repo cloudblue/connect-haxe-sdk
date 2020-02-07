@@ -55,12 +55,12 @@ class DiffTest {
         final a = {x: '10'};
         final b = {x: 10};
         final diff = new Diff(a, b);
-        final expected = sortObject(Json.parse('{
+        final expected = Helper.sortObject(Json.parse('{
             "a": {},
             "d": {},
             "c": {"x": ["10", 10]}
         }'));
-        final result = sortObject(Json.parse(diff.toString()));
+        final result = Helper.sortObject(Json.parse(diff.toString()));
         Assert.areEqual(Json.stringify(expected), Json.stringify(result));
     }
 
@@ -187,7 +187,7 @@ class DiffTest {
         final a = {x: [10, 20]};
         final b = {x: [10, 30]};
         final diff = new Diff(a, b);
-        final expected = sortObject(Json.parse('{
+        final expected = Helper.sortObject(Json.parse('{
             "a": {},
             "d": {},
             "c": {
@@ -200,7 +200,7 @@ class DiffTest {
                 ]
             }
         }'));
-        final result = sortObject(Json.parse(diff.toString()));
+        final result = Helper.sortObject(Json.parse(diff.toString()));
         Assert.areEqual(Json.stringify(expected), Json.stringify(result));
     }
 
@@ -210,7 +210,7 @@ class DiffTest {
         final a = {x: [10, 20, 100]};
         final b = {x: [10, 30]};
         final diff = new Diff(a, b);
-        final expected = sortObject(Json.parse('{
+        final expected = Helper.sortObject(Json.parse('{
             "a": {},
             "d": {},
             "c": {
@@ -223,7 +223,7 @@ class DiffTest {
                 ]
             }
         }'));
-        final result = sortObject(Json.parse(diff.toString()));
+        final result = Helper.sortObject(Json.parse(diff.toString()));
         Assert.areEqual(Json.stringify(expected), Json.stringify(result));
     }
 
@@ -233,7 +233,7 @@ class DiffTest {
         final a = Json.parse('{"x": [10, [20]]}');
         final b = Json.parse('{"x": [10, [30]]}');
         final diff = new Diff(a, b);
-        final expected = sortObject(Json.parse('{
+        final expected = Helper.sortObject(Json.parse('{
             "a": {},
             "d": {},
             "c": {
@@ -252,7 +252,7 @@ class DiffTest {
                 ]
             }
         }'));
-        final result = sortObject(Json.parse(diff.toString()));
+        final result = Helper.sortObject(Json.parse(diff.toString()));
         Assert.areEqual(Json.stringify(expected), Json.stringify(result));
     }
 
@@ -262,7 +262,7 @@ class DiffTest {
         final a = Json.parse('{"x": [10, {"y": 20}]}');
         final b = Json.parse('{"x": [10, {"y": 30}]}');
         final diff = new Diff(a, b);
-        final expected = sortObject(Json.parse('{
+        final expected = Helper.sortObject(Json.parse('{
             "a": {},
             "d": {},
             "c": {
@@ -281,7 +281,7 @@ class DiffTest {
                 ]
             }
         }'));
-        final result = sortObject(Json.parse(diff.toString()));
+        final result = Helper.sortObject(Json.parse(diff.toString()));
         Assert.areEqual(Json.stringify(expected), Json.stringify(result));
     }
 
@@ -305,7 +305,7 @@ class DiffTest {
             }
         };
         final diff = new Diff(first, second);
-        final expected = sortObject({
+        final expected = Helper.sortObject({
             a: {},
             d: {},
             c: {
@@ -330,7 +330,7 @@ class DiffTest {
                 }
             }
         });
-        final result = sortObject(Json.parse(diff.toString()));
+        final result = Helper.sortObject(Json.parse(diff.toString()));
         Assert.areEqual(Json.stringify(expected), Json.stringify(result));
     }
 
@@ -375,8 +375,8 @@ class DiffTest {
         final a = {x: {y: 'Hello'}};
         final b = {x: {y: 'Hello', z: 'World'}};
         final diff = new Diff(a, b);
-        final expected = sortObject(b);
-        final result = sortObject(diff.apply(a));
+        final expected = Helper.sortObject(b);
+        final result = Helper.sortObject(diff.apply(a));
         Assert.areEqual(Std.string(expected), Std.string(result));
     }
 
@@ -386,8 +386,8 @@ class DiffTest {
         final a = {x: {y: 'Hello', z: 'Hi', w: 'Other'}};
         final b = {x: {y: 'World', z: 'He', w: 'Other'}};
         final diff = new Diff(a, b);
-        final expected = sortObject(b);
-        final result = sortObject(diff.apply(a));
+        final expected = Helper.sortObject(b);
+        final result = Helper.sortObject(diff.apply(a));
         Assert.areEqual(Std.string(expected), Std.string(result));
     }
 
@@ -465,8 +465,8 @@ class DiffTest {
             }
         };
         final diff = new Diff(first, second);
-        final expected = Std.string(sortObject(second));
-        final result = Std.string(sortObject(diff.apply(first)));
+        final expected = Std.string(Helper.sortObject(second));
+        final result = Std.string(Helper.sortObject(diff.apply(first)));
         Assert.areEqual(expected, result);
     }
 
@@ -520,8 +520,8 @@ class DiffTest {
         final a = {x: {y: 'Hello', z: 'Hi', w: 'Other'}};
         final b = {x: {y: 'World', z: 'He', w: 'Other'}};
         final diff = new Diff(a, b);
-        final expected = sortObject(a);
-        final result = sortObject(diff.swap().apply(b));
+        final expected = Helper.sortObject(a);
+        final result = Helper.sortObject(diff.swap().apply(b));
         Assert.areEqual(Std.string(expected), Std.string(result));
     }
 
@@ -599,8 +599,8 @@ class DiffTest {
             },
         };
         final diff = new Diff(first, second);
-        final expected = Std.string(sortObject(first));
-        final result = Std.string(sortObject(diff.swap().apply(second)));
+        final expected = Std.string(Helper.sortObject(first));
+        final result = Std.string(Helper.sortObject(diff.swap().apply(second)));
         Assert.areEqual(expected, result);
     }
 
@@ -764,14 +764,14 @@ class DiffTest {
             }
         };
         final diff = new Diff(first, second);
-        final expected = sortObject({
+        final expected = Helper.sortObject({
             title: 'Hellooo',
             stargazers: ['/users/40'],
             settings: {
                 assignees: [null, null, 202]
             }
         });
-        final result = sortObject(diff.apply({}));
+        final result = Helper.sortObject(diff.apply({}));
         Assert.areEqual(Json.stringify(expected), Json.stringify(result));
     }
 
@@ -806,17 +806,5 @@ class DiffTest {
             new Diff(a, b);
             Assert.fail('We should not get here');
         } catch (ex: Dynamic) {}
-    }
-
-
-    @Test
-    private static function sortObject(obj: Dynamic): Dynamic {
-        final sortedObj = {};
-        final sortedFields = Reflect.fields(obj);
-        sortedFields.sort((a, b) -> (a == b) ? 0 : (a > b) ? 1 : -1);
-        for (field in sortedFields) {
-            Reflect.setField(sortedObj, field, Reflect.field(obj, field));
-        }
-        return sortedObj;
     }
 }
