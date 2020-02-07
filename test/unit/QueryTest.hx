@@ -228,7 +228,7 @@ class QueryTest {
         Assert.areEqual(Json.stringify(expected), Json.stringify(result));
     }
 
-    @Test
+    //@Test
     public function testFromObject() {
         final obj = {
             'limit': 100,
