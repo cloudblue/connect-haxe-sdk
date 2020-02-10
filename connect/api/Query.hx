@@ -5,6 +5,7 @@
 package connect.api;
 
 import haxe.ds.StringMap;
+import haxe.Json;
 
 
 class Query extends Base {
@@ -302,6 +303,123 @@ class Query extends Base {
     }
 
 
+    /**
+     * Returns a dynamic object with the fields of the Query.
+     * @return Dynamic
+     */
+    public function toObject(): Dynamic {
+        final obj = {
+            "in": stringMapToObject(this.in__),
+            "out": stringMapToObject(this.out_),
+            "limit": this.limit_,
+            "orderBy": this.orderBy_,
+            "offset": this.offset_,
+            "ordering": this.ordering_,
+            "like": stringMapToObject(this.like_),
+            "ilike": stringMapToObject(this.ilike_),
+            "select": this.select_,
+            "relOps": stringMapToObject(this.relOps),
+        };
+        final keys = Reflect.fields(obj).filter(function(field) {
+            final value = Reflect.field(obj, field);
+            switch (Type.typeof(value)) {
+                case TNull:
+                    return false;
+                case TObject:
+                    return Reflect.fields(value).length > 0;
+                default:
+                    return true;
+            }
+            return true;
+        });
+        final out = {};
+        for (i in 0...keys.length) {
+            Reflect.setField(out, keys[i], Reflect.field(obj, keys[i]));
+        }
+        return out;
+    }
+
+
+    /**
+     * Returns a Json representation of the Query.
+     * @return String
+     */
+    public function toJson(): String {
+        return Json.stringify(this.toObject());
+    }
+
+
+    public static function fromObject(obj: Dynamic): Query {
+        final select = Reflect.field(obj, 'select');
+        final like = Reflect.field(obj, 'like');
+        final ilike = Reflect.field(obj, 'ilike');
+        final in_ = Reflect.field(obj, 'in');
+        final out = Reflect.field(obj, 'out');
+        final relOps = Reflect.field(obj, 'relOps');
+        final ordering = Reflect.field(obj, 'ordering');
+        final limit = Reflect.field(obj, 'limit');
+        final orderBy = Reflect.field(obj, 'orderBy');
+        final offset = Reflect.field(obj, 'offset');
+
+        final rql = new Query();
+
+        if (select != null) {
+            rql.select_ = select;
+        }
+
+        if (like != null) {
+            final fields = Reflect.fields(like);
+            Lambda.iter(fields, field -> rql.like_.set(field, Reflect.field(like, field)));
+        }
+
+        if (ilike != null) {
+            final fields = Reflect.fields(ilike);
+            Lambda.iter(fields, field -> rql.ilike_.set(field, Reflect.field(ilike, field)));
+        }
+
+        if (in_ != null) {
+            final fields = Reflect.fields(in_);
+            Lambda.iter(fields, field -> rql.in__.set(field, Reflect.field(in_, field)));
+        }
+
+        if (out != null) {
+            final fields = Reflect.fields(out);
+            Lambda.iter(fields, field -> rql.out_.set(field, Reflect.field(out, field)));
+        }
+
+        if (relOps != null) {
+            final fields = Reflect.fields(relOps);
+            Lambda.iter(fields, function(field) {
+                final array: Array<Dynamic> = Reflect.field(relOps, field);
+                rql.relOps.set(field, array.map(kv -> new KeyValue(kv.key, kv.value)));
+            });
+        }
+
+        if (ordering != null) {
+            rql.ordering_ = ordering;
+        }
+
+        if (limit != null) {
+            rql.limit_ = limit;
+        }
+
+        if (orderBy != null) {
+            rql.orderBy_ = orderBy;
+        }
+
+        if (offset != null) {
+            rql.offset_ = offset;
+        }
+
+        return rql;
+    }
+
+
+    public static function fromJson(json: String): Query {
+        return fromObject(Json.parse(json));
+    }
+
+
     private var in__: StringMap<Array<String>>;
     private var out_: StringMap<Array<String>>;
     private var limit_: Null<Int>;
@@ -321,6 +439,31 @@ class Query extends Base {
         this.relOps.get(op).push(new KeyValue(property, value));
         return this;
     }
+
+
+    private static function stringMapToObject(map: StringMap<Dynamic>): Dynamic {
+        final obj = {};
+        final fields = [for (k in map.keys()) k];
+        Lambda.iter(fields, f -> Reflect.setField(obj, f, valueToObject(map.get(f))));
+        return obj;
+    }
+
+
+    private static function valueToObject(value: Dynamic): Dynamic {
+        switch (Type.typeof(value)) {
+            case TClass(Array):
+                return arrayToObject(value);
+            case TClass(KeyValue):
+                return value.toObject();
+            default:
+                return value;
+        }
+    }
+
+
+    private static function arrayToObject(arr:Array<Dynamic>): Array<Dynamic> {
+        return Lambda.map(arr, elem -> valueToObject(elem));
+    }
 }
 
 
@@ -332,5 +475,13 @@ private class KeyValue {
     public function new(key: String, value: String) {
         this.key = key;
         this.value = value;
+    }
+
+
+    public function toObject(): Dynamic {
+        return {
+            'key': this.key,
+            'value': this.value
+        };
     }
 }
