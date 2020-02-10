@@ -7,16 +7,15 @@
 import os
 
 
-def remove_origin() -> None:
-    run(['git', 'remote', 'rm', 'origin'])
+def remove_origin() -> str:
+    return run(['git', 'remote', 'rm', 'origin'])
 
 
-def add_origin(token: str) -> None:
-    run([
+def add_origin(token: str) -> str:
+    return run([
         'git', 'remote', 'add', 'origin',
         'https://cloudblue:{}@github.com/cloudblue/connect-haxe-sdk.git'.format(token)
     ])
-    pass
 
 
 def get_tags() -> list:
@@ -24,9 +23,10 @@ def get_tags() -> list:
     return list(filter(lambda x: x != '', result))
 
 
-def push_tag(tag: str) -> None:
-    run(['git', 'tag', tag])
-    run(['git', 'push', 'origin', tag])
+def push_tag(tag: str) -> str:
+    result = run(['git', 'tag', tag]) + '\n'
+    result += run(['git', 'push', 'origin', tag])
+    return result
 
 
 def run(args: list) -> str:
@@ -35,10 +35,10 @@ def run(args: list) -> str:
 
 
 if __name__ == '__main__':
-    print('*** ' + os.environ('TRAVIS_BRANCH'))
-    if os.environ('TRAVIS_BRANCH') == 'master':
-        remove_origin()
-        add_origin(os.environ('doc_token'))
+    print('*** ' + os.environ['TRAVIS_BRANCH'])
+    if os.environ['TRAVIS_BRANCH'] == 'master':
+        print(remove_origin())
+        print(add_origin(os.environ['doc_token']))
         tags = get_tags()
         with open('VERSION') as f:
             version = 'v' + f.read().strip()
