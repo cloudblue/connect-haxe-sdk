@@ -48,6 +48,8 @@ deploy:
     branch: master
 
 after_deploy:
+# Push Java code
+  - "./stuff/java_push.sh"
 # Deploy to NuGet Gallery
   - echo "*** Deploying to NuGet Gallery..."
   - sudo apt install nuget -y
@@ -74,9 +76,5 @@ after_deploy:
   - cd ../..
 
 after_script:
-# Push Java code
-  - "./stuff/java_push.sh"
-# Push repository tag
-  - git remote rm origin
-  - git remote add origin https://cloudblue:${doc_token}@github.com/cloudblue/connect-haxe-sdk.git
+# Push repository tag when in master branch
   - python3 stuff/push_tag.py
