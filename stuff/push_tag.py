@@ -35,7 +35,6 @@ def run(args: list) -> str:
 
 
 if __name__ == '__main__':
-    print('*** ' + os.environ['TRAVIS_BRANCH'])
     if os.environ['TRAVIS_BRANCH'] == 'master':
         print(remove_origin())
         print(add_origin(os.environ['doc_token']))
@@ -43,4 +42,10 @@ if __name__ == '__main__':
         with open('VERSION') as f:
             version = 'v' + f.read().strip()
         if version not in tags:
-            push_tag(version)
+            print(push_tag(version))
+        else:
+            print('Tag is not being pushed because it already exists.')
+    else:
+        print('Tag is not being pushed because this commit has been pushed to '
+            + os.environ['TRAVIS_BRANCH']
+            + ' branch instead of master.')
