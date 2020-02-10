@@ -77,8 +77,4 @@ after_deploy:
 
 after_script:
 # Push repository tag when in master branch
-  # on:
-  #  branch: master
-  - git remote rm origin
-  - git remote add origin https://cloudblue:${doc_token}@github.com/cloudblue/connect-haxe-sdk.git
   - python3 stuff/push_tag.py
