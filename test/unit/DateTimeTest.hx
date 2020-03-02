@@ -46,4 +46,66 @@ class DateTimeTest {
         final dt = DateTime.fromString('Invalid');
         Assert.isNull(dt);
     }
+
+
+    @Test
+    public function testCompareWithEarlier() {
+        final earlier = DateTime.fromString('2000-01-01T00:00:00');
+        final now = DateTime.now();
+        Assert.isTrue(now.compare(earlier) > 0);
+    }
+
+
+    @Test
+    public function testCompareWithNow() {
+        final earlier = DateTime.fromString('2000-01-01T00:00:00');
+        final now = DateTime.now();
+        Assert.isTrue(earlier.compare(now) < 0);
+    }
+
+
+    @Test
+    public function testCompareWithSame() {
+        final now = DateTime.now();
+        Assert.areEqual(0, now.compare(now));
+    }
+
+
+    @Test
+    public function testCompareWithEqual() {
+        final now = DateTime.now();
+        final other = DateTime.now();
+        Assert.areEqual(0, now.compare(other));
+    }
+
+    
+    @Test
+    public function testEqualsWithEarlier() {
+        final earlier = DateTime.fromString('2000-01-01T00:00:00');
+        final now = DateTime.now();
+        Assert.isFalse(now.equals(earlier));
+    }
+
+
+    @Test
+    public function testEqualsWithNow() {
+        final earlier = DateTime.fromString('2000-01-01T00:00:00');
+        final now = DateTime.now();
+        Assert.isFalse(earlier.equals(now));
+    }
+
+
+    @Test
+    public function testEqualsWithSame() {
+        final now = DateTime.now();
+        Assert.isTrue(now.equals(now));
+    }
+
+
+    @Test
+    public function testEqualsWithEqual() {
+        final now = DateTime.now();
+        final other = DateTime.now();
+        Assert.isTrue(now.equals(other));
+    }
 }
