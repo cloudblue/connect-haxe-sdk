@@ -141,6 +141,34 @@ class DateTime {
     }
 
 
+    /**
+     * Compares `this` DateTime with the given one, and returns the difference
+     * between both dates in seconds. A positive value means the `this` represents
+     * a later date, while a negative value means that `this` is an early date.
+     * If the function returns 0, it means both objects represent the same date with
+     * precision of seconds.
+     * @param other The `DateTime` we want to compare `this` to.
+     * @return Int 
+     */
+    public function compare(other: DateTime): Int {
+        final thisDate = new Date(year, month, day, hours, minutes, seconds);
+        final otherDate = new Date(other.year, other.month, other.day,
+            other.hours, other.minutes, other.seconds);
+        return Std.int(thisDate.getTime()/1000) - Std.int(otherDate.getTime()/1000);
+    }
+
+
+    /**
+     * Indicates if the date in `this` is equal to the one in `other`. It is the same as doing
+     * `this.compare(other) == 0`.
+     * @param other The `DateTime` we want to compare `this` to.
+     * @return Bool
+     */
+    public function equals(other: DateTime): Bool {
+        return this.compare(other) == 0;
+    }
+
+
     private final year: Int;
     private final month: Int;
     private final day: Int;
