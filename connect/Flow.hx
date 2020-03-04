@@ -356,12 +356,12 @@ class Flow extends Base {
                     steps,
                     function(step, prev) {
                         if (prev != null) {
-                            return processStep(step, stepData.firstIndex + prev.nextIndex, prev.lastRequestStr, prev.lastDataStr);
+                            return processStep(step, prev.nextIndex, prev.lastRequestStr, prev.lastDataStr);
                         } else {
                             return null;
                         }
                     },
-                    {nextIndex: 0, lastRequestStr: '', lastDataStr: '{}'});
+                    {nextIndex: stepData.firstIndex, lastRequestStr: '', lastDataStr: '{}'});
             }
             Env.getLogger().closeSection();
         }
