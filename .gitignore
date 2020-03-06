@@ -3,9 +3,9 @@
 _build
 _report
 doc
-log.md
 *.gpg
 *.asc
+examples/log
 stuff/.classpath
 stuff/.project
 stuff/.settings

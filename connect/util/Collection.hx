@@ -139,6 +139,14 @@ class Collection<T> extends Base {
 #end
 
 
+#if python
+    private function __iter__(): Dynamic {
+        final list: Dynamic = this._array;
+        return list.__iter__();
+    }
+#end
+
+
     /**
         Returns a string representation of `this` Collection, with `sep` separating
         each element.
