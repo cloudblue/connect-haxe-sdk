@@ -6,9 +6,10 @@ package connect;
 
 import connect.api.IApiClient;
 import connect.api.IFulfillmentApi;
-import connect.api.IUsageApi;
-import connect.api.ITierApi;
 import connect.api.IGeneralApi;
+import connect.api.IMarketplaceApi;
+import connect.api.ITierApi;
+import connect.api.IUsageApi;
 import connect.logger.Logger;
 import connect.logger.LoggerConfig;
 import connect.util.Collection;
@@ -17,9 +18,10 @@ import connect.util.Dictionary;
 // Need to make sure that these get compiled
 import connect.api.impl.ApiClientImpl;
 import connect.api.impl.FulfillmentApiImpl;
-import connect.api.impl.UsageApiImpl;
-import connect.api.impl.TierApiImpl;
 import connect.api.impl.GeneralApiImpl;
+import connect.api.impl.MarketplaceApiImpl;
+import connect.api.impl.TierApiImpl;
+import connect.api.impl.UsageApiImpl;
 
 
 /**
@@ -161,7 +163,7 @@ class Env extends Base {
         @returns The API Client, used to make all low level Http requests to the platform.
         @throws String If a class implementing the IApiClient interface cannot be instanced.
     **/
-    public static function getApiClient() : IApiClient {
+    public static function getApiClient(): IApiClient {
         if (apiClient == null) {
             apiClient = createInstance('IApiClient');
         }
@@ -175,7 +177,7 @@ class Env extends Base {
         @throws String If a class implementing the IFulfillmentApi interface cannot be instanced.
     **/
     @:dox(hide)
-    public static function getFulfillmentApi() : IFulfillmentApi {
+    public static function getFulfillmentApi(): IFulfillmentApi {
         if (fulfillmentApi == null) {
             fulfillmentApi = createInstance('IFulfillmentApi');
         }
@@ -188,7 +190,7 @@ class Env extends Base {
         @throws String If a class implementing the IUsageApi interface cannot be instanced.
     **/
     @:dox(hide)
-    public static function getUsageApi() : IUsageApi {
+    public static function getUsageApi(): IUsageApi {
         if (usageApi == null) {
             usageApi = createInstance('IUsageApi');
         }
@@ -201,7 +203,7 @@ class Env extends Base {
         @throws String If a class implementing the ITierApi interface cannot be instanced.
     **/
     @:dox(hide)
-    public static function getTierApi() : ITierApi {
+    public static function getTierApi(): ITierApi {
         if (tierApi == null) {
             tierApi = createInstance('ITierApi');
         }
@@ -214,11 +216,20 @@ class Env extends Base {
         @throws String If a class implementing the IGeneralApi interface cannot be instanced.
     **/
     @:dox(hide)
-    public static function getGeneralApi() : IGeneralApi {
+    public static function getGeneralApi(): IGeneralApi {
         if (generalApi == null) {
             generalApi = createInstance('IGeneralApi');
         }
         return generalApi;
+    }
+
+
+    @:dox(hide)
+    public static function getMarketplaceApi(): IMarketplaceApi {
+        if (marketplaceApi == null) {
+            marketplaceApi = createInstance('IMarketplaceApi');
+        }
+        return marketplaceApi;
     }
 
 
@@ -231,6 +242,7 @@ class Env extends Base {
         usageApi = null;
         tierApi = null;
         generalApi = null;
+        marketplaceApi = null;
         dependencies = null;
         init(deps);
     }
@@ -243,6 +255,7 @@ class Env extends Base {
     private static var usageApi: IUsageApi;
     private static var tierApi: ITierApi;
     private static var generalApi: IGeneralApi;
+    private static var marketplaceApi: IMarketplaceApi;
     private static var defaultDependencies : Dictionary;
     private static var dependencies: Dictionary;
 
@@ -270,7 +283,8 @@ class Env extends Base {
                 .setString('IFulfillmentApi', 'connect.api.impl.FulfillmentApiImpl')
                 .setString('IUsageApi', 'connect.api.impl.UsageApiImpl')
                 .setString('ITierApi', 'connect.api.impl.TierApiImpl')
-                .setString('IGeneralApi', 'connect.api.impl.GeneralApiImpl');
+                .setString('IGeneralApi', 'connect.api.impl.GeneralApiImpl')
+                .setString('IMarketplaceApi', 'connect.api.impl.MarketplaceApiImpl');
         }
     }
 
