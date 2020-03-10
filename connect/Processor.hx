@@ -111,7 +111,7 @@ class Processor extends Base {
 
 
     private function run<T>(modelClass: Class<T>, filters: Query): Void {
-        // On some targets, a string is received as modelClass, so obtain the real class from it
+        // On some platforms, a string is received as modelClass, so obtain the real class from it
         switch (Type.typeof(modelClass)) {
             case TClass(String):
                 modelClass = untyped Type.resolveClass(cast(modelClass, String));
