@@ -183,7 +183,7 @@ class AgreementTest {
         Assert.areEqual(1, apiMock.callCount('getAgreementVersion'));
         Assert.areEqual(
             Std.string(['AGP-884-348-731', 3]),
-            apiMock.callArgs('getAgreementVersion', 0).toString());
+            Std.string(apiMock.callArgs('getAgreementVersion', 0)));
     }
 
 
@@ -197,7 +197,7 @@ class AgreementTest {
         Assert.areEqual(1, apiMock.callCount('removeAgreementVersion'));
         Assert.areEqual(
             Std.string(['AGP-884-348-731', 2]),
-            apiMock.callArgs('removeAgreementVersion', 0).toString());
+            Std.string(apiMock.callArgs('removeAgreementVersion', 0)));
     }
 
 
@@ -229,6 +229,6 @@ class AgreementTest {
         Assert.areEqual(1, apiMock.callCount('createAgreementSubAgreement'));
         Assert.areEqual(
             Std.string(['AGP-884-348-731', new Agreement()]),
-            apiMock.callArgs('createAgreementSubAgreement', 0).toString());
+            Std.string(apiMock.callArgs('createAgreementSubAgreement', 0)));
     }
 }
