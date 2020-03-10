@@ -9,6 +9,9 @@ import connect.util.Collection;
 import connect.util.DateTime;
 
 
+/**
+ * A Listing represents the the actual publishing procedure in the Connect platform.
+ */
 class Listing extends IdModel {
     /** Status of the listing. One of: listed, unlisted. **/
     public var status: String;
