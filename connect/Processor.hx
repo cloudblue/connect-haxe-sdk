@@ -7,6 +7,7 @@ package connect;
 import connect.api.Query;
 import connect.logger.Logger;
 import connect.models.AssetRequest;
+import connect.models.Listing;
 import connect.models.TierConfigRequest;
 import connect.models.UsageFile;
 import connect.util.DateTime;
@@ -67,6 +68,18 @@ class Processor extends Base {
     **/
     public function processAssetRequests(filters: Query): Void {
         run(AssetRequest, filters);
+    }
+
+
+    /**
+        Processes all `Listing` objects that match the given filters,
+        executing in sequence all the flows defined for them.
+
+        @param filters Filters to be used for listing requests. It can contain
+        any of the filters specified for the `Listing.list` method.
+    **/
+    public function processListings(filters: Query): Void {
+        run(Listing, filters);
     }
 
 
