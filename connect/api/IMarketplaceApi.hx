@@ -43,6 +43,7 @@ interface IMarketplaceApi {
     public function listListings(filters: Query): String;
     public function getListing(id: String): String;
     public function putListing(id: String, body: String): String;
+
     public function listListingRequests(filters: Query): String;
     public function getListingRequest(id: String): String;
     public function createListingRequest(body: String): String;

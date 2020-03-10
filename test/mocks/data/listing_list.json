@@ -2,7 +2,9 @@
   {
     "id": "LST-212-458-762",
     "status": "unlisted",
-    "contract": "CRD-93991-27147-93443",
+    "contract": {
+      "id": "CRD-93991-27147-93443"
+    },
     "product": {
       "id": "CN-436-803-738",
       "name": "Sample App"

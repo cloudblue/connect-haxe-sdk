@@ -138,7 +138,7 @@ class Agreement extends IdModel {
 
 
     /**
-        Updates the agreement in the server with the data changed in `this` model.
+        Updates the agreement in Connect platform with the data changed in `this` model.
 
         @returns The Agreement returned from the server, which should contain
         the same data as `this` Agreement.
