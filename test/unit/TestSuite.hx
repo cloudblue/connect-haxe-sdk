@@ -9,6 +9,7 @@ import ConfigurationTest;
 import AccountTest;
 import TierConfigRequestTest;
 import DiffTest;
+import AgreementTest;
 import AssetRequestTest;
 import UsageFileTest;
 import TierConfigTest;
@@ -38,6 +39,7 @@ class TestSuite extends massive.munit.TestSuite
 		add(AccountTest);
 		add(TierConfigRequestTest);
 		add(DiffTest);
+		add(AgreementTest);
 		add(AssetRequestTest);
 		add(UsageFileTest);
 		add(TierConfigTest);

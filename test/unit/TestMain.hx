@@ -11,6 +11,7 @@ import mcover.coverage.MCoverage;
 import test.mocks.ApiClientMock;
 import test.mocks.FulfillmentApiMock;
 import test.mocks.GeneralApiMock;
+import test.mocks.MarketplaceApiMock;
 import test.mocks.TierApiMock;
 import test.mocks.UsageApiMock;
 
