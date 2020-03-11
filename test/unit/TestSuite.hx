@@ -14,6 +14,7 @@ import AssetRequestTest;
 import UsageFileTest;
 import TierConfigTest;
 import ConversationTest;
+import ListingRequestTest;
 import ConfigTest;
 import ListingTest;
 import ModelTest;
@@ -45,6 +46,7 @@ class TestSuite extends massive.munit.TestSuite
 		add(UsageFileTest);
 		add(TierConfigTest);
 		add(ConversationTest);
+		add(ListingRequestTest);
 		add(ConfigTest);
 		add(ListingTest);
 		add(ModelTest);

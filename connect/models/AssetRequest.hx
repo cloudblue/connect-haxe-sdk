@@ -261,7 +261,7 @@ class AssetRequest extends IdModel {
 
 
     /**
-        Assigns this request to the assignee with the given `assigneeId`.
+        Assigns `this` request to the assignee with the given `assigneeId`.
 
         @returns The AssetRequest returned from the server, which should contain
         the updated assignee.

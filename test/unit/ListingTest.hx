@@ -66,8 +66,8 @@ class ListingTest {
     @Test
     public function testGetKo() {
         // Check subject
-        final agreement = Listing.get('LST-XXX-XXX-XXX');
-        Assert.isNull(agreement);
+        final listing = Listing.get('LST-XXX-XXX-XXX');
+        Assert.isNull(listing);
 
         // Check mocks
         final apiMock = cast(Env.getMarketplaceApi(), Mock);

@@ -82,8 +82,8 @@ class Listing extends IdModel {
     /** @returns The Listing with the given id, or `null` if it was not found. **/
     public static function get(id: String): Listing {
         try {
-            final agreement = Env.getMarketplaceApi().getListing(id);
-            return Model.parse(Listing, agreement);
+            final listing = Env.getMarketplaceApi().getListing(id);
+            return Model.parse(Listing, listing);
         } catch (ex: Dynamic) {
             return null;
         }

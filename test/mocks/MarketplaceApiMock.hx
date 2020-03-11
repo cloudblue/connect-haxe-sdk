@@ -164,8 +164,8 @@ class MarketplaceApiMock extends Mock implements IMarketplaceApi {
     }
 
 
-    public function changeListingRequestToCancelled(id: String): Void {
-        this.calledFunction('changeListingRequestToCancelled', [id]);
+    public function changeListingRequestToCanceled(id: String): Void {
+        this.calledFunction('changeListingRequestToCanceled', [id]);
     }
 
 

@@ -124,7 +124,7 @@ class MarketplaceApiImpl implements IMarketplaceApi {
     }
 
 
-    public function changeListingRequestToCancelled(id: String): Void {
+    public function changeListingRequestToCanceled(id: String): Void {
         ConnectHelper.post(LISTINGREQUESTS_PATH, id, 'cancel');
     }
 

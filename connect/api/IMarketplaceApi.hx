@@ -52,7 +52,7 @@ interface IMarketplaceApi {
     public function changeListingRequestToDraft(id: String): Void;
     public function changeListingRequestToDeploying(id: String): Void;
     public function changeListingRequestToCompleted(id: String): Void;
-    public function changeListingRequestToCancelled(id: String): Void;
+    public function changeListingRequestToCanceled(id: String): Void;
     public function changeListingRequestToReviewing(id: String): Void;
 
     public function listMarketplaces(filters: Query): String;
