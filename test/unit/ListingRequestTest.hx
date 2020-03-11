@@ -5,7 +5,6 @@
 import connect.Env;
 import connect.models.Listing;
 import connect.models.ListingRequest;
-import connect.models.Product;
 import connect.util.Collection;
 import connect.util.DateTime;
 import connect.util.Dictionary;

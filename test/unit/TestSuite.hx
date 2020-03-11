@@ -1,5 +1,6 @@
 import massive.munit.TestSuite;
 
+import MarketplaceTest;
 import TierAccountTest;
 import AssetTest;
 import MarkdownLoggerFormatterTest;
@@ -32,6 +33,7 @@ class TestSuite extends massive.munit.TestSuite
 	{
 		super();
 
+		add(MarketplaceTest);
 		add(TierAccountTest);
 		add(AssetTest);
 		add(MarkdownLoggerFormatterTest);

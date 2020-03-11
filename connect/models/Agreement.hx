@@ -152,7 +152,7 @@ class Agreement extends IdModel {
 
 
     /**
-     * Removes `this` agreement on Connect.
+     * Removes `this` agreement from Connect.
      */
     public function remove(): Void {
         Env.getMarketplaceApi().removeAgreement(this.id);
