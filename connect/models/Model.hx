@@ -123,7 +123,7 @@ class Model extends Base {
                             ? Inflection.toSingular('connect.models.' + camelField)
                             : fieldClassName;
                         final classObj = Type.resolveClass(className);
-                        Reflect.setProperty(model, field, _parseArray(classObj, val));
+                        Reflect.setField(model, field, _parseArray(classObj, val));
                     case TObject:
                         final fieldClassName = model.getFieldClassName(field);
                         final className = (fieldClassName == null)
@@ -132,9 +132,9 @@ class Model extends Base {
                         final classObj = Type.resolveClass(className);
                         if (classObj != null) {
                             if (className != 'String') {
-                                Reflect.setProperty(model, field, _parse(classObj, val));
+                                Reflect.setField(model, field, _parse(classObj, val));
                             } else {
-                                Reflect.setProperty(model, field, Json.stringify(val));
+                                Reflect.setField(model, field, Json.stringify(val));
                             }
                         } else {
                             throw 'Cannot find class "$className"';
@@ -142,10 +142,10 @@ class Model extends Base {
                     default:
                         final fieldClassName = model.getFieldClassName(field);
                         if (fieldClassName == 'DateTime') {
-                            Reflect.setProperty(model, field, DateTime.fromString(val));
+                            Reflect.setField(model, field, DateTime.fromString(val));
                         } else {
                             try {
-                                Reflect.setProperty(model, field, val);
+                                Reflect.setField(model, field, val);
                             } catch (ex: Dynamic) {
                                 // It will fail if we are trying to set a protected property
                                 // (like __getattr__ or __setattr__ on Python)
