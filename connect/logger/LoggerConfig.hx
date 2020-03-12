@@ -13,7 +13,12 @@ import connect.util.Collection;
  */
 class LoggerConfig extends Base {
     /**
-     * Sets the path where logs will be stored. Default is "logs".
+     * Sets the path where logs will be stored. Default is "logs". When using a `Processor`
+     * to process requests, the `Flow`s in the processor will use `Logger.setFilename` to switch
+     * to the correct filename based on the id of the element being processed. When not using
+     * the `Processor` at all, remember to call `Logger.setFilename` after initializing the Log
+     * or log messages will only be printed to the standard output (usually, the terminal).
+     * 
      * @param path Path for logs.
      * @return `this` instance to support a fluent interface.
      */
