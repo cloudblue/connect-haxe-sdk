@@ -1,0 +1,73 @@
+[
+    {
+        "id": "MP-12345",
+        "name": "France and territories",
+        "description": "Use the marketplace to distribute services in France and it's territories.",
+        "active_contracts": 34,
+        "icon": "/media/PA-123-123/marketplaces/MP-12345/image.png",
+        "owner": {
+            "id": "PA-123-123",
+            "name": "Awesome Provider"
+        },
+        "hubs": [
+            {
+                "hub": {
+                    "id": "HB-1234-1234",
+                    "name": "Staging OA 7.4"
+                },
+                "external_id": "20190101"
+            },
+            {
+                "hub": {
+                    "id": "HB-4321-4321",
+                    "name": "Staging OA 7.3"
+                },
+                "external_id": "70190121"
+            }
+        ],
+        "countries": [
+            {
+                "id": "IN",
+                "name": "India",
+                "icon": "/media/countries/india.png",
+                "zone": "Asia"
+            }
+        ]
+    }, 
+    {
+        "id": "MP-54321",
+        "name": "US and Canada",
+        "description": "Hubs located in US DCs.",
+        "active_contracts": 128,
+        "icon": "/media/PA-123-123/marketplaces/MP-54321/image.png",
+        "owner": {
+            "id": "PA-123-123",
+            "name": "Awesome Provider"
+        },
+        "hubs": [
+            {
+                "hub": {
+                    "id": "HB-1222-2222",
+                    "name": "Seattle DC"
+                },
+                "external_id": "20190101"
+            },
+            {
+                "hub": {
+                    "id": "HB-4321-4321",
+                    "name": "New York DC"
+                },
+                "external_id": "70190121"
+            }
+        ],
+        "countries": [
+            {
+                "id": "IN",
+                "name": "India",
+                "icon": "/media/countries/india.png",
+                "zone": "Asia"
+            }
+        ],
+        "sourcing": true
+    }
+]

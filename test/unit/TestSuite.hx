@@ -1,5 +1,6 @@
 import massive.munit.TestSuite;
 
+import MarketplaceTest;
 import TierAccountTest;
 import AssetTest;
 import MarkdownLoggerFormatterTest;
@@ -9,11 +10,14 @@ import ConfigurationTest;
 import AccountTest;
 import TierConfigRequestTest;
 import DiffTest;
+import AgreementTest;
 import AssetRequestTest;
 import UsageFileTest;
 import TierConfigTest;
 import ConversationTest;
+import ListingRequestTest;
 import ConfigTest;
+import ListingTest;
 import ModelTest;
 import QueryTest;
 import ProductTest;
@@ -29,6 +33,7 @@ class TestSuite extends massive.munit.TestSuite
 	{
 		super();
 
+		add(MarketplaceTest);
 		add(TierAccountTest);
 		add(AssetTest);
 		add(MarkdownLoggerFormatterTest);
@@ -38,11 +43,14 @@ class TestSuite extends massive.munit.TestSuite
 		add(AccountTest);
 		add(TierConfigRequestTest);
 		add(DiffTest);
+		add(AgreementTest);
 		add(AssetRequestTest);
 		add(UsageFileTest);
 		add(TierConfigTest);
 		add(ConversationTest);
+		add(ListingRequestTest);
 		add(ConfigTest);
+		add(ListingTest);
 		add(ModelTest);
 		add(QueryTest);
 		add(ProductTest);

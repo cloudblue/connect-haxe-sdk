@@ -4,6 +4,7 @@
 */
 package connect.models;
 
+import connect.api.Query;
 import connect.util.Collection;
 import connect.util.DateTime;
 
@@ -94,5 +95,137 @@ class Agreement extends IdModel {
             'versionCreated' => 'DateTime',
             'parent' => 'Agreement'
         ]);
+    }
+
+
+    /**
+        Lists all agreements that match the given filters. Supported filters are:
+
+        - type
+        - owner__id
+
+        @returns A Collection of Agreements.
+    **/
+    public static function list(filters: Query): Collection<Agreement> {
+        final agreements = Env.getMarketplaceApi().listAgreements(filters);
+        return Model.parseArray(Agreement, agreements);
+    }
+
+
+    /** @returns The Agreement with the given id, or `null` if it was not found. **/
+    public static function get(id: String): Agreement {
+        try {
+            final agreement = Env.getMarketplaceApi().getAgreement(id);
+            return Model.parse(Agreement, agreement);
+        } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+
+    /**
+     * Registers a new Agreement on Connect, based on the data of `this` Agreement.
+     * @return The new Agreement, or `null` if it couldn't be created
+     */
+    public function register(): Agreement {
+        try {
+            final agreement = Env.getMarketplaceApi().createAgreement(this.toString());
+            return Model.parse(Agreement, agreement);
+        } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+
+    /**
+        Updates the agreement in Connect platform with the data changed in `this` model.
+
+        @returns The Agreement returned from the server, which should contain
+        the same data as `this` Agreement.
+    **/
+    public function update(): Agreement {
+        final agreement = Env.getMarketplaceApi().updateAgreement(
+            this.id,
+            this.toString());
+        return Model.parse(Agreement, agreement);
+    }
+
+
+    /**
+     * Removes `this` agreement from Connect.
+     */
+    public function remove(): Void {
+        Env.getMarketplaceApi().removeAgreement(this.id);
+    }
+
+
+    /**
+        Lists all versions for `this` Agreement.
+
+        @returns A Collection of Agreements.
+    **/
+    public function listVersions(): Collection<Agreement> {
+        final versions = Env.getMarketplaceApi().listAgreementVersions(this.id);
+        return Model.parseArray(Agreement, versions);
+    }
+
+
+    /**
+     * Registers a new version on Connect, based on the data of `this` Agreement.
+     * @return The new version, or `null` if it couldn't be registered
+     */
+    public function registerVersion(): Agreement {
+        try {
+            final version = Env.getMarketplaceApi().newAgreementVersion(this.id, this.toString());
+            return Model.parse(Agreement, version);
+        } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+
+    /**
+     * @return Agreement Returns the specified version for `this` Agreement, or `null` if it was not found.
+     */
+    public function getVersion(version: Int): Agreement {
+        try {
+            final version = Env.getMarketplaceApi().getAgreementVersion(this.id, Std.string(version));
+            return Model.parse(Agreement, version);
+        } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+
+    /**
+     * Removes the specified version from `this` agreement on Connect.
+     * @param version The version to remove.
+     */
+    public function removeVersion(version: Int): Void {
+        Env.getMarketplaceApi().removeAgreementVersion(this.id, Std.string(version));
+    }
+
+
+    /**
+     * Lists all sub agreements linked to `this` Agreement.
+     * @return Collection<Agreement>
+     */
+    public function listSubAgreements(): Collection<Agreement> {
+        final agreements = Env.getMarketplaceApi().listAgreementSubAgreements(this.id);
+        return Model.parseArray(Agreement, agreements);
+    }
+
+
+    /**
+     * Registers a new Agreement on Connect and links it to `this` Agreement.
+     * @return The new Agreement, or `null` if it couldn't be created
+     */
+    public function registerSubAgreement(agreement: Agreement): Agreement {
+        try {
+            final agreement = Env.getMarketplaceApi().createAgreementSubAgreement(this.id, agreement.toString());
+            return Model.parse(Agreement, agreement);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 }

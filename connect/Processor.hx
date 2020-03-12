@@ -7,6 +7,7 @@ package connect;
 import connect.api.Query;
 import connect.logger.Logger;
 import connect.models.AssetRequest;
+import connect.models.Listing;
 import connect.models.TierConfigRequest;
 import connect.models.UsageFile;
 import connect.util.DateTime;
@@ -71,6 +72,18 @@ class Processor extends Base {
 
 
     /**
+        Processes all `Listing` objects that match the given filters,
+        executing in sequence all the flows defined for them.
+
+        @param filters Filters to be used for listing requests. It can contain
+        any of the filters specified for the `Listing.list` method.
+    **/
+    public function processListings(filters: Query): Void {
+        run(Listing, filters);
+    }
+
+
+    /**
         Processes all `TierConfigRequest` objects that match the given filters,
         executing in sequence all the flows defined for them.
 
@@ -98,7 +111,7 @@ class Processor extends Base {
 
 
     private function run<T>(modelClass: Class<T>, filters: Query): Void {
-        // On some targets, a string is received as modelClass, so obtain the real class from it
+        // On some platforms, a string is received as modelClass, so obtain the real class from it
         switch (Type.typeof(modelClass)) {
             case TClass(String):
                 modelClass = untyped Type.resolveClass(cast(modelClass, String));

@@ -4,6 +4,8 @@
 */
 package connect.models;
 
+import connect.api.Query;
+import connect.util.Blob;
 import connect.util.Collection;
 
 
@@ -47,7 +49,7 @@ class Marketplace extends IdModel {
 
 
     /** Collection of country objects associated with marketplace. **/
-    public var countries: List<Country>;
+    public var countries: Collection<Country>;
 
 
     /** Is marketplace available for sourcing? **/
@@ -57,8 +59,84 @@ class Marketplace extends IdModel {
     public function new() {
         super();
         this._setFieldClassNames([
+            'owner' => 'Account',
             'hubs' => 'ExtIdHub',
             'countries' => 'Country'
         ]);
+    }
+
+
+    /**
+        Lists all marketplaces that match the given filters. Supported filters are:
+
+        - id
+        - name
+        - owner.id
+        - owner.name
+        - sourcing
+        - search
+        - owner__id
+
+        @returns A Collection of Marketplaces.
+    **/
+    public static function list(filters: Query): Collection<Marketplace> {
+        final marketplaces = Env.getMarketplaceApi().listMarketplaces(filters);
+        return Model.parseArray(Marketplace, marketplaces);
+    }
+
+
+    /** @returns The Marketplace with the given id, or `null` if it was not found. **/
+    public static function get(id: String): Marketplace {
+        try {
+            final marketplace = Env.getMarketplaceApi().getMarketplace(id);
+            return Model.parse(Marketplace, marketplace);
+        } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+
+    /**
+        Registers a new Marketplace on Connect, based on the data of `this` Marketplace.
+
+        @returns The new Marketplace, or `null` if it couldn't be created.
+    **/
+    public function register(): Marketplace {
+        try {
+            final request = Env.getMarketplaceApi().createMarketplace(this.toString());
+            return Model.parse(Marketplace, request);
+        } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+
+    /**
+        Updates the Marketplace in the server with the data changed in `this` model.
+
+        @returns The Marketplace returned from the server, which should contain
+        the same data as `this` Marketplace.
+    **/
+    public function update(): Marketplace {
+        final marketplace = Env.getMarketplaceApi().updateMarketplace(
+            this.id,
+            this.toString());
+        return Model.parse(Marketplace, marketplace);
+    }
+
+
+    /**
+     * Sets the icon of `this` Marketplace.
+     */
+    public function setIcon(icon: Blob): Void {
+        Env.getMarketplaceApi().setMarketplaceIcon(this.id, icon);
+    }
+
+
+    /**
+     * Removes `this` Marketplace from Connect.
+     */
+    public function remove(): Void {
+        Env.getMarketplaceApi().deleteMarketplace(this.id);
     }
 }

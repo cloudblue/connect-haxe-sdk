@@ -4,6 +4,7 @@
 */
 package connect.api;
 
+
 @:dox(hide)
 interface IGeneralApi {
     public function listAccounts(filters: Query): String;

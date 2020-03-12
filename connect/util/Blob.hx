@@ -15,19 +15,23 @@ import haxe.io.UInt8Array;
 class Blob extends Base {
     /** Loads the contents of the file at the specified path as a Blob object. **/
     public static function load(path: String): Blob {
-        return new Blob(sys.io.File.getBytes(path));
+        try {
+            return new Blob(sys.io.File.getBytes(path));
+        } catch (ex: Dynamic) {
+            return new Blob(null);
+        }
     }
 
 
     /** @returns The number of bytes contained in the object. **/
     public function length(): Int {
-        return bytes.length;
+        return (bytes != null) ? bytes.length : -1;
     }
 
 
     /** @returns A String representation of the data interpreted as UTF-8. **/
     public function toString(): String {
-        return bytes.toString();
+        return (bytes != null) ? bytes.toString() : '';
     }
 
 
@@ -51,7 +55,7 @@ class Blob extends Base {
 
     @:dox(hide)
     public static function _bytesToArray(bytes: Bytes): Array<Int> {
-        return [for (b in UInt8Array.fromBytes(bytes)) b];
+        return (bytes != null) ? [for (b in UInt8Array.fromBytes(bytes)) b] : null;
     }
 
 

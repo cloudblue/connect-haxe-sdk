@@ -79,10 +79,10 @@ Documentation with be generated in the `doc` folder.
 To run the unit tests on Haxe's builtin interpreter, type:
 
 ```shell script
-$ haxe unittests.hxml
+$ haxelib run munit test -neko
 ```
 
-To run the unit tests on all supported platforms using munit, type:
+To run the unit tests on all supported platforms, type:
 
 ```shell script
 $ haxelib run munit test -cs -java -js -php -python

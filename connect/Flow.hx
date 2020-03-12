@@ -8,6 +8,7 @@ import connect.logger.ILoggerFormatter;
 import connect.logger.Logger;
 import connect.models.AssetRequest;
 import connect.models.IdModel;
+import connect.models.Listing;
 import connect.models.Param;
 import connect.models.TierConfigRequest;
 import connect.models.UsageFile;
@@ -92,6 +93,22 @@ class Flow extends Base {
     public function getAssetRequest(): AssetRequest {
         try {
             return cast(this.model, AssetRequest);
+        } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+
+    /**
+        This can be called within your steps to get the element being processed, as long as it
+        is of the `Listing` type.
+
+        @returns The `Listing` being processed, or `null` if current element is not of
+        Listing api.
+    **/
+    public function getListing(): Listing {
+        try {
+            return cast(this.model, Listing);
         } catch (ex: Dynamic) {
             return null;
         }
@@ -444,11 +461,13 @@ class Flow extends Base {
         this.originalModelStr = model.toString();
 
         final assetRequest = this.getAssetRequest();
+        final listing = this.getListing();
         final tierConfigRequest = this.getTierConfigRequest();
         final usageFile = this.getUsageFile();
 
         // Get product
         final product = (assetRequest != null) ? assetRequest.asset.product
+            : (listing != null) ? listing.product
             : (tierConfigRequest != null) ? tierConfigRequest.product
             : (usageFile != null) ? usageFile.product
             : null;
@@ -461,6 +480,8 @@ class Flow extends Base {
         // Set log filename
         if (assetRequest != null) {
             Env.getLogger().setFilename('$productPath${assetRequest.asset.id}.md');
+        } else if (listing != null) {
+            Env.getLogger().setFilename('$productPath${listing.id}.md');
         } else if (tierConfigRequest != null) {
             Env.getLogger().setFilename('$productPath${tierConfigRequest.configuration.id}.md');
         } else if (usageFile != null) {
