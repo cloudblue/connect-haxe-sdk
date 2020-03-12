@@ -186,11 +186,7 @@ def get_profile_id() -> str:
         raise Exception(xml_error(root))
 
 
-if __name__ == '__main__':
-    profile_id = get_profile_id()
-    repository_id = start(profile_id)
-
-    # Upload all files, signatures and digests
+def upload_files(profile_id: str, repository_id: str) -> None:
     for file in FILES:
         fullname = '/'.join([PATH, file])
         print(upload(repository_id, fullname), flush=True)
@@ -200,10 +196,10 @@ if __name__ == '__main__':
         print(upload(repository_id, fullname + '.md5'), flush=True)
         sha1(fullname)
         print(upload(repository_id, fullname + '.sha1'), flush=True)
-    
     print(finish(profile_id, repository_id), flush=True)
 
-    # Wait until the repository gets successfully closed
+
+def close_repository(profile_id: str, repository_id: str) -> bool:
     print('*** Waiting until the repository is closed...', flush=True)
     max_attempts = 10
     num_attempts = 0
@@ -211,11 +207,28 @@ if __name__ == '__main__':
     while num_attempts < max_attempts and status != 'closed':
         print('*** Repository status is "' + status + '"', flush=True)
         num_attempts += 1
-        print('*** Sleeping for 1 minute (retry {}/{})...'.format(num_attempts, max_attempts - 1),
+        print('*** Sleeping for 1 minute (retry {}/{})...'.format(num_attempts, max_attempts),
             flush=True)
         time.sleep(60)
         status = repository_status(profile_id, repository_id)
-    if status != 'closed':
+    return status == 'closed'
+
+
+if __name__ == '__main__':
+    profile_id = get_profile_id()
+    repository_id = start(profile_id)
+    upload_files(profile_id, repository_id)
+
+    # Wait until the repository gets successfully closed
+    max_attempts = 5
+    num_attempts = 1
+    closed = close_repository(profile_id, repository_id)
+    while num_attempts < max_attempts and not closed:
+        num_attempts += 1
+        print('*** Repòsitory could not be closed, retrying... ({}/{})'. \
+            format(num_attempts, max_attempts))
+        closed = close_repository(profile_id, repository_id)
+    if not closed:
         raise Exception('Repository could not be closed.')
     else:
         print('*** Repository closed.')
