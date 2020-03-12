@@ -205,7 +205,7 @@ if __name__ == '__main__':
 
     # Wait until the repository gets successfully closed
     print('*** Waiting until the repository is closed...', flush=True)
-    max_attempts = 100
+    max_attempts = 10
     num_attempts = 0
     status = repository_status(profile_id, repository_id)
     while num_attempts < max_attempts and status != 'closed':
