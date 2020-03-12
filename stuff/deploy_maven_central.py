@@ -211,7 +211,7 @@ if __name__ == '__main__':
     while num_attempts < max_attempts and status != 'closed':
         print('*** Repository status is "' + status + '"', flush=True)
         num_attempts += 1
-        print('*** Sleeping for 1 minute (retry {}/{})...'.format(num_attempts, max_attempts - 1),
+        print('*** Sleeping for 1 minute (retry {}/{})...'.format(num_attempts, max_attempts),
             flush=True)
         time.sleep(60)
         status = repository_status(profile_id, repository_id)
