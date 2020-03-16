@@ -81,17 +81,13 @@ class Util {
     }
 
 
-    /**
-        @return Whether the passed object is an array.
-    **/
+    /** @return Whether the passed object is an array. **/
     public static function isArray(value: Dynamic): Bool {
         return Std.is(value, Array);
     }
 
 
-    /**
-        @return Whether the passed object is a dynamic object.
-    **/
+    /** @return Whether the passed object is a dynamic object. **/
     public static function isStruct(value: Dynamic): Bool {
         return Type.typeof(value) == TObject;
     }
@@ -156,14 +152,16 @@ class Util {
      */
     private static function compactArray(array: Array<Dynamic>, second: Array<Dynamic>)
             : Array<Dynamic> {
-        final out = [];
+        final out: Array<Dynamic> = [];
         for (i in 0...array.length) {
             final value = array[i];
             final secondValue = second[i];
             if (isStruct(value) && isStruct(secondValue)) {
                 out.push(addIdsToObject(value, secondValue));
             } else if (isArray(value) && isArray(secondValue)) {
-                out.push(compactArray(value, secondValue));
+                final valueArr = cast(value, Array<Dynamic>);
+                final secondValueArr = cast(secondValue, Array<Dynamic>);
+                out.push(compactArray(valueArr, secondValueArr));
             } else if (value != null) {
                 out.push(value);
             }

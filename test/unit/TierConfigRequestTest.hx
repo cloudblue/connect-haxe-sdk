@@ -100,7 +100,7 @@ class TierConfigRequestTest {
     public function testUpdate() {
         // Check subject
         final request = TierConfigRequest.get('TCR-000-000-000');
-        request.status = 'failed';
+        request.getParamById('param_a').value = 'Hello, world!';
         final updatedRequest = request.update();
         Assert.isType(updatedRequest, TierConfigRequest);
         Assert.areEqual(TierConfigRequest.get('TCR-000-000-000').toString(),
