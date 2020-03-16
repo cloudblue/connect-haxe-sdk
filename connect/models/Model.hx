@@ -19,41 +19,43 @@ class Model extends Base {
         final obj = {};
         final fields = Type.getInstanceFields(Type.getClass(this));
         for (field in fields) {
-            final value = Reflect.field(this, field);
-            if (field != 'fieldClassNames' && value != null) {
-                switch (Type.typeof(value)) {
-                    case TClass(String):
-                        Reflect.setField(obj, Inflection.toSnakeCase(field), Std.string(value));
-                    case TClass(DateTime):
-                        Reflect.setField(obj, Inflection.toSnakeCase(field), value.toString());
-                    case TClass(class_):
-                        final className = Type.getClassName(class_);
-                        if (className.indexOf('connect.util.Collection') == 0) {
-                            final col = cast(value, Collection<Dynamic>);
-                            final arr = new Array<Dynamic>();
-                            for (elem in col) {
-                                final elemClassName = Type.getClassName(Type.getClass(elem));
-                                if (elemClassName.indexOf('connect.models.') == 0) {
-                                    arr.push(elem.toObject());
-                                } else {
-                                    arr.push(elem);
-                                }                                
+            if (field != '_footprint') {
+                final value = Reflect.field(this, field);
+                if (field != 'fieldClassNames' && value != null) {
+                    switch (Type.typeof(value)) {
+                        case TClass(String):
+                            Reflect.setField(obj, Inflection.toSnakeCase(field), Std.string(value));
+                        case TClass(DateTime):
+                            Reflect.setField(obj, Inflection.toSnakeCase(field), value.toString());
+                        case TClass(class_):
+                            final className = Type.getClassName(class_);
+                            if (className.indexOf('connect.util.Collection') == 0) {
+                                final col = cast(value, Collection<Dynamic>);
+                                final arr = new Array<Dynamic>();
+                                for (elem in col) {
+                                    final elemClassName = Type.getClassName(Type.getClass(elem));
+                                    if (elemClassName.indexOf('connect.models.') == 0) {
+                                        arr.push(elem.toObject());
+                                    } else {
+                                        arr.push(elem);
+                                    }                                
+                                }
+                                if (arr.length > 0) {
+                                    Reflect.setField(obj, Inflection.toSnakeCase(field), arr);
+                                }
+                            } else if (className.indexOf('connect.models.') == 0) {
+                                final model = cast(value, Model).toObject();
+                                if (Reflect.fields(model).length != 0) {
+                                    Reflect.setField(obj, Inflection.toSnakeCase(field), model);
+                                }
+                            } else {
+                                Reflect.setField(obj, Inflection.toSnakeCase(field), value);
                             }
-                            if (arr.length > 0) {
-                                Reflect.setField(obj, Inflection.toSnakeCase(field), arr);
-                            }
-                        } else if (className.indexOf('connect.models.') == 0) {
-                            final model = cast(value, Model).toObject();
-                            if (Reflect.fields(model).length != 0) {
-                                Reflect.setField(obj, Inflection.toSnakeCase(field), model);
-                            }
-                        } else {
+                        case TFunction:
+                            // Skip
+                        default:
                             Reflect.setField(obj, Inflection.toSnakeCase(field), value);
-                        }
-                    case TFunction:
-                        // Skip
-                    default:
-                        Reflect.setField(obj, Inflection.toSnakeCase(field), value);
+                    }
                 }
             }
         }
@@ -101,9 +103,19 @@ class Model extends Base {
     }
 
 
+    @:dox(hide)
+    public function _toDiff(): Dynamic {
+        final cls = Type.getClass(this);
+        final prevObj = Json.parse(this._footprint);
+        final diff = connect.util.Util.createObjectDiff(this.toObject(), prevObj);
+        return _parse(cls, diff);
+    }
+
+
     public function new() {}
 
 
+    private var _footprint: String;  // Contains the Json representation of the object when it was parsed.
     private var fieldClassNames: StringMap<String>;
 
 
@@ -154,6 +166,7 @@ class Model extends Base {
                 }
             }
         }
+        model._footprint = model.toString();
         return instance;
     }
 

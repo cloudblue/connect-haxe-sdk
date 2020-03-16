@@ -99,7 +99,7 @@ class Listing extends IdModel {
     public function put(): Listing {
         final listing = Env.getMarketplaceApi().putListing(
             this.id,
-            this.toString());
+            this._toDiff().toString());
         return Model.parse(Listing, listing);
     }
 }

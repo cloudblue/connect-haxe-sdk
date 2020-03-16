@@ -14,7 +14,7 @@ class TierApiImpl extends Base implements ITierApi {
 
 
     public function listTierConfigRequests(filters: Query): String {
-        return ConnectHelper.get(TCR_PATH, null, null, filters);
+        return ConnectHelper.get(TCR_PATH, null, null, filters, true);
     }
 
 
@@ -33,13 +33,13 @@ class TierApiImpl extends Base implements ITierApi {
     }
 
 
-    public function pendTierConfigRequest(id: String): String {
-        return ConnectHelper.post(TCR_PATH, id, 'pend');
+    public function pendTierConfigRequest(id: String): Void {
+        ConnectHelper.post(TCR_PATH, id, 'pend');
     }
 
 
-    public function inquireTierConfigRequest(id: String): String {
-        return ConnectHelper.post(TCR_PATH, id, 'inquire');
+    public function inquireTierConfigRequest(id: String): Void {
+        ConnectHelper.post(TCR_PATH, id, 'inquire');
     }
 
 

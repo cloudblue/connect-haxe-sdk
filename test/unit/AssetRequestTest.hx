@@ -122,7 +122,7 @@ class AssetRequestTest {
         final apiMock = cast(Env.getFulfillmentApi(), Mock);
         Assert.areEqual(1, apiMock.callCount('updateRequest'));
         Assert.areEqual(
-            [request.id, request.toString()].toString(),
+            [request.id, request._toDiff().toString()].toString(),
             apiMock.callArgs('updateRequest', 0).toString());
     }
 

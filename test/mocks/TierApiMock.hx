@@ -46,15 +46,13 @@ class TierApiMock extends Mock implements ITierApi {
     }
 
 
-    public function pendTierConfigRequest(id: String): String {
+    public function pendTierConfigRequest(id: String): Void {
         this.calledFunction('pendTierConfigRequest', [id]);
-        return this.getTierConfigRequest(id);
     }
 
 
-    public function inquireTierConfigRequest(id: String): String {
+    public function inquireTierConfigRequest(id: String): Void {
         this.calledFunction('inquireTierConfigRequest', [id]);
-        return this.getTierConfigRequest(id);
     }
 
 

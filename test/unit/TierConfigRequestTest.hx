@@ -41,7 +41,6 @@ class TierConfigRequestTest {
     }
 
 
-
     @Test
     public function testGetOk() {
         // Check subject
@@ -101,6 +100,7 @@ class TierConfigRequestTest {
     public function testUpdate() {
         // Check subject
         final request = TierConfigRequest.get('TCR-000-000-000');
+        request.status = 'failed';
         final updatedRequest = request.update();
         Assert.isType(updatedRequest, TierConfigRequest);
         Assert.areEqual(TierConfigRequest.get('TCR-000-000-000').toString(),
@@ -111,7 +111,7 @@ class TierConfigRequestTest {
         final apiMock = cast(Env.getTierApi(), Mock);
         Assert.areEqual(1, apiMock.callCount('updateTierConfigRequest'));
         Assert.areEqual(
-            [request.id, request.toString()].toString(),
+            [request.id, request._toDiff().toString()].toString(),
             apiMock.callArgs('updateTierConfigRequest', 0).toString());
     }
 
@@ -167,9 +167,7 @@ class TierConfigRequestTest {
     @Test
     public function testInquire() {
         // Check subject
-        final request = TierConfigRequest.get('TCR-000-000-000');
-        final inquiredRequest = request.inquire();
-        Assert.isType(inquiredRequest, TierConfigRequest);
+        TierConfigRequest.get('TCR-000-000-000').inquire();
 
         // Check mocks
         final apiMock = cast(Env.getTierApi(), Mock);
@@ -183,9 +181,7 @@ class TierConfigRequestTest {
     @Test
     public function testPend() {
         // Check subject
-        final request = TierConfigRequest.get('TCR-000-000-000');
-        final pendedRequest = request.pend();
-        Assert.isType(pendedRequest, TierConfigRequest);
+        TierConfigRequest.get('TCR-000-000-000').pend();
 
         // Check mocks
         final apiMock = cast(Env.getTierApi(), Mock);

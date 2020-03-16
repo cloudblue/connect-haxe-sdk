@@ -120,7 +120,7 @@ class Marketplace extends IdModel {
     public function update(): Marketplace {
         final marketplace = Env.getMarketplaceApi().updateMarketplace(
             this.id,
-            this.toString());
+            this._toDiff().toString());
         return Model.parse(Marketplace, marketplace);
     }
 

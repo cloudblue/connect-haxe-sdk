@@ -82,6 +82,22 @@ class Util {
 
 
     /**
+        @return Whether the passed object is an array.
+    **/
+    public static function isArray(value: Dynamic): Bool {
+        return Std.is(value, Array);
+    }
+
+
+    /**
+        @return Whether the passed object is a dynamic object.
+    **/
+    public static function isStruct(value: Dynamic): Bool {
+        return Type.typeof(value) == TObject;
+    }
+
+
+    /**
      * Creates an object with the differences between the two passed objects (except
      * for deletions). The objects must contain an id field.
      * @param object The updated object.
@@ -93,16 +109,6 @@ class Util {
         return Util.addIdsToObject(
             new Diff(previous, object).apply({id: object.id}),
             previous);
-    }
-
-
-    public static function isArray(value: Dynamic): Bool {
-        return Std.is(value, Array);
-    }
-
-
-    public static function isStruct(value: Dynamic): Bool {
-        return Type.typeof(value) == TObject;
     }
 
 
@@ -127,7 +133,9 @@ class Util {
                 if (isStruct(value) && isStruct(originalValue)) {
                     Reflect.setField(out, field, addIdsToObject(value, originalValue));
                 } else if (isArray(value) && isArray(originalValue)) {
-                    Reflect.setField(out, field, compactArray(value, originalValue));
+                    final valueArr = cast(value, Array<Dynamic>);
+                    final originalValueArr = cast(originalValue, Array<Dynamic>);
+                    Reflect.setField(out, field, compactArray(valueArr, originalValueArr));
                 } else {
                     Reflect.setField(out, field, value);
                 }

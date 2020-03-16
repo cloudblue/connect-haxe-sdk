@@ -187,22 +187,22 @@ class Flow extends Base {
         information, and automatically skips any further steps.
     **/
     public function approveByTemplate(id: String): Void {
-        final request = this.getAssetRequestChanges();
-        final tcr = this.getTierConfigRequestChanges();
+        final request = this.getAssetRequest();
+        final tcr = this.getTierConfigRequest();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
             if (request.asset != null) {
                 request.update();
             }
             request.approveByTemplate(id);
-            this.abort("");
+            this.abort('');
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
             if (tcr.params != null) {
                 tcr.update();
             }
             tcr.approveByTemplate(id);
-            this.abort("");
+            this.abort('');
         }
     }
 
@@ -216,22 +216,22 @@ class Flow extends Base {
         information, and automatically skips any further steps.
     **/
     public function approveByTile(text: String): Void {
-        final request = this.getAssetRequestChanges();
-        final tcr = this.getTierConfigRequestChanges();
+        final request = this.getAssetRequest();
+        final tcr = this.getTierConfigRequest();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
             if (request.asset != null) {
                 request.update();
             }
             request.approveByTile(text);
-            this.abort("");
+            this.abort('');
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
             if (tcr.params != null) {
                 tcr.update();
             }
             tcr.approveByTile(text);
-            this.abort("");
+            this.abort('');
         }
     }
 
@@ -244,22 +244,22 @@ class Flow extends Base {
         information, and automatically skips any further steps.
     **/
     public function fail(reason: String): Void {
-        final request = this.getAssetRequestChanges();
-        final tcr = this.getTierConfigRequestChanges();
+        final request = this.getAssetRequest();
+        final tcr = this.getTierConfigRequest();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
             if (request.asset != null) {
                 request.update();
             }
             request.fail(reason);
-            this.abort("Failing request");
+            this.abort('Failing request');
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
             if (tcr.params != null) {
                 tcr.update();
             }
             tcr.fail(reason);
-            this.abort("Failing request");
+            this.abort('Failing request');
         }
     }
 
@@ -275,22 +275,22 @@ class Flow extends Base {
         is only used for AssetRequests.
     **/
     public function inquire(templateId: String): Void {
-        final request = this.getAssetRequestChanges();
-        final tcr = this.getTierConfigRequestChanges();
+        final request = this.getAssetRequest();
+        final tcr = this.getTierConfigRequest();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
             if (request.asset != null) {
                 request.update();
             }
             request.inquire(templateId);
-            this.abort("Inquiring request");
+            this.abort('Inquiring request');
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
             if (tcr.params != null) {
                 tcr.update();
             }
             tcr.inquire();
-            this.abort("Inquiring request");
+            this.abort('Inquiring request');
         }
     }
 
@@ -303,22 +303,22 @@ class Flow extends Base {
         information, and automatically skips any further steps.
     **/
     public function pend(): Void {
-        final request = this.getAssetRequestChanges();
-        final tcr = this.getTierConfigRequestChanges();
+        final request = this.getAssetRequest();
+        final tcr = this.getTierConfigRequest();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
             if (request.asset != null) {
                 request.update();
             }
             request.pend();
-            this.abort("Pending request");
+            this.abort('Pending request');
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
             if (tcr.params != null) {
                 tcr.update();
             }
             tcr.update();
-            this.abort("Pending request");
+            this.abort('Pending request');
         }
     }
 
@@ -628,6 +628,7 @@ class Flow extends Base {
     }
 
 
+    /*
     private function getAssetRequestChanges(): AssetRequest {
         if (this.getAssetRequest() != null) {
             final originalModel = Json.parse(this.originalModelStr);
@@ -648,6 +649,7 @@ class Flow extends Base {
             return null;
         }
     }
+    */
     
     
     private function getClassName(): String {
