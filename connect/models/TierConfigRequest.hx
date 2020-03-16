@@ -158,7 +158,7 @@ class TierConfigRequest extends IdModel {
     public function update(): TierConfigRequest {
         final request = Env.getTierApi().updateTierConfigRequest(
             this.id,
-            this.toString());
+            this._toDiff().toString());
         return Model.parse(TierConfigRequest, request);
     }
 
@@ -224,13 +224,9 @@ class TierConfigRequest extends IdModel {
 
         When processing requests within a `Flow`, you should use the `Flow.inquire`
         method instead of this one, since it finishes the flow and logs the information.
-
-        @returns The TierConfigRequest returned from the server, which should contain
-        the updated status.
     **/
-    public function inquire(): TierConfigRequest {
-        final request = Env.getTierApi().inquireTierConfigRequest(this.id);
-        return Model.parse(TierConfigRequest, request);
+    public function inquire(): Void {
+        Env.getTierApi().inquireTierConfigRequest(this.id);
     }
 
 
@@ -239,13 +235,9 @@ class TierConfigRequest extends IdModel {
 
         When processing requests within a `Flow`, you should use the `Flow.pend`
         method instead of this one, since it finishes the flow and logs the information.
-
-        @returns The TierConfigRequest returned from the server, which should contain
-        the updated status.
     **/
-    public function pend(): TierConfigRequest {
-        final request = Env.getTierApi().pendTierConfigRequest(this.id);
-        return Model.parse(TierConfigRequest, request);
+    public function pend(): Void {
+        Env.getTierApi().pendTierConfigRequest(this.id);
     }
 
 

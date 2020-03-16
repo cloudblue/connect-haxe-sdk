@@ -119,7 +119,7 @@ class AgreementTest {
         final apiMock = cast(Env.getMarketplaceApi(), Mock);
         Assert.areEqual(1, apiMock.callCount('updateAgreement'));
         Assert.areEqual(
-            [agreement.id, agreement.toString()].toString(),
+            [agreement.id, agreement._toDiff().toString()].toString(),
             apiMock.callArgs('updateAgreement', 0).toString());
     }
 

@@ -146,7 +146,7 @@ class Agreement extends IdModel {
     public function update(): Agreement {
         final agreement = Env.getMarketplaceApi().updateAgreement(
             this.id,
-            this.toString());
+            this._toDiff().toString());
         return Model.parse(Agreement, agreement);
     }
 

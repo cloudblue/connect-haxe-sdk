@@ -161,14 +161,12 @@ class UsageFile extends IdModel {
     public function update(): UsageFile {
         final usageFile = Env.getUsageApi().updateUsageFile(
             this.id,
-            this.toString());
+            this._toDiff().toString());
         return Model.parse(UsageFile, usageFile);
     }
 
 
-    /**
-        Deletes `this` UsageFile in the server.
-    **/
+    /** Deletes `this` UsageFile in the server. **/
     public function delete(): Void {
         Env.getUsageApi().deleteUsageFile(this.id);
     }

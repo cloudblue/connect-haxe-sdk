@@ -92,7 +92,7 @@ class ListingTest {
         final apiMock = cast(Env.getMarketplaceApi(), Mock);
         Assert.areEqual(1, apiMock.callCount('putListing'));
         Assert.areEqual(
-            [listing.id, listing.toString()].toString(),
+            [listing.id, listing._toDiff().toString()].toString(),
             apiMock.callArgs('putListing', 0).toString());
     }
 }

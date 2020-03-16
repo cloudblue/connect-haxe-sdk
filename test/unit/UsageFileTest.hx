@@ -136,7 +136,7 @@ class UsageFileTest {
         final apiMock = cast(Env.getUsageApi(), Mock);
         Assert.areEqual(1, apiMock.callCount('updateUsageFile'));
         Assert.areEqual(
-            [usageFile.id, usageFile.toString()].toString(),
+            [usageFile.id, usageFile._toDiff().toString()].toString(),
             apiMock.callArgs('updateUsageFile', 0).toString());
     }
 

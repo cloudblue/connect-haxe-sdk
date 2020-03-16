@@ -125,7 +125,7 @@ class MarketplaceTest {
         final apiMock = cast(Env.getMarketplaceApi(), Mock);
         Assert.areEqual(1, apiMock.callCount('updateMarketplace'));
         Assert.areEqual(
-            [marketplace.id, marketplace.toString()].toString(),
+            [marketplace.id, marketplace._toDiff().toString()].toString(),
             apiMock.callArgs('updateMarketplace', 0).toString());
     }
 

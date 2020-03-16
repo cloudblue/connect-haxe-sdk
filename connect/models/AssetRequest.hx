@@ -149,7 +149,7 @@ class AssetRequest extends IdModel {
     public function update(): AssetRequest {
         final request = Env.getFulfillmentApi().updateRequest(
             this.id,
-            this.toString());
+            this._toDiff().toString());
         return Model.parse(AssetRequest, request);
     }
 
