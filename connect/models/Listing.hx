@@ -91,8 +91,7 @@ class Listing extends IdModel {
 
 
     /**
-        Puts the listing in the Connect platform with the data changed in `this` model, as long as
-        the listing has been modified.
+        Puts the listing in the Connect platform with the data changed in `this` model.
 
         You should reassign your listing with the object returned by this method, so the next time
         you call `put` on the object, the SDK knows the fields that already got updated in a
@@ -103,7 +102,7 @@ class Listing extends IdModel {
         ```
 
         @returns The Listing returned from the server, which should contain
-        the same data as `this` Listing, or `null` if the listing was not modified.
+        the same data as `this` Listing.
     **/
     public function put(): Listing {
         final diff = this._toDiff();
@@ -114,7 +113,7 @@ class Listing extends IdModel {
                 haxe.Json.stringify(diff));
             return Model.parse(Listing, listing);
         } else {
-            return null;
+            return this;
         }
     }
 }

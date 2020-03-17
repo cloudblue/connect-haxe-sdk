@@ -132,7 +132,8 @@ class AssetRequestTest {
         // Check subject
         final request = AssetRequest.get('PR-5852-1608-0000');
         final updatedRequest = request.update();
-        Assert.isNull(updatedRequest);
+        Assert.isType(updatedRequest, AssetRequest);
+        Assert.areEqual(request.toString(), updatedRequest.toString());
 
         // Check mocks
         final apiMock = cast(Env.getFulfillmentApi(), Mock);

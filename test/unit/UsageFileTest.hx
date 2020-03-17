@@ -146,7 +146,8 @@ class UsageFileTest {
         // Check subject
         final usageFile = UsageFile.get('UF-2018-11-9878764342');
         final updatedFile = usageFile.update();
-        Assert.isNull(updatedFile);
+        Assert.isType(updatedFile, UsageFile);
+        Assert.areEqual(usageFile.toString(), updatedFile.toString());
 
         // Check mocks
         final apiMock = cast(Env.getUsageApi(), Mock);

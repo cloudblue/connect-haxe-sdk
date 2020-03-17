@@ -121,7 +121,8 @@ class TierConfigRequestTest {
         // Check subject
         final request = TierConfigRequest.get('TCR-000-000-000');
         final updatedRequest = request.update();
-        Assert.isNull(updatedRequest);
+        Assert.isType(updatedRequest, TierConfigRequest);
+        Assert.areEqual(request.toString(), updatedRequest.toString());
 
         // Check mocks
         final apiMock = cast(Env.getTierApi(), Mock);

@@ -153,8 +153,7 @@ class UsageFile extends IdModel {
 
 
     /**
-        Updates `this` UsageFile in the server with the data changed in `this` model, as long as
-        the usage file has been modified.
+        Updates `this` UsageFile in the server with the data changed in `this` model.
 
         You should reassign your file with the object returned by this method, so the next time
         you call `update` on the object, the SDK knows the fields that already got updated in a
@@ -165,7 +164,7 @@ class UsageFile extends IdModel {
         ```
 
         @returns The UsageFile returned from the server, which should contain
-        the same data as `this` UsageFile, or `null` if the usage file was not modified.
+        the same data as `this` UsageFile.
     **/
     public function update(): UsageFile {
         final diff = this._toDiff();
@@ -176,7 +175,7 @@ class UsageFile extends IdModel {
                 haxe.Json.stringify(diff));
             return Model.parse(UsageFile, usageFile);
         } else {
-            return null;
+            return this;
         }
     }
 

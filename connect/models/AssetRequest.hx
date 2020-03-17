@@ -141,8 +141,7 @@ class AssetRequest extends IdModel {
 
 
     /**
-        Updates the request in the server with the data changed in `this` model, as long as
-        the request has been modified.
+        Updates the request in the server with the data changed in `this` model.
 
         You should reassign your request with the object returned by this method, so the next time
         you call `update` on the object, the SDK knows the fields that already got updated in a
@@ -153,7 +152,7 @@ class AssetRequest extends IdModel {
         ```
 
         @returns The AssetRequest returned from the server, which should contain
-        the same data as `this` AssetRequest, or `null` if the request was not modified.
+        the same data as `this` AssetRequest.
     **/
     public function update(): AssetRequest {
         final diff = this._toDiff();
@@ -164,7 +163,7 @@ class AssetRequest extends IdModel {
                 haxe.Json.stringify(diff));
             return Model.parse(AssetRequest, request);
         } else {
-            return null;
+            return this;
         }
     }
 

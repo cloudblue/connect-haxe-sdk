@@ -138,8 +138,7 @@ class Agreement extends IdModel {
 
 
     /**
-        Updates the agreement in Connect platform with the data changed in `this` model, as long as
-        the agreement has been modified.
+        Updates the agreement in Connect platform with the data changed in `this` model.
 
         You should reassign your agreement with the object returned by this method, so the next time
         you call `update` on the object, the SDK knows the fields that already got updated in a
@@ -150,7 +149,7 @@ class Agreement extends IdModel {
         ```
 
         @returns The Agreement returned from the server, which should contain
-        the same data as `this` Agreement, or `null` if the agreement was not modified.
+        the same data as `this` Agreement.
     **/
     public function update(): Agreement {
         final diff = this._toDiff();
@@ -161,7 +160,7 @@ class Agreement extends IdModel {
                 haxe.Json.stringify(diff));
             return Model.parse(Agreement, agreement);
         } else {
-            return null;
+            return this;
         }
     }
 

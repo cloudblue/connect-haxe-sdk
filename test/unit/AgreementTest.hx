@@ -129,7 +129,8 @@ class AgreementTest {
         // Check subject
         final agreement = Agreement.get('AGP-884-348-731');
         final updatedAgreement = agreement.update();
-        Assert.isNull(updatedAgreement);
+        Assert.isType(updatedAgreement, Agreement);
+        Assert.areEqual(agreement.toString(), updatedAgreement.toString());
 
         // Check mocks
         final apiMock = cast(Env.getMarketplaceApi(), Mock);

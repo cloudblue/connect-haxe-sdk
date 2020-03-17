@@ -135,7 +135,8 @@ class MarketplaceTest {
         // Check subject
         final marketplace = Marketplace.get('MP-12345');
         final updatedMarketplace = marketplace.update();
-        Assert.isNull(updatedMarketplace);
+        Assert.isType(updatedMarketplace, Marketplace);
+        Assert.areEqual(marketplace.toString(), updatedMarketplace.toString());
 
         // Check mocks
         final apiMock = cast(Env.getMarketplaceApi(), Mock);

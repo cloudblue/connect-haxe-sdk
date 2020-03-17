@@ -112,8 +112,7 @@ class Marketplace extends IdModel {
 
 
     /**
-        Updates the Marketplace in the server with the data changed in `this` model, as long as
-        the marketplace has been modified.
+        Updates the Marketplace in the server with the data changed in `this` model.
 
         You should reassign your marketplace with the object returned by this method, so the next time
         you call `update` on the object, the SDK knows the fields that already got updated in a
@@ -124,7 +123,7 @@ class Marketplace extends IdModel {
         ```
 
         @returns The Marketplace returned from the server, which should contain
-        the same data as `this` Marketplace, or `null` if the marketplace was not modified.
+        the same data as `this` Marketplace.
     **/
     public function update(): Marketplace {
         final diff = this._toDiff();
@@ -135,7 +134,7 @@ class Marketplace extends IdModel {
                 haxe.Json.stringify(diff));
             return Model.parse(Marketplace, marketplace);
         } else {
-            return null;
+            return this;
         }
     }
 

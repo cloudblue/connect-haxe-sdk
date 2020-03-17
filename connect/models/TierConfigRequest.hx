@@ -150,8 +150,7 @@ class TierConfigRequest extends IdModel {
 
 
     /**
-        Updates the TierConfigRequest in the server with the data changed in `this` model, as long as
-        the request has been modified.
+        Updates the TierConfigRequest in the server with the data changed in `this` model.
 
         You should reassign your request with the object returned by this method, so the next time
         you call `update` on the object, the SDK knows the fields that already got updated in a
@@ -162,7 +161,7 @@ class TierConfigRequest extends IdModel {
         ```
 
         @returns The TierConfigRequest returned from the server, which should contain
-        the same data as `this` TierConfigRequest, or `null` if the request was not modified.
+        the same data as `this` TierConfigRequest.
     **/
     public function update(): TierConfigRequest {
         final diff = this._toDiff();
@@ -173,7 +172,7 @@ class TierConfigRequest extends IdModel {
                 haxe.Json.stringify(this._toDiff()));
             return Model.parse(TierConfigRequest, request);
         } else {
-            return null;
+            return this;
         }
     }
 
