@@ -122,8 +122,21 @@ class AssetRequestTest {
         final apiMock = cast(Env.getFulfillmentApi(), Mock);
         Assert.areEqual(1, apiMock.callCount('updateRequest'));
         Assert.areEqual(
-            [request.id, request._toDiff().toString()].toString(),
+            [request.id, request._toDiffString()].toString(),
             apiMock.callArgs('updateRequest', 0).toString());
+    }
+
+
+    @Test
+    public function testUpdateNoChanges() {
+        // Check subject
+        final request = AssetRequest.get('PR-5852-1608-0000');
+        final updatedRequest = request.update();
+        Assert.isNull(updatedRequest);
+
+        // Check mocks
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
+        Assert.areEqual(0, apiMock.callCount('updateRequest'));
     }
 
 

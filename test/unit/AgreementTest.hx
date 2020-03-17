@@ -119,8 +119,21 @@ class AgreementTest {
         final apiMock = cast(Env.getMarketplaceApi(), Mock);
         Assert.areEqual(1, apiMock.callCount('updateAgreement'));
         Assert.areEqual(
-            [agreement.id, agreement._toDiff().toString()].toString(),
+            [agreement.id, agreement._toDiffString()].toString(),
             apiMock.callArgs('updateAgreement', 0).toString());
+    }
+
+
+    @Test
+    public function testUpdateNoChanges() {
+        // Check subject
+        final agreement = Agreement.get('AGP-884-348-731');
+        final updatedAgreement = agreement.update();
+        Assert.isNull(updatedAgreement);
+
+        // Check mocks
+        final apiMock = cast(Env.getMarketplaceApi(), Mock);
+        Assert.areEqual(0, apiMock.callCount('updateAgreement'));
     }
 
 

@@ -153,16 +153,23 @@ class UsageFile extends IdModel {
 
 
     /**
-        Updates `this` UsageFile in the server with the data changed in `this` model.
+        Updates `this` UsageFile in the server with the data changed in `this` model, as long as
+        the usage file has been modified.
 
         @returns The UsageFile returned from the server, which should contain
-        the same data as `this` UsageFile.
+        the same data as `this` UsageFile, or `null` if the usage file was not modified.
     **/
     public function update(): UsageFile {
-        final usageFile = Env.getUsageApi().updateUsageFile(
-            this.id,
-            this._toDiff().toString());
-        return Model.parse(UsageFile, usageFile);
+        final diff = this._toDiff();
+        final hasModifiedFields = Reflect.fields(diff).length > 1;
+        if (hasModifiedFields) {
+            final usageFile = Env.getUsageApi().updateUsageFile(
+                this.id,
+                haxe.Json.stringify(diff));
+            return Model.parse(UsageFile, usageFile);
+        } else {
+            return null;
+        }
     }
 
 

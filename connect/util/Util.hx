@@ -96,9 +96,9 @@ class Util {
     /**
      * Creates an object with the differences between the two passed objects (except
      * for deletions). The objects must contain an id field.
+     * This method is used for example when updating a request, to send only the modified data.
      * @param object The updated object.
      * @param previous The object prior to the updates.
-     * This method is used for example when updating a request, to send only the modified data.
      * @return The object with only the differences.
      */
     public static function createObjectDiff(object: Dynamic, previous: Dynamic): Dynamic {

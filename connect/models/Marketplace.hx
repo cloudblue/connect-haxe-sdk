@@ -112,16 +112,23 @@ class Marketplace extends IdModel {
 
 
     /**
-        Updates the Marketplace in the server with the data changed in `this` model.
+        Updates the Marketplace in the server with the data changed in `this` model, as long as
+        the marketplace has been modified.
 
         @returns The Marketplace returned from the server, which should contain
-        the same data as `this` Marketplace.
+        the same data as `this` Marketplace, or `null` if the marketplace was not modified.
     **/
     public function update(): Marketplace {
-        final marketplace = Env.getMarketplaceApi().updateMarketplace(
-            this.id,
-            this._toDiff().toString());
-        return Model.parse(Marketplace, marketplace);
+        final diff = this._toDiff();
+        final hasModifiedFields = Reflect.fields(diff).length > 1;
+        if (hasModifiedFields) {
+            final marketplace = Env.getMarketplaceApi().updateMarketplace(
+                this.id,
+                haxe.Json.stringify(diff));
+            return Model.parse(Marketplace, marketplace);
+        } else {
+            return null;
+        }
     }
 
 

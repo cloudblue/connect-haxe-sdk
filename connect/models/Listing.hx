@@ -91,15 +91,22 @@ class Listing extends IdModel {
 
 
     /**
-        Puts the listing in the Connect platform with the data changed in `this` model.
+        Puts the listing in the Connect platform with the data changed in `this` model, as long as
+        the listing has been modified.
 
         @returns The Listing returned from the server, which should contain
-        the same data as `this` Listing.
+        the same data as `this` Listing, or `null` if the listing was not modified.
     **/
     public function put(): Listing {
-        final listing = Env.getMarketplaceApi().putListing(
-            this.id,
-            this._toDiff().toString());
-        return Model.parse(Listing, listing);
+        final diff = this._toDiff();
+        final hasModifiedFields = Reflect.fields(diff).length > 1;
+        if (hasModifiedFields) {
+            final listing = Env.getMarketplaceApi().putListing(
+                this.id,
+                haxe.Json.stringify(diff));
+            return Model.parse(Listing, listing);
+        } else {
+            return null;
+        }
     }
 }

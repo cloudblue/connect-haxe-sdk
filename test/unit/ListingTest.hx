@@ -92,7 +92,20 @@ class ListingTest {
         final apiMock = cast(Env.getMarketplaceApi(), Mock);
         Assert.areEqual(1, apiMock.callCount('putListing'));
         Assert.areEqual(
-            [listing.id, listing._toDiff().toString()].toString(),
+            [listing.id, listing._toDiffString()].toString(),
             apiMock.callArgs('putListing', 0).toString());
+    }
+
+
+    @Test
+    public function testPutNoChanges() {
+        // Check subject
+        final listing = Listing.get('LST-212-458-762');
+        final updatedListing = listing.put();
+        Assert.isNull(updatedListing);
+
+        // Check mocks
+        final apiMock = cast(Env.getMarketplaceApi(), Mock);
+        Assert.areEqual(1, apiMock.callCount('putListing'));
     }
 }

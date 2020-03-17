@@ -111,8 +111,21 @@ class TierConfigRequestTest {
         final apiMock = cast(Env.getTierApi(), Mock);
         Assert.areEqual(1, apiMock.callCount('updateTierConfigRequest'));
         Assert.areEqual(
-            [request.id, request._toDiff().toString()].toString(),
+            [request.id, request._toDiffString()].toString(),
             apiMock.callArgs('updateTierConfigRequest', 0).toString());
+    }
+
+
+    @Test
+    public function testUpdateNoChanges() {
+        // Check subject
+        final request = TierConfigRequest.get('TCR-000-000-000');
+        final updatedRequest = request.update();
+        Assert.isNull(updatedRequest);
+
+        // Check mocks
+        final apiMock = cast(Env.getTierApi(), Mock);
+        Assert.areEqual(0, apiMock.callCount('updateTierConfigRequest'));
     }
 
 

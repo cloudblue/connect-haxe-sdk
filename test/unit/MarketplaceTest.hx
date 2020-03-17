@@ -125,8 +125,21 @@ class MarketplaceTest {
         final apiMock = cast(Env.getMarketplaceApi(), Mock);
         Assert.areEqual(1, apiMock.callCount('updateMarketplace'));
         Assert.areEqual(
-            [marketplace.id, marketplace._toDiff().toString()].toString(),
+            [marketplace.id, marketplace._toDiffString()].toString(),
             apiMock.callArgs('updateMarketplace', 0).toString());
+    }
+
+
+    @Test
+    public function testUpdateNoChanges() {
+        // Check subject
+        final marketplace = Marketplace.get('MP-12345');
+        final updatedMarketplace = marketplace.update();
+        Assert.isNull(updatedMarketplace);
+
+        // Check mocks
+        final apiMock = cast(Env.getMarketplaceApi(), Mock);
+        Assert.areEqual(0, apiMock.callCount('updateMarketplace'));
     }
 
 
