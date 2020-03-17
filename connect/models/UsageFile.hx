@@ -386,6 +386,7 @@ class UsageFile extends IdModel {
         entries.add(zipEntry('[Content_Types].xml', CONTENT_TYPES));
 
         final output = new haxe.io.BytesOutput();
+        new haxe.zip.Writer(output).write(entries);
         return output.getBytes();
     }
 
