@@ -153,6 +153,14 @@ class TierConfigRequest extends IdModel {
         Updates the TierConfigRequest in the server with the data changed in `this` model, as long as
         the request has been modified.
 
+        You should reassign your request with the object returned by this method, so the next time
+        you call `update` on the object, the SDK knows the fields that already got updated in a
+        previous call, like this:
+
+        ```
+        request = request.update();
+        ```
+
         @returns The TierConfigRequest returned from the server, which should contain
         the same data as `this` TierConfigRequest, or `null` if the request was not modified.
     **/

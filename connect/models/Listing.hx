@@ -94,6 +94,14 @@ class Listing extends IdModel {
         Puts the listing in the Connect platform with the data changed in `this` model, as long as
         the listing has been modified.
 
+        You should reassign your listing with the object returned by this method, so the next time
+        you call `put` on the object, the SDK knows the fields that already got updated in a
+        previous call, like this:
+
+        ```
+        listing = listing.put();
+        ```
+
         @returns The Listing returned from the server, which should contain
         the same data as `this` Listing, or `null` if the listing was not modified.
     **/

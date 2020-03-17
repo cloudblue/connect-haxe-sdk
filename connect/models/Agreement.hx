@@ -141,6 +141,14 @@ class Agreement extends IdModel {
         Updates the agreement in Connect platform with the data changed in `this` model, as long as
         the agreement has been modified.
 
+        You should reassign your agreement with the object returned by this method, so the next time
+        you call `update` on the object, the SDK knows the fields that already got updated in a
+        previous call, like this:
+
+        ```
+        agreement = agreement.update();
+        ```
+
         @returns The Agreement returned from the server, which should contain
         the same data as `this` Agreement, or `null` if the agreement was not modified.
     **/

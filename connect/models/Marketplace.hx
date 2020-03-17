@@ -115,6 +115,14 @@ class Marketplace extends IdModel {
         Updates the Marketplace in the server with the data changed in `this` model, as long as
         the marketplace has been modified.
 
+        You should reassign your marketplace with the object returned by this method, so the next time
+        you call `update` on the object, the SDK knows the fields that already got updated in a
+        previous call, like this:
+
+        ```
+        marketplace = marketplace.update();
+        ```
+
         @returns The Marketplace returned from the server, which should contain
         the same data as `this` Marketplace, or `null` if the marketplace was not modified.
     **/

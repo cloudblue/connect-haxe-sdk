@@ -156,6 +156,14 @@ class UsageFile extends IdModel {
         Updates `this` UsageFile in the server with the data changed in `this` model, as long as
         the usage file has been modified.
 
+        You should reassign your file with the object returned by this method, so the next time
+        you call `update` on the object, the SDK knows the fields that already got updated in a
+        previous call, like this:
+
+        ```
+        file = file.update();
+        ```
+
         @returns The UsageFile returned from the server, which should contain
         the same data as `this` UsageFile, or `null` if the usage file was not modified.
     **/
