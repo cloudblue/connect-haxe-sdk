@@ -194,7 +194,6 @@ class UsageFile extends IdModel {
     **/
     public function uploadRecords(records: Collection<UsageRecord>): UsageFile {
         final sheet = createSpreadsheet(records.toArray(), this.id);
-        sys.io.File.saveBytes('usage_file.xlsx', sheet);
         final data = Blob._fromBytes(sheet);
         return upload(data);
     }
