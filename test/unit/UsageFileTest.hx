@@ -190,9 +190,10 @@ class UsageFileTest {
         record.recordId = 'Unique record value';
         record.itemSearchCriteria = 'item.mpn';
         record.itemSearchValue = 'SKUA';
+        record.amount = 1.5;
         record.quantity = 1;
-        record.startTimeUtc = yesterday.toString();
-        record.endTimeUtc = today.toString();
+        record.startTimeUtc = yesterday;
+        record.endTimeUtc = today;
         record.assetSearchCriteria = 'parameter.param_b';
         record.assetSearchValue = 'tenant2';
         final records = new Collection<UsageRecord>().push(record);
