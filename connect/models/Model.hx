@@ -105,10 +105,14 @@ class Model extends Base {
 
     @:dox(hide)
     public function _toDiff(): Dynamic {
-        final cls = Type.getClass(this);
         final prevObj = Json.parse(this._footprint);
-        final diff = connect.util.Util.createObjectDiff(this.toObject(), prevObj);
-        return _parse(cls, diff);
+        return connect.util.Util.createObjectDiff(this.toObject(), prevObj);
+    }
+
+
+    @:dox(hide)
+    public function _toDiffString(): String {
+        return Json.stringify(this._toDiff());
     }
 
 

@@ -114,14 +114,28 @@ class Marketplace extends IdModel {
     /**
         Updates the Marketplace in the server with the data changed in `this` model.
 
+        You should reassign your marketplace with the object returned by this method, so the next time
+        you call `update` on the object, the SDK knows the fields that already got updated in a
+        previous call, like this:
+
+        ```
+        marketplace = marketplace.update();
+        ```
+
         @returns The Marketplace returned from the server, which should contain
         the same data as `this` Marketplace.
     **/
     public function update(): Marketplace {
-        final marketplace = Env.getMarketplaceApi().updateMarketplace(
-            this.id,
-            this._toDiff().toString());
-        return Model.parse(Marketplace, marketplace);
+        final diff = this._toDiff();
+        final hasModifiedFields = Reflect.fields(diff).length > 1;
+        if (hasModifiedFields) {
+            final marketplace = Env.getMarketplaceApi().updateMarketplace(
+                this.id,
+                haxe.Json.stringify(diff));
+            return Model.parse(Marketplace, marketplace);
+        } else {
+            return this;
+        }
     }
 
 

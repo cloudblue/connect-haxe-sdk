@@ -93,13 +93,27 @@ class Listing extends IdModel {
     /**
         Puts the listing in the Connect platform with the data changed in `this` model.
 
+        You should reassign your listing with the object returned by this method, so the next time
+        you call `put` on the object, the SDK knows the fields that already got updated in a
+        previous call, like this:
+
+        ```
+        listing = listing.put();
+        ```
+
         @returns The Listing returned from the server, which should contain
         the same data as `this` Listing.
     **/
     public function put(): Listing {
-        final listing = Env.getMarketplaceApi().putListing(
-            this.id,
-            this._toDiff().toString());
-        return Model.parse(Listing, listing);
+        final diff = this._toDiff();
+        final hasModifiedFields = Reflect.fields(diff).length > 1;
+        if (hasModifiedFields) {
+            final listing = Env.getMarketplaceApi().putListing(
+                this.id,
+                haxe.Json.stringify(diff));
+            return Model.parse(Listing, listing);
+        } else {
+            return this;
+        }
     }
 }

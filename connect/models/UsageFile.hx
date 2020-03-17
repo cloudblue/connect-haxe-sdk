@@ -155,14 +155,28 @@ class UsageFile extends IdModel {
     /**
         Updates `this` UsageFile in the server with the data changed in `this` model.
 
+        You should reassign your file with the object returned by this method, so the next time
+        you call `update` on the object, the SDK knows the fields that already got updated in a
+        previous call, like this:
+
+        ```
+        file = file.update();
+        ```
+
         @returns The UsageFile returned from the server, which should contain
         the same data as `this` UsageFile.
     **/
     public function update(): UsageFile {
-        final usageFile = Env.getUsageApi().updateUsageFile(
-            this.id,
-            this._toDiff().toString());
-        return Model.parse(UsageFile, usageFile);
+        final diff = this._toDiff();
+        final hasModifiedFields = Reflect.fields(diff).length > 1;
+        if (hasModifiedFields) {
+            final usageFile = Env.getUsageApi().updateUsageFile(
+                this.id,
+                haxe.Json.stringify(diff));
+            return Model.parse(UsageFile, usageFile);
+        } else {
+            return this;
+        }
     }
 
 

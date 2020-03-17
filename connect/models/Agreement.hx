@@ -140,14 +140,28 @@ class Agreement extends IdModel {
     /**
         Updates the agreement in Connect platform with the data changed in `this` model.
 
+        You should reassign your agreement with the object returned by this method, so the next time
+        you call `update` on the object, the SDK knows the fields that already got updated in a
+        previous call, like this:
+
+        ```
+        agreement = agreement.update();
+        ```
+
         @returns The Agreement returned from the server, which should contain
         the same data as `this` Agreement.
     **/
     public function update(): Agreement {
-        final agreement = Env.getMarketplaceApi().updateAgreement(
-            this.id,
-            this._toDiff().toString());
-        return Model.parse(Agreement, agreement);
+        final diff = this._toDiff();
+        final hasModifiedFields = Reflect.fields(diff).length > 1;
+        if (hasModifiedFields) {
+            final agreement = Env.getMarketplaceApi().updateAgreement(
+                this.id,
+                haxe.Json.stringify(diff));
+            return Model.parse(Agreement, agreement);
+        } else {
+            return this;
+        }
     }
 
 
