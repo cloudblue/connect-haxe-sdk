@@ -193,7 +193,7 @@ class UsageFile extends IdModel {
         method, which requires you to generate the Excel file contents yourself.
     **/
     public function uploadRecords(records: Collection<UsageRecord>): UsageFile {
-        final sheet = createSpreadsheet(records.toArray());
+        final sheet = createSpreadsheet(records.toArray(), this.id);
         final data = Blob._fromBytes(sheet);
         return upload(data);
     }
@@ -324,28 +324,47 @@ class UsageFile extends IdModel {
     private static final WORKBOOK = '<workbook xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><workbookPr /><workbookProtection /><bookViews><workbookView activeTab="0" autoFilterDateGrouping="1" firstSheet="0" minimized="0" showHorizontalScroll="1" showSheetTabs="1" showVerticalScroll="1" tabRatio="600" visibility="visible" /></bookViews><sheets><sheet name="%NAME%" sheetId="1" state="visible" r:id="rId1" /></sheets><definedNames /><calcPr calcId="124519" fullCalcOnLoad="1" /></workbook>';
 
 
-    private static function createSpreadsheet(records: Array<UsageRecord>): haxe.io.Bytes {
+    private static function createSpreadsheet(records: Array<UsageRecord>, fileId: String): haxe.io.Bytes {
         final sheet: Sheet = [];
         sheet.push([
-            'record_id',
-            'item_search_criteria',
-            'item_search_value',
-            'quantity',
-            'start_time_utc',
-            'end_time_utc',
-            'asset_search_criteria',
-            'asset_search_value'
+            's:record_id',
+            's:record_note',
+            's:item_search_criteria',
+            's:item_search_value',
+            's:amount',
+            's:quantity',
+            's:start_time_utc',
+            's:end_time_utc',
+            's:asset_search_criteria',
+            's:asset_search_value',
+            's:item_name',
+            's:item_mpn',
+            's:item_precision',
+            's:item_unit',
+            's:category_id',
+            's:asset_recon_id',
+            's:tier'
         ]);
-        for (record in records) {
+        for (i in 0...records.length) {
+            final record = records[i];
             sheet.push([
-                record.recordId,
-                record.itemSearchCriteria,
-                record.itemSearchValue,
-                record.quantity,
-                record.startTimeUtc,
-                record.endTimeUtc,
-                record.assetSearchCriteria,
-                record.assetSearchValue
+                's:' + ((record.recordId != null) ? record.recordId : '${fileId}_record_$i'),
+                's:' + ((record.recordNote != null) ? record.recordNote : ''),
+                's:' + ((record.itemSearchCriteria != null) ? record.itemSearchCriteria : ''),
+                's:' + ((record.itemSearchValue != null) ? record.itemSearchValue : ''),
+                'n:' + Std.string(record.amount),
+                'n:' + Std.string(record.quantity),
+                's:' + ((record.startTimeUtc != null) ? record.startTimeUtc.toString() : ''),
+                's:' + ((record.endTimeUtc != null) ? record.endTimeUtc.toString() : ''),
+                's:' + ((record.assetSearchCriteria != null) ? record.assetSearchCriteria : ''),
+                's:' + ((record.assetSearchValue != null) ? record.assetSearchValue : ''),
+                's:' + ((record.itemName != null) ? record.itemName : ''),
+                's:' + ((record.itemMpn != null) ? record.itemMpn : ''),
+                's:' + ((record.itemPrecision != null) ? record.itemPrecision : ''),
+                's:' + ((record.itemUnit != null) ? record.itemUnit : ''),
+                's:' + ((record.categoryId != null) ? record.categoryId : 'generic_category'),
+                's:' + ((record.assetReconId != null) ? record.assetReconId : ''),
+                'n:' + Std.string(record.tier)
             ]);
         }
         return zipSheet('usage_records', sheet);
@@ -389,10 +408,12 @@ class UsageFile extends IdModel {
             for (c in 0...rowNames.length) {
                 final elem = sheet[r][c];
                 if (elem != null) {
-                    final type = Std.is(elem, String) ? 's' : 'n';
-                    final value = Std.is(elem, String) ? strings.indexOf(elem) : cast(elem, Int);
+                    final split = elem.split(':');
+                    final type = split[0];
+                    final value = split.slice(1).join(':');
+                    final fixedValue = Std.string(type == 's' ? strings.indexOf(value) : value);
                     buf.add('<c r="${rowNames[c]}" t="$type">');
-                    buf.add('<v>$value</v>');
+                    buf.add('<v>$fixedValue</v>');
                     buf.add('</c>');
                 }
             }
@@ -454,7 +475,7 @@ class UsageFile extends IdModel {
 
 
     private static function getStrings(sheet: Sheet): Array<String> {
-        return [for (row in sheet) for (col in row) if (Std.is(col, String)) col];
+        return [for (row in sheet) for (col in row) if (col.split(':')[0] == 's') col.split(':').slice(1).join(':')];
     }
 
 
@@ -464,5 +485,5 @@ class UsageFile extends IdModel {
 }
 
 
-private typedef Row = Array<Dynamic>;
+private typedef Row = Array<String>;
 private typedef Sheet = Array<Row>;
