@@ -72,9 +72,9 @@ class ConnectHelper {
         @throws String if the request fails.
     **/
     public static function postFile(resource: String, ?id: String, ?suffix: String,
-        fileArg: String, fileName: String, fileContents: Blob): Dynamic {
+            fileArg: String, fileName: String, fileContents: Blob): Dynamic {
         return checkResponse(connectSyncRequest('POST', parsePath(resource, id, suffix),
-            getHeaders('multipart/form-data'), null, false, fileArg, fileName, fileContents));
+            getHeaders(false), null, false, null, fileArg, fileName, fileContents));
     }
 
 
@@ -110,10 +110,14 @@ class ConnectHelper {
     }
 
 
-    private static function getHeaders(contentType: String = 'application/json'): Dictionary {
+    private static function getHeaders(addContentType: Bool = true): Dictionary {
         final headers = new Dictionary();
         headers.set('Authorization', Env.getConfig().getApiKey());
-        headers.set('Content-Type', contentType);
+        if (addContentType) {
+            headers.set('Content-Type', 'application/json');
+        } else {
+            headers.set('Accept', 'application/json');
+        }
         return headers;
     }
 

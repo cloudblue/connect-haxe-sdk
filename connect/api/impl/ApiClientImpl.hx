@@ -317,13 +317,15 @@ class ApiClientImpl extends Base implements IApiClient {
 
     private static function getFormattedData(data: String, title: String, fmt: ILoggerFormatter)
             : String {
+        final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
         if (Util.isJson(data)) {
-            final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
             final prefix = compact ? '$title (compact):' : '$title:';
             final block = fmt.formatCodeBlock(Util.beautify(data, compact), 'json');
             return '$prefix $block';
         } else {
-            final fixedBody = StringTools.lpad(data.substr(data.length - 4), '*', data.length);
+            final fixedBody = compact
+                ? StringTools.lpad(data.substr(data.length - 4), '*', data.length)
+                : data;
             return '$title: $fixedBody';
         }
     }

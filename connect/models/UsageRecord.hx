@@ -64,7 +64,7 @@ class UsageRecord extends Model {
 
     /**
      * Only for reporting items that was not part of product definition.
-     * Items are reported and created dynamically,
+     * Items are reported and created dynamically.
      */
     public var itemUnit: String;
 
