@@ -88,6 +88,10 @@ class Asset extends IdModel {
     public var configuration: Configuration;
 
 
+    /** Events that have taken place on this asset (i.e: created, updated). **/
+    public var events: Events;
+
+
     /**
         Lists all Assets that match the given filters. Supported filters are:
 

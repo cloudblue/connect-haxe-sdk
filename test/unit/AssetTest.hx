@@ -23,6 +23,7 @@ import connect.models.TierAccount;
 import connect.models.Tiers;
 import connect.models.User;
 import connect.util.Collection;
+import connect.util.DateTime;
 import connect.util.Dictionary;
 import massive.munit.Assert;
 import test.mocks.Mock;
@@ -43,7 +44,7 @@ class AssetTest {
         Assert.isType(assets, Collection);
         Assert.areEqual(2, assets.length());
 
-        // Check first assert
+        // Check first asset
         final asset0 = assets.get(0);
         Assert.isType(asset0, Asset);
         Assert.areEqual('AS-392-283-000-0', asset0.id);
@@ -98,6 +99,11 @@ class AssetTest {
         Assert.isType(asset.configuration.params, Collection);
         Assert.areEqual(1, asset.configuration.params.length());
         Assert.isType(asset.configuration.params.get(0), Param);
+        Assert.isType(asset.events, Events);
+        Assert.isType(asset.events.created, Event);
+        Assert.isType(asset.events.updated, Event);
+        Assert.isType(asset.events.created.at, DateTime);
+        Assert.isType(asset.events.updated.at, DateTime);
         Assert.areEqual('AS-392-283-000-0', asset.id);
         Assert.areEqual('processing', asset.status);
         Assert.areEqual('1001000', asset.externalId);
@@ -116,6 +122,8 @@ class AssetTest {
         Assert.areEqual('MP-12345', asset.marketplace.id);
         Assert.areEqual('France and territories', asset.marketplace.name);
         Assert.areEqual('/media/PA-239-689/marketplaces/MP-54865/icon.png', asset.marketplace.icon);
+        Assert.areEqual('2018-11-21T11:10:29+00:00', asset.events.created.at.toString());
+        Assert.areEqual('2018-11-21T11:10:29+00:00', asset.events.updated.at.toString());
         
         final param = asset.params.get(0);
         Assert.areEqual('activationCode', param.id);
