@@ -108,4 +108,47 @@ class DateTimeTest {
         final other = DateTime.now();
         Assert.isTrue(now.equals(other));
     }
+
+    
+    @Test
+    public function testIsBetweenDatesInBetween() {
+        final first = DateTime.fromString('2000-01-01T00:00:00');
+        final second = DateTime.fromString('2010-01-01T00:00:00');
+        final inBetween = DateTime.fromString('2005-01-01T00:00:00');
+        Assert.isTrue(inBetween.isBetweenDates(first, second));
+    }
+
+    @Test
+    public function testIsBetweenDatesEarlier() {
+        final first = DateTime.fromString('2005-01-01T00:00:00');
+        final second = DateTime.fromString('2010-01-01T00:00:00');
+        final inBetween = DateTime.fromString('2000-01-01T00:00:00');
+        Assert.isFalse(inBetween.isBetweenDates(first, second));
+    }
+
+
+    @Test
+    public function testIsBetweenDatesLater() {
+        final first = DateTime.fromString('2000-01-01T00:00:00');
+        final second = DateTime.fromString('2005-01-01T00:00:00');
+        final inBetween = DateTime.fromString('2010-01-01T00:00:00');
+        Assert.isFalse(inBetween.isBetweenDates(first, second));
+    }
+
+    @Test
+    public function testIsBetweenDatesInBetweenSwapped() {
+        final first = DateTime.fromString('2010-01-01T00:00:00');
+        final second = DateTime.fromString('2000-01-01T00:00:00');
+        final inBetween = DateTime.fromString('2005-01-01T00:00:00');
+        Assert.isTrue(inBetween.isBetweenDates(first, second));
+    }
+
+
+    @Test
+    public function testIsBetweenDatesEquals() {
+        final first = DateTime.fromString('2000-01-01T00:00:00');
+        final second = DateTime.fromString('2000-01-01T00:00:00');
+        final inBetween = DateTime.fromString('2000-01-01T00:00:00');
+        Assert.isTrue(inBetween.isBetweenDates(first, second));
+    }
 }

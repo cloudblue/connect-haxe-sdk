@@ -169,6 +169,18 @@ class DateTime {
     }
 
 
+    public function isBetweenDates(first: DateTime, last: DateTime): Bool {
+        if (last.compare(first) < 0) {
+            final temp = first;
+            first = last;
+            last = temp;
+        }
+        final length = last.compare(first);
+        final offset = this.compare(first);
+        return (offset >= 0 && offset <= length);
+    }
+
+
     private final year: Int;
     private final month: Int;
     private final day: Int;
