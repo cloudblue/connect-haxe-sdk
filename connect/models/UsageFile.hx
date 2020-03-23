@@ -5,6 +5,7 @@
 package connect.models;
 
 import connect.api.Query;
+import connect.models.Period;
 import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.DateTime;
@@ -43,19 +44,23 @@ class UsageFile extends IdModel {
     public var status: String;
 
 
-    /** User ID who has created this UsageFile. **/
-    public var createdBy: String;
+    /** Period covered by this UsageFile. **/
+    public var period: Period;
 
 
-    /** Date of the creation of the UsageFile. **/
-    public var createdAt: DateTime;
+    /** Currency of the amount included in UsageFile. **/
+    public var currency: String;
+
+
+    /** Usage scheme used for the usage file. One of: QT, TR, CR, PR. **/
+    public var schema: String;
 
 
     /**
         Google Storage shared location of the upload file. Only available in GET API and not
         included in list API (sharing timeout 600 sec).
     **/
-    public var uploadFileUri: String;
+    public var usageFileUri: String;
 
 
     /**
@@ -94,15 +99,23 @@ class UsageFile extends IdModel {
 
 
     /** In case of invalid file, this field will contain errors related to the file. **/
-    public var errorDetails: String;
+    public var errorDetail: String;
 
 
-    /** Reference to `UsageRecords` object. **/
-    public var records: UsageRecords;
+    /** Reference to `UsageStats` object. **/
+    public var stats: UsageStats;
 
 
     /** Reference to `Events` ocurred on the UsageFile. **/
     public var events: Events;
+
+
+    /** External id of the UsageFile. **/
+    public var externalId: String;
+
+
+    /** Environment of the UsageFile. **/
+    public var environment: String;
 
 
     /**
@@ -306,10 +319,9 @@ class UsageFile extends IdModel {
     public function new() {
         super();
         this._setFieldClassNames([
-            'createdAt' => 'DateTime',
             'vendor' => 'Account',
             'provider' => 'Account',
-            'records' => 'UsageRecords'
+            'stats' => 'UsageStats'
         ]);
     }
 

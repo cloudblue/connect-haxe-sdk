@@ -9,7 +9,7 @@ import connect.models.Marketplace;
 import connect.models.Product;
 import connect.models.UsageFile;
 import connect.models.UsageRecord;
-import connect.models.UsageRecords;
+import connect.models.UsageStats;
 import connect.util.Collection;
 import connect.util.DateTime;
 import connect.util.Dictionary;
@@ -54,15 +54,15 @@ class UsageFileTest {
         Assert.isType(usageFile.marketplace, Marketplace);
         Assert.isType(usageFile.vendor, Account);
         Assert.isType(usageFile.provider, Account);
-        Assert.isType(usageFile.records, UsageRecords);
+        Assert.isType(usageFile.stats, UsageStats);
         Assert.areEqual('UF-2018-11-9878764342', usageFile.id);
         Assert.areEqual('Usage for Feb 2019', usageFile.name);
         Assert.areEqual('This file contains usage for the product belonging to month Feb 2019', usageFile.description);
         Assert.areEqual('My personal note', usageFile.note);
         Assert.areEqual('READY', usageFile.status);
-        Assert.areEqual('rahul.mondal@ingrammicro.com', usageFile.createdBy);
-        Assert.areEqual('2018-11-21T11:10:29+00:00', usageFile.createdAt.toString());
-        Assert.areEqual('<File Location for uploaded file>', usageFile.uploadFileUri);
+        Assert.areEqual('address@mail.com', usageFile.events.created.by);
+        Assert.areEqual('2018-11-21T11:10:29+00:00', usageFile.events.created.at.toString());
+        Assert.areEqual('<File Location for uploaded file>', usageFile.usageFileUri);
         Assert.areEqual('<File Location for generated file>', usageFile.processedFileUri);
         Assert.areEqual('CN-783-317-575', usageFile.product.id);
         Assert.areEqual('Google Apps', usageFile.product.name);
@@ -78,9 +78,9 @@ class UsageFileTest {
         Assert.areEqual('ABC Corp', usageFile.provider.name);
         Assert.areEqual('All usage data is correct', usageFile.acceptanceNote);
         Assert.areEqual('Rejected due to wrong usage for item 56', usageFile.rejectionNote);
-        Assert.areEqual('Error details in case of usage file is marked as invalid', usageFile.errorDetails);
-        Assert.areEqual(56, usageFile.records.valid);
-        Assert.areEqual(0, usageFile.records.invalid);
+        Assert.areEqual('Error details in case of usage file is marked as invalid', usageFile.errorDetail);
+        Assert.areEqual(56, usageFile.stats.validated);
+        Assert.areEqual(0, usageFile.stats.uploaded);
 
         // Check mocks
         final apiMock = cast(Env.getUsageApi(), Mock);

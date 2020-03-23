@@ -46,6 +46,7 @@ import connect.models.Media;
 import connect.models.Message;
 import connect.models.Model;
 import connect.models.Param;
+import connect.models.Period;
 import connect.models.PhoneNumber;
 import connect.models.Product;
 import connect.models.ProductConfigurationParam;
@@ -59,7 +60,7 @@ import connect.models.TierConfigRequest;
 import connect.models.Tiers;
 import connect.models.UsageFile;
 import connect.models.UsageRecord;
-import connect.models.UsageRecords;
+import connect.models.UsageStats;
 import connect.models.User;
 import connect.util.DateTime;
 #end
