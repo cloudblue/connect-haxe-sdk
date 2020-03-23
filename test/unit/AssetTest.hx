@@ -44,7 +44,7 @@ class AssetTest {
         Assert.isType(assets, Collection);
         Assert.areEqual(2, assets.length());
 
-        // Check first assert
+        // Check first asset
         final asset0 = assets.get(0);
         Assert.isType(asset0, Asset);
         Assert.areEqual('AS-392-283-000-0', asset0.id);
