@@ -75,19 +75,19 @@ class Product extends IdModel {
     /**
         Lists all Products that match the given filters. Supported filters are:
 
-        - name
-        - category.id (eq)
-        - owner.id
-        - owner.name
-        - version (eq, ne, null)
-        - search
-        - stats.listings
-        - stats.agreements.distribution
-        - stats.agreements.sourcing
-        - stats.contracts.sourcing
-        - stats.contracts.distribution
-        - latest (eq, ne)
-        - status (Draft)
+        - `name`
+        - `category.id` (eq)
+        - `owner.id`
+        - `owner.name`
+        - `version` (eq, ne, null)
+        - `search`
+        - `stats.listings`
+        - `stats.agreements.distribution`
+        - `stats.agreements.sourcing`
+        - `stats.contracts.sourcing`
+        - `stats.contracts.distribution`
+        - `latest` (eq, ne)
+        - `status` (Draft)
 
         @returns A Collection of Products.
     **/
@@ -111,7 +111,7 @@ class Product extends IdModel {
     /**
         Lists all Actions for the Product that match the given filters. Supported filters are:
 
-        - scope
+        - `scope`
 
         @returns A Collection of Actions.
     **/
@@ -313,14 +313,14 @@ class Product extends IdModel {
     /**
         Lists all ProductConfigurationParams that match the given filters. Supported filters are:
 
-        - parameter.id
-        - parameter.title
-        - parameter.scope
-        - marketplace.id
-        - marketplace.name
-        - item.id
-        - item.name
-        - value
+        - `parameter.id`
+        - `parameter.title`
+        - `parameter.scope`
+        - `marketplace.id`
+        - `marketplace.name`
+        - `item.id`
+        - `item.name`
+        - `value`
 
         @returns A Collection of ProductConfigurationParams for `this` Product.
     **/
@@ -366,10 +366,10 @@ class Product extends IdModel {
     /**
         Lists all Media that match the given filters. Supported filters are:
 
-        - id
-        - position
-        - type
-        - url
+        - `id`
+        - `position`
+        - `type`
+        - `url`
 
         @returns A Collection of Media for `this` Product.
     **/

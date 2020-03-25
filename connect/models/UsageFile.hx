@@ -121,10 +121,10 @@ class UsageFile extends IdModel {
     /**
         Lists all UsageFiles that match the given filters. Supported filters are:
 
-        - product_id
-        - distribution_contract_id
-        - status
-        - created_at
+        - `product_id`
+        - `distribution_contract_id`
+        - `status`
+        - `created_at`
 
         @returns A Collection of Requests.
     **/

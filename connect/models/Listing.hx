@@ -63,13 +63,13 @@ class Listing extends IdModel {
     /**
         Lists all listings that match the given filters. Supported filters are:
 
-        - status
-        - contract
-        - product
-        - created_date
-        - marketplace
-        - sourcing__agreement
-        - sourcing__published
+        - `status`
+        - `contract`
+        - `product`
+        - `created_date`
+        - `marketplace`
+        - `sourcing__agreement`
+        - `sourcing__published`
 
         @returns A Collection of Listings.
     **/

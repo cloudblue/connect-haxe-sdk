@@ -49,16 +49,16 @@ class TierAccount extends IdModel {
     /**
         Lists all TierAccounts that match the given filters. Supported filters are:
 
-        - id
-        - external_id
-        - external_uid
-        - environment
-        - scopes
-        - marketplace.id
-        - marketplace.name
-        - hub.id
-        - hub.name
-        - search (search based on all fields - generic search option)
+        - `id`
+        - `external_id`
+        - `external_uid`
+        - `environment`
+        - `scopes`
+        - `marketplace.id`
+        - `marketplace.name`
+        - `hub.id`
+        - `hub.name`
+        - `search` (search based on all fields - generic search option)
 
         @returns A Collection of TierAccounts.
     **/

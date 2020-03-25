@@ -69,13 +69,13 @@ class Marketplace extends IdModel {
     /**
         Lists all marketplaces that match the given filters. Supported filters are:
 
-        - id
-        - name
-        - owner.id
-        - owner.name
-        - sourcing
-        - search
-        - owner__id
+        - `id`
+        - `name`
+        - `owner.id`
+        - `owner.name`
+        - `sourcing`
+        - `search`
+        - `owner__id`
 
         @returns A Collection of Marketplaces.
     **/

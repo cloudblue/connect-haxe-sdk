@@ -101,8 +101,8 @@ class Agreement extends IdModel {
     /**
         Lists all agreements that match the given filters. Supported filters are:
 
-        - type
-        - owner__id
+        - `type`
+        - `owner__id`
 
         @returns A Collection of Agreements.
     **/
