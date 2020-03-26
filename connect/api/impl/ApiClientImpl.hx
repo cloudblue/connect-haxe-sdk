@@ -267,6 +267,8 @@ class ApiClientImpl extends Base implements IApiClient {
             if (response.status != -1) {
                 requestList.push('Status: ${response.status}');
                 requestList.push(getFormattedData(response.text, 'Response', fmt));
+            } else {
+                requestList.push(getFormattedData(response.text, 'Exception', fmt));
             }
             Env.getLogger()._writeToHandler(
                 level,

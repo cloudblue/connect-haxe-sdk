@@ -94,16 +94,16 @@ class TierConfigRequest extends IdModel {
     /**
         Lists all TierConfigRequests that match the given filters. Supported filters are:
 
-        - type (=, in)
-        - status (=, in)
-        - id (=, in)
-        - configuration__id (=, in)
-        - configuration__tier_level (=, in)
-        - configuration__account__id (=, in)
-        - configuration__product__id (=, in)
-        - assignee__id (=)
-        - unassigned (bool)
-        - configuration__account__external_uid (=)
+        - `type` (=, in)
+        - `status` (=, in)
+        - `id` (=, in)
+        - `configuration__id` (=, in)
+        - `configuration__tier_level` (=, in)
+        - `configuration__account__id` (=, in)
+        - `configuration__product__id` (=, in)
+        - `assignee__id` (=)
+        - `unassigned` (bool)
+        - `configuration__account__external_uid` (=)
 
         @returns A Collection of TierConfigRequests.
     **/

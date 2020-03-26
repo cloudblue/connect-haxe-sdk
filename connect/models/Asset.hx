@@ -95,20 +95,20 @@ class Asset extends IdModel {
     /**
         Lists all Assets that match the given filters. Supported filters are:
 
-        - id
-        - connection.hub.id
-        - connection.provider.id
-        - tiers.customer.id
-        - tiers.tier1.id
-        - tiers.tier2.id
-        - connection.id
-        - status
-        - created
-        - updated
-        - marketplace.id
-        - contract.id
-        - product.id
-        - connection.type
+        - `id`
+        - `conection.hub.id`
+        - `connection.provider.id`
+        - `tiers.customer.id`
+        - `tiers.tier1.id`
+        - `tiers.tier2.id`
+        - `connection.id`
+        - `status`
+        - `created`
+        - `updated`
+        - `marketplace.id`
+        - `contract.id`
+        - `product.id`
+        - `connection.type`
 
         @returns A Collection of Assets.
     **/

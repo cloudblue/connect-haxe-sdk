@@ -49,13 +49,13 @@ class ListingRequest extends IdModel {
     /**
         Lists all listing requests that match the given filters. Supported filters are:
 
-        - type
-        - status
-        - listing
-        - creator
-        - assignee
-        - created_date
-        - notes
+        - `type`
+        - `status`
+        - `listing`
+        - `creator`
+        - `assignee`
+        - `created_date`
+        - `notes`
 
         @returns A Collection of ListingRequests.
     **/

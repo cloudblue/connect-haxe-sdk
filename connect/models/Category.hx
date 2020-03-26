@@ -31,8 +31,8 @@ class Category extends IdModel {
     /**
         Lists all Categories that match the given filters. Supported filters are:
 
-        - family.id
-        - parent.id
+        - `family.id`
+        - `parent.id`
 
         @returns A Collection of Categories.
     **/

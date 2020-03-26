@@ -81,22 +81,22 @@ class AssetRequest extends IdModel {
     /**
         Lists all requests that match the given filters. Supported filters are:
 
-        - status
-        - created
-        - id (List support)
-        - type (purchase|renew|change|cancel)
-        - asset.id (asset_id) - (List support)
-        - asset.product.id (product_id)
-        - asset.product.name - (List support)
-        - asset.hub.id
-        - asset.connection.hub.name - (List support)
-        - asset.connection.provider.id
-        - asset.connection.provider.name - (List support)
-        - asset.connection.vendor.name - (List support)
-        - asset.tiers.customer.id (Customer ID)
-        - asset.tiers.tier1.id
-        - asset.tiers.tier2.id
-        - asset.connection.type (test|production|preview)
+        - `status`
+        - `created`
+        - `id` (List support)
+        - `type` (purchase|renew|change|cancel)
+        - `asset.id` (asset_id) - (List support)
+        - `asset.product.id` (product_id)
+        - `asset.product.name` - (List support)
+        - `asset.hub.id`
+        - `asset.connection.hub.name` - (List support)
+        - `asset.connection.provider.id`
+        - `asset.connection.provider.name` - (List support)
+        - `asset.connection.vendor.name` - (List support)
+        - `asset.tiers.customer.id` (Customer ID)
+        - `asset.tiers.tier1.id`
+        - `asset.tiers.tier2.id`
+        - `asset.connection.type` (test|production|preview)
 
         @returns A Collection of AssetRequests.
     **/

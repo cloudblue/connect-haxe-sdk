@@ -71,14 +71,14 @@ class TierConfig extends IdModel {
     /**
         Lists all TierConfigs that match the given filters. Supported filters are:
 
-        - id
-        - account.id
-        - product.id
-        - connection.id
-        - connection.type
-        - tier_level
-        - environment
-        - search (search based on all fields - generic search option)
+        - `id`
+        - `account.id`
+        - `product.id`
+        - `connection.id`
+        - `connection.type`
+        - `tier_level`
+        - `environent`
+        - `search` (search based on all fields - generic search option)
 
         @returns A Collection of TierConfigs.
     **/
