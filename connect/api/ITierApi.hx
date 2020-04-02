@@ -14,9 +14,9 @@ interface ITierApi {
     public function pendTierConfigRequest(id: String): Void;
     public function inquireTierConfigRequest(id: String): Void;
     public function approveTierConfigRequest(id: String, data: String): String;
-    public function failTierConfigRequest(id: String, data: String): String;
-    public function assignTierConfigRequest(id: String): String;
-    public function unassignTierConfigRequest(id: String): String;
+    public function failTierConfigRequest(id: String, data: String): Void;
+    public function assignTierConfigRequest(id: String): Void;
+    public function unassignTierConfigRequest(id: String): Void;
     public function listTierAccounts(filters: Query): String;
     public function getTierAccount(id: String): String;
     public function listTierConfigs(filters: Query): String;

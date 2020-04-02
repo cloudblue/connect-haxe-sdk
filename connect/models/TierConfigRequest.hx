@@ -183,16 +183,12 @@ class TierConfigRequest extends IdModel {
 
         When processing requests within a `Flow`, you should use the `Flow.approveByTemplate`
         method instead of this one, since it finishes the flow and logs the information.
-
-        @returns The TierConfigRequest returned from the server, which should contain
-        the updated status.
     **/
-    public function approveByTemplate(id: String): TierConfigRequest {
-        final request = Env.getTierApi().approveTierConfigRequest(
+    public function approveByTemplate(id: String): Void {
+        Env.getTierApi().approveTierConfigRequest(
             this.id,
             haxe.Json.stringify({template_id: id})
         );
-        return Model.parse(TierConfigRequest, request);
     }
 
 
@@ -202,16 +198,12 @@ class TierConfigRequest extends IdModel {
 
         When processing requests within a `Flow`, you should use the `Flow.approveByTile`
         method instead of this one, since it finishes the flow and logs the information.
-
-        @returns The TierConfigRequest returned from the server, which should contain
-        the updated status.
     **/
-    public function approveByTile(text: String): TierConfigRequest {
-        final request = Env.getTierApi().approveTierConfigRequest(
+    public function approveByTile(text: String): Void {
+        Env.getTierApi().approveTierConfigRequest(
             this.id,
             haxe.Json.stringify({activation_tile: text})
         );
-        return Model.parse(TierConfigRequest, request);
     }
 
 
@@ -220,16 +212,12 @@ class TierConfigRequest extends IdModel {
 
         When processing requests within a `Flow`, you should use the `Flow.fail`
         method instead of this one, since it finishes the flow and logs the information.
-
-        @returns The TierConfigRequest returned from the server, which should contain
-        the updated status.
     **/
-    public function fail(reason: String): TierConfigRequest {
-        final request = Env.getTierApi().failTierConfigRequest(
+    public function fail(reason: String): Void {
+        Env.getTierApi().failTierConfigRequest(
             this.id,
             haxe.Json.stringify({reason: reason})
         );
-        return Model.parse(TierConfigRequest, request);
     }
 
 
@@ -257,25 +245,17 @@ class TierConfigRequest extends IdModel {
 
     /**
         Assigns this TierConfigRequest.
-
-        @returns The TierConfigRequest returned from the server, which should contain
-        the updated assignee.
     **/
-    public function assign(): TierConfigRequest {
-        final request = Env.getTierApi().assignTierConfigRequest(this.id);
-        return Model.parse(TierConfigRequest, request);
+    public function assign(): Void {
+        Env.getTierApi().assignTierConfigRequest(this.id);
     }
 
 
     /**
         Unassigns this TierConfigRequest.
-
-        @returns The TierConfigRequest returned from the server, which should contain
-        the updated assignee.
     **/
-    public function unassign(): TierConfigRequest {
-        final request = Env.getTierApi().unassignTierConfigRequest(this.id);
-        return Model.parse(TierConfigRequest, request);
+    public function unassign(): Void {
+        Env.getTierApi().unassignTierConfigRequest(this.id);
     }
 
 

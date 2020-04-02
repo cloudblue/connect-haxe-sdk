@@ -48,18 +48,18 @@ class TierApiImpl extends Base implements ITierApi {
     }
 
 
-    public function failTierConfigRequest(id: String, data: String): String {
-        return ConnectHelper.post(TCR_PATH, id, 'fail', data);
+    public function failTierConfigRequest(id: String, data: String): Void {
+        ConnectHelper.post(TCR_PATH, id, 'fail', data);
     }
 
 
-    public function assignTierConfigRequest(id: String): String {
-        return ConnectHelper.post(TCR_PATH, id, 'assign');
+    public function assignTierConfigRequest(id: String): Void {
+        ConnectHelper.post(TCR_PATH, id, 'assign');
     }
 
 
-    public function unassignTierConfigRequest(id: String): String {
-        return ConnectHelper.post(TCR_PATH, id, 'unassign');
+    public function unassignTierConfigRequest(id: String): Void {
+        ConnectHelper.post(TCR_PATH, id, 'unassign');
     }
 
 
