@@ -60,7 +60,8 @@ class UsageFileTest {
         Assert.areEqual('This file contains usage for the product belonging to month Feb 2019', usageFile.description);
         Assert.areEqual('My personal note', usageFile.note);
         Assert.areEqual('READY', usageFile.status);
-        Assert.areEqual('address@mail.com', usageFile.events.created.by);
+        Assert.areEqual('PA-000-000', usageFile.events.created.by.id);
+        Assert.areEqual('Username', usageFile.events.created.by.name);
         Assert.areEqual('2018-11-21T11:10:29+00:00', usageFile.events.created.at.toString());
         Assert.areEqual('<File Location for uploaded file>', usageFile.usageFileUri);
         Assert.areEqual('<File Location for generated file>', usageFile.processedFileUri);

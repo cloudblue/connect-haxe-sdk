@@ -5,7 +5,7 @@
         "description": "This file contains usage for the product belonging to month Feb 2019",
         "note": "My personal note",
         "status":"READY",
-        "created_by": "rahul.mondal@ingrammicro.com",
+        "created_by": "name@address.com",
         "created_at": "2018-11-21T11:10:29+00:00",
         "product": {
             "id": "CN-783-317-575",
@@ -40,23 +40,38 @@
         },
         "events": {
             "created": {
-                "by": "address@mail.com",
+                "by": {
+                    "id": "PA-000-000",
+                    "name": "Username"
+                },
                 "at": "2018-11-21T11:10:29+00:00"
             },
             "submitted": {
-                "by": "address@mail.com",
+                "by": {
+                    "id": "PA-000-000",
+                    "name": "Username"
+                },
                 "at": "2018-11-21T11:10:29+00:00"
             },
             "accepted": {
-                "by": "address@mail.com",
+                "by": {
+                    "id": "PA-000-000",
+                    "name": "Username"
+                },
                 "at": "2018-11-21T11:10:29+00:00"
             },
             "rejected": {
-                "by": "address@mail.com",
+                "by": {
+                    "id": "PA-000-000",
+                    "name": "Username"
+                },
                 "at": "2018-11-21T11:10:29+00:00"
             },
             "closed": {
-                "by": "address@mail.com",
+                "by": {
+                    "id": "PA-000-000",
+                    "name": "Username"
+                },
                 "at": "2018-11-21T11:10:29+00:00"
             }
         }
