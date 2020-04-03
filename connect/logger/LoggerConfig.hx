@@ -51,6 +51,16 @@ class LoggerConfig extends Base {
         return this;
     }
 
+    /**
+     * Sets the fields which should be masked in the logs,
+     * by default only connect api credentials are masked
+     * @param maskedFields Collection of field names (string).
+     * @return LoggerConfig
+     */
+    public function maskedFields(maskedFields: Collection<String>):LoggerConfig{
+        this.maskedFields_ = maskedFields;
+        return this;
+    }
 
     public function new() {
         this.path_ = 'logs';
@@ -65,4 +75,5 @@ class LoggerConfig extends Base {
     public var path_(default, null): String;
     public var level_(default, null): Int;
     public var handlers_(default, null): Collection<LoggerHandler>;
+    public var maskedFields_(default,null): Collection<String>;
 }
