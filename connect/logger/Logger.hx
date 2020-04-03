@@ -35,6 +35,8 @@ class Logger extends Base {
         this.level = Std.int(Math.min(Math.max(config.level_, LEVEL_ERROR), LEVEL_DEBUG));
         this.handlers = config.handlers_.copy();
         this.sections = [];
+        this.maskedFields = config.maskedFields_;
+        this.maskedFields.push("apiKey");
     }
 
 
@@ -184,6 +186,13 @@ class Logger extends Base {
         }
     }
 
+    /**
+    *  Returns a list of fields which should be masked in http requests or responses
+    **/
+    public function getMaskedFields(){
+        return this.maskedFields;
+    }
+
 
     @:dox(hide)
     public function log(message: String): Void {
@@ -253,6 +262,7 @@ class Logger extends Base {
     private final level: Int;
     private final handlers: Collection<LoggerHandler>;
     private final sections: Array<LoggerSection>;
+    private final maskedFields: Collection<String>;
     
     
     private function writeSections(): Void {
