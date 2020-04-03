@@ -2,9 +2,11 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-package connect.logger;
+package test.util;
 
 
+import connect.logger.ILoggerWriter;
+import connect.Base;
 @:dox(hide)
 class ArrayLoggerWriter extends Base implements ILoggerWriter {
     public function new() {

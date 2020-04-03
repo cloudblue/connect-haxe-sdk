@@ -92,7 +92,7 @@ class Util {
 
 
     /** @return Whether the passed object is an array. **/
-    public static function isArray(value:Dynamic):Bool {
+    public static function isArray(value: Dynamic):Bool {
         return Std.is(value, Array);
     }
 
