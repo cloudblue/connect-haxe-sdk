@@ -134,8 +134,7 @@ class TierConfigRequestTest {
     public function testApproveByTemplate() {
         // Check subject
         final request = TierConfigRequest.get('TCR-000-000-000');
-        final approvedRequest = request.approveByTemplate('TL-XXX-XXX-XXX');
-        Assert.isType(approvedRequest, TierConfigRequest);
+        request.approveByTemplate('TL-XXX-XXX-XXX');
 
         // Check mocks
         final apiMock = cast(Env.getTierApi(), Mock);
@@ -150,8 +149,7 @@ class TierConfigRequestTest {
     public function testApproveByTile() {
         // Check subject
         final request = TierConfigRequest.get('TCR-000-000-000');
-        final approvedRequest = request.approveByTile('Hello, world!');
-        Assert.isType(approvedRequest, TierConfigRequest);
+        request.approveByTile('Hello, world!');
 
         // Check mocks
         final apiMock = cast(Env.getTierApi(), Mock);
@@ -166,8 +164,7 @@ class TierConfigRequestTest {
     public function testFail() {
         // Check subject
         final request = TierConfigRequest.get('TCR-000-000-000');
-        final failedRequest = request.fail("Failing...");
-        Assert.isType(failedRequest, TierConfigRequest);
+        request.fail("Failing...");
 
         // Check mocks
         final apiMock = cast(Env.getTierApi(), Mock);
@@ -210,8 +207,7 @@ class TierConfigRequestTest {
     public function testAssign() {
         // Check subject
         final request = TierConfigRequest.get('TCR-000-000-000');
-        final assignedRequest = request.assign();
-        Assert.isType(assignedRequest, TierConfigRequest);
+        request.assign();
 
         // Check mocks
         final apiMock = cast(Env.getTierApi(), Mock);
@@ -226,8 +222,7 @@ class TierConfigRequestTest {
     public function testUnassign() {
         // Check subject
         final request = TierConfigRequest.get('TCR-000-000-000');
-        final unassignedRequest = request.unassign();
-        Assert.isType(unassignedRequest, TierConfigRequest);
+        request.unassign();
 
         // Check mocks
         final apiMock = cast(Env.getTierApi(), Mock);

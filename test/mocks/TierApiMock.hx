@@ -62,21 +62,18 @@ class TierApiMock extends Mock implements ITierApi {
     }
 
 
-    public function failTierConfigRequest(id: String, data: String): String {
+    public function failTierConfigRequest(id: String, data: String): Void {
         this.calledFunction('failTierConfigRequest', [id, data]);
-        return this.getTierConfigRequest(id);
     }
 
 
-    public function assignTierConfigRequest(id: String): String {
+    public function assignTierConfigRequest(id: String): Void {
         this.calledFunction('assignTierConfigRequest', [id]);
-        return this.getTierConfigRequest(id);
     }
 
 
-    public function unassignTierConfigRequest(id: String): String {
+    public function unassignTierConfigRequest(id: String): Void {
         this.calledFunction('unassignTierConfigRequest', [id]);
-        return this.getTierConfigRequest(id);
     }
 
 
