@@ -340,7 +340,15 @@ class Flow extends Base {
     private var data: Dictionary;
     private var abortRequested: Bool;
     private var abortMessage: String;
+    private var currentStepAttempt: Int;
 
+    /**
+    * Provide current step attempt
+    * @return Int Number of times that this step has been executed
+    **/
+    public function getCurrentAttempt(){
+        return this.currentStepAttempt;
+    }
 
     private function process(model: IdModel): Void {
         if (this.prepareRequestAndOpenLogSection(model)) {
@@ -386,6 +394,7 @@ class Flow extends Base {
     private function loadStepDataIfStored(): StepData {
         final stepData = StepStorage.load(this.model.id, getStepParam());
         this.data = stepData.data;
+        this.currentStepAttempt = stepData.attempt;
         if (stepData.storage != FailedStorage) {
             Env.getLogger().write(Logger.LEVEL_INFO,
                 'Resuming request from step ${stepData.firstIndex + 1} with ${stepData.storage}.');
@@ -497,7 +506,7 @@ class Flow extends Base {
                 Env.getLogger().write(Logger.LEVEL_INFO,
                     'Skipping request. Trying to save step data.');
                 final saveResult = StepStorage.save(this.model,
-                    new StepData(index, this.data, ConnectStorage),
+                    new StepData(index, this.data, ConnectStorage,this.currentStepAttempt+1),
                     param,
                     Reflect.field(model, 'update'));
                 switch (saveResult) {
@@ -521,6 +530,7 @@ class Flow extends Base {
             return {nextIndex: index+1, lastRequestStr: requestStr, lastDataStr: dataStr};
         }
     }
+
 
 
     /**
