@@ -31,6 +31,28 @@ class LoggerTest {
     }
 
     @Test
+    public function setLevel() {
+        var logConfig:LoggerConfig = new LoggerConfig();
+        logConfig.level(0);
+        Assert.areEqual(0, logConfig.level_);
+        logConfig.level(2);
+        Assert.areEqual(2, logConfig.level_);
+        logConfig.level(3);
+        Assert.areEqual(3, logConfig.level_);
+        logConfig.level('ERROR');
+        Assert.areEqual(0, logConfig.level_);
+        logConfig.level('WARNING');
+        Assert.areEqual(0, logConfig.level_);
+        logConfig.level('INFO');
+        Assert.areEqual(2, logConfig.level_);
+        logConfig.level('TEST');
+        Assert.areEqual(2, logConfig.level_);
+        logConfig.level('DEBUG');
+        Assert.areEqual(3, logConfig.level_);
+    }
+
+
+    @Test
     public function testMaskDataInObj() {
         final maskedInfo = Util.beautify(dataTestMaskDataInObj, true);
         final result = Helper.sortObject(Json.parse(maskedInfo));
