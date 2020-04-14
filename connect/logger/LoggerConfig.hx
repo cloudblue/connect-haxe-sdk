@@ -47,7 +47,7 @@ class LoggerConfig extends Base {
      */
     public function levelName(level:String):LoggerConfig {
         this.level_ = Logger.LEVEL_INFO;
-        if (Std.is(level, String) && this.levelTranslation.exists(level)) {
+        if (this.levelTranslation.exists(level)) {
             this.level_ = this.levelTranslation[level];
         }
         return this;
