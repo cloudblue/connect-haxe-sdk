@@ -34,11 +34,20 @@ class LoggerConfig extends Base {
      *  One of: `Logger.LEVEL_ERROR`, `Logger.LEVEL_INFO`, `Logger.LEVEL_DEBUG`.
      * @return `this` instance to support a fluent interface.
      */
-    public function level(level:Dynamic):LoggerConfig {
+    public function level(level:Int):LoggerConfig {
+        this.level_ = level;
+        return this;
+    }
+
+    /**
+     * Sets the logging level. Default is `Logger.LEVEL_INFO`.
+     * @param level Level of log.
+     *  One of: `ERROR`, `INFO`, `DEBUG`.
+     * @return `this` instance to support a fluent interface.
+     */
+    public function levelName(level:String):LoggerConfig {
         this.level_ = Logger.LEVEL_INFO;
-        if (Std.is(level, Int)) {
-            this.level_ = level;
-        } else if (Std.is(level, String) && this.levelTranslation.exists(level)) {
+        if (Std.is(level, String) && this.levelTranslation.exists(level)) {
             this.level_ = this.levelTranslation[level];
         }
         return this;

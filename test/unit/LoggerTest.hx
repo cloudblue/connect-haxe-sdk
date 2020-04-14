@@ -39,15 +39,15 @@ class LoggerTest {
         Assert.areEqual(2, logConfig.level_);
         logConfig.level(3);
         Assert.areEqual(3, logConfig.level_);
-        logConfig.level('ERROR');
+        logConfig.levelName('ERROR');
         Assert.areEqual(0, logConfig.level_);
-        logConfig.level('WARNING');
+        logConfig.levelName('WARNING');
         Assert.areEqual(0, logConfig.level_);
-        logConfig.level('INFO');
+        logConfig.levelName('INFO');
         Assert.areEqual(2, logConfig.level_);
-        logConfig.level('TEST');
+        logConfig.levelName('TEST');
         Assert.areEqual(2, logConfig.level_);
-        logConfig.level('DEBUG');
+        logConfig.levelName('DEBUG');
         Assert.areEqual(3, logConfig.level_);
     }
 
