@@ -43,6 +43,6 @@ class ArrayLoggerWriter extends Base implements ILoggerWriter {
 
     private var filename: String;
     private var file: sys.io.FileOutput;
-    private var lines: Array<String>;
+    private var lines: Array<String> = new Array<String>();
 
 }

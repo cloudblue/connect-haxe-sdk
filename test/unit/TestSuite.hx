@@ -10,6 +10,7 @@ import ConversationTest;
 import TierAccountTest;
 import LoggerTest;
 import AssetRequestTest;
+import FlowAttemptsTest;
 import ModelTest;
 import DateTimeTest;
 import ItemTest;
@@ -44,6 +45,7 @@ class TestSuite extends massive.munit.TestSuite
 		add(TierAccountTest);
 		add(LoggerTest);
 		add(AssetRequestTest);
+		add(FlowAttemptsTest);
 		add(ModelTest);
 		add(DateTimeTest);
 		add(ItemTest);

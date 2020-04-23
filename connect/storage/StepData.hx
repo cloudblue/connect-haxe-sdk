@@ -21,13 +21,11 @@ class StepData {
     public final firstIndex: Int;
     public final data: Dictionary;
     public final storage: StorageType;
-    public var attempt:Int;
 
-    public function new(firstIndex: Int, data: Dynamic, storage: StorageType,attempt: Int = 0) {
+    public function new(firstIndex: Int, data: Dynamic, storage: StorageType) {
         this.firstIndex = firstIndex;
         this.data = new Dictionary();
         this.storage = storage;
-        this.attempt = attempt;
         if (Std.is(data, Dictionary)) {
             // Create data from Dictionary. Store model class names with key
             for (key in cast(data, Dictionary).keys()) {
@@ -53,5 +51,6 @@ class StepData {
                 this.data.set(fieldName, parsedValue);
             }
         }
+
     }
 }
