@@ -33,7 +33,7 @@ class ApiClientFlowMock extends Mock implements IApiClient {
 
 	public function syncRequest(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob):Response {
 		this.calledFunction('syncRequest', [method, url, headers, body, fileArg, fileName, fileContent]);
-		
+
 		if (StringTools.contains(url, REQUESTS_PATH) && method.toUpperCase() == 'GET') {
 			return new Response(200, Mock.parseJsonFile('test/mocks/data/request_list.json'), null);
 		}
@@ -73,7 +73,7 @@ class ApiClientFlowMock extends Mock implements IApiClient {
 class TestFlow extends Flow {
 	public function new() {
 		super(null);
-        this.step("test step 1",untyped TestFlow.firstStep_1);
+		this.step("test step 1", untyped TestFlow.firstStep_1);
 	}
 
 	public function firstStep_1() {
@@ -85,18 +85,18 @@ class TestFlow extends Flow {
 class FlowAttemptsTest {
 	@Before
 	public function setup() {
-        Env._reset(new Dictionary().setString('IApiClient', 'ApiClientFlowMock'));
-        var maskedFields:Collection<String> = new Collection();
-        Env.initLogger(new LoggerConfig().handlers(new Collection<LoggerHandler>().push(new LoggerHandler(new MarkdownLoggerFormatter(),
-        new ArrayLoggerWriter())))
-		.maskedFields(maskedFields));
-		Env.initConfig("TESTAPIURL","TESTAPIKEY",new Collection<String>().push("PRD-TEST-0001"));
+		Env._reset(new Dictionary().setString('IApiClient', 'ApiClientFlowMock'));
+		var maskedFields:Collection<String> = new Collection();
+		Env.initLogger(new LoggerConfig().handlers(new Collection<LoggerHandler>().push(new LoggerHandler(new MarkdownLoggerFormatter(),
+			new ArrayLoggerWriter())))
+			.maskedFields(maskedFields));
+		Env.initConfig("TESTAPIURL", "TESTAPIKEY", new Collection<String>().push("PRD-TEST-0001"));
 	}
 
 	@Test
 	public function testAttempts() {
 		var testFlow:TestFlow = new TestFlow();
-        var request_list = Model.parseArray(AssetRequest, sys.io.File.getContent('test/mocks/data/request_list.json'));
+		var request_list = Model.parseArray(AssetRequest, sys.io.File.getContent('test/mocks/data/request_list.json'));
 		Assert.areEqual(0, testFlow.getCurrentAttempt());
 		testFlow._run(request_list);
 		Assert.areEqual(1, testFlow.getCurrentAttempt());
