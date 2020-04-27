@@ -7,6 +7,7 @@
 -cs _build/cs
 --next
 
+-D javalib
 -java _build/java
 --next
 

@@ -9,7 +9,7 @@ package connect.util;
     A Collection is a way to have a standard collection type across all languages supported by the
     SDK.
 **/
-#if java
+#if javalib
 class Collection<T> extends Base implements java.lang.Iterable<T> {
 #else
 class Collection<T> extends Base {
@@ -128,7 +128,7 @@ class Collection<T> extends Base {
         Returns an iterator of the Collection values. This can be used with `for` loops when
         using the SDK within Haxe, and in Java it returns a native iterator.
     **/
-#if java
+#if javalib
     public function iterator(): java.util.Iterator<T> {
         return new connect.native.JavaIterator(this._array);
     }
