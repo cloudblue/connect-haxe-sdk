@@ -80,9 +80,10 @@ class LoggerConfig extends Base {
         this.path_ = 'logs';
         this.level_ = Logger.LEVEL_INFO;
         this.handlers_ = new Collection<LoggerHandler>()
-        .push(
-            new LoggerHandler(new MarkdownLoggerFormatter(),
-            new FileLoggerWriter()));
+            .push(
+                new LoggerHandler(new MarkdownLoggerFormatter(),
+                new FileLoggerWriter()));
+        this.maskedFields_ = new Collection<String>();
     }
 
 

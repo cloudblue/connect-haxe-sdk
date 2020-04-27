@@ -5,7 +5,7 @@
 package connect.native;
 
 
-#if java
+#if javalib
 class JavaIterator<T> implements java.util.Iterator<T> {
     public function new(array: Array<T>) {
         this.array = array;

@@ -5,7 +5,7 @@
 package connect.native;
 
 
-#if java
+#if javalib
 @:nativeGen
 @:abstract
 @:javaNative
