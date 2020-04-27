@@ -22,7 +22,7 @@ class LoggerConfig extends Base {
      * @param path Path for logs.
      * @return `this` instance to support a fluent interface.
      */
-    public function path(path: String): LoggerConfig {
+    public function path(path:String):LoggerConfig {
         this.path_ = path;
         return this;
     }
@@ -34,8 +34,22 @@ class LoggerConfig extends Base {
      *  One of: `Logger.LEVEL_ERROR`, `Logger.LEVEL_INFO`, `Logger.LEVEL_DEBUG`.
      * @return `this` instance to support a fluent interface.
      */
-    public function level(level: Int): LoggerConfig {
+    public function level(level:Int):LoggerConfig {
         this.level_ = level;
+        return this;
+    }
+
+    /**
+     * Sets the logging level. Default is `Logger.LEVEL_INFO`.
+     * @param level Level of log.
+     *  One of: `ERROR`, `INFO`, `DEBUG`.
+     * @return `this` instance to support a fluent interface.
+     */
+    public function levelName(level:String):LoggerConfig {
+        this.level_ = Logger.LEVEL_INFO;
+        if (this.levelTranslation.exists(level)) {
+            this.level_ = this.levelTranslation[level];
+        }
         return this;
     }
 
@@ -46,7 +60,7 @@ class LoggerConfig extends Base {
      * @param handlers Collection of handlers.
      * @return LoggerConfig
      */
-    public function handlers(handlers: Collection<LoggerHandler>): LoggerConfig {
+    public function handlers(handlers:Collection<LoggerHandler>):LoggerConfig {
         this.handlers_ = handlers.copy();
         return this;
     }
@@ -57,7 +71,7 @@ class LoggerConfig extends Base {
      * @param maskedFields Collection of field names (string).
      * @return LoggerConfig
      */
-    public function maskedFields(maskedFields: Collection<String>):LoggerConfig{
+    public function maskedFields(maskedFields:Collection<String>):LoggerConfig {
         this.maskedFields_ = maskedFields;
         return this;
     }
@@ -66,14 +80,15 @@ class LoggerConfig extends Base {
         this.path_ = 'logs';
         this.level_ = Logger.LEVEL_INFO;
         this.handlers_ = new Collection<LoggerHandler>()
-            .push(
-                new LoggerHandler(new MarkdownLoggerFormatter(),
-                new FileLoggerWriter()));
+        .push(
+            new LoggerHandler(new MarkdownLoggerFormatter(),
+            new FileLoggerWriter()));
     }
 
 
-    public var path_(default, null): String;
-    public var level_(default, null): Int;
-    public var handlers_(default, null): Collection<LoggerHandler>;
-    public var maskedFields_(default,null): Collection<String>;
+    public var path_(default, null):String;
+    public var level_(default, null):Int;
+    public var handlers_(default, null):Collection<LoggerHandler>;
+    public var maskedFields_(default, null):Collection<String>;
+    private final levelTranslation:Map<String, Int> = ["ERROR"=>0, "WARNING" => 0, "INFO" =>2, "DEBUG" => 3];
 }
