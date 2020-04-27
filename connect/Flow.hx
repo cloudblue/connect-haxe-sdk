@@ -536,11 +536,11 @@ class Flow extends Base {
 
     private function logStepData(level: Int, request: String, data: String,
             lastRequest: String, lastData: String) {
-        for (output in Env.getLogger().getOutputs()) {
+        for (handler in Env.getLogger().getHandlers()) {
             final list = new Collection<String>()
-                .push(getFormattedRequest(request, lastRequest, output.formatter))
-                .push(getFormattedData(data, lastData, this.data, output.formatter));
-            Env.getLogger()._writeToHandler(level, output.formatter.formatList(list), output);
+                .push(getFormattedRequest(request, lastRequest, handler.formatter))
+                .push(getFormattedData(data, lastData, this.data, handler.formatter));
+            Env.getLogger()._writeToHandler(level, handler.formatter.formatList(list), handler);
         }
     }
 

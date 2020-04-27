@@ -255,8 +255,8 @@ class ApiClientImpl extends Base implements IApiClient {
     private static function logRequest(level: Int, method: String, url: String,
             headers: Dictionary, body: String, response: Response): Void {
         final firstMessage = 'Http ${method.toUpperCase()} request to ${url}';
-        for (output in Env.getLogger().getOutputs()) {
-            final fmt = output.formatter;
+        for (handler in Env.getLogger().getHandlers()) {
+            final fmt = handler.formatter;
             final requestList = new Collection<String>();
             if (headers != null) {
                 requestList.push('Headers:${getHeadersTable(headers, fmt)}');
@@ -273,7 +273,7 @@ class ApiClientImpl extends Base implements IApiClient {
             Env.getLogger()._writeToHandler(
                 level,
                 fmt.formatBlock('$firstMessage${fmt.formatList(requestList)}'),
-                output);
+                handler);
         }
     }
 

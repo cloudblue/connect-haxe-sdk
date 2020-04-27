@@ -96,8 +96,8 @@ class Logger extends Base {
     */
 
 
-    /** @returns The defined outputs for this logger. Do not modify this collection. **/
-    public function getOutputs(): Collection<LoggerHandler> {
+    /** @returns The defined handlers for this logger. Do not modify this collection. **/
+    public function getHandlers(): Collection<LoggerHandler> {
         return this.handlers;
     }
 
