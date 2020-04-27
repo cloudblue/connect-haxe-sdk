@@ -69,6 +69,7 @@ class LoggerConfig extends Base {
             .push(
                 new LoggerHandler(new MarkdownLoggerFormatter(),
                 new FileLoggerWriter()));
+        this.maskedFields_ = new Collection<String>();
     }
 
 
