@@ -24,7 +24,7 @@ import haxe.Json;
 #if cslib
 typedef FilterFunc = connect.native.CsFunc<IdModel, Bool>;
 typedef StepFunc = connect.native.CsAction<Flow>;
-#elseif java
+#elseif javalib
 typedef FilterFunc = connect.native.JavaFunction<IdModel, Bool>;
 typedef StepFunc = connect.native.JavaConsumer<Flow>;
 #else
@@ -313,7 +313,7 @@ class Flow extends Base {
             ? Collection._fromArray(list.toArray().filter(
             #if cslib
                 (m) -> filterFunc.Invoke(cast(m, IdModel))
-            #elseif java
+            #elseif javalib
                 (m) -> filterFunc.apply(cast(m, IdModel))
             #else
                 (m) -> filterFunc(cast(m, IdModel))
@@ -415,7 +415,7 @@ class Flow extends Base {
         try {
             #if cslib
             step.func.Invoke(this);
-            #elseif java
+            #elseif javalib
             step.func.accept(this);
             #else
             step.func(this);
@@ -536,11 +536,11 @@ class Flow extends Base {
 
     private function logStepData(level: Int, request: String, data: String,
             lastRequest: String, lastData: String) {
-        for (output in Env.getLogger().getOutputs()) {
+        for (handler in Env.getLogger().getHandlers()) {
             final list = new Collection<String>()
-                .push(getFormattedRequest(request, lastRequest, output.formatter))
-                .push(getFormattedData(data, lastData, this.data, output.formatter));
-            Env.getLogger()._writeToHandler(level, output.formatter.formatList(list), output);
+                .push(getFormattedRequest(request, lastRequest, handler.formatter))
+                .push(getFormattedData(data, lastData, this.data, handler.formatter));
+            Env.getLogger()._writeToHandler(level, handler.formatter.formatList(list), handler);
         }
     }
 

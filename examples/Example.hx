@@ -3,6 +3,7 @@
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
 
+import connect.util.Collection;
 import connect.Env;
 import connect.Flow;
 import connect.Processor;
@@ -20,15 +21,14 @@ class Example {
 
         // Define main flow
         final flow = new Flow(null)
-            .step('Add dummy data', function(f) {
+            .step('Add dummy data', function(f: Flow): Void {
                 f.setData('requestId', f.getAssetRequest().id)
                     .setData('assetId', f.getAssetRequest().asset.id)
                     .setData('connectionId', f.getAssetRequest().asset.connection.id)
                     .setData('productId', f.getAssetRequest().asset.product.id)
                     .setData('status', f.getAssetRequest().status);
-                return f.getAssetRequest().id;
             })
-            .step('Trace request data', function(f) {
+            .step('Trace request data', function(f: Flow): Void {
                 Sys.println(f.getData('requestId')
                     + ' : ' + f.getData('assetId')
                     + ' : ' + f.getData('connectionId')
