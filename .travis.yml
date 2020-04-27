@@ -10,7 +10,7 @@ install:
 # Install Java
   - curl -s "https://get.sdkman.io" | bash
   - source "/home/travis/.sdkman/bin/sdkman-init.sh"
-  - sdk install java 8.0.242.j9-adpt
+  - sdk install java 8.0.252.j9-adpt
 # Install Mono
   - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
   - sudo apt install apt-transport-https ca-certificates -y
