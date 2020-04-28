@@ -53,6 +53,9 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
         }
     }
 
+    public function formatLine(text:String):String{
+        return text;
+    }
 
     public function new() {}
 
@@ -63,7 +66,4 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
         return macosReplaced.split('\n');
     }
 
-    private static function formatLine(text:String):String{
-        return text;
-    }
 }
