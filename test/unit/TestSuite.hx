@@ -32,9 +32,9 @@ import CustomLoggerFormatterTest;
  */
 class TestSuite extends massive.munit.TestSuite
 {
-	public function new()
-	{
-		super();
+    public function new()
+    {
+        super();
 
 
         add(LoggerTest);
@@ -63,5 +63,5 @@ class TestSuite extends massive.munit.TestSuite
         add(FlowAttemptsTest);
         add(CustomLoggerFormatterTest);
 
-	}
+    }
 }
