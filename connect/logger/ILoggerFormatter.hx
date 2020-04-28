@@ -17,4 +17,5 @@ interface ILoggerFormatter {
     public function formatCodeBlock(text: String, language: String): String;
     public function formatList(list: Collection<String>): String;
     public function formatTable(table: Collection<Collection<String>>): String;
+    public function formatLine(text:String):String;
 }

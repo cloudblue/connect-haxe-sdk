@@ -62,4 +62,8 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
         final macosReplaced = StringTools.replace(windowsReplaced, '\r', '\n');
         return macosReplaced.split('\n');
     }
+
+    private static function formatLine(text:String):String{
+        return text;
+    }
 }
