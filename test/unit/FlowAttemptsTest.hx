@@ -75,10 +75,10 @@ class ApiClientFlowMock extends Mock implements IApiClient {
 class TestFlow extends Flow {
 	public function new() {
 		super(null);
-		this.step("test step 1",this.firstStep);
+		this.step("test step 1", this.firstStep);
 	}
 
-	public function firstStep(f: Flow):Void {
+	public function firstStep(f:Flow):Void {
 		this.abort();
 	}
 }

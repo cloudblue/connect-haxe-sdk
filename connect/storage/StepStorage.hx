@@ -19,13 +19,13 @@ import sys.io.File;
 @:dox(hide)
 class StepStorage {
 	public static function load(requestId:String, param:Param):StepData {
-        final fileData = loadRequestFromFile(requestId);
-        final stepData = (fileData != null) ? fileData : loadRequestFromParam(requestId, param);
+    	final fileData = loadRequestFromFile(requestId);
+		final stepData = (fileData != null) ? fileData : loadRequestFromParam(requestId, param);
 		return (stepData != null) ? stepData : new StepData(0, {}, FailedStorage);
 	}
 
 	public static function save(request:IdModel, stepData:StepData, param:Param, updateFunc:Function):StorageType {
-        removeStepDataFromFile(request.id);
+		removeStepDataFromFile(request.id);
 		// Save new data in available storage
 		final paramObj = objWithRequestData(loadAllFromParam(param), request.id, stepData);
 
@@ -33,7 +33,6 @@ class StepStorage {
 		if (saveInConnect(request, encodeData(paramObj), param, updateFunc)) {
 			return ConnectStorage;
 		} else if (saveInFile(encodeData(fileObj))) {
-
 			return LocalStorage;
 		} else {
 			return FailedStorage;
@@ -86,7 +85,7 @@ class StepStorage {
 	}
 
 	private static function loadRequestFromFile(requestId:String):StepData {
-        final dataObject = loadAllFromFile();
+		final dataObject = loadAllFromFile();
 		if (dataObject != null) {
 			return getRequestField(dataObject, requestId, LocalStorage);
 		}
@@ -137,9 +136,9 @@ class StepStorage {
 	 * @return Bool Whether the data could be saved in the file or not.
 	 */
 	private static function saveInFile(data:String):Bool {
-        final dataFilename = getDataFilename();
+		final dataFilename = getDataFilename();
 		try {
-            File.saveContent(dataFilename, data);
+			File.saveContent(dataFilename, data);
 			return true;
 		} catch (ex:Dynamic) {
 			return false;
@@ -166,14 +165,13 @@ class StepStorage {
 		final compressed = connect.native.PythonZlib.compress(bytes, 9);
 		#elseif cs
 		final contentBytes = cs.system.text.Encoding.UTF8.GetBytes(Json.stringify(data));
-        final outputStream = new cs.system.io.MemoryStream();
-        final compressionStream = new connect.native.CsDeflateStream(outputStream,
-            connect.native.CsCompressionMode.Compress);
-        compressionStream.Write(contentBytes, 0, contentBytes.Length);
-        compressionStream.Dispose();
-        outputStream.Dispose();
+		final outputStream = new cs.system.io.MemoryStream();
+		final compressionStream = new connect.native.CsDeflateStream(outputStream, connect.native.CsCompressionMode.Compress);
+		compressionStream.Write(contentBytes, 0, contentBytes.Length);
+		compressionStream.Dispose();
+		outputStream.Dispose();
 
-        final compressed = haxe.io.Bytes.ofData(contentBytes);
+		final compressed = haxe.io.Bytes.ofData(contentBytes);
 		#else
 		final compressed = haxe.zip.Compress.run(bytes, 9);
 		#end
@@ -185,7 +183,7 @@ class StepStorage {
 		#if python
 		final decompressed = connect.native.PythonZlib.decompress(decoded);
 		#elseif cs
-		final decompressed =  decoded;
+		final decompressed = decoded;
 		#else
 		final decompressed = haxe.zip.Uncompress.run(decoded);
 		#end

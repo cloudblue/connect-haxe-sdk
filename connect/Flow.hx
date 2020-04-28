@@ -293,8 +293,9 @@ class Flow extends Base {
 	public function _run<T>(list:Collection<T>):Void {
 		Env.getLogger().openSection('Running ${this.getClassName()} on ${DateTime.now()}');
 		// Filter requests
-		final filteredList = (filterFunc != null) ? Collection._fromArray(list.toArray().filter(#if cslib(m) -> filterFunc.Invoke(cast(m,
-			IdModel)) #elseif javalib(m) -> filterFunc.apply(cast(m, IdModel)) #else(m) -> filterFunc(cast(m, IdModel)) #end)) : list;
+		final filteredList = (filterFunc != null) ? Collection._fromArray(list.toArray()
+			.filter(#if cslib(m) -> filterFunc.Invoke(cast(m, IdModel)) #elseif javalib(m) -> filterFunc.apply(cast(m, IdModel)) #else(m) -> filterFunc(cast(m,
+				IdModel)) #end)) : list;
 		// Process each model
 		for (model in filteredList) {
 			this.process(cast(model, IdModel));
@@ -453,10 +454,10 @@ class Flow extends Base {
 
 				// Save step data if request supports it
 				Env.getLogger().write(Logger.LEVEL_INFO, 'Skipping request. Trying to save step data.');
-                this.data.exists(ATTEMPT_PARAM) ? this.data.set(ATTEMPT_PARAM, this.data.get(ATTEMPT_PARAM) + 1) : this.data.set(ATTEMPT_PARAM, 1);
+				this.data.exists(ATTEMPT_PARAM) ? this.data.set(ATTEMPT_PARAM, this.data.get(ATTEMPT_PARAM) + 1) : this.data.set(ATTEMPT_PARAM, 1);
 				final saveResult = StepStorage.save(this.model, new StepData(index, this.data, ConnectStorage), param, Reflect.field(model, 'update'));
 
-                switch (saveResult) {
+				switch (saveResult) {
 					case ConnectStorage:
 						Env.getLogger().write(Logger.LEVEL_INFO, 'Step data saved in Connect.');
 					case LocalStorage:
