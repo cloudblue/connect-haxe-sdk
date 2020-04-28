@@ -1,6 +1,6 @@
 /*
-	This file is part of the Ingram Micro CloudBlue Connect SDK.
-	Copyright (c) 2019 Ingram Micro. All Rights Reserved.
+    This file is part of the Ingram Micro CloudBlue Connect SDK.
+    Copyright (c) 2019 Ingram Micro. All Rights Reserved.
  */
 
 import connect.Env;
@@ -31,85 +31,85 @@ import sys.FileSystem;
 import sys.io.File;
 
 class ApiClientFlowMock extends Mock implements IApiClient {
-	private static final REQUESTS_PATH = 'requests';
+    private static final REQUESTS_PATH = 'requests';
 
-	public function syncRequest(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob):Response {
-		this.calledFunction('syncRequest', [method, url, headers, body, fileArg, fileName, fileContent]);
+    public function syncRequest(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob):Response {
+        this.calledFunction('syncRequest', [method, url, headers, body, fileArg, fileName, fileContent]);
 
-		if (StringTools.contains(url, REQUESTS_PATH) && method.toUpperCase() == 'GET') {
-			return new Response(200, Mock.parseJsonFile('test/mocks/data/request_list.json'), null);
-		}
+        if (StringTools.contains(url, REQUESTS_PATH) && method.toUpperCase() == 'GET') {
+            return new Response(200, Mock.parseJsonFile('test/mocks/data/request_list.json'), null);
+        }
 
-		if (StringTools.contains(url, REQUESTS_PATH) && method.toUpperCase() == 'PUT') {
-			return new Response(404, "No connection with the API", null);
-		}
+        if (StringTools.contains(url, REQUESTS_PATH) && method.toUpperCase() == 'PUT') {
+            return new Response(404, "No connection with the API", null);
+        }
 
-		return new Response(200, '[{"life": "The anwser is 42"}]', null);
-	}
+        return new Response(200, '[{"life": "The anwser is 42"}]', null);
+    }
 
-	public function get(resource:String, ?id:String, ?suffix:String, ?params:Query):String {
-		return null;
-	}
+    public function get(resource:String, ?id:String, ?suffix:String, ?params:Query):String {
+        return null;
+    }
 
-	public function getString(resource:String, ?id:String, ?suffix:String, ?params:Query):String {
-		return null;
-	}
+    public function getString(resource:String, ?id:String, ?suffix:String, ?params:Query):String {
+        return null;
+    }
 
-	public function put(resource:String, id:String, body:String):String {
-		return null;
-	}
+    public function put(resource:String, id:String, body:String):String {
+        return null;
+    }
 
-	public function post(resource:String, ?id:String, ?suffix:String, ?body:String):String {
-		return null;
-	}
+    public function post(resource:String, ?id:String, ?suffix:String, ?body:String):String {
+        return null;
+    }
 
-	public function postFile(resource:String, ?id:String, ?suffix:String, argname:String, filename:String, contents:Blob):Dynamic {
-		return null;
-	}
+    public function postFile(resource:String, ?id:String, ?suffix:String, argname:String, filename:String, contents:Blob):Dynamic {
+        return null;
+    }
 
-	public function delete(resource:String, id:String, ?suffix:String):String {
-		return null;
-	}
+    public function delete(resource:String, id:String, ?suffix:String):String {
+        return null;
+    }
 }
 
 class TestFlow extends Flow {
-	public function new() {
-		super(null);
-		this.step("test step 1", this.firstStep);
-	}
+    public function new() {
+        super(null);
+        this.step("test step 1", this.firstStep);
+    }
 
-	public function firstStep(f:Flow):Void {
-		this.abort();
-	}
+    public function firstStep(f:Flow):Void {
+        this.abort();
+    }
 }
 
 class FlowAttemptsTest {
-	@Before
-	public function setup() {
-		Env._reset(new Dictionary().setString('IApiClient', 'ApiClientFlowMock'));
-		var maskedFields:Collection<String> = new Collection();
-		Env.initLogger(new LoggerConfig().handlers(new Collection<LoggerHandler>().push(new LoggerHandler(new MarkdownLoggerFormatter(),
-			new ArrayLoggerWriter())))
-			.maskedFields(maskedFields));
-		Env.initConfig("TESTAPIURL", "TESTAPIKEY", new Collection<String>().push("PRD-TEST-0001"));
-		if (!FileSystem.exists("logs")) {
-			FileSystem.createDirectory("logs");
-		}
-		if (FileSystem.exists("logs/step.dat")) {
-			FileSystem.deleteFile("logs/step.dat");
-		}
-	}
+    @Before
+    public function setup() {
+        Env._reset(new Dictionary().setString('IApiClient', 'ApiClientFlowMock'));
+        var maskedFields:Collection<String> = new Collection();
+        Env.initLogger(new LoggerConfig().handlers(new Collection<LoggerHandler>().push(new LoggerHandler(new MarkdownLoggerFormatter(),
+            new ArrayLoggerWriter())))
+            .maskedFields(maskedFields));
+        Env.initConfig("TESTAPIURL", "TESTAPIKEY", new Collection<String>().push("PRD-TEST-0001"));
+        if (!FileSystem.exists("logs")) {
+            FileSystem.createDirectory("logs");
+        }
+        if (FileSystem.exists("logs/step.dat")) {
+            FileSystem.deleteFile("logs/step.dat");
+        }
+    }
 
-	@Test
-	public function testAttempts() {
-		var testFlow:TestFlow = new TestFlow();
-		var request_list = Model.parseArray(AssetRequest, sys.io.File.getContent('test/mocks/data/request_list.json'));
-		Assert.areEqual(0, testFlow.getCurrentAttempt());
-		testFlow._run(request_list);
-		Assert.areEqual(1, testFlow.getCurrentAttempt());
-		testFlow._run(request_list);
-		Assert.areEqual(2, testFlow.getCurrentAttempt());
-		testFlow._run(request_list);
-		Assert.areEqual(3, testFlow.getCurrentAttempt());
-	}
+    @Test
+    public function testAttempts() {
+        var testFlow:TestFlow = new TestFlow();
+        var request_list = Model.parseArray(AssetRequest, sys.io.File.getContent('test/mocks/data/request_list.json'));
+        Assert.areEqual(0, testFlow.getCurrentAttempt());
+        testFlow._run(request_list);
+        Assert.areEqual(1, testFlow.getCurrentAttempt());
+        testFlow._run(request_list);
+        Assert.areEqual(2, testFlow.getCurrentAttempt());
+        testFlow._run(request_list);
+        Assert.areEqual(3, testFlow.getCurrentAttempt());
+    }
 }
