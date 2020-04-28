@@ -2,16 +2,55 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
+
 import connect.api.Query;
+import connect.Env;
 import haxe.Json;
 import massive.munit.Assert;
 
 
 class QueryTest {
+    @Before
+    public function setup() {
+        Env._reset();
+    }
+
     @Test
     public function testConstructor() {
         final rql = new Query();
         Assert.areEqual('', rql.toString());
+    }
+
+    @Test
+    public function testCopy() {
+        final rql = new Query()
+            .limit(100)
+            .offset(10)
+            .in_('key', ['value1', 'value2'])
+            .out('product.id', ['PR-', 'CN-'])
+            .select(['attribute'])
+            .like('product.id', 'PR-')
+            .ilike('product.id', 'PR-')
+            .equal('property1', 'value1')
+            .notEqual('property2', 'value2')
+            .greater('property', 'value')
+            .greaterOrEqual('property', 'value')
+            .lesser('property', 'value')
+            .lesserOrEqual('property', 'value')
+            .orderBy('date')
+            .ordering(['property1', 'property2']);
+        final copy = rql.copy();
+        Assert.areNotEqual(copy, rql);
+        Assert.areEqual(copy.toString(), rql.toString());
+    }
+
+
+    @Test
+    public function testDefault() {
+        final def = new Query().equal('key', 'value');
+        Env.initDefaultQuery(def);
+        final rql = new Query().default_();
+        Assert.areEqual(rql.toString(), def.toString());
     }
 
 

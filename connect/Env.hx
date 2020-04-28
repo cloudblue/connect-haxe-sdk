@@ -10,6 +10,7 @@ import connect.api.IGeneralApi;
 import connect.api.IMarketplaceApi;
 import connect.api.ITierApi;
 import connect.api.IUsageApi;
+import connect.api.Query;
 import connect.logger.Logger;
 import connect.logger.LoggerConfig;
 import connect.util.Collection;
@@ -100,7 +101,7 @@ class Env extends Base {
 
 
     /**
-        @returns `true` is config has already been initialized, `false` otherwise.
+        @returns `true` if config has already been initialized, `false` otherwise.
     **/
     public static function isConfigInitialized(): Bool {
         return config != null;
@@ -122,10 +123,32 @@ class Env extends Base {
 
 
     /**
-        @returns `true` is logger has already been initialized, `false` otherwise.
+        @returns `true` if logger has already been initialized, `false` otherwise.
     **/
     public static function isLoggerInitialized(): Bool {
         return logger != null;
+    }
+
+
+    /**
+     * Initializes the default `Query`. This query can contain common filters and be easily
+     * embedded in any other query by using the `Query.default` method.
+     * @param query The default `Query`.
+     */
+    public static function initDefaultQuery(query: Query): Void {
+        if (defaultQuery == null) {
+            defaultQuery = query.copy();
+        } else {
+            throw 'Default Query instance in already initialized.';
+        }
+    }
+
+
+    /**
+     * @returns `true` if default query has already been set, `false` otherwise;
+     */
+    public static function isDefaultQueryInitialized(): Bool {
+        return defaultQuery != null;
     }
 
 
@@ -237,6 +260,7 @@ class Env extends Base {
     public static function _reset(?deps: Dictionary) {
         config = null;
         logger = null;
+        defaultQuery = null;
         apiClient = null;
         fulfillmentApi = null;
         usageApi = null;
@@ -248,8 +272,15 @@ class Env extends Base {
     }
 
 
+    @:dox(hide)
+    public static function _getDefaultQuery(): Query {
+        return defaultQuery;
+    }
+
+
     private static var config: Config;
     private static var logger: Logger;
+    private static var defaultQuery: Query;
     private static var apiClient: IApiClient;
     private static var fulfillmentApi: IFulfillmentApi;
     private static var usageApi: IUsageApi;
