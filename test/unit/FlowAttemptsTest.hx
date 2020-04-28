@@ -27,6 +27,8 @@ import connect.logger.LoggerHandler;
 import connect.logger.LoggerConfig;
 import test.util.ArrayLoggerWriter;
 import connect.logger.MarkdownLoggerFormatter;
+import sys.FileSystem;
+import sys.io.File;
 
 class ApiClientFlowMock extends Mock implements IApiClient {
 	private static final REQUESTS_PATH = 'requests';
@@ -73,11 +75,10 @@ class ApiClientFlowMock extends Mock implements IApiClient {
 class TestFlow extends Flow {
 	public function new() {
 		super(null);
-		this.step("test step 1", untyped TestFlow.firstStep_1);
+		this.step("test step 1",this.firstStep);
 	}
 
-	public function firstStep_1() {
-		trace("This is step 1");
+	public function firstStep(f: Flow):Void {
 		this.abort();
 	}
 }
@@ -91,6 +92,12 @@ class FlowAttemptsTest {
 			new ArrayLoggerWriter())))
 			.maskedFields(maskedFields));
 		Env.initConfig("TESTAPIURL", "TESTAPIKEY", new Collection<String>().push("PRD-TEST-0001"));
+		if (!FileSystem.exists("logs")) {
+			FileSystem.createDirectory("logs");
+		}
+		if (FileSystem.exists("logs/step.dat")) {
+			FileSystem.deleteFile("logs/step.dat");
+		}
 	}
 
 	@Test

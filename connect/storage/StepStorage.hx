@@ -28,10 +28,12 @@ class StepStorage {
         removeStepDataFromFile(request.id);
 		// Save new data in available storage
 		final paramObj = objWithRequestData(loadAllFromParam(param), request.id, stepData);
+
 		final fileObj = objWithRequestData(loadAllFromFile(), request.id, stepData);
 		if (saveInConnect(request, encodeData(paramObj), param, updateFunc)) {
 			return ConnectStorage;
 		} else if (saveInFile(encodeData(fileObj))) {
+
 			return LocalStorage;
 		} else {
 			return FailedStorage;
@@ -162,6 +164,16 @@ class StepStorage {
 		final bytes = Bytes.ofString(Json.stringify(data));
 		#if python
 		final compressed = connect.native.PythonZlib.compress(bytes, 9);
+		#elseif cs
+		final contentBytes = cs.system.text.Encoding.UTF8.GetBytes(Json.stringify(data));
+        final outputStream = new cs.system.io.MemoryStream();
+        final compressionStream = new connect.native.CsDeflateStream(outputStream,
+            connect.native.CsCompressionMode.Compress);
+        compressionStream.Write(contentBytes, 0, contentBytes.Length);
+        compressionStream.Dispose();
+        outputStream.Dispose();
+
+        final compressed = haxe.io.Bytes.ofData(contentBytes);
 		#else
 		final compressed = haxe.zip.Compress.run(bytes, 9);
 		#end
@@ -172,6 +184,8 @@ class StepStorage {
 		final decoded = Base64.decode(data);
 		#if python
 		final decompressed = connect.native.PythonZlib.decompress(decoded);
+		#elseif cs
+		final decompressed =  decoded;
 		#else
 		final decompressed = haxe.zip.Uncompress.run(decoded);
 		#end

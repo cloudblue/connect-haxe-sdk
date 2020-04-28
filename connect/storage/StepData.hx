@@ -51,6 +51,5 @@ class StepData {
                 this.data.set(fieldName, parsedValue);
             }
         }
-
     }
 }
