@@ -19,7 +19,7 @@ import sys.io.File;
 @:dox(hide)
 class StepStorage {
 	public static function load(requestId:String, param:Param):StepData {
-    	final fileData = loadRequestFromFile(requestId);
+		final fileData = loadRequestFromFile(requestId);
 		final stepData = (fileData != null) ? fileData : loadRequestFromParam(requestId, param);
 		return (stepData != null) ? stepData : new StepData(0, {}, FailedStorage);
 	}
