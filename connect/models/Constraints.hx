@@ -11,18 +11,37 @@ import connect.util.Collection;
     Parameter constraints.
 **/
 class Constraints extends Model {
-    /** Is the parameter hidden? **/
-    public var hidden: Bool;
-
-
     /** Is the parameter required? **/
     public var required: Bool;
 
 
-    /** A collection of choices. **/
-    public var choices: Collection<Choice>;
+    /** Is the parameter hidden? **/
+    public var hidden: Bool;
 
 
     /** Is the constraint unique? **/
     public var unique: Bool;
+
+
+    /** An explicit way to specify one of the fulfillment parameters as
+     * "primary reconciliation ID by the Vendor for the Asset", shown
+     * as "asset_recon_id" in the Usage File format.
+     */
+    public var reconciliation: Bool;
+
+
+    /** Provider access. One of: view, edit. **/
+    public var shared: String;
+
+
+    /** Minimum characters required. **/
+    public var minLength: Int;
+
+
+    /** Maximum characters allowed. **/
+    public var maxLength: Int;
+
+
+    /** A collection of choices. **/
+    public var choices: Collection<Choice>;
 }

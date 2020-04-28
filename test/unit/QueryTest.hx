@@ -40,7 +40,6 @@ class QueryTest {
             .orderBy('date')
             .ordering(['property1', 'property2']);
         final copy = rql.copy();
-        Assert.areNotEqual(copy, rql);
         Assert.areEqual(copy.toString(), rql.toString());
     }
 
