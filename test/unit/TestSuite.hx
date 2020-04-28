@@ -35,6 +35,7 @@ class TestSuite extends massive.munit.TestSuite
 	{
 		super();
 
+
 		add(LoggerTest);
 		add(MarketplaceTest);
 		add(TierAccountTest);
