@@ -18,6 +18,69 @@ class Query extends Base {
     }
 
 
+    public function copy() {
+        final copy = new Query();
+        copy.in__ = [for (k in this.in__.keys()) k => this.in__.get(k).copy()];
+        copy.out_ = [for (k in this.out_.keys()) k => this.out_.get(k).copy()];
+        copy.limit_  = this.limit_;
+        copy.orderBy_ = this.orderBy_;
+        copy.offset_ = this.offset_;
+        copy.ordering_ = (this.ordering_ != null) ? this.ordering_.copy() : null;
+        copy.like_ = this.like_.copy();
+        copy.ilike_ = this.ilike_.copy();
+        copy.select_ = (this.select_ != null) ? this.select_.copy() : null;
+        copy.relOps = [for (k in this.relOps.keys())
+            k => [for (kv in this.relOps.get(k)) new KeyValue(kv.key, kv.value)]];
+        return copy;
+    }
+
+
+    /**
+     * Embeds the filters in the query defined by `Env.initDefaultQuery` in this one.
+     * If the query already has an specific filter set, it is not overriden by the default
+     * value.
+     * @return Query
+     */
+    public function default_(): Query {
+        final def = Env._getDefaultQuery();
+        Lambda.iter([for (k in def.in__.keys()) k],
+            k -> if (!this.in__.exists(k)) this.in__.set(k, def.in__.get(k).copy()));
+        Lambda.iter([for (k in def.out_.keys()) k],
+            k -> if (!this.out_.exists(k)) this.out_.set(k, def.out_.get(k).copy()));
+        if (this.limit_ == null) this.limit_ = def.limit_;
+        if (this.orderBy_ == null) this.orderBy_ = def.orderBy_;
+        if (this.offset_ == null) this.offset_ = def.offset_;
+        if (def.ordering_ != null) {
+            if (this.ordering_ == null) this.ordering_ = [];
+            Lambda.iter(def.ordering_,
+                e -> if (this.ordering_.indexOf(e) == -1) this.ordering_.push(e));
+        }
+        Lambda.iter([for (k in def.like_.keys()) k],
+            k -> if (!this.like_.exists(k)) this.like_.set(k, def.like_.get(k)));
+        Lambda.iter([for (k in def.ilike_.keys()) k],
+            k -> if (!this.ilike_.exists(k)) this.ilike_.set(k, def.ilike_.get(k)));
+        if (def.select_ != null) {
+            if (this.select_ == null) this.select_ = [];
+            Lambda.iter(def.select_,
+                e -> if (this.select_.indexOf(e) == -1) this.select_.push(e));
+        }
+        Lambda.iter([for (k in def.relOps.keys()) k],
+            function (k) {
+                if (this.relOps.exists(k)) {
+                    final thisK = this.relOps.get(k);
+                    for (kv in def.relOps.get(k)) {
+                        if (Lambda.find(thisK, thisKV -> thisKV.equals(kv)) == null) {
+                            thisK.push(new KeyValue(kv.key, kv.value));
+                        }
+                    }
+                } else {
+                    this.relOps.set(k, [for (kv in def.relOps.get(k)) new KeyValue(kv.key, kv.value)]);
+                }
+            });
+        return this;
+    }
+
+
     /**
      * Select objects where the specified property value is in the provided array.
      * @param property
@@ -475,6 +538,11 @@ private class KeyValue {
     public function new(key: String, value: String) {
         this.key = key;
         this.value = value;
+    }
+
+
+    public function equals(other: KeyValue): Bool {
+        return this.key == other.key && this.value == other.value;
     }
 
 
