@@ -24,6 +24,7 @@ import QueryTest;
 import ProductTest;
 import DateTimeTest;
 import FlowAttemptsTest;
+import CustomLoggerFormatterTest;
 
 /**
  * Auto generated Test Suite for MassiveUnit.
@@ -60,6 +61,7 @@ class TestSuite extends massive.munit.TestSuite
         add(ProductTest);
         add(DateTimeTest);
         add(FlowAttemptsTest);
+        add(CustomLoggerFormatterTest);
 
     }
 }
