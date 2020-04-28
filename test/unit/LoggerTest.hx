@@ -1,6 +1,6 @@
 /*
-	This file is part of the Ingram Micro CloudBlue Connect SDK.
-	Copyright (c) 2019 Ingram Micro. All Rights Reserved.
+    This file is part of the Ingram Micro CloudBlue Connect SDK.
+    Copyright (c) 2019 Ingram Micro. All Rights Reserved.
  */
 import test.util.ArrayLoggerWriter;
 import connect.logger.MarkdownLoggerFormatter;

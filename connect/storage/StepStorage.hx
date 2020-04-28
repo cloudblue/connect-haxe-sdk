@@ -1,7 +1,8 @@
 /*
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
-*/
+ */
+
 package connect.storage;
 
 import connect.storage.StepData.StorageType;
@@ -15,26 +16,19 @@ import haxe.Json;
 import sys.FileSystem;
 import sys.io.File;
 
-
 @:dox(hide)
 class StepStorage {
-    public static function load(requestId: String, param: Param): StepData {
+    public static function load(requestId:String, param:Param):StepData {
         final fileData = loadRequestFromFile(requestId);
-        final stepData = (fileData != null)
-            ? fileData
-            : loadRequestFromParam(requestId, param);
-        return (stepData != null)
-            ? stepData
-            : new StepData(0, {}, FailedStorage);
+        final stepData = (fileData != null) ? fileData : loadRequestFromParam(requestId, param);
+        return (stepData != null) ? stepData : new StepData(0, {}, FailedStorage);
     }
 
-
-    public static function save(request: IdModel, stepData: StepData,
-            param: Param, updateFunc: Function) : StorageType {
+    public static function save(request:IdModel, stepData:StepData, param:Param, updateFunc:Function):StorageType {
         removeStepDataFromFile(request.id);
-
         // Save new data in available storage
         final paramObj = objWithRequestData(loadAllFromParam(param), request.id, stepData);
+
         final fileObj = objWithRequestData(loadAllFromFile(), request.id, stepData);
         if (saveInConnect(request, encodeData(paramObj), param, updateFunc)) {
             return ConnectStorage;
@@ -45,8 +39,7 @@ class StepStorage {
         }
     }
 
-
-    public static function removeStepData(requestId: String, param: Param): Bool {
+    public static function removeStepData(requestId:String, param:Param):Bool {
         removeStepDataFromFile(requestId);
 
         final paramObj = loadAllFromParam(param);
@@ -54,12 +47,11 @@ class StepStorage {
             param.value = encodeData(objWithoutRequestData(paramObj, requestId));
             return true; // Request needs updating
         }
-        
+
         return false; // No need to update request
     }
 
-
-    private static function removeStepDataFromFile(requestId: String): Void {
+    private static function removeStepDataFromFile(requestId:String):Void {
         final fileObj = loadAllFromFile();
         if (fileObj != null && Reflect.hasField(fileObj, requestId)) {
             final fileData = objWithoutRequestData(fileObj, requestId);
@@ -67,9 +59,7 @@ class StepStorage {
         }
     }
 
-
-    private static function objWithRequestData(obj: Dynamic, requestId: String,
-            stepData: StepData): Dynamic {
+    private static function objWithRequestData(obj:Dynamic, requestId:String, stepData:StepData):Dynamic {
         final fixedObj = (obj != null) ? obj : {};
         Reflect.setField(fixedObj, requestId, {
             current_step: stepData.firstIndex,
@@ -78,8 +68,7 @@ class StepStorage {
         return fixedObj;
     }
 
-
-    private static function objWithoutRequestData(obj: Dynamic, requestId: String): Dynamic {
+    private static function objWithoutRequestData(obj:Dynamic, requestId:String):Dynamic {
         final fixedObj = (obj != null) ? obj : {};
         if (Reflect.hasField(fixedObj, requestId)) {
             Reflect.deleteField(fixedObj, requestId);
@@ -87,8 +76,7 @@ class StepStorage {
         return fixedObj;
     }
 
-
-    private static function loadRequestFromParam(requestId: String, param: Param): StepData {
+    private static function loadRequestFromParam(requestId:String, param:Param):StepData {
         final dataObject = loadAllFromParam(param);
         if (dataObject != null) {
             return getRequestField(dataObject, requestId, ConnectStorage);
@@ -96,8 +84,7 @@ class StepStorage {
         return null;
     }
 
-
-    private static function loadRequestFromFile(requestId: String): StepData {
+    private static function loadRequestFromFile(requestId:String):StepData {
         final dataObject = loadAllFromFile();
         if (dataObject != null) {
             return getRequestField(dataObject, requestId, LocalStorage);
@@ -105,8 +92,7 @@ class StepStorage {
         return null;
     }
 
-
-    private static function loadAllFromParam(param: Param) : Dynamic {
+    private static function loadAllFromParam(param:Param):Dynamic {
         try {
             if (param != null && param.value != null && param.value != '') {
                 return decodeData(param.value);
@@ -115,15 +101,13 @@ class StepStorage {
         return null;
     }
 
-
-    private static function loadAllFromFile(): Dynamic {
+    private static function loadAllFromFile():Dynamic {
         final dataFilename = getDataFilename();
         if (FileSystem.exists(dataFilename) && !FileSystem.isDirectory(dataFilename)) {
             return decodeData(File.getContent(dataFilename));
         }
         return null;
     }
-
 
     /**
      * Saves data for all requests in Connect.
@@ -133,38 +117,35 @@ class StepStorage {
      * @param updateFunc The update function to be called (TODO: Get this using reflection).
      * @return Bool Whether the data could be saved in Connect or not.
      */
-    private static function saveInConnect(request: IdModel, data: String,
-            param: Param, updateFunc: Function) : Bool {
+    private static function saveInConnect(request:IdModel, data:String, param:Param, updateFunc:Function):Bool {
         if (param != null) {
             param.value = data;
             try {
                 Reflect.callMethod(request, updateFunc, []);
                 return true;
-            } catch (ex: Dynamic) {
+            } catch (ex:Dynamic) {
                 Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, Std.string(ex), '');
             }
         }
         return false;
     }
 
-
     /**
      * Saves data for all requests in the local file.
      * @param data Encoded string with all requests for the given asset or TierConfig.
      * @return Bool Whether the data could be saved in the file or not.
      */
-    private static function saveInFile(data: String): Bool {
+    private static function saveInFile(data:String):Bool {
         final dataFilename = getDataFilename();
         try {
             File.saveContent(dataFilename, data);
             return true;
-        } catch (ex: Dynamic) {
+        } catch (ex:Dynamic) {
             return false;
         }
     }
 
-
-    private static function getRequestField(object: Dynamic, requestId: String, storage: StorageType): StepData {
+    private static function getRequestField(object:Dynamic, requestId:String, storage:StorageType):StepData {
         if (Reflect.hasField(object, requestId)) {
             final stepData = Reflect.field(object, requestId);
             return new StepData(stepData.current_step, stepData.data, storage);
@@ -172,34 +153,40 @@ class StepStorage {
         return null;
     }
 
-
-    private static function getDataFilename(): String {
+    private static function getDataFilename():String {
         final filename = 'step.dat';
         final logPath = Env.getLogger().getPath();
-        return (logPath != null)
-            ? (logPath + filename)
-            : filename;
+        return (logPath != null) ? (logPath + filename) : filename;
     }
 
-
-    private static function encodeData(data: Dynamic): String {
+    private static function encodeData(data:Dynamic):String {
         final bytes = Bytes.ofString(Json.stringify(data));
-    #if python
+        #if python
         final compressed = connect.native.PythonZlib.compress(bytes, 9);
-    #else
+        #elseif cs
+        final contentBytes = cs.system.text.Encoding.UTF8.GetBytes(Json.stringify(data));
+        final outputStream = new cs.system.io.MemoryStream();
+        final compressionStream = new connect.native.CsDeflateStream(outputStream, connect.native.CsCompressionMode.Compress);
+        compressionStream.Write(contentBytes, 0, contentBytes.Length);
+        compressionStream.Dispose();
+        outputStream.Dispose();
+
+        final compressed = haxe.io.Bytes.ofData(contentBytes);
+        #else
         final compressed = haxe.zip.Compress.run(bytes, 9);
-    #end
+        #end
         return Base64.encode(compressed);
     }
 
-
-    private static function decodeData(data: String): Dynamic {
+    private static function decodeData(data:String):Dynamic {
         final decoded = Base64.decode(data);
-    #if python
+        #if python
         final decompressed = connect.native.PythonZlib.decompress(decoded);
-    #else
+        #elseif cs
+        final decompressed = decoded;
+        #else
         final decompressed = haxe.zip.Uncompress.run(decoded);
-    #end
+        #end
         return Json.parse(decompressed.toString());
     }
 }

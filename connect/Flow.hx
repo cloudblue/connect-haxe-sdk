@@ -1,7 +1,8 @@
 /*
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
-*/
+ */
+
 package connect;
 
 import connect.logger.ILoggerFormatter;
@@ -20,7 +21,6 @@ import connect.util.Dictionary;
 import connect.util.Util;
 import haxe.Json;
 
-
 #if cslib
 typedef FilterFunc = connect.native.CsFunc<IdModel, Bool>;
 typedef StepFunc = connect.native.CsAction<Flow>;
@@ -30,10 +30,10 @@ typedef StepFunc = connect.native.JavaConsumer<Flow>;
 #else
 @:dox(hide)
 typedef FilterFunc = (IdModel) -> Bool;
+
 @:dox(hide)
 typedef StepFunc = (Flow) -> Void;
 #end
-
 
 /**
     A Flow represents a set of steps within a `Processor` which are executed for all requests
@@ -47,12 +47,11 @@ class Flow extends Base {
         to which `this` Flow is attached. All requests for which the function returns `true` will
         be processed by `this` Flow when the Processor runs.
     **/
-    public function new(filterFunc: FilterFunc) {
+    public function new(filterFunc:FilterFunc) {
         this.filterFunc = filterFunc;
         this.steps = [];
         this.data = new Dictionary();
     }
-
 
     /**
         The setup function is always called before executing the steps, independently of what is
@@ -64,8 +63,7 @@ class Flow extends Base {
         `Flow.setData`, that information will be overridden with the one restored from the
         previous execution.
     **/
-    public function setup(): Void {}
-
+    public function setup():Void {}
 
     /**
         Defines a step of `this` Flow. Steps are executed sequentially by the Flow
@@ -77,11 +75,10 @@ class Flow extends Base {
         and it cannot return a value.
         @returns `this` Flow, so calls to this method can be chained.
     **/
-    public function step(description: String, func: StepFunc): Flow {
+    public function step(description:String, func:StepFunc):Flow {
         this.steps.push(new Step(description, func));
         return this;
     }
-
 
     /**
         This can be called within your steps to get the request being processed, as long as it
@@ -90,14 +87,13 @@ class Flow extends Base {
         @returns The `AssetRequest` being processed, or `null` if current request is not of
         Fulfillment api.
     **/
-    public function getAssetRequest(): AssetRequest {
+    public function getAssetRequest():AssetRequest {
         try {
             return cast(this.model, AssetRequest);
-        } catch (ex: Dynamic) {
+        } catch (ex:Dynamic) {
             return null;
         }
     }
-
 
     /**
         This can be called within your steps to get the element being processed, as long as it
@@ -106,14 +102,13 @@ class Flow extends Base {
         @returns The `Listing` being processed, or `null` if current element is not of
         Listing api.
     **/
-    public function getListing(): Listing {
+    public function getListing():Listing {
         try {
             return cast(this.model, Listing);
-        } catch (ex: Dynamic) {
+        } catch (ex:Dynamic) {
             return null;
         }
     }
-
 
     /**
         This can be called within your steps to get the request being processed, as long as it
@@ -122,14 +117,13 @@ class Flow extends Base {
         @returns The `TierConfigRequest` being processed, or `null` if current request is not of
         Tier api.
     **/
-    public function getTierConfigRequest(): TierConfigRequest {
+    public function getTierConfigRequest():TierConfigRequest {
         try {
             return cast(this.model, TierConfigRequest);
-        } catch (ex: Dynamic) {
+        } catch (ex:Dynamic) {
             return null;
         }
     }
-
 
     /**
         This can be called within your steps to get the request being processed, as long as it
@@ -138,14 +132,13 @@ class Flow extends Base {
         @returns The `UsageFile` being processed, or `null` if current request is not of
         Usage api.
     **/
-    public function getUsageFile(): UsageFile {
+    public function getUsageFile():UsageFile {
         try {
             return cast(this.model, UsageFile);
-        } catch (ex: Dynamic) {
+        } catch (ex:Dynamic) {
             return null;
         }
     }
-
 
     /**
         Steps can pass data to the next one using the return value, but this data could be lost if
@@ -162,21 +155,19 @@ class Flow extends Base {
         can be serialized.
         @returns `this` Flow, so calls to this method can be chained.
     **/
-    public function setData(key: String, value: Dynamic): Flow {
+    public function setData(key:String, value:Dynamic):Flow {
         this.data.set(key, value);
         return this;
     }
-    
-    
+
     /**
         Retrieves Flow data previously set with `setData`.
         @param key The name of the key that identifies the data to be obtained.
         @returns The value of the data, or `null` if the key does not exist.
     **/
-    public function getData(key: String): Dynamic {
+    public function getData(key:String):Dynamic {
         return this.data.get(key);
     }
-
 
     /**
         Changes the status of the request being processed to "approved", sending the id
@@ -186,7 +177,7 @@ class Flow extends Base {
         `TierConfigRequest.approveByTemplate()`, since this take care of cleaning the stored step
         information, and automatically skips any further steps.
     **/
-    public function approveByTemplate(id: String): Void {
+    public function approveByTemplate(id:String):Void {
         final request = this.getAssetRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
@@ -202,7 +193,6 @@ class Flow extends Base {
         }
     }
 
-
     /**
         Changes the status of the request being processed to "approved", rendering a tile on
         the portal with the given Markdown `text`.
@@ -211,7 +201,7 @@ class Flow extends Base {
         `TierConfigRequest.approveByTile()`, since this take care of cleaning the stored step
         information, and automatically skips any further steps.
     **/
-    public function approveByTile(text: String): Void {
+    public function approveByTile(text:String):Void {
         final request = this.getAssetRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
@@ -227,7 +217,6 @@ class Flow extends Base {
         }
     }
 
-
     /**
         Changes the status of the request being processed to "failed".
 
@@ -235,7 +224,7 @@ class Flow extends Base {
         `TierConfigRequest.fail()`, since this takes care of cleaning the stored step
         information, and automatically skips any further steps.
     **/
-    public function fail(reason: String): Void {
+    public function fail(reason:String):Void {
         final request = this.getAssetRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
@@ -251,18 +240,17 @@ class Flow extends Base {
         }
     }
 
-
     /**
         Changes the status of the request being processed to "inquiring".
 
         When using the Flow, this method should be used instead of `AssetRequest.inquire()` or
         `TierConfigRequest.inquire()`, since this take care of cleaning the stored step
         information, and automatically skips any further steps.
-        
+
         @param templateId Id of the template to use in the portal, or `null` to not use any. This
         is only used for AssetRequests.
     **/
-    public function inquire(templateId: String): Void {
+    public function inquire(templateId:String):Void {
         final request = this.getAssetRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
@@ -278,7 +266,6 @@ class Flow extends Base {
         }
     }
 
-
     /**
         Changes the status of the request being processed to "pending".
 
@@ -286,7 +273,7 @@ class Flow extends Base {
         `TierConfigRequest.pend()`, since this take care of cleaning the stored step
         information, and automatically skips any further steps.
     **/
-    public function pend(): Void {
+    public function pend():Void {
         final request = this.getAssetRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
@@ -302,74 +289,66 @@ class Flow extends Base {
         }
     }
 
-
     @:dox(hide)
-    public function _run<T>(list: Collection<T>): Void {
-        Env.getLogger().openSection(
-            'Running ${this.getClassName()} on ${DateTime.now()}');
-
+    public function _run<T>(list:Collection<T>):Void {
+        Env.getLogger().openSection('Running ${this.getClassName()} on ${DateTime.now()}');
         // Filter requests
-        final filteredList = (filterFunc != null)
-            ? Collection._fromArray(list.toArray().filter(
-            #if cslib
-                (m) -> filterFunc.Invoke(cast(m, IdModel))
-            #elseif javalib
-                (m) -> filterFunc.apply(cast(m, IdModel))
-            #else
-                (m) -> filterFunc(cast(m, IdModel))
-            #end
-                ))
-            : list;
-        
+        final filteredList = (filterFunc != null) ? Collection._fromArray(list.toArray()
+            .filter(#if cslib(m) -> filterFunc.Invoke(cast(m, IdModel)) #elseif javalib(m) -> filterFunc.apply(cast(m, IdModel)) #else(m) -> filterFunc(cast(m,
+                IdModel)) #end)) : list;
         // Process each model
         for (model in filteredList) {
             this.process(cast(model, IdModel));
         }
-
         Env.getLogger().closeSection();
     }
 
-
     private static final STEP_PARAM_ID = '__sdk_processor_step';
+    private static final ATTEMPT_PARAM = 'attempt';
 
+    private final filterFunc:FilterFunc;
+    private var steps:Array<Step>;
+    private var model:IdModel;
+    private var originalModelStr:String;
+    private var data:Dictionary;
+    private var abortRequested:Bool;
+    private var abortMessage:String;
 
-    private final filterFunc: FilterFunc;
-    private var steps: Array<Step>;
-    private var model: IdModel;
-    private var originalModelStr: String;
-    private var data: Dictionary;
-    private var abortRequested: Bool;
-    private var abortMessage: String;
+    /**
+     * Provide current step attempt
+     * @return Int Number of times that this step has been executed
+    **/
+    public function getCurrentAttempt() {
+        if (!this.data.exists(ATTEMPT_PARAM)) {
+            this.data.set(ATTEMPT_PARAM, 0);
+        }
+        return this.data.get(ATTEMPT_PARAM);
+    }
 
-
-    private function process(model: IdModel): Void {
+    private function process(model:IdModel):Void {
         if (this.prepareRequestAndOpenLogSection(model)) {
             if (this.processSetup()) {
                 final stepData = this.loadStepDataIfStored();
                 final steps = [for (i in stepData.firstIndex...this.steps.length) this.steps[i]];
 
                 // Process all steps
-                Lambda.fold(
-                    steps,
-                    function(step, prev) {
-                        if (prev != null) {
-                            return processStep(step, prev.nextIndex, prev.lastRequestStr, prev.lastDataStr);
-                        } else {
-                            return null;
-                        }
-                    },
-                    {nextIndex: stepData.firstIndex, lastRequestStr: '', lastDataStr: '{}'});
+                Lambda.fold(steps, function(step, prev) {
+                    if (prev != null) {
+                        return processStep(step, prev.nextIndex, prev.lastRequestStr, prev.lastDataStr);
+                    } else {
+                        return null;
+                    }
+                }, {nextIndex: stepData.firstIndex, lastRequestStr: '', lastDataStr: '{}'});
             }
             Env.getLogger().closeSection();
         }
     }
 
-
-    private function processSetup(): Bool {
+    private function processSetup():Bool {
         Env.getLogger().openSection('Setup');
         try {
             this.setup();
-        } catch (ex: Dynamic) {
+        } catch (ex:Dynamic) {
             final exStr = Std.string(ex);
             Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, exStr, '');
             if (this.getAssetRequest() != null) {
@@ -382,33 +361,25 @@ class Flow extends Base {
         return true;
     }
 
-
-    private function loadStepDataIfStored(): StepData {
+    private function loadStepDataIfStored():StepData {
         final stepData = StepStorage.load(this.model.id, getStepParam());
         this.data = stepData.data;
         if (stepData.storage != FailedStorage) {
-            Env.getLogger().write(Logger.LEVEL_INFO,
-                'Resuming request from step ${stepData.firstIndex + 1} with ${stepData.storage}.');
+            Env.getLogger().write(Logger.LEVEL_INFO, 'Resuming request from step ${stepData.firstIndex + 1} with ${stepData.storage}.');
         }
         return stepData;
     }
 
-
-    private function getStepParam(): Param {
-        return (this.getAssetRequest() != null)
-            ? this.getAssetRequest().asset.getParamById(STEP_PARAM_ID)
-            : null;
+    private function getStepParam():Param {
+        return (this.getAssetRequest() != null) ? this.getAssetRequest().asset.getParamById(STEP_PARAM_ID) : null;
     }
 
-
-    private function processStep(step: Step, index: Int, lastRequestStr: String,
-            lastDataStr: String): {nextIndex: Int, lastRequestStr: String, lastDataStr: String} {
-        final requestStr = Util.beautifyObject(this.model.toObject(),
-            Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
+    private function processStep(step:Step, index:Int, lastRequestStr:String, lastDataStr:String):{nextIndex:Int, lastRequestStr:String, lastDataStr:String} {
+        final requestStr = Util.beautifyObject(this.model.toObject(), Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
         final dataStr = Std.string(this.data);
-        
+
         Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
-        
+
         logStepData(Logger.LEVEL_INFO, requestStr, dataStr, lastRequestStr, lastDataStr);
 
         // Execute step
@@ -420,7 +391,7 @@ class Flow extends Base {
             #else
             step.func(this);
             #end
-        } catch (ex: Dynamic) {
+        } catch (ex:Dynamic) {
             if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                 logStepData(Logger.LEVEL_ERROR, requestStr, dataStr, lastRequestStr, lastDataStr);
             }
@@ -435,8 +406,7 @@ class Flow extends Base {
         return this.processAbortAndCloseLogSection(index, requestStr, dataStr);
     }
 
-
-    private function prepareRequestAndOpenLogSection(model: IdModel): Bool {
+    private function prepareRequestAndOpenLogSection(model:IdModel):Bool {
         this.model = model;
         this.originalModelStr = model.toString();
 
@@ -446,16 +416,10 @@ class Flow extends Base {
         final usageFile = this.getUsageFile();
 
         // Get product
-        final product = (assetRequest != null) ? assetRequest.asset.product
-            : (listing != null) ? listing.product
-            : (tierConfigRequest != null) ? tierConfigRequest.product
-            : (usageFile != null) ? usageFile.product
-            : null;
+        final product = (assetRequest != null) ? assetRequest.asset.product : (listing != null) ? listing.product : (tierConfigRequest != null) ? tierConfigRequest.product : (usageFile != null) ? usageFile.product : null;
 
         // Get product path
-        final productPath = (product != null)
-            ? product.id + '/'
-            : '';
+        final productPath = (product != null) ? product.id + '/' : '';
 
         // Set log filename
         if (assetRequest != null) {
@@ -473,8 +437,7 @@ class Flow extends Base {
 
         // For asset requests, check if we must skip due to pending migration
         if (assetRequest != null && assetRequest.needsMigration()) {
-            Env.getLogger().write(Logger.LEVEL_INFO,
-                'Skipping request because it is pending migration.');
+            Env.getLogger().write(Logger.LEVEL_INFO, 'Skipping request because it is pending migration.');
             Env.getLogger().closeSection();
             return false;
         } else {
@@ -484,22 +447,16 @@ class Flow extends Base {
         }
     }
 
-
-    private function processAbortAndCloseLogSection(index: Int, requestStr: String,
-            dataStr: String) : {nextIndex: Int, lastRequestStr: String, lastDataStr: String} {
+    private function processAbortAndCloseLogSection(index:Int, requestStr:String, dataStr:String):{nextIndex:Int, lastRequestStr:String, lastDataStr:String} {
         if (this.abortRequested) {
             if (this.abortMessage == null) {
-                final param = (this.getAssetRequest() != null)
-                    ? this.getAssetRequest().asset.getParamById(STEP_PARAM_ID)
-                    : null;
-                
+                final param = (this.getAssetRequest() != null) ? this.getAssetRequest().asset.getParamById(STEP_PARAM_ID) : null;
+
                 // Save step data if request supports it
-                Env.getLogger().write(Logger.LEVEL_INFO,
-                    'Skipping request. Trying to save step data.');
-                final saveResult = StepStorage.save(this.model,
-                    new StepData(index, this.data, ConnectStorage),
-                    param,
-                    Reflect.field(model, 'update'));
+                Env.getLogger().write(Logger.LEVEL_INFO, 'Skipping request. Trying to save step data.');
+                this.data.exists(ATTEMPT_PARAM) ? this.data.set(ATTEMPT_PARAM, this.data.get(ATTEMPT_PARAM) + 1) : this.data.set(ATTEMPT_PARAM, 1);
+                final saveResult = StepStorage.save(this.model, new StepData(index, this.data, ConnectStorage), param, Reflect.field(model, 'update'));
+
                 switch (saveResult) {
                     case ConnectStorage:
                         Env.getLogger().write(Logger.LEVEL_INFO, 'Step data saved in Connect.');
@@ -518,52 +475,36 @@ class Flow extends Base {
             return null;
         } else {
             Env.getLogger().closeSection();
-            return {nextIndex: index+1, lastRequestStr: requestStr, lastDataStr: dataStr};
+            return {nextIndex: index + 1, lastRequestStr: requestStr, lastDataStr: dataStr};
         }
     }
-
 
     /**
         Without a message, a skip is performed with the standard skip message, which
         will try to store step data. If a message is provided, no data is stored, and that message
         is printed instead as long as it is not an empty string.
     **/
-    private function abort(?message: String): Void {
+    private function abort(?message:String):Void {
         this.abortRequested = true;
         this.abortMessage = message;
     }
 
-
-    private function logStepData(level: Int, request: String, data: String,
-            lastRequest: String, lastData: String) {
+    private function logStepData(level:Int, request:String, data:String, lastRequest:String, lastData:String) {
         for (handler in Env.getLogger().getHandlers()) {
-            final list = new Collection<String>()
-                .push(getFormattedRequest(request, lastRequest, handler.formatter))
+            final list = new Collection<String>().push(getFormattedRequest(request, lastRequest, handler.formatter))
                 .push(getFormattedData(data, lastData, this.data, handler.formatter));
             Env.getLogger()._writeToHandler(level, handler.formatter.formatList(list), handler);
         }
     }
 
-
-    private static function getFormattedRequest(request: String, lastRequest: String,
-            fmt: ILoggerFormatter): String {
+    private static function getFormattedRequest(request:String, lastRequest:String, fmt:ILoggerFormatter):String {
         if (request != lastRequest) {
             if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
-                final lastRequestObj = Util.isJsonObject(lastRequest)
-                    ? Json.parse(lastRequest)
-                    : null;
-                final requestObj = (Util.isJsonObject(request) && lastRequestObj != null)
-                    ? Json.parse(request)
-                    : null;
-                final diff = (lastRequestObj != null && requestObj != null)
-                    ? Util.createObjectDiff(requestObj, lastRequestObj)
-                    : null;
-                final requestStr = (diff != null)
-                    ? Util.beautifyObject(diff, false)
-                    : request;
-                final requestTitle = (diff != null)
-                    ? 'Request (changes):'
-                    : 'Request:';
+                final lastRequestObj = Util.isJsonObject(lastRequest) ? Json.parse(lastRequest) : null;
+                final requestObj = (Util.isJsonObject(request) && lastRequestObj != null) ? Json.parse(request) : null;
+                final diff = (lastRequestObj != null && requestObj != null) ? Util.createObjectDiff(requestObj, lastRequestObj) : null;
+                final requestStr = (diff != null) ? Util.beautifyObject(diff, false) : request;
+                final requestTitle = (diff != null) ? 'Request (changes):' : 'Request:';
                 return '$requestTitle${fmt.formatCodeBlock(requestStr, 'json')}';
             } else {
                 return 'Request (id): ${request}';
@@ -573,9 +514,7 @@ class Flow extends Base {
         }
     }
 
-
-    private static function getFormattedData(data: String, lastData: String, dataDict: Dictionary,
-            fmt: ILoggerFormatter): String {
+    private static function getFormattedData(data:String, lastData:String, dataDict:Dictionary, fmt:ILoggerFormatter):String {
         if (data != '{}') {
             if (data != lastData) {
                 if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
@@ -592,69 +531,57 @@ class Flow extends Base {
         }
     }
 
-
-    private static function getDataTable(data: Dictionary, fmt: ILoggerFormatter): String {
+    private static function getDataTable(data:Dictionary, fmt:ILoggerFormatter):String {
         final dataKeys = [for (key in data.keys()) key];
-        final dataCol = new Collection<Collection<String>>()
-            .push(new Collection<String>().push('Key').push('Value'));
+        final dataCol = new Collection<Collection<String>>().push(new Collection<String>().push('Key').push('Value'));
         Lambda.iter(dataKeys, function(key) {
-            dataCol.push(
-                new Collection<String>()
-                    .push(key)
-                    .push(data.get(key))
-            );
+            dataCol.push(new Collection<String>().push(key).push(data.get(key)));
         });
         return fmt.formatTable(dataCol);
     }
 
-
     /*
-    private function getAssetRequestChanges(): AssetRequest {
-        if (this.getAssetRequest() != null) {
-            final originalModel = Json.parse(this.originalModelStr);
-            final diff = Util.createObjectDiff(this.model.toObject(), originalModel);
-            return connect.models.Model.parse(AssetRequest, Json.stringify(diff));
-        } else {
-            return null;
+        private function getAssetRequestChanges(): AssetRequest {
+            if (this.getAssetRequest() != null) {
+                final originalModel = Json.parse(this.originalModelStr);
+                final diff = Util.createObjectDiff(this.model.toObject(), originalModel);
+                return connect.models.Model.parse(AssetRequest, Json.stringify(diff));
+            } else {
+                return null;
+            }
         }
-    }
 
 
-    private function getTierConfigRequestChanges(): TierConfigRequest {
-        if (this.getTierConfigRequest() != null) {
-            final originalModel = Json.parse(this.originalModelStr);
-            final diff = Util.createObjectDiff(this.model.toObject(), originalModel);
-            return connect.models.Model.parse(TierConfigRequest, Json.stringify(diff));
-        } else {
-            return null;
+        private function getTierConfigRequestChanges(): TierConfigRequest {
+            if (this.getTierConfigRequest() != null) {
+                final originalModel = Json.parse(this.originalModelStr);
+                final diff = Util.createObjectDiff(this.model.toObject(), originalModel);
+                return connect.models.Model.parse(TierConfigRequest, Json.stringify(diff));
+            } else {
+                return null;
+            }
         }
-    }
-    */
-    
-    
-    private function getClassName(): String {
-    #if js
+     */
+    private function getClassName():String {
+        #if js
         final constructorName = js.Syntax.code("{0}.constructor.name", this);
-        final className = (constructorName != 'Object')
-            ? constructorName
-            : Type.getClassName(Type.getClass(this));
+        final className = (constructorName != 'Object') ? constructorName : Type.getClassName(Type.getClass(this));
         return className;
-    #elseif php
+        #elseif php
         return php.Syntax.code("get_class({0})", this);
-    #elseif python
+        #elseif python
         return python.Syntax.code("type({0}).__name__", this);
-    #else
+        #else
         return Type.getClassName(Type.getClass(this));
-    #end
+        #end
     }
 }
 
-
 private class Step {
-    public final description: String;
-    public final func: StepFunc;
+    public final description:String;
+    public final func:StepFunc;
 
-    public function new(description: String, func: StepFunc) {
+    public function new(description:String, func:StepFunc) {
         this.description = description;
         this.func = func;
     }
