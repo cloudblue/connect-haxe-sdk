@@ -15,12 +15,24 @@ class Param extends IdModel {
     public var name: String;
 
 
+    /** Title of parameter. **/
+    public var title: String;
+
+
     /** Description of parameter. **/
     public var description: String;
 
 
     /** Type of parameter. **/
     public var type: String;
+
+
+    /** Hint for parameter value. **/
+    public var hint: String;
+
+
+    /** Placeholder for parameter. **/
+    public var placeholder: String;
 
 
     /** Value of parameter. **/
@@ -35,31 +47,31 @@ class Param extends IdModel {
     public var valueChoice: Collection<String>;
 
 
-    // Undocumented fields (they appear in PHP SDK)
-
-
-    /** Title for parameter. **/
-    public var title: String;
-
-
-    /** Scope of parameter. **/
-    public var scope: String;
-
-
     /** Parameter constraints. **/
     public var constraints: Constraints;
+
+
+    /** Provider access. One of: view, edit. **/
+    public var shared: String;
 
 
     /** Collection of available dropdown choices for parameter. **/
     public var valueChoices: Collection<Choice>;
 
 
-    /** Param phase. **/
-    public var phase: String;
-
-
     /** Events. **/
     public var events: Events;
+
+
+    // Undocumented fields (they appear in PHP SDK)
+
+
+    /** Scope of parameter. **/
+    public var scope: String;
+
+
+    /** Param phase. **/
+    public var phase: String;
 
 
     /** Marketplace. **/

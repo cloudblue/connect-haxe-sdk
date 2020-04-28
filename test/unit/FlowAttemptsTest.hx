@@ -46,7 +46,6 @@ class ApiClientFlowMock extends Mock implements IApiClient {
 
         return new Response(200, '[{"life": "The anwser is 42"}]', null);
     }
-
 }
 
 class TestFlow extends Flow {
