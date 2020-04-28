@@ -250,10 +250,10 @@ class Logger extends Base {
 
     @:dox(hide)
     public function _writeToHandler(level: Int, message: String, handler: LoggerHandler): Void {
-
+        
         if (this.level >= level) {
             this.writeSections();
-            handler.writer.writeLine(message);
+            handler.writer.writeLine(handler.formatter.formatLine(message));
         }
     }
 
