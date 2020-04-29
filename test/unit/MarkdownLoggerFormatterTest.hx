@@ -26,19 +26,19 @@ class MarkdownLoggerFormatterTest {
 
     @Test
     public function testFormatBlock() {
-        Assert.areEqual('\n> Hello, world\n', fmt.formatBlock('Hello, world'));
-        Assert.areEqual('\n> Hello\n> World\n', fmt.formatBlock('Hello\nWorld'));
-        Assert.areEqual('\n> Hello\n> World\n', fmt.formatBlock('Hello\r\nWorld'));
-        Assert.areEqual('\n> Hello\n> World\n', fmt.formatBlock('Hello\rWorld'));
-        Assert.areEqual('\n> \n', fmt.formatBlock(''));
+        Assert.areEqual('\n> Hello, world\n', fmt.formatBlock(0,'Hello, world'));
+        Assert.areEqual('\n> Hello\n> World\n', fmt.formatBlock(0,'Hello\nWorld'));
+        Assert.areEqual('\n> Hello\n> World\n', fmt.formatBlock(0,'Hello\r\nWorld'));
+        Assert.areEqual('\n> Hello\n> World\n', fmt.formatBlock(0,'Hello\rWorld'));
+        Assert.areEqual('\n> \n', fmt.formatBlock(0,''));
     }
 
 
     @Test
     public function testFormatCodeBlock() {
         final expected = '\n```json\n{"key": "value"}\n```\n';
-        Assert.areEqual(expected, fmt.formatCodeBlock('{"key": "value"}', 'json'));
-        Assert.areEqual('\n```\n\n```\n', fmt.formatCodeBlock('', ''));
+        Assert.areEqual(expected, fmt.formatCodeBlock(0,'{"key": "value"}', 'json'));
+        Assert.areEqual('\n```\n\n```\n', fmt.formatCodeBlock(0,'', ''));
     }
 
 
@@ -47,7 +47,7 @@ class MarkdownLoggerFormatterTest {
         final expected = '\n> \n> ```json\n> {"key": "value"}\n> ```\n> \n';
         Assert.areEqual(
             expected,
-            fmt.formatBlock(fmt.formatCodeBlock('{"key": "value"}', 'json')));
+            fmt.formatBlock(0,fmt.formatCodeBlock(0,'{"key": "value"}', 'json')));
     }
 
 
@@ -57,8 +57,8 @@ class MarkdownLoggerFormatterTest {
         final list = new Collection<String>()
             .push('Hello')
             .push('World');
-        Assert.areEqual(expected, fmt.formatList(list));
-        Assert.areEqual('\n\n', fmt.formatList(new Collection<String>()));
+        Assert.areEqual(expected, fmt.formatList(0,list));
+        Assert.areEqual('\n\n', fmt.formatList(0,new Collection<String>()));
     }
 
 
@@ -68,8 +68,8 @@ class MarkdownLoggerFormatterTest {
         final table = new Collection<Collection<String>>()
             .push(new Collection<String>().push('One').push('Two'))
             .push(new Collection<String>().push('1').push('2'));
-        Assert.areEqual(expected, fmt.formatTable(table));
-        Assert.areEqual('\n\n', fmt.formatTable(new Collection<Collection<String>>()));
+        Assert.areEqual(expected, fmt.formatTable(0,table));
+        Assert.areEqual('\n\n', fmt.formatTable(0,new Collection<Collection<String>>()));
     }
 
 

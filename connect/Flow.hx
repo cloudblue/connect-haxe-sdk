@@ -493,7 +493,7 @@ class Flow extends Base {
         for (handler in Env.getLogger().getHandlers()) {
             final list = new Collection<String>().push(getFormattedRequest(request, lastRequest, handler.formatter))
                 .push(getFormattedData(data, lastData, this.data, handler.formatter));
-            Env.getLogger()._writeToHandler(level, handler.formatter.formatList(list), handler);
+            Env.getLogger()._writeToHandler(level, handler.formatter.formatList(level,list), handler);
         }
     }
 
@@ -505,7 +505,7 @@ class Flow extends Base {
                 final diff = (lastRequestObj != null && requestObj != null) ? Util.createObjectDiff(requestObj, lastRequestObj) : null;
                 final requestStr = (diff != null) ? Util.beautifyObject(diff, false) : request;
                 final requestTitle = (diff != null) ? 'Request (changes):' : 'Request:';
-                return '$requestTitle${fmt.formatCodeBlock(requestStr, 'json')}';
+                return '$requestTitle${fmt.formatCodeBlock(Env.getLogger().getLevel(),requestStr, 'json')}';
             } else {
                 return 'Request (id): ${request}';
             }
@@ -537,7 +537,7 @@ class Flow extends Base {
         Lambda.iter(dataKeys, function(key) {
             dataCol.push(new Collection<String>().push(key).push(data.get(key)));
         });
-        return fmt.formatTable(dataCol);
+        return fmt.formatTable(Env.getLogger().getLevel(),dataCol);
     }
 
     /*
