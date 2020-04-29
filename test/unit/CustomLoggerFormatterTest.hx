@@ -18,19 +18,19 @@ class CustomLoggerFormatter extends Base implements ILoggerFormatter {
         return text;
     }
 
-    public function formatBlock(text:String):String {
+    public function formatBlock(level:Int, text:String):String {
         return text;
     }
 
-    public function formatCodeBlock(text:String, language:String):String {
+    public function formatCodeBlock(level:Int, text:String, language:String):String {
         return text;
     }
 
-    public function formatList(lines:Collection<String>):String {
+    public function formatList(level:Int, lines:Collection<String>):String {
         return "list";
     }
 
-    public function formatTable(table:Collection<Collection<String>>):String {
+    public function formatTable(level:Int, table:Collection<Collection<String>>):String {
         return "table";
     }
 
@@ -44,19 +44,18 @@ class CustomLoggerFormatter extends Base implements ILoggerFormatter {
     private final hub:String;
     private final customer:String;
 
-    private static function getLines(text:String):Array<String> {
-        return text.split('\n');
-    }
-
-    public function formatLine(text:String):String{
-        return this.marketPlace+" - "+this.hub+" - "+this.customer+" - "+text;
+    public function formatLine(level:Int, text:String):String {
+        var textLevel = "INFO";
+        if (level == 0) {
+            textLevel = "ERROR";
+        }
+        return textLevel + " - " + this.marketPlace + " - " + this.hub + " - " + this.customer + " - " + text;
     }
 }
 
 class CustomLoggerFormatterTest {
-
-    private static final firstLine:String = "MP-000-000 - HUB-1 - 1000001 - TEST FORMATTER";
-    private static final secondLine:String = "MP-000-000 - HUB-1 - 1000001 - This line is formatted";
+    private static final firstLine:String = "ERROR - MP-000-000 - HUB-1 - 1000001 - TEST FORMATTER";
+    private static final secondLine:String = "INFO - MP-000-000 - HUB-1 - 1000001 - This line is formatted";
 
     public function setup() {
         Env._reset();
@@ -65,10 +64,10 @@ class CustomLoggerFormatterTest {
     @Test
     public function testFormatter() {
         Env.initLogger(new LoggerConfig().handlers(new Collection<LoggerHandler>().push(new LoggerHandler(new CustomLoggerFormatter("MP-000-000", "HUB-1",
-        "1000001"), new ArrayLoggerWriter()))));
+            "1000001"), new ArrayLoggerWriter()))));
         Env.getLogger().error("TEST FORMATTER");
-        Env.getLogger().error("This line is formatted");
-        final writer = cast(Env.getLogger().getHandlers().get(0).writer,ArrayLoggerWriter);
+        Env.getLogger().info("This line is formatted");
+        final writer = cast(Env.getLogger().getHandlers().get(0).writer, ArrayLoggerWriter);
         Assert.areEqual(firstLine, writer.getLines()[0]);
         Assert.areEqual(secondLine, writer.getLines()[1]);
     }
