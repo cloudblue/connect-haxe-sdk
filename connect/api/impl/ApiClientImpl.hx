@@ -272,7 +272,7 @@ class ApiClientImpl extends Base implements IApiClient {
             }
             Env.getLogger()._writeToHandler(
                 level,
-                fmt.formatBlock('$firstMessage${fmt.formatList(requestList)}'),
+                fmt.formatBlock(level,'$firstMessage${fmt.formatList(level,requestList)}'),
                 handler);
         }
     }
@@ -292,7 +292,7 @@ class ApiClientImpl extends Base implements IApiClient {
                     .push(fixedHeaders.get(key))
             );
         });
-        return fmt.formatTable(headersCol);
+        return fmt.formatTable(Env.getLogger().getLevel(),headersCol);
     }
 
 
@@ -322,7 +322,7 @@ class ApiClientImpl extends Base implements IApiClient {
         final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
         if (Util.isJson(data)) {
             final prefix = compact ? '$title (compact):' : '$title:';
-            final block = fmt.formatCodeBlock(Util.beautify(data, compact), 'json');
+            final block = fmt.formatCodeBlock(Env.getLogger().getLevel(),Util.beautify(data, compact), 'json');
             return '$prefix $block';
         } else {
             final fixedBody = compact
