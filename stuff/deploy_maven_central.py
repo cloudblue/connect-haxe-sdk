@@ -225,13 +225,16 @@ if __name__ == '__main__':
     closed = close_repository(profile_id, repository_id)
     while num_attempts < max_attempts and not closed:
         num_attempts += 1
-        print('*** Repòsitory could not be closed, retrying... ({}/{})'. \
+        print('*** Repository could not be closed, retrying... ({}/{})'. \
             format(num_attempts, max_attempts))
         closed = close_repository(profile_id, repository_id)
     if not closed:
         raise Exception('Repository could not be closed.')
     else:
         print('*** Repository closed.')
+
+    print('*** Sleeping for 1 minute...', flush=True)
+    time.sleep(60)
 
     print(promote(repository_id), flush=True)
 
