@@ -375,7 +375,10 @@ class Flow extends Base {
     }
 
     private function processStep(step:Step, index:Int, lastRequestStr:String, lastDataStr:String):{nextIndex:Int, lastRequestStr:String, lastDataStr:String} {
-        final requestStr = Util.beautifyObject(this.model.toObject(), Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
+        final requestStr = Util.beautifyObject(
+            this.model.toObject(),
+            Env.getLogger().isCompact(),
+            Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
         final dataStr = Std.string(this.data);
 
         Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
@@ -503,7 +506,12 @@ class Flow extends Base {
                 final lastRequestObj = Util.isJsonObject(lastRequest) ? Json.parse(lastRequest) : null;
                 final requestObj = (Util.isJsonObject(request) && lastRequestObj != null) ? Json.parse(request) : null;
                 final diff = (lastRequestObj != null && requestObj != null) ? Util.createObjectDiff(requestObj, lastRequestObj) : null;
-                final requestStr = (diff != null) ? Util.beautifyObject(diff, false) : request;
+                final requestStr = (diff != null)
+                    ? Util.beautifyObject(
+                        diff,
+                        Env.getLogger().isCompact(),
+                        false)
+                    : request;
                 final requestTitle = (diff != null) ? 'Request (changes):' : 'Request:';
                 return '$requestTitle${fmt.formatCodeBlock(requestStr, 'json')}';
             } else {

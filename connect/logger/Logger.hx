@@ -36,7 +36,8 @@ class Logger extends Base {
         this.handlers = config.handlers_.copy();
         this.sections = [];
         this.maskedFields = config.maskedFields_;
-        this.maskedFields.push("apiKey");
+        if (this.maskedFields.indexOf('apiKey') == -1) this.maskedFields.push('apiKey');
+        this.compact = (this.level != LEVEL_DEBUG) ? config.compact_ : false;
     }
 
 
@@ -49,6 +50,16 @@ class Logger extends Base {
     /** @returns The level of the log. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`. **/
     public function getLevel(): Int {
         return this.level;
+    }
+
+
+    /**
+     * @return Bool Whether the logs are written in compact format (this is,
+     * for JSON objects only print key names or, if it has an 'id' field,
+     * only the id)..
+     */
+    public function isCompact(): Bool {
+        return this.compact;
     }
 
 
@@ -263,6 +274,7 @@ class Logger extends Base {
     private final handlers: Collection<LoggerHandler>;
     private final sections: Array<LoggerSection>;
     private final maskedFields: Collection<String>;
+    private final compact: Bool;
     
     
     private function writeSections(): Void {
