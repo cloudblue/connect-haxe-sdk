@@ -14,6 +14,6 @@ class ModelTest {
         final param = new Param();
         param.valueChoice = new Collection<String>().push('My choice');
         final expected = '{\n  "value_choice": [\n    "My choice"\n  ]\n}';
-        Assert.areEqual(expected, Util.beautifyObject(param.toObject(), false));
+        Assert.areEqual(expected, Util.beautifyObject(param.toObject(), false, false));
     }
 }

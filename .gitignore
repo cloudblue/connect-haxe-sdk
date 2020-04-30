@@ -10,3 +10,4 @@ stuff/.classpath
 stuff/.project
 stuff/.settings
 coverage.json
+logs/step.dat

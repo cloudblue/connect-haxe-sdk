@@ -54,7 +54,7 @@ class LoggerTest {
 
     @Test
     public function testMaskDataInObj() {
-        final maskedInfo = Util.beautify(dataTestMaskDataInObj, true);
+        final maskedInfo = Util.beautify(dataTestMaskDataInObj, false, true);
         final result = Helper.sortObject(Json.parse(maskedInfo));
         final expected = Helper.sortObject(Json.parse(resultTestMaskDataInObj));
         Assert.areEqual(Json.stringify(expected), Json.stringify(result));
@@ -62,7 +62,7 @@ class LoggerTest {
 
     @Test
     public function testMaskDataInList() {
-        final maskedInfo = Util.beautify(dataTestMaskDataInList, true);
+        final maskedInfo = Util.beautify(dataTestMaskDataInList, false, true);
         final result = Helper.sortObject(Json.parse(maskedInfo));
         final expected = Helper.sortObject(Json.parse(resultTestMaskDataInList));
         Assert.areEqual(Json.stringify(expected), Json.stringify(result));

@@ -322,7 +322,13 @@ class ApiClientImpl extends Base implements IApiClient {
         final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
         if (Util.isJson(data)) {
             final prefix = compact ? '$title (compact):' : '$title:';
-            final block = fmt.formatCodeBlock(Env.getLogger().getLevel(),Util.beautify(data, compact), 'json');
+            final block = fmt.formatCodeBlock(
+                Env.getLogger().getLevel(),
+                Util.beautify(
+                    data,
+                    Env.getLogger().isCompact(),
+                    Env.getLogger().getLevel() != Logger.LEVEL_DEBUG),
+                'json');
             return '$prefix $block';
         } else {
             final fixedBody = compact
