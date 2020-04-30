@@ -18,21 +18,21 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
     }
 
 
-    public function formatBlock(text: String): String {
+    public function formatBlock(level:Int,text: String): String {
         final lines = getLines(text);
         final prefixedLines = [for (line in lines) '> $line'];
         return '\n' + prefixedLines.join('\n') + '\n';
     }
 
 
-    public function formatCodeBlock(text: String, language: String): String {
+    public function formatCodeBlock(level:Int,text: String, language: String): String {
         final header = '\n```$language\n';
         final footer = '\n```\n';
         return header + text + footer;
     }
 
 
-    public function formatList(lines: Collection<String>): String {
+    public function formatList(level:Int,lines: Collection<String>): String {
         if (lines.length() > 0) {
             final lines = [for (line in lines) '* $line'];
             return '\n${lines.join('\n')}\n';
@@ -42,7 +42,7 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
     }
 
 
-    public function formatTable(table: Collection<Collection<String>>): String {
+    public function formatTable(level:Int,table: Collection<Collection<String>>): String {
         if (table.length() > 0) {
             final rows = [for (row in table) '| ${row.join(' | ')} |'];
             final header = rows[0];
@@ -53,6 +53,9 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
         }
     }
 
+    public function formatLine(level:Int,text:String):String{
+        return text;
+    }
 
     public function new() {}
 
@@ -62,4 +65,5 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
         final macosReplaced = StringTools.replace(windowsReplaced, '\r', '\n');
         return macosReplaced.split('\n');
     }
+
 }
