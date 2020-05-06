@@ -33,35 +33,35 @@ import ConfigTest;
  */
 class TestSuite extends massive.munit.TestSuite
 {
- public function new()
- {
-  super();
+    public function new()
+    {
+        super();
 
-  add(TierConfigTest);
-  add(DiffTest);
-  add(MarketplaceTest);
-  add(TierConfigRequestTest);
-  add(QueryTest);
-  add(UsageFileTest);
-  add(ConversationTest);
-  add(TierAccountTest);
-  add(LoggerTest);
-  add(AssetRequestTest);
-  add(FlowAttemptsTest);
-  add(ModelTest);
-  add(DateTimeTest);
-  add(ItemTest);
-  add(FlowTest);
-  add(AccountTest);
-  add(MarkdownLoggerFormatterTest);
-  add(ConfigurationTest);
-  add(AgreementTest);
-  add(CustomLoggerFormatterTest);
-  add(ListingTest);
-  add(AssetTest);
-  add(CategoryTest);
-  add(ProductTest);
-  add(ListingRequestTest);
-  add(ConfigTest);
- }
+        add(TierConfigTest);
+        add(DiffTest);
+        add(MarketplaceTest);
+        add(TierConfigRequestTest);
+        add(QueryTest);
+        add(UsageFileTest);
+        add(ConversationTest);
+        add(TierAccountTest);
+        add(LoggerTest);
+        add(AssetRequestTest);
+        add(FlowAttemptsTest);
+        add(ModelTest);
+        add(DateTimeTest);
+        add(ItemTest);
+        add(FlowTest);
+        add(AccountTest);
+        add(MarkdownLoggerFormatterTest);
+        add(ConfigurationTest);
+        add(AgreementTest);
+        add(CustomLoggerFormatterTest);
+        add(ListingTest);
+        add(AssetTest);
+        add(CategoryTest);
+        add(ProductTest);
+        add(ListingRequestTest);
+        add(ConfigTest);
+    }
 }
