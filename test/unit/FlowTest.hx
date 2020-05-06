@@ -142,17 +142,16 @@ class FlowTest {
   Assert.isType(flow.getListing(), Listing);
  }
 
- @Test
- public function testFlowStepError() {
-  final flow = new Flow(null).step('Add dummy data', function(f:Flow):Void {
-   (null:Dynamic).callNonExistentMethod();
-  });
-  Assert.throws(Dynamic, flow._run(request_list));
-  Assert.throws(Dynamic, flow._run(tier_list));
-  Assert.throws(Dynamic, flow._run(listing_list));
-  Assert.throws(Dynamic, flow._run(usage_list));
- }
-
+ /*@Test
+  public function testFlowStepError() {
+   final flow = new Flow(null).step('Add dummy data', function(f:Flow):Void {
+    (null:Dynamic).callNonExistentMethod();
+   });
+   Assert.throws(Dynamic, flow._run(request_list));
+   Assert.throws(Dynamic, flow._run(tier_list));
+   Assert.throws(Dynamic, flow._run(listing_list));
+   Assert.throws(Dynamic, flow._run(usage_list));
+ }*/
  private function flowRunner(flow:Flow) {
   try {
    flow._run(request_list);
