@@ -5,6 +5,7 @@
 package connect.logger;
 
 import connect.util.Collection;
+import haxe.ds.StringMap;
 
 
 /**
@@ -39,6 +40,7 @@ class LoggerConfig extends Base {
         return this;
     }
 
+
     /**
      * Sets the logging level. Default is `Logger.LEVEL_INFO`.
      * @param level Level of log.
@@ -65,6 +67,7 @@ class LoggerConfig extends Base {
         return this;
     }
 
+
     /**
      * Sets the fields which should be masked in the logs,
      * by default only connect api credentials are masked
@@ -76,6 +79,20 @@ class LoggerConfig extends Base {
         return this;
     }
 
+
+    /**
+     * Sets whether the logs must be written in compact format (this is,
+     * for JSON objects only prints key names or, if it has an 'id' field,
+     * only the id). This is ignored if the logger is created in LEVEL_DEBUG.
+     * @param enable Whether compact logging should be enabled.
+     * @return LoggerConfig
+     */
+    public function compact(enable:Bool):LoggerConfig {
+        this.compact_ = enable;
+        return this;
+    }
+
+
     public function new() {
         this.path_ = 'logs';
         this.level_ = Logger.LEVEL_INFO;
@@ -84,6 +101,7 @@ class LoggerConfig extends Base {
                 new LoggerHandler(new MarkdownLoggerFormatter(),
                 new FileLoggerWriter()));
         this.maskedFields_ = new Collection<String>();
+        this.compact_ = false;
     }
 
 
@@ -91,5 +109,11 @@ class LoggerConfig extends Base {
     public var level_(default, null):Int;
     public var handlers_(default, null):Collection<LoggerHandler>;
     public var maskedFields_(default, null):Collection<String>;
-    private final levelTranslation:Map<String, Int> = ["ERROR"=>0, "WARNING" => 0, "INFO" =>2, "DEBUG" => 3];
+    public var compact_(default, null):Bool;
+
+    private final levelTranslation:Map<String, Int> = [
+        "ERROR" => 0,
+        "WARNING" => 0,
+        "INFO" => 2,
+        "DEBUG" => 3];
 }

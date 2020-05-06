@@ -31,7 +31,8 @@ class Logger extends Base {
         this.handlers = config.handlers_.copy();
         this.sections = [];
         this.maskedFields = config.maskedFields_;
-        this.maskedFields.push("apiKey");
+        if (this.maskedFields.indexOf('apiKey') == -1) this.maskedFields.push('apiKey');
+        this.compact = (this.level != LEVEL_DEBUG) ? config.compact_ : false;
     }
 
     /** @returns The path where logs are stored. **/
@@ -43,6 +44,16 @@ class Logger extends Base {
     public function getLevel():Int {
         return this.level;
     }
+
+    /**
+     * @return Bool Whether the logs are written in compact format (this is,
+     * for JSON objects only print key names or, if it has an 'id' field,
+     * only the id)..
+     */
+    public function isCompact(): Bool {
+        return this.compact;
+    }
+
 
     /**
         Sets the filename of the log. All future log messages will get printed to this file.
@@ -226,7 +237,9 @@ class Logger extends Base {
     private final handlers:Collection<LoggerHandler>;
     private final sections:Array<LoggerSection>;
     private final maskedFields:Collection<String>;
-
+    private final compact:Bool;
+    
+    
     private function writeSections():Void {
         for (i in 0...this.sections.length) {
             if (!this.sections[i].written) {

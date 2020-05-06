@@ -1,31 +1,31 @@
 import massive.munit.TestSuite;
 
-import TierConfigTest;
-import DiffTest;
-import MarketplaceTest;
-import TierConfigRequestTest;
-import QueryTest;
-import UsageFileTest;
-import ConversationTest;
-import TierAccountTest;
 import LoggerTest;
-import AssetRequestTest;
-import FlowAttemptsTest;
-import ModelTest;
-import DateTimeTest;
-import ItemTest;
-import FlowTest;
-import AccountTest;
-import MarkdownLoggerFormatterTest;
-import ConfigurationTest;
-import AgreementTest;
-import CustomLoggerFormatterTest;
-import ListingTest;
+import MarketplaceTest;
+import TierAccountTest;
 import AssetTest;
+import MarkdownLoggerFormatterTest;
 import CategoryTest;
-import ProductTest;
+import ItemTest;
+import ConfigurationTest;
+import CustomLoggerFormatterTest;
+import AccountTest;
+import TierConfigRequestTest;
+import DiffTest;
+import FlowAttemptsTest;
+import AgreementTest;
+import AssetRequestTest;
+import UsageFileTest;
+import TierConfigTest;
+import ConversationTest;
 import ListingRequestTest;
 import ConfigTest;
+import ListingTest;
+import ModelTest;
+import QueryTest;
+import ProductTest;
+import DateTimeTest;
+import FlowTest;
 
 /**
  * Auto generated Test Suite for MassiveUnit.
@@ -33,35 +33,35 @@ import ConfigTest;
  */
 class TestSuite extends massive.munit.TestSuite
 {
-    public function new()
-    {
-        super();
+	public function new()
+	{
+		super();
 
-        add(TierConfigTest);
-        add(DiffTest);
-        add(MarketplaceTest);
-        add(TierConfigRequestTest);
-        add(QueryTest);
-        add(UsageFileTest);
-        add(ConversationTest);
-        add(TierAccountTest);
-        add(LoggerTest);
-        add(AssetRequestTest);
-        add(FlowAttemptsTest);
-        add(ModelTest);
-        add(DateTimeTest);
-        add(ItemTest);
+		add(LoggerTest);
+		add(MarketplaceTest);
+		add(TierAccountTest);
+		add(AssetTest);
+		add(MarkdownLoggerFormatterTest);
+		add(CategoryTest);
+		add(ItemTest);
+		add(ConfigurationTest);
+		add(CustomLoggerFormatterTest);
+		add(AccountTest);
+		add(TierConfigRequestTest);
+		add(DiffTest);
+		add(FlowAttemptsTest);
+		add(AgreementTest);
+		add(AssetRequestTest);
+		add(UsageFileTest);
+		add(TierConfigTest);
+		add(ConversationTest);
+		add(ListingRequestTest);
+		add(ConfigTest);
+		add(ListingTest);
+		add(ModelTest);
+		add(QueryTest);
+		add(ProductTest);
+		add(DateTimeTest);
         add(FlowTest);
-        add(AccountTest);
-        add(MarkdownLoggerFormatterTest);
-        add(ConfigurationTest);
-        add(AgreementTest);
-        add(CustomLoggerFormatterTest);
-        add(ListingTest);
-        add(AssetTest);
-        add(CategoryTest);
-        add(ProductTest);
-        add(ListingRequestTest);
-        add(ConfigTest);
-    }
+	}
 }
