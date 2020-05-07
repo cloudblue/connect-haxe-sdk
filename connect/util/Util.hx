@@ -16,7 +16,7 @@ class Util {
      * @param text 
      * @param regExData 
      */
-    public static function replaceStrSensitiveData(text:String,regExData:Collection<EReg>) {
+    public static function replaceStrSensitiveData(text:String,regExData:Collection<EReg>):String {
         for (regEx in regExData){
             while(regEx.match(text)){
                 text = StringTools.replace(text,regEx.matched(1),StringTools.lpad("","*",9));

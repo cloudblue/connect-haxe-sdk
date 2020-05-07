@@ -176,14 +176,14 @@ class Logger extends Base {
     /**
      *  Returns a list of fields which should be masked in http requests or responses
     **/
-    public function getMaskedFields() {
+    public function getMaskedFields():Collection<String> {
         return this.maskedFields;
     }
 
      /**
      *  Returns a list of regular expression for string data masking purposes
     **/
-    public function getRegExMaskingList() {
+    public function getRegExMaskingList()Collection<EReg> {
         return this.regexMaskingList;
     }
 
