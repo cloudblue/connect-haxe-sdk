@@ -245,7 +245,7 @@ class Logger extends Base {
     private final handlers:Collection<LoggerHandler>;
     private final sections:Array<LoggerSection>;
     private final maskedFields:Collection<String>;
-    private final regexMaskingList:Collection<String>;
+    private final regexMaskingList:Collection<EReg>;
     private final compact:Bool;
     
     

@@ -18,7 +18,9 @@ class Util {
      */
     public static function replaceStrSensitiveData(text:String,regExData:Collection<EReg>) {
         for (regEx in regExData){
-            text = regEx.replace(text,"{HIDDEN}");
+            while(regEx.match(text)){
+                text = StringTools.replace(text,regEx.matched(1),StringTools.lpad("","*",9));
+            }
         }
         return text;
     }
@@ -34,7 +36,7 @@ class Util {
         try {
             return beautifyObject(haxe.Json.parse(text), compact, masked);
         } catch (ex:Dynamic) {
-            return replaceStrSensitiveData(text,Env.getLogger().getRegExMaskingList());
+           return replaceStrSensitiveData(text,Env.getLogger().getRegExMaskingList());
         }
     }
 
