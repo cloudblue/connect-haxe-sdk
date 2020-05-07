@@ -89,13 +89,13 @@ class LoggerConfig extends Base {
 
     /**
      * Set list of regexs to replace in logs strings
-     * @param expresions
+     * @param expressions
      */
-    public function regexMasks(expresions:Collection<String>) {
-        for (expresion in expresions) {
-            expresion = StringTools.startsWith(expresion,"(") ? expresion : "(" + expresion;
-            expresion = StringTools.endsWith(expresion,")") ? expresion : expresion + ")";
-            this.regexMaskingList_.push(new EReg(expresion, "g"));
+    public function regexMasks(expressions:Collection<String>) {
+        for (expression in expressions) {
+            expression = StringTools.startsWith(expression,"(") ? expression : "(" + expression;
+            expression = StringTools.endsWith(expression,")") ? expression : expression + ")";
+            this.regexMaskingList_.push(new EReg(expression, "g"));
         }
     }
 

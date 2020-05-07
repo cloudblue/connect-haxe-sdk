@@ -181,7 +181,7 @@ class Logger extends Base {
     }
 
      /**
-     *  Returns a list of regular expresion for string data masking purposes
+     *  Returns a list of regular expression for string data masking purposes
     **/
     public function getRegExMaskingList() {
         return this.regexMaskingList;
