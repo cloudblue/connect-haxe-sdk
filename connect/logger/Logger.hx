@@ -31,6 +31,7 @@ class Logger extends Base {
         this.handlers = config.handlers_.copy();
         this.sections = [];
         this.maskedFields = config.maskedFields_;
+        this.regexMaskingList = config.regexMaskingList_;
         if (this.maskedFields.indexOf('apiKey') == -1) this.maskedFields.push('apiKey');
         this.compact = (this.level != LEVEL_DEBUG) ? config.compact_ : false;
     }
@@ -179,6 +180,13 @@ class Logger extends Base {
         return this.maskedFields;
     }
 
+     /**
+     *  Returns a list of regular expresion for string data masking purposes
+    **/
+    public function getRegExMaskingList() {
+        return this.regexMaskingList;
+    }
+
     @:dox(hide)
     public function log(message:String):Void {
         this.error(message);
@@ -237,6 +245,7 @@ class Logger extends Base {
     private final handlers:Collection<LoggerHandler>;
     private final sections:Array<LoggerSection>;
     private final maskedFields:Collection<String>;
+    private final regexMaskingList:Collection<String>;
     private final compact:Bool;
     
     
