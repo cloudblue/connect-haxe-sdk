@@ -30,7 +30,7 @@ import connect.logger.MarkdownLoggerFormatter;
 import sys.FileSystem;
 import sys.io.File;
 
-class ApiClientFlowMock extends Mock implements IApiClient {
+class ApiClientFlowAttemptMock extends Mock implements IApiClient {
     private static final REQUESTS_PATH = 'requests';
 
     public function syncRequest(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob):Response {
@@ -62,7 +62,7 @@ class TestFlow extends Flow {
 class FlowAttemptsTest {
     @Before
     public function setup() {
-        Env._reset(new Dictionary().setString('IApiClient', 'ApiClientFlowMock'));
+        Env._reset(new Dictionary().setString('IApiClient', 'ApiClientFlowAttemptMock'));
         var maskedFields:Collection<String> = new Collection();
         Env.initLogger(new LoggerConfig().handlers(new Collection<LoggerHandler>().push(new LoggerHandler(new MarkdownLoggerFormatter(),
             new ArrayLoggerWriter())))
