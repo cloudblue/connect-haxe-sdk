@@ -183,7 +183,7 @@ class Logger extends Base {
      /**
      *  Returns a list of regular expression for string data masking purposes
     **/
-    public function getRegExMaskingList()Collection<EReg> {
+    public function getRegExMaskingList():Collection<EReg> {
         return this.regexMaskingList;
     }
 
