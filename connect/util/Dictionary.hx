@@ -277,6 +277,11 @@ class Dictionary extends Base {
         Classes in the `connect.api` package work with dynamic objects.
     **/
     public static function fromObject(obj: Dynamic): Dictionary {
+    #if python
+        if (python.Syntax.code("isinstance({0}, dict)", obj)) {
+            obj = python.Lib.dictToAnon(obj);
+        }
+    #end
         return fromObject_r(obj);
     }
 
