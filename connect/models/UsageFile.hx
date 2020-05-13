@@ -366,8 +366,8 @@ class UsageFile extends IdModel {
                 's:' + ((record.itemSearchValue != null) ? record.itemSearchValue : ''),
                 'n:' + record.amount != null ? Std.string(record.amount):'0',
                 'n:' + record.quantity != null ?  Std.string(record.quantity) :'0',
-                's:' + ((record.startTimeUtc != null) ? record.startTimeUtc.toString() : ''),
-                's:' + ((record.endTimeUtc != null) ? record.endTimeUtc.toString() : ''),
+                's:' + (record.startTimeUtc != null ? StringTools.replace(record.startTimeUtc.toString(),'T',' ').split("+")[0] : ''),
+                's:' + (record.endTimeUtc != null ? StringTools.replace(record.endTimeUtc.toString(),'T',' ').split("+")[0] : ''),
                 's:' + ((record.assetSearchCriteria != null) ? record.assetSearchCriteria : ''),
                 's:' + ((record.assetSearchValue != null) ? record.assetSearchValue : ''),
                 's:' + ((record.itemName != null) ? record.itemName : ''),
@@ -376,7 +376,7 @@ class UsageFile extends IdModel {
                 's:' + ((record.itemUnit != null) ? record.itemUnit : ''),
                 's:' + ((record.categoryId != null) ? record.categoryId : 'generic_category'),
                 's:' + ((record.assetReconId != null) ? record.assetReconId : ''),
-                'n:' + record.tier != null ?  Std.string(record.tier) : '0'
+                's:' + record.tier != null ?  Std.string(record.tier) : ''
             ]);
         }
         return zipSheet('usage_records', sheet);
