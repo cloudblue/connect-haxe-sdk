@@ -364,8 +364,8 @@ class UsageFile extends IdModel {
                 's:' + ((record.recordNote != null) ? record.recordNote : ''),
                 's:' + ((record.itemSearchCriteria != null) ? record.itemSearchCriteria : ''),
                 's:' + ((record.itemSearchValue != null) ? record.itemSearchValue : ''),
-                'n:' + Std.string(record.amount),
-                'n:' + Std.string(record.quantity),
+                'n:' + record.amount != null ? Std.string(record.amount):'0',
+                'n:' + record.quantity != null ?  Std.string(record.quantity) :'0',
                 's:' + ((record.startTimeUtc != null) ? record.startTimeUtc.toString() : ''),
                 's:' + ((record.endTimeUtc != null) ? record.endTimeUtc.toString() : ''),
                 's:' + ((record.assetSearchCriteria != null) ? record.assetSearchCriteria : ''),
@@ -376,7 +376,7 @@ class UsageFile extends IdModel {
                 's:' + ((record.itemUnit != null) ? record.itemUnit : ''),
                 's:' + ((record.categoryId != null) ? record.categoryId : 'generic_category'),
                 's:' + ((record.assetReconId != null) ? record.assetReconId : ''),
-                'n:' + Std.string(record.tier)
+                'n:' + record.tier != null ?  Std.string(record.tier) : '0'
             ]);
         }
         return zipSheet('usage_records', sheet);
