@@ -330,6 +330,11 @@ class Dictionary extends Base {
                 }
                 return dict;
             default:
+            #if python
+                if (python.Syntax.code("isinstance({0}, dict)", x)) {
+                    return fromObject_r(python.Lib.dictToAnon(x));
+                }
+            #end
                 return x;
         }
     }
