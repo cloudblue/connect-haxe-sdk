@@ -304,7 +304,7 @@ class Flow extends Base {
     }
 
     private static final STEP_PARAM_ID = '__sdk_processor_step';
-    private static final ATTEMPT_PARAM = 'attempt';
+    private static final ATTEMPT_PARAM_ID = '__sdk_attempt';
 
     private final filterFunc:FilterFunc;
     private var steps:Array<Step>;
@@ -319,10 +319,10 @@ class Flow extends Base {
      * @return Int Number of times that this step has been executed
     **/
     public function getCurrentAttempt() {
-        if (!this.data.exists(ATTEMPT_PARAM)) {
-            this.data.set(ATTEMPT_PARAM, 0);
+        if (!this.data.exists(ATTEMPT_PARAM_ID)) {
+            this.data.set(ATTEMPT_PARAM_ID, 0);
         }
-        return this.data.get(ATTEMPT_PARAM);
+        return this.data.get(ATTEMPT_PARAM_ID);
     }
 
     private function process(model:IdModel):Void {
@@ -457,7 +457,7 @@ class Flow extends Base {
 
                 // Save step data if request supports it
                 Env.getLogger().write(Logger.LEVEL_INFO, 'Skipping request. Trying to save step data.');
-                this.data.exists(ATTEMPT_PARAM) ? this.data.set(ATTEMPT_PARAM, this.data.get(ATTEMPT_PARAM) + 1) : this.data.set(ATTEMPT_PARAM, 1);
+                this.data.exists(ATTEMPT_PARAM_ID) ? this.data.set(ATTEMPT_PARAM_ID, this.data.get(ATTEMPT_PARAM_ID) + 1) : this.data.set(ATTEMPT_PARAM_ID, 1);
                 final saveResult = StepStorage.save(this.model, new StepData(index, this.data, ConnectStorage), param, Reflect.field(model, 'update'));
 
                 switch (saveResult) {
