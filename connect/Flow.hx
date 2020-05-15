@@ -170,6 +170,13 @@ class Flow extends Base {
     }
 
     /**
+     * @return Collection<String> The keys of all the data stored in the Flow.
+     */
+    public function getDataKeys():Collection<String> {
+        return Collection._fromArray([for (key in this.data.keys()) key]);
+    }
+
+    /**
         Changes the status of the request being processed to "approved", sending the id
         of a Template to render on the portal.
 
