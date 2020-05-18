@@ -25,11 +25,11 @@ class UsageRecord extends Model {
 
 
     /** Usage amount corresponding to a item of an asset. Only needed for CR, PR and TR Schemas. **/
-    public var amount: Float;
+    public var amount: Null<Float>;
 
 
     /** Usage quantity. **/
-    public var quantity: Float;
+    public var quantity: Null<Float>;
 
 
     /** Start time. **/
