@@ -243,11 +243,10 @@ class Dictionary extends Base {
 
 
     /**
-        Returns a String representation of `this` Dictionary.
-        The exact representation depends on the platform.
+        Returns a JSON string representation of `this` Dictionary.
     **/
     public function toString(): String {
-        return map.toString();
+        return haxe.Json.stringify(this.toObject());
     }
 
 

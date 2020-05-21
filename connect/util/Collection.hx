@@ -300,13 +300,10 @@ class Collection<T> extends Base {
 
 
     /**
-        Returns a string representation of `this` Collection.
-
-        The result will include the individual elements' String representations
-        separated by comma. The enclosing [ ] may be missing on some platforms.
+        Returns a JSON string representation of `this` Collection.
     **/
     public function toString(): String {
-        return this._array.toString();
+        return haxe.Json.stringify(this._array);
     }
 
 
