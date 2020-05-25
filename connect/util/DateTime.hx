@@ -14,19 +14,18 @@ package connect.util;
     - `DateTime.fromString()` to parse from a string.
 
     DateTime handles date and time information in UTC.
-    A timestamp is defined as the number of milliseconds elapsed since 1st
-    January 1970 UTC.
 **/
 class DateTime {
     /**
         Creates a new date object from the given arguments.
-        The behaviour of a Date instance is only consistent across platforms if
-        the the arguments describe a valid date.
-        - month: 0 to 11 (note that this is zero-based)
-        - day: 1 to 31
-        - hour: 0 to 23
-        - min: 0 to 59
-        - sec: 0 to 59
+        The behaviour of a DateTime instance is only consistent across platforms if
+        the arguments describe a valid date.
+
+         - month: 0 to 11 (note that this is zero-based)
+         - day: 1 to 31
+         - hour: 0 to 23
+         - min: 0 to 59
+         - sec: 0 to 59
     **/
     public function new(year:Int, month:Int, day:Int, hour:Int, min:Int, sec:Int) {
         this.year = year;
@@ -123,6 +122,20 @@ class DateTime {
     /** Returns the seconds of `this` DateTime (0-59 range) in UTC. **/
     public function getSeconds(): Int {
         return this.seconds;
+    }
+
+
+    /**
+     * Returns the timestamp in seconds of `this` DateTime. The fractional part contains at least
+     * milliseconds accuracy, so you can multiply by 1000 and cast to int if you need an integer
+     * timestamp. A timestamp is defined as the number of milliseconds elapsed since
+     * 1st January 1970 UTC.
+     * @return Float The timestamp in seconds.
+     */
+    public function getTimestamp(): Float {
+        final thisDate = new Date(year, month, day, hours, minutes, seconds);
+        final otherDate = new Date(1970, 0, 1, 0, 0, 0);
+        return thisDate.getTime()/1000 - otherDate.getTime()/1000;
     }
 
 
