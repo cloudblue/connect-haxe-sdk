@@ -77,4 +77,22 @@ class TierAccount extends IdModel {
             return null;
         }
     }
+
+
+    /**
+     * Gets the TierConfig for `this` TierAccount, based on the product id and
+     * tier level specified.
+     * @param productId Product id of the TierConfig we want to get.
+     * @param tierLevel Tier level of the tier account.
+     * @return TierConfig The `TierConfig`, or `null` if none could be found with the given parameters.
+     */
+    public function getTierConfig(productId: String, tierLevel: Int): TierConfig {
+        final configs = TierConfig.list(new Query()
+            .equal('account.id', this.id)
+            .equal('product.id', productId)
+            .equal('tier_level', Std.string(tierLevel)));
+        return (configs.length() > 0)
+            ? configs.get(0)
+            : null;
+    }
 }
