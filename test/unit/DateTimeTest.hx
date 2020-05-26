@@ -49,6 +49,20 @@ class DateTimeTest {
 
 
     @Test
+    public function testGetEpochTimestamp() {
+        final dt = new DateTime(1970, 0, 1, 0, 0, 0);
+        Assert.areEqual(0, Std.int(dt.getTimestamp()));
+    }
+
+
+    @Test
+    public function testGetOneHourAfterEpochTimestamp() {
+        final dt = new DateTime(1970, 0, 1, 1, 0, 0);
+        Assert.areEqual(3600, Std.int(dt.getTimestamp()));
+    }
+
+
+    @Test
     public function testCompareWithEarlier() {
         final earlier = DateTime.fromString('2000-01-01T00:00:00');
         final now = DateTime.now();

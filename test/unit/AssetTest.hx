@@ -3,6 +3,7 @@
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
 import connect.Env;
+import connect.api.Query;
 import connect.models.Account;
 import connect.models.Asset;
 import connect.models.Configuration;
@@ -20,6 +21,7 @@ import connect.models.Param;
 import connect.models.PhoneNumber;
 import connect.models.Product;
 import connect.models.TierAccount;
+import connect.models.TierConfig;
 import connect.models.Tiers;
 import connect.models.User;
 import connect.util.Collection;
@@ -33,7 +35,8 @@ class AssetTest {
     @Before
     public function setup() {
         Env._reset(new Dictionary()
-            .setString('IFulfillmentApi', 'test.mocks.FulfillmentApiMock'));
+            .setString('IFulfillmentApi', 'test.mocks.FulfillmentApiMock')
+            .setString('ITierApi', 'test.mocks.TierApiMock'));
     }
 
 
@@ -336,5 +339,56 @@ class AssetTest {
         final asset = Asset.get('AS-392-283-000-0');
         final item = asset.getItemByGlobalId('invalid-id');
         Assert.isNull(item);
+    }
+
+
+    @Test
+    public function testGetCustomerConfig() {
+        // Check subject
+        final asset = Asset.get('AS-392-283-000-0');
+        final tierConfig = asset.getCustomerConfig();
+        Assert.isType(tierConfig, TierConfig);
+
+        // Check mocks
+        final query = new Query()
+            .equal('account.id', asset.tiers.customer.id)
+            .equal('product.id', asset.product.id)
+            .equal('tier_level', Std.string(0));
+        final apiMock = cast(Env.getTierApi(), Mock);
+        Assert.areEqual(1, apiMock.callCount('listTierConfigs'));
+        Assert.areEqual(
+            [query].toString(),
+            apiMock.callArgs('listTierConfigs', 0).toString());
+    }
+
+
+    @Test
+    public function testGetTier1Config() {
+        final asset = Asset.get('AS-392-283-000-0');
+        final tierConfig = asset.getTier1Config();
+        Assert.isType(tierConfig, TierConfig);
+
+        // Check mocks
+        final query = new Query()
+            .equal('account.id', asset.tiers.tier1.id)
+            .equal('product.id', asset.product.id)
+            .equal('tier_level', Std.string(1));
+        final apiMock = cast(Env.getTierApi(), Mock);
+        Assert.areEqual(1, apiMock.callCount('listTierConfigs'));
+        Assert.areEqual(
+            [query].toString(),
+            apiMock.callArgs('listTierConfigs', 0).toString());
+    }
+
+
+    @Test
+    public function testGetTier2Config() {
+        final asset = Asset.get('AS-392-283-000-0');
+        final tierConfig = asset.getTier2Config();
+        Assert.isNull(tierConfig);
+
+        // Check mocks
+        final apiMock = cast(Env.getTierApi(), Mock);
+        Assert.areEqual(0, apiMock.callCount('listTierConfigs'));
     }
 }

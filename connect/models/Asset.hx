@@ -195,4 +195,34 @@ class Asset extends IdModel {
         });
         return (items.length > 0) ? items[0] : null;
     }
+
+
+    /**
+     * @return The `TierConfig` object for the customer tier of this asset, or `null`.
+     */
+    public function getCustomerConfig(): TierConfig {
+        return (this.tiers.customer != null && this.product != null)
+            ? this.tiers.customer.getTierConfig(this.product.id, 0)
+            : null;
+    }
+
+
+    /**
+     * @return The `TierConfig` object for the tier1 of this asset, or `null`.
+     */
+    public function getTier1Config(): TierConfig {
+        return (this.tiers.tier1 != null && this.product != null)
+            ? this.tiers.tier1.getTierConfig(this.product.id, 1)
+            : null;
+    }
+
+
+    /**
+     * @return The `TierConfig` object for the tier2 of this asset, or `null`.
+     */
+    public function getTier2Config(): TierConfig {
+        return (this.tiers.tier2 != null && this.product != null)
+            ? this.tiers.tier2.getTierConfig(this.product.id, 2)
+            : null;
+    }
 }
