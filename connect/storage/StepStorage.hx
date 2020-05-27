@@ -21,7 +21,7 @@ class StepStorage {
     public static function load(requestId:String, param:Param):StepData {
         final fileData = loadRequestFromFile(requestId);
         final stepData = (fileData != null) ? fileData : loadRequestFromParam(requestId, param);
-        return (stepData != null) ? stepData : new StepData(0, {}, FailedStorage,0);
+        return (stepData != null) ? stepData : new StepData(0, {}, FailedStorage, 1);
     }
 
     public static function save(request:IdModel, stepData:StepData, param:Param, updateFunc:Function):StorageType {
@@ -149,7 +149,7 @@ class StepStorage {
     private static function getRequestField(object:Dynamic, requestId:String, storage:StorageType):StepData {
         if (Reflect.hasField(object, requestId)) {
             final stepData = Reflect.field(object, requestId);
-            return new StepData(stepData.current_step, stepData.data, storage,stepData.attempt);
+            return new StepData(stepData.current_step, stepData.data, storage, stepData.attempt);
         }
         return null;
     }

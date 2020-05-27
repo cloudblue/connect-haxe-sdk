@@ -51,6 +51,7 @@ class Flow extends Base {
         this.filterFunc = filterFunc;
         this.steps = [];
         this.data = new Dictionary();
+        this.stepAttempt = 0;
     }
 
     /**
@@ -319,9 +320,6 @@ class Flow extends Base {
      * @return Int Number of times that this step has been executed
     **/
     public function getCurrentAttempt() {
-        if(this.stepAttempt == null){
-            this.stepAttempt = 0;
-        }
         return this.stepAttempt;
     }
 
@@ -458,9 +456,7 @@ class Flow extends Base {
 
                 // Save step data if request supports it
                 Env.getLogger().write(Logger.LEVEL_INFO, 'Skipping request. Trying to save step data.');
-                (this.stepAttempt != null)?this.stepAttempt+=1:this.stepAttempt = 1;
-                final saveResult = StepStorage.save(this.model, new StepData(index, this.data, ConnectStorage,this.stepAttempt), param, Reflect.field(model, 'update'));
-
+                final saveResult = StepStorage.save(this.model, new StepData(index, this.data, ConnectStorage, this.stepAttempt + 1), param, Reflect.field(model, 'update'));
                 switch (saveResult) {
                     case ConnectStorage:
                         Env.getLogger().write(Logger.LEVEL_INFO, 'Step data saved in Connect.');
