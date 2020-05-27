@@ -304,7 +304,6 @@ class Flow extends Base {
     }
 
     private static final STEP_PARAM_ID = '__sdk_processor_step';
-    private static final ATTEMPT_PARAM_ID = '__sdk_attempt';
 
     private final filterFunc:FilterFunc;
     private var steps:Array<Step>;
@@ -313,22 +312,24 @@ class Flow extends Base {
     private var data:Dictionary;
     private var abortRequested:Bool;
     private var abortMessage:String;
+    private var stepAttempt:Int;
 
     /**
      * Provide current step attempt
      * @return Int Number of times that this step has been executed
     **/
     public function getCurrentAttempt() {
-        if (!this.data.exists(ATTEMPT_PARAM_ID)) {
-            this.data.set(ATTEMPT_PARAM_ID, 0);
+        if(this.stepAttempt == null){
+            this.stepAttempt = 0;
         }
-        return this.data.get(ATTEMPT_PARAM_ID);
+        return this.stepAttempt;
     }
 
     private function process(model:IdModel):Void {
         if (this.prepareRequestAndOpenLogSection(model)) {
             if (this.processSetup()) {
                 final stepData = this.loadStepDataIfStored();
+                this.stepAttempt = stepData.attempt;
                 final steps = [for (i in stepData.firstIndex...this.steps.length) this.steps[i]];
 
                 // Process all steps
@@ -457,8 +458,8 @@ class Flow extends Base {
 
                 // Save step data if request supports it
                 Env.getLogger().write(Logger.LEVEL_INFO, 'Skipping request. Trying to save step data.');
-                this.data.exists(ATTEMPT_PARAM_ID) ? this.data.set(ATTEMPT_PARAM_ID, this.data.get(ATTEMPT_PARAM_ID) + 1) : this.data.set(ATTEMPT_PARAM_ID, 1);
-                final saveResult = StepStorage.save(this.model, new StepData(index, this.data, ConnectStorage), param, Reflect.field(model, 'update'));
+                (this.stepAttempt != null)?this.stepAttempt+=1:this.stepAttempt = 1;
+                final saveResult = StepStorage.save(this.model, new StepData(index, this.data, ConnectStorage,this.stepAttempt), param, Reflect.field(model, 'update'));
 
                 switch (saveResult) {
                     case ConnectStorage:
