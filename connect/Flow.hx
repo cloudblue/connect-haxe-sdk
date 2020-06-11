@@ -481,6 +481,7 @@ class Flow extends Base {
             Env.getLogger().closeSection();
             return null;
         } else {
+            this.stepAttempt = 1;
             Env.getLogger().closeSection();
             return {nextIndex: index + 1, lastRequestStr: requestStr, lastDataStr: dataStr};
         }

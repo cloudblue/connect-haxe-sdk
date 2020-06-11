@@ -51,12 +51,17 @@ class ApiClientFlowAttemptMock extends Mock implements IApiClient {
 class TestFlow extends Flow {
     public function new() {
         super(null);
-        this.step("test step 1", this.firstStep);
+        this.step("test step 1", this.functionality);
+        this.step("test step 2", this.functionality);
+        this.step("test step 3", this.functionality);
     }
 
-    public function firstStep(f:Flow):Void {
-        this.abort();
+    public function functionality(f:Flow):Void {
+        if(this.getCurrentAttempt()<4){
+            this.abort();
+        }
     }
+    
 }
 
 class FlowAttemptsTest {
@@ -81,6 +86,18 @@ class FlowAttemptsTest {
         var testFlow:TestFlow = new TestFlow();
         var request_list = Model.parseArray(AssetRequest, sys.io.File.getContent('test/mocks/data/request_list.json'));
         Assert.areEqual(0, testFlow.getCurrentAttempt());
+        testFlow._run(request_list);
+        Assert.areEqual(1, testFlow.getCurrentAttempt());
+        testFlow._run(request_list);
+        Assert.areEqual(2, testFlow.getCurrentAttempt());
+        testFlow._run(request_list);
+        Assert.areEqual(3, testFlow.getCurrentAttempt());
+        testFlow._run(request_list);
+        Assert.areEqual(1, testFlow.getCurrentAttempt());
+        testFlow._run(request_list);
+        Assert.areEqual(2, testFlow.getCurrentAttempt());
+        testFlow._run(request_list);
+        Assert.areEqual(3, testFlow.getCurrentAttempt());
         testFlow._run(request_list);
         Assert.areEqual(1, testFlow.getCurrentAttempt());
         testFlow._run(request_list);
