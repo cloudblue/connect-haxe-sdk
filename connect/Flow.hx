@@ -190,12 +190,12 @@ class Flow extends Base {
         final tcr = this.getTierConfigRequest();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
-            request.update();
+            request.update(null);
             request.approveByTemplate(id);
             this.abort('');
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
-            tcr.update();
+            tcr.update(null);
             tcr.approveByTemplate(id);
             this.abort('');
         }
@@ -214,12 +214,12 @@ class Flow extends Base {
         final tcr = this.getTierConfigRequest();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
-            request.update();
+            request.update(null);
             request.approveByTile(text);
             this.abort('');
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
-            tcr.update();
+            tcr.update(null);
             tcr.approveByTile(text);
             this.abort('');
         }
@@ -237,12 +237,12 @@ class Flow extends Base {
         final tcr = this.getTierConfigRequest();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
-            request.update();
+            request.update(null);
             request.fail(reason);
             this.abort('Failing request');
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
-            tcr.update();
+            tcr.update(null);
             tcr.fail(reason);
             this.abort('Failing request');
         }
@@ -253,22 +253,25 @@ class Flow extends Base {
 
         When using the Flow, this method should be used instead of `AssetRequest.inquire()` or
         `TierConfigRequest.inquire()`, since this take care of cleaning the stored step
-        information, and automatically skips any further steps.
+        information, and automatically skips any further steps. Also, this method calls `update`
+        on the request before changing its status.
 
         @param templateId Id of the template to use in the portal, or `null` to not use any. This
         is only used for AssetRequests.
+        @param params A collection of parameters to update. If `null` is passed, then the
+        parameters that have changed in the request will be updated.
     **/
-    public function inquire(templateId:String):Void {
+    public function inquire(templateId:String, params: Collection<Param>):Void {
         final request = this.getAssetRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
-            request.update();
+            request.update(params);
             request.inquire(templateId);
             this.abort('Inquiring request');
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
-            tcr.update();
+            tcr.update(params);
             tcr.inquire();
             this.abort('Inquiring request');
         }
@@ -286,12 +289,12 @@ class Flow extends Base {
         final tcr = this.getTierConfigRequest();
         if (request != null) {
             StepStorage.removeStepData(request.id, getStepParam());
-            request.update();
+            request.update(null);
             request.pend();
             this.abort('Pending request');
         } else if (tcr != null) {
             StepStorage.removeStepData(tcr.id, getStepParam());
-            tcr.update();
+            tcr.update(null);
             tcr.pend();
             this.abort('Pending request');
         }

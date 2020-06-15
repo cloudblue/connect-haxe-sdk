@@ -273,41 +273,31 @@ class Query extends Base {
             rql.push('select(${this.select_.join(',')})');
         }
 
-        final likeKeys = this.like_.keys();
-        if (likeKeys.hasNext()) {
-            for (key in likeKeys) {
-                rql.push('like($key,${this.like_.get(key)})');
-            }
+        final likeKeys = sortStringArray([for (k in this.like_.keys()) k]);
+        for (key in likeKeys) {
+            rql.push('like($key,${this.like_.get(key)})');
         }
 
-        final ilikeKeys = this.ilike_.keys();
-        if (ilikeKeys.hasNext()) {
-            for (key in ilikeKeys) {
-                rql.push('ilike($key,${this.ilike_.get(key)})');
-            }
+        final ilikeKeys = sortStringArray([for (k in this.ilike_.keys()) k]);
+        for (key in ilikeKeys) {
+            rql.push('ilike($key,${this.ilike_.get(key)})');
         }
 
-        final inKeys = this.in__.keys();
-        if (inKeys.hasNext()) {
-            for (key in inKeys) {
-                rql.push('in($key,(${this.in__.get(key).join(',')}))');
-            }
+        final inKeys = sortStringArray([for (k in this.in__.keys()) k]);
+        for (key in inKeys) {
+            rql.push('in($key,(${this.in__.get(key).join(',')}))');
         }
 
-        final outKeys = this.out_.keys();
-        if (outKeys.hasNext()) {
-            for (key in outKeys) {
-                rql.push('out($key,(${this.out_.get(key).join(',')}))');
-            }
+        final outKeys = sortStringArray([for (k in this.out_.keys()) k]);
+        for (key in outKeys) {
+            rql.push('out($key,(${this.out_.get(key).join(',')}))');
         }
 
-        final relOpsKeys = this.relOps.keys();
-        if (relOpsKeys.hasNext()) {
-            for (relOp in relOpsKeys) {
-                final arguments = this.relOps.get(relOp);
-                for (argument in arguments) {
-                    rql.push('$relOp(${argument.key},${argument.value})');
-                }
+        final relOpsKeys = sortStringArray([for (k in this.relOps.keys()) k]);
+        for (relOp in relOpsKeys) {
+            final arguments = this.relOps.get(relOp);
+            for (argument in arguments) {
+                rql.push('$relOp(${argument.key},${argument.value})');
             }
         }
 
@@ -526,6 +516,12 @@ class Query extends Base {
 
     private static function arrayToObject(arr:Array<Dynamic>): Array<Dynamic> {
         return Lambda.map(arr, elem -> valueToObject(elem));
+    }
+
+
+    private static function sortStringArray(arr: Array<String>): Array<String> {
+        haxe.ds.ArraySort.sort(arr, (a, b) -> Reflect.compare(a, b));
+        return arr;
     }
 }
 

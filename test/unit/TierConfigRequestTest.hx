@@ -101,7 +101,7 @@ class TierConfigRequestTest {
         // Check subject
         final request = TierConfigRequest.get('TCR-000-000-000');
         request.getParamById('param_a').value = 'Hello, world!';
-        final updatedRequest = request.update();
+        final updatedRequest = request.update(null);
         Assert.isType(updatedRequest, TierConfigRequest);
         Assert.areEqual(TierConfigRequest.get('TCR-000-000-000').toString(),
             updatedRequest.toString());
@@ -120,13 +120,34 @@ class TierConfigRequestTest {
     public function testUpdateNoChanges() {
         // Check subject
         final request = TierConfigRequest.get('TCR-000-000-000');
-        final updatedRequest = request.update();
+        final updatedRequest = request.update(null);
         Assert.isType(updatedRequest, TierConfigRequest);
         Assert.areEqual(request.toString(), updatedRequest.toString());
 
         // Check mocks
         final apiMock = cast(Env.getTierApi(), Mock);
         Assert.areEqual(0, apiMock.callCount('updateTierConfigRequest'));
+    }
+
+
+    @Test
+    public function testUpdateWithParams() {
+        // Check subject
+        final param = new Param();
+        param.id = 'PM-9861-7949-8492-0001';
+        param.valueError = 'Please provide a value.';
+        final request = TierConfigRequest.get('TCR-000-000-000');
+        final updatedRequest = request.update(new Collection<Param>().push(param));
+        Assert.isType(updatedRequest, TierConfigRequest);
+        Assert.areEqual(request.toString(), updatedRequest.toString());
+
+        // Check mocks
+        final apiMock = cast(Env.getTierApi(), Mock);
+        Assert.areEqual(1, apiMock.callCount('updateTierConfigRequest'));
+        final callArgs = apiMock.callArgs('updateTierConfigRequest', 0);
+        Assert.areEqual(
+            [request.id, '{"params":[{"id":"PM-9861-7949-8492-0001","value_error":"Please provide a value."}]}'].toString(),
+            [callArgs[0], Helper.sortStringObject(TierConfigRequest, callArgs[1])].toString());
     }
 
 

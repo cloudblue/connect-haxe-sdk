@@ -83,7 +83,7 @@ class FlowTest {
     @Test
     public function testFlowRunInquire() {
         final flow = new Flow(null).step('Add dummy data', function(f:Flow):Void {
-            f.inquire("TMPL-0001");
+            f.inquire('TMPL-0001', null);
         }).step('Trace request data', function(f:Flow):Void {});
         this.flowRunner(flow);
     }
@@ -91,7 +91,7 @@ class FlowTest {
     @Test
     public function testFlowRunFail() {
         final flow = new Flow(null).step('Add dummy data', function(f:Flow):Void {
-            f.fail("Fail by default");
+            f.fail('Fail by default');
         }).step('Trace request data', function(f:Flow):Void {});
         this.flowRunner(flow);
     }
