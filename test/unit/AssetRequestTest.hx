@@ -131,6 +131,8 @@ class AssetRequestTest {
     public function testUpdateNoChanges() {
         // Check subject
         final request = AssetRequest.get('PR-5852-1608-0000');
+        final modifiedFields = Reflect.fields(request._toDiff());
+        trace('*** ' + haxe.Json.stringify(modifiedFields));
         final updatedRequest = request.update(null);
         Assert.isType(updatedRequest, AssetRequest);
         Assert.areEqual(request.toString(), updatedRequest.toString());
