@@ -143,26 +143,37 @@ class AssetRequest extends IdModel {
     /**
         Updates the request in the server with the data changed in `this` model.
 
-        You should reassign your request with the object returned by this method, so the next time
-        you call `update` on the object, the SDK knows the fields that already got updated in a
-        previous call, like this:
+        If no parameters are specified for updating, you should reassign your request with the
+        object returned by this method, so the next time you call `update` on the object, the SDK
+        knows the fields that already got updated in a previous call, like this:
 
         ```
         request = request.update();
         ```
 
+        @param params A collection of parameters to update. If `null` is passed, then the
+        parameters that have changed in the request will be sent.
         @returns The AssetRequest returned from the server, which should contain
         the same data as `this` AssetRequest.
     **/
-    public function update(): AssetRequest {
-        final diff = this._toDiff();
-        final hasModifiedFields = Reflect.fields(diff).length > 1;
-        if (hasModifiedFields) {
-            final request = Env.getFulfillmentApi().updateRequest(
-                this.id,
-                haxe.Json.stringify(diff));
-            return Model.parse(AssetRequest, request);
+    public function update(params: Collection<Param>): AssetRequest {
+        if (params == null) {
+            final diff = this._toDiff();
+            final hasModifiedFields = Reflect.fields(diff).length > 1;
+            if (hasModifiedFields) {
+                final request = Env.getFulfillmentApi().updateRequest(
+                    this.id,
+                    haxe.Json.stringify(diff));
+                return Model.parse(AssetRequest, request);
+            } else {
+                return this;
+            }
         } else {
+            if (params.length() > 0) {
+                Env.getFulfillmentApi().updateRequest(
+                    this.id,
+                    '{"asset":{"params":${params.toString()}}}');
+            }
             return this;
         }
     }

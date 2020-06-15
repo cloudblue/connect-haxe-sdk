@@ -113,7 +113,7 @@ class AssetRequestTest {
         // Check subject
         final request = AssetRequest.get('PR-5852-1608-0000');
         request.note = 'Hello, world!';
-        final updatedRequest = request.update();
+        final updatedRequest = request.update(null);
         Assert.isType(updatedRequest, AssetRequest);
         Assert.areEqual(AssetRequest.get('PR-5852-1608-0000').toString(), updatedRequest.toString());
         // ^ The mock returns that request
@@ -131,13 +131,34 @@ class AssetRequestTest {
     public function testUpdateNoChanges() {
         // Check subject
         final request = AssetRequest.get('PR-5852-1608-0000');
-        final updatedRequest = request.update();
+        final updatedRequest = request.update(null);
         Assert.isType(updatedRequest, AssetRequest);
         Assert.areEqual(request.toString(), updatedRequest.toString());
 
         // Check mocks
         final apiMock = cast(Env.getFulfillmentApi(), Mock);
         Assert.areEqual(0, apiMock.callCount('updateRequest'));
+    }
+
+
+    @Test
+    public function testUpdateWithParams() {
+        // Check subject
+        final param = new Param();
+        param.id = 'PM-9861-7949-8492-0001';
+        param.valueError = 'Please provide a value.';
+        final request = AssetRequest.get('PR-5852-1608-0000');
+        final updatedRequest = request.update(new Collection<Param>().push(param));
+        Assert.isType(updatedRequest, AssetRequest);
+        Assert.areEqual(request.toString(), updatedRequest.toString());
+
+        // Check mocks
+        final apiMock = cast(Env.getFulfillmentApi(), Mock);
+        Assert.areEqual(1, apiMock.callCount('updateRequest'));
+        final callArgs = apiMock.callArgs('updateRequest', 0);
+        Assert.areEqual(
+            [request.id, '{"asset":{"params":[{"id":"PM-9861-7949-8492-0001","value_error":"Please provide a value."}]}}'].toString(),
+            [callArgs[0], Helper.sortStringObject(AssetRequest, callArgs[1])].toString());
     }
 
 
