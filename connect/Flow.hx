@@ -521,7 +521,7 @@ class Flow extends Base {
                         false)
                     : request;
                 final requestTitle = (diff != null) ? 'Request (changes):' : 'Request:';
-                return '$requestTitle${fmt.formatCodeBlock(Env.getLogger().getLevel(),requestStr, 'json')}';
+                return '$requestTitle${fmt.formatCodeBlock(Env.getLogger().getLevel(),Std.string(requestStr), 'json')}';
             } else {
                 return 'Request (id): ${request}';
             }

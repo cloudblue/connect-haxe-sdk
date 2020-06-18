@@ -132,7 +132,7 @@ class Logger extends Base {
      */
     public function writeCodeBlock(level:Int, code:String, language:String):Void {
         for (output in this.handlers) {
-            this._writeToHandler(level, output.formatter.formatCodeBlock(level, code, language), output);
+            this._writeToHandler(level, output.formatter.formatCodeBlock(level, Std.string(code), language), output);
         }
     }
 
