@@ -31,6 +31,10 @@ class Item extends IdModel {
     public var params: Collection<Param>;
 
 
+    /** Item status. One of: draft, published, endofsale. **/
+    public var status: String;
+
+
     // Undocumented fields (they appear in PHP SDK)
 
 
