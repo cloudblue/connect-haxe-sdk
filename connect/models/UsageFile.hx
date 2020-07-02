@@ -274,7 +274,7 @@ class UsageFile extends IdModel {
     public function getTemplate(): Blob {
         try {
             final link = getTemplateLink();
-            final response = Env.getApiClient().syncRequest('GET', link, null, null, null, null, null);
+            final response = Env.getApiClient().syncRequest('GET', link, null, null, null, null, null, null);
             return response.data;
         } catch (ex: Dynamic) {
             return null;

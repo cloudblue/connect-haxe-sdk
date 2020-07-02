@@ -13,8 +13,8 @@ import connect.util.Dictionary;
 
 class ApiClientMock extends Mock implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob) : Response {
-        this.calledFunction('syncRequest', [method, url, headers, body, fileArg, fileName, fileContent]);
+            fileArg: String, fileName: String, fileContent: Blob, certificate:String) : Response {
+        this.calledFunction('syncRequest', [method, url, headers, body, fileArg, fileName, fileContent, certificate]);
         return new Response(200, null, null);
     }
 }

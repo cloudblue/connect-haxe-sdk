@@ -33,35 +33,34 @@ import DateTimeTest;
  */
 class TestSuite extends massive.munit.TestSuite
 {
-	public function new()
-	{
-		super();
-
-		add(LoggerTest);
-		add(MarketplaceTest);
-		add(TierAccountTest);
-		add(AssetTest);
-		add(MarkdownLoggerFormatterTest);
-		add(CategoryTest);
-		add(ItemTest);
-		add(ConfigurationTest);
-		add(CustomLoggerFormatterTest);
-		add(AccountTest);
-		add(TierConfigRequestTest);
-		add(DiffTest);
-		add(FlowAttemptsTest);
-		add(AgreementTest);
-		add(AssetRequestTest);
-		add(UsageFileTest);
-		add(TierConfigTest);
-		add(ConversationTest);
-		add(FlowTest);
-		add(ListingRequestTest);
-		add(ConfigTest);
-		add(ListingTest);
-		add(ModelTest);
-		add(QueryTest);
-		add(ProductTest);
-		add(DateTimeTest);
-	}
+    public function new()
+    {
+        super();
+        add(LoggerTest);
+        add(MarketplaceTest);
+        add(TierAccountTest);
+        add(AssetTest);
+        add(MarkdownLoggerFormatterTest);
+        add(CategoryTest);
+        add(ItemTest);
+        add(ConfigurationTest);
+        add(CustomLoggerFormatterTest);
+        add(AccountTest);
+        add(TierConfigRequestTest);
+        add(DiffTest);
+        add(FlowAttemptsTest);
+        add(AgreementTest);
+        add(AssetRequestTest);
+        add(UsageFileTest);
+        add(TierConfigTest);
+        add(ConversationTest);
+        add(FlowTest);
+        add(ListingRequestTest);
+        add(ConfigTest);
+        add(ListingTest);
+        add(ModelTest);
+        add(QueryTest);
+        add(ProductTest);
+        add(DateTimeTest);
+    }
 }
