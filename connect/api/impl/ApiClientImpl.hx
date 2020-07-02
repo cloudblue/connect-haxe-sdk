@@ -17,17 +17,17 @@ import haxe.io.BytesInput;
 
 class ApiClientImpl extends Base implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob) : Response {
+            fileArg: String, fileName: String, fileContent: Blob, certificate:String) : Response {
     #if cs
-        final response = syncRequestCs(method, url, headers, body, fileArg, fileName, fileContent);
+        final response = syncRequestCs(method, url, headers, body, fileArg, fileName, fileContent,certificate);
     #elseif js
-        final response = syncRequestJs(method, url, headers, body, fileArg, fileName, fileContent);
+        final response = syncRequestJs(method, url, headers, body, fileArg, fileName, fileContent,certificate);
     #elseif use_tink
-        final response = syncRequestTink(method, url, headers, body, fileArg, fileName, fileContent);
+        final response = syncRequestTink(method, url, headers, body, fileArg, fileName, fileContent,certificate);
     #elseif python
-        final response = syncRequestPython(method, url, headers, body, fileArg, fileName, fileContent);
+        final response = syncRequestPython(method, url, headers, body, fileArg, fileName, fileContent,certificate);
     #else
-        final response = syncRequestStd(method, url, headers, body, fileArg, fileName, fileContent);
+        final response = syncRequestStd(method, url, headers, body, fileArg, fileName, fileContent,certificate);
     #end
 
         final level = (response.status >= 400 || response.status == -1)
@@ -48,7 +48,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
 #if cs
     private static function syncRequestCs(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob) : Response {
+            fileArg: String, fileName: String, fileContent: Blob,certificate: String) : Response {
         try {
             final boundary = '---------------------------${StringTools.hex(Std.int(Date.now().getTime() * 1000))}';
 
@@ -112,7 +112,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
 #elseif js
     private static function syncRequestJs(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob) : Response {
+            fileArg: String, fileName: String, fileContent: Blob, certificate:String) : Response {
         initXMLHttpRequest();
 
         final xhr = new js.html.XMLHttpRequest();
@@ -149,7 +149,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
 #elseif use_tink
     private static function syncRequestTink(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob) : Response {
+            fileArg: String, fileName: String, fileContent: Blob,certificate:String) : Response {
         final methods = [
             'GET' => tink.http.Method.GET,
             'PUT' => tink.http.Method.PUT,
@@ -199,10 +199,10 @@ class ApiClientImpl extends Base implements IApiClient {
 
 #elseif python
     private static function syncRequestPython(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob) : Response {
+            fileArg: String, fileName: String, fileContent: Blob,certificate: String) : Response {
         try {
             return connect.native.PythonRequest.request(
-                method, url, headers, body, fileArg, fileName, fileContent, 300);
+                method, url, headers, body, fileArg, fileName, fileContent, 300,certificate);
         } catch (ex: Dynamic) {
             return new Response(-1, Std.string(ex), null);
         }
@@ -211,7 +211,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
 #else
     public function syncRequestStd(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob) : Response {
+            fileArg: String, fileName: String, fileContent: Blob,certificate:String) : Response {
         var status:Null<Int> = null;
         final responseBytes = new haxe.io.BytesOutput();
 

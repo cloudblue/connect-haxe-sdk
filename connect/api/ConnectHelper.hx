@@ -99,7 +99,7 @@ class ConnectHelper {
             ? (rqlParams) ? params.toString() : params.toPlain()
             : '';
         final url = Env.getConfig().getApiUrl() + path + paramsStr;
-        return Env.getApiClient().syncRequest(method, url, headers, data, fileArg, fileName, fileContent);
+        return Env.getApiClient().syncRequest(method, url, headers, data, fileArg, fileName, fileContent,null);
     }
 
 
