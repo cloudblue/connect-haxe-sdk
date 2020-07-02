@@ -13,9 +13,11 @@ class JavaIterator<T> implements java.util.Iterator<T> {
     }
 
 
+    /*
     public function forEachRemaining(param1: java.util.function.Consumer<Dynamic>): Void {
         // TODO: Not implemented
     }
+    */
 
 
     public function hasNext(): Bool {
