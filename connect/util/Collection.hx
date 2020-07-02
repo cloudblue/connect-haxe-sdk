@@ -129,23 +129,23 @@ class Collection<T> extends Base {
         using the SDK within Haxe, and in Java it returns a native iterator.
     **/
 #if javalib
-#if (haxe_ver >= 4.1)
+    /*
     public function forEach(param1: java.util.function.Consumer<Dynamic>): Void {
         // TODO: Not implemented
     }
-#end
+    */
 
     public function iterator(): java.util.Iterator<T> {
         return new connect.native.JavaIterator(this._array);
     }
 
 
-#if (haxe_ver >= 4.1)
+    /*
     public function spliterator(): java.util.Spliterator<T> {
         // TODO: Not implemented
         return null;
     }
-#end
+    */
 #else
     public function iterator(): Iterator<T> {
         return this._array.iterator();
