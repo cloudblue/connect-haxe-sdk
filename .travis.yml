@@ -1,7 +1,7 @@
 os: linux
 dist: xenial
 language: haxe
-haxe: 4.0.5
+haxe: 4.1.2
 
 install:
 # Get SDK version
