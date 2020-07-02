@@ -202,7 +202,7 @@ class ApiClientImpl extends Base implements IApiClient {
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
         try {
             return connect.native.PythonRequest.request(
-                method, url, headers, body, fileArg, fileName, fileContent, 300,certificate);
+                method, url, headers, body, fileArg, fileName, fileContent, 300, certificate);
         } catch (ex: Dynamic) {
             return new Response(-1, Std.string(ex), null);
         }
