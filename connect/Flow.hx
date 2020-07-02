@@ -427,21 +427,56 @@ class Flow extends Base {
         final tierConfigRequest = this.getTierConfigRequest();
         final usageFile = this.getUsageFile();
 
-        // Get product
-        final product = (assetRequest != null) ? assetRequest.asset.product : (listing != null) ? listing.product : (tierConfigRequest != null) ? tierConfigRequest.product : (usageFile != null) ? usageFile.product : null;
+        // Get provider
+        final provider =
+            (assetRequest != null && assetRequest.asset.connection.provider != null) ?
+                assetRequest.asset.connection.provider.id :
+            (listing != null && listing.provider != null) ?
+                listing.provider.id :
+            (tierConfigRequest != null && tierConfigRequest.configuration.connection.provider != null) ?
+                tierConfigRequest.configuration.connection.provider.id :
+            (usageFile != null && usageFile.provider != null) ?
+                usageFile.provider.id :
+            'provider';
 
-        // Get product path
-        final productPath = (product != null) ? product.id + '/' : '';
+        // Get hub
+        final hub =
+            (assetRequest != null && assetRequest.asset.connection.hub != null) ?
+                assetRequest.asset.connection.hub.id :
+            (tierConfigRequest != null && tierConfigRequest.configuration.connection.hub != null) ?
+                tierConfigRequest.configuration.connection.hub.id :
+            'hub';
+
+        // Get marketplace
+        final marketplace =
+            (assetRequest != null && assetRequest.marketplace != null) ? assetRequest.marketplace.id :
+            (listing != null && listing.contract.marketplace != null) ? listing.contract.marketplace.id :
+            (tierConfigRequest != null && tierConfigRequest.marketplace != null) ? tierConfigRequest.marketplace.id :
+            (usageFile != null && usageFile.marketplace != null) ? usageFile.marketplace.id :
+            'marketplace';
+
+        // Get product
+        final product =
+            (assetRequest != null && assetRequest.asset.product != null) ? assetRequest.asset.product.id :
+            (listing != null && listing.product != null) ? listing.product.id :
+            (tierConfigRequest != null && tierConfigRequest.product != null) ? tierConfigRequest.product.id :
+            (usageFile != null && usageFile.product != null) ? usageFile.product.id :
+            'product';
+        
+        
+        // Get tier account
+        final tierAccount = 
+            (assetRequest != null && assetRequest.asset.tiers.customer != null) ?
+                assetRequest.asset.tiers.customer.id:
+            (tierConfigRequest != null && tierConfigRequest.configuration.tiers.customer != null) ?
+                tierConfigRequest.configuration.tiers.customer.id :
+            'tier_account';
 
         // Set log filename
-        if (assetRequest != null) {
-            Env.getLogger().setFilename('$productPath${assetRequest.asset.id}.md');
-        } else if (listing != null) {
-            Env.getLogger().setFilename('$productPath${listing.id}.md');
-        } else if (tierConfigRequest != null) {
-            Env.getLogger().setFilename('$productPath${tierConfigRequest.configuration.id}.md');
-        } else if (usageFile != null) {
-            Env.getLogger().setFilename('$productPath${usageFile.id}.md');
+        if (assetRequest != null || tierConfigRequest != null) {
+            Env.getLogger().setFilename('$provider/$hub/$marketplace/$product/$tierAccount.md');
+        } else if (listing != null || usageFile != null) {
+            Env.getLogger().setFilename('usage/$provider/$marketplace.md');
         }
 
         // Open log section

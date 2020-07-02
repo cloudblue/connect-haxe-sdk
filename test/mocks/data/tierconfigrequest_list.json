@@ -4,7 +4,9 @@
         "type": "setup",
         "status": "pending",
         "configuration": {
-            "id": "TC-000-000-000"
+            "id": "TC-000-000-000",
+            "connection": {},
+            "tiers": {}
         },
         "events": {
           "created": {

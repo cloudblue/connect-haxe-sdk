@@ -61,6 +61,10 @@ class TierConfig extends IdModel {
     public var events: Events;
 
 
+    /** TierConfig tier accounts. **/
+    public var tiers: Tiers;
+
+
     // Undocumented fields (they appear in PHP SDK)
 
 
