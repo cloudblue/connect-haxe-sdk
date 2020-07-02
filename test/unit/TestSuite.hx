@@ -1,5 +1,6 @@
 import massive.munit.TestSuite;
 
+import LoggerTest;
 import MarketplaceTest;
 import TierAccountTest;
 import AssetTest;
@@ -7,14 +8,17 @@ import MarkdownLoggerFormatterTest;
 import CategoryTest;
 import ItemTest;
 import ConfigurationTest;
+import CustomLoggerFormatterTest;
 import AccountTest;
 import TierConfigRequestTest;
 import DiffTest;
+import FlowAttemptsTest;
 import AgreementTest;
 import AssetRequestTest;
 import UsageFileTest;
 import TierConfigTest;
 import ConversationTest;
+import FlowTest;
 import ListingRequestTest;
 import ConfigTest;
 import ListingTest;
@@ -32,7 +36,7 @@ class TestSuite extends massive.munit.TestSuite
 	public function new()
 	{
 		super();
-
+        add(LoggerTest);
 		add(MarketplaceTest);
 		add(TierAccountTest);
 		add(AssetTest);
@@ -40,14 +44,17 @@ class TestSuite extends massive.munit.TestSuite
 		add(CategoryTest);
 		add(ItemTest);
 		add(ConfigurationTest);
+        add(CustomLoggerFormatterTest);
 		add(AccountTest);
 		add(TierConfigRequestTest);
 		add(DiffTest);
+        add(FlowAttemptsTest);
 		add(AgreementTest);
 		add(AssetRequestTest);
 		add(UsageFileTest);
 		add(TierConfigTest);
 		add(ConversationTest);
+        add(FlowTest);
 		add(ListingRequestTest);
 		add(ConfigTest);
 		add(ListingTest);
