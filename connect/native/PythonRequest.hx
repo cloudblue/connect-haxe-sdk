@@ -15,7 +15,7 @@ import python.Syntax;
 class PythonRequest {
     public static function request(method: String, url: String, headers: Dictionary,
             body: String, fileArg: String, fileName: String, fileContent: Blob,
-            timeout: Float,certificate:String): Response {
+            timeout: Float, certificate:String): Response {
         Syntax.code("import requests");
 
         final parsedHeaders = new python.Dict<String, Dynamic>();
@@ -39,10 +39,10 @@ class PythonRequest {
         final resp = (files == null)
             ? Syntax.code(
                 "requests.request({0}, {1}, headers={2}, data={3}.encode() if {3} else None, timeout={4},cert={5})",
-                method, url, parsedHeaders, body, timeout,certificate)
+                method, url, parsedHeaders, body, timeout, certificate)
             : Syntax.code(
                 "requests.request({0}, {1}, headers={2}, files={3}, timeout={4},cert={5})",
-                method, url, parsedHeaders, files, timeout,certificate);
+                method, url, parsedHeaders, files, timeout, certificate);
         final contentBytes = Bytes.ofData(resp.content);
         return new Response(resp.status_code, resp.text, Blob._fromBytes(contentBytes));
     }
