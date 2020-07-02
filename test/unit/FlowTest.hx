@@ -36,8 +36,8 @@ import sys.io.File;
 class ApiClientFlowMock extends Mock implements IApiClient {
     private static final REQUESTS_PATH = 'requests';
 
-    public function syncRequest(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob):Response {
-        this.calledFunction('syncRequest', [method, url, headers, body, fileArg, fileName, fileContent]);
+    public function syncRequest(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob,certificate:String):Response {
+        this.calledFunction('syncRequest', [method, url, headers, body, fileArg, fileName, fileContent,certificate]);
 
         if (StringTools.contains(url, REQUESTS_PATH) && method.toUpperCase() == 'GET') {
             return new Response(200, Mock.parseJsonFile('test/mocks/data/request_list.json'), null);
