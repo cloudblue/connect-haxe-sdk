@@ -238,6 +238,11 @@ class ApiClientImpl extends Base implements IApiClient {
             );
         }
 
+        http.onStatus = function(status_) { status = status_; };
+        http.onError = function(msg) {
+            status = -1;
+            responseBytes.writeString(msg);
+        }
         http.customRequest(false, responseBytes, null, method.toUpperCase());
 
         while (status == null) {} // Wait for async request
