@@ -229,7 +229,7 @@ class Logger extends Base {
     @:dox(hide)
     public function _writeToHandler(level:Int, message:String, handler:LoggerHandler):Void {
         if (this.level >= level) {
-            this.writeSections();
+            this.writeSections(level);
             handler.writer.writeLine(handler.formatter.formatLine(level, message));
         }
     }
@@ -242,11 +242,11 @@ class Logger extends Base {
     private final regexMaskingList:Collection<EReg>;
     private final compact:Bool;
     
-    private function writeSections():Void {
+    private function writeSections(level:Int):Void {
         for (i in 0...this.sections.length) {
             if (!this.sections[i].written) {
                 for (output in this.handlers) {
-                    final section = output.formatter.formatSection(i + 1, this.sections[i].name);
+                    final section = output.formatter.formatSection(level, this.sections[i].name);
                     output.writer.writeLine(section);
                 }
                 this.sections[i].written = true;
