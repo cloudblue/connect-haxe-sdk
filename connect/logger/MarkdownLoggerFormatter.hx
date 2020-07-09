@@ -17,20 +17,23 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
         return '\n$prefix$text\n';
     }
 
-
     public function formatBlock(level: Int, text: String): String {
         final lines = getLines(text);
         final prefixedLines = [for (line in lines) '> $line'];
         return '\n' + prefixedLines.join('\n') + '\n';
     }
 
+    private static function getLines(text: String): Array<String> {
+        final windowsReplaced = StringTools.replace(text, '\r\n', '\n');
+        final macosReplaced = StringTools.replace(windowsReplaced, '\r', '\n');
+        return macosReplaced.split('\n');
+    }
 
     public function formatCodeBlock(level: Int, text: String, language: String): String {
         final header = '\n```$language\n';
         final footer = '\n```\n';
         return header + text + footer;
     }
-
 
     public function formatList(level: Int, lines: Collection<String>): String {
         if (lines.length() > 0) {
@@ -40,7 +43,6 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
             return '\n\n';
         }
     }
-
 
     public function formatTable(level: Int, table: Collection<Collection<String>>): String {
         if (table.length() > 0) {
@@ -58,12 +60,4 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
     }
 
     public function new() {}
-
-
-    private static function getLines(text: String): Array<String> {
-        final windowsReplaced = StringTools.replace(text, '\r\n', '\n');
-        final macosReplaced = StringTools.replace(windowsReplaced, '\r', '\n');
-        return macosReplaced.split('\n');
-    }
-
 }
