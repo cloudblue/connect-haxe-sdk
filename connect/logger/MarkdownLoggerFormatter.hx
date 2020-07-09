@@ -10,8 +10,8 @@ import connect.util.Util;
 
 @:dox(hide)
 class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
-    public function formatSection(level: Int, text: String): String {
-        final hashes = StringTools.rpad('', '#', level);
+    public function formatSection(level: Int, sectionLevel: Int, text: String): String {
+        final hashes = StringTools.rpad('', '#', sectionLevel);
         final prefix = (hashes != '')
             ? (hashes + ' ')
             : '';

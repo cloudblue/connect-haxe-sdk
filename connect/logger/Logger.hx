@@ -246,7 +246,7 @@ class Logger extends Base {
         for (i in 0...this.sections.length) {
             if (!this.sections[i].written) {
                 for (output in this.handlers) {
-                    final section = output.formatter.formatSection(level, this.sections[i].name);
+                    final section = output.formatter.formatSection(level, i+1, this.sections[i].name);
                     output.writer.writeLine(section);
                 }
                 this.sections[i].written = true;
