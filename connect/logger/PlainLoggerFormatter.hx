@@ -16,13 +16,13 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
 
     private var currentRequest = NO_REQUEST;
 
-    public function formatSection(level: Int, text: String): String {
-        final hashes = StringTools.rpad('', '#', level);
-        final sectionPrefix = (hashes != '')
+    public function formatSection(level: Int, sectionLevel: Int, text: String): String {
+        final hashes = StringTools.rpad('', '#', sectionLevel);
+        final prefix = (hashes != '')
             ? (hashes + ' ')
             : '';
         this.parseCurrentRequest(level, text);
-        return '${formatPrefix(level)}$sectionPrefix$text\n';
+        return '${formatPrefix(level)}$prefix$text';
     }
 
     private function parseCurrentRequest(level: Int, text: String): Void {
@@ -48,30 +48,37 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
             'INFO   ',
             'DEBUG  '
         ];
-        return levelNames[level];
+        return (level >= 0 && level < levelNames.length)
+            ? levelNames[level]
+            : 'LEVEL:$level';
     }
 
     public function formatBlock(level: Int, text: String): String {
+        return this.getLines(level, text).join('\n');
+    }
+
+    private function getLines(level: Int, text: String): Array<String> {
         final prefix = formatPrefix(level);
         final lines = Util.getLines(text);
-        final prefixedLines = [for (line in lines) '$prefix$line'];
-        return prefixedLines.join('\n') + '\n';
+        return [for (line in lines) isPrefixed(line) ? line : '$prefix$line'];
+    }
+
+    private static function isPrefixed(text: String): Bool {
+        final datePrefix = text.split(' ')[0];
+        return DateTime.fromString(datePrefix) != null;
     }
 
     public function formatCodeBlock(level: Int, text: String, language: String): String {
-        final prefix = formatPrefix(level);
-        final lines = Util.getLines(text);
-        final formatted = [for (line in lines) '$prefix$line'];
-        return '${formatted.join('\n')}\n';
+        return this.getLines(level, text).join('\n');
     }
 
     public function formatList(level: Int, list: Collection<String>): String {
         if (list.length() > 0) {
             final prefix = formatPrefix(level);
-            final formatted = [for (line in list) '$prefix* $line'];
-            return '${formatted.join('\n')}\n';
+            final formatted = [for (line in list) isPrefixed(line) ? line : '$prefix* $line'];
+            return formatted.join('\n');
         } else {
-            return '\n';
+            return '';
         }
     }
 
@@ -81,17 +88,19 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
             final rows = [for (row in table) '$prefix| ${row.join(' | ')} |'];
             final header = rows[0];
             final rest = rows.slice(1);
-            return '$header\n${rest.join('\n')}\n';
+            return '$header\n${rest.join('\n')}';
         } else {
-            return '\n';
+            return '';
         }
     }
 
     public function formatLine(level: Int, text: String): String {
-        return '${formatPrefix(level)}$text\n';
+        return '${formatPrefix(level)}$text';
     }
 
     public function getFileExtension(): String {
         return 'log';
     }
+
+    public function new() {}
 }
