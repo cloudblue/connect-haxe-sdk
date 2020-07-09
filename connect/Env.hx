@@ -170,7 +170,7 @@ class Env extends Base {
 
     /**
         Returns the logger object. If it is not initialized, it will initialize it in the level
-        `Info` with a filename of "log.md".
+        `Info` with the path "logs".
 
         @returns The environment logger.
     **/

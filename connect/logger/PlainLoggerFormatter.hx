@@ -90,4 +90,8 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
     public function formatLine(level: Int, text: String): String {
         return '${formatPrefix(level)}$text\n';
     }
+
+    public function getFileExtension(): String {
+        return 'log';
+    }
 }

@@ -54,5 +54,9 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
         return text;
     }
 
+    public function getFileExtension(): String {
+        return 'md';
+    }
+
     public function new() {}
 }

@@ -18,4 +18,5 @@ interface ILoggerFormatter {
     public function formatList(level:Int, list:Collection<String>):String;
     public function formatTable(level:Int, table:Collection<Collection<String>>):String;
     public function formatLine(level:Int, text:String):String;
+    public function getFileExtension():String;
 }

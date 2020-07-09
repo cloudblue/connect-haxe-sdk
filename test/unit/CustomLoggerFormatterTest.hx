@@ -51,6 +51,10 @@ class CustomLoggerFormatter extends Base implements ILoggerFormatter {
         }
         return textLevel + " - " + this.marketPlace + " - " + this.hub + " - " + this.customer + " - " + text;
     }
+
+    public function getFileExtension():String {
+        return 'txt';
+    }
 }
 
 class CustomLoggerFormatterTest {
