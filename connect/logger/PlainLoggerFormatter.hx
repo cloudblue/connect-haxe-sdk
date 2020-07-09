@@ -54,13 +54,22 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
     }
 
     public function formatBlock(level: Int, text: String): String {
-        return this.getLines(level, text).join('\n');
+        return this.getPrefixedLines(level, text).join('\n');
     }
 
-    private function getLines(level: Int, text: String): Array<String> {
+    private function getPrefixedLines(level: Int, text: String): Array<String> {
         final prefix = formatPrefix(level);
+        return getUnprefixedLines(level, text).map(l -> '$prefix$l');
+    }
+
+    private function getUnprefixedLines(level: Int, text: String): Array<String> {
+        return Util.getLines(text).map(l -> removePrefix(l));
+    }
+
+    private static function removePrefix(text: String): String {
         final lines = Util.getLines(text);
-        return [for (line in lines) isPrefixed(line) ? line : '$prefix$line'];
+        final fixedLines = lines.map(l -> isPrefixed(l) ? l.split('- ').slice(1).join('- ') : l);
+        return fixedLines.join('\n');
     }
 
     private static function isPrefixed(text: String): Bool {
@@ -69,14 +78,18 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
     }
 
     public function formatCodeBlock(level: Int, text: String, language: String): String {
-        return this.getLines(level, text).join('\n');
+        return this.getPrefixedLines(level, text).join('\n');
     }
 
     public function formatList(level: Int, list: Collection<String>): String {
         if (list.length() > 0) {
             final prefix = formatPrefix(level);
-            final formatted = [for (line in list) isPrefixed(line) ? line : '$prefix* $line'];
-            return formatted.join('\n');
+            final formatted = list.toArray().map(function(text) {
+                final lines = this.getPrefixedLines(level, text);
+                lines[0] = '$prefix* ' + removePrefix(lines[0]);
+                return lines.join('\n');
+            }).join('\n');
+            return formatted;
         } else {
             return '';
         }
@@ -95,7 +108,7 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
     }
 
     public function formatLine(level: Int, text: String): String {
-        return '${formatPrefix(level)}$text';
+        return this.getPrefixedLines(level, text).join('\n');
     }
 
     public function getFileExtension(): String {
