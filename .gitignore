@@ -11,3 +11,4 @@ stuff/.project
 stuff/.settings
 coverage.json
 logs/step.dat
+lcov.info
