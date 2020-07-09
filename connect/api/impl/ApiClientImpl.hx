@@ -272,7 +272,7 @@ class ApiClientImpl extends Base implements IApiClient {
             }
             Env.getLogger()._writeToHandler(
                 level,
-                fmt.formatBlock(level,'$firstMessage${fmt.formatList(level,requestList)}'),
+                fmt.formatBlock(level, '$firstMessage\n${fmt.formatList(level, requestList)}'),
                 handler);
         }
     }

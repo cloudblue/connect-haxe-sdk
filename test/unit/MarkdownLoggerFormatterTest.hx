@@ -3,6 +3,7 @@
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
 import connect.logger.ILoggerFormatter;
+import connect.logger.Logger;
 import connect.logger.MarkdownLoggerFormatter;
 import connect.util.Collection;
 import massive.munit.Assert;
@@ -16,11 +17,11 @@ class MarkdownLoggerFormatterTest {
 
     @Test
     public function testFormatSection() {
-        Assert.areEqual('\n## Hello\n', fmt.formatSection(2, 'Hello'));
-        Assert.areEqual('\n# Hello\n', fmt.formatSection(1, 'Hello'));
-        Assert.areEqual('\nHello\n', fmt.formatSection(0, 'Hello'));
-        Assert.areEqual('\nHello\n', fmt.formatSection(-1, 'Hello'));
-        Assert.areEqual('\n# \n', fmt.formatSection(1, ''));
+        Assert.areEqual('\n## Hello\n', fmt.formatSection(Logger.LEVEL_INFO, 2, 'Hello'));
+        Assert.areEqual('\n# Hello\n', fmt.formatSection(Logger.LEVEL_INFO, 1, 'Hello'));
+        Assert.areEqual('\nHello\n', fmt.formatSection(Logger.LEVEL_INFO, 0, 'Hello'));
+        Assert.areEqual('\nHello\n', fmt.formatSection(Logger.LEVEL_INFO, -1, 'Hello'));
+        Assert.areEqual('\n# \n', fmt.formatSection(Logger.LEVEL_INFO, 1, ''));
     }
 
 
