@@ -468,8 +468,8 @@ class Flow extends Base {
         final tierAccount = 
             (assetRequest != null && assetRequest.asset.tiers.customer != null) ?
                 assetRequest.asset.tiers.customer.id:
-            (tierConfigRequest != null && tierConfigRequest.configuration.tiers.customer != null) ?
-                tierConfigRequest.configuration.tiers.customer.id :
+            (tierConfigRequest != null && tierConfigRequest.configuration.account != null) ?
+                tierConfigRequest.configuration.account.id :
             'tier_account';
 
         // Set log filename
