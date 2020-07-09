@@ -55,7 +55,6 @@ class Logger extends Base {
         return this.compact;
     }
 
-
     /**
         Sets the filename of the log. All future log messages will get printed to this file.
         Use `null` to only write to standard output.
@@ -83,13 +82,7 @@ class Logger extends Base {
             return null;
         }
     }
-
-    /** @returns The formatter for this logger. **/
-    /*
-        public function getFormatter(): ILoggerFormatter {
-            return this.formatter;
-        }
-     */
+    
     /** @returns The defined handlers for this logger. Do not modify this collection. **/
     public function getHandlers():Collection<LoggerHandler> {
         return this.handlers;
@@ -247,7 +240,6 @@ class Logger extends Base {
     private final maskedFields:Collection<String>;
     private final regexMaskingList:Collection<EReg>;
     private final compact:Bool;
-    
     
     private function writeSections():Void {
         for (i in 0...this.sections.length) {
