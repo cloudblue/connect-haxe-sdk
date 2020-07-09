@@ -6,13 +6,32 @@
 package connect.logger;
 
 import connect.util.Collection;
-import haxe.ds.StringMap;
 
 /**
  * Represents the configuration of the logger. An instance can be passed to `Env.initLogger`
  * to setup the logger behaviour.
  */
 class LoggerConfig extends Base {
+    public var path_(default, null):String;
+    public var level_(default, null):Int;
+    public var handlers_(default, null):Collection<LoggerHandler>;
+    public var maskedFields_(default, null):Collection<String>;
+    public var compact_(default, null):Bool;
+    public var regexMaskingList_:Collection<EReg>;
+
+    private final levelTranslation:Map<String, Int> = ["ERROR" => 0, "WARNING" => 0, "INFO" => 2, "DEBUG" => 3];
+    private var customHandlers:Bool;
+
+    public function new() {
+        this.path_ = 'logs';
+        this.level_ = Logger.LEVEL_INFO;
+        this.handlers_ = new Collection<LoggerHandler>().push(new LoggerHandler(new PlainLoggerFormatter(), new FileLoggerWriter()));
+        this.maskedFields_ = new Collection<String>();
+        this.compact_ = false;
+        this.regexMaskingList_ = new Collection<EReg>();
+        this.customHandlers = false;
+    }
+
     /**
      * Sets the path where logs will be stored. Default is "logs". When using a `Processor`
      * to process requests, the `Flow`s in the processor will use `Logger.setFilename` to switch
@@ -57,10 +76,11 @@ class LoggerConfig extends Base {
      * Sets the handlers for the logger. Default is a handler with a Markdown formatter
      * and a file writer.
      * @param handlers Collection of handlers.
-     * @return LoggerConfig
+     * @return LoggerConfig `this` instance to support a fluent interface.
      */
     public function handlers(handlers:Collection<LoggerHandler>):LoggerConfig {
         this.handlers_ = handlers.copy();
+        this.customHandlers = true;
         return this;
     }
 
@@ -68,7 +88,7 @@ class LoggerConfig extends Base {
      * Sets the fields which should be masked in the logs,
      * by default only connect api credentials are masked
      * @param maskedFields Collection of field names (string).
-     * @return LoggerConfig
+     * @return LoggerConfig `this` instance to support a fluent interface.
      */
     public function maskedFields(maskedFields:Collection<String>):LoggerConfig {
         this.maskedFields_ = maskedFields;
@@ -80,7 +100,7 @@ class LoggerConfig extends Base {
      * for JSON objects only prints key names or, if it has an 'id' field,
      * only the id). This is ignored if the logger is created in LEVEL_DEBUG.
      * @param enable Whether compact logging should be enabled.
-     * @return LoggerConfig
+     * @return LoggerConfig `this` instance to support a fluent interface.
      */
     public function compact(enable:Bool):LoggerConfig {
         this.compact_ = enable;
@@ -90,30 +110,32 @@ class LoggerConfig extends Base {
     /**
      * Set list of regexs to replace in logs strings
      * @param expressions
+     * @return LoggerConfig `this` instance to support a fluent interface.
      */
-    public function regexMasks(expressions:Collection<String>) {
+    public function regexMasks(expressions:Collection<String>):LoggerConfig {
         for (expression in expressions) {
             expression = StringTools.startsWith(expression,"(") ? expression : "(" + expression;
             expression = StringTools.endsWith(expression,")") ? expression : expression + ")";
             this.regexMaskingList_.push(new EReg(expression, "g"));
         }
+        return this;
     }
 
-    public function new() {
-        this.path_ = 'logs';
-        this.level_ = Logger.LEVEL_INFO;
-        this.handlers_ = new Collection<LoggerHandler>().push(new LoggerHandler(new MarkdownLoggerFormatter(), new FileLoggerWriter()));
-        this.maskedFields_ = new Collection<String>();
-        this.compact_ = false;
-        this.regexMaskingList_ = new Collection<EReg>();
+
+    /**
+     * Sets whether the logger should use the Markdown formatter. By default,
+     * the plain text formatter is used. This property only has effect if no default
+     * set of logger handlers has been set.
+     * @param enable Whether to use the Markdown formatter.
+     * @return LoggerConfig `this` instance to support a fluent interface.
+     */
+    public function markdown(enable:Bool):LoggerConfig {
+        if (!this.customHandlers) {
+            this.handlers_ = new Collection<LoggerHandler>().push(new LoggerHandler(
+                enable ? new MarkdownLoggerFormatter() : new PlainLoggerFormatter(),
+                new FileLoggerWriter()
+            ));
+        }
+        return this;
     }
-
-    public var path_(default, null):String;
-    public var level_(default, null):Int;
-    public var handlers_(default, null):Collection<LoggerHandler>;
-    public var maskedFields_(default, null):Collection<String>;
-    public var compact_(default, null):Bool;
-    public var regexMaskingList_:Collection<EReg>;
-
-    private final levelTranslation:Map<String, Int> = ["ERROR" => 0, "WARNING" => 0, "INFO" => 2, "DEBUG" => 3];
 }
