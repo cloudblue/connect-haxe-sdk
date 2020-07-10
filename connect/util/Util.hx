@@ -156,6 +156,19 @@ class Util {
 
 
     /**
+     * Splits the given text into its lines, detecting Windows (CR+LF), Mac OS Classic (CR) and
+     * Unix (LF) line endings.
+     * @param text 
+     * @return Array<String> 
+     */
+    public static function getLines(text: String): Array<String> {
+        final windowsReplaced = StringTools.replace(text, '\r\n', '\n');
+        final macosReplaced = StringTools.replace(windowsReplaced, '\r', '\n');
+        return macosReplaced.split('\n');
+    }
+
+
+    /**
      * Creates a new dynamic object that contains the sames fields as `object`.
      * When a field contains a subobject that has no `id` field, but the respective
      * subobject in `original` contains an id field, the value is copied.

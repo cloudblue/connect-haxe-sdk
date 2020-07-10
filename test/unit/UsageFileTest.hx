@@ -326,6 +326,7 @@ class UsageFileTest {
             null,
             null,
             null,
+            null,
             null].toString(),
             apiMock.callArgs('syncRequest', 0).toString());
         final usageMock = cast(Env.getUsageApi(), Mock);

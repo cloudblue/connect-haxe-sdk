@@ -474,9 +474,9 @@ class Flow extends Base {
 
         // Set log filename
         if (assetRequest != null || tierConfigRequest != null) {
-            Env.getLogger().setFilename('$provider/$hub/$marketplace/$product/$tierAccount.md');
+            Env.getLogger().setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
         } else if (listing != null || usageFile != null) {
-            Env.getLogger().setFilename('usage/$provider/$marketplace.md');
+            Env.getLogger().setFilename('usage/$provider/$marketplace');
         }
 
         // Open log section

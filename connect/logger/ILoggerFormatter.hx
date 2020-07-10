@@ -12,10 +12,11 @@ import connect.util.Collection;
  * this interface (`MarkdownLoggerFormatter` by default) to write log messages.
  */
 interface ILoggerFormatter {
-    public function formatSection(level:Int, text:String):String;
+    public function formatSection(level:Int, sectionLevel:Int, text:String):String;
     public function formatBlock(level:Int, text:String):String;
     public function formatCodeBlock(level:Int, text:String, language:String):String;
     public function formatList(level:Int, list:Collection<String>):String;
     public function formatTable(level:Int, table:Collection<Collection<String>>):String;
     public function formatLine(level:Int, text:String):String;
+    public function getFileExtension():String;
 }

@@ -14,7 +14,7 @@ import massive.munit.Assert;
 import connect.Base;
 
 class CustomLoggerFormatter extends Base implements ILoggerFormatter {
-    public function formatSection(level:Int, text:String):String {
+    public function formatSection(level:Int, sectionLevel:Int, text:String):String {
         return text;
     }
 
@@ -50,6 +50,10 @@ class CustomLoggerFormatter extends Base implements ILoggerFormatter {
             textLevel = "ERROR";
         }
         return textLevel + " - " + this.marketPlace + " - " + this.hub + " - " + this.customer + " - " + text;
+    }
+
+    public function getFileExtension():String {
+        return 'txt';
     }
 }
 

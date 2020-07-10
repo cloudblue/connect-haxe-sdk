@@ -57,12 +57,13 @@ class Logger extends Base {
 
     /**
         Sets the filename of the log. All future log messages will get printed to this file.
-        Use `null` to only write to standard output.
+        Use `null` to only write to standard output. Filename extension must be omitted, since
+        it is provided by the formatters used in each handler.
     **/
     public function setFilename(filename:String):Void {
         final fullname = (this.path != null && filename != null) ? this.path + filename : null;
         final setFilenameResult = Lambda.fold(this.handlers, function(o, last) {
-            return last && o.writer.setFilename(fullname);
+            return last && o.writer.setFilename('$fullname.${o.formatter.getFileExtension()}');
         }, true);
         if (setFilenameResult && fullname != null) {
             for (section in this.sections) {
@@ -228,7 +229,7 @@ class Logger extends Base {
     @:dox(hide)
     public function _writeToHandler(level:Int, message:String, handler:LoggerHandler):Void {
         if (this.level >= level) {
-            this.writeSections();
+            this.writeSections(level);
             handler.writer.writeLine(handler.formatter.formatLine(level, message));
         }
     }
@@ -241,11 +242,11 @@ class Logger extends Base {
     private final regexMaskingList:Collection<EReg>;
     private final compact:Bool;
     
-    private function writeSections():Void {
+    private function writeSections(level:Int):Void {
         for (i in 0...this.sections.length) {
             if (!this.sections[i].written) {
                 for (output in this.handlers) {
-                    final section = output.formatter.formatSection(i + 1, this.sections[i].name);
+                    final section = output.formatter.formatSection(level, i+1, this.sections[i].name);
                     output.writer.writeLine(section);
                 }
                 this.sections[i].written = true;

@@ -259,7 +259,7 @@ class ApiClientImpl extends Base implements IApiClient {
             final fmt = handler.formatter;
             final requestList = new Collection<String>();
             if (headers != null) {
-                requestList.push('Headers:${getHeadersTable(headers, fmt)}');
+                requestList.push('Headers:\n${getHeadersTable(headers, fmt)}');
             }
             if (body != null) {
                 requestList.push(getFormattedData(body, 'Body', fmt));
@@ -272,7 +272,7 @@ class ApiClientImpl extends Base implements IApiClient {
             }
             Env.getLogger()._writeToHandler(
                 level,
-                fmt.formatBlock(level,'$firstMessage${fmt.formatList(level,requestList)}'),
+                fmt.formatBlock(level, '$firstMessage\n${fmt.formatList(level, requestList)}'),
                 handler);
         }
     }
@@ -321,7 +321,7 @@ class ApiClientImpl extends Base implements IApiClient {
             : String {
         final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
         if (Util.isJson(data)) {
-            final prefix = compact ? '$title (compact):' : '$title:';
+            final prefix = compact ? '$title (compact): ' : '$title:\n';
             final block = fmt.formatCodeBlock(
                 Env.getLogger().getLevel(),
                 Util.beautify(
@@ -329,7 +329,7 @@ class ApiClientImpl extends Base implements IApiClient {
                     Env.getLogger().isCompact(),
                     Env.getLogger().getLevel() != Logger.LEVEL_DEBUG),
                 'json');
-            return '$prefix $block';
+            return '$prefix$block';
         } else {
             final fixedBody = compact
                 ? StringTools.lpad(data.substr(data.length - 4), '*', data.length)

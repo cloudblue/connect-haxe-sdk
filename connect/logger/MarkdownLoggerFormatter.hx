@@ -5,12 +5,13 @@
 package connect.logger;
 
 import connect.util.Collection;
+import connect.util.Util;
 
 
 @:dox(hide)
 class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
-    public function formatSection(level: Int, text: String): String {
-        final hashes = StringTools.rpad('', '#', level);
+    public function formatSection(level: Int, sectionLevel: Int, text: String): String {
+        final hashes = StringTools.rpad('', '#', sectionLevel);
         final prefix = (hashes != '')
             ? (hashes + ' ')
             : '';
@@ -18,15 +19,9 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
     }
 
     public function formatBlock(level: Int, text: String): String {
-        final lines = getLines(text);
+        final lines = Util.getLines(text);
         final prefixedLines = [for (line in lines) '> $line'];
         return '\n' + prefixedLines.join('\n') + '\n';
-    }
-
-    private static function getLines(text: String): Array<String> {
-        final windowsReplaced = StringTools.replace(text, '\r\n', '\n');
-        final macosReplaced = StringTools.replace(windowsReplaced, '\r', '\n');
-        return macosReplaced.split('\n');
     }
 
     public function formatCodeBlock(level: Int, text: String, language: String): String {
@@ -35,10 +30,10 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
         return header + text + footer;
     }
 
-    public function formatList(level: Int, lines: Collection<String>): String {
-        if (lines.length() > 0) {
-            final lines = [for (line in lines) '* $line'];
-            return '\n${lines.join('\n')}\n';
+    public function formatList(level: Int, list: Collection<String>): String {
+        if (list.length() > 0) {
+            final formatted = [for (line in list) '* $line'];
+            return '\n${formatted.join('\n')}\n';
         } else {
             return '\n\n';
         }
@@ -57,6 +52,10 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
 
     public function formatLine(level: Int, text: String): String {
         return text;
+    }
+
+    public function getFileExtension(): String {
+        return 'md';
     }
 
     public function new() {}
