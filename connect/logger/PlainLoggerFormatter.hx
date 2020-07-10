@@ -33,7 +33,7 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
     }
 
     private function formatPrefix(level: Int): String {
-        return '${formatDate()}  ${formatLevel(level)} ${this.currentRequest} - ';
+        return '${formatDate()}  ${formatLevel(level)}   ${this.currentRequest} - ';
     }
 
     private static function formatDate(): String {
@@ -43,10 +43,10 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
 
     private static function formatLevel(level: Int): String {
         final levelNames = [
-            'ERROR  ',
+            'ERROR',
             'WARNING',
-            'INFO   ',
-            'DEBUG  '
+            'INFO',
+            'DEBUG'
         ];
         return (level >= 0 && level < levelNames.length)
             ? levelNames[level]
