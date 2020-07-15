@@ -62,6 +62,10 @@ class Item extends IdModel {
     public var name: String;
 
 
+    /** Description. **/
+    public var description: String;
+
+
     /** @returns The `Param` with the given id, or `null` if it was not found. **/
     public function getParamById(paramId: String): Param {
         final params = this.params.toArray().filter(function(param) {
