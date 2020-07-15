@@ -282,36 +282,36 @@ class ProductTest {
 
 
     @Test
-    public function testGetItemsOk() {
+    public function testListItemsOk() {
         // Check subject
         final product = Product.get('PRD-783-317-575');
-        final items = product.getItems();
+        final items = product.listItems(null);
         Assert.areEqual(2, items.length());
         Assert.areEqual('PRD-783-317-575-0001', items.get(0).id);
         Assert.areEqual('PRD-783-317-575-0002', items.get(1).id);
 
         // Check mocks
         final apiMock = cast(Env.getGeneralApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getProductItems'));
+        Assert.areEqual(1, apiMock.callCount('listProductItems'));
         Assert.areEqual(
             ['PRD-783-317-575'].toString(),
-            apiMock.callArgs('getProductItems', 0).toString());
+            apiMock.callArgs('listProductItems', 0).toString());
     }
 
 
     @Test
-    public function testGetItemsKo() {
+    public function testListItemsKo() {
         // Check subject
         final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
-        final items = product.getItems();
+        final items = product.listItems(null);
         Assert.areEqual(0, items.length());
 
         // Check mocks
         final apiMock = cast(Env.getGeneralApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getProductItems'));
+        Assert.areEqual(1, apiMock.callCount('listProductItems'));
         Assert.areEqual(
             ['PRD-XXX-XXX-XXX'].toString(),
-            apiMock.callArgs('getProductItems', 0).toString());
+            apiMock.callArgs('listProductItems', 0).toString());
     }
 
 

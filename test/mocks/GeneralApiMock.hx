@@ -157,8 +157,8 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function getProductItems(id: String): String {
-        this.calledFunction('getProductItems', [id]);
+    public function listProductItems(id: String, filters: Query): String {
+        this.calledFunction('listProductItems', [id]);
         this.getProduct(id);
         return Json.stringify(this.itemList);
     }
@@ -231,7 +231,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     public function getProductVersionItems(id: String, version: Int): String {
         this.calledFunction('getProductVersionItems', [id, version]);
         this.getProductVersion(id, version);
-        return this.getProductItems(id);
+        return this.listProductItems(id, null);
     }
 
 
