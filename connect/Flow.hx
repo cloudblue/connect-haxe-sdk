@@ -315,6 +315,7 @@ class Flow extends Base {
     }
 
     private static final STEP_PARAM_ID = '__sdk_processor_step';
+    private static final STEP_PARAM_ID_TIER = '__sdk_processor_step_tier';
 
     private final filterFunc:FilterFunc;
     private var steps:Array<Step>;
@@ -380,7 +381,12 @@ class Flow extends Base {
     }
 
     private function getStepParam():Param {
-        return (this.getAssetRequest() != null) ? this.getAssetRequest().asset.getParamById(STEP_PARAM_ID) : null;
+        final assetRequest = this.getAssetRequest();
+        final tierConfigRequest = this.getTierConfigRequest();
+        return
+            (assetRequest != null) ? assetRequest.asset.getParamById(STEP_PARAM_ID) :
+            (tierConfigRequest != null) ? tierConfigRequest.getParamById(STEP_PARAM_ID_TIER) :
+            null;
     }
 
     private function processStep(step:Step, index:Int, lastRequestStr:String, lastDataStr:String):{nextIndex:Int, lastRequestStr:String, lastDataStr:String} {
@@ -497,11 +503,13 @@ class Flow extends Base {
     private function processAbortAndCloseLogSection(index:Int, requestStr:String, dataStr:String):{nextIndex:Int, lastRequestStr:String, lastDataStr:String} {
         if (this.abortRequested) {
             if (this.abortMessage == null) {
-                final param = (this.getAssetRequest() != null) ? this.getAssetRequest().asset.getParamById(STEP_PARAM_ID) : null;
-
                 // Save step data if request supports it
                 Env.getLogger().write(Logger.LEVEL_INFO, 'Skipping request. Trying to save step data.');
-                final saveResult = StepStorage.save(this.model, new StepData(index, this.data, ConnectStorage, this.stepAttempt + 1), param, Reflect.field(model, 'update'));
+                final saveResult = StepStorage.save(
+                    this.model,
+                    new StepData(index, this.data, ConnectStorage, this.stepAttempt + 1),
+                    this.getStepParam(),
+                    Reflect.field(model, 'update'));
                 switch (saveResult) {
                     case ConnectStorage:
                         Env.getLogger().write(Logger.LEVEL_INFO, 'Step data saved in Connect.');
