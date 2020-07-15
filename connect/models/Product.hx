@@ -165,15 +165,29 @@ class Product extends IdModel {
 
 
     /**
-        @returns A Collection of Items for `this` Product.
-    **/
-    public function getItems() : Collection<Item> {
+     * Lists all Items of `this` Product that match the given filters. Supported filters are:
+     * 
+     * - limit
+     * - offset
+     * 
+     * @param filters 
+     * @return Collection<Item>
+     */
+    public function listItems(filters: Query) : Collection<Item> {
         try {
-            final items = Env.getGeneralApi().getProductItems(this.id);
+            final items = Env.getGeneralApi().listProductItems(this.id, filters);
             return Model.parseArray(Item, items);
         } catch (ex: Dynamic) {
             return new Collection<Item>();
         }
+    }
+
+
+    /**
+        @returns A Collection of Items for `this` Product.
+    **/
+    public function getItems() : Collection<Item> {
+        return this.listItems(null);
     }
 
 

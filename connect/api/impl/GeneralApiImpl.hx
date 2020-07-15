@@ -92,8 +92,8 @@ class GeneralApiImpl extends Base implements IGeneralApi {
     }
 
 
-    public function getProductItems(id: String): String {
-        return ConnectHelper.get(PRODUCTS_PATH, id, 'items');
+    public function listProductItems(id: String, filters: Query): String {
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'items', filters);
     }
 
 
