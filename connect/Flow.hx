@@ -304,14 +304,29 @@ class Flow extends Base {
     public function _run<T>(list:Collection<T>):Void {
         Env.getLogger().openSection('Running ${this.getClassName()} on ${DateTime.now()}');
         // Filter requests
-        final filteredList = (filterFunc != null) ? Collection._fromArray(list.toArray()
-            .filter(#if cslib(m) -> filterFunc.Invoke(cast(m, IdModel)) #elseif javalib(m) -> filterFunc.apply(cast(m, IdModel)) #else(m) -> filterFunc(cast(m,
-                IdModel)) #end)) : list;
+        final filteredList = (this.filterFunc != null)
+            ? Collection._fromArray(list.toArray().filter(
+                #if cslib
+                (m) -> this.filterFunc.Invoke(cast(m, IdModel))))
+                #elseif javalib
+                (m) -> this.filterFunc.apply(cast(m, IdModel))))
+                #else
+                (m) -> this.filterFunc(cast(m, IdModel))))
+                #end
+            : list;
         // Process each model
         for (model in filteredList) {
             this.process(cast(model, IdModel));
         }
         Env.getLogger().closeSection();
+    }
+
+    /**
+     * Provide current step attempt
+     * @return Int Number of times that this step has been executed
+    **/
+    public function getCurrentAttempt() {
+        return this.stepAttempt;
     }
 
     private static final STEP_PARAM_ID = '__sdk_processor_step';
@@ -325,14 +340,6 @@ class Flow extends Base {
     private var abortRequested:Bool;
     private var abortMessage:String;
     private var stepAttempt:Int;
-
-    /**
-     * Provide current step attempt
-     * @return Int Number of times that this step has been executed
-    **/
-    public function getCurrentAttempt() {
-        return this.stepAttempt;
-    }
 
     private function process(model:IdModel):Void {
         if (this.prepareRequestAndOpenLogSection(model)) {
