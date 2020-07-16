@@ -4,9 +4,10 @@
  */
 
 import test.util.ArrayLoggerWriter;
-import connect.logger.MarkdownLoggerFormatter;
+import connect.logger.Logger;
 import connect.logger.LoggerHandler;
 import connect.logger.LoggerConfig;
+import connect.logger.MarkdownLoggerFormatter;
 import connect.Env;
 import connect.util.Collection;
 import connect.util.Util;
@@ -47,22 +48,25 @@ class LoggerTest {
     @Test
     public function setLevel() {
         var logConfig:LoggerConfig = new LoggerConfig();
-        logConfig.level(0);
-        Assert.areEqual(0, logConfig.level_);
-        logConfig.level(2);
-        Assert.areEqual(2, logConfig.level_);
-        logConfig.level(3);
-        Assert.areEqual(3, logConfig.level_);
+        logConfig.level(Logger.LEVEL_ERROR);
+        Assert.areEqual(Logger.LEVEL_ERROR, logConfig.level_);
+        logConfig.level(Logger.LEVEL_WARNING);
+        Assert.areEqual(Logger.LEVEL_WARNING, logConfig.level_);
+        logConfig.level(Logger.LEVEL_INFO);
+        Assert.areEqual(Logger.LEVEL_INFO, logConfig.level_);
+        logConfig.level(Logger.LEVEL_DEBUG);
+        Assert.areEqual(Logger.LEVEL_DEBUG, logConfig.level_);
         logConfig.levelName('ERROR');
-        Assert.areEqual(0, logConfig.level_);
+        Assert.areEqual(Logger.LEVEL_ERROR, logConfig.level_);
         logConfig.levelName('WARNING');
-        Assert.areEqual(0, logConfig.level_);
+        Assert.areEqual(Logger.LEVEL_WARNING, logConfig.level_);
         logConfig.levelName('INFO');
-        Assert.areEqual(2, logConfig.level_);
-        logConfig.levelName('TEST');
-        Assert.areEqual(2, logConfig.level_);
+        Assert.areEqual(Logger.LEVEL_INFO, logConfig.level_);
         logConfig.levelName('DEBUG');
-        Assert.areEqual(3, logConfig.level_);
+        Assert.areEqual(Logger.LEVEL_DEBUG, logConfig.level_);
+        final previousLevel = logConfig.level_;
+        logConfig.levelName('TEST');
+        Assert.areEqual(previousLevel, logConfig.level_);
     }
 
     @Test

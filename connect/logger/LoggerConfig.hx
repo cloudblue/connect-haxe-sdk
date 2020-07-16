@@ -19,7 +19,11 @@ class LoggerConfig extends Base {
     public var compact_(default, null):Bool;
     public var regexMaskingList_:Collection<EReg>;
 
-    private final levelTranslation:Map<String, Int> = ["ERROR" => 0, "WARNING" => 0, "INFO" => 2, "DEBUG" => 3];
+    private static final levelTranslation:Map<String, Int> = [
+        "ERROR" => Logger.LEVEL_ERROR,
+        "WARNING" => Logger.LEVEL_WARNING,
+        "INFO" => Logger.LEVEL_INFO,
+        "DEBUG" => Logger.LEVEL_DEBUG];
     private var customHandlers:Bool;
 
     public function new() {
@@ -49,8 +53,8 @@ class LoggerConfig extends Base {
 
     /**
      * Sets the logging level. Default is `Logger.LEVEL_INFO`.
-     * @param level Level of log.
-     *  One of: `Logger.LEVEL_ERROR`, `Logger.LEVEL_INFO`, `Logger.LEVEL_DEBUG`.
+     * @param level Level of log. One of: `Logger.LEVEL_ERROR`,
+     * `Logger.LEVEL_WARNING`, `Logger.LEVEL_INFO`, `Logger.LEVEL_DEBUG`.
      * @return `this` instance to support a fluent interface.
      */
     public function level(level:Int):LoggerConfig {
@@ -61,20 +65,20 @@ class LoggerConfig extends Base {
     /**
      * Sets the logging level. Default is `Logger.LEVEL_INFO`.
      * @param level Level of log.
-     *  One of: `ERROR`, `INFO`, `DEBUG`.
+     *  One of: `"ERROR"`, `"WARNING"`, `"INFO"`, `"DEBUG"`.
      * @return `this` instance to support a fluent interface.
      */
     public function levelName(level:String):LoggerConfig {
-        this.level_ = Logger.LEVEL_INFO;
-        if (this.levelTranslation.exists(level)) {
-            this.level_ = this.levelTranslation[level];
+        if (levelTranslation.exists(level)) {
+            this.level_ = levelTranslation[level];
         }
         return this;
     }
 
     /**
-     * Sets the handlers for the logger. Default is a handler with a Markdown formatter
-     * and a file writer.
+     * Sets the handlers for the logger. Default is a handler with a plain of Markdown formatter
+     * (depending on whether `markdown` method was called with a `true` argument) and a file
+     * writer.
      * @param handlers Collection of handlers.
      * @return LoggerConfig `this` instance to support a fluent interface.
      */
