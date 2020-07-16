@@ -9,7 +9,8 @@ import connect.util.Collection;
 
 /**
  * Represents a log formatter.The `Logger` uses an instance of a class that implements
- * this interface (`MarkdownLoggerFormatter` by default) to write log messages.
+ * this interface (`PlainLoggerFormatter` or `MarkdownLoggerFormatter` by default,
+ * depending on the value of `LoggerConfig.markdown()`) to write log messages.
  */
 interface ILoggerFormatter {
     public function formatSection(level:Int, sectionLevel:Int, text:String):String;

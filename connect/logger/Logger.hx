@@ -11,8 +11,11 @@ import connect.util.Collection;
     This class is used to log events to a file and the output console.
 **/
 class Logger extends Base {
-    /** Only writes compact error messages. **/
+    /** Only writes compact error level messages. **/
     public static final LEVEL_ERROR = 0;
+
+    /** Only writes compact error & warning level messages. **/
+    public static final LEVEL_WARNING = 1;
 
     /** Only writes compact error & info level messages. **/
     public static final LEVEL_INFO = 2;
@@ -41,7 +44,10 @@ class Logger extends Base {
         return this.path;
     }
 
-    /** @returns The level of the log. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`. **/
+    /**
+     * @return Int The level of the log. One of: `LEVEL_ERROR`, `LEVEL_WARNING`,
+     * `LEVEL_INFO`, `LEVEL_DEBUG`.
+     */
     public function getLevel():Int {
         return this.level;
     }
@@ -90,9 +96,9 @@ class Logger extends Base {
     }
 
     /**
-        Opens a new section in the log. This will be output as a Markdown header with the right
-        level, depending on the number of opened sections. For example, at the beginning of a
-        function, a section can be opened, and closed when the function finishes.
+        Opens a new section in the log. This will be output as a Markdown header when using
+        this formatting, depending on the number of opened sections. For example, at the beginning
+        of a function, a section can be opened, and closed when the function finishes.
     **/
     public function openSection(name:String):Void {
         this.sections.push(new LoggerSection(name));
@@ -108,7 +114,7 @@ class Logger extends Base {
     /**
      * Writes a block to the log in the specified level.
      * It adds a new line to the log after writing the block.
-     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`.
+     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_WARNING`, `LEVEL_INFO`, `LEVEL_DEBUG`.
      * @param block Block of text to log. Lines in the text are formatted to appear as a block.
      */
     public function writeBlock(level:Int, block:String):Void {
@@ -120,7 +126,7 @@ class Logger extends Base {
     /**
      * Writes a code block to the log in the specified level.
      * It adds a new line to the log after writing the block.
-     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`.
+     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_WARNING`, `LEVEL_INFO`, `LEVEL_DEBUG`.
      * @param code Code to log. Text is formatted to appear as a code block.
      * @param language Language used in the block. For example, "json". Can be an empty string.
      */
@@ -133,7 +139,7 @@ class Logger extends Base {
     /**
      * Writes a list to the log in the specified level.
      * It adds a new line to the log after writing the list.
-     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`.
+     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_WARNING`, `LEVEL_INFO`, `LEVEL_DEBUG`.
      * @param list List to log. Lines are formatted to appear as a list.
      */
     public function writeList(level:Int, list:Collection<String>):Void {
@@ -146,7 +152,7 @@ class Logger extends Base {
      * Writes a table to the log in the specified level. The first row should contain the
      * table header.
      * It adds a new line to the log after writing the list.
-     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`.
+     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_WARNING`, `LEVEL_INFO`, `LEVEL_DEBUG`.
      * @param table Table to log. Rows are formatted to appear as a table.
      */
     public function writeTable(level:Int, table:Collection<Collection<String>>):Void {
@@ -158,7 +164,7 @@ class Logger extends Base {
     /**
      * Writes a message to the log in the specified level.
      * It adds a new line to the log after writing the message.
-     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_INFO`, `LEVEL_DEBUG`.
+     * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_WARNING`, `LEVEL_INFO`, `LEVEL_DEBUG`.
      * @param message Message to log. The message is not formatted.
      */
     public function write(level:Int, message:String):Void {
@@ -203,7 +209,7 @@ class Logger extends Base {
 
     @:dox(hide)
     public function warning(message:String):Void {
-        this.error(message);
+        this.write(LEVEL_WARNING, message);
     }
 
     @:dox(hide)
