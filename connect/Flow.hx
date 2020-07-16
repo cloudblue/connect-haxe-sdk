@@ -304,9 +304,16 @@ class Flow extends Base {
     public function _run<T>(list:Collection<T>):Void {
         Env.getLogger().openSection('Running ${this.getClassName()} on ${DateTime.now()}');
         // Filter requests
-        final filteredList = (filterFunc != null) ? Collection._fromArray(list.toArray()
-            .filter(#if cslib(m) -> filterFunc.Invoke(cast(m, IdModel)) #elseif javalib(m) -> filterFunc.apply(cast(m, IdModel)) #else(m) -> filterFunc(cast(m,
-                IdModel)) #end)) : list;
+        final filteredList = (this.filterFunc != null)
+            ? Collection._fromArray(list.toArray().filter(
+                #if cslib
+                (m) -> this.filterFunc.Invoke(cast(m, IdModel))))
+                #elseif javalib
+                (m) -> this.filterFunc.apply(cast(m, IdModel))))
+                #else
+                (m) -> this.filterFunc(cast(m, IdModel))))
+                #end
+            : list;
         // Process each model
         for (model in filteredList) {
             this.process(cast(model, IdModel));
@@ -314,7 +321,16 @@ class Flow extends Base {
         Env.getLogger().closeSection();
     }
 
+    /**
+     * Provide current step attempt
+     * @return Int Number of times that this step has been executed
+    **/
+    public function getCurrentAttempt() {
+        return this.stepAttempt;
+    }
+
     private static final STEP_PARAM_ID = '__sdk_processor_step';
+    private static final STEP_PARAM_ID_TIER = '__sdk_processor_step_tier';
 
     private final filterFunc:FilterFunc;
     private var steps:Array<Step>;
@@ -324,14 +340,6 @@ class Flow extends Base {
     private var abortRequested:Bool;
     private var abortMessage:String;
     private var stepAttempt:Int;
-
-    /**
-     * Provide current step attempt
-     * @return Int Number of times that this step has been executed
-    **/
-    public function getCurrentAttempt() {
-        return this.stepAttempt;
-    }
 
     private function process(model:IdModel):Void {
         if (this.prepareRequestAndOpenLogSection(model)) {
@@ -380,7 +388,12 @@ class Flow extends Base {
     }
 
     private function getStepParam():Param {
-        return (this.getAssetRequest() != null) ? this.getAssetRequest().asset.getParamById(STEP_PARAM_ID) : null;
+        final assetRequest = this.getAssetRequest();
+        final tierConfigRequest = this.getTierConfigRequest();
+        return
+            (assetRequest != null) ? assetRequest.asset.getParamById(STEP_PARAM_ID) :
+            (tierConfigRequest != null) ? tierConfigRequest.getParamById(STEP_PARAM_ID_TIER) :
+            null;
     }
 
     private function processStep(step:Step, index:Int, lastRequestStr:String, lastDataStr:String):{nextIndex:Int, lastRequestStr:String, lastDataStr:String} {
@@ -497,11 +510,13 @@ class Flow extends Base {
     private function processAbortAndCloseLogSection(index:Int, requestStr:String, dataStr:String):{nextIndex:Int, lastRequestStr:String, lastDataStr:String} {
         if (this.abortRequested) {
             if (this.abortMessage == null) {
-                final param = (this.getAssetRequest() != null) ? this.getAssetRequest().asset.getParamById(STEP_PARAM_ID) : null;
-
                 // Save step data if request supports it
                 Env.getLogger().write(Logger.LEVEL_INFO, 'Skipping request. Trying to save step data.');
-                final saveResult = StepStorage.save(this.model, new StepData(index, this.data, ConnectStorage, this.stepAttempt + 1), param, Reflect.field(model, 'update'));
+                final saveResult = StepStorage.save(
+                    this.model,
+                    new StepData(index, this.data, ConnectStorage, this.stepAttempt + 1),
+                    this.getStepParam(),
+                    Reflect.field(model, 'update'));
                 switch (saveResult) {
                     case ConnectStorage:
                         Env.getLogger().write(Logger.LEVEL_INFO, 'Step data saved in Connect.');
