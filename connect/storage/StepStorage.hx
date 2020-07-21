@@ -18,6 +18,12 @@ import sys.io.File;
 
 @:dox(hide)
 class StepStorage {
+    public static function getStepFilename():String {
+        final filename = 'step.dat';
+        final logPath = Env.getLogger().getPath();
+        return (logPath != null) ? (logPath + filename) : filename;
+    }
+
     public static function load(requestId:String, param:Param):StepData {
         final fileData = loadRequestFromFile(requestId);
         final stepData = (fileData != null)
@@ -37,17 +43,11 @@ class StepStorage {
     }
 
     private static function loadAllFromFile():Dynamic {
-        final dataFilename = getDataFilename();
-        if (FileSystem.exists(dataFilename) && !FileSystem.isDirectory(dataFilename)) {
-            return decodeData(File.getContent(dataFilename));
+        final stepFilename = getStepFilename();
+        if (FileSystem.exists(stepFilename) && !FileSystem.isDirectory(stepFilename)) {
+            return decodeData(File.getContent(stepFilename));
         }
         return null;
-    }
-
-    private static function getDataFilename():String {
-        final filename = 'step.dat';
-        final logPath = Env.getLogger().getPath();
-        return (logPath != null) ? (logPath + filename) : filename;
     }
 
     private static function decodeData(data:String):Dynamic {
@@ -162,9 +162,9 @@ class StepStorage {
      * @return Bool Whether the data could be saved in the file or not.
      */
      private static function saveInFile(data:String):Bool {
-        final dataFilename = getDataFilename();
+        final stepFilename = getStepFilename();
         try {
-            File.saveContent(dataFilename, data);
+            File.saveContent(stepFilename, data);
             return true;
         } catch (ex:Dynamic) {
             return false;
