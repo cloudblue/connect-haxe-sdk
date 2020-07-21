@@ -3,6 +3,7 @@ import massive.munit.TestSuite;
 import LoggerTest;
 import MarketplaceTest;
 import TierAccountTest;
+import StepStorageTest;
 import AssetTest;
 import MarkdownLoggerFormatterTest;
 import CategoryTest;
@@ -24,6 +25,7 @@ import ConfigTest;
 import ListingTest;
 import ModelTest;
 import QueryTest;
+import DictionaryTest;
 import ProductTest;
 import DateTimeTest;
 
@@ -40,6 +42,7 @@ class TestSuite extends massive.munit.TestSuite
 		add(LoggerTest);
 		add(MarketplaceTest);
 		add(TierAccountTest);
+		add(StepStorageTest);
 		add(AssetTest);
 		add(MarkdownLoggerFormatterTest);
 		add(CategoryTest);
@@ -61,6 +64,7 @@ class TestSuite extends massive.munit.TestSuite
 		add(ListingTest);
 		add(ModelTest);
 		add(QueryTest);
+		add(DictionaryTest);
 		add(ProductTest);
 		add(DateTimeTest);
 	}
