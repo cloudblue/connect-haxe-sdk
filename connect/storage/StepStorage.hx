@@ -36,10 +36,9 @@ class StepStorage {
 
     private static function loadRequestFromFile(requestId:String):StepData {
         final dataObject = loadAllFromFile();
-        if (dataObject != null) {
-            return getRequestField(dataObject, requestId, LocalStorage);
-        }
-        return null;
+        return (dataObject != null) 
+            ? getRequestField(dataObject, requestId, LocalStorage)
+            : null;
     }
 
     private static function loadAllFromFile():Dynamic {

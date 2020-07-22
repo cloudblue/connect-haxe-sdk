@@ -23,9 +23,7 @@ import FlowTest;
 import ListingRequestTest;
 import ConfigTest;
 import ListingTest;
-import ModelTest;
 import QueryTest;
-import DictionaryTest;
 import ProductTest;
 import DateTimeTest;
 
@@ -62,9 +60,7 @@ class TestSuite extends massive.munit.TestSuite
 		add(ListingRequestTest);
 		add(ConfigTest);
 		add(ListingTest);
-		add(ModelTest);
 		add(QueryTest);
-		add(DictionaryTest);
 		add(ProductTest);
 		add(DateTimeTest);
 	}

@@ -21,13 +21,15 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
         final prefix = (hashes != '')
             ? (hashes + ' ')
             : '';
-        this.parseCurrentRequest(level, text);
-        return '${formatPrefix(level)}$prefix$text';
+        final textStr = Std.string(text);
+        this.parseCurrentRequest(level, textStr);
+        return '${formatPrefix(level)}$prefix$textStr';
     }
 
     private function parseCurrentRequest(level: Int, text: String): Void {
-        if (StringTools.startsWith(text, REQUEST_PREFIX)) {
-            final request = text.split('"')[1];
+        final textStr = Std.string(text);
+        if (StringTools.startsWith(textStr, REQUEST_PREFIX)) {
+            final request = textStr.split('"')[1];
             this.currentRequest = (request != '') ? request : NO_REQUEST;
         }
     }
@@ -73,7 +75,7 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
     }
 
     private static function isPrefixed(text: String): Bool {
-        final datePrefix = text.split(' ')[0];
+        final datePrefix = Std.string(text).split(' ')[0];
         return DateTime.fromString(datePrefix) != null;
     }
 

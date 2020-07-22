@@ -15,7 +15,7 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
         final prefix = (hashes != '')
             ? (hashes + ' ')
             : '';
-        return '\n$prefix$text\n';
+        return '\n$prefix${Std.string(text)}\n';
     }
 
     public function formatBlock(level: Int, text: String): String {
@@ -25,14 +25,14 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
     }
 
     public function formatCodeBlock(level: Int, text: String, language: String): String {
-        final header = '\n```$language\n';
+        final header = '\n```${Std.string(language)}\n';
         final footer = '\n```\n';
-        return header + text + footer;
+        return header + Std.string(text) + footer;
     }
 
     public function formatList(level: Int, list: Collection<String>): String {
         if (list.length() > 0) {
-            final formatted = [for (line in list) '* $line'];
+            final formatted = [for (line in list) '* ${Std.string(line)}'];
             return '\n${formatted.join('\n')}\n';
         } else {
             return '\n\n';
@@ -51,7 +51,7 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
     }
 
     public function formatLine(level: Int, text: String): String {
-        return text;
+        return Std.string(text);
     }
 
     public function getFileExtension(): String {

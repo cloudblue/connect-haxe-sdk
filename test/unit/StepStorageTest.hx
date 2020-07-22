@@ -15,6 +15,7 @@ import connect.storage.StepStorage;
 import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.Dictionary;
+import haxe.Json;
 import massive.munit.Assert;
 import sys.FileSystem;
 
@@ -22,7 +23,7 @@ import sys.FileSystem;
 class StepStorageTest {
     @Before
     public function setup() {
-        Env._reset(new Dictionary().set('IApiClient', 'test.ApiClientMock'));
+        Env._reset();
     }
 
     @After
@@ -45,7 +46,7 @@ class StepStorageTest {
     }
 
     @Test
-    public function testSaveAndLoadItem() {
+    public function testLocalSaveAndLoadItem() {
         final constraints = new Constraints();
         constraints.required = true;
         
@@ -68,16 +69,29 @@ class StepStorageTest {
         
         StepStorage.save(request, stepData, null, null);
         final loadedData = StepStorage.load(request.id, null);
+        final loadedItem = loadedData.data.get('item');
 
-        Assert.areEqual(Std.string(stepData), Std.string(loadedData));
+        Assert.isTrue(Std.is(loadedItem, Item));
+        Assert.areEqual(1, loadedItem.params.length());
+        Assert.isTrue(Std.is(loadedItem.params.get(0), Param));
+        final expected = Json.stringify(Helper.sortObject(item.toObject()));
+        final actual = Json.stringify(Helper.sortObject(loadedItem.toObject()));
+        Assert.areEqual(expected, actual);
     }
-}
 
+    @Test
+    public function testLocalSaveAndLoadDictionary() {
+        final dict = new Dictionary()
+            .set('id', '12345')
+            .set('name', 'Unnamed');
+        final request = new AssetRequest();
+        request.id = 'PR-1234';
+        final stepData = new StepData(0, new Dictionary().set('dict', dict), LocalStorage, 0);
 
-class ApiClientMock implements IApiClient {
-    public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
-        trace('Mock called');
-        return null;
+        StepStorage.save(request, stepData, null, null);
+        final loadedData = StepStorage.load(request.id, null);
+        final loadedDict = loadedData.data.get('dict');
+
+        Assert.isTrue(Std.is(loadedDict, Dictionary));
     }
 }

@@ -306,7 +306,12 @@ class Dictionary extends Base {
                 }
                 return obj;
             default:
-                return x;
+                final classObj = Type.getClass(x);
+                final instanceFields = (classObj != null)
+                    ? Type.getInstanceFields(classObj)
+                    : [];
+                final hasToObject = instanceFields.indexOf('toObject') > -1;
+                return hasToObject ? x.toObject() : x;
         }
     }
 

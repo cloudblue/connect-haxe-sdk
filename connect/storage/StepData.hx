@@ -4,6 +4,7 @@
 */
 package connect.storage;
 
+import connect.models.Model;
 import connect.util.Dictionary;
 import haxe.Json;
 
@@ -32,9 +33,10 @@ class StepData {
             // Create data from Dictionary. Store model class names with key
             for (key in cast(data, Dictionary).keys()) {
                 final value = data.get(key);
-                final className = Std.is(value, connect.models.Model)
-                    ? Type.getClassName(Type.getClass(value))
-                    : '';
+                final className =
+                    Std.is(value, Model) ? Type.getClassName(Type.getClass(value)) :
+                    Std.is(value, Dictionary) ? 'Dictionary' :
+                    '';
                 this.data.set('$key::$className', value);
             }
         } else {
@@ -43,13 +45,15 @@ class StepData {
                 final fieldSplit = field.split('::');
                 final fieldName = fieldSplit.slice(0, -1).join('::');
                 final fieldClassName = fieldSplit.slice(-1)[0];
-                final fieldClass = (fieldClassName != '')
-                    ? Type.resolveClass(fieldClassName)
-                    : null;
+                final fieldClass =
+                    (fieldClassName == 'Dictionary') ? Dictionary :
+                    (fieldClassName != '') ? Type.resolveClass(fieldClassName) :
+                    null;
                 final value = Reflect.field(data, field);
-                final parsedValue: Dynamic = (fieldClass != null)
-                    ? connect.models.Model.parse(fieldClass, Json.stringify(value))
-                    : value;
+                final parsedValue: Dynamic =
+                    (fieldClass == Dictionary) ? Dictionary.fromObject(value) :
+                    (fieldClass != null) ? Model.parse(fieldClass, Json.stringify(value)) :
+                    value;
                 this.data.set(fieldName, parsedValue);
             }
         }
