@@ -329,6 +329,7 @@ class Flow extends Base {
         return this.stepAttempt;
     }
 
+    private static final SKIP_MSG = 'Skipping request because an exception was thrown: ';
     private static final STEP_PARAM_ID = '__sdk_processor_step';
     private static final STEP_PARAM_ID_TIER = '__sdk_processor_step_tier';
 
@@ -366,16 +367,30 @@ class Flow extends Base {
         try {
             this.setup();
         } catch (ex:Dynamic) {
-            final exStr = Std.string(ex);
+            final exStr = getExceptionMessage(ex);
             Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, exStr, '');
             if (this.getAssetRequest() != null) {
-                this.getAssetRequest()._updateConversation('Skipping request because an exception was thrown: $exStr');
+                this.getAssetRequest()._updateConversation(SKIP_MSG + exStr);
             }
             Env.getLogger().closeSection();
             return false;
         }
         Env.getLogger().closeSection();
         return true;
+    }
+
+    private static function getExceptionMessage(ex: Dynamic): String {
+#if php
+        try {
+            return ex.getMessage();
+        } catch (_: Dynamic) {
+            return Std.string(ex);
+        }
+#elseif python
+        return python.Syntax.code("str({0})", ex);
+#else
+        return Std.string(ex);
+#end
     }
 
     private function loadStepDataIfStored():StepData {
@@ -420,10 +435,10 @@ class Flow extends Base {
             if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
                 logStepData(Logger.LEVEL_ERROR, requestStr, dataStr, lastRequestStr, lastDataStr);
             }
-            final exStr = Std.string(ex);
+            final exStr = getExceptionMessage(ex);
             Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, exStr, '');
             if (this.getAssetRequest() != null) {
-                this.getAssetRequest()._updateConversation('Skipping request because an exception was thrown: $exStr');
+                this.getAssetRequest()._updateConversation(SKIP_MSG + exStr);
             }
             this.abort();
         }
