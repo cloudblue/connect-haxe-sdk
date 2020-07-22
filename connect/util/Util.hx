@@ -162,7 +162,7 @@ class Util {
      * @return Array<String> 
      */
     public static function getLines(text: String): Array<String> {
-        final windowsReplaced = StringTools.replace(text, '\r\n', '\n');
+        final windowsReplaced = StringTools.replace(Std.string(text), '\r\n', '\n');
         final macosReplaced = StringTools.replace(windowsReplaced, '\r', '\n');
         return macosReplaced.split('\n');
     }
