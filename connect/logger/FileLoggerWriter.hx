@@ -41,7 +41,7 @@ class FileLoggerWriter extends Base implements ILoggerWriter {
             this.getFile().flush();
         }
         try {
-            // This can fail if stdout ºhas been overriden
+            // This can fail if stdout has been overriden
             Sys.println(lineStr);
         } catch (ex: Dynamic) {}
     }
