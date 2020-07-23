@@ -131,6 +131,24 @@ class TierConfigRequestTest {
 
 
     @Test
+    public function testUpdateWithTcParams() {
+        // Check subject
+        final request = TierConfigRequest.get('TCR-000-000-000');
+        request.configuration.getParamById('tc_param').value = 'New value';
+        request.update(null);
+        request.params = request.configuration.params;
+        Reflect.deleteField(request, 'configuration');
+
+        // Check mocks
+        final apiMock = cast(Env.getTierApi(), Mock);
+        Assert.areEqual(1, apiMock.callCount('updateTierConfigRequest'));
+        Assert.areEqual(
+            [request.id, request._toDiffString()].toString(),
+            apiMock.callArgs('updateTierConfigRequest', 0).toString());
+    }
+
+
+    @Test
     public function testUpdateWithParams() {
         // Check subject
         final param = new Param();

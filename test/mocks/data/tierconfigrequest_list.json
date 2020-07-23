@@ -6,6 +6,12 @@
         "configuration": {
             "id": "TC-000-000-000",
             "connection": {},
+            "params": [
+              {
+                "id": "tc_param",
+                "value": "tc_param_value"
+              }
+            ],
             "tiers": {}
         },
         "events": {

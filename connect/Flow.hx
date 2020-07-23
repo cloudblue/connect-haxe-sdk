@@ -477,18 +477,26 @@ class Flow extends Base {
 
         // Get marketplace
         final marketplace =
-            (assetRequest != null && assetRequest.marketplace != null) ? assetRequest.marketplace.id :
-            (listing != null && listing.contract.marketplace != null) ? listing.contract.marketplace.id :
-            (tierConfigRequest != null && tierConfigRequest.marketplace != null) ? tierConfigRequest.marketplace.id :
-            (usageFile != null && usageFile.marketplace != null) ? usageFile.marketplace.id :
+            (assetRequest != null && assetRequest.marketplace != null) ?
+                assetRequest.marketplace.id :
+            (listing != null && listing.contract.marketplace != null) ?
+                listing.contract.marketplace.id :
+            (tierConfigRequest != null && tierConfigRequest.configuration.marketplace != null) ?
+                tierConfigRequest.configuration.marketplace.id :
+            (usageFile != null && usageFile.marketplace != null) ?
+                usageFile.marketplace.id :
             'marketplace';
 
         // Get product
         final product =
-            (assetRequest != null && assetRequest.asset.product != null) ? assetRequest.asset.product.id :
-            (listing != null && listing.product != null) ? listing.product.id :
-            (tierConfigRequest != null && tierConfigRequest.product != null) ? tierConfigRequest.product.id :
-            (usageFile != null && usageFile.product != null) ? usageFile.product.id :
+            (assetRequest != null && assetRequest.asset.product != null) ?
+                assetRequest.asset.product.id :
+            (listing != null && listing.product != null) ?
+                listing.product.id :
+            (tierConfigRequest != null && tierConfigRequest.configuration.product != null) ?
+                tierConfigRequest.configuration.product.id :
+            (usageFile != null && usageFile.product != null) ?
+                usageFile.product.id :
             'product';
         
         
