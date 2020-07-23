@@ -172,7 +172,7 @@ class TierConfigRequest extends IdModel {
             if (hasModifiedFields) {
                 final request = Env.getTierApi().updateTierConfigRequest(
                     this.id,
-                    haxe.Json.stringify(this._toDiff()));
+                    prepareUpdateBody(diff));
                 return Model.parse(TierConfigRequest, request);
             } else {
                 return this;
@@ -185,6 +185,28 @@ class TierConfigRequest extends IdModel {
             }
             return this;
         }
+    }
+
+
+    private static function prepareUpdateBody(diff: Dynamic): String {
+        final hasConfiguration = Reflect.hasField(diff, 'configuration');
+        final hasTcrParams = Reflect.hasField(diff, 'params');
+        final hasTcParams = hasConfiguration && Reflect.hasField(diff.configuration, 'params');
+        final hasConfigParams = hasConfiguration && Reflect.hasField(diff.configuration, 'configuration')
+            && Reflect.hasField(diff.configuration.configuration, 'params');
+        if ((hasTcParams || hasConfigParams) && !hasTcrParams) {
+            diff.params = [];
+        }
+        if (hasTcParams) {
+            diff.params = diff.params.concat(diff.configuration.params);
+        }
+        if (hasConfigParams) {
+            diff.params = diff.params.concat(diff.configuration.configuration.params);
+        }
+        if (hasConfiguration) {
+            Reflect.deleteField(diff, 'configuration');
+        }
+        return haxe.Json.stringify(diff);
     }
 
 
