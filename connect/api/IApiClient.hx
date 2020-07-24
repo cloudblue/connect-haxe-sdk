@@ -19,6 +19,7 @@ interface IApiClient {
         @param fileArg Argument name of file to send in multipart requests, or `null`.
         @param fileName File name of file to send in multipart requests, or `null`.
         @param fileContent File content of file to send in multipart requests, or `null`.
+        @param certificate Certificate to send in the request, or `null`.
         @returns A `Response` object.
     **/
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
