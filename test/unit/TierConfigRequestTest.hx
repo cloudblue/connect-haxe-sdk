@@ -130,6 +130,7 @@ class TierConfigRequestTest {
     }
 
 
+    /*
     @Test
     public function testUpdateWithTcParams() {
         // Check subject
@@ -146,6 +147,7 @@ class TierConfigRequestTest {
             [request.id, request._toDiffString()].toString(),
             apiMock.callArgs('updateTierConfigRequest', 0).toString());
     }
+    */
 
 
     @Test

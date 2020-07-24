@@ -36,12 +36,12 @@ class StepData {
     private static function createDictionaryWithClassnameSuffixes(dict: Dictionary): Dictionary {
         final data = new Dictionary();
         for (key in dict.keys()) {
-            final value = dict.get(key);
+            final value: Dynamic = dict.get(key);
             final className =
                 Std.is(value, Model) ? Type.getClassName(Type.getClass(value)) :
                 Std.is(value, Dictionary) ? 'Dictionary' :
                 '';
-            final fixedValue = (className == 'Dictionary')
+            final fixedValue: Dynamic = (className == 'Dictionary')
                 ? createDictionaryWithClassnameSuffixes(value)
                 : value;
             data.set('$key::$className', fixedValue);
