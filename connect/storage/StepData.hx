@@ -26,36 +26,46 @@ class StepData {
 
     public function new(firstIndex: Int, data: Dynamic, storage: StorageType, attempt:Int) {
         this.firstIndex = firstIndex;
-        this.data = new Dictionary();
+        this.data = (Std.is(data, Dictionary))
+            ? createDictionaryWithClassnameSuffixes(data)
+            : createDictionaryAndDeserializeContent(data);
         this.storage = storage;
         this.attempt = attempt;
-        if (Std.is(data, Dictionary)) {
-            // Create data from Dictionary. Store model class names with key
-            for (key in cast(data, Dictionary).keys()) {
-                final value = data.get(key);
-                final className =
-                    Std.is(value, Model) ? Type.getClassName(Type.getClass(value)) :
-                    Std.is(value, Dictionary) ? 'Dictionary' :
-                    '';
-                this.data.set('$key::$className', value);
-            }
-        } else {
-            // Create data from anonymous structure. For keys that have an attached class name, parse class
-            for (field in Reflect.fields(data)) {
-                final fieldSplit = field.split('::');
-                final fieldName = fieldSplit.slice(0, -1).join('::');
-                final fieldClassName = fieldSplit.slice(-1)[0];
-                final fieldClass =
-                    (fieldClassName == 'Dictionary') ? Dictionary :
-                    (fieldClassName != '') ? Type.resolveClass(fieldClassName) :
-                    null;
-                final value = Reflect.field(data, field);
-                final parsedValue: Dynamic =
-                    (fieldClass == Dictionary) ? Dictionary.fromObject(value) :
-                    (fieldClass != null) ? Model.parse(fieldClass, Json.stringify(value)) :
-                    value;
-                this.data.set(fieldName, parsedValue);
-            }
+    }
+
+    private static function createDictionaryWithClassnameSuffixes(dict: Dictionary): Dictionary {
+        final data = new Dictionary();
+        for (key in dict.keys()) {
+            final value = dict.get(key);
+            final className =
+                Std.is(value, Model) ? Type.getClassName(Type.getClass(value)) :
+                Std.is(value, Dictionary) ? 'Dictionary' :
+                '';
+            final fixedValue = (className == 'Dictionary')
+                ? createDictionaryWithClassnameSuffixes(value)
+                : value;
+            data.set('$key::$className', fixedValue);
         }
+        return data;
+    }
+
+    private static function createDictionaryAndDeserializeContent(obj: Dynamic): Dictionary {
+        final data = new Dictionary();
+        for (field in Reflect.fields(obj)) {
+            final fieldSplit = field.split('::');
+            final fieldName = fieldSplit.slice(0, -1).join('::');
+            final fieldClassName = fieldSplit.slice(-1)[0];
+            final fieldClass =
+                (fieldClassName == 'Dictionary') ? Dictionary :
+                (fieldClassName != '') ? Type.resolveClass(fieldClassName) :
+                null;
+            final value = Reflect.field(obj, field);
+            final parsedValue: Dynamic =
+                (fieldClass == Dictionary) ? createDictionaryAndDeserializeContent(value) :
+                (fieldClass != null) ? Model.parse(fieldClass, Json.stringify(value)) :
+                value;
+            data.set(fieldName, parsedValue);
+        }
+        return data;
     }
 }

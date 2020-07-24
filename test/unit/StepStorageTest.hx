@@ -94,4 +94,37 @@ class StepStorageTest {
 
         Assert.isTrue(Std.is(loadedDict, Dictionary));
     }
+
+    @Test
+    public function testLocalSaveAndLoadDictionaryWithItem() {
+        final param = new Param();
+        param.id = '123123123';
+        param.name = 'Test_param';
+        param.value = '16ec0f63';
+        
+        final item = new Item();
+        item.id = 'SkuB';
+        item.mpn = 'Test_mpn';
+        item.quantity = '1';
+        item.params = new Collection<Param>().push(param);
+
+        final dict = new Dictionary().set('item', item);
+        
+        final request = new AssetRequest();
+        request.id = 'PR-1234';
+        
+        final stepData = new StepData(0, new Dictionary().set('dict', dict), LocalStorage, 0);
+        
+        StepStorage.save(request, stepData, null, null);
+        final loadedData = StepStorage.load(request.id, null);
+        final loadedDict = loadedData.data.get('dict');
+        final loadedItem = loadedDict.get('item');
+
+        Assert.isTrue(Std.is(loadedItem, Item));
+        Assert.areEqual(1, loadedItem.params.length());
+        Assert.isTrue(Std.is(loadedItem.params.get(0), Param));
+        final expected = Json.stringify(Helper.sortObject(item.toObject()));
+        final actual = Json.stringify(Helper.sortObject(loadedItem.toObject()));
+        Assert.areEqual(expected, actual);
+    }
 }
