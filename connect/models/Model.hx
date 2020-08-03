@@ -4,6 +4,7 @@
 */
 package connect.models;
 
+import connect.util.Dictionary;
 import connect.util.Collection;
 import connect.util.DateTime;
 import haxe.ds.StringMap;
@@ -27,6 +28,8 @@ class Model extends Base {
                             Reflect.setField(obj, Inflection.toSnakeCase(field), Std.string(value));
                         case TClass(DateTime):
                             Reflect.setField(obj, Inflection.toSnakeCase(field), value.toString());
+                        case TClass(Dictionary):
+                            Reflect.setField(obj, Inflection.toSnakeCase(field), value.toObject());
                         case TClass(class_):
                             final className = Type.getClassName(class_);
                             if (className.indexOf('connect.util.Collection') == 0) {
@@ -153,7 +156,11 @@ class Model extends Base {
                                 Reflect.setField(model, field, Json.stringify(val));
                             }
                         } else {
-                            throw 'Cannot find class "$className"';
+                            if (className == 'Dictionary') {
+                                Reflect.setField(model, field, Dictionary.fromObject(val));
+                            } else {
+                                throw 'Cannot find class "$className"';
+                            }
                         }
                     default:
                         final fieldClassName = model.getFieldClassName(field);
@@ -191,7 +198,7 @@ class Model extends Base {
     private function getFieldClassName(field: String): String {
         if (this.fieldClassNames != null && this.fieldClassNames.exists(field)) {
             final nameInField: String = this.fieldClassNames.get(field);
-            final exceptions = ['DateTime', 'String'];
+            final exceptions = ['DateTime', 'Dictionary', 'String'];
             return (exceptions.indexOf(nameInField) == -1)
                 ? 'connect.models.' + nameInField
                 : nameInField;
