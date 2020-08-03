@@ -98,7 +98,7 @@ class Param extends IdModel {
      * @return Bool
      */
     public function isCheckboxChecked(): Bool {
-        return (structuredValue != null)
+        return (type == 'checkbox' && structuredValue != null)
             ? structuredValue.getBool('true')
             : false;
     }
