@@ -55,6 +55,9 @@
                       "hidden": false,
                       "required": false,
                       "unique": false
+                    },
+                    "structured_value": {
+                      "true": true
                     }
                   },
                   {
