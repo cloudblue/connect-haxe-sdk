@@ -2,11 +2,13 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
+import connect.models.Category;
 import connect.Env;
 import connect.models.Account;
 import connect.models.Contract;
 import connect.models.Marketplace;
 import connect.models.Product;
+import connect.models.UsageCategory;
 import connect.models.UsageFile;
 import connect.models.UsageRecord;
 import connect.models.UsageStats;
@@ -197,6 +199,10 @@ class UsageFileTest {
         record.endTimeUtc = today;
         record.assetSearchCriteria = 'parameter.param_b';
         record.assetSearchValue = 'tenant2';
+        record.category = new UsageCategory();
+        record.category.id = 'UR-2020-06-6073-9139-3463-6735';
+        record.category.name = 'my_category';
+        record.category.description = 'My category';
         final records = new Collection<UsageRecord>().push(record);
 
         // Check subject

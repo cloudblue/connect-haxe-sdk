@@ -58,6 +58,7 @@ import connect.models.TierAccount;
 import connect.models.TierConfig;
 import connect.models.TierConfigRequest;
 import connect.models.Tiers;
+import connect.models.UsageCategory;
 import connect.models.UsageFile;
 import connect.models.UsageRecord;
 import connect.models.UsageStats;

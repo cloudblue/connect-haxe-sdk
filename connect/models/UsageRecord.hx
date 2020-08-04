@@ -84,6 +84,9 @@ class UsageRecord extends Model {
     public var categoryId: String;
 
 
+    public var category: UsageCategory;
+
+
     /**
      * Optional: Asset reconciliation ID provided by vendor.
      * This value comes from a parameter value of the asset that is marked as recon id by vendor.
@@ -100,6 +103,7 @@ class UsageRecord extends Model {
         this._setFieldClassNames([
             'startTimeUtc' => 'DateTime',
             'endTimeUtc' => 'DateTime',
+            'category' => 'UsageCategory',
         ]);
     }
 }
