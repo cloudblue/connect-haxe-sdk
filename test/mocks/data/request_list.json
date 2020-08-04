@@ -55,6 +55,9 @@
                       "hidden": false,
                       "required": false,
                       "unique": false
+                    },
+                    "structured_value": {
+                      "true": true
                     }
                   },
                   {
@@ -81,6 +84,16 @@
                       "hidden": false,
                       "required": true,
                       "unique": false
+                    }
+                  },
+                  {
+                    "id": "item_param_checkbox",
+                    "title": "item_param_checkbox",
+                    "description": "item_param_checkbox",
+                    "type": "checkbox",
+                    "scope": "item",
+                    "structured_value": {
+                      "true": true
                     }
                   }
                 ]

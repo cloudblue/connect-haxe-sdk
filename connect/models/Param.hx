@@ -5,6 +5,7 @@
 package connect.models;
 
 import connect.util.Collection;
+import connect.util.Dictionary;
 
 
 /**
@@ -63,6 +64,10 @@ class Param extends IdModel {
     public var events: Events;
 
 
+    /** Only for parameter types phone, address, checkbox and object. **/
+    public var structuredValue: Dictionary;
+
+
     // Undocumented fields (they appear in PHP SDK)
 
 
@@ -83,6 +88,18 @@ class Param extends IdModel {
         this._setFieldClassNames([
             'valueChoice' => 'String',
             'valueChoices' => 'Choice',
+            'structuredValue' => 'Dictionary',
         ]);
+    }
+
+
+    /**
+     * If `this` Param is a checkbox, 
+     * @return Bool
+     */
+    public function isCheckboxChecked(): Bool {
+        return (type == 'checkbox' && structuredValue != null)
+            ? structuredValue.getBool('true')
+            : false;
     }
 }
