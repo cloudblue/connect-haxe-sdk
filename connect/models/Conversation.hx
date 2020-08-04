@@ -85,6 +85,9 @@ class Conversation extends IdModel {
             this.id,
             haxe.Json.stringify({ text: text }));
         final message = Model.parse(Message, msg);
+        if (this.messages == null) {
+            this.messages = new Collection<Message>();
+        }
         this.messages.push(message);
         return message;
     }
