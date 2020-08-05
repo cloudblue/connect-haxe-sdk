@@ -5,6 +5,7 @@
 
 import connect.api.Query;
 import connect.Env;
+import connect.util.Collection;
 import haxe.Json;
 import massive.munit.Assert;
 
@@ -26,9 +27,9 @@ class QueryTest {
         final rql = new Query()
             .limit(100)
             .offset(10)
-            .in_('key', ['value1', 'value2'])
-            .out('product.id', ['PR-', 'CN-'])
-            .select(['attribute'])
+            .in_('key', new Collection<String>().push('value1').push('value2'))
+            .out('product.id', new Collection<String>().push('PR-').push('CN-'))
+            .select(new Collection<String>().push('attribute'))
             .like('product.id', 'PR-')
             .ilike('product.id', 'PR-')
             .equal('property1', 'value1')
@@ -38,7 +39,7 @@ class QueryTest {
             .lesser('property', 'value')
             .lesserOrEqual('property', 'value')
             .orderBy('date')
-            .ordering(['property1', 'property2']);
+            .ordering(new Collection<String>().push('property1').push('property2'));
         final copy = rql.copy();
         Assert.areEqual(copy.toString(), rql.toString());
     }
@@ -64,7 +65,7 @@ class QueryTest {
     @Test
     public function testIn() {
         final rql = new Query()
-            .in_('key', ['value1', 'value2']);
+            .in_('key', new Collection<String>().push('value1').push('value2'));
         Assert.areEqual('?in(key,(value1,value2))', rql.toString());
     }
 
@@ -72,7 +73,7 @@ class QueryTest {
     @Test
     public function testSelect() {
         final rql = new Query()
-            .select(['attribute']);
+            .select(new Collection<String>().push('attribute'));
         Assert.areEqual('?select(attribute)', rql.toString());
     }
 
@@ -96,7 +97,7 @@ class QueryTest {
     @Test
     public function testOut() {
         final rql = new Query()
-            .out('product.id', ['PR-', 'CN-']);
+            .out('product.id', new Collection<String>().push('PR-').push('CN-'));
         Assert.areEqual('?out(product.id,(PR-,CN-))', rql.toString());
     }
 
@@ -168,7 +169,7 @@ class QueryTest {
     @Test
     public function testOrdering() {
         final rql = new Query()
-            .ordering(['property1', 'property2']);
+            .ordering(new Collection<String>().push('property1').push('property2'));
         Assert.areEqual('?ordering(property1,property2)', rql.toString());
     }
 
@@ -177,8 +178,9 @@ class QueryTest {
     public function testPlain() {
         final rql = new Query()
             .equal('property', 'value')
+            .ordering(new Collection<String>().push('created'))
             .limit(100);
-        Assert.areEqual('?property=value&limit=100', rql.toPlain());
+        Assert.areEqual('?property=value&limit=100&ordering(created)', rql.toPlain());
     }
 
 
@@ -196,9 +198,9 @@ class QueryTest {
         final rql = new Query()
             .limit(100)
             .offset(10)
-            .in_('key', ['value1', 'value2'])
-            .out('product.id', ['PR-', 'CN-'])
-            .select(['attribute'])
+            .in_('key', new Collection<String>().push('value1').push('value2'))
+            .out('product.id', new Collection<String>().push('PR-').push('CN-'))
+            .select(new Collection<String>().push('attribute'))
             .like('product.id', 'PR-')
             .ilike('product.id', 'PR-')
             .equal('property1', 'value1')
@@ -208,7 +210,7 @@ class QueryTest {
             .lesser('property', 'value')
             .lesserOrEqual('property', 'value')
             .orderBy('date')
-            .ordering(['property1', 'property2']);
+            .ordering(new Collection<String>().push('property1').push('property2'));
         final expected = Helper.sortObject({
             'limit': 100,
             'offset': 10,
@@ -324,9 +326,9 @@ class QueryTest {
         final expected = new Query()
             .limit(100)
             .offset(10)
-            .in_('key', ['value1', 'value2'])
-            .out('product.id', ['PR-', 'CN-'])
-            .select(['attribute'])
+            .in_('key', new Collection<String>().push('value1').push('value2'))
+            .out('product.id', new Collection<String>().push('PR-').push('CN-'))
+            .select(new Collection<String>().push('attribute'))
             .like('product.id', 'PR-')
             .ilike('product.id', 'PR-')
             .equal('property1', 'value1')
@@ -336,7 +338,7 @@ class QueryTest {
             .lesser('property', 'value')
             .lesserOrEqual('property', 'value')
             .orderBy('date')
-            .ordering(['property1', 'property2']);
+            .ordering(new Collection<String>().push('property1').push('property2'));
         final result = Query.fromObject(obj);
         Assert.areEqual(expected.toJson(), result.toJson());
     }

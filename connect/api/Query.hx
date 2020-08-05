@@ -4,6 +4,7 @@
 */
 package connect.api;
 
+import connect.util.Collection;
 import haxe.ds.StringMap;
 import haxe.Json;
 
@@ -87,8 +88,8 @@ class Query extends Base {
      * @param array
      * @return Query
      */
-    public function in_(property: String, array: Array<String>): Query {
-        this.in__.set(property, array.copy());
+    public function in_(property: String, array: Collection<String>): Query {
+        this.in__.set(property, array.toArray().copy());
         return this;
     }
 
@@ -99,8 +100,8 @@ class Query extends Base {
      * @param array 
      * @return Query
      */
-    public function out(property: String, array: Array<String>): Query {
-        this.out_.set(property, array.copy());
+    public function out(property: String, array: Collection<String>): Query {
+        this.out_.set(property, array.toArray().copy());
         return this;
     }
 
@@ -145,8 +146,8 @@ class Query extends Base {
      * @param propertyList 
      * @return Query
      */
-    public function ordering(propertyList: Array<String>): Query {
-        this.ordering_ = propertyList.copy();
+    public function ordering(propertyList: Collection<String>): Query {
+        this.ordering_ = propertyList.toArray().copy();
         return this;
     }
 
@@ -189,8 +190,8 @@ class Query extends Base {
      * @param attributes 
      * @return Query
      */
-    public function select(attributes: Array<String>): Query {
-        this.select_ = attributes.copy();
+    public function select(attributes: Collection<String>): Query {
+        this.select_ = attributes.toArray().copy();
         return this;
     }
 
@@ -346,6 +347,10 @@ class Query extends Base {
 
         if (this.offset_ != null) {
             rql.push('offset=${this.offset_}');
+        }
+
+        if (this.ordering_ != null) {
+            rql.push('ordering(${this.ordering_.join(',')})');
         }
 
         if (rql.length > 0) {
