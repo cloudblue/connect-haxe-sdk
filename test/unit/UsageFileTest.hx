@@ -8,7 +8,6 @@ import connect.models.Account;
 import connect.models.Contract;
 import connect.models.Marketplace;
 import connect.models.Product;
-import connect.models.UsageCategory;
 import connect.models.UsageFile;
 import connect.models.UsageParam;
 import connect.models.UsageRecord;
@@ -205,10 +204,6 @@ class UsageFileTest {
         record.endTimeUtc = today;
         record.assetSearchCriteria = 'parameter.param_b';
         record.assetSearchValue = 'tenant2';
-        record.category = new UsageCategory();
-        record.category.id = 'UR-2020-06-6073-9139-3463-6735';
-        record.category.name = 'my_category';
-        record.category.description = 'My category';
         record.params = new Collection<UsageParam>().push(param);
         final records = new Collection<UsageRecord>().push(record);
 
