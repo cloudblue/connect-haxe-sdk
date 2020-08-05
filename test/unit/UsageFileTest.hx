@@ -2,7 +2,6 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-import connect.models.Category;
 import connect.Env;
 import connect.models.Account;
 import connect.models.Contract;

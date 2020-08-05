@@ -10,7 +10,6 @@ import connect.logger.Logger;
 
 @:dox(hide)
 class Util {
-
     /**
      * Given a list of regex search all in a string and hide this values
      * @param text 
@@ -165,6 +164,14 @@ class Util {
         final windowsReplaced = StringTools.replace(Std.string(text), '\r\n', '\n');
         final macosReplaced = StringTools.replace(windowsReplaced, '\r', '\n');
         return macosReplaced.split('\n');
+    }
+
+
+    /**
+     * @return Int `1` if the argument is `true`, `0` otherwise.
+     */
+    public static function boolToInt(b: Bool): Int {
+        return b ? 1 : 0;
     }
 
 
