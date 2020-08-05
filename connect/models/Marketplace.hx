@@ -56,6 +56,9 @@ class Marketplace extends IdModel {
     public var sourcing: Bool;
 
 
+    public var currency: String;
+
+
     public function new() {
         super();
         this._setFieldClassNames([

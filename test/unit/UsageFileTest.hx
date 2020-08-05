@@ -8,6 +8,7 @@ import connect.models.Contract;
 import connect.models.Marketplace;
 import connect.models.Product;
 import connect.models.UsageFile;
+import connect.models.UsageParam;
 import connect.models.UsageRecord;
 import connect.models.UsageStats;
 import connect.util.Collection;
@@ -186,6 +187,11 @@ class UsageFileTest {
             today.getYear(), today.getMonth(), today.getDay() - 1,
             today.getHours(), today.getMinutes(), today.getSeconds());
 
+        // Create custom param
+        final param = new UsageParam();
+        param.parameterName = 'v.aobo';
+        param.parameterValue = '1';
+
         // Create record
         final record = new UsageRecord();
         record.recordId = 'Unique record value';
@@ -197,6 +203,7 @@ class UsageFileTest {
         record.endTimeUtc = today;
         record.assetSearchCriteria = 'parameter.param_b';
         record.assetSearchValue = 'tenant2';
+        record.params = new Collection<UsageParam>().push(param);
         final records = new Collection<UsageRecord>().push(record);
 
         // Check subject

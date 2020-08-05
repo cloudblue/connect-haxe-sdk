@@ -4,6 +4,7 @@
 */
 package connect.models;
 
+import connect.util.Collection;
 import connect.util.DateTime;
 
 
@@ -95,11 +96,19 @@ class UsageRecord extends Model {
     public var tier: Int;
 
 
+    /**
+     * Contains the custom fields of the record, such as vendor (prefixed with "v.")
+     * and provider (prefixed with "p.") custom data.
+     **/
+    public var params: Collection<UsageParam>;
+
+
     public function new() {
         super();
         this._setFieldClassNames([
             'startTimeUtc' => 'DateTime',
             'endTimeUtc' => 'DateTime',
+            'params' => 'UsageParam'
         ]);
     }
 }
