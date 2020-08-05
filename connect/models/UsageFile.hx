@@ -409,11 +409,9 @@ class UsageFile extends IdModel {
             ]);
         }
 
-        final bytes = new ExcelWriter()
+        return new ExcelWriter()
             .addSheet('categories', categoriesSheet)
             .addSheet('usage_records', usageSheet)
             .compress();
-        sys.io.File.saveBytes('usage_file.xlsx', bytes);
-        return bytes;
     }
 }
