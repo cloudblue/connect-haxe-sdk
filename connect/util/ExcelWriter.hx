@@ -164,7 +164,6 @@ class ExcelWriter {
     private function getWorkbook(): String {
         final sheet = '<sheet name="%NAME%" sheetId="%ID%" state="visible" r:id="rId%ID%" />';
         final sheetNames = getSheetNames();
-        trace(sheetNames);
         final buffer = new StringBuf();
         buffer.add('<workbook xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">');
         buffer.add('<workbookPr />');
