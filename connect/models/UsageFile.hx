@@ -344,8 +344,8 @@ class UsageFile extends IdModel {
 
     private static function createSpreadsheet(fileId: String, records: Array<UsageRecord>,
             categories: Array<UsageCategory>): haxe.io.Bytes {
-        final usageSheet: ExcelSheet = [];
-        usageSheet.push([
+        final paramNames = getRecordParamNames(records);
+        final usageColumns = [
             's:record_id',
             's:record_note',
             's:item_search_criteria',
@@ -363,7 +363,8 @@ class UsageFile extends IdModel {
             's:category_id',
             's:asset_recon_id',
             's:tier'
-        ]);
+        ].concat(paramNames.map(n -> 's:$n'));
+        final usageSheet: ExcelSheet = [usageColumns];
         for (i in 0...records.length) {
             final record = records[i];
             usageSheet.push([
@@ -384,7 +385,7 @@ class UsageFile extends IdModel {
                 's:' + ((record.categoryId != null) ? record.categoryId : 'generic_category'),
                 's:' + ((record.assetReconId != null) ? record.assetReconId : ''),
                 's:' + record.tier != null ?  Std.string(record.tier) : ''
-            ]);
+            ].concat(paramNames.map(n -> 's:${getRecordParamValue(record, n)}')));
         }
 
         final categoriesSheet: ExcelSheet = [];
@@ -413,5 +414,30 @@ class UsageFile extends IdModel {
             .addSheet('categories', categoriesSheet)
             .addSheet('usage_records', usageSheet)
             .compress();
+    }
+
+
+    private static function getRecordParamNames(records: Array<UsageRecord>): Array<String> {
+        final names: Array<String> = [];
+        for (record in records) {
+            if (record.params != null) {
+                for (param in record.params) {
+                    if (names.indexOf(param.parameterName) == -1) {
+                        names.push(param.parameterName);
+                    }
+                }
+            }
+        }
+        return names;
+    }
+
+
+    private static function getRecordParamValue(record: UsageRecord, name: String): String {
+        if (record.params != null) {
+            final param = Lambda.find(record.params, p -> p.parameterName == name);
+            return (param != null) ? param.parameterValue : '';
+        } else {
+            return '';
+        }
     }
 }
