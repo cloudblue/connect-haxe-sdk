@@ -30,7 +30,7 @@ class FulfillmentApiImpl extends Base implements IFulfillmentApi {
 
 
     public function updateRequest(id: String, request: String): String {
-        return ConnectHelper.put(REQUESTS_PATH, id, request);
+        return ConnectHelper.put(REQUESTS_PATH, id, null, request);
     }
 
 

@@ -30,7 +30,7 @@ class MarketplaceApiImpl implements IMarketplaceApi {
 
 
     public function updateAgreement(id: String, body: String): String {
-        return ConnectHelper.put(AGREEMENTS_PATH, id, body);
+        return ConnectHelper.put(AGREEMENTS_PATH, id, null, body);
     }
 
 
@@ -80,7 +80,7 @@ class MarketplaceApiImpl implements IMarketplaceApi {
 
 
     public function putListing(id: String, body: String): String {
-        return ConnectHelper.put(LISTINGS_PATH, id, body);
+        return ConnectHelper.put(LISTINGS_PATH, id, null, body);
     }
 
 
@@ -150,7 +150,7 @@ class MarketplaceApiImpl implements IMarketplaceApi {
 
 
     public function updateMarketplace(id: String, body: String): String {
-        return ConnectHelper.put(MARKETPLACES_PATH, id, body);
+        return ConnectHelper.put(MARKETPLACES_PATH, id, null, body);
     }
 
 

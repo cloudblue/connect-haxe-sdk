@@ -29,7 +29,7 @@ class TierApiImpl extends Base implements ITierApi {
 
 
     public function updateTierConfigRequest(id: String, tcr: String): String {
-        return ConnectHelper.put(TCR_PATH, id, tcr);
+        return ConnectHelper.put(TCR_PATH, id, null, tcr);
     }
 
 

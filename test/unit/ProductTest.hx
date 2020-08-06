@@ -294,7 +294,7 @@ class ProductTest {
         final apiMock = cast(Env.getGeneralApi(), Mock);
         Assert.areEqual(1, apiMock.callCount('listProductItems'));
         Assert.areEqual(
-            ['PRD-783-317-575'].toString(),
+            ['PRD-783-317-575', null].toString(),
             apiMock.callArgs('listProductItems', 0).toString());
     }
 
@@ -310,7 +310,7 @@ class ProductTest {
         final apiMock = cast(Env.getGeneralApi(), Mock);
         Assert.areEqual(1, apiMock.callCount('listProductItems'));
         Assert.areEqual(
-            ['PRD-XXX-XXX-XXX'].toString(),
+            ['PRD-XXX-XXX-XXX', null].toString(),
             apiMock.callArgs('listProductItems', 0).toString());
     }
 

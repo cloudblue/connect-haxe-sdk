@@ -32,7 +32,7 @@ class UsageApiImpl extends Base implements IUsageApi {
 
 
     public function updateUsageFile(id: String, body: String): String {
-        return ConnectHelper.put(USAGE_FILES_PATH, id, body);
+        return ConnectHelper.put(USAGE_FILES_PATH, id, null, body);
     }
 
 
@@ -108,7 +108,7 @@ class UsageApiImpl extends Base implements IUsageApi {
 
 
     public function updateUsageRecord(id: String, record: String): String {
-        return ConnectHelper.put(USAGE_RECORDS_PATH, id, record);
+        return ConnectHelper.put(USAGE_RECORDS_PATH, id, null, record);
     }
 
 

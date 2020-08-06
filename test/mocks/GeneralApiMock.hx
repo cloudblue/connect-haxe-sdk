@@ -158,7 +158,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
 
 
     public function listProductItems(id: String, filters: Query): String {
-        this.calledFunction('listProductItems', [id]);
+        this.calledFunction('listProductItems', [id, filters]);
         this.getProduct(id);
         return Json.stringify(this.itemList);
     }

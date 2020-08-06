@@ -188,7 +188,7 @@ class GeneralApiImpl extends Base implements IGeneralApi {
 
 
     public function updateProductMedia(id: String, mediaId: String, media: String): String {
-        return ConnectHelper.put(PRODUCTS_PATH, '${id}/media/${mediaId}', media);
+        return ConnectHelper.put(PRODUCTS_PATH, '${id}/media/${mediaId}', null, media);
     }
 
 

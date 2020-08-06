@@ -37,8 +37,8 @@ class ConnectHelper {
         @returns A string with the response.
         @throws String if the request fails.
     **/
-    public static function put(resource: String, id: String, body: String): String {
-        return checkResponse(connectSyncRequest('PUT', parsePath(resource, id),
+    public static function put(resource: String, id: String, suffix: String, body: String): String {
+        return checkResponse(connectSyncRequest('PUT', parsePath(resource, id, suffix),
             getHeaders(), body));
     }
 
@@ -105,8 +105,8 @@ class ConnectHelper {
 
     private static function parsePath(resource: String, ?id: String, ?suffix: String): String {
         return resource
-            + (id != null ? "/" + id : "")
-            + (suffix != null ? "/" + suffix : "");
+            + (id != null && id != '' ? '/' + id : '')
+            + (suffix != null && suffix != '' ? '/' + suffix : '');
     }
 
 
