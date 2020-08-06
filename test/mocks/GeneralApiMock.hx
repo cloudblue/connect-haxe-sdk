@@ -164,10 +164,37 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     }
 
 
-    public function getProductParameters(id: String): String {
-        this.calledFunction('getProductParameters', [id]);
+    public function listProductParameters(id: String, filters: Query): String {
+        this.calledFunction('listProductParameters', [id, filters]);
         this.getProduct(id);
         return Json.stringify(this.paramList);
+    }
+
+
+    public function getProductParameter(id: String, paramId: String): String {
+        this.calledFunction('getProductParameter', [id, paramId]);
+        this.getProduct(id);
+        return Json.stringify(this.paramList[0]);
+    }
+
+
+    public function createProductParameter(id: String, data: String): String {
+        this.calledFunction('createProductParameter', [id, data]);
+        this.getProduct(id);
+        return Json.stringify(this.paramList[0]);
+    }
+
+    
+    public function updateProductParameter(id: String, paramId: String, data: String): String {
+        this.calledFunction('updateProductParameter', [id, paramId, data]);
+        this.getProduct(id);
+        return data;
+    }
+
+
+    public function deleteProductParameter(id: String, paramId: String): Void {
+        this.calledFunction('deleteProductParameter', [id, paramId]);
+        this.getProduct(id);
     }
 
 
@@ -238,7 +265,7 @@ class GeneralApiMock extends Mock implements IGeneralApi {
     public function getProductVersionParameters(id: String, version: Int): String {
         this.calledFunction('getProductVersionParameters', [id, version]);
         this.getProductVersion(id, version);
-        return this.getProductParameters(id);
+        return this.listProductParameters(id, null);
     }
 
 

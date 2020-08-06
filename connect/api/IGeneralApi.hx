@@ -23,7 +23,11 @@ interface IGeneralApi {
     public function getProductActionLink(id: String, actionId: String): String;
     public function getProductConnections(id: String): String;
     public function listProductItems(id: String, filters: Query): String;
-    public function getProductParameters(id: String): String;
+    public function listProductParameters(id: String, filters: Query): String;
+    public function getProductParameter(id: String, paramId: String): String;
+    public function createProductParameter(id: String, data: String): String;
+    public function updateProductParameter(id: String, paramId: String, data: String): String;
+    public function deleteProductParameter(id: String, paramId: String): Void;
     public function getProductTemplates(id: String): String;
     public function getProductVersions(id: String): String;
     public function getProductVersion(id: String, version: Int): String;
