@@ -66,6 +66,18 @@ class Item extends IdModel {
     public var description: String;
 
 
+    /** Billing information (only for `SubscriptionRequest`) **/
+    public var billing: ItemBilling;
+
+
+    public function new() {
+        super();
+        this._setFieldClassNames([
+            'billing' => 'ItemBilling',
+        ]);
+    }
+
+
     /** @returns The `Param` with the given id, or `null` if it was not found. **/
     public function getParamById(paramId: String): Param {
         final params = this.params.toArray().filter(function(param) {
