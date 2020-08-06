@@ -192,14 +192,83 @@ class Product extends IdModel {
 
 
     /**
-        @returns A Collection of Params for `this` Product.
-    **/
-    public function getParameters() : Collection<Param> {
+     * Lists all parameters of `this` Product that match the given filters. Supported filters are:
+     * 
+     * - scope
+     * - phase
+     * - type
+     * - constraints
+     * - name
+     * 
+     * @param filters
+     * @return Collection<Param>
+     */
+    public function listParameters(filters: Query): Collection<Param> {
         try {
-            final params = Env.getGeneralApi().getProductParameters(this.id);
+            final params = Env.getGeneralApi().listProductParameters(this.id, filters);
             return Model.parseArray(Param, params);
         } catch (ex: Dynamic) {
             return new Collection<Param>();
+        }
+    }
+
+
+    /**
+     * Get the product parameter with the given `paramId`.
+     * @param paramId Id of the parameter
+     * @return Param
+     */
+    public function getParameter(paramId: String): Param {
+        try {
+            final param = Env.getGeneralApi().getProductParameter(this.id, paramId);
+            return Model.parse(Param, param);
+        } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+
+    /**
+     * Creates the given parameter in `this` Product.
+     * @param param The parameter to create in the Product.
+     * @return Param A copy of the parameter, with an id assigned to it.
+     */
+    public function createParameter(param: Param): Param {
+        try {
+            final param = Env.getGeneralApi().createProductParameter(this.id, param.toString());
+            return Model.parse(Param, param);
+        } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+
+    /**
+     * Updates the given parameter in `this` Product.
+     * @param param The parameter to update.
+     * @return Param A copy of the parameter.
+     */
+    public function updateParameter(param: Param): Param {
+        try {
+            final param = Env.getGeneralApi().updateProductParameter(this.id, param.id, param.toString());
+            return Model.parse(Param, param);
+        } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+
+    /**
+     * Deletes the parameter with the given `paramId` from `this` Product.
+     * @param paramId 
+     * @return Bool Whether the parameter was correctly deleted.
+     */
+    public function deleteParameter(paramId: String): Bool {
+        try {
+            Env.getGeneralApi().deleteProductParameter(this.id, paramId);
+            return true;
+        } catch (ex: Dynamic) {
+            return false;
         }
     }
 

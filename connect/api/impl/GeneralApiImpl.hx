@@ -97,8 +97,28 @@ class GeneralApiImpl extends Base implements IGeneralApi {
     }
 
 
-    public function getProductParameters(id: String): String {
-        return ConnectHelper.get(PRODUCTS_PATH, id, 'parameters');
+    public function listProductParameters(id: String, filters: Query): String {
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'parameters', filters);
+    }
+
+
+    public function getProductParameter(id: String, paramId: String): String {
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'parameters/$paramId');
+    }
+
+
+    public function createProductParameter(id: String, data: String): String {
+        return ConnectHelper.post(PRODUCTS_PATH, id, 'parameters', data);
+    }
+
+
+    public function updateProductParameter(id: String, paramId: String, data: String): String {
+        return ConnectHelper.put(PRODUCTS_PATH, id, 'parameters/$paramId', data);
+    }
+
+
+    public function deleteProductParameter(id: String, paramId: String): Void {
+        ConnectHelper.delete(PRODUCTS_PATH, id, 'parameters/$paramId');
     }
 
 
@@ -188,7 +208,7 @@ class GeneralApiImpl extends Base implements IGeneralApi {
 
 
     public function updateProductMedia(id: String, mediaId: String, media: String): String {
-        return ConnectHelper.put(PRODUCTS_PATH, '${id}/media/${mediaId}', media);
+        return ConnectHelper.put(PRODUCTS_PATH, '${id}/media/${mediaId}', null, media);
     }
 
 

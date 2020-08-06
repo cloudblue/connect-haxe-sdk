@@ -294,7 +294,7 @@ class ProductTest {
         final apiMock = cast(Env.getGeneralApi(), Mock);
         Assert.areEqual(1, apiMock.callCount('listProductItems'));
         Assert.areEqual(
-            ['PRD-783-317-575'].toString(),
+            ['PRD-783-317-575', null].toString(),
             apiMock.callArgs('listProductItems', 0).toString());
     }
 
@@ -310,26 +310,26 @@ class ProductTest {
         final apiMock = cast(Env.getGeneralApi(), Mock);
         Assert.areEqual(1, apiMock.callCount('listProductItems'));
         Assert.areEqual(
-            ['PRD-XXX-XXX-XXX'].toString(),
+            ['PRD-XXX-XXX-XXX', null].toString(),
             apiMock.callArgs('listProductItems', 0).toString());
     }
 
 
     @Test
-    public function testGetParametersOk() {
+    public function testListParametersOk() {
         // Check subject
         final product = Product.get('PRD-783-317-575');
-        final params = product.getParameters();
+        final params = product.listParameters(null);
         Assert.areEqual(2, params.length());
         Assert.areEqual('military-saolas-vrqh', params.get(0).id);
         Assert.areEqual('sure-crickets-5x24', params.get(1).id);
 
         // Check mocks
         final apiMock = cast(Env.getGeneralApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getProductParameters'));
+        Assert.areEqual(1, apiMock.callCount('listProductParameters'));
         Assert.areEqual(
-            ['PRD-783-317-575'].toString(),
-            apiMock.callArgs('getProductParameters', 0).toString());
+            ['PRD-783-317-575', null].toString(),
+            apiMock.callArgs('listProductParameters', 0).toString());
     }
 
 
@@ -337,15 +337,15 @@ class ProductTest {
     public function testGetParametersKo() {
         // Check subject
         final product = Model.parse(Product, '{"id": "PRD-XXX-XXX-XXX"}');
-        final params = product.getParameters();
+        final params = product.listParameters(null);
         Assert.areEqual(0, params.length());
 
         // Check mocks
         final apiMock = cast(Env.getGeneralApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getProductParameters'));
+        Assert.areEqual(1, apiMock.callCount('listProductParameters'));
         Assert.areEqual(
-            ['PRD-XXX-XXX-XXX'].toString(),
-            apiMock.callArgs('getProductParameters', 0).toString());
+            ['PRD-XXX-XXX-XXX', null].toString(),
+            apiMock.callArgs('listProductParameters', 0).toString());
     }
 
 
