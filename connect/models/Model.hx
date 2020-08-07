@@ -164,7 +164,7 @@ class Model extends Base {
                         }
                     default:
                         final fieldClassName = model.getFieldClassName(field);
-                        if (fieldClassName == 'DateTime') {
+                        if (fieldClassName == 'DateTime' && val != null) {
                             Reflect.setField(model, field, DateTime.fromString(val));
                         } else {
                             try {

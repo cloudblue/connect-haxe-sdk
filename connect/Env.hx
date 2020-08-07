@@ -8,7 +8,7 @@ import connect.api.IApiClient;
 import connect.api.IFulfillmentApi;
 import connect.api.IGeneralApi;
 import connect.api.IMarketplaceApi;
-import connect.api.ISubscriptionsApi;
+import connect.api.SubscriptionsApi;
 import connect.api.ITierApi;
 import connect.api.IUsageApi;
 import connect.api.Query;
@@ -22,7 +22,6 @@ import connect.api.impl.ApiClientImpl;
 import connect.api.impl.FulfillmentApiImpl;
 import connect.api.impl.GeneralApiImpl;
 import connect.api.impl.MarketplaceApiImpl;
-import connect.api.impl.SubscriptionsApiImpl;
 import connect.api.impl.TierApiImpl;
 import connect.api.impl.UsageApiImpl;
 
@@ -249,9 +248,9 @@ class Env extends Base {
 
 
     @:dox(hide)
-    public static function getSubscriptionsApi(): ISubscriptionsApi {
+    public static function getSubscriptionsApi(): SubscriptionsApi {
         if (subscriptionsApi == null) {
-            subscriptionsApi = createInstance('ISubscriptionsApi');
+            subscriptionsApi = new SubscriptionsApi();
         }
         return subscriptionsApi;
     }
@@ -298,7 +297,7 @@ class Env extends Base {
     private static var tierApi: ITierApi;
     private static var generalApi: IGeneralApi;
     private static var marketplaceApi: IMarketplaceApi;
-    private static var subscriptionsApi: ISubscriptionsApi;
+    private static var subscriptionsApi: SubscriptionsApi;
     private static var defaultDependencies : Dictionary;
     private static var dependencies: Dictionary;
 
@@ -327,8 +326,7 @@ class Env extends Base {
                 .setString('IUsageApi', 'connect.api.impl.UsageApiImpl')
                 .setString('ITierApi', 'connect.api.impl.TierApiImpl')
                 .setString('IGeneralApi', 'connect.api.impl.GeneralApiImpl')
-                .setString('IMarketplaceApi', 'connect.api.impl.MarketplaceApiImpl')
-                .setString('ISubscriptionsApi', 'connect.api.impl.SubscriptionsApiImpl');
+                .setString('IMarketplaceApi', 'connect.api.impl.MarketplaceApiImpl');
         }
     }
 

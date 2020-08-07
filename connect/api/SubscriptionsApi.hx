@@ -2,10 +2,10 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-package connect.api.impl;
+package connect.api;
 
 @:dox(hide)
-class SubscriptionsApiImpl extends Base implements ISubscriptionsApi {
+class SubscriptionsApi extends Base {
     private static final ASSETS_PATH = 'subscriptions/assets';
     private static final REQUESTS_PATH = 'subscriptions/requests';
 
