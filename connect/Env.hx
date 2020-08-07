@@ -8,6 +8,7 @@ import connect.api.IApiClient;
 import connect.api.IFulfillmentApi;
 import connect.api.IGeneralApi;
 import connect.api.IMarketplaceApi;
+import connect.api.SubscriptionsApi;
 import connect.api.ITierApi;
 import connect.api.IUsageApi;
 import connect.api.Query;
@@ -85,11 +86,10 @@ class Env extends Base {
             final apiUrl = dict.get('apiEndpoint');
             final apiKey = dict.get('apiKey');
             final configProducts: Dynamic = dict.get('products');
-            final products: Collection<String> = Std.is(configProducts, Collection)
-                ? configProducts
-                : Std.is(configProducts, String)
-                ? Collection._fromArray([configProducts])
-                : null;
+            final products: Collection<String> =
+                Std.is(configProducts, Collection) ? configProducts :
+                Std.is(configProducts, String) ? Collection._fromArray([configProducts]) :
+                null;
             dict.remove('apiEndpoint');
             dict.remove('apiKey');
             dict.remove('products');
@@ -248,6 +248,15 @@ class Env extends Base {
 
 
     @:dox(hide)
+    public static function getSubscriptionsApi(): SubscriptionsApi {
+        if (subscriptionsApi == null) {
+            subscriptionsApi = new SubscriptionsApi();
+        }
+        return subscriptionsApi;
+    }
+
+
+    @:dox(hide)
     public static function getMarketplaceApi(): IMarketplaceApi {
         if (marketplaceApi == null) {
             marketplaceApi = createInstance('IMarketplaceApi');
@@ -267,6 +276,7 @@ class Env extends Base {
         tierApi = null;
         generalApi = null;
         marketplaceApi = null;
+        subscriptionsApi = null;
         dependencies = null;
         init(deps);
     }
@@ -287,6 +297,7 @@ class Env extends Base {
     private static var tierApi: ITierApi;
     private static var generalApi: IGeneralApi;
     private static var marketplaceApi: IMarketplaceApi;
+    private static var subscriptionsApi: SubscriptionsApi;
     private static var defaultDependencies : Dictionary;
     private static var dependencies: Dictionary;
 

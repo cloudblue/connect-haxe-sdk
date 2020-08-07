@@ -1,0 +1,5 @@
+{
+  "apiKey": "SU-XXX-XXX-XXX:...",
+  "apiEndpoint": "https://api.conn.rocks/public/v1/",
+  "products": ["PRD-XXX-XXX-XXX"]
+}
