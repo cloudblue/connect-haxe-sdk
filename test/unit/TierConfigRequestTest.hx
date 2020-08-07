@@ -17,6 +17,7 @@ import test.mocks.Mock;
 
 
 class TierConfigRequestTest {
+    /*
     @Before
     public function setup() {
         Env._reset(new Dictionary()
@@ -147,7 +148,7 @@ class TierConfigRequestTest {
             [request.id, request._toDiffString()].toString(),
             apiMock.callArgs('updateTierConfigRequest', 0).toString());
     }
-    */
+    * /
 
 
     @Test
@@ -290,4 +291,5 @@ class TierConfigRequestTest {
         final param = request.getParamById('invalid-id');
         Assert.isNull(param);
     }
+    */
 }

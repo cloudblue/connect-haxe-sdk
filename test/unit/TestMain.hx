@@ -8,14 +8,6 @@ import mcover.coverage.client.CodecovJsonPrintClient;
 import mcover.coverage.client.LcovPrintClient;
 import mcover.coverage.MCoverage;
 
-// Include all mock classes here to make sure they are accesible to reflection
-import test.mocks.ApiClientMock;
-import test.mocks.FulfillmentApiMock;
-import test.mocks.GeneralApiMock;
-import test.mocks.MarketplaceApiMock;
-import test.mocks.TierApiMock;
-import test.mocks.UsageApiMock;
-
 /**
  * Auto generated Test Application.
  * Refer to munit command line tool for more information (haxelib run munit)

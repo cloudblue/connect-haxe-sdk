@@ -16,8 +16,7 @@ import test.mocks.Mock;
 class AccountTest {
     @Before
     public function setup() {
-        Env._reset(new Dictionary()
-            .setString('IApiClient', 'AccountApiClient'));
+        Env._reset(new AccountApiClient());
     }
 
     @Test

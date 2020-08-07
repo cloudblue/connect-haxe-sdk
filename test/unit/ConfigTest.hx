@@ -13,7 +13,6 @@ class ConfigTest {
     private static final PRODUCT1 = 'XX-000-000-000';
     private static final PRODUCT2 = 'XX-111-000-000';
 
-
     @Test
     public function test() {
         var config = new Config(API_URL, API_KEY,

@@ -13,18 +13,14 @@ class Agreement extends IdModel {
     /** Type of the agreement. One of: distribution, program, service. **/
     public var type: String;
 
-
     /** Title of the agreement. **/
     public var title: String;
-
 
     /** Agreement details (Markdown). **/
     public var description: String;
 
-
     /** Date of creation of the agreement. **/
     public var created: DateTime;
-
 
     /**
         Date of the update of the agreement. It can be creation
@@ -32,57 +28,43 @@ class Agreement extends IdModel {
     **/
     public var updated: DateTime;
 
-
     /** Reference to the owner account object. **/
     public var owner: Account;
-
 
     /** Agreement stats. **/
     public var stats: AgreementStats;
 
-
     /** Reference to the user who created the version. **/
     public var author: User;
-
 
     /** Chronological number of the version. **/
     public var version: Int;
 
-
     /** State of the version. **/
     public var active: Bool;
-
 
     /** Url to the document. **/
     public var link: String;
 
-
     /** Date of the creation of the version. **/
     public var versionCreated: DateTime;
-
 
     /** Number of contracts this version has. **/
     public var versionContracts: Int;
 
-
     /** Program agreements can have distribution agreements associated with them. **/
     public var agreements: Collection<Agreement>;
-
 
     /** Reference to the parent program agreement (for distribution agreement). **/
     public var parent: Agreement;
 
-
     /** Reference to marketplace object (for distribution agreement). **/
     public var marketplace: Marketplace;
 
-
     // Undocumented fields (they appear in PHP SDK)
-
 
     /** Name of Agreement. **/
     public var name: String;
-
 
     public function new() {
         super();
@@ -97,7 +79,6 @@ class Agreement extends IdModel {
         ]);
     }
 
-
     /**
         Lists all agreements that match the given filters. Supported filters are:
 
@@ -111,7 +92,6 @@ class Agreement extends IdModel {
         return Model.parseArray(Agreement, agreements);
     }
 
-
     /** @returns The Agreement with the given id, or `null` if it was not found. **/
     public static function get(id: String): Agreement {
         try {
@@ -121,7 +101,6 @@ class Agreement extends IdModel {
             return null;
         }
     }
-
 
     /**
      * Registers a new Agreement on Connect, based on the data of `this` Agreement.
@@ -135,7 +114,6 @@ class Agreement extends IdModel {
             return null;
         }
     }
-
 
     /**
         Updates the agreement in Connect platform with the data changed in `this` model.
@@ -164,14 +142,12 @@ class Agreement extends IdModel {
         }
     }
 
-
     /**
      * Removes `this` agreement from Connect.
      */
     public function remove(): Void {
         Env.getMarketplaceApi().removeAgreement(this.id);
     }
-
 
     /**
         Lists all versions for `this` Agreement.
@@ -182,7 +158,6 @@ class Agreement extends IdModel {
         final versions = Env.getMarketplaceApi().listAgreementVersions(this.id);
         return Model.parseArray(Agreement, versions);
     }
-
 
     /**
      * Registers a new version on Connect, based on the data of `this` Agreement.
@@ -197,7 +172,6 @@ class Agreement extends IdModel {
         }
     }
 
-
     /**
      * @return Agreement Returns the specified version for `this` Agreement, or `null` if it was not found.
      */
@@ -210,7 +184,6 @@ class Agreement extends IdModel {
         }
     }
 
-
     /**
      * Removes the specified version from `this` agreement on Connect.
      * @param version The version to remove.
@@ -218,7 +191,6 @@ class Agreement extends IdModel {
     public function removeVersion(version: Int): Void {
         Env.getMarketplaceApi().removeAgreementVersion(this.id, Std.string(version));
     }
-
 
     /**
      * Lists all sub agreements linked to `this` Agreement.
@@ -228,7 +200,6 @@ class Agreement extends IdModel {
         final agreements = Env.getMarketplaceApi().listAgreementSubAgreements(this.id);
         return Model.parseArray(Agreement, agreements);
     }
-
 
     /**
      * Registers a new Agreement on Connect and links it to `this` Agreement.

@@ -67,7 +67,7 @@ class TestFlow extends Flow {
 class FlowAttemptsTest {
     @Before
     public function setup() {
-        Env._reset(new Dictionary().setString('IApiClient', 'ApiClientFlowAttemptMock'));
+        Env._reset(new ApiClientFlowAttemptMock());
         var maskedFields:Collection<String> = new Collection();
         Env.initLogger(new LoggerConfig().handlers(new Collection<LoggerHandler>().push(new LoggerHandler(new MarkdownLoggerFormatter(),
             new ArrayLoggerWriter())))

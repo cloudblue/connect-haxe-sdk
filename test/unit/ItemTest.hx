@@ -10,6 +10,7 @@ import massive.munit.Assert;
 
 
 class ItemTest {
+    /*
     @Before
     public function setup() {
         Env._reset(new Dictionary()
@@ -33,4 +34,5 @@ class ItemTest {
         final param = item.getParamById('invalid-id');
         Assert.isNull(param);
     }
+    */
 }

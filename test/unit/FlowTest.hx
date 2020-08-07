@@ -60,7 +60,7 @@ class FlowTest {
 
     @Before
     public function setup() {
-        Env._reset(new Dictionary().setString('IApiClient', 'ApiClientFlowMock'));
+        Env._reset(new ApiClientFlowMock());
         var maskedFields:Collection<String> = new Collection();
         Env.initLogger(new LoggerConfig().handlers(new Collection<LoggerHandler>().push(new LoggerHandler(new MarkdownLoggerFormatter(),
             new ArrayLoggerWriter())))

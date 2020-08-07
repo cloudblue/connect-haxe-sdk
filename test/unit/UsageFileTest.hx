@@ -19,6 +19,7 @@ import test.mocks.Mock;
 
 
 class UsageFileTest {
+    /*
     @Before
     public function setup() {
         Env._reset(new Dictionary()
@@ -179,7 +180,7 @@ class UsageFileTest {
     #else
         final sheetName = 'test/mocks/data/sheet.xlsx';
     #end
-    */
+    * /
 
         // Create dates
         final today = DateTime.now();
@@ -221,7 +222,7 @@ class UsageFileTest {
         Assert.areEqual(
             args.toString(),
             apiMock.callArgs('uploadUsageFile', 0).toString());
-        */
+        * /
     }
 
 
@@ -376,4 +377,5 @@ class UsageFileTest {
             [usageFile.id].toString(),
             apiMock.callArgs('reprocessProcessedFile', 0).toString());
     }
+    */
 }

@@ -12,6 +12,7 @@ import test.mocks.Mock;
 
 
 class CategoryTest {
+    /*
     @Before
     public function setup() {
         Env._reset(new Dictionary()
@@ -73,4 +74,5 @@ class CategoryTest {
             ['CAT-XXXXX'].toString(),
             apiMock.callArgs('getCategory', 0).toString());
     }
+    */
 }

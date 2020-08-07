@@ -16,8 +16,7 @@ import test.mocks.Mock;
 class SubscriptionTest {
     @Before
     public function setup() {
-        Env._reset(new Dictionary()
-            .set('IApiClient', 'SubscriptionApiClientMock'));
+        Env._reset(new SubscriptionApiClientMock());
     }
 
     @Test
