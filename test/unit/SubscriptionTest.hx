@@ -52,7 +52,7 @@ class SubscriptionTest {
 }
 
 class SubscriptionApiClientMock extends Mock implements IApiClient {
-    static final FILE = 'test/unit/data/subscription_list.json';
+    static final FILE = 'test/unit/data/subscriptions.json';
 
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
