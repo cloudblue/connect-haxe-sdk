@@ -52,7 +52,7 @@ class SubscriptionTest {
 }
 
 class SubscriptionApiClientMock extends Mock implements IApiClient {
-    static final SUBSCRIPTIONS_FILE = 'test/unit/data/subscription_list.json';
+    static final FILE = 'test/unit/data/subscription_list.json';
 
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
@@ -62,9 +62,9 @@ class SubscriptionApiClientMock extends Mock implements IApiClient {
             case 'GET':
                 switch (url) {
                     case 'https://api.conn.rocks/public/v1/subscriptions/assets':
-                        return new Response(200, File.getContent(SUBSCRIPTIONS_FILE), null);
+                        return new Response(200, File.getContent(FILE), null);
                     case 'https://api.conn.rocks/public/v1/subscriptions/assets/AS-0000-0000-0001':
-                        final list = Mock.parseJsonFile(SUBSCRIPTIONS_FILE);
+                        final list = Mock.parseJsonFile(FILE);
                         return new Response(200, haxe.Json.stringify(list[0]), null);
                 }
         }

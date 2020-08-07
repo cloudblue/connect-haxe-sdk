@@ -16,6 +16,7 @@ import TierConfigRequestTest;
 import DiffTest;
 import FlowAttemptsTest;
 import AgreementTest;
+import SubscriptionRequestTest;
 import AssetRequestTest;
 import UsageFileTest;
 import TierConfigTest;
@@ -55,6 +56,7 @@ class TestSuite extends massive.munit.TestSuite
 		add(DiffTest);
 		add(FlowAttemptsTest);
 		add(AgreementTest);
+		add(SubscriptionRequestTest);
 		add(AssetRequestTest);
 		add(UsageFileTest);
 		add(TierConfigTest);

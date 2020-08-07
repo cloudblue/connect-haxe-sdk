@@ -1,0 +1,97 @@
+[
+    {
+        "id": "BRP-0000-0000-0001-0001",
+        "type": "provider",
+        "events": {
+            "created": {
+                "at": "2019-12-31T23:00:00.000001+00:00"
+            },
+            "updated": {
+                "at": "2019-12-31T23:00:00+00:00"
+            }
+        },
+        "asset": {
+            "id": "AS-0000-0000-0001",
+            "status": "active",
+            "events": {
+                "created": {
+                    "at": "2019-12-31T23:00:00+00:00"
+                },
+                "updated": {
+                    "at": "2019-12-31T23:00:00+00:00"
+                }
+            },
+            "external_id": "EX000000ID",
+            "external_uid": "00000000-0000-0000-0000-000000000001",
+            "product": {
+                "id": "PRD-000-000-001",
+                "name": "PocketPack",
+                "status": "published",
+                "icon": "/media/VA-000-001/PRD-000-000-001/media/PRD-000-000-001-logo.png"
+            },
+            "connection": {
+                "id": "CT-0000-0001",
+                "hub": {
+                    "id": "HB-0000-0001",
+                    "name": "Provider Production Hub"
+                },
+                "provider": {
+                    "id": "PA-000-001",
+                    "name": "Provider company"
+                },
+                "vendor": {
+                    "id": "VA-000-001",
+                    "name": "Vendor company"
+                },
+                "type": "production"
+            },
+            "params": [
+                {
+                    "id": "param_a",
+                    "name": "Secondary email",
+                    "description": "This is a backup email for emergency",
+                    "type": "text",
+                    "value": "mail@example.com"
+                }
+            ],
+            "marketplace": {
+                "id": "MP-00001",
+                "name": "Marketplace M01 for provider",
+                "icon": "/media/logo_marketplace_1.png"
+            },
+            "contract": {
+                "id": "CRP-00000-00000-00001",
+                "name": "Contract of Program Agreement PA01"
+            }
+        },
+        "items": [
+            {
+                "id": "SKU_A",
+                "global_id": "PRD-000-000-001-0001",
+                "display_name": "Sku A",
+                "mpn": "MPN-A",
+                "item_type": "reservation",
+                "period": "monthly",
+                "quantity": 8.0,
+                "type": "Gb",
+                "billing": {
+                    "cycle_number": 1
+                }
+            }
+        ],
+        "attributes": {
+            "vendor": {
+                "external_id": "some-value"
+            },
+            "provider": {
+                "external_id": "some-value"
+            }
+        },
+        "period": {
+            "from": "2019-12-31T23:00:00Z",
+            "to": "2020-01-31T23:00:00Z",
+            "delta": 1.0,
+            "uom": "monthly"
+        }
+    }
+]
