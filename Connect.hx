@@ -60,6 +60,7 @@ import connect.models.ProductStats;
 import connect.models.ProductStatsInfo;
 import connect.models.Renewal;
 import connect.models.Subscription;
+import connect.models.SubscriptionRequest;
 import connect.models.SubscriptionRequestAttributes;
 import connect.models.Template;
 import connect.models.TierAccount;
