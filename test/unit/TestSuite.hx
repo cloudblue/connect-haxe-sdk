@@ -11,6 +11,7 @@ import ItemTest;
 import ConfigurationTest;
 import CustomLoggerFormatterTest;
 import AccountTest;
+import SubscriptionTest;
 import TierConfigRequestTest;
 import DiffTest;
 import FlowAttemptsTest;
@@ -49,6 +50,7 @@ class TestSuite extends massive.munit.TestSuite
 		add(ConfigurationTest);
 		add(CustomLoggerFormatterTest);
 		add(AccountTest);
+		add(SubscriptionTest);
 		add(TierConfigRequestTest);
 		add(DiffTest);
 		add(FlowAttemptsTest);
