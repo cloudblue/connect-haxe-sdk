@@ -44,11 +44,11 @@ class MarketplaceApi {
     }
 
     public function getAgreementVersion(id: String, version: String): String {
-        return ConnectHelper.get(AGREEMENTS_PATH, id, 'versions/$version');
+        return ConnectHelper.get(AGREEMENTS_PATH, id, 'version/$version');
     }
 
     public function removeAgreementVersion(id: String, version: String): Void {
-        ConnectHelper.delete(AGREEMENTS_PATH, id, 'versions/$version');
+        ConnectHelper.delete(AGREEMENTS_PATH, id, 'version/$version');
     }
 
     public function listAgreementSubAgreements(id: String): String {

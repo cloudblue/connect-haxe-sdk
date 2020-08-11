@@ -143,12 +143,19 @@ class Agreement extends IdModel {
     }
 
     /**
-     * Removes `this` agreement from Connect.
+     * Removes `this` Agreement from Connect.
+     * @return Bool If agreement could be removed, returns `true`. Otherwise, returns `false`.
      */
-    public function remove(): Void {
-        Env.getMarketplaceApi().removeAgreement(this.id);
+    public function remove(): Bool {
+        try {
+            Env.getMarketplaceApi().removeAgreement(this.id);
+            return true;
+        } catch (ex: Dynamic) {
+            return false;
+        }
     }
 
+    /*
     /**
         Lists all versions for `this` Agreement.
 
@@ -188,8 +195,13 @@ class Agreement extends IdModel {
      * Removes the specified version from `this` agreement on Connect.
      * @param version The version to remove.
      */
-    public function removeVersion(version: Int): Void {
-        Env.getMarketplaceApi().removeAgreementVersion(this.id, Std.string(version));
+    public function removeVersion(version: Int): Bool {
+        try {
+            Env.getMarketplaceApi().removeAgreementVersion(this.id, Std.string(version));
+            return true;
+        } catch (ex: Dynamic) {
+            return false;
+        }
     }
 
     /**
