@@ -318,23 +318,22 @@ class AssetApiClient extends Mock implements IApiClient {
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
         this.calledFunction('syncRequest', [method, url, headers, body,
             fileArg, fileName, fileContent, certificate]);
-        switch (method) {
-            case 'GET':
-                switch (url) {
-                    case 'https://api.conn.rocks/public/v1/assets':
-                        return new Response(200, haxe.Json.stringify(getAssets()), null);
-                    case 'https://api.conn.rocks/public/v1/assets/AS-392-283-000-0':
-                        return new Response(200, haxe.Json.stringify(getAssets()[0]), null);
-                    case 'https://api.conn.rocks/public/v1/assets/AS-392-283-000-0/requests':
-                        final requests = Mock.parseJsonFile(FILE).filter(r -> r.asset.id == 'AS-392-283-000-0');
-                        return new Response(200, haxe.Json.stringify(requests), null);
-                    case 'https://api.conn.rocks/public/v1/assets/AS-XXX-XXX-XXX-X/requests':
-                        return new Response(200, '[]', null);
-                    case 'https://api.conn.rocks/public/v1/tier/configs?eq(account.id,TA-0-7304-8514-7000)&eq(product.id,CN-631-322-000)&eq(tier_level,0)':
-                        return new Response(200, File.getContent(TIERCONFIGS_FILE), null);
-                    case 'https://api.conn.rocks/public/v1/tier/configs?eq(account.id,TA-0-7042-5000-3000)&eq(product.id,CN-631-322-000)&eq(tier_level,1)':
-                        return new Response(200, File.getContent(TIERCONFIGS_FILE), null);
-                }
+        if (method == 'GET') {
+            switch (url) {
+                case 'https://api.conn.rocks/public/v1/assets':
+                    return new Response(200, haxe.Json.stringify(getAssets()), null);
+                case 'https://api.conn.rocks/public/v1/assets/AS-392-283-000-0':
+                    return new Response(200, haxe.Json.stringify(getAssets()[0]), null);
+                case 'https://api.conn.rocks/public/v1/assets/AS-392-283-000-0/requests':
+                    final requests = Mock.parseJsonFile(FILE).filter(r -> r.asset.id == 'AS-392-283-000-0');
+                    return new Response(200, haxe.Json.stringify(requests), null);
+                case 'https://api.conn.rocks/public/v1/assets/AS-XXX-XXX-XXX-X/requests':
+                    return new Response(200, '[]', null);
+                case 'https://api.conn.rocks/public/v1/tier/configs?eq(account.id,TA-0-7304-8514-7000)&eq(product.id,CN-631-322-000)&eq(tier_level,0)':
+                    return new Response(200, File.getContent(TIERCONFIGS_FILE), null);
+                case 'https://api.conn.rocks/public/v1/tier/configs?eq(account.id,TA-0-7042-5000-3000)&eq(product.id,CN-631-322-000)&eq(tier_level,1)':
+                    return new Response(200, File.getContent(TIERCONFIGS_FILE), null);
+            }
         }
         return new Response(404, null, null);
     }
