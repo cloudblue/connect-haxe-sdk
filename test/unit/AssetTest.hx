@@ -2,6 +2,8 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
+import connect.api.IApiClient;
+import connect.api.Response;
 import connect.Env;
 import connect.api.Query;
 import connect.models.Account;
@@ -24,52 +26,36 @@ import connect.models.TierAccount;
 import connect.models.TierConfig;
 import connect.models.Tiers;
 import connect.models.User;
+import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.DateTime;
 import connect.util.Dictionary;
 import massive.munit.Assert;
+import sys.io.File;
 import test.mocks.Mock;
 
 
 class AssetTest {
-    /*
     @Before
     public function setup() {
-        Env._reset(new Dictionary()
-            .setString('IFulfillmentApi', 'test.mocks.FulfillmentApiMock')
-            .setString('ITierApi', 'test.mocks.TierApiMock'));
+        Env._reset(new AssetApiClient());
     }
-
 
     @Test
     public function testList() {
-        // Check subject
         final assets = Asset.list(null);
         Assert.isType(assets, Collection);
         Assert.areEqual(2, assets.length());
-
-        // Check first asset
         final asset0 = assets.get(0);
         Assert.isType(asset0, Asset);
         Assert.areEqual('AS-392-283-000-0', asset0.id);
-
-        // Check second asset
         final asset1 = assets.get(1);
         Assert.isType(asset1, Asset);
         Assert.areEqual('AS-392-283-001-0', asset1.id);
-
-        // Check mocks
-        final apiMock = cast(Env.getFulfillmentApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('listAssets'));
-        Assert.areEqual(
-            [null].toString(),
-            apiMock.callArgs('listAssets', 0).toString());
     }
-
 
     @Test
     public function testGetOk() {
-        // Check asset
         final asset = Asset.get('AS-392-283-000-0');
         Assert.isType(asset, Asset);
         Assert.isType(asset.product, Product);
@@ -181,63 +167,28 @@ class AssetTest {
         Assert.isFalse(itemParam.isCheckboxChecked());
         Assert.isFalse(item.params.get(1).isCheckboxChecked());
         Assert.isTrue(item.params.get(2).isCheckboxChecked());
-
-        // Check mocks
-        final apiMock = cast(Env.getFulfillmentApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getAsset'));
-        Assert.areEqual(
-            ['AS-392-283-000-0'].toString(),
-            apiMock.callArgs('getAsset', 0).toString());
     }
-
 
     @Test
     public function testGetKo() {
-        // Check subject
         final asset = Asset.get('AS-XXX-XXX-XXX-X');
         Assert.isNull(asset);
-
-        // Check mocks
-        final apiMock = cast(Env.getFulfillmentApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getAsset'));
-        Assert.areEqual(
-            ['AS-XXX-XXX-XXX-X'].toString(),
-            apiMock.callArgs('getAsset', 0).toString());
     }
-
 
     @Test
     public function testGetRequests() {
-        // Check subject
         final asset = Asset.get('AS-392-283-000-0');
         final requests = asset.getRequests();
         Assert.areEqual(1, requests.length());
         Assert.areEqual('PR-5852-1608-0000', requests.get(0).id);
-
-        // Check mocks
-        final apiMock = cast(Env.getFulfillmentApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getAssetRequests'));
-        Assert.areEqual(
-            ['AS-392-283-000-0'].toString(),
-            apiMock.callArgs('getAssetRequests', 0).toString());
     }
-
 
     @Test
     public function testGetRequestsEmpty() {
-        // Check subject
         final asset = Model.parse(Asset, '{"id": "AS-XXX-XXX-XXX-X"}');
         final requests = asset.getRequests();
         Assert.areEqual(0, requests.length());
-
-        // Check mocks
-        final apiMock = cast(Env.getFulfillmentApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getAssetRequests'));
-        Assert.areEqual(
-            ['AS-XXX-XXX-XXX-X'].toString(),
-            apiMock.callArgs('getAssetRequests', 0).toString());
     }
-
 
     @Test
     public function testGetNewItems() {
@@ -252,7 +203,6 @@ class AssetTest {
         Assert.areEqual('0', newItems.get(1).oldQuantity);
     }
 
-
     @Test
     public function testGetChangedItems() {
         final asset = Asset.get('AS-392-283-000-0');
@@ -266,7 +216,6 @@ class AssetTest {
         Assert.areEqual('200', changedItems.get(1).oldQuantity);
     }
 
-
     @Test
     public function testGetRemovedItems() {
         final asset = Asset.get('AS-392-283-000-0');
@@ -277,7 +226,6 @@ class AssetTest {
         Assert.areEqual('200', removedItems.get(0).oldQuantity);
     }
 
-
     @Test
     public function testGetParamByIdOk() {
         final asset = Asset.get('AS-392-283-000-0');
@@ -286,14 +234,12 @@ class AssetTest {
         Assert.areEqual('activationCode', param.id);
     }
 
-
     @Test
     public function testGetParamByIdKo() {
         final asset = Asset.get('AS-392-283-000-0');
         final param = asset.getParamById('invalid-id');
         Assert.isNull(param);
     }
-
 
     @Test
     public function testGetItemByIdOk() {
@@ -303,14 +249,12 @@ class AssetTest {
         Assert.areEqual('TEAM_ST3L2T1Y', item.id);
     }
 
-
     @Test
     public function testGetItemByIdKo() {
         final asset = Asset.get('AS-392-283-000-0');
         final item = asset.getItemById('invalid-id');
         Assert.isNull(item);
     }
-
 
     @Test
     public function testGetItemByMpnOk() {
@@ -319,7 +263,6 @@ class AssetTest {
         Assert.isType(item, Item);
         Assert.areEqual('TEAM-ST3L2T1Y', item.mpn);
     }
-
 
     @Test
     public function testGetItemByMpnKo() {
@@ -345,55 +288,58 @@ class AssetTest {
         Assert.isNull(item);
     }
 
-
     @Test
     public function testGetCustomerConfig() {
-        // Check subject
         final asset = Asset.get('AS-392-283-000-0');
         final tierConfig = asset.getCustomerConfig();
         Assert.isType(tierConfig, TierConfig);
-
-        // Check mocks
-        final query = new Query()
-            .equal('account.id', asset.tiers.customer.id)
-            .equal('product.id', asset.product.id)
-            .equal('tier_level', Std.string(0));
-        final apiMock = cast(Env.getTierApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('listTierConfigs'));
-        Assert.areEqual(
-            [query].toString(),
-            apiMock.callArgs('listTierConfigs', 0).toString());
     }
-
 
     @Test
     public function testGetTier1Config() {
         final asset = Asset.get('AS-392-283-000-0');
         final tierConfig = asset.getTier1Config();
         Assert.isType(tierConfig, TierConfig);
-
-        // Check mocks
-        final query = new Query()
-            .equal('account.id', asset.tiers.tier1.id)
-            .equal('product.id', asset.product.id)
-            .equal('tier_level', Std.string(1));
-        final apiMock = cast(Env.getTierApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('listTierConfigs'));
-        Assert.areEqual(
-            [query].toString(),
-            apiMock.callArgs('listTierConfigs', 0).toString());
     }
-
 
     @Test
     public function testGetTier2Config() {
         final asset = Asset.get('AS-392-283-000-0');
         final tierConfig = asset.getTier2Config();
         Assert.isNull(tierConfig);
-
-        // Check mocks
-        final apiMock = cast(Env.getTierApi(), Mock);
-        Assert.areEqual(0, apiMock.callCount('listTierConfigs'));
     }
-    */
+}
+
+class AssetApiClient extends Mock implements IApiClient {
+    static final FILE = 'test/unit/data/requests.json';
+    static final TIERCONFIGS_FILE = 'test/unit/data/tierconfigs.json';
+
+    public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
+        this.calledFunction('syncRequest', [method, url, headers, body,
+            fileArg, fileName, fileContent, certificate]);
+        switch (method) {
+            case 'GET':
+                switch (url) {
+                    case 'https://api.conn.rocks/public/v1/assets':
+                        return new Response(200, haxe.Json.stringify(getAssets()), null);
+                    case 'https://api.conn.rocks/public/v1/assets/AS-392-283-000-0':
+                        return new Response(200, haxe.Json.stringify(getAssets()[0]), null);
+                    case 'https://api.conn.rocks/public/v1/assets/AS-392-283-000-0/requests':
+                        final requests = Mock.parseJsonFile(FILE).filter(r -> r.asset.id == 'AS-392-283-000-0');
+                        return new Response(200, haxe.Json.stringify(requests), null);
+                    case 'https://api.conn.rocks/public/v1/assets/AS-XXX-XXX-XXX-X/requests':
+                        return new Response(200, '[]', null);
+                    case 'https://api.conn.rocks/public/v1/tier/configs?eq(account.id,TA-0-7304-8514-7000)&eq(product.id,CN-631-322-000)&eq(tier_level,0)':
+                        return new Response(200, File.getContent(TIERCONFIGS_FILE), null);
+                    case 'https://api.conn.rocks/public/v1/tier/configs?eq(account.id,TA-0-7042-5000-3000)&eq(product.id,CN-631-322-000)&eq(tier_level,1)':
+                        return new Response(200, File.getContent(TIERCONFIGS_FILE), null);
+                }
+        }
+        return new Response(404, null, null);
+    }
+
+    private static function getAssets(): Array<Dynamic> {
+        return Mock.parseJsonFile(FILE).map(r -> r.asset);
+    }
 }
