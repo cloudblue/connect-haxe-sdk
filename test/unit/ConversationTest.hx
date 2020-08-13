@@ -2,67 +2,45 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
+import connect.api.IApiClient;
+import connect.api.Response;
 import connect.Env;
 import connect.models.Conversation;
 import connect.models.Message;
 import connect.models.User;
+import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.Dictionary;
 import massive.munit.Assert;
+import sys.io.File;
 import test.mocks.Mock;
 
 
 class ConversationTest {
-    /*
     @Before
     public function setup() {
-        Env._reset(new Dictionary()
-            .setString('IGeneralApi', 'test.mocks.GeneralApiMock'));
+        Env._reset(new ConversationApiClientMock());
     }
-
 
     @Test
     public function testList() {
-        // Check subject
         final conversations = Conversation.list(null);
         Assert.isType(conversations, Collection);
         Assert.areEqual(1, conversations.length());
         Assert.isType(conversations.get(0), Conversation);
         Assert.areEqual('CO-000-000-000', conversations.get(0).id);
-
-        // Check mocks
-        final apiMock = cast(Env.getGeneralApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('listConversations'));
-        Assert.areEqual(
-            [null].toString(),
-            apiMock.callArgs('listConversations', 0).toString());
     }
-
 
     @Test
     public function testCreate() {
-        // Check subject
         final conversation = Conversation.create('XXX', 'Nothing in particular');
         Assert.isType(conversation, Conversation);
-        Assert.areEqual('CO-000-000-000', conversation.id);
         Assert.areEqual('XXX', conversation.instanceId);
         Assert.areEqual('Nothing in particular', conversation.topic);
-
-        // Check mocks
-        final apiMock = cast(Env.getGeneralApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('createConversation'));
-        Assert.areEqual(
-            [haxe.Json.stringify({
-                instance_id: 'XXX',
-                topic: 'Nothing in particular'
-            })].toString(),
-            apiMock.callArgs('createConversation', 0).toString());
     }
-
 
     @Test
     public function testGetOk() {
-        // Check subject
         final conversation = Conversation.get('CO-000-000-000');
         Assert.isType(conversation, Conversation);
         Assert.isType(conversation.messages, Collection);
@@ -86,43 +64,44 @@ class ConversationTest {
         final creator = conversation.creator;
         Assert.areEqual('UR-922-977-649', creator.id);
         Assert.areEqual('Some User', creator.name);
-
-        // Check mocks
-        final apiMock = cast(Env.getGeneralApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getConversation'));
-        Assert.areEqual(
-            ['CO-000-000-000'].toString(),
-            apiMock.callArgs('getConversation', 0).toString());
     }
-
 
     @Test
     public function testGetKo() {
-        // Check subject
-        final conversation = Conversation.get('CO-XXX-XXX-XXX');
-        Assert.isNull(conversation);
-
-        // Check mocks
-        final apiMock = cast(Env.getGeneralApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getConversation'));
-        Assert.areEqual(
-            ['CO-XXX-XXX-XXX'].toString(),
-            apiMock.callArgs('getConversation', 0).toString());
+        Assert.isNull(Conversation.get('CO-XXX-XXX-XXX'));
     }
-
 
     @Test
     public function testCreateMessage() {
-        // Check subject
         final message = Conversation.get('CO-000-000-000').createMessage('Hello, world!');
         Assert.isType(message, Message);
-
-        // Check mocks
-        final apiMock = cast(Env.getGeneralApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('createConversationMessage'));
-        Assert.areEqual(
-            ['CO-000-000-000', haxe.Json.stringify({text: 'Hello, world!'})].toString(),
-            apiMock.callArgs('createConversationMessage', 0).toString());
     }
-    */
+}
+
+class ConversationApiClientMock extends Mock implements IApiClient {
+    static final FILE = 'test/unit/data/conversations.json';
+
+    public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
+        this.calledFunction('syncRequest', [method, url, headers, body,
+            fileArg, fileName, fileContent, certificate]);
+        switch (method) {
+            case 'GET':
+                switch (url) {
+                    case 'https://api.conn.rocks/public/v1/conversations':
+                        return new Response(200, File.getContent(FILE), null);
+                    case 'https://api.conn.rocks/public/v1/conversations/CO-000-000-000':
+                        final conv = Mock.parseJsonFile(FILE)[0];
+                        return new Response(200, haxe.Json.stringify(conv), null);
+                }
+            case 'POST':
+                switch (url) {
+                    case 'https://api.conn.rocks/public/v1/conversations':
+                        return new Response(200, body, null);
+                    case 'https://api.conn.rocks/public/v1/conversations/CO-000-000-000/messages':
+                        return new Response(200, body, null);
+                }
+        }
+        return new Response(404, null, null);
+    }
 }
