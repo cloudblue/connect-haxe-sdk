@@ -18,7 +18,7 @@ import test.mocks.Mock;
 class CategoryTest {
     @Before
     public function setup() {
-        Env._reset(new CategoryApiClient());
+        Env._reset(new CategoryApiClientMock());
     }
 
     @Test
@@ -50,7 +50,7 @@ class CategoryTest {
     }
 }
 
-class CategoryApiClient extends Mock implements IApiClient {
+class CategoryApiClientMock extends Mock implements IApiClient {
     static final FILE = 'test/unit/data/categories.json';
 
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,

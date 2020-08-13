@@ -38,7 +38,7 @@ import test.mocks.Mock;
 class AssetTest {
     @Before
     public function setup() {
-        Env._reset(new AssetApiClient());
+        Env._reset(new AssetApiClientMock());
     }
 
     @Test
@@ -310,7 +310,7 @@ class AssetTest {
     }
 }
 
-class AssetApiClient extends Mock implements IApiClient {
+class AssetApiClientMock extends Mock implements IApiClient {
     static final FILE = 'test/unit/data/requests.json';
     static final TIERCONFIGS_FILE = 'test/unit/data/tierconfigs.json';
 

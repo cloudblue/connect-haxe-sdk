@@ -22,7 +22,7 @@ import test.mocks.Mock;
 class AssetRequestTest {
     @Before
     public function setup() {
-        Env._reset(new AssetRequestApiClient());
+        Env._reset(new AssetRequestApiClientMock());
     }
 
     @Test
@@ -178,7 +178,7 @@ class AssetRequestTest {
     }
 }
 
-class AssetRequestApiClient extends Mock implements IApiClient {
+class AssetRequestApiClientMock extends Mock implements IApiClient {
     static final FILE = 'test/unit/data/requests.json';
     static final CONVERSATIONS_FILE = 'test/unit/data/conversations.json';
 

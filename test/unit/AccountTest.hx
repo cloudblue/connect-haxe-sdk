@@ -16,7 +16,7 @@ import test.mocks.Mock;
 class AccountTest {
     @Before
     public function setup() {
-        Env._reset(new AccountApiClient());
+        Env._reset(new AccountApiClientMock());
     }
 
     @Test
@@ -71,7 +71,7 @@ class AccountTest {
     }
 }
 
-class AccountApiClient extends Mock implements IApiClient {
+class AccountApiClientMock extends Mock implements IApiClient {
     static final FILE = 'test/unit/data/accounts.json';
     static final USERS_FILE = 'test/unit/data/users.json';
 

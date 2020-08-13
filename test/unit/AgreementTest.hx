@@ -20,7 +20,7 @@ import test.mocks.Mock;
 class AgreementTest {
     @Before
     public function setup() {
-        Env._reset(new AgreementApiClient());
+        Env._reset(new AgreementApiClientMock());
     }
 
     @Test
@@ -149,7 +149,7 @@ class AgreementTest {
     }
 }
 
-class AgreementApiClient extends Mock implements IApiClient {
+class AgreementApiClientMock extends Mock implements IApiClient {
     static final FILE = 'test/unit/data/agreements.json';
 
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
