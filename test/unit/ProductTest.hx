@@ -505,7 +505,6 @@ class ProductApiClientMock extends Mock implements IApiClient {
                     return new Response(200, haxe.Json.stringify(media), null);
                 }
         }
-        trace('$method : $url');
         return new Response(404, null, null);
     }
 }
