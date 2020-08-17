@@ -11,7 +11,6 @@ import connect.util.Collection;
 import connect.util.ExcelWriter.ExcelSheet;
 import connect.util.ExcelWriter.ExcelWriter;
 
-
 /**
     Usage File Object.
 **/
@@ -19,14 +18,11 @@ class UsageFile extends IdModel {
     /** Name of the UsageFile object. **/
     public var name: String;
 
-
     /** Vendor can provide a description value in this field to describe the file content. **/
     public var description: String;
 
-
     /** Vendor can put a note which can be referred to later for some extra information. **/
     public var note: String;
-
 
     /**
         One of:
@@ -44,18 +40,14 @@ class UsageFile extends IdModel {
     **/
     public var status: String;
 
-
     /** Period covered by this UsageFile. **/
     public var period: Period;
-
 
     /** Currency of the amount included in UsageFile. **/
     public var currency: String;
 
-
     /** Usage scheme used for the usage file. One of: QT, TR, CR, PR. **/
     public var schema: String;
-
 
     /**
         Google Storage shared location of the upload file. Only available in GET API and not
@@ -63,61 +55,56 @@ class UsageFile extends IdModel {
     **/
     public var usageFileUri: String;
 
-
     /**
         Google Storage shared location of the generated file after processing uploaded file.
         Only available in GET API and not included in list API (sharing timeout 30 sec).
     **/
     public var processedFileUri: String;
 
-
     /** Reference to `Product` object. **/
     public var product: Product;
-
 
     /** Reference to `Contract` object. **/
     public var contract: Contract;
 
-
     /** Reference to `Marketplace` object. **/
     public var marketplace: Marketplace;
-
 
     /** Reference to Vendor `Account`. **/
     public var vendor: Account;
 
-
     /** Reference to Provider `Account`. **/
     public var provider: Account;
-
 
     /** Note provided by the provider in case of acceptance of the usage file. **/
     public var acceptanceNote: String;
 
-
     /** Note provider by the provider in case of rejection of the usage file. **/
     public var rejectionNote: String;
-
 
     /** In case of invalid file, this field will contain errors related to the file. **/
     public var errorDetail: String;
 
-
     /** Reference to `UsageStats` object. **/
     public var stats: UsageStats;
-
 
     /** Reference to `Events` ocurred on the UsageFile. **/
     public var events: Events;
 
-
     /** External id of the UsageFile. **/
     public var externalId: String;
-
 
     /** Environment of the UsageFile. **/
     public var environment: String;
 
+    public function new() {
+        super();
+        this._setFieldClassNames([
+            'vendor' => 'Account',
+            'provider' => 'Account',
+            'stats' => 'UsageStats'
+        ]);
+    }
 
     /**
         Lists all UsageFiles that match the given filters. Supported filters are:
@@ -134,7 +121,6 @@ class UsageFile extends IdModel {
         return Model.parseArray(UsageFile, usageFiles);
     }
 
-
     /** @returns The UsageFile with the given id, or `null` if it was not found. **/
     public static function get(id: String): UsageFile {
         try {
@@ -144,7 +130,6 @@ class UsageFile extends IdModel {
             return null;
         }
     }
-
 
     /**
         Registers a new UsageFile on Connect, based on the data of `this` UsageFile, which
@@ -164,7 +149,6 @@ class UsageFile extends IdModel {
             return null;
         }
     }
-
 
     /**
         Updates `this` UsageFile in the server with the data changed in `this` model.
@@ -193,12 +177,15 @@ class UsageFile extends IdModel {
         }
     }
 
-
     /** Deletes `this` UsageFile in the server. **/
-    public function delete(): Void {
-        Env.getUsageApi().deleteUsageFile(this.id);
+    public function delete(): Bool {
+        try {
+            Env.getUsageApi().deleteUsageFile(this.id);
+            return true;
+        } catch (ex: Dynamic) {
+            return false;
+        }
     }
-
 
     /**
         Uploads the `Collection` of `UsageRecord` objects to `this` UsageFile in Connect.
@@ -211,136 +198,6 @@ class UsageFile extends IdModel {
         final data = Blob._fromBytes(sheet);
         return upload(data);
     }
-
-
-    /**
-     * Uploads the `Collection` of `UsageRecord` objects and `UsageCategory` objects
-     * to `this` UsageFile in Connect. The SDK automatically generates a Microsoft Excel
-     * XLSX file with the records and uploads it, so this is a more convenient version of
-     * the `UsageFile.upload()` method, which requires you to generate the Excel file
-     * contents yourself.
-     */
-    public function uploadRecordsAndCategories(records: Collection<UsageRecord>,
-            categories: Collection<UsageCategory>): UsageFile {
-        final sheet = createSpreadsheet(this.id, records.toArray(), categories.toArray());
-        final data = Blob._fromBytes(sheet);
-        return upload(data);
-    }
-
-
-    /**
-        Uploads the specified contents to `this` UsageFile in Connect.
-
-        @param content The contents of an XLSX file.
-        @returns The UsageFile returned from the server.
-    **/
-    public function upload(content: Blob): UsageFile {
-        final usageFile = Env.getUsageApi().uploadUsageFile(this.id, content);
-        return Model.parse(UsageFile, usageFile);
-    }
-
-
-    /**
-        Submits `this` UsageFile.
-
-        @returns The UsageFile returned from the server.
-    **/
-    public function submit(): UsageFile {
-        final usageFile = Env.getUsageApi().submitUsageFileAction(this.id);
-        return Model.parse(UsageFile, usageFile);
-    }
-
-
-    /**
-        Accepts `this` UsageFile.
-
-        @returns The UsageFile returned from the server.
-    **/
-    public function accept(note: String): UsageFile {
-        final usageFile = Env.getUsageApi().acceptUsageFileAction(this.id, note);
-        return Model.parse(UsageFile, usageFile);
-    }
-
-
-    /**
-        Rejects `this` UsageFile.
-
-        @returns The UsageFile returned from the server.
-    **/
-    public function reject(note: String): UsageFile {
-        final usageFile = Env.getUsageApi().rejectUsageFileAction(this.id, note);
-        return Model.parse(UsageFile, usageFile);
-    }
-
-
-    /**
-        Cancels `this` UsageFile.
-
-        @returns The UsageFile returned from the server.
-    **/
-    public function close(): UsageFile {
-        final usageFile = Env.getUsageApi().closeUsageFileAction(this.id);
-        return Model.parse(UsageFile, usageFile);
-    }
-
-
-    /**
-        Gets the contents of the product specific file template for `this` UsageFile.
-    **/
-    public function getTemplate(): Blob {
-        try {
-            final link = getTemplateLink();
-            final response = Env.getApiClient().syncRequest('GET', link, null, null, null, null, null, null);
-            return response.data;
-        } catch (ex: Dynamic) {
-            return null;
-        }
-    }
-
-
-    /**
-        Gets the product specific file template URL for `this` UsageFile.
-    **/
-    public function getTemplateLink(): String {
-        final link = haxe.Json.parse(
-            Env.getUsageApi().getProductSpecificUsageFileTemplate(this.id));
-        return link.template_link;
-    }
-
-
-    /**
-        Uploads the contents of a reconciliation file to `this` UsageFile.
-
-        @param content The contents of an XLSX file.
-        @returns The UsageFile returned from the server.
-    **/
-    public function uploadReconciliation(content: Blob): UsageFile {
-        final usageFile = Env.getUsageApi().uploadReconciliationFileFromProvider(this.id, content);
-        return Model.parse(UsageFile, usageFile);
-    }
-
-
-    /**
-        Reprocesses a processed file. This is called by the provider after the provider closes
-        some usage records manually.
-
-        @returns The UsageFile returned from the server.
-    **/
-    public function reprocess(): UsageFile {
-        final usageFile = Env.getUsageApi().reprocessProcessedFile(this.id);
-        return Model.parse(UsageFile, usageFile);
-    }
-
-
-    public function new() {
-        super();
-        this._setFieldClassNames([
-            'vendor' => 'Account',
-            'provider' => 'Account',
-            'stats' => 'UsageStats'
-        ]);
-    }
-
 
     private static function createSpreadsheet(fileId: String, records: Array<UsageRecord>,
             categories: Array<UsageCategory>): haxe.io.Bytes {
@@ -416,7 +273,6 @@ class UsageFile extends IdModel {
             .compress();
     }
 
-
     private static function getRecordParamNames(records: Array<UsageRecord>): Array<String> {
         final names: Array<String> = [];
         for (record in records) {
@@ -431,7 +287,6 @@ class UsageFile extends IdModel {
         return names;
     }
 
-
     private static function getRecordParamValue(record: UsageRecord, name: String): String {
         if (record.params != null) {
             final param = Lambda.find(record.params, p -> p.parameterName == name);
@@ -439,5 +294,113 @@ class UsageFile extends IdModel {
         } else {
             return '';
         }
+    }
+
+    /**
+     * Uploads the `Collection` of `UsageRecord` objects and `UsageCategory` objects
+     * to `this` UsageFile in Connect. The SDK automatically generates a Microsoft Excel
+     * XLSX file with the records and uploads it, so this is a more convenient version of
+     * the `UsageFile.upload()` method, which requires you to generate the Excel file
+     * contents yourself.
+     */
+    public function uploadRecordsAndCategories(records: Collection<UsageRecord>,
+            categories: Collection<UsageCategory>): UsageFile {
+        final sheet = createSpreadsheet(this.id, records.toArray(), categories.toArray());
+        final data = Blob._fromBytes(sheet);
+        return upload(data);
+    }
+
+    /**
+        Uploads the specified contents to `this` UsageFile in Connect.
+
+        @param content The contents of an XLSX file.
+        @returns The UsageFile returned from the server.
+    **/
+    public function upload(content: Blob): UsageFile {
+        final usageFile = Env.getUsageApi().uploadUsageFile(this.id, content);
+        return Model.parse(UsageFile, usageFile);
+    }
+
+    /**
+        Submits `this` UsageFile.
+
+        @returns The UsageFile returned from the server.
+    **/
+    public function submit(): UsageFile {
+        final usageFile = Env.getUsageApi().submitUsageFileAction(this.id);
+        return Model.parse(UsageFile, usageFile);
+    }
+
+    /**
+        Accepts `this` UsageFile.
+
+        @returns The UsageFile returned from the server.
+    **/
+    public function accept(note: String): UsageFile {
+        final usageFile = Env.getUsageApi().acceptUsageFileAction(this.id, note);
+        return Model.parse(UsageFile, usageFile);
+    }
+
+    /**
+        Rejects `this` UsageFile.
+
+        @returns The UsageFile returned from the server.
+    **/
+    public function reject(note: String): UsageFile {
+        final usageFile = Env.getUsageApi().rejectUsageFileAction(this.id, note);
+        return Model.parse(UsageFile, usageFile);
+    }
+
+    /**
+        Cancels `this` UsageFile.
+
+        @returns The UsageFile returned from the server.
+    **/
+    public function close(): UsageFile {
+        final usageFile = Env.getUsageApi().closeUsageFileAction(this.id);
+        return Model.parse(UsageFile, usageFile);
+    }
+
+    /**
+        Gets the contents of the product specific file template for `this` UsageFile.
+    **/
+    public function getTemplate(): Blob {
+        try {
+            final link = getTemplateLink();
+            final response = Env.getApiClient().syncRequest('GET', link, null, null, null, null, null, null);
+            return response.data;
+        } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+    /**
+        Gets the product specific file template URL for `this` UsageFile.
+    **/
+    public function getTemplateLink(): String {
+        final link = haxe.Json.parse(Env.getUsageApi().getProductSpecificUsageFileTemplate(this.id));
+        return link.template_link;
+    }
+
+    /**
+        Uploads the contents of a reconciliation file to `this` UsageFile.
+
+        @param content The contents of an XLSX file.
+        @returns The UsageFile returned from the server.
+    **/
+    public function uploadReconciliation(content: Blob): UsageFile {
+        final usageFile = Env.getUsageApi().uploadReconciliationFileFromProvider(this.id, content);
+        return Model.parse(UsageFile, usageFile);
+    }
+
+    /**
+        Reprocesses a processed file. This is called by the provider after the provider closes
+        some usage records manually.
+
+        @returns The UsageFile returned from the server.
+    **/
+    public function reprocess(): UsageFile {
+        final usageFile = Env.getUsageApi().reprocessProcessedFile(this.id);
+        return Model.parse(UsageFile, usageFile);
     }
 }

@@ -2,6 +2,8 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
+import connect.api.IApiClient;
+import connect.api.Response;
 import connect.Env;
 import connect.models.Account;
 import connect.models.Contract;
@@ -11,44 +13,32 @@ import connect.models.UsageFile;
 import connect.models.UsageParam;
 import connect.models.UsageRecord;
 import connect.models.UsageStats;
+import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.DateTime;
 import connect.util.Dictionary;
 import massive.munit.Assert;
+import sys.io.File;
 import test.mocks.Mock;
 
 
 class UsageFileTest {
-    /*
     @Before
     public function setup() {
-        Env._reset(new Dictionary()
-            .setString('IUsageApi', 'test.mocks.UsageApiMock')
-            .setString('IApiClient', 'test.mocks.ApiClientMock'));
+        Env._reset(new UsageFileApiClientMock());
     }
-
 
     @Test
     public function testList() {
-        // Check subject
         final usageFiles = UsageFile.list(null);
         Assert.isType(usageFiles, Collection);
         Assert.areEqual(1, usageFiles.length());
         Assert.isType(usageFiles.get(0), UsageFile);
         Assert.areEqual('UF-2018-11-9878764342', usageFiles.get(0).id);
-
-        // Check mocks
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('listUsageFiles'));
-        Assert.areEqual(
-            [null].toString(),
-            apiMock.callArgs('listUsageFiles', 0).toString());
     }
-
 
     @Test
     public function testGetOk() {
-        // Check subject
         final usageFile = UsageFile.get('UF-2018-11-9878764342');
         Assert.isType(usageFile, UsageFile);
         Assert.isType(usageFile.product, Product);
@@ -84,93 +74,38 @@ class UsageFileTest {
         Assert.areEqual('Error details in case of usage file is marked as invalid', usageFile.errorDetail);
         Assert.areEqual(56, usageFile.stats.validated);
         Assert.areEqual(0, usageFile.stats.uploaded);
-
-        // Check mocks
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getUsageFile'));
-        Assert.areEqual(
-            ['UF-2018-11-9878764342'].toString(),
-            apiMock.callArgs('getUsageFile', 0).toString());
     }
-
 
     @Test
     public function testGetKo() {
-        // Check subject
-        final usageFile = UsageFile.get('UF-XXXX-XX-XXXXXXXXXX');
-        Assert.isNull(usageFile);
-
-        // Check mocks
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getUsageFile'));
-        Assert.areEqual(
-            ['UF-XXXX-XX-XXXXXXXXXX'].toString(),
-            apiMock.callArgs('getUsageFile', 0).toString());
+        Assert.isNull(UsageFile.get('UF-XXXX-XX-XXXXXXXXXX'));
     }
-
 
     @Test
     public function testRegister() {
-        // Check subject
-        final usageFile = new UsageFile().register();
-        Assert.isType(usageFile, UsageFile);
-        Assert.areEqual('UF-2018-11-9878764342', usageFile.id);
-
-        // Check mocks
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('createUsageFile'));
-        Assert.areEqual(
-            [new UsageFile()].toString(),
-            apiMock.callArgs('createUsageFile', 0).toString());
+        Assert.isType(new UsageFile().register(), UsageFile);
     }
-
 
     @Test
     public function testUpdate() {
-        // Check subject
         final usageFile = UsageFile.get('UF-2018-11-9878764342');
         usageFile.note = 'Hello, world!';
         final updatedFile = usageFile.update();
         Assert.isType(updatedFile, UsageFile);
-        Assert.areEqual(UsageFile.get('UF-2018-11-9878764342').toString(), updatedFile.toString());
-        // ^ The mock returns that file
-
-        // Check mocks
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('updateUsageFile'));
-        Assert.areEqual(
-            [usageFile.id, usageFile._toDiffString()].toString(),
-            apiMock.callArgs('updateUsageFile', 0).toString());
+        Assert.areNotEqual(updatedFile, usageFile);
     }
-
 
     @Test
     public function testUpdateNoChanges() {
-        // Check subject
         final usageFile = UsageFile.get('UF-2018-11-9878764342');
         final updatedFile = usageFile.update();
-        Assert.isType(updatedFile, UsageFile);
-        Assert.areEqual(usageFile.toString(), updatedFile.toString());
-
-        // Check mocks
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(0, apiMock.callCount('updateUsageFile'));
+        Assert.areEqual(updatedFile, usageFile);
     }
-
 
     @Test
     public function testDelete() {
-        final usageFile = UsageFile.get('UF-2018-11-9878764342');
-        usageFile.delete();
-
-        // Check mocks
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('deleteUsageFile'));
-        Assert.areEqual(
-            ['UF-2018-11-9878764342'].toString(),
-            apiMock.callArgs('deleteUsageFile', 0).toString());
+        Assert.isTrue(UsageFile.get('UF-2018-11-9878764342').delete());
     }
-
 
     @Test
     public function testUploadRecords() {
@@ -180,7 +115,7 @@ class UsageFileTest {
     #else
         final sheetName = 'test/mocks/data/sheet.xlsx';
     #end
-    * /
+    */
 
         // Create dates
         final today = DateTime.now();
@@ -210,172 +145,108 @@ class UsageFileTest {
         // Check subject
         final usageFile = new UsageFile().register();
         final newFile = usageFile.uploadRecords(records);
-        Assert.isType(newFile, UsageFile);
-        Assert.areEqual(UsageFile.get('UF-2018-11-9878764342').toString(), newFile.toString());
-        // ^ The mock returns that file
-
-        // Check mocks (does not work because the generated file always differs in date)
-        /*
-        final args: Array<Dynamic> = [usageFile.id, Blob.load(sheetName)];
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('uploadUsageFile'));
-        Assert.areEqual(
-            args.toString(),
-            apiMock.callArgs('uploadUsageFile', 0).toString());
-        * /
+        Assert.areNotEqual(newFile, usageFile);
     }
-
 
     @Test
     public function testUpload() {
-        // Check subject
         final usageFile = UsageFile.get('UF-2018-11-9878764342');
         final newFile = usageFile.upload(null);
-        Assert.isType(newFile, UsageFile);
-        Assert.areEqual(UsageFile.get('UF-2018-11-9878764342').toString(), newFile.toString());
-        // ^ The mock returns that file
-
-        // Check mocks
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('uploadUsageFile'));
-        Assert.areEqual(
-            [usageFile.id, null].toString(),
-            apiMock.callArgs('uploadUsageFile', 0).toString());
+        Assert.areNotEqual(newFile, usageFile);
     }
-
 
     @Test
     public function testSubmit() {
-        // Check subject
         final usageFile = UsageFile.get('UF-2018-11-9878764342');
         final newFile = usageFile.submit();
-        Assert.isType(newFile, UsageFile);
-        Assert.areEqual(UsageFile.get('UF-2018-11-9878764342').toString(), newFile.toString());
-        // ^ The mock returns that file
-
-        // Check mocks
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('submitUsageFileAction'));
-        Assert.areEqual(
-            [usageFile.id].toString(),
-            apiMock.callArgs('submitUsageFileAction', 0).toString());
+        Assert.areNotEqual(newFile, usageFile);
     }
-
 
     @Test
     public function testAccept() {
-        // Check subject
         final usageFile = UsageFile.get('UF-2018-11-9878764342');
         final newFile = usageFile.accept('Accept');
-        Assert.isType(newFile, UsageFile);
-        Assert.areEqual(UsageFile.get('UF-2018-11-9878764342').toString(), newFile.toString());
-        // ^ The mock returns that file
-
-        // Check mocks
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('acceptUsageFileAction'));
-        Assert.areEqual(
-            [usageFile.id, 'Accept'].toString(),
-            apiMock.callArgs('acceptUsageFileAction', 0).toString());
+        Assert.areNotEqual(newFile, usageFile);
     }
-
 
     @Test
     public function testReject() {
-        // Check subject
         final usageFile = UsageFile.get('UF-2018-11-9878764342');
         final newFile = usageFile.reject('Reject');
-        Assert.isType(newFile, UsageFile);
-        Assert.areEqual(UsageFile.get('UF-2018-11-9878764342').toString(), newFile.toString());
-        // ^ The mock returns that file
-
-        // Check mocks
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('rejectUsageFileAction'));
-        Assert.areEqual(
-            [usageFile.id, 'Reject'].toString(),
-            apiMock.callArgs('rejectUsageFileAction', 0).toString());
+        Assert.areNotEqual(newFile, usageFile);
     }
-
 
     @Test
     public function testClose() {
-        // Check subject
         final usageFile = UsageFile.get('UF-2018-11-9878764342');
         final newFile = usageFile.close();
-        Assert.isType(newFile, UsageFile);
-        Assert.areEqual(UsageFile.get('UF-2018-11-9878764342').toString(), newFile.toString());
-        // ^ The mock returns that file
-
-        // Check mocks
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('closeUsageFileAction'));
-        Assert.areEqual(
-            [usageFile.id].toString(),
-            apiMock.callArgs('closeUsageFileAction', 0).toString());
+        Assert.areNotEqual(newFile, usageFile);
     }
-
 
     @Test
     public function testGetTemplate() {
-        // Check subject
-        final usageFile = UsageFile.get('UF-2018-11-9878764342');
-        final template = usageFile.getTemplate();
-        Assert.isNull(template);
-        //Assert.isType(template, ByteData);
-
-        // Check mocks
-        final apiMock = cast(Env.getApiClient(), Mock);
-        Assert.areEqual(1, apiMock.callCount('syncRequest'));
-        Assert.areEqual(
-            ['GET',
-            'https://storage.googleapis.com/apsconnect-rteam.appspot.com/PRD-783-078-030/template/TEMPLATE-PRD-783-078-030?GoogleAccessId=quickstart-usage-collector%40apsconnect-rteam.iam.gserviceaccount.com&Expires=1548767260&Signature=WKiObnvvZjEElgxrOyscXJKI82bZg%2BESUZThnpGXYTNKFkjKwr378TQwbSZlXa41cR4M0x1yCt2KqCbo45zxpgip8WTLpJx05RvMmIiNOGFwLjK6nd1pwfXKRM0aUmkbxQ1B4GF3hLJWMqCzWWzDN8UNP7vKi7mamlV%2F1gv16OGsGgpbHtEDSXHNMciQOHOa0Fue5O12zKmE0gh4j8RxHUA5hl8etss57rWHkoGfOSG0nCJAIKIHS%2FJ2EW2X9o1nIIDIqsNrESrItuekwLad5t6%2FtQW8CkVal3dC9jXhelR%2FzzcGRBlbTrDr6GHw%2FECGfnL8q9RxpH0tk335Wi7zpQ%3D%3D&response-content-disposition=attachment%3B+filename%3D%22TEMPLATE-PRD-783-078-030.csv%22',
-            null,
-            null,
-            null,
-            null,
-            null,
-            null].toString(),
-            apiMock.callArgs('syncRequest', 0).toString());
-        final usageMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(1, usageMock.callCount('getProductSpecificUsageFileTemplate'));
-        Assert.areEqual(
-            [usageFile.id].toString(),
-            usageMock.callArgs('getProductSpecificUsageFileTemplate', 0).toString());
+        Assert.isNull(UsageFile.get('UF-2018-11-9878764342').getTemplate());
     }
-
 
     @Test
     public function testGetTemplateLink() {
-        // Check subject
         final usageFile = UsageFile.get('UF-2018-11-9878764342');
         final link = usageFile.getTemplateLink();
         Assert.areEqual('https://storage.googleapis.com/apsconnect-rteam.appspot.com/PRD-783-078-030/template/TEMPLATE-PRD-783-078-030?GoogleAccessId=quickstart-usage-collector%40apsconnect-rteam.iam.gserviceaccount.com&Expires=1548767260&Signature=WKiObnvvZjEElgxrOyscXJKI82bZg%2BESUZThnpGXYTNKFkjKwr378TQwbSZlXa41cR4M0x1yCt2KqCbo45zxpgip8WTLpJx05RvMmIiNOGFwLjK6nd1pwfXKRM0aUmkbxQ1B4GF3hLJWMqCzWWzDN8UNP7vKi7mamlV%2F1gv16OGsGgpbHtEDSXHNMciQOHOa0Fue5O12zKmE0gh4j8RxHUA5hl8etss57rWHkoGfOSG0nCJAIKIHS%2FJ2EW2X9o1nIIDIqsNrESrItuekwLad5t6%2FtQW8CkVal3dC9jXhelR%2FzzcGRBlbTrDr6GHw%2FECGfnL8q9RxpH0tk335Wi7zpQ%3D%3D&response-content-disposition=attachment%3B+filename%3D%22TEMPLATE-PRD-783-078-030.csv%22', link);
-
-        // Check mocks
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getProductSpecificUsageFileTemplate'));
-        Assert.areEqual(
-            [usageFile.id].toString(),
-            apiMock.callArgs('getProductSpecificUsageFileTemplate', 0).toString());
     }
-
 
     @Test
     public function testReprocess() {
-        // Check subject
         final usageFile = UsageFile.get('UF-2018-11-9878764342');
         final newFile = usageFile.reprocess();
-        Assert.isType(newFile, UsageFile);
-        Assert.areEqual(UsageFile.get('UF-2018-11-9878764342').toString(), newFile.toString());
-        // ^ The mock returns that file
-
-        // Check mocks
-        final apiMock = cast(Env.getUsageApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('reprocessProcessedFile'));
-        Assert.areEqual(
-            [usageFile.id].toString(),
-            apiMock.callArgs('reprocessProcessedFile', 0).toString());
+        Assert.areNotEqual(newFile, usageFile);
     }
-    */
+}
+
+class UsageFileApiClientMock extends Mock implements IApiClient {
+    static final FILE = 'test/unit/data/usagefiles.json';
+
+    public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
+        this.calledFunction('syncRequest', [method, url, headers, body,
+            fileArg, fileName, fileContent, certificate]);
+        switch (method) {
+            case 'GET':
+                switch (url) {
+                    case 'https://api.conn.rocks/public/v1/usage/files':
+                        return new Response(200, File.getContent(FILE), null);
+                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342':
+                        final usageFile = Mock.parseJsonFile(FILE)[0];
+                        return new Response(200, haxe.Json.stringify(usageFile), null);
+                    case 'https://api.conn.rocks/public/v1/usage/products/UF-2018-11-9878764342/template':
+                        return new Response(200, '{"template_link": "https://storage.googleapis.com/apsconnect-rteam.appspot.com/PRD-783-078-030/template/TEMPLATE-PRD-783-078-030?GoogleAccessId=quickstart-usage-collector%40apsconnect-rteam.iam.gserviceaccount.com&Expires=1548767260&Signature=WKiObnvvZjEElgxrOyscXJKI82bZg%2BESUZThnpGXYTNKFkjKwr378TQwbSZlXa41cR4M0x1yCt2KqCbo45zxpgip8WTLpJx05RvMmIiNOGFwLjK6nd1pwfXKRM0aUmkbxQ1B4GF3hLJWMqCzWWzDN8UNP7vKi7mamlV%2F1gv16OGsGgpbHtEDSXHNMciQOHOa0Fue5O12zKmE0gh4j8RxHUA5hl8etss57rWHkoGfOSG0nCJAIKIHS%2FJ2EW2X9o1nIIDIqsNrESrItuekwLad5t6%2FtQW8CkVal3dC9jXhelR%2FzzcGRBlbTrDr6GHw%2FECGfnL8q9RxpH0tk335Wi7zpQ%3D%3D&response-content-disposition=attachment%3B+filename%3D%22TEMPLATE-PRD-783-078-030.csv%22"}', null);
+                }
+            case 'POST':
+                switch (url) {
+                    case 'https://api.conn.rocks/public/v1/usage/files':
+                        return new Response(200, body, null);
+                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/delete':
+                        return new Response(204, null, null);
+                    case 'https://api.conn.rocks/public/v1/usage/files/upload':
+                        return new Response(200, '{}', null);
+                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/upload':
+                        return new Response(200, '{}', null);
+                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/submit':
+                        return new Response(200, '{}', null);
+                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/accept':
+                        return new Response(200, '{}', null);
+                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/reject':
+                        return new Response(200, '{}', null);
+                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/close':
+                        return new Response(200, '{}', null);
+                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/reprocess':
+                        return new Response(200, '{}', null);
+                }
+            case 'PUT':
+                if (url == 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342') {
+                    return new Response(200, body, null);
+                }
+        }
+        return new Response(404, null, null);
+    }
 }
