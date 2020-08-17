@@ -14,7 +14,6 @@ import massive.munit.Assert;
 import sys.io.File;
 import test.mocks.Mock;
 
-
 class CategoryTest {
     @Before
     public function setup() {

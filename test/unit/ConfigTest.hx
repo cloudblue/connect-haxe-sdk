@@ -6,7 +6,6 @@ import connect.Config;
 import connect.util.Collection;
 import massive.munit.Assert;
 
-
 class ConfigTest {
     private static final API_URL = 'http://localhost:8080/api/public/v1/';
     private static final API_KEY = 'ApiKey XXXX:YYYYY';

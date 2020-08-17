@@ -12,7 +12,6 @@ import connect.util.Dictionary;
 import massive.munit.Assert;
 import test.mocks.Mock;
 
-
 class ConfigurationTest {
     @Before
     public function setup() {

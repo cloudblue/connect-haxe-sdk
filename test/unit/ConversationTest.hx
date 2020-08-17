@@ -15,7 +15,6 @@ import massive.munit.Assert;
 import sys.io.File;
 import test.mocks.Mock;
 
-
 class ConversationTest {
     @Before
     public function setup() {
