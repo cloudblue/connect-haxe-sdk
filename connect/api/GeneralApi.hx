@@ -166,7 +166,7 @@ class GeneralApi extends Base {
     }
 
     public function getProductMedia(id: String, mediaId: String): String {
-        return ConnectHelper.post(PRODUCTS_PATH, id, 'media/${mediaId}');
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'media/${mediaId}');
     }
 
     public function updateProductMedia(id: String, mediaId: String, media: String): String {
