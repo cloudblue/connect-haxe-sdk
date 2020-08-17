@@ -2,7 +2,8 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-import haxe.DynamicAccess;
+import connect.api.IApiClient;
+import connect.api.Response;
 import connect.Env;
 import connect.models.Account;
 import connect.models.Country;
@@ -13,21 +14,17 @@ import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.Dictionary;
 import massive.munit.Assert;
+import sys.io.File;
 import test.mocks.Mock;
 
-
 class MarketplaceTest {
-    /*
     @Before
     public function setup() {
-        Env._reset(new Dictionary()
-            .setString('IMarketplaceApi', 'test.mocks.MarketplaceApiMock'));
+        Env._reset(new MarketplaceApiClientMock());
     }
-
 
     @Test
     public function testList() {
-        // Check subject
         final marketplaces = Marketplace.list(null);
         Assert.isType(marketplaces, Collection);
         Assert.areEqual(2, marketplaces.length());
@@ -35,19 +32,10 @@ class MarketplaceTest {
         Assert.isType(marketplaces.get(1), Marketplace);
         Assert.areEqual('MP-12345', marketplaces.get(0).id);
         Assert.areEqual('MP-54321', marketplaces.get(1).id);
-
-        // Check mock
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('listMarketplaces'));
-        Assert.areEqual(
-            [null].toString(),
-            apiMock.callArgs('listMarketplaces', 0).toString());
     }
-
 
     @Test
     public function testGetOk() {
-        // Check subject
         final marketplace = Marketplace.get('MP-12345');
         Assert.isType(marketplace, Marketplace);
         Assert.isType(marketplace.owner, Account);
@@ -71,105 +59,78 @@ class MarketplaceTest {
         Assert.areEqual('India', marketplace.countries.get(0).name);
         Assert.areEqual('/media/countries/india.png', marketplace.countries.get(0).icon);
         Assert.areEqual('Asia', marketplace.countries.get(0).zone);
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getMarketplace'));
-        Assert.areEqual(
-            ['MP-12345'].toString(),
-            apiMock.callArgs('getMarketplace', 0).toString());
     }
-
 
     @Test
     public function testGetKo() {
-        // Check subject
-        final marketplace = Marketplace.get('MP-XXXXX');
-        Assert.isNull(marketplace);
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getMarketplace'));
-        Assert.areEqual(
-            ['MP-XXXXX'].toString(),
-            apiMock.callArgs('getMarketplace', 0).toString());
+        Assert.isNull(Marketplace.get('MP-XXXXX'));
     }
-
 
     @Test
     public function testRegister() {
-        // Check subject
-        final marketplace = new Marketplace().register();
-        Assert.isType(marketplace, Marketplace);
-        Assert.areEqual('MP-12345', marketplace.id);
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('createMarketplace'));
-        Assert.areEqual(
-            [new Marketplace()].toString(),
-            apiMock.callArgs('createMarketplace', 0).toString());
+        Assert.isType(new Marketplace().register(), Marketplace);
     }
-
 
     @Test
     public function testUpdate() {
-        // Check subject
         final marketplace = Marketplace.get('MP-12345');
         marketplace.zone = 'US';
         final updatedMarketplace = marketplace.update();
         Assert.isType(updatedMarketplace, Marketplace);
-        Assert.areEqual(Marketplace.get('MP-12345').toString(), updatedMarketplace.toString());
-        // ^ The mock returns that request
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('updateMarketplace'));
-        Assert.areEqual(
-            [marketplace.id, marketplace._toDiffString()].toString(),
-            apiMock.callArgs('updateMarketplace', 0).toString());
+        Assert.areNotEqual(updatedMarketplace, marketplace);
     }
-
 
     @Test
     public function testUpdateNoChanges() {
-        // Check subject
         final marketplace = Marketplace.get('MP-12345');
         final updatedMarketplace = marketplace.update();
         Assert.isType(updatedMarketplace, Marketplace);
-        Assert.areEqual(marketplace.toString(), updatedMarketplace.toString());
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(0, apiMock.callCount('updateMarketplace'));
+        Assert.areEqual(updatedMarketplace, marketplace);
     }
-
 
     @Test
     public function testSetIcon() {
-        // Check subject
-        Marketplace.get('MP-12345').setIcon(Blob.load(null));
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('setMarketplaceIcon'));
-        Assert.areEqual(
-            Std.string(['MP-12345', Blob.load(null)]),
-            Std.string(apiMock.callArgs('setMarketplaceIcon', 0)));
+        Assert.isTrue(Marketplace.get('MP-12345').setIcon(Blob.load(null)));
     }
-
 
     @Test
     public function testRemove() {
-        // Check subject
-        Marketplace.get('MP-12345').remove();
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('deleteMarketplace'));
-        Assert.areEqual(
-            Std.string(['MP-12345']),
-            Std.string(apiMock.callArgs('deleteMarketplace', 0)));
+        Assert.isTrue(Marketplace.get('MP-12345').remove());
     }
-    */
+}
+
+class MarketplaceApiClientMock extends Mock implements IApiClient {
+    static final FILE = 'test/unit/data/marketplaces.json';
+
+    public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
+        this.calledFunction('syncRequest', [method, url, headers, body,
+            fileArg, fileName, fileContent, certificate]);
+        switch (method) {
+            case 'GET':
+                switch (url) {
+                    case 'https://api.conn.rocks/public/v1/marketplaces':
+                        return new Response(200, File.getContent(FILE), null);
+                    case 'https://api.conn.rocks/public/v1/marketplaces/MP-12345':
+                        final marketplace = Mock.parseJsonFile(FILE)[0];
+                        return new Response(200, haxe.Json.stringify(marketplace), null);
+                }
+            case 'POST':
+                switch (url) {
+                    case 'https://api.conn.rocks/public/v1/marketplaces':
+                        return new Response(200, body, null);
+                    case 'https://api.conn.rocks/public/v1/marketplaces/MP-12345/icon':
+                        return new Response(200, null, null);
+                }
+            case 'PUT':
+                if (url == 'https://api.conn.rocks/public/v1/marketplaces/MP-12345') {
+                    return new Response(200, body, null);
+                }
+            case 'DELETE':
+                if (url == 'https://api.conn.rocks/public/v1/marketplaces/MP-12345') {
+                    return new Response(204, null, null);
+                }
+        }
+        return new Response(404, null, null);
+    }
 }
