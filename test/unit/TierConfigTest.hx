@@ -2,6 +2,8 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
+import connect.api.IApiClient;
+import connect.api.Response;
 import connect.Env;
 import connect.models.Connection;
 import connect.models.Contract;
@@ -13,41 +15,29 @@ import connect.models.Template;
 import connect.models.TierAccount;
 import connect.models.TierConfig;
 import connect.models.TierConfigRequest;
+import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.Dictionary;
 import massive.munit.Assert;
+import sys.io.File;
 import test.mocks.Mock;
 
-
 class TierConfigTest {
-    /*
     @Before
     public function setup() {
-        Env._reset(new Dictionary()
-            .setString('ITierApi', 'test.mocks.TierApiMock'));
+        Env._reset(new TierConfigApiClientMock());
     }
-
 
     @Test
     public function testList() {
-        // Check subject
         final configs = TierConfig.list(null);
         Assert.isType(configs, Collection);
         Assert.areEqual(1, configs.length());
         Assert.isType(configs.get(0), TierConfig);
-
-        // Check mocks
-        final apiMock = cast(Env.getTierApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('listTierConfigs'));
-        Assert.areEqual(
-            [null].toString(),
-            apiMock.callArgs('listTierConfigs', 0).toString());
     }
-
 
     @Test
     public function testGetOk() {
-        // Check subject
         final config = TierConfig.get('TC-000-000-000');
         Assert.isType(config, TierConfig);
         Assert.isType(config.account, TierAccount);
@@ -87,46 +77,43 @@ class TierConfigTest {
         Assert.areEqual('2018-11-21T11:10:29+00:00', config.events.updated.at.toString());
         Assert.areEqual('PA-000-000', config.events.updated.by.id);
         Assert.areEqual('Username', config.events.updated.by.name);
-
-        // Check mocks
-        final apiMock = cast(Env.getTierApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getTierConfig'));
-        Assert.areEqual(
-            ['TC-000-000-000'].toString(),
-            apiMock.callArgs('getTierConfig', 0).toString());
     }
-
 
     @Test
     public function testGetKo() {
-        // Check subject
-        final config = TierConfig.get('TC-XXX-XXX-XXX');
-        Assert.isNull(config);
-
-        // Check mocks
-        final apiMock = cast(Env.getTierApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getTierConfig'));
-        Assert.areEqual(
-            ['TC-XXX-XXX-XXX'].toString(),
-            apiMock.callArgs('getTierConfig', 0).toString());
+        Assert.isNull(TierConfig.get('TC-XXX-XXX-XXX'));
     }
-
 
     @Test
     public function testGetParamByIdOk() {
-        final config = TierConfig.get('TC-000-000-000');
-        final param = config.getParamById('param_a');
+        final param = TierConfig.get('TC-000-000-000').getParamById('param_a');
         Assert.isType(param, Param);
         Assert.areEqual('param_a', param.id);
         Assert.areEqual('param_a_value', param.value);
     }
 
-
     @Test
     public function testGetParamByIdKo() {
-        final config = TierConfig.get('TC-000-000-000');
-        final param = config.getParamById('invalid-id');
-        Assert.isNull(param);
+        Assert.isNull(TierConfig.get('TC-000-000-000').getParamById('invalid-id'));
     }
-    */
+}
+
+class TierConfigApiClientMock extends Mock implements IApiClient {
+    static final FILE = 'test/unit/data/tierconfigs.json';
+
+    public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
+        this.calledFunction('syncRequest', [method, url, headers, body,
+            fileArg, fileName, fileContent, certificate]);
+        if (method == 'GET') {
+            switch (url) {
+                case 'https://api.conn.rocks/public/v1/tier/configs':
+                    return new Response(200, File.getContent(FILE), null);
+                case 'https://api.conn.rocks/public/v1/tier/configs/TC-000-000-000':
+                    final tc = Mock.parseJsonFile(FILE)[0];
+                    return new Response(200, haxe.Json.stringify(tc), null);
+            }
+        }
+        return new Response(404, null, null);
+    }
 }
