@@ -2,46 +2,36 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
+import connect.api.IApiClient;
+import connect.api.Response;
 import connect.Env;
 import connect.models.Listing;
 import connect.models.ListingRequest;
+import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.DateTime;
 import connect.util.Dictionary;
 import massive.munit.Assert;
+import sys.io.File;
 import test.mocks.Mock;
 
-
 class ListingRequestTest {
-    /*
     @Before
     public function setup() {
-        Env._reset(new Dictionary()
-            .setString('IMarketplaceApi', 'test.mocks.MarketplaceApiMock'));
+        Env._reset(new ListingRequestApiClientMock());
     }
-
 
     @Test
     public function testList() {
-        // Check subject
         final requests = ListingRequest.list(null);
         Assert.isType(requests, Collection);
         Assert.areEqual(1, requests.length());
         Assert.isType(requests.get(0), ListingRequest);
         Assert.areEqual('LSTR-409-308-930', requests.get(0).id);
-
-        // Check mock
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('listListingRequests'));
-        Assert.areEqual(
-            [null].toString(),
-            apiMock.callArgs('listListingRequests', 0).toString());
     }
-
 
     @Test
     public function testGetOk() {
-        // Check subject
         final request = ListingRequest.get('LSTR-409-308-930');
         Assert.isType(request, ListingRequest);
         Assert.isNull(request.product);
@@ -53,143 +43,92 @@ class ListingRequestTest {
         Assert.areEqual('LST-086-623-913', request.listing.id);
         Assert.isTrue(request.created.equals(DateTime.fromString('2018-12-12T14:45:14+00:00')));
         Assert.isTrue(request.updated.equals(DateTime.fromString('2018-12-12T14:45:14+00:00')));
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getListingRequest'));
-        Assert.areEqual(
-            ['LSTR-409-308-930'].toString(),
-            apiMock.callArgs('getListingRequest', 0).toString());
     }
-
 
     @Test
     public function testGetKo() {
-        // Check subject
-        final listing = ListingRequest.get('LSTR-XXX-XXX-XXX');
-        Assert.isNull(listing);
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getListingRequest'));
-        Assert.areEqual(
-            ['LSTR-XXX-XXX-XXX'].toString(),
-            apiMock.callArgs('getListingRequest', 0).toString());
+        Assert.isNull(ListingRequest.get('LSTR-XXX-XXX-XXX'));
     }
-
 
     @Test
     public function testRegister() {
-        // Check subject
         final request = new ListingRequest().register();
         Assert.isType(request, ListingRequest);
-        Assert.areEqual('LSTR-409-308-930', request.id);
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('createListingRequest'));
-        Assert.areEqual(
-            [new ListingRequest()].toString(),
-            apiMock.callArgs('createListingRequest', 0).toString());
     }
-
 
     @Test
     public function testAssign() {
-        // Check subject
-        final request = ListingRequest.get('LSTR-409-308-930');
-        request.assign();
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('assignListingRequest'));
-        Assert.areEqual(
-            ['LSTR-409-308-930'].toString(),
-            apiMock.callArgs('assignListingRequest', 0).toString());
+        Assert.isTrue(ListingRequest.get('LSTR-409-308-930').assign());
     }
-
 
     @Test
     public function testUnassign() {
-        // Check subject
-        ListingRequest.get('LSTR-409-308-930').unassign();
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('unassignListingRequest'));
-        Assert.areEqual(
-            ['LSTR-409-308-930'].toString(),
-            apiMock.callArgs('unassignListingRequest', 0).toString());
+        Assert.isTrue(ListingRequest.get('LSTR-409-308-930').unassign());
     }
-
 
     @Test
-    public function testChangetoDraft() {
-        // Check subject
-        ListingRequest.get('LSTR-409-308-930').changeToDraft();
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('changeListingRequestToDraft'));
-        Assert.areEqual(
-            ['LSTR-409-308-930'].toString(),
-            apiMock.callArgs('changeListingRequestToDraft', 0).toString());
+    public function testChangeToDraft() {
+        Assert.isTrue(ListingRequest.get('LSTR-409-308-930').changeToDraft());
     }
-
 
     @Test
-    public function testChangetoDeploying() {
-        // Check subject
-        ListingRequest.get('LSTR-409-308-930').changeToDeploying();
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('changeListingRequestToDeploying'));
-        Assert.areEqual(
-            ['LSTR-409-308-930'].toString(),
-            apiMock.callArgs('changeListingRequestToDeploying', 0).toString());
+    public function testChangeToDeploying() {
+        Assert.isTrue(ListingRequest.get('LSTR-409-308-930').changeToDeploying());
     }
-
 
     @Test
-    public function testChangetoCompleted() {
-        // Check subject
-        ListingRequest.get('LSTR-409-308-930').changeToCompleted();
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('changeListingRequestToCompleted'));
-        Assert.areEqual(
-            ['LSTR-409-308-930'].toString(),
-            apiMock.callArgs('changeListingRequestToCompleted', 0).toString());
+    public function testChangeToCompleted() {
+        Assert.isTrue(ListingRequest.get('LSTR-409-308-930').changeToCompleted());
     }
-
 
     @Test
-    public function testChangetoCanceled() {
-        // Check subject
-        ListingRequest.get('LSTR-409-308-930').changeToCanceled();
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('changeListingRequestToCanceled'));
-        Assert.areEqual(
-            ['LSTR-409-308-930'].toString(),
-            apiMock.callArgs('changeListingRequestToCanceled', 0).toString());
+    public function testChangeToCanceled() {
+        Assert.isTrue(ListingRequest.get('LSTR-409-308-930').changeToCanceled());
     }
-
 
     @Test
-    public function testChangetoReviewing() {
-        // Check subject
-        ListingRequest.get('LSTR-409-308-930').changeToReviewing();
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('changeListingRequestToReviewing'));
-        Assert.areEqual(
-            ['LSTR-409-308-930'].toString(),
-            apiMock.callArgs('changeListingRequestToReviewing', 0).toString());
+    public function testChangeToReviewing() {
+        Assert.isTrue(ListingRequest.get('LSTR-409-308-930').changeToReviewing());
     }
-    */
+}
+
+class ListingRequestApiClientMock extends Mock implements IApiClient {
+    static final FILE = 'test/unit/data/listingrequests.json';
+
+    public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
+        this.calledFunction('syncRequest', [method, url, headers, body,
+            fileArg, fileName, fileContent, certificate]);
+        switch (method) {
+            case 'GET':
+                switch (url) {
+                    case 'https://api.conn.rocks/public/v1/listing-requests':
+                        return new Response(200, File.getContent(FILE), null);
+                    case 'https://api.conn.rocks/public/v1/listing-requests/LSTR-409-308-930':
+                        final request = Mock.parseJsonFile(FILE)[0];
+                        return new Response(200, haxe.Json.stringify(request), null);
+                }
+            case 'POST':
+                switch (url) {
+                    case 'https://api.conn.rocks/public/v1/listing-requests':
+                        return new Response(200, body, null);
+                    case 'https://api.conn.rocks/public/v1/listing-requests/LSTR-409-308-930/assign':
+                        return new Response(202, '{}', null);
+                    case 'https://api.conn.rocks/public/v1/listing-requests/LSTR-409-308-930/unassign':
+                        return new Response(202, '{}', null);
+                    case 'https://api.conn.rocks/public/v1/listing-requests/LSTR-409-308-930/refine':
+                        return new Response(202, '{}', null);
+                    case 'https://api.conn.rocks/public/v1/listing-requests/LSTR-409-308-930/deploy':
+                        return new Response(202, '{}', null);
+                    case 'https://api.conn.rocks/public/v1/listing-requests/LSTR-409-308-930/complete':
+                        return new Response(202, '{}', null);
+                    case 'https://api.conn.rocks/public/v1/listing-requests/LSTR-409-308-930/cancel':
+                        return new Response(202, '{}', null);
+                    case 'https://api.conn.rocks/public/v1/listing-requests/LSTR-409-308-930/submit':
+                        return new Response(202, '{}', null);
+                }
+        }
+        trace('$url');
+        return new Response(404, null, null);
+    }
 }
