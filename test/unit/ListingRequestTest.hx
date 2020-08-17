@@ -128,7 +128,6 @@ class ListingRequestApiClientMock extends Mock implements IApiClient {
                         return new Response(202, '{}', null);
                 }
         }
-        trace('$url');
         return new Response(404, null, null);
     }
 }
