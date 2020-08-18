@@ -144,7 +144,7 @@ class UsageFileTest {
         // Check subject
         final usageFile = new UsageFile().register();
         final newFile = usageFile.uploadRecords(records);
-        Assert.areNotEqual(newFile, usageFile);
+        Assert.isType(newFile, UsageFile);
     }
 
     @Test

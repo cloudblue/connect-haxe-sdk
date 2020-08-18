@@ -40,7 +40,7 @@ class FlowAttemptsTest {
     @Test
     public function testAttempts() {
         var testFlow:TestFlow = new TestFlow();
-        var request_list = Model.parseArray(AssetRequest, sys.io.File.getContent('test/mocks/data/request_list.json'));
+        var request_list = Model.parseArray(AssetRequest, sys.io.File.getContent('test/unit/data/requests.json'));
         Assert.areEqual(0, testFlow.getCurrentAttempt());
         testFlow._run(request_list);
         Assert.areEqual(1, testFlow.getCurrentAttempt());

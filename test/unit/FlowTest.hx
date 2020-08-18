@@ -24,11 +24,11 @@ import sys.io.File;
 import test.util.ArrayLoggerWriter;
 
 class FlowTest {
-    private static final request_list:Collection<AssetRequest> = Model.parseArray(AssetRequest, sys.io.File.getContent('test/mocks/data/request_list.json'));
+    private static final request_list:Collection<AssetRequest> = Model.parseArray(AssetRequest, sys.io.File.getContent('test/unit/data/requests.json'));
     private static final tier_list:Collection<TierConfigRequest> = Model.parseArray(TierConfigRequest,
-        sys.io.File.getContent('test/mocks/data/tierconfigrequest_list.json'));
-    private static final listing_list:Collection<Listing> = Model.parseArray(Listing, sys.io.File.getContent('test/mocks/data/listing_list.json'));
-    private static final usage_list:Collection<UsageFile> = Model.parseArray(UsageFile, sys.io.File.getContent('test/mocks/data/usagefile_list.json'));
+        sys.io.File.getContent('test/unit/data/tierconfigrequests.json'));
+    private static final listing_list:Collection<Listing> = Model.parseArray(Listing, sys.io.File.getContent('test/unit/data/listings.json'));
+    private static final usage_list:Collection<UsageFile> = Model.parseArray(UsageFile, sys.io.File.getContent('test/unit/data/usagefiles.json'));
 
     @Before
     public function setup() {
