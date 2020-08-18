@@ -15,9 +15,9 @@ import connect.models.Param;
 import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.Dictionary;
+import haxe.Json;
 import massive.munit.Assert;
 import sys.io.File;
-import test.mocks.Mock;
 
 class AssetRequestTest {
     @Before
@@ -34,7 +34,7 @@ class AssetRequestTest {
         Assert.areEqual('PR-5852-1608-0000', requests.get(0).id);
         Assert.areEqual('PR-5852-1608-0001', requests.get(1).id);
         Assert.areEqual('ApiKey XXX', requests.get(0).assignee);
-        Assert.areEqual(haxe.Json.stringify({id: 'XXX'}), requests.get(1).assignee);
+        Assert.areEqual(Json.stringify({id: 'XXX'}), requests.get(1).assignee);
     }
 
     @Test
@@ -178,54 +178,55 @@ class AssetRequestTest {
     }
 }
 
-class AssetRequestApiClientMock extends Mock implements IApiClient {
+class AssetRequestApiClientMock implements IApiClient {
     static final FILE = 'test/unit/data/requests.json';
     static final CONVERSATIONS_FILE = 'test/unit/data/conversations.json';
 
+    public function new() {
+    }
+
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
-        this.calledFunction('syncRequest', [method, url, headers, body,
-            fileArg, fileName, fileContent, certificate]);
         switch (method) {
             case 'GET':
                 switch (url) {
                     case 'https://api.conn.rocks/public/v1/requests':
                         return new Response(200, File.getContent(FILE), null);
                     case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000':
-                        final list = Mock.parseJsonFile(FILE);
-                        return new Response(200, haxe.Json.stringify(list[0]), null);
+                        final list = Json.parse(File.getContent(FILE));
+                        return new Response(200, Json.stringify(list[0]), null);
                     case 'https://api.conn.rocks/public/v1/conversations?instance_id=PR-5852-1608-0000':
                         return new Response(200, '[]', null);
                     case 'https://api.conn.rocks/public/v1/conversations?instance_id=PR-5852-1608-0001':
                         return new Response(200, File.getContent(CONVERSATIONS_FILE), null);
                     case 'https://api.conn.rocks/public/v1/conversations/CO-000-000-000':
-                        final conv = Mock.parseJsonFile(CONVERSATIONS_FILE)[0];
-                        return new Response(200, haxe.Json.stringify(conv), null);
+                        final conv = Json.parse(File.getContent(CONVERSATIONS_FILE))[0];
+                        return new Response(200, Json.stringify(conv), null);
                 }
             case 'POST':
                 switch (url) {
                     case 'https://api.conn.rocks/public/v1/requests':
                         return new Response(200, body, null);
                     case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000/approve':
-                        final request = Mock.parseJsonFile(FILE)[0];
+                        final request = Json.parse(File.getContent(FILE))[0];
                         request.status = 'approved';
-                        return new Response(200, haxe.Json.stringify(request), null);
+                        return new Response(200, Json.stringify(request), null);
                     case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000/fail':
-                        final request = Mock.parseJsonFile(FILE)[0];
+                        final request = Json.parse(File.getContent(FILE))[0];
                         request.status = 'failed';
-                        return new Response(200, haxe.Json.stringify(request), null);
+                        return new Response(200, Json.stringify(request), null);
                     case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000/inquire':
-                        final request = Mock.parseJsonFile(FILE)[0];
+                        final request = Json.parse(File.getContent(FILE))[0];
                         request.status = 'inquired';
-                        return new Response(200, haxe.Json.stringify(request), null);
+                        return new Response(200, Json.stringify(request), null);
                     case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000/pend':
-                        final request = Mock.parseJsonFile(FILE)[0];
+                        final request = Json.parse(File.getContent(FILE))[0];
                         request.status = 'pending';
-                        return new Response(200, haxe.Json.stringify(request), null);
+                        return new Response(200, Json.stringify(request), null);
                     case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000/assign/XXX':
-                        final request = Mock.parseJsonFile(FILE)[0];
+                        final request = Json.parse(File.getContent(FILE))[0];
                         request.assignee = 'XXX';
-                        return new Response(200, haxe.Json.stringify(request), null);
+                        return new Response(200, Json.stringify(request), null);
                 }
             case 'PUT':
                 if (url == 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000') {

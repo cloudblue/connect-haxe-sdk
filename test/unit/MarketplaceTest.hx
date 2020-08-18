@@ -14,8 +14,8 @@ import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.Dictionary;
 import massive.munit.Assert;
+import haxe.Json;
 import sys.io.File;
-import test.mocks.Mock;
 
 class MarketplaceTest {
     @Before
@@ -99,21 +99,22 @@ class MarketplaceTest {
     }
 }
 
-class MarketplaceApiClientMock extends Mock implements IApiClient {
+class MarketplaceApiClientMock implements IApiClient {
     static final FILE = 'test/unit/data/marketplaces.json';
+
+    public function new() {
+    }
 
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
-        this.calledFunction('syncRequest', [method, url, headers, body,
-            fileArg, fileName, fileContent, certificate]);
         switch (method) {
             case 'GET':
                 switch (url) {
                     case 'https://api.conn.rocks/public/v1/marketplaces':
                         return new Response(200, File.getContent(FILE), null);
                     case 'https://api.conn.rocks/public/v1/marketplaces/MP-12345':
-                        final marketplace = Mock.parseJsonFile(FILE)[0];
-                        return new Response(200, haxe.Json.stringify(marketplace), null);
+                        final marketplace = Json.parse(File.getContent(FILE))[0];
+                        return new Response(200, Json.stringify(marketplace), null);
                 }
             case 'POST':
                 switch (url) {

@@ -7,7 +7,6 @@ import connect.util.Collection;
 import connect.util.Util;
 import massive.munit.Assert;
 
-
 class ModelTest {
     @Test
     public function testToObject() {

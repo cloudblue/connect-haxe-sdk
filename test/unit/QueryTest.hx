@@ -2,13 +2,11 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-
 import connect.api.Query;
 import connect.Env;
 import connect.util.Collection;
 import haxe.Json;
 import massive.munit.Assert;
-
 
 class QueryTest {
     @Before
@@ -44,7 +42,6 @@ class QueryTest {
         Assert.areEqual(copy.toString(), rql.toString());
     }
 
-
     @Test
     public function testDefault() {
         final def = new Query().equal('key', 'value');
@@ -53,14 +50,12 @@ class QueryTest {
         Assert.areEqual(rql.toString(), def.toString());
     }
 
-
     @Test
     public function testEqual() {
         final rql = new Query()
             .equal('key', 'value');
         Assert.areEqual('?eq(key,value)', rql.toString());
     }
-
 
     @Test
     public function testIn() {
@@ -69,14 +64,12 @@ class QueryTest {
         Assert.areEqual('?in(key,(value1,value2))', rql.toString());
     }
 
-
     @Test
     public function testSelect() {
         final rql = new Query()
             .select(new Collection<String>().push('attribute'));
         Assert.areEqual('?select(attribute)', rql.toString());
     }
-
 
     @Test
     public function testLike() {
@@ -85,14 +78,12 @@ class QueryTest {
         Assert.areEqual('?like(product.id,PR-)', rql.toString());
     }
 
-
     @Test
     public function testIlike() {
         final rql = new Query()
             .ilike('product.id', 'PR-');
         Assert.areEqual('?ilike(product.id,PR-)', rql.toString());
     }
-
 
     @Test
     public function testOut() {
@@ -101,14 +92,12 @@ class QueryTest {
         Assert.areEqual('?out(product.id,(PR-,CN-))', rql.toString());
     }
 
-
     @Test
     public function testOrderBy() {
         final rql = new Query()
             .orderBy('date');
         Assert.areEqual('?order_by=date', rql.toString());
     }
-
 
     @Test
     public function testNotEqual() {
@@ -117,14 +106,12 @@ class QueryTest {
         Assert.areEqual('?ne(property,value)', rql.toString());
     }
 
-
     @Test
     public function testGreater() {
         final rql = new Query()
             .greater('property', 'value');
         Assert.areEqual('?gt(property,value)', rql.toString());
     }
-
 
     @Test
     public function testGreaterOrEqual() {
@@ -133,14 +120,12 @@ class QueryTest {
         Assert.areEqual('?ge(property,value)', rql.toString());
     }
 
-
     @Test
     public function testLesser() {
         final rql = new Query()
             .lesser('property', 'value');
         Assert.areEqual('?lt(property,value)', rql.toString());
     }
-
 
     @Test
     public function testLesserOrEqual() {
@@ -149,14 +134,12 @@ class QueryTest {
         Assert.areEqual('?le(property,value)', rql.toString());
     }
 
-
     @Test
     public function testLimit() {
         final rql = new Query()
             .limit(10);
         Assert.areEqual('?limit=10', rql.toString());
     }
-
 
     @Test
     public function testOffset() {
@@ -165,14 +148,12 @@ class QueryTest {
         Assert.areEqual('?offset=10', rql.toString());
     }
 
-
     @Test
     public function testOrdering() {
         final rql = new Query()
             .ordering(new Collection<String>().push('property1').push('property2'));
         Assert.areEqual('?ordering(property1,property2)', rql.toString());
     }
-
 
     @Test
     public function testPlain() {
@@ -182,7 +163,6 @@ class QueryTest {
             .limit(100);
         Assert.areEqual('?property=value&limit=100&ordering(created)', rql.toPlain());
     }
-
 
     @Test
     public function testPlainWithOtherProperties() {

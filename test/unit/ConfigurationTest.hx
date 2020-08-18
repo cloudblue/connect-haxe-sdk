@@ -9,8 +9,9 @@ import connect.models.Asset;
 import connect.models.Param;
 import connect.util.Blob;
 import connect.util.Dictionary;
+import haxe.Json;
 import massive.munit.Assert;
-import test.mocks.Mock;
+import sys.io.File;
 
 class ConfigurationTest {
     @Before
@@ -34,15 +35,16 @@ class ConfigurationTest {
     }
 }
 
-class ConfigurationApiClientMock extends Mock implements IApiClient {
+class ConfigurationApiClientMock implements IApiClient {
     static final REQUESTS_FILE = 'test/unit/data/requests.json';
+
+    public function new() {
+    }
 
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
-        this.calledFunction('syncRequest', [method, url, headers, body,
-            fileArg, fileName, fileContent, certificate]);
         if (method == 'GET' && url == 'https://api.conn.rocks/public/v1/assets/AS-392-283-000-0') {
-            final asset = Mock.parseJsonFile(REQUESTS_FILE)[0].asset;
+            final asset = Json.parse(File.getContent(REQUESTS_FILE))[0].asset;
             return new Response(200, haxe.Json.stringify(asset), null);
         }
         return new Response(404, null, null);

@@ -8,8 +8,9 @@ import connect.logger.MarkdownLoggerFormatter;
 import connect.util.Collection;
 import massive.munit.Assert;
 
-
 class MarkdownLoggerFormatterTest {
+    private var fmt: ILoggerFormatter;
+
     @BeforeClass
     public function setup() {
         fmt = new MarkdownLoggerFormatter();
@@ -24,7 +25,6 @@ class MarkdownLoggerFormatterTest {
         Assert.areEqual('\n# \n', fmt.formatSection(Logger.LEVEL_INFO, 1, ''));
     }
 
-
     @Test
     public function testFormatBlock() {
         Assert.areEqual('\n> Hello, world\n', fmt.formatBlock(0,'Hello, world'));
@@ -34,14 +34,12 @@ class MarkdownLoggerFormatterTest {
         Assert.areEqual('\n> \n', fmt.formatBlock(0,''));
     }
 
-
     @Test
     public function testFormatCodeBlock() {
         final expected = '\n```json\n{"key": "value"}\n```\n';
         Assert.areEqual(expected, fmt.formatCodeBlock(0,'{"key": "value"}', 'json'));
         Assert.areEqual('\n```\n\n```\n', fmt.formatCodeBlock(0,'', ''));
     }
-
 
     @Test
     public function testFormatCodeBlockWithinBlock() {
@@ -50,7 +48,6 @@ class MarkdownLoggerFormatterTest {
             expected,
             fmt.formatBlock(0,fmt.formatCodeBlock(0,'{"key": "value"}', 'json')));
     }
-
 
     @Test
     public function testFormatList() {
@@ -62,7 +59,6 @@ class MarkdownLoggerFormatterTest {
         Assert.areEqual('\n\n', fmt.formatList(0,new Collection<String>()));
     }
 
-
     @Test
     public function testFormatTable() {
         final expected = '\n| One | Two |\n| --- | --- |\n| 1 | 2 |\n';
@@ -72,7 +68,4 @@ class MarkdownLoggerFormatterTest {
         Assert.areEqual(expected, fmt.formatTable(0,table));
         Assert.areEqual('\n\n', fmt.formatTable(0,new Collection<Collection<String>>()));
     }
-
-
-    private var fmt: ILoggerFormatter;
 }

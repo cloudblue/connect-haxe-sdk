@@ -18,9 +18,9 @@ import connect.models.TierConfigRequest;
 import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.Dictionary;
+import haxe.Json;
 import massive.munit.Assert;
 import sys.io.File;
-import test.mocks.Mock;
 
 class TierConfigTest {
     @Before
@@ -98,20 +98,21 @@ class TierConfigTest {
     }
 }
 
-class TierConfigApiClientMock extends Mock implements IApiClient {
+class TierConfigApiClientMock implements IApiClient {
     static final FILE = 'test/unit/data/tierconfigs.json';
+
+    public function new() {
+    }
 
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
-        this.calledFunction('syncRequest', [method, url, headers, body,
-            fileArg, fileName, fileContent, certificate]);
         if (method == 'GET') {
             switch (url) {
                 case 'https://api.conn.rocks/public/v1/tier/configs':
                     return new Response(200, File.getContent(FILE), null);
                 case 'https://api.conn.rocks/public/v1/tier/configs/TC-000-000-000':
-                    final tc = Mock.parseJsonFile(FILE)[0];
-                    return new Response(200, haxe.Json.stringify(tc), null);
+                    final tc = Json.parse(File.getContent(FILE))[0];
+                    return new Response(200, Json.stringify(tc), null);
             }
         }
         return new Response(404, null, null);

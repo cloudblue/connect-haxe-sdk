@@ -30,9 +30,9 @@ import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.DateTime;
 import connect.util.Dictionary;
+import haxe.Json;
 import massive.munit.Assert;
 import sys.io.File;
-import test.mocks.Mock;
 
 class AssetTest {
     @Before
@@ -309,23 +309,24 @@ class AssetTest {
     }
 }
 
-class AssetApiClientMock extends Mock implements IApiClient {
+class AssetApiClientMock implements IApiClient {
     static final FILE = 'test/unit/data/requests.json';
     static final TIERCONFIGS_FILE = 'test/unit/data/tierconfigs.json';
 
+    public function new() {
+    }
+
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
-        this.calledFunction('syncRequest', [method, url, headers, body,
-            fileArg, fileName, fileContent, certificate]);
         if (method == 'GET') {
             switch (url) {
                 case 'https://api.conn.rocks/public/v1/assets':
-                    return new Response(200, haxe.Json.stringify(getAssets()), null);
+                    return new Response(200, Json.stringify(getAssets()), null);
                 case 'https://api.conn.rocks/public/v1/assets/AS-392-283-000-0':
-                    return new Response(200, haxe.Json.stringify(getAssets()[0]), null);
+                    return new Response(200, Json.stringify(getAssets()[0]), null);
                 case 'https://api.conn.rocks/public/v1/assets/AS-392-283-000-0/requests':
-                    final requests = Mock.parseJsonFile(FILE).filter(r -> r.asset.id == 'AS-392-283-000-0');
-                    return new Response(200, haxe.Json.stringify(requests), null);
+                    final requests = Json.parse(File.getContent(FILE)).filter(r -> r.asset.id == 'AS-392-283-000-0');
+                    return new Response(200, Json.stringify(requests), null);
                 case 'https://api.conn.rocks/public/v1/assets/AS-XXX-XXX-XXX-X/requests':
                     return new Response(200, '[]', null);
                 case 'https://api.conn.rocks/public/v1/tier/configs?eq(account.id,TA-0-7304-8514-7000)&eq(product.id,CN-631-322-000)&eq(tier_level,0)':
@@ -338,6 +339,6 @@ class AssetApiClientMock extends Mock implements IApiClient {
     }
 
     private static function getAssets(): Array<Dynamic> {
-        return Mock.parseJsonFile(FILE).map(r -> r.asset);
+        return Json.parse(File.getContent(FILE)).map(r -> r.asset);
     }
 }

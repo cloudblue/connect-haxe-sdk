@@ -12,9 +12,9 @@ import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.DateTime;
 import connect.util.Dictionary;
+import haxe.Json;
 import massive.munit.Assert;
 import sys.io.File;
-import test.mocks.Mock;
 
 
 class ListingTest {
@@ -70,21 +70,22 @@ class ListingTest {
     }
 }
 
-class ListingApiClientMock extends Mock implements IApiClient {
+class ListingApiClientMock implements IApiClient {
     static final FILE = 'test/unit/data/listings.json';
+
+    public function new() {
+    }
 
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
-        this.calledFunction('syncRequest', [method, url, headers, body,
-            fileArg, fileName, fileContent, certificate]);
         switch (method) {
             case 'GET':
                 switch (url) {
                     case 'https://api.conn.rocks/public/v1/listings':
                         return new Response(200, File.getContent(FILE), null);
                     case 'https://api.conn.rocks/public/v1/listings/LST-212-458-762':
-                        final listing = Mock.parseJsonFile(FILE)[0];
-                        return new Response(200, haxe.Json.stringify(listing), null);
+                        final listing = Json.parse(File.getContent(FILE))[0];
+                        return new Response(200, Json.stringify(listing), null);
                 }
             case 'PUT':
                 if (url == 'https://api.conn.rocks/public/v1/listings/LST-212-458-762') {

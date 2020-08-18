@@ -10,9 +10,9 @@ import connect.models.Family;
 import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.Dictionary;
+import haxe.Json;
 import massive.munit.Assert;
 import sys.io.File;
-import test.mocks.Mock;
 
 class CategoryTest {
     @Before
@@ -49,20 +49,21 @@ class CategoryTest {
     }
 }
 
-class CategoryApiClientMock extends Mock implements IApiClient {
+class CategoryApiClientMock implements IApiClient {
     static final FILE = 'test/unit/data/categories.json';
+
+    public function new() {
+    }
 
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
-        this.calledFunction('syncRequest', [method, url, headers, body,
-            fileArg, fileName, fileContent, certificate]);
         if (method == 'GET') {
             switch (url) {
                 case 'https://api.conn.rocks/public/v1/categories':
                     return new Response(200, File.getContent(FILE), null);
                 case 'https://api.conn.rocks/public/v1/categories/CAT-00012':
-                    final category = Mock.parseJsonFile(FILE)[0];
-                    return new Response(200, haxe.Json.stringify(category), null);
+                    final category = Json.parse(File.getContent(FILE))[0];
+                    return new Response(200, Json.stringify(category), null);
             }
         }
         return new Response(404, null, null);

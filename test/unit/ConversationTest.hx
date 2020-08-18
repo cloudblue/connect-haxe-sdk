@@ -11,9 +11,9 @@ import connect.models.User;
 import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.Dictionary;
+import haxe.Json;
 import massive.munit.Assert;
 import sys.io.File;
-import test.mocks.Mock;
 
 class ConversationTest {
     @Before
@@ -77,21 +77,22 @@ class ConversationTest {
     }
 }
 
-class ConversationApiClientMock extends Mock implements IApiClient {
+class ConversationApiClientMock implements IApiClient {
     static final FILE = 'test/unit/data/conversations.json';
+
+    public function new() {
+    }
 
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
-        this.calledFunction('syncRequest', [method, url, headers, body,
-            fileArg, fileName, fileContent, certificate]);
         switch (method) {
             case 'GET':
                 switch (url) {
                     case 'https://api.conn.rocks/public/v1/conversations':
                         return new Response(200, File.getContent(FILE), null);
                     case 'https://api.conn.rocks/public/v1/conversations/CO-000-000-000':
-                        final conv = Mock.parseJsonFile(FILE)[0];
-                        return new Response(200, haxe.Json.stringify(conv), null);
+                        final conv = Json.parse(File.getContent(FILE))[0];
+                        return new Response(200, Json.stringify(conv), null);
                 }
             case 'POST':
                 switch (url) {

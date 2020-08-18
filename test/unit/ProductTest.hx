@@ -23,9 +23,9 @@ import connect.models.ProductConfigurationParam;
 import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.Dictionary;
+import haxe.Json;
 import massive.munit.Assert;
 import sys.io.File;
-import test.mocks.Mock;
 
 class ProductTest {
     @Before
@@ -421,7 +421,7 @@ class ProductTest {
     }
 }
 
-class ProductApiClientMock extends Mock implements IApiClient {
+class ProductApiClientMock implements IApiClient {
     static final FILE = 'test/unit/data/products.json';
     static final ACTIONS_FILE = 'test/unit/data/actions.json';
     static final AGREEMENTS_FILE = 'test/unit/data/agreements.json';
@@ -432,23 +432,24 @@ class ProductApiClientMock extends Mock implements IApiClient {
     static final PARAMS_FILE = 'test/unit/data/params.json';
     static final TEMPLATES_FILE = 'test/unit/data/templates.json';
 
+    public function new() {
+    }
+
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
-        this.calledFunction('syncRequest', [method, url, headers, body,
-            fileArg, fileName, fileContent, certificate]);
         switch (method) {
             case 'GET':
                 switch (url) {
                     case 'https://api.conn.rocks/public/v1/products':
                         return new Response(200, File.getContent(FILE), null);
                     case 'https://api.conn.rocks/public/v1/products/PRD-783-317-575':
-                        final product = Mock.parseJsonFile(FILE)[0];
-                        return new Response(200, haxe.Json.stringify(product), null);
+                        final product = Json.parse(File.getContent(FILE))[0];
+                        return new Response(200, Json.stringify(product), null);
                     case 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/actions':
                         return new Response(200, File.getContent(ACTIONS_FILE), null);
                     case 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/actions/sso_action':
-                        final action = Mock.parseJsonFile(ACTIONS_FILE)[0];
-                        return new Response(200, haxe.Json.stringify(action), null);
+                        final action = Json.parse(File.getContent(ACTIONS_FILE))[0];
+                        return new Response(200, Json.stringify(action), null);
                     case 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/actions/sso_action/actionLink':
                         return new Response(200, '{"link": "https://stub-dot-mydevball.appspot.com/?jwt=eyJhbGciOi"}', null);
                     case 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/connections':
@@ -462,13 +463,13 @@ class ProductApiClientMock extends Mock implements IApiClient {
                     case 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/versions':
                         return new Response(200, File.getContent(FILE), null);
                     case 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/versions/2':
-                        final product = Mock.parseJsonFile(FILE)[0];
-                        return new Response(200, haxe.Json.stringify(product), null);
+                        final product = Json.parse(File.getContent(FILE))[0];
+                        return new Response(200, Json.stringify(product), null);
                     case 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/versions/2/actions':
                         return new Response(200, File.getContent(ACTIONS_FILE), null);
                     case 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/versions/2/actions/sso_action':
-                        final action = Mock.parseJsonFile(ACTIONS_FILE)[0];
-                        return new Response(200, haxe.Json.stringify(action), null);
+                        final action = Json.parse(File.getContent(ACTIONS_FILE))[0];
+                        return new Response(200, Json.stringify(action), null);
                     case 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/versions/2/actions/sso_action/actionLink':
                         return new Response(200, '{"link": "https://stub-dot-mydevball.appspot.com/?jwt=eyJhbGciOi"}', null);
                     case 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/versions/2/items':
@@ -484,16 +485,16 @@ class ProductApiClientMock extends Mock implements IApiClient {
                     case 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/media':
                         return new Response(200, File.getContent(MEDIAS_FILE), null);
                     case 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/media/PRM-00000-00000-00000':
-                        final media = Mock.parseJsonFile(MEDIAS_FILE)[0];
-                        return new Response(200, haxe.Json.stringify(media), null);
+                        final media = Json.parse(File.getContent(MEDIAS_FILE))[0];
+                        return new Response(200, Json.stringify(media), null);
                 }
             case 'POST':
                 switch (url) {
                     case 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/configurations':
                         return new Response(200, body, null);
                     case 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/media':
-                        final media = Mock.parseJsonFile(MEDIAS_FILE)[0];
-                        return new Response(200, haxe.Json.stringify(media), null);
+                        final media = Json.parse(File.getContent(MEDIAS_FILE))[0];
+                        return new Response(200, Json.stringify(media), null);
                 }
             case 'PUT':
                 if (url == 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/media/PRM-00000-00000-00000') {
@@ -501,8 +502,8 @@ class ProductApiClientMock extends Mock implements IApiClient {
                 }
             case 'DELETE':
                 if (url == 'https://api.conn.rocks/public/v1/products/PRD-783-317-575/media/PRM-00000-00000-00000') {
-                    final media = Mock.parseJsonFile(MEDIAS_FILE)[0];
-                    return new Response(200, haxe.Json.stringify(media), null);
+                    final media = Json.parse(File.getContent(MEDIAS_FILE))[0];
+                    return new Response(200, Json.stringify(media), null);
                 }
         }
         return new Response(404, null, null);
