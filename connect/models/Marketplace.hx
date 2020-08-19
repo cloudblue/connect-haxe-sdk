@@ -8,7 +8,6 @@ import connect.api.Query;
 import connect.util.Blob;
 import connect.util.Collection;
 
-
 /**
     An object containing Distribution agreements with exact Hubs, enriched with additional
     information on details about the relation.
@@ -20,26 +19,20 @@ class Marketplace extends IdModel {
     /** Marketplace title, unique for an account. **/
     public var name: String;
 
-
     /** Markdown text describing the marketplace. **/
     public var description: String;
-
 
     /** How many active contracts were signed on the Marketplace. **/
     public var activeContracts: Int;
 
-
     /** Image identifying Marketplace object uploaded by user. **/
     public var icon: String;
-
 
     /** Provider account - the object owner. **/
     public var owner: Account;
 
-
     /** Collection of account-hub relations associated with the Marketplace object. **/
     public var hubs: Collection<ExtIdHub>;
-
 
     /**
         Zone where the marketplace is located, there can be following zones:
@@ -47,17 +40,13 @@ class Marketplace extends IdModel {
     **/
     public var zone: String;
 
-
     /** Collection of country objects associated with marketplace. **/
     public var countries: Collection<Country>;
-
 
     /** Is marketplace available for sourcing? **/
     public var sourcing: Bool;
 
-
     public var currency: String;
-
 
     public function new() {
         super();
@@ -67,7 +56,6 @@ class Marketplace extends IdModel {
             'countries' => 'Country'
         ]);
     }
-
 
     /**
         Lists all marketplaces that match the given filters. Supported filters are:
@@ -87,7 +75,6 @@ class Marketplace extends IdModel {
         return Model.parseArray(Marketplace, marketplaces);
     }
 
-
     /** @returns The Marketplace with the given id, or `null` if it was not found. **/
     public static function get(id: String): Marketplace {
         try {
@@ -97,7 +84,6 @@ class Marketplace extends IdModel {
             return null;
         }
     }
-
 
     /**
         Registers a new Marketplace on Connect, based on the data of `this` Marketplace.
@@ -112,7 +98,6 @@ class Marketplace extends IdModel {
             return null;
         }
     }
-
 
     /**
         Updates the Marketplace in the server with the data changed in `this` model.
@@ -141,19 +126,27 @@ class Marketplace extends IdModel {
         }
     }
 
-
     /**
      * Sets the icon of `this` Marketplace.
      */
-    public function setIcon(icon: Blob): Void {
-        Env.getMarketplaceApi().setMarketplaceIcon(this.id, icon);
+    public function setIcon(icon: Blob): Bool {
+        try {
+            Env.getMarketplaceApi().setMarketplaceIcon(this.id, icon);
+            return true;
+        } catch (ex: Dynamic) {
+            return false;
+        }
     }
-
 
     /**
      * Removes `this` Marketplace from Connect.
      */
-    public function remove(): Void {
-        Env.getMarketplaceApi().deleteMarketplace(this.id);
+    public function remove(): Bool {
+        try {
+            Env.getMarketplaceApi().deleteMarketplace(this.id);
+            return true;
+        } catch (ex: Dynamic) {
+            return false;
+        }
     }
 }

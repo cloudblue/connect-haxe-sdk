@@ -2,46 +2,38 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
+import connect.api.IApiClient;
+import connect.api.Response;
 import connect.Env;
 import connect.models.Listing;
 import connect.models.ListingRequest;
 import connect.models.Product;
+import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.DateTime;
 import connect.util.Dictionary;
+import haxe.Json;
 import massive.munit.Assert;
-import test.mocks.Mock;
+import sys.io.File;
 
 
 class ListingTest {
     @Before
     public function setup() {
-        Env._reset(new Dictionary()
-            .setString('IMarketplaceApi', 'test.mocks.MarketplaceApiMock'));
+        Env._reset(new ListingApiClientMock());
     }
-
 
     @Test
     public function testList() {
-        // Check subject
         final listings = Listing.list(null);
         Assert.isType(listings, Collection);
         Assert.areEqual(1, listings.length());
         Assert.isType(listings.get(0), Listing);
         Assert.areEqual('LST-212-458-762', listings.get(0).id);
-
-        // Check mock
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('listListings'));
-        Assert.areEqual(
-            [null].toString(),
-            apiMock.callArgs('listListings', 0).toString());
     }
-
 
     @Test
     public function testGetOk() {
-        // Check subject
         final listing = Listing.get('LST-212-458-762');
         Assert.isType(listing, Listing);
         Assert.isType(listing.product, Product);
@@ -53,60 +45,53 @@ class ListingTest {
         Assert.areEqual('Sample App', listing.product.name);
         Assert.isTrue(listing.created.equals(DateTime.fromString('2018-12-12T14:40:44+00:00')));
         Assert.areEqual('LSTR-086-623-913-001', listing.pendingRequest.id);
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getListing'));
-        Assert.areEqual(
-            ['LST-212-458-762'].toString(),
-            apiMock.callArgs('getListing', 0).toString());
     }
-
 
     @Test
     public function testGetKo() {
-        // Check subject
-        final listing = Listing.get('LST-XXX-XXX-XXX');
-        Assert.isNull(listing);
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getListing'));
-        Assert.areEqual(
-            ['LST-XXX-XXX-XXX'].toString(),
-            apiMock.callArgs('getListing', 0).toString());
+        Assert.isNull(Listing.get('LST-XXX-XXX-XXX'));
     }
-
 
     @Test
     public function testPut() {
-        // Check subject
         final listing = Listing.get('LST-212-458-762');
         listing.status = 'listed';
         final updatedListing = listing.put();
         Assert.isType(updatedListing, Listing);
-        Assert.areEqual(Listing.get('LST-212-458-762').toString(), updatedListing.toString());
-        // ^ The mock returns that request
-
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('putListing'));
-        Assert.areEqual(
-            [listing.id, listing._toDiffString()].toString(),
-            apiMock.callArgs('putListing', 0).toString());
+        Assert.areNotEqual(updatedListing, listing);
     }
-
 
     @Test
     public function testPutNoChanges() {
-        // Check subject
         final listing = Listing.get('LST-212-458-762');
         final updatedListing = listing.put();
         Assert.isType(updatedListing, Listing);
-        Assert.areEqual(listing.toString(), updatedListing.toString());
+        Assert.areEqual(updatedListing, listing);
+    }
+}
 
-        // Check mocks
-        final apiMock = cast(Env.getMarketplaceApi(), Mock);
-        Assert.areEqual(0, apiMock.callCount('putListing'));
+class ListingApiClientMock implements IApiClient {
+    static final FILE = 'test/unit/data/listings.json';
+
+    public function new() {
+    }
+
+    public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
+        switch (method) {
+            case 'GET':
+                switch (url) {
+                    case 'https://api.conn.rocks/public/v1/listings':
+                        return new Response(200, File.getContent(FILE), null);
+                    case 'https://api.conn.rocks/public/v1/listings/LST-212-458-762':
+                        final listing = Json.parse(File.getContent(FILE))[0];
+                        return new Response(200, Json.stringify(listing), null);
+                }
+            case 'PUT':
+                if (url == 'https://api.conn.rocks/public/v1/listings/LST-212-458-762') {
+                    return new Response(200, body, null);
+                }
+        }
+        return new Response(404, null, null);
     }
 }

@@ -2,17 +2,14 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-
 import connect.models.Model;
 import haxe.Json;
-
 
 class Helper {
     public static function sortStringObject<T>(cls: Class<T>, str: String): String {
         final obj = cast(Model.parse(cls, str), Model).toObject();
         return Json.stringify(sortObject(obj));
     }
-
 
     public static function sortObject(obj: Dynamic): Dynamic {
         final sortedObj = {};
@@ -22,11 +19,9 @@ class Helper {
         return sortedObj;
     }
 
-
     private static function sortArrayObjects(arr: Array<Dynamic>): Array<Dynamic> {
         return Lambda.map(arr, elem -> sortValue(elem));
     }
-
 
     private static function sortValue(value: Dynamic): Dynamic {
         switch (Type.typeof(value)) {

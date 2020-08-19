@@ -7,7 +7,6 @@ package connect.models;
 import connect.api.Query;
 import connect.util.Collection;
 
-
 /**
     Tier Accounts.
 **/
@@ -18,33 +17,25 @@ class TierAccount extends IdModel {
     /** Tier name. **/
     public var name: String;
 
-
     /** Type of account in respect to operation. One of: test, preview, production. **/
     public var environment: String;
-
 
     /** Scopes of the tier account in asset tier chain. Possible: tier1, tier2, customer **/
     public var scopes: Collection<String>;
 
-
     /** Tier ContactInfo object. **/
     public var contactInfo: ContactInfo;
-
 
     /** Marketplace Object reference **/
     public var marketplace: Marketplace;
 
-
     /** Hub Reference **/
     public var hub: Hub;
 
-
     // Undocumented fields (they appear in PHP SDK)
-
 
     /** Only in case of filtering by this field. **/
     public var externalUid: String;
-
 
     /**
         Lists all TierAccounts that match the given filters. Supported filters are:
@@ -67,7 +58,6 @@ class TierAccount extends IdModel {
         return Model.parseArray(TierAccount, accounts);
     }
 
-
     /** @returns The TierAccount with the given id, or `null` if it was not found. **/
     public static function get(id: String): TierAccount {
         try {
@@ -77,7 +67,6 @@ class TierAccount extends IdModel {
             return null;
         }
     }
-
 
     /**
      * Gets the TierConfig for `this` TierAccount, based on the product id and

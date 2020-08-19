@@ -1,66 +1,38 @@
 /*
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
- */
-
+*/
+import connect.api.IApiClient;
+import connect.api.Response;
 import connect.Env;
 import connect.Flow;
-import connect.Processor;
-import connect.models.Asset;
+import connect.logger.LoggerConfig;
+import connect.logger.MarkdownLoggerFormatter;
 import connect.models.AssetRequest;
 import connect.models.TierConfigRequest;
 import connect.models.Listing;
 import connect.models.UsageFile;
-import connect.models.Contract;
-import connect.models.Conversation;
-import connect.models.Marketplace;
 import connect.models.Model;
-import connect.models.Param;
+import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.Dictionary;
-import massive.munit.Assert;
-import test.mocks.Mock;
-import connect.api.Response;
-import connect.api.IApiClient;
-import connect.api.Query;
-import connect.api.Response;
-import connect.util.Blob;
-import connect.util.Dictionary;
 import connect.logger.LoggerHandler;
-import connect.logger.LoggerConfig;
-import test.util.ArrayLoggerWriter;
-import connect.logger.MarkdownLoggerFormatter;
+import haxe.Json;
+import massive.munit.Assert;
 import sys.FileSystem;
 import sys.io.File;
-
-class ApiClientFlowMock extends Mock implements IApiClient {
-    private static final REQUESTS_PATH = 'requests';
-
-    public function syncRequest(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob, certificate:String):Response {
-        this.calledFunction('syncRequest', [method, url, headers, body, fileArg, fileName, fileContent, certificate]);
-
-        if (StringTools.contains(url, REQUESTS_PATH) && method.toUpperCase() == 'GET') {
-            return new Response(200, Mock.parseJsonFile('test/mocks/data/request_list.json'), null);
-        }
-
-        if (StringTools.contains(url, REQUESTS_PATH) && method.toUpperCase() == 'PUT') {
-            return new Response(404, "No connection with the API", null);
-        }
-
-        return new Response(200, '[{"life": "The anwser is 42"}]', null);
-    }
-}
+import test.util.ArrayLoggerWriter;
 
 class FlowTest {
-    private static final request_list:Collection<AssetRequest> = Model.parseArray(AssetRequest, sys.io.File.getContent('test/mocks/data/request_list.json'));
+    private static final request_list:Collection<AssetRequest> = Model.parseArray(AssetRequest, sys.io.File.getContent('test/unit/data/requests.json'));
     private static final tier_list:Collection<TierConfigRequest> = Model.parseArray(TierConfigRequest,
-        sys.io.File.getContent('test/mocks/data/tierconfigrequest_list.json'));
-    private static final listing_list:Collection<Listing> = Model.parseArray(Listing, sys.io.File.getContent('test/mocks/data/listing_list.json'));
-    private static final usage_list:Collection<UsageFile> = Model.parseArray(UsageFile, sys.io.File.getContent('test/mocks/data/usagefile_list.json'));
+        sys.io.File.getContent('test/unit/data/tierconfigrequests.json'));
+    private static final listing_list:Collection<Listing> = Model.parseArray(Listing, sys.io.File.getContent('test/unit/data/listings.json'));
+    private static final usage_list:Collection<UsageFile> = Model.parseArray(UsageFile, sys.io.File.getContent('test/unit/data/usagefiles.json'));
 
     @Before
     public function setup() {
-        Env._reset(new Dictionary().setString('IApiClient', 'ApiClientFlowMock'));
+        Env._reset(new FlowApiClientMock());
         var maskedFields:Collection<String> = new Collection();
         Env.initLogger(new LoggerConfig().handlers(new Collection<LoggerHandler>().push(new LoggerHandler(new MarkdownLoggerFormatter(),
             new ArrayLoggerWriter())))
@@ -151,5 +123,24 @@ class FlowTest {
         } catch (ex:Dynamic) {
             Assert.fail("Process fail");
         }
+    }
+}
+
+class FlowApiClientMock implements IApiClient {
+    private static final REQUESTS_PATH = 'requests';
+
+    public function new() {
+    }
+
+    public function syncRequest(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob, certificate:String):Response {
+        if (StringTools.contains(url, REQUESTS_PATH) && method.toUpperCase() == 'GET') {
+            return new Response(200, Json.parse(File.getContent('test/mocks/data/request_list.json')), null);
+        }
+
+        if (StringTools.contains(url, REQUESTS_PATH) && method.toUpperCase() == 'PUT') {
+            return new Response(404, "No connection with the API", null);
+        }
+
+        return new Response(200, '[{"life": "The anwser is 42"}]', null);
     }
 }

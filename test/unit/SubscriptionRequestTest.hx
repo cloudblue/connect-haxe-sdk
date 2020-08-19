@@ -10,15 +10,14 @@ import connect.models.SubscriptionRequestAttributes;
 import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.Dictionary;
+import haxe.Json;
 import massive.munit.Assert;
 import sys.io.File;
-import test.mocks.Mock;
 
 class SubscriptionRequestTest {
     @Before
     public function setup() {
-        Env._reset(new Dictionary()
-            .set('IApiClient', 'SubscriptionRequestApiClientMock'));
+        Env._reset(new SubscriptionRequestApiClientMock());
     }
 
     @Test
@@ -85,21 +84,22 @@ class SubscriptionRequestTest {
     }
 }
 
-class SubscriptionRequestApiClientMock extends Mock implements IApiClient {
-    static final FILE = 'test/unit/data/subscriptionrequest_list.json';
+class SubscriptionRequestApiClientMock implements IApiClient {
+    static final FILE = 'test/unit/data/subscriptionrequests.json';
+
+    public function new() {
+    }
 
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
-        this.calledFunction('syncRequest', [method, url, headers, body,
-            fileArg, fileName, fileContent, certificate]);
         switch (method) {
             case 'GET':
                 switch (url) {
                     case 'https://api.conn.rocks/public/v1/subscriptions/requests':
                         return new Response(200, File.getContent(FILE), null);
                     case 'https://api.conn.rocks/public/v1/subscriptions/requests/BRP-0000-0000-0001-0001':
-                        final list = Mock.parseJsonFile(FILE);
-                        return new Response(200, haxe.Json.stringify(list[0]), null);
+                        final list = Json.parse(File.getContent(FILE));
+                        return new Response(200, Json.stringify(list[0]), null);
                 }
             case 'POST':
                 if (url == 'https://api.conn.rocks/public/v1/subscriptions/requests') {

@@ -2,23 +2,19 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-import connect.logger.LoggerConfig;
-import connect.api.IApiClient;
-import connect.api.Response;
 import connect.Env;
+import connect.logger.LoggerConfig;
 import connect.models.AssetRequest;
 import connect.models.Constraints;
 import connect.models.Item;
 import connect.models.Param;
 import connect.storage.StepData;
 import connect.storage.StepStorage;
-import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.Dictionary;
 import haxe.Json;
 import massive.munit.Assert;
 import sys.FileSystem;
-
 
 class StepStorageTest {
     @Before

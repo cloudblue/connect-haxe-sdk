@@ -2,45 +2,36 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
+import connect.api.IApiClient;
+import connect.api.Response;
 import connect.Env;
 import connect.models.Contact;
 import connect.models.ContactInfo;
 import connect.models.PhoneNumber;
 import connect.models.TierAccount;
+import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.Dictionary;
+import haxe.Json;
 import massive.munit.Assert;
-import test.mocks.Mock;
-
+import sys.io.File;
 
 class TierAccountTest {
     @Before
     public function setup() {
-        Env._reset(new Dictionary()
-            .setString('ITierApi', 'test.mocks.TierApiMock'));
+        Env._reset(new TierAccountApiClientMock());
     }
-
 
     @Test
     public function testList() {
-        // Check subject
         final accounts = TierAccount.list(null);
         Assert.isType(accounts, Collection);
         Assert.areEqual(1, accounts.length());
         Assert.isType(accounts.get(0), TierAccount);
-
-        // Check mocks
-        final apiMock = cast(Env.getTierApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('listTierAccounts'));
-        Assert.areEqual(
-            [null].toString(),
-            apiMock.callArgs('listTierAccounts', 0).toString());
     }
-
 
     @Test
     public function testGetOk() {
-        // Check subject
         final account = TierAccount.get('TA-9861-7949-8492');
         Assert.isType(account, TierAccount);
         Assert.isType(account.scopes, Collection);
@@ -71,27 +62,31 @@ class TierAccountTest {
         Assert.areEqual('/media/PA-239-689/marketplaces/MP-54865/icon.png', account.marketplace.icon);
         Assert.areEqual('HB-12345-12345', account.hub.id);
         Assert.areEqual('Provider Production Hub', account.hub.name);
-
-        // Check mocks
-        final apiMock = cast(Env.getTierApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getTierAccount'));
-        Assert.areEqual(
-            ['TA-9861-7949-8492'].toString(),
-            apiMock.callArgs('getTierAccount', 0).toString());
     }
-
 
     @Test
     public function testGetKo() {
-        // Check subject
-        final request = TierAccount.get('TA-XXXX-XXXX-XXXX');
-        Assert.isNull(request);
+        Assert.isNull(TierAccount.get('TA-XXXX-XXXX-XXXX'));
+    }
+}
 
-        // Check mocks
-        final apiMock = cast(Env.getTierApi(), Mock);
-        Assert.areEqual(1, apiMock.callCount('getTierAccount'));
-        Assert.areEqual(
-            ['TA-XXXX-XXXX-XXXX'].toString(),
-            apiMock.callArgs('getTierAccount', 0).toString());
+class TierAccountApiClientMock implements IApiClient {
+    static final FILE = 'test/unit/data/tieraccounts.json';
+
+    public function new() {
+    }
+
+    public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
+        if (method == 'GET') {
+            switch (url) {
+                case 'https://api.conn.rocks/public/v1/tier/accounts':
+                    return new Response(200, File.getContent(FILE), null);
+                case 'https://api.conn.rocks/public/v1/tier/accounts/TA-9861-7949-8492':
+                    final account = Json.parse(File.getContent(FILE))[0];
+                    return new Response(200, haxe.Json.stringify(account), null);
+            }
+        }
+        return new Response(404, null, null);
     }
 }

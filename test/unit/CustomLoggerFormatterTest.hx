@@ -1,15 +1,13 @@
 /*
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
- */
-
+*/
 import test.util.ArrayLoggerWriter;
 import connect.logger.ILoggerFormatter;
 import connect.logger.LoggerHandler;
 import connect.logger.LoggerConfig;
 import connect.Env;
 import connect.util.Collection;
-import connect.util.Util;
 import massive.munit.Assert;
 import connect.Base;
 
