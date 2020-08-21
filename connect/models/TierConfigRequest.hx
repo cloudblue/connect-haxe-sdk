@@ -144,7 +144,7 @@ class TierConfigRequest extends IdModel {
         knows the fields that already got updated in a previous call, like this:
 
         ```
-        request = request.update();
+        request = request.update(null);
         ```
 
         @param params A collection of parameters to update. If `null` is passed, then the
