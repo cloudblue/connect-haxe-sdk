@@ -43,7 +43,8 @@ class Util {
     /*
         @returns The JSON representation of the object beautified using two space indentation.
         If `compact` is `true` and the text contains a JSON string representation, only the id
-        is returned or a string with all the fields if it does not have an id.
+        is returned or a string with all the fields if it does not have an id. If `compact` is
+        false and `masked` is true, all fields in the mask list will be masked.
     */
     public static function beautifyObject(obj:Dynamic, compact:Bool, masked:Bool):String {
         if (compact) {
@@ -71,30 +72,29 @@ class Util {
         }
     }
 
-    public static function maskFields(obj:Dynamic): Dynamic {
-        final  maskedFields= Env.getLogger().getMaskedFields();
+    public static function maskFields(obj:Dynamic):Dynamic {
+        final maskedFields = Env.getLogger().getMaskedFields();
         if (Type.typeof(obj) == TObject) {
             for(fieldName in Reflect.fields(obj)){
-                if(maskedFields.indexOf(fieldName) !=  - 1){
+                if(maskedFields.indexOf(fieldName) != -1) {
                     if (Type.typeof(Reflect.field(obj, fieldName)) == TObject){
                         if (Reflect.hasField(Reflect.field(obj, fieldName), 'id')) {
                             Reflect.setField(obj, fieldName, Reflect.field(obj, fieldName).id);
                         } else {
                             Reflect.setField(obj, fieldName, '{object}');
                         }
-                    }else{
-                        Reflect.setField(obj, fieldName, 'HIDDEN FIELD');
+                    } else {
+                        final value = Reflect.field(obj, fieldName);
+                        Reflect.setField(obj, fieldName, StringTools.lpad('', '*', value.length));
                     }
-                }else if (Type.typeof(obj) == TObject || Std.is(obj,connect.util.Collection) ||  Std.is(obj, Array)){
+                } else if (Type.typeof(obj) == TObject || Std.is(obj,connect.util.Collection) || Std.is(obj, Array)) {
                     Reflect.setField(obj, fieldName, maskFields(Reflect.field(obj, fieldName)));
                 }
             }
             return obj;
-        }else if (Std.is(obj, Array)){
+        } else if (Std.is(obj, Array)) {
             final arr: Array<Dynamic> = obj;
-            return arr.map(function(el) {
-                return maskFields(el);
-            });
+            return arr.map(el -> maskFields(el));
         }
         return obj;
     }

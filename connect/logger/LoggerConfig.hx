@@ -12,18 +12,24 @@ import connect.util.Collection;
  * to setup the logger behaviour.
  */
 class LoggerConfig extends Base {
+    @:dox(hide)
     public var path_(default, null):String;
+    @:dox(hide)
     public var level_(default, null):Int;
+    @:dox(hide)
     public var handlers_(default, null):Collection<LoggerHandler>;
+    @:dox(hide)
     public var maskedFields_(default, null):Collection<String>;
+    @:dox(hide)
     public var compact_(default, null):Bool;
+    @:dox(hide)
     public var regexMaskingList_:Collection<EReg>;
 
     private static final levelTranslation:Map<String, Int> = [
-        "ERROR" => Logger.LEVEL_ERROR,
-        "WARNING" => Logger.LEVEL_WARNING,
-        "INFO" => Logger.LEVEL_INFO,
-        "DEBUG" => Logger.LEVEL_DEBUG];
+        'ERROR' => Logger.LEVEL_ERROR,
+        'WARNING' => Logger.LEVEL_WARNING,
+        'INFO' => Logger.LEVEL_INFO,
+        'DEBUG' => Logger.LEVEL_DEBUG];
     private var customHandlers:Bool;
 
     public function new() {
@@ -90,7 +96,7 @@ class LoggerConfig extends Base {
 
     /**
      * Sets the fields which should be masked in the logs,
-     * by default only connect api credentials are masked
+     * by default only Authorization field in header is masked.
      * @param maskedFields Collection of field names (string).
      * @return LoggerConfig `this` instance to support a fluent interface.
      */

@@ -42,9 +42,9 @@ class Logger extends Base {
         this.level = Std.int(Math.min(Math.max(config.level_, LEVEL_ERROR), LEVEL_DEBUG));
         this.handlers = config.handlers_.copy();
         this.sections = [];
-        this.maskedFields = config.maskedFields_;
-        this.regexMaskingList = config.regexMaskingList_;
-        if (this.maskedFields.indexOf('apiKey') == -1) this.maskedFields.push('apiKey');
+        this.maskedFields = config.maskedFields_.copy();
+        this.regexMaskingList = config.regexMaskingList_.copy();
+        if (this.maskedFields.indexOf('Authorization') == -1) this.maskedFields.push('Authorization');
         this.compact = (this.level != LEVEL_DEBUG) ? config.compact_ : false;
         this.defaultFilename = null;
     }
@@ -77,7 +77,7 @@ class Logger extends Base {
         this method with an argument other than `null`, the provided name will be considered
         the default filename. Whenever this method is called afterwards with a `null` argument,
         output will be sent to the default file.
-        
+
         Filename extension must be omitted, since it is provided by the formatters
         used in each handler.
     **/
