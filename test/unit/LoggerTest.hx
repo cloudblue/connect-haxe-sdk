@@ -27,18 +27,21 @@ class LoggerTest {
     @Before
     public function setup() {
         Env._reset();
-        var maskedFields:Collection<String> = new Collection().push("apiKey")
+        final maskedFields:Collection<String> = new Collection()
+            .push("apiKey")
             .push("username")
             .push("password")
             .push("smtpUsername")
             .push("id_obj")
             .push("the_obj");
-        var maskingRegex:Collection<String> = new Collection().push("(Bearer\\s[\\d|a-f]{8}-([\\d|a-f]{4}-){3}[\\d|a-f]{12})")
+        final maskingRegex:Collection<String> = new Collection()
+            .push("(Bearer\\s[\\d|a-f]{8}-([\\d|a-f]{4}-){3}[\\d|a-f]{12})")
             .push("(password=[^\\&]*)")
             .push("(user=[^\\s]*)")
             .push("\\{(.*?)\\}");
-        var loggerConfiguration:LoggerConfig = new LoggerConfig().handlers(new Collection<LoggerHandler>()
-            .push(new LoggerHandler(new MarkdownLoggerFormatter(), new ArrayLoggerWriter())));
+        final loggerConfiguration:LoggerConfig = new LoggerConfig()
+            .handlers(new Collection<LoggerHandler>()
+                .push(new LoggerHandler(new MarkdownLoggerFormatter(), new ArrayLoggerWriter())));
         loggerConfiguration.maskedFields(maskedFields);
         loggerConfiguration.regexMasks(maskingRegex);
         Env.initLogger(loggerConfiguration);
