@@ -92,14 +92,14 @@ class Param extends IdModel {
         ]);
     }
 
-
     /**
-     * If `this` Param is a checkbox, 
-     * @return Bool
+     * If `this` Param is a checkbox, returns the status of the field specified in the param.
+     * @param fieldName Name of the field whose status we want to check.
+     * @return Bool Whether the checkbox is checked.
      */
-    public function isCheckboxChecked(): Bool {
+    public function isCheckboxChecked(fieldName: String): Bool {
         return (type == 'checkbox' && structuredValue != null)
-            ? structuredValue.getBool('true')
+            ? structuredValue.getBool(fieldName)
             : false;
     }
 }
