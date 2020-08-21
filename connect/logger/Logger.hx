@@ -23,6 +23,15 @@ class Logger extends Base {
     /** Writes detailed messages of all levels. **/
     public static final LEVEL_DEBUG = 3;
 
+    private final path:String;
+    private final level:Int;
+    private final handlers:Collection<LoggerHandler>;
+    private final sections:Array<LoggerSection>;
+    private final maskedFields:Collection<String>;
+    private final regexMaskingList:Collection<EReg>;
+    private final compact:Bool;
+    private var defaultFilename:String;
+
     /**
         Creates a new Logger object. You don't normally create objects of this class,
         since the SDK uses the default instance provided by `Env.getLogger()`.
@@ -33,10 +42,11 @@ class Logger extends Base {
         this.level = Std.int(Math.min(Math.max(config.level_, LEVEL_ERROR), LEVEL_DEBUG));
         this.handlers = config.handlers_.copy();
         this.sections = [];
-        this.maskedFields = config.maskedFields_;
-        this.regexMaskingList = config.regexMaskingList_;
-        if (this.maskedFields.indexOf('apiKey') == -1) this.maskedFields.push('apiKey');
+        this.maskedFields = config.maskedFields_.copy();
+        this.regexMaskingList = config.regexMaskingList_.copy();
+        if (this.maskedFields.indexOf('Authorization') == -1) this.maskedFields.push('Authorization');
         this.compact = (this.level != LEVEL_DEBUG) ? config.compact_ : false;
+        this.defaultFilename = null;
     }
 
     /** @returns The path where logs are stored. **/
@@ -63,13 +73,27 @@ class Logger extends Base {
 
     /**
         Sets the filename of the log. All future log messages will get printed to this file.
-        Use `null` to only write to standard output. Filename extension must be omitted, since
-        it is provided by the formatters used in each handler.
+        Initially, the logger only writes to the standard output. The first time you call
+        this method with an argument other than `null`, the provided name will be considered
+        the default filename. Whenever this method is called afterwards with a `null` argument,
+        output will be sent to the default file.
+
+        Filename extension must be omitted, since it is provided by the formatters
+        used in each handler.
     **/
     public function setFilename(filename:String):Void {
-        final fullname = (this.path != null && filename != null) ? this.path + filename : null;
-        final setFilenameResult = Lambda.fold(this.handlers, function(o, last) {
-            return last && o.writer.setFilename('$fullname.${o.formatter.getFileExtension()}');
+        if (this.defaultFilename == null && filename != null) {
+            this.defaultFilename = filename;
+        }
+        final fullname =
+            (this.path != null && filename != null) ? this.path + filename :
+            (this.path != null) ? this.path + this.defaultFilename :
+            null;
+        final setFilenameResult = Lambda.fold(this.handlers, function(handler, last) {
+            final fullnameWithExt = (fullname != null)
+                ? '$fullname.${handler.formatter.getFileExtension()}'
+                : null;
+            return last && handler.writer.setFilename(fullnameWithExt);
         }, true);
         if (setFilenameResult && fullname != null) {
             for (section in this.sections) {
@@ -83,7 +107,9 @@ class Logger extends Base {
         final firstWriter = (this.handlers.length() > 0) ? this.handlers.get(0).writer : null;
         if (firstWriter != null) {
             final filename = firstWriter.getFilename();
-            final fixedFilename = (filename != null && filename.indexOf(this.path) == 0) ? filename.substr(filename.length) : filename;
+            final fixedFilename = (filename != null && filename.indexOf(this.path) == 0)
+                ? filename.substr(this.path.length)
+                : filename;
             return fixedFilename;
         } else {
             return null;
@@ -239,14 +265,6 @@ class Logger extends Base {
             handler.writer.writeLine(handler.formatter.formatLine(level, message));
         }
     }
-
-    private final path:String;
-    private final level:Int;
-    private final handlers:Collection<LoggerHandler>;
-    private final sections:Array<LoggerSection>;
-    private final maskedFields:Collection<String>;
-    private final regexMaskingList:Collection<EReg>;
-    private final compact:Bool;
     
     private function writeSections(level:Int):Void {
         for (i in 0...this.sections.length) {

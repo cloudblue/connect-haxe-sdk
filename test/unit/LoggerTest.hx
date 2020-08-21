@@ -15,10 +15,10 @@ import haxe.Json;
 
 class LoggerTest {
     private static final dataTestMaskDataInObj:String = '{"apiKey":"123456","non_important_data": 1,"some_list":["a","b",{"username":"1"}],"smtp": {"user":"loguser","password":"pass"},"the_obj":{"a":"test"},"id_obj":{"id":"the id"}}';
-    private static final resultTestMaskDataInObj:String = '{"apiKey":"HIDDEN FIELD","non_important_data": 1,"some_list":["a","b",{"username":"HIDDEN FIELD"}],"smtp": {"user":"loguser","password":"HIDDEN FIELD"},"the_obj":"{object}","id_obj":"the id"}';
+    private static final resultTestMaskDataInObj:String = '{"apiKey":"******","non_important_data": 1,"some_list":["a","b",{"username":"*"}],"smtp": {"user":"loguser","password":"****"},"the_obj":"{object}","id_obj":"the id"}';
 
     private static final dataTestMaskDataInList:String = '[{"apiKey":"123456","non_important_data": 1,"some_list":["a","b",{"username":"1"}],"smtp": {"user":"loguser","password":"pass"},"the_obj":{"a":"test"},"id_obj":{"id":"the id"}},{"apiKey":"123456","non_important_data": 1,"some_list":["a","b",{"username":"1"}],"smtp": {"user":"loguser","password":"pass"},"the_obj":{"a":"test"},"id_obj":{"id":"the id"}}]';
-    private static final resultTestMaskDataInList:String = '[{"apiKey":"HIDDEN FIELD","non_important_data": 1,"some_list":["a","b",{"username":"HIDDEN FIELD"}],"smtp": {"user":"loguser","password":"HIDDEN FIELD"},"the_obj":"{object}","id_obj":"the id"},{"apiKey":"HIDDEN FIELD","non_important_data": 1,"some_list":["a","b",{"username":"HIDDEN FIELD"}],"smtp": {"user":"loguser","password":"HIDDEN FIELD"},"the_obj":"{object}","id_obj":"the id"}]';
+    private static final resultTestMaskDataInList:String = '[{"apiKey":"******","non_important_data": 1,"some_list":["a","b",{"username":"*"}],"smtp": {"user":"loguser","password":"****"},"the_obj":"{object}","id_obj":"the id"},{"apiKey":"******","non_important_data": 1,"some_list":["a","b",{"username":"*"}],"smtp": {"user":"loguser","password":"****"},"the_obj":"{object}","id_obj":"the id"}]';
 
     private static final dataTestMaskDataInText:String = 'Bearer 89abddfb-2cff-4fda-83e6-13221f0c3d4f password=Ingrammicro2020&user=CloudBlue topSecret={The anwser is 42},{Sensitive data}';
     private static final dataTestNoMaskDataInText:String = 'This is a testing string with no passwords and no users';
@@ -27,18 +27,21 @@ class LoggerTest {
     @Before
     public function setup() {
         Env._reset();
-        var maskedFields:Collection<String> = new Collection().push("apiKey")
+        final maskedFields:Collection<String> = new Collection()
+            .push("apiKey")
             .push("username")
             .push("password")
             .push("smtpUsername")
             .push("id_obj")
             .push("the_obj");
-        var maskingRegex:Collection<String> = new Collection().push("(Bearer\\s[\\d|a-f]{8}-([\\d|a-f]{4}-){3}[\\d|a-f]{12})")
+        final maskingRegex:Collection<String> = new Collection()
+            .push("(Bearer\\s[\\d|a-f]{8}-([\\d|a-f]{4}-){3}[\\d|a-f]{12})")
             .push("(password=[^\\&]*)")
             .push("(user=[^\\s]*)")
             .push("\\{(.*?)\\}");
-        var loggerConfiguration:LoggerConfig = new LoggerConfig().handlers(new Collection<LoggerHandler>()
-            .push(new LoggerHandler(new MarkdownLoggerFormatter(), new ArrayLoggerWriter())));
+        final loggerConfiguration:LoggerConfig = new LoggerConfig()
+            .handlers(new Collection<LoggerHandler>()
+                .push(new LoggerHandler(new MarkdownLoggerFormatter(), new ArrayLoggerWriter())));
         loggerConfiguration.maskedFields(maskedFields);
         loggerConfiguration.regexMasks(maskingRegex);
         Env.initLogger(loggerConfiguration);
@@ -78,10 +81,14 @@ class LoggerTest {
 
     @Test
     public function testMaskDataInList() {
-        final maskedInfo = Util.beautify(dataTestMaskDataInList, false, true);
-        final result = Helper.sortObject(Json.parse(maskedInfo));
-        final expected = Helper.sortObject(Json.parse(resultTestMaskDataInList));
-        Assert.areEqual(Json.stringify(expected), Json.stringify(result));
+        final maskedList: Array<Dynamic> = Json.parse(Util.beautify(dataTestMaskDataInList, false, true));
+        final expectedList: Array<Dynamic> = Json.parse(resultTestMaskDataInList);
+        Assert.areEqual(expectedList.length, maskedList.length);
+        for (i in 0...maskedList.length) {
+            final expected = Helper.sortObject(expectedList[i]);
+            final result = Helper.sortObject(maskedList[i]);
+            Assert.areEqual(Json.stringify(expected), Json.stringify(result));
+        }
     }
 
     @Test

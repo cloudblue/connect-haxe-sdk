@@ -297,23 +297,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
 
     private static function maskHeaders(headers: Dictionary): Dictionary {
-        final masked = new Dictionary();
-        for (key in headers.keys()) {
-            if (key == 'Authorization') {
-                final auth = Std.string(headers.get('Authorization'));
-                final parts = auth.split(':');
-                final join = (parts.length > 1) ? parts.slice(1).join(':') : '';
-                final maskedAuth = StringTools.startsWith(auth, 'ApiKey ')
-                    ? (parts.length > 1)
-                        ? (parts[0] + ':' + StringTools.lpad(join.substr(join.length - 4), '*', join.length))
-                        : 'ApiKey ' + StringTools.lpad(auth.substr(auth.length - 4), '*', auth.length - 7)
-                    : StringTools.lpad(auth.substr(auth.length - 4), '*', auth.length);
-                masked.set('Authorization', maskedAuth);
-            } else {
-                masked.set(key, headers.get(key));
-            }
-        }
-        return masked;
+        return Dictionary.fromObject(Util.maskFields(headers.toObject()));
     }
 
 
