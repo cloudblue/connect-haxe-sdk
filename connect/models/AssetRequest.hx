@@ -148,7 +148,7 @@ class AssetRequest extends IdModel {
         knows the fields that already got updated in a previous call, like this:
 
         ```
-        request = request.update();
+        request = request.update(null);
         ```
 
         @param params A collection of parameters to update. If `null` is passed, then the
@@ -301,7 +301,6 @@ class AssetRequest extends IdModel {
     }
 
 
-    
     /**
         @returns Whether `this` AssetRequest is pending migration. This is indicated by the
         presence of a parameter (by default name "migration_info") that contains JSON data.

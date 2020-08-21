@@ -146,7 +146,7 @@ class StepStorage {
         if (param != null) {
             param.value = data;
             try {
-                Reflect.callMethod(request, updateFunc, []);
+                Reflect.callMethod(request, updateFunc, [null]);
                 return true;
             } catch (ex:Dynamic) {
                 Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, Std.string(ex), '');
