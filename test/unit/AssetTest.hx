@@ -163,9 +163,9 @@ class AssetTest {
         Assert.areEqual('2019-08-27T14:21:23+00:00', itemParam.events.updated.at.toString());
         Assert.areEqual('UR-841-574-187', itemParam.events.updated.by.id);
         Assert.areEqual('Marc Serrat', itemParam.events.updated.by.name);
-        Assert.isFalse(itemParam.isCheckboxChecked());
-        Assert.isFalse(item.params.get(1).isCheckboxChecked());
-        Assert.isTrue(item.params.get(2).isCheckboxChecked());
+        Assert.isFalse(itemParam.isCheckboxChecked('checked'));
+        Assert.isFalse(item.params.get(1).isCheckboxChecked('checked'));
+        Assert.isTrue(item.params.get(2).isCheckboxChecked('checked'));
     }
 
     @Test
