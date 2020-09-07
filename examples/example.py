@@ -23,6 +23,7 @@ def trace_request_data(p):
         + ' : ' + p.getData('productId') \
         + ' : ' + p.getData('status'))
 
+
 def approve_request(p):
     pass
     # p.getAssetRequest().approveByTemplate('TL-000-000-000')
