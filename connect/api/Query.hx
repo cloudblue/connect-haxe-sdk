@@ -10,14 +10,26 @@ import haxe.Json;
 
 
 class Query extends Base {
+    private var in__: StringMap<Array<String>>;
+    private var out_: StringMap<Array<String>>;
+    private var limit_: Null<Int>;
+    private var orderBy_: String;
+    private var offset_: Null<Int>;
+    private var ordering_: Array<String>;
+    private var like_: StringMap<String>;
+    private var ilike_: StringMap<String>;
+    private var select_: Array<String>;
+    private var relOps: StringMap<Array<KeyValue>>;
+    private var forceRql_: Bool;
+
     public function new() {
         this.in__ = new StringMap<Array<String>>();
         this.out_ = new StringMap<Array<String>>();
         this.like_ = new StringMap<String>();
         this.ilike_ = new StringMap<String>();
         this.relOps = new StringMap<Array<KeyValue>>();
+        this.forceRql_ = false;
     }
-
 
     public function copy() {
         final copy = new Query();
@@ -34,7 +46,6 @@ class Query extends Base {
             k => [for (kv in this.relOps.get(k)) new KeyValue(kv.key, kv.value)]];
         return copy;
     }
-
 
     /**
      * Embeds the filters in the query defined by `Env.initDefaultQuery` in this one.
@@ -81,7 +92,6 @@ class Query extends Base {
         return this;
     }
 
-
     /**
      * Select objects where the specified property value is in the provided array.
      * @param property
@@ -92,7 +102,6 @@ class Query extends Base {
         this.in__.set(property, array.toArray().copy());
         return this;
     }
-
 
     /**
      * Select objects where the specified property value is not in the provided array.
@@ -105,7 +114,6 @@ class Query extends Base {
         return this;
     }
 
-
     /**
      * Indicates the given number of objects from the start position.
      * @param amount 
@@ -115,7 +123,6 @@ class Query extends Base {
         this.limit_ = amount;
         return this;
     }
-
 
     /**
      * Order list by given property
@@ -127,7 +134,6 @@ class Query extends Base {
         return this;
     }
 
-
     /**
      * Offset (page) to return on paged queries.
      * @param page 
@@ -137,7 +143,6 @@ class Query extends Base {
         this.offset_ = page;
         return this;
     }
-
 
     /**
      * Order list of objects by the given properties (unlimited number of properties).
@@ -150,7 +155,6 @@ class Query extends Base {
         this.ordering_ = propertyList.toArray().copy();
         return this;
     }
-
 
     /**
      * Search for the specified pattern in the specified property. The function is similar
@@ -167,7 +171,6 @@ class Query extends Base {
         return this;
     }
 
-
     /**
      * Same as like but case unsensitive.
      * @param property 
@@ -178,7 +181,6 @@ class Query extends Base {
         this.ilike_.set(property, pattern);
         return this;
     }
-
 
     /**
      * The function is applicable to a list of resources (hereafter base resources). It receives
@@ -195,7 +197,6 @@ class Query extends Base {
         return this;
     }
 
-
     /**
      * Select objects with a property value equal to value.
      * @param property 
@@ -205,7 +206,6 @@ class Query extends Base {
     public function equal(property: String, value: String): Query {
         return addRelOp('eq', property, value);
     }
-
 
     /**
      * Select objects with a property value not equal to value.
@@ -217,7 +217,6 @@ class Query extends Base {
         return addRelOp('ne', property, value);
     }
 
-
     /**
      * Select objects with a property value greater than the value.
      * @param property 
@@ -227,7 +226,6 @@ class Query extends Base {
     public function greater(property: String, value: String): Query {
         return addRelOp('gt', property, value);
     }
-
 
     /**
      * Select objects with a property value equal or greater than the value.
@@ -239,7 +237,6 @@ class Query extends Base {
         return addRelOp('ge', property, value);
     }
 
-
     /**
      * Select objects with a property value less than the value.
      * @param property 
@@ -250,7 +247,6 @@ class Query extends Base {
         return addRelOp('lt', property, value);
     }
 
-
     /**
      * Select objects with a property value equal or less than the value.
      * @param property 
@@ -260,7 +256,6 @@ class Query extends Base {
     public function lesserOrEqual(property: String, value: String): Query {
         return addRelOp('le', property, value);
     }
-
 
     /**
      * Returns a string representation of `this` query in RQL syntax that can be appended
@@ -321,45 +316,50 @@ class Query extends Base {
         return (rql.length > 0) ? ('?' + rql.join('&')) : '';
     }
 
-
     /**
      * Returns a string representation of `this` Query with the parameters
      * compatible with query params syntax. It can be appended to a URL.
+     * If `forceRql(true)` was called on `this` Query, then it returns the
+     * string in RQL syntax, making this method equivalent to `toString`
+     * in that case.
      * @return String
      */
     public function toPlain(): String {
-        final rql = new Array<String>();
+        if (!forceRql_) {
+            final rql = new Array<String>();
 
-        if (this.relOps.exists('eq')) {
-            final arguments = this.relOps.get('eq');
-            for (argument in arguments) {
-                rql.push('${argument.key}=${argument.value}');
+            if (this.relOps.exists('eq')) {
+                final arguments = this.relOps.get('eq');
+                for (argument in arguments) {
+                    rql.push('${argument.key}=${argument.value}');
+                }
             }
-        }
 
-        if (this.limit_ != null) {
-            rql.push('limit=${this.limit_}');
-        }
+            if (this.limit_ != null) {
+                rql.push('limit=${this.limit_}');
+            }
 
-        if (this.orderBy_ != null) {
-            rql.push('order_by=${this.orderBy_}');
-        }
+            if (this.orderBy_ != null) {
+                rql.push('order_by=${this.orderBy_}');
+            }
 
-        if (this.offset_ != null) {
-            rql.push('offset=${this.offset_}');
-        }
+            if (this.offset_ != null) {
+                rql.push('offset=${this.offset_}');
+            }
 
-        if (this.ordering_ != null) {
-            rql.push('ordering(${this.ordering_.join(',')})');
-        }
+            if (this.ordering_ != null) {
+                rql.push('ordering(${this.ordering_.join(',')})');
+            }
 
-        if (rql.length > 0) {
-            return '?' + rql.join('&');
+            if (rql.length > 0) {
+                return '?' + rql.join('&');
+            } else {
+                return '';
+            }
         } else {
-            return '';
+            return this.toString();
         }
     }
-
 
     /**
      * Returns a dynamic object with the fields of the Query.
@@ -397,7 +397,6 @@ class Query extends Base {
         return out;
     }
 
-
     /**
      * Returns a Json representation of the Query.
      * @return String
@@ -405,7 +404,6 @@ class Query extends Base {
     public function toJson(): String {
         return Json.stringify(this.toObject());
     }
-
 
     public static function fromObject(obj: Dynamic): Query {
         final select = Reflect.field(obj, 'select');
@@ -472,23 +470,21 @@ class Query extends Base {
         return rql;
     }
 
-
     public static function fromJson(json: String): Query {
         return fromObject(Json.parse(json));
     }
 
-
-    private var in__: StringMap<Array<String>>;
-    private var out_: StringMap<Array<String>>;
-    private var limit_: Null<Int>;
-    private var orderBy_: String;
-    private var offset_: Null<Int>;
-    private var ordering_: Array<String>;
-    private var like_: StringMap<String>;
-    private var ilike_: StringMap<String>;
-    private var select_: Array<String>;
-    private var relOps: StringMap<Array<KeyValue>>;
-
+    /**
+     * Calling this method with a `true` argument makes the
+     * `toPlain` method return an RQL string representation
+     * instead of a plain list of query params.
+     * @param force 
+     * @return Query
+     */
+    public function forceRql(force: Bool): Query {
+        this.forceRql_ = force;
+        return this;
+    }
 
     private function addRelOp(op: String, property: String, value: String): Query {
         if (!this.relOps.exists(op)) {
@@ -498,14 +494,12 @@ class Query extends Base {
         return this;
     }
 
-
     private static function stringMapToObject(map: StringMap<Dynamic>): Dynamic {
         final obj = {};
         final fields = [for (k in map.keys()) k];
         Lambda.iter(fields, f -> Reflect.setField(obj, f, valueToObject(map.get(f))));
         return obj;
     }
-
 
     private static function valueToObject(value: Dynamic): Dynamic {
         switch (Type.typeof(value)) {
@@ -518,11 +512,9 @@ class Query extends Base {
         }
     }
 
-
     private static function arrayToObject(arr:Array<Dynamic>): Array<Dynamic> {
         return Lambda.map(arr, elem -> valueToObject(elem));
     }
-
 
     private static function sortStringArray(arr: Array<String>): Array<String> {
         haxe.ds.ArraySort.sort(arr, (a, b) -> Reflect.compare(a, b));
@@ -530,22 +522,18 @@ class Query extends Base {
     }
 }
 
-
 private class KeyValue {
     public final key: String;
     public final value: String;
-
 
     public function new(key: String, value: String) {
         this.key = key;
         this.value = value;
     }
 
-
     public function equals(other: KeyValue): Bool {
         return this.key == other.key && this.value == other.value;
     }
-
 
     public function toObject(): Dynamic {
         return {
