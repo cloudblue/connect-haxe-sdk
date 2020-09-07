@@ -23,6 +23,12 @@ class Blob extends Base {
     }
 
 
+    /** Saves the blob to the specified `path`. **/
+    public function save(path: String): Void {
+        sys.io.File.saveBytes(path, this.bytes);
+    }
+
+
     /** @returns The number of bytes contained in the object. **/
     public function length(): Int {
         return (bytes != null) ? bytes.length : -1;
