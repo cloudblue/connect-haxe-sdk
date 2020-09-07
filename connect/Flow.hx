@@ -415,7 +415,8 @@ class Flow extends Base {
         final requestStr = Util.beautifyObject(
             this.model.toObject(),
             Env.getLogger().isCompact(),
-            Env.getLogger().getLevel() != Logger.LEVEL_DEBUG);
+            Env.getLogger().getLevel() != Logger.LEVEL_DEBUG,
+            Env.getLogger().isBeautified());
         final dataStr = Std.string(this.data);
 
         Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
@@ -591,7 +592,8 @@ class Flow extends Base {
                     ? Util.beautifyObject(
                         diff,
                         Env.getLogger().isCompact(),
-                        false)
+                        false,
+                        Env.getLogger().isBeautified())
                     : request;
                 final requestTitle = (diff != null) ? 'Request (changes):' : 'Request:';
                 return '$requestTitle${fmt.formatCodeBlock(Env.getLogger().getLevel(),Std.string(requestStr), 'json')}';
@@ -650,7 +652,8 @@ class Flow extends Base {
                 return null;
             }
         }
-     */
+    */
+    
     private function getClassName():String {
         #if js
         final constructorName = js.Syntax.code("{0}.constructor.name", this);

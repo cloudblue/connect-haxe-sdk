@@ -23,6 +23,8 @@ class LoggerConfig extends Base {
     @:dox(hide)
     public var compact_(default, null):Bool;
     @:dox(hide)
+    public var beautify_(default, null):Bool;
+    @:dox(hide)
     public var regexMaskingList_:Collection<EReg>;
 
     private static final levelTranslation:Map<String, Int> = [
@@ -38,6 +40,7 @@ class LoggerConfig extends Base {
         this.handlers_ = new Collection<LoggerHandler>().push(new LoggerHandler(new PlainLoggerFormatter(), new FileLoggerWriter()));
         this.maskedFields_ = new Collection<String>();
         this.compact_ = false;
+        this.beautify_ = true;
         this.regexMaskingList_ = new Collection<EReg>();
         this.customHandlers = false;
     }
@@ -102,6 +105,17 @@ class LoggerConfig extends Base {
      */
     public function maskedFields(maskedFields:Collection<String>):LoggerConfig {
         this.maskedFields_ = maskedFields;
+        return this;
+    }
+
+    /**
+     * Set whether the logs must be written in beautified format (this is,
+     * for JSON objects use new lines and two space indentation).
+     * @param enable Whether beautified logging should be enabled (defaults to `true`).
+     * @return LoggerConfig `this` instance to support a fluent interface.
+     */
+    public function beautify(enable:Bool):LoggerConfig {
+        this.beautify_ = enable;
         return this;
     }
 

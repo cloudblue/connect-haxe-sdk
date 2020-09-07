@@ -30,6 +30,7 @@ class Logger extends Base {
     private final maskedFields:Collection<String>;
     private final regexMaskingList:Collection<EReg>;
     private final compact:Bool;
+    private final beautify:Bool;
     private var defaultFilename:String;
 
     /**
@@ -45,6 +46,7 @@ class Logger extends Base {
         this.maskedFields = config.maskedFields_.copy();
         this.regexMaskingList = config.regexMaskingList_.copy();
         if (this.maskedFields.indexOf('Authorization') == -1) this.maskedFields.push('Authorization');
+        this.beautify = config.beautify_;
         this.compact = (this.level != LEVEL_DEBUG) ? config.compact_ : false;
         this.defaultFilename = null;
     }
@@ -60,6 +62,14 @@ class Logger extends Base {
      */
     public function getLevel():Int {
         return this.level;
+    }
+
+    /**
+     * @return Bool Whether the logs are written in beautified format (this is,
+     * for JSON objects use new lines and two space indentation).
+     */
+    public function isBeautified(): Bool {
+        return this.beautify;
     }
 
     /**
