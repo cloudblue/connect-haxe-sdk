@@ -204,7 +204,7 @@ class TierConfigRequest extends IdModel {
     **/
     public function approveByTemplate(id: String): Bool {
         try {
-            Env.getTierApi().approveTierConfigRequest(this.id, haxe.Json.stringify({template_id: id}));
+            Env.getTierApi().approveTierConfigRequest(this.id, haxe.Json.stringify({template: {id: id}}));
             return true;
         } catch (ex: Dynamic) {
             return false;
