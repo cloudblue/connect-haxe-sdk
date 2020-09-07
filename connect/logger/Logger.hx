@@ -104,13 +104,17 @@ class Logger extends Base {
 
     /** @returns The last filename that was set. **/
     public function getFilename():String {
-        final firstWriter = (this.handlers.length() > 0) ? this.handlers.get(0).writer : null;
-        if (firstWriter != null) {
-            final filename = firstWriter.getFilename();
-            final fixedFilename = (filename != null && filename.indexOf(this.path) == 0)
+        final firstHandler = (this.handlers.length() > 0) ? this.handlers.get(0) : null;
+        if (firstHandler != null) {
+            final filename = firstHandler.writer.getFilename();
+            final ext = firstHandler.formatter.getFileExtension();
+            final noPathFilename = (filename != null && filename.indexOf(this.path) == 0)
                 ? filename.substr(this.path.length)
                 : filename;
-            return fixedFilename;
+            final noExtFilename = (noPathFilename != null && ext != null && ext.length > 0)
+                ? noPathFilename.substr(0, noPathFilename.length - ext.length - 1)
+                : noPathFilename;
+            return noExtFilename;
         } else {
             return null;
         }
