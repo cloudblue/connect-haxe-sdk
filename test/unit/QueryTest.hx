@@ -174,6 +174,16 @@ class QueryTest {
     }
 
     @Test
+    public function testPlainForced() {
+        final rql = new Query()
+            .equal('property1', 'value1')
+            .notEqual('property2', 'value2')
+            .limit(100)
+            .forceRql(true);
+        Assert.areEqual('?eq(property1,value1)&ne(property2,value2)&limit=100', rql.toPlain());
+    }
+
+    @Test
     public function testToObject() {
         final rql = new Query()
             .limit(100)
