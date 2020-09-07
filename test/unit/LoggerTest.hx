@@ -73,7 +73,7 @@ class LoggerTest {
 
     @Test
     public function testMaskDataInObj() {
-        final maskedInfo = Util.beautify(dataTestMaskDataInObj, false, true);
+        final maskedInfo = Util.beautify(dataTestMaskDataInObj, false, true, false);
         final result = Helper.sortObject(Json.parse(maskedInfo));
         final expected = Helper.sortObject(Json.parse(resultTestMaskDataInObj));
         Assert.areEqual(Json.stringify(expected), Json.stringify(result));
@@ -81,7 +81,7 @@ class LoggerTest {
 
     @Test
     public function testMaskDataInList() {
-        final maskedList: Array<Dynamic> = Json.parse(Util.beautify(dataTestMaskDataInList, false, true));
+        final maskedList: Array<Dynamic> = Json.parse(Util.beautify(dataTestMaskDataInList, false, true, false));
         final expectedList: Array<Dynamic> = Json.parse(resultTestMaskDataInList);
         Assert.areEqual(expectedList.length, maskedList.length);
         for (i in 0...maskedList.length) {
@@ -93,13 +93,13 @@ class LoggerTest {
 
     @Test
     public function testMaskDataInText() {
-        final maskedInfo = Util.beautify(dataTestMaskDataInText, false, true);
+        final maskedInfo = Util.beautify(dataTestMaskDataInText, false, true, false);
         Assert.areEqual(resultTestMaskDataInText, maskedInfo);
     }
     
     @Test
     public function testMaskNoDataInText() {
-        final unMaskedInfo = Util.beautify(dataTestNoMaskDataInText,false,true);
+        final unMaskedInfo = Util.beautify(dataTestNoMaskDataInText, false, true, false);
         Assert.areEqual(dataTestNoMaskDataInText,unMaskedInfo);
     }
 }
