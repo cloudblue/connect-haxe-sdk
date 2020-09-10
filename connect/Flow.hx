@@ -52,6 +52,21 @@ class Flow extends Base {
         this.steps = [];
         this.data = new Dictionary();
         this.stepAttempt = 0;
+        this.storeRequestOnFailure = true;
+    }
+
+    /**
+        Enables or disables storing of request data when the Flow fails execution. Defaults to true.
+    **/
+    public function setStoreRequestOnFailure(enable:Bool):Void {
+        this.storeRequestOnFailure = enable;
+    }
+
+    /**
+        Tells if the flow stores request data when Flow execution fails.
+    **/
+    public function storesRequestOnFailure():Bool {
+        return this.storeRequestOnFailure;
     }
 
     /**
@@ -341,6 +356,7 @@ class Flow extends Base {
     private var abortRequested:Bool;
     private var abortMessage:String;
     private var stepAttempt:Int;
+    private var storeRequestOnFailure:Bool;
 
     private function process(model:IdModel):Void {
         if (this.prepareRequestAndOpenLogSection(model)) {
@@ -394,12 +410,16 @@ class Flow extends Base {
     }
 
     private function loadStepDataIfStored():StepData {
-        final stepData = StepStorage.load(this.model.id, getStepParam());
-        this.data = stepData.data;
-        if (stepData.storage != FailedStorage) {
-            Env.getLogger().write(Logger.LEVEL_INFO, 'Resuming request from step ${stepData.firstIndex + 1} with ${stepData.storage}.');
+        if (this.storesRequestOnFailure()) {
+            final stepData = StepStorage.load(this.model.id, getStepParam());
+            this.data = stepData.data;
+            if (stepData.storage != FailedStorage) {
+                Env.getLogger().write(Logger.LEVEL_INFO, 'Resuming request from step ${stepData.firstIndex + 1} with ${stepData.storage}.');
+            }
+            return stepData;
+        } else {
+            return new StepData(0, {}, FailedStorage, 1);
         }
-        return stepData;
     }
 
     private function getStepParam():Param {
@@ -536,11 +556,13 @@ class Flow extends Base {
             if (this.abortMessage == null) {
                 // Save step data if request supports it
                 Env.getLogger().write(Logger.LEVEL_INFO, 'Skipping request. Trying to save step data.');
-                final saveResult = StepStorage.save(
-                    this.model,
-                    new StepData(index, this.data, ConnectStorage, this.stepAttempt + 1),
-                    this.getStepParam(),
-                    Reflect.field(model, 'update'));
+                final saveResult = this.storesRequestOnFailure()
+                    ? StepStorage.save(
+                        this.model,
+                        new StepData(index, this.data, ConnectStorage, this.stepAttempt + 1),
+                        this.getStepParam(),
+                        Reflect.field(model, 'update'))
+                    : OmittedStorage;
                 switch (saveResult) {
                     case ConnectStorage:
                         Env.getLogger().write(Logger.LEVEL_INFO, 'Step data saved in Connect.');
@@ -548,6 +570,8 @@ class Flow extends Base {
                         Env.getLogger().write(Logger.LEVEL_INFO, 'Step data saved locally.');
                     case FailedStorage:
                         Env.getLogger().write(Logger.LEVEL_INFO, 'Step data could not be saved.');
+                    case OmittedStorage:
+                        Env.getLogger().write(Logger.LEVEL_INFO, 'Step data will not be saved because feature is disabled.');
                 }
             } else {
                 if (this.abortMessage != '') {
