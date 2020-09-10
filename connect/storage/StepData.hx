@@ -14,6 +14,7 @@ enum StorageType {
     ConnectStorage;
     LocalStorage;
     FailedStorage;
+    OmittedStorage;
 }
 
 
