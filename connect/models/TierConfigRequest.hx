@@ -174,7 +174,7 @@ class TierConfigRequest extends IdModel {
         }
     }
 
-    private static function prepareUpdateBody(diff: Dynamic): String {
+    private function prepareUpdateBody(diff: Dynamic): String {
         final hasConfiguration = Reflect.hasField(diff, 'configuration');
         final hasTcrParams = Reflect.hasField(diff, 'params');
         final hasTcParams = hasConfiguration && Reflect.hasField(diff.configuration, 'params');
@@ -192,6 +192,21 @@ class TierConfigRequest extends IdModel {
         if (hasConfiguration) {
             Reflect.deleteField(diff, 'configuration');
         }
+        Lambda.iter(diff.params, function(p) {
+            if (!Reflect.hasField(p, 'value') && (!Reflect.hasField(p, 'value_error') || Reflect.field(p, 'value_error') == '')) {
+                final id = Reflect.field(p, 'id');
+                final tcrValue = (hasTcrParams && this.getParamById(id) != null)
+                    ? this.getParamById(id).value
+                    : null;
+                final tcValue = (tcrValue == null && hasTcParams && this.configuration.getParamById(id) != null)
+                    ? this.configuration.getParamById(id).value
+                    : tcrValue;
+                final value = (tcValue == null && hasConfigParams && this.configuration.configuration.getParamById(id) != null)
+                    ? this.configuration.configuration.getParamById(id).value
+                    : tcValue;
+                Reflect.setField(p, 'value', value);
+            }
+        });
         return haxe.Json.stringify(diff);
     }
 

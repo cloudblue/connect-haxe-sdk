@@ -27,76 +27,76 @@
           "old_quantity": "0",
           "global_id": "XXX",
           "params": [
-                  {
-                    "value": "Value 1",
-                    "events": {
-                      "updated": {
-                        "at": "2019-08-27T14:21:23+00:00",
-                        "by": {
-                          "id": "UR-841-574-187",
-                          "name": "Marc Serrat"
-                        }
-                      },
-                      "created": {
-                        "at": "2019-08-26T10:42:56+00:00",
-                        "by": {
-                          "id": "UR-841-574-187",
-                          "name": "Marc Serrat"
-                        }
-                      }
-                    },
-                    "id": "item_parameter",
-                    "title": "item_parameter",
-                    "description": "item_parameter",
-                    "type": "text",
-                    "scope": "item",
-                    "phase": "configuration",
-                    "constraints": {
-                      "hidden": false,
-                      "required": false,
-                      "unique": false
-                    },
-                    "structured_value": {
-                      "checked": true
-                    }
-                  },
-                  {
-                    "value": "item",
-                    "events": {
-                      "updated": {
-                        "at": "2019-08-26T10:44:10+00:00"
-                      },
-                      "created": {
-                        "at": "2019-08-26T10:44:10+00:00",
-                        "by": {
-                          "id": "UR-841-574-187",
-                          "name": "Marc Serrat"
-                        }
-                      }
-                    },
-                    "id": "item_per_marketplace",
-                    "title": "item_per_marketplace",
-                    "description": "item_per_marketplace",
-                    "type": "text",
-                    "scope": "item_marketplace",
-                    "phase": "configuration",
-                    "constraints": {
-                      "hidden": false,
-                      "required": true,
-                      "unique": false
-                    }
-                  },
-                  {
-                    "id": "item_param_checkbox",
-                    "title": "item_param_checkbox",
-                    "description": "item_param_checkbox",
-                    "type": "checkbox",
-                    "scope": "item",
-                    "structured_value": {
-                      "checked": true
-                    }
+            {
+              "value": "Value 1",
+              "events": {
+                "updated": {
+                  "at": "2019-08-27T14:21:23+00:00",
+                  "by": {
+                    "id": "UR-841-574-187",
+                    "name": "Marc Serrat"
                   }
-                ]
+                },
+                "created": {
+                  "at": "2019-08-26T10:42:56+00:00",
+                  "by": {
+                    "id": "UR-841-574-187",
+                    "name": "Marc Serrat"
+                  }
+                }
+              },
+              "id": "item_parameter",
+              "title": "item_parameter",
+              "description": "item_parameter",
+              "type": "text",
+              "scope": "item",
+              "phase": "configuration",
+              "constraints": {
+                "hidden": false,
+                "required": false,
+                "unique": false
+              },
+              "structured_value": {
+                "checked": true
+              }
+            },
+            {
+              "value": "item",
+              "events": {
+                "updated": {
+                  "at": "2019-08-26T10:44:10+00:00"
+                },
+                "created": {
+                  "at": "2019-08-26T10:44:10+00:00",
+                  "by": {
+                    "id": "UR-841-574-187",
+                    "name": "Marc Serrat"
+                  }
+                }
+              },
+              "id": "item_per_marketplace",
+              "title": "item_per_marketplace",
+              "description": "item_per_marketplace",
+              "type": "text",
+              "scope": "item_marketplace",
+              "phase": "configuration",
+              "constraints": {
+                "hidden": false,
+                "required": true,
+                "unique": false
+              }
+            },
+            {
+              "id": "item_param_checkbox",
+              "title": "item_param_checkbox",
+              "description": "item_param_checkbox",
+              "type": "checkbox",
+              "scope": "item",
+              "structured_value": {
+                "checked": true
+              }
+            }
+          ]
         },
         {
           "id": "TEAM_ST3L2TAC1M",
@@ -131,7 +131,7 @@
           "type": "text",
           "value": "value param",
           "value_choices": [],
-          "value_error": ""
+          "value_error": "Error"
         }
       ],
       "product": {

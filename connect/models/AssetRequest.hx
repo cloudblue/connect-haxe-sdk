@@ -8,7 +8,6 @@ import connect.api.Query;
 import connect.util.Collection;
 import connect.util.DateTime;
 
-
 /**
     Represents a request of the Fulfillment Api.
 **/
@@ -16,14 +15,11 @@ class AssetRequest extends IdModel {
     /** Type of request. One of: purchase, change, suspend, resume, renew, cancel. **/
     public var type: String;
 
-
     /** Date of request creation. **/
     public var created: DateTime;
 
-
     /** Date of last request modification. **/
     public var updated: DateTime;
-
 
     /**
         Status of request. One of: pending, inquiring, failed, approved.
@@ -39,10 +35,8 @@ class AssetRequest extends IdModel {
     **/
     public var status: String;
 
-
     /** URL for customer/reseller/provider for modifying param based on vendor's feedback. **/
     public var paramsFormUrl: String;
-
 
     /**
         Activation key content for activating the subscription on vendor portal.
@@ -50,26 +44,20 @@ class AssetRequest extends IdModel {
     **/
     public var activationKey: String;
 
-
     /** Fail reason in case of status of request is failed. **/
     public var reason: String;
-
 
     /** Details of note. **/
     public var note: String;
 
-
     /** Asset object **/
     public var asset: Asset;
-
 
     /** Contract object. **/
     public var contract: Contract;
 
-
     /** Marketplace object. **/
     public var marketplace: Marketplace;
-
 
     /**
         Connect returns either a String or a JSON object in this field. When it is an object,
@@ -77,6 +65,14 @@ class AssetRequest extends IdModel {
     **/
     public var assignee: String;
 
+    public function new() {
+        super();
+        this._setFieldClassNames([
+            'created' => 'DateTime',
+            'updated' => 'DateTime',
+            'assignee' => 'String' // Assigne could be an object, so force conversion to string
+        ]);
+    }
 
     /**
         Lists all requests that match the given filters. Supported filters are:
@@ -105,7 +101,6 @@ class AssetRequest extends IdModel {
         return Model.parseArray(AssetRequest, requests);
     }
 
-
     /** @returns The AssetRequest with the given id, or `null` if it was not found. **/
     public static function get(id: String): AssetRequest {
         try {
@@ -115,7 +110,6 @@ class AssetRequest extends IdModel {
             return null;
         }
     }
-
 
     /**
         Registers a new AssetRequest on Connect, based on the data of `this` AssetRequest, which
@@ -138,7 +132,6 @@ class AssetRequest extends IdModel {
             return null;
         }
     }
-
 
     /**
         Updates the request in the server with the data changed in `this` model.
@@ -163,7 +156,7 @@ class AssetRequest extends IdModel {
             if (hasModifiedFields) {
                 final request = Env.getFulfillmentApi().updateRequest(
                     this.id,
-                    haxe.Json.stringify(diff));
+                    haxe.Json.stringify(addValueToParams(diff)));
                 return Model.parse(AssetRequest, request);
             } else {
                 return this;
@@ -178,6 +171,19 @@ class AssetRequest extends IdModel {
         }
     }
 
+    private function addValueToParams(obj: Dynamic): Dynamic {
+        final asset = Reflect.field(obj, 'asset');
+        final params: Array<Dynamic> = (asset != null) ? Reflect.field(asset, 'params') : null;
+        if (params != null) {
+            Lambda.iter(params, function(p) {
+                if (!Reflect.hasField(p, 'value') && (!Reflect.hasField(p, 'value_error') || Reflect.field(p, 'value_error') == '')) {
+                    final value = this.asset.getParamById(Reflect.field(p, 'id')).value;
+                    Reflect.setField(p, 'value', value);
+                }
+            });
+        }
+        return obj;
+    }
 
     /**
         Changes `this` AssetRequest status to "approved", sending the id of a Template to render
@@ -199,7 +205,6 @@ class AssetRequest extends IdModel {
         return Model.parse(AssetRequest, request);
     }
 
-
     /**
         Changes `this` AssetRequest status to "approved", rendering a tile on the portal with
         the given Markdown `text`.
@@ -220,7 +225,6 @@ class AssetRequest extends IdModel {
         return Model.parse(AssetRequest, request);
     }
 
-
     /**
         Changes the status of `this` AssetRequest to "failed".
 
@@ -239,7 +243,6 @@ class AssetRequest extends IdModel {
         this._updateConversation('Request failed: $reason.');
         return Model.parse(AssetRequest, request);
     }
-
 
     /**
         Changes the status of `this` AssetRequest to "inquiring".
@@ -264,7 +267,6 @@ class AssetRequest extends IdModel {
         return Model.parse(AssetRequest, request);
     }
 
-
     /**
         Changes the status of `this` AssetRequest to "pending".
 
@@ -284,7 +286,6 @@ class AssetRequest extends IdModel {
         return Model.parse(AssetRequest, request);
     }
 
-
     /**
         Assigns `this` request to the assignee with the given `assigneeId`.
 
@@ -300,7 +301,6 @@ class AssetRequest extends IdModel {
         return Model.parse(AssetRequest, request);
     }
 
-
     /**
         @returns Whether `this` AssetRequest is pending migration. This is indicated by the
         presence of a parameter (by default name "migration_info") that contains JSON data.
@@ -309,7 +309,6 @@ class AssetRequest extends IdModel {
         final param = this.asset.getParamById(key);
         return param != null && param.value != null && param.value != '';
     }
-
 
     /** @returns The Conversation assigned to `this` AssetRequest, or `null` if there is none. **/
     public function getConversation(): Conversation {
@@ -321,17 +320,6 @@ class AssetRequest extends IdModel {
             return null;
         }
     }
-
-
-    public function new() {
-        super();
-        this._setFieldClassNames([
-            'created' => 'DateTime',
-            'updated' => 'DateTime',
-            'assignee' => 'String' // Assigne could be an object, so force conversion to string
-        ]);
-    }
-
 
     @:dox(hide)
     public function _updateConversation(message: String): Void {

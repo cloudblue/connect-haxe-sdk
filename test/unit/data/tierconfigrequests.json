@@ -9,7 +9,8 @@
             "params": [
               {
                 "id": "tc_param",
-                "value": "tc_param_value"
+                "value": "tc_param_value",
+                "value_error": "Error"
               }
             ],
             "tiers": {}

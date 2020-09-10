@@ -120,7 +120,7 @@ class AssetTest {
         Assert.areEqual('Activation Code', param.description);
         Assert.areEqual('text', param.type);
         Assert.areEqual('value param', param.value);
-        Assert.areEqual('', param.valueError);
+        Assert.areEqual('Error', param.valueError);
 
         final customer = asset.tiers.customer;
         Assert.areEqual('TA-0-7304-8514-7000', customer.id);
