@@ -99,6 +99,18 @@ class AssetRequestTest {
     }
 
     @Test
+    public function testUpdateValueError() {
+        final request = AssetRequest.get('PR-5852-1608-0000');
+        final param = request.asset.getParamById('activationCode');
+        param.valueError = '';
+        final updatedRequest = request.update(null);
+        Assert.isType(updatedRequest, AssetRequest);
+        Assert.areNotEqual(updatedRequest, request);
+        Assert.areEqual('value param', updatedRequest.asset.getParamById('activationCode').value);
+        Assert.areEqual('', updatedRequest.asset.getParamById('activationCode').valueError);
+    }
+
+    @Test
     public function testApproveByTemplate() {
         final request = AssetRequest.get('PR-5852-1608-0000');
         final approvedRequest = request.approveByTemplate('TL-XXX-XXX-XXX');
