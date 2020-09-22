@@ -347,6 +347,7 @@ class Flow extends Base {
     private static final SKIP_MSG = 'Skipping request because an exception was thrown: ';
     private static final STEP_PARAM_ID = '__sdk_processor_step';
     private static final STEP_PARAM_ID_TIER = '__sdk_processor_step_tier';
+    private static final STEP_PARAM_ID_TIER2 = '__sdk_processor_step_tier2';
 
     private final filterFunc:FilterFunc;
     private var steps:Array<Step>;
@@ -427,7 +428,8 @@ class Flow extends Base {
         final tierConfigRequest = this.getTierConfigRequest();
         return
             (assetRequest != null) ? assetRequest.asset.getParamById(STEP_PARAM_ID) :
-            (tierConfigRequest != null) ? tierConfigRequest.getParamById(STEP_PARAM_ID_TIER) :
+            (tierConfigRequest != null && tierConfigRequest.tierLevel == 1) ? tierConfigRequest.getParamById(STEP_PARAM_ID_TIER) :
+            (tierConfigRequest != null && tierConfigRequest.tierLevel == 2) ? tierConfigRequest.getParamById(STEP_PARAM_ID_TIER2) :
             null;
     }
 
