@@ -24,7 +24,7 @@ class Param extends IdModel {
     public var description: String;
 
 
-    /** Type of parameter. **/
+    /** Type of parameter. One of: text, dropdown, password, email, checkbox, subdomain, domain, phone, url, choice. **/
     public var type: String;
 
 
