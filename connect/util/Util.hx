@@ -70,33 +70,59 @@ class Util {
                 return haxe.Json.stringify(mapped, null, spacing);
             }
         } else {
-            return haxe.Json.stringify(masked ? maskFields(obj) : obj, null, spacing);
+            return haxe.Json.stringify(masked ? maskParams(maskFields(obj)) : obj, null, spacing);
         }
     }
 
     public static function maskFields(obj:Dynamic):Dynamic {
-        final maskedFields = Env.getLogger().getMaskedFields();
         if (Type.typeof(obj) == TObject) {
-            for(fieldName in Reflect.fields(obj)){
-                if(maskedFields.indexOf(fieldName) != -1) {
-                    if (Type.typeof(Reflect.field(obj, fieldName)) == TObject){
-                        if (Reflect.hasField(Reflect.field(obj, fieldName), 'id')) {
-                            Reflect.setField(obj, fieldName, Reflect.field(obj, fieldName).id);
+            final maskedFields = Env.getLogger().getMaskedFields();
+            for (fieldName in Reflect.fields(obj)) {
+                final value = Reflect.field(obj, fieldName);
+                if (maskedFields.indexOf(fieldName) != -1) {
+                    if (Type.typeof(value) == TObject){
+                        if (Reflect.hasField(value, 'id')) {
+                            Reflect.setField(obj, fieldName, value.id);
                         } else {
                             Reflect.setField(obj, fieldName, '{object}');
                         }
                     } else {
-                        final value = Reflect.field(obj, fieldName);
                         Reflect.setField(obj, fieldName, StringTools.lpad('', '*', value.length));
                     }
-                } else if (Type.typeof(obj) == TObject || Std.is(obj,connect.util.Collection) || Std.is(obj, Array)) {
-                    Reflect.setField(obj, fieldName, maskFields(Reflect.field(obj, fieldName)));
+                } else if (Type.typeof(value) == TObject || Std.is(value, connect.util.Collection) || Std.is(value, Array)) {
+                    Reflect.setField(obj, fieldName, maskFields(value));
                 }
             }
             return obj;
         } else if (Std.is(obj, Array)) {
             final arr: Array<Dynamic> = obj;
             return arr.map(el -> maskFields(el));
+        }
+        return obj;
+    }
+
+
+    public static function maskParams(obj:Dynamic):Dynamic {
+        if (Type.typeof(obj) == TObject) {
+            final maskedParams = Env.getLogger().getMaskedParams();
+            for (fieldName in Reflect.fields(obj)) {
+                final value = Reflect.field(obj, fieldName);
+                if (fieldName == 'params' && Std.is(value, Array)) {
+                    for (param in cast(value, Array<Dynamic>)) {
+                        if (Type.typeof(param) == TObject && Reflect.hasField(param, 'id') && Reflect.hasField(param, 'value')) {
+                            if (maskedParams.indexOf(Std.string(Reflect.field(param, 'id'))) != -1) {
+                                final paramValue = Std.string(Reflect.field(param, 'value'));
+                                Reflect.setField(param, 'value', StringTools.lpad('', '*', paramValue.length));
+                            }
+                        }
+                    }
+                } else if (Type.typeof(value) == TObject || Std.is(value, connect.util.Collection) || Std.is(value, Array)) {
+                    Reflect.setField(obj, fieldName, maskParams(value));
+                }
+            }
+        } else if (Std.is(obj, Array)) {
+            final arr: Array<Dynamic> = obj;
+            return arr.map(el -> maskParams(el));
         }
         return obj;
     }

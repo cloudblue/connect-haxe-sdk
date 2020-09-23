@@ -28,6 +28,7 @@ class Logger extends Base {
     private final handlers:Collection<LoggerHandler>;
     private final sections:Array<LoggerSection>;
     private final maskedFields:Collection<String>;
+    private final maskedParams:Collection<String>;
     private final regexMaskingList:Collection<EReg>;
     private final compact:Bool;
     private final beautify:Bool;
@@ -44,6 +45,7 @@ class Logger extends Base {
         this.handlers = config.handlers_.copy();
         this.sections = [];
         this.maskedFields = config.maskedFields_.copy();
+        this.maskedParams = config.maskedParams_.copy();
         this.regexMaskingList = config.regexMaskingList_.copy();
         if (this.maskedFields.indexOf('Authorization') == -1) this.maskedFields.push('Authorization');
         this.beautify = config.beautify_;
@@ -213,11 +215,14 @@ class Logger extends Base {
         }
     }
 
-    /**
-     *  Returns a list of fields which should be masked in http requests or responses
-    **/
+    /** Returns a list of fields which should be masked in http requests or responses. **/
     public function getMaskedFields():Collection<String> {
         return this.maskedFields;
+    }
+
+    /** Returns a list of param ids whose value should be masked in logged requests. **/
+    public function getMaskedParams():Collection<String> {
+        return this.maskedParams;
     }
 
      /**

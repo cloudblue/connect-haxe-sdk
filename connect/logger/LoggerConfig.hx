@@ -21,11 +21,13 @@ class LoggerConfig extends Base {
     @:dox(hide)
     public var maskedFields_(default, null):Collection<String>;
     @:dox(hide)
+    public var maskedParams_(default, null):Collection<String>;
+    @:dox(hide)
+    public var regexMaskingList_:Collection<EReg>;
+    @:dox(hide)
     public var compact_(default, null):Bool;
     @:dox(hide)
     public var beautify_(default, null):Bool;
-    @:dox(hide)
-    public var regexMaskingList_:Collection<EReg>;
 
     private static final levelTranslation:Map<String, Int> = [
         'ERROR' => Logger.LEVEL_ERROR,
@@ -39,6 +41,7 @@ class LoggerConfig extends Base {
         this.level_ = Logger.LEVEL_INFO;
         this.handlers_ = new Collection<LoggerHandler>().push(new LoggerHandler(new PlainLoggerFormatter(), new FileLoggerWriter()));
         this.maskedFields_ = new Collection<String>();
+        this.maskedParams_ = new Collection<String>();
         this.compact_ = false;
         this.beautify_ = true;
         this.regexMaskingList_ = new Collection<EReg>();
@@ -105,6 +108,16 @@ class LoggerConfig extends Base {
      */
     public function maskedFields(maskedFields:Collection<String>):LoggerConfig {
         this.maskedFields_ = maskedFields;
+        return this;
+    }
+
+    /**
+     * Sets the id of the params whose value should be masked in the logs.
+     * @param maskedParams Collection of param ids (string).
+     * @return LoggerConfig `this` instance to support a fluent interface.
+     */
+    public function maskedParams(maskedParams:Collection<String>):LoggerConfig {
+        this.maskedParams_ = maskedParams;
         return this;
     }
 
