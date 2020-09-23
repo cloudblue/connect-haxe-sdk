@@ -133,4 +133,29 @@ class LoggerTest {
             Util.beautify(request.toString(), false, true, false)
         );
     }
+
+    @Test
+    public function testMaskPasswordParam() {
+        final request = Model.parse(AssetRequest, Json.stringify({
+            asset: {
+                params: [
+                    {
+                        id: 'one_param',
+                        value: 'my_value',
+                        type: 'password',
+                    },
+                    {
+                        id: 'other_param',
+                        value: 'other_value',
+                        type: null,
+                    }
+                ]
+            }
+        }));
+
+        Assert.areEqual(
+            '{"asset":{"params":[{"type":"password","id":"one_param","value":"********"},{"id":"other_param","value":"other_value"}]}}',
+            Util.beautify(request.toString(), false, true, false)
+        );
+    }
 }

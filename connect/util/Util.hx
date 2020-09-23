@@ -110,7 +110,10 @@ class Util {
                 if (fieldName == 'params' && Std.is(value, Array)) {
                     for (param in cast(value, Array<Dynamic>)) {
                         if (Type.typeof(param) == TObject && Reflect.hasField(param, 'id') && Reflect.hasField(param, 'value')) {
-                            if (maskedParams.indexOf(Std.string(Reflect.field(param, 'id'))) != -1) {
+                            final isPassword = Reflect.hasField(param, 'type')
+                                ? (Reflect.field(param, 'type') == 'password')
+                                : false;
+                            if (maskedParams.indexOf(Std.string(Reflect.field(param, 'id'))) != -1 || isPassword) {
                                 final paramValue = Std.string(Reflect.field(param, 'value'));
                                 Reflect.setField(param, 'value', StringTools.lpad('', '*', paramValue.length));
                             }
