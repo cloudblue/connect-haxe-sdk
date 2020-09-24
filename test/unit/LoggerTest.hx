@@ -128,10 +128,9 @@ class LoggerTest {
             }
         }));
 
-        Assert.areEqual(
-            '{"asset":{"params":[{"id":"my_param","value":"********"},{"id":"other_param","value":"other_value"}]}}',
-            Util.beautify(request.toString(), false, true, false)
-        );
+        final expected = Helper.sortStringObject(AssetRequest, '{"asset":{"params":[{"id":"my_param","value":"********"},{"id":"other_param","value":"other_value"}]}}');
+        final result = Helper.sortStringObject(AssetRequest, Util.beautify(request.toString(), false, true, false));
+        Assert.areEqual(expected, result);
     }
 
     @Test
@@ -153,9 +152,8 @@ class LoggerTest {
             }
         }));
 
-        Assert.areEqual(
-            '{"asset":{"params":[{"type":"password","id":"one_param","value":"********"},{"id":"other_param","value":"other_value"}]}}',
-            Util.beautify(request.toString(), false, true, false)
-        );
+        final expected = Helper.sortStringObject(AssetRequest, '{"asset":{"params":[{"type":"password","id":"one_param","value":"********"},{"id":"other_param","value":"other_value"}]}}');
+        final result = Helper.sortStringObject(AssetRequest, Util.beautify(request.toString(), false, true, false));
+        Assert.areEqual(expected, result);
     }
 }
