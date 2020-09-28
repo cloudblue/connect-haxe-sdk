@@ -176,7 +176,7 @@ class AssetRequest extends IdModel {
         final params: Array<Dynamic> = (asset != null) ? Reflect.field(asset, 'params') : null;
         if (params != null) {
             Lambda.iter(params, function(p) {
-                if (!Reflect.hasField(p, 'value') && (!Reflect.hasField(p, 'value_error') || Reflect.field(p, 'value_error') == '')) {
+                if (!Reflect.hasField(p, 'value')) {
                     final value = this.asset.getParamById(Reflect.field(p, 'id')).value;
                     Reflect.setField(p, 'value', value);
                 }

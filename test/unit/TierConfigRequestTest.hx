@@ -106,12 +106,21 @@ class TierConfigRequestTest {
     }
 
     @Test
-    public function testUpdateWithValueError() {
+    public function testUpdateWithEmptyValueError() {
         final request = TierConfigRequest.get('TCR-000-000-000');
         request.configuration.getParamById('tc_param').valueError = '';
         final updatedRequest = request.update(null);
         Assert.areEqual('tc_param_value', updatedRequest.getParamById('tc_param').value);
         Assert.areEqual('', updatedRequest.getParamById('tc_param').valueError);
+    }
+
+    @Test
+    public function testUpdateWithValueError() {
+        final request = TierConfigRequest.get('TCR-000-000-000');
+        request.configuration.getParamById('tc_param').valueError = 'Changed';
+        final updatedRequest = request.update(null);
+        Assert.areEqual('tc_param_value', updatedRequest.getParamById('tc_param').value);
+        Assert.areEqual('Changed', updatedRequest.getParamById('tc_param').valueError);
     }
 
     @Test
