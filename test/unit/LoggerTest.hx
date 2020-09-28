@@ -2,16 +2,18 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-import test.util.ArrayLoggerWriter;
 import connect.logger.Logger;
 import connect.logger.LoggerHandler;
 import connect.logger.LoggerConfig;
 import connect.logger.MarkdownLoggerFormatter;
+import connect.models.AssetRequest;
+import connect.models.Model;
 import connect.Env;
 import connect.util.Collection;
 import connect.util.Util;
-import massive.munit.Assert;
 import haxe.Json;
+import massive.munit.Assert;
+import test.util.ArrayLoggerWriter;
 
 class LoggerTest {
     private static final dataTestMaskDataInObj:String = '{"apiKey":"123456","non_important_data": 1,"some_list":["a","b",{"username":"1"}],"smtp": {"user":"loguser","password":"pass"},"the_obj":{"a":"test"},"id_obj":{"id":"the id"}}';
@@ -24,6 +26,9 @@ class LoggerTest {
     private static final dataTestNoMaskDataInText:String = 'This is a testing string with no passwords and no users';
     private static final resultTestMaskDataInText:String = '********* *********&********* topSecret=*********,*********';
 
+    private static final MASKED_PARAM_ID = 'my_param';
+    private static final MASKED_PARAM_VALUE = 'my_value';
+
     @Before
     public function setup() {
         Env._reset();
@@ -34,6 +39,8 @@ class LoggerTest {
             .push("smtpUsername")
             .push("id_obj")
             .push("the_obj");
+        final maskedParams:Collection<String> = new Collection()
+            .push(MASKED_PARAM_ID);
         final maskingRegex:Collection<String> = new Collection()
             .push("(Bearer\\s[\\d|a-f]{8}-([\\d|a-f]{4}-){3}[\\d|a-f]{12})")
             .push("(password=[^\\&]*)")
@@ -43,6 +50,7 @@ class LoggerTest {
             .handlers(new Collection<LoggerHandler>()
                 .push(new LoggerHandler(new MarkdownLoggerFormatter(), new ArrayLoggerWriter())));
         loggerConfiguration.maskedFields(maskedFields);
+        loggerConfiguration.maskedParams(maskedParams);
         loggerConfiguration.regexMasks(maskingRegex);
         Env.initLogger(loggerConfiguration);
     }
@@ -101,5 +109,51 @@ class LoggerTest {
     public function testMaskNoDataInText() {
         final unMaskedInfo = Util.beautify(dataTestNoMaskDataInText, false, true, false);
         Assert.areEqual(dataTestNoMaskDataInText,unMaskedInfo);
+    }
+
+    @Test
+    public function testMaskParam() {
+        final request = Model.parse(AssetRequest, Json.stringify({
+            asset: {
+                params: [
+                    {
+                        id: MASKED_PARAM_ID,
+                        value: MASKED_PARAM_VALUE,
+                    },
+                    {
+                        id: 'other_param',
+                        value: 'other_value',
+                    }
+                ]
+            }
+        }));
+
+        final expected = Helper.sortStringObject(AssetRequest, '{"asset":{"params":[{"id":"my_param","value":"********"},{"id":"other_param","value":"other_value"}]}}');
+        final result = Helper.sortStringObject(AssetRequest, Util.beautify(request.toString(), false, true, false));
+        Assert.areEqual(expected, result);
+    }
+
+    @Test
+    public function testMaskPasswordParam() {
+        final request = Model.parse(AssetRequest, Json.stringify({
+            asset: {
+                params: [
+                    {
+                        id: 'one_param',
+                        value: 'my_value',
+                        type: 'password',
+                    },
+                    {
+                        id: 'other_param',
+                        value: 'other_value',
+                        type: null,
+                    }
+                ]
+            }
+        }));
+
+        final expected = Helper.sortStringObject(AssetRequest, '{"asset":{"params":[{"type":"password","id":"one_param","value":"********"},{"id":"other_param","value":"other_value"}]}}');
+        final result = Helper.sortStringObject(AssetRequest, Util.beautify(request.toString(), false, true, false));
+        Assert.areEqual(expected, result);
     }
 }
