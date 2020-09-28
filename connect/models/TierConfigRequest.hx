@@ -193,7 +193,7 @@ class TierConfigRequest extends IdModel {
             Reflect.deleteField(diff, 'configuration');
         }
         Lambda.iter(diff.params, function(p) {
-            if (!Reflect.hasField(p, 'value') && (!Reflect.hasField(p, 'value_error') || Reflect.field(p, 'value_error') == '')) {
+            if (!Reflect.hasField(p, 'value')) {
                 final id = Reflect.field(p, 'id');
                 final tcrValue = (hasTcrParams && this.getParamById(id) != null)
                     ? this.getParamById(id).value

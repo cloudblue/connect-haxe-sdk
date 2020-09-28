@@ -656,29 +656,6 @@ class Flow extends Base {
         });
         return fmt.formatTable(Env.getLogger().getLevel(),dataCol);
     }
-
-    /*
-        private function getAssetRequestChanges(): AssetRequest {
-            if (this.getAssetRequest() != null) {
-                final originalModel = Json.parse(this.originalModelStr);
-                final diff = Util.createObjectDiff(this.model.toObject(), originalModel);
-                return connect.models.Model.parse(AssetRequest, Json.stringify(diff));
-            } else {
-                return null;
-            }
-        }
-
-
-        private function getTierConfigRequestChanges(): TierConfigRequest {
-            if (this.getTierConfigRequest() != null) {
-                final originalModel = Json.parse(this.originalModelStr);
-                final diff = Util.createObjectDiff(this.model.toObject(), originalModel);
-                return connect.models.Model.parse(TierConfigRequest, Json.stringify(diff));
-            } else {
-                return null;
-            }
-        }
-    */
     
     private function getClassName():String {
         #if js

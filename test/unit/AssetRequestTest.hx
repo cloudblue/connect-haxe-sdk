@@ -95,11 +95,11 @@ class AssetRequestTest {
         final request = AssetRequest.get('PR-5852-1608-0000');
         final updatedRequest = request.update(new Collection<Param>().push(param));
         Assert.isType(updatedRequest, AssetRequest);
-        Assert.areEqual(request.toString(), updatedRequest.toString());
+        Assert.areEqual(request, updatedRequest);
     }
 
     @Test
-    public function testUpdateValueError() {
+    public function testUpdateWithEmptyValueError() {
         final request = AssetRequest.get('PR-5852-1608-0000');
         final param = request.asset.getParamById('activationCode');
         param.valueError = '';
@@ -108,6 +108,18 @@ class AssetRequestTest {
         Assert.areNotEqual(updatedRequest, request);
         Assert.areEqual('value param', updatedRequest.asset.getParamById('activationCode').value);
         Assert.areEqual('', updatedRequest.asset.getParamById('activationCode').valueError);
+    }
+
+    @Test
+    public function testUpdateWithValueError() {
+        final request = AssetRequest.get('PR-5852-1608-0000');
+        final param = request.asset.getParamById('activationCode');
+        param.valueError = 'Changed';
+        final updatedRequest = request.update(null);
+        Assert.isType(updatedRequest, AssetRequest);
+        Assert.areNotEqual(updatedRequest, request);
+        Assert.areEqual('value param', updatedRequest.asset.getParamById('activationCode').value);
+        Assert.areEqual('Changed', updatedRequest.asset.getParamById('activationCode').valueError);
     }
 
     @Test
