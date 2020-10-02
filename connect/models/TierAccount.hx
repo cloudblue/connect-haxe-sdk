@@ -37,6 +37,9 @@ class TierAccount extends IdModel {
     /** Only in case of filtering by this field. **/
     public var externalUid: String;
 
+    /** Used for storing "Tax Registration ID" value of CloudBlue Commerce. **/
+    public var taxId: String;
+
     /**
         Lists all TierAccounts that match the given filters. Supported filters are:
 
