@@ -379,7 +379,7 @@ class Flow extends Base {
         if (this.prepareRequestAndOpenLogSection(model)) {
             if (this.processSetup()) {
                 final stepData = this.loadStepDataIfStored();
-                this.stepAttempt = stepData.attempt;
+                this.stepAttempt = (stepData.attempt != null) ? stepData.attempt : 0;
                 final steps = [for (i in stepData.firstIndex...this.steps.length) this.steps[i]];
 
                 // Process all steps
