@@ -558,7 +558,7 @@ class Flow extends Base {
         Env.getLogger().openSection('Processing request "${this.model.id}" on ${DateTime.now()}');
 
         // For asset requests, check if we must skip due to pending migration
-        if (assetRequest != null && assetRequest.needsMigration() && skipsRequestOnPendingMigration()) {
+        if (assetRequest != null && assetRequest.needsMigration() && skipsRequestOnPendingMigration() && assetRequest.type == 'purchase') {
             Env.getLogger().write(Logger.LEVEL_INFO, 'Skipping request because it is pending migration.');
             Env.getLogger().closeSection();
             return false;
