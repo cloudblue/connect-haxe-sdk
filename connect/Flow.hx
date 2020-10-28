@@ -53,6 +53,7 @@ class Flow extends Base {
         this.data = new Dictionary();
         this.stepAttempt = 0;
         this.storeRequestOnFailure = true;
+        this.skipRequestOnPendingMigration = true;
     }
 
     /**
@@ -67,6 +68,20 @@ class Flow extends Base {
     **/
     public function storesRequestOnFailure():Bool {
         return this.storeRequestOnFailure;
+    }
+
+    /**
+        Enables or disables skipping the request when it is pending migration. Defaults to true.
+    **/
+    public function setSkipRequestOnPendingMigration(enable:Bool):Void {
+        this.skipRequestOnPendingMigration = enable;
+    }
+
+    /**
+        Tells if requests are automatically skipped when they are pending migration.
+    **/
+    public function skipsRequestOnPendingMigration():Bool {
+        return this.skipRequestOnPendingMigration;
     }
 
     /**
@@ -358,12 +373,13 @@ class Flow extends Base {
     private var abortMessage:String;
     private var stepAttempt:Int;
     private var storeRequestOnFailure:Bool;
+    private var skipRequestOnPendingMigration:Bool;
 
     private function process(model:IdModel):Void {
         if (this.prepareRequestAndOpenLogSection(model)) {
             if (this.processSetup()) {
                 final stepData = this.loadStepDataIfStored();
-                this.stepAttempt = stepData.attempt;
+                this.stepAttempt = (stepData.attempt != null) ? stepData.attempt : 0;
                 final steps = [for (i in stepData.firstIndex...this.steps.length) this.steps[i]];
 
                 // Process all steps
@@ -547,7 +563,7 @@ class Flow extends Base {
         Env.getLogger().openSection('Processing request "${this.model.id}" on ${DateTime.now()}');
 
         // For asset requests, check if we must skip due to pending migration
-        if (assetRequest != null && assetRequest.needsMigration()) {
+        if (assetRequest != null && assetRequest.needsMigration() && skipsRequestOnPendingMigration() && assetRequest.type == 'purchase') {
             Env.getLogger().write(Logger.LEVEL_INFO, 'Skipping request because it is pending migration.');
             Env.getLogger().closeSection();
             return false;
