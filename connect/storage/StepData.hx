@@ -23,7 +23,7 @@ class StepData {
     public final firstIndex: Int;
     public final data: Dictionary;
     public final storage: StorageType;
-    public final attempt: Int;
+    public final attempt: Null<Int>;
 
     public function new(firstIndex: Int, data: Dynamic, storage: StorageType, attempt:Int) {
         this.firstIndex = firstIndex;
