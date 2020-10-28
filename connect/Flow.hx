@@ -463,6 +463,11 @@ class Flow extends Base {
             if (this.getAssetRequest() != null) {
                 this.getAssetRequest()._updateConversation(SKIP_MSG + exStr);
             }
+            if (this.getAssetRequest() != null) {
+                this.getAssetRequest().update(null);
+            } else if (this.getTierConfigRequest() != null) {
+                this.getTierConfigRequest().update(null);
+            }
             this.abort();
         }
 
