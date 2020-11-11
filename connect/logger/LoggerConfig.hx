@@ -43,7 +43,7 @@ class LoggerConfig extends Base {
         this.maskedFields_ = new Collection<String>();
         this.maskedParams_ = new Collection<String>();
         this.compact_ = false;
-        this.beautify_ = true;
+        this.beautify_ = false;
         this.regexMaskingList_ = new Collection<EReg>();
         this.customHandlers = false;
     }
@@ -124,7 +124,7 @@ class LoggerConfig extends Base {
     /**
      * Set whether the logs must be written in beautified format (this is,
      * for JSON objects use new lines and two space indentation).
-     * @param enable Whether beautified logging should be enabled (defaults to `true`).
+     * @param enable Whether beautified logging should be enabled (defaults to `false`).
      * @return LoggerConfig `this` instance to support a fluent interface.
      */
     public function beautify(enable:Bool):LoggerConfig {
