@@ -192,21 +192,23 @@ class TierConfigRequest extends IdModel {
         if (hasConfiguration) {
             Reflect.deleteField(diff, 'configuration');
         }
-        Lambda.iter(diff.params, function(p) {
-            if (!Reflect.hasField(p, 'value')) {
-                final id = Reflect.field(p, 'id');
-                final tcrValue = (hasTcrParams && this.getParamById(id) != null)
-                    ? this.getParamById(id).value
-                    : null;
-                final tcValue = (tcrValue == null && hasTcParams && this.configuration.getParamById(id) != null)
-                    ? this.configuration.getParamById(id).value
-                    : tcrValue;
-                final value = (tcValue == null && hasConfigParams && this.configuration.configuration.getParamById(id) != null)
-                    ? this.configuration.configuration.getParamById(id).value
-                    : tcValue;
-                Reflect.setField(p, 'value', value);
-            }
-        });
+        if (hasTcrParams || hasTcParams || hasConfigParams) {
+            Lambda.iter(diff.params, function(p) {
+                if (!Reflect.hasField(p, 'value')) {
+                    final id = Reflect.field(p, 'id');
+                    final tcrValue = (hasTcrParams && this.getParamById(id) != null)
+                        ? this.getParamById(id).value
+                        : null;
+                    final tcValue = (tcrValue == null && hasTcParams && this.configuration.getParamById(id) != null)
+                        ? this.configuration.getParamById(id).value
+                        : tcrValue;
+                    final value = (tcValue == null && hasConfigParams && this.configuration.configuration.getParamById(id) != null)
+                        ? this.configuration.configuration.getParamById(id).value
+                        : tcValue;
+                    Reflect.setField(p, 'value', value);
+                }
+            });
+        }
         return haxe.Json.stringify(diff);
     }
 
