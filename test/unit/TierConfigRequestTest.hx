@@ -124,6 +124,14 @@ class TierConfigRequestTest {
     }
 
     @Test
+    public function testUpdateWithNotes() {
+        final request = TierConfigRequest.get('TCR-000-000-000');
+        request.notes = "Notes text";
+        final updatedRequest = request.update(null);
+        Assert.isType(request, TierConfigRequest);
+    }
+
+    @Test
     public function testApproveByTemplate() {
         final request = TierConfigRequest.get('TCR-000-000-000');
         Assert.isTrue(request.approveByTemplate('TL-XXX-XXX-XXX'));

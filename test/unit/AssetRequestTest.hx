@@ -123,6 +123,14 @@ class AssetRequestTest {
     }
 
     @Test
+    public function testUpdateWithNote() {
+        final request = AssetRequest.get('PR-5852-1608-0000');
+        request.note = "Note text.";
+        final updatedRequest = request.update(null);
+        Assert.isType(updatedRequest, AssetRequest);
+    }
+
+    @Test
     public function testApproveByTemplate() {
         final request = AssetRequest.get('PR-5852-1608-0000');
         final approvedRequest = request.approveByTemplate('TL-XXX-XXX-XXX');
