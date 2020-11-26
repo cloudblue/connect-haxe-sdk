@@ -6,6 +6,12 @@
 package connect.logger;
 
 import connect.util.Collection;
+import connect.models.IdModel;
+import connect.models.Asset;
+import connect.models.AssetRequest;
+import connect.models.Listing;
+import connect.models.TierConfigRequest;
+import connect.models.UsageFile;
 
 /**
     This class is used to log events to a file and the output console.
@@ -113,6 +119,62 @@ class Logger extends Base {
             }
         }
     }
+
+
+    public function setFilenameFromRequest(request: IdModel) {
+
+        final defaultProvider = 'provider';
+        final defaultHub = 'hub';
+        final defaultMarketplace = 'marketplace';
+        final defaultProduct = 'product';
+        final defaultTierAccount = 'tierAccount';
+
+        if(Std.is(request, Asset)){
+            final asset = cast(request, Asset);
+            final provider = asset.connection.provider != null ? asset.connection.provider.id : defaultProvider;
+            final hub = asset.connection.hub != null ? asset.connection.hub.id : defaultHub;
+            final marketplace = asset.marketplace != null ? asset.marketplace.id : defaultMarketplace;
+            final product = asset.product != null ? asset.product.id : defaultProduct;
+            final tierAccount = asset.tiers.customer != null ? asset.tiers.customer.id : defaultTierAccount;
+            Env.getLogger().setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
+        }
+
+        if(Std.is(request, AssetRequest)){
+            final assetRequest = cast(request, AssetRequest);
+            final provider = assetRequest.asset.connection.provider != null ? assetRequest.asset.connection.provider.id : defaultProvider;
+            final hub = assetRequest.asset.connection.hub != null ? assetRequest.asset.connection.hub.id : defaultHub;
+            final marketplace = assetRequest.marketplace != null ? assetRequest.marketplace.id : defaultMarketplace;
+            final product = assetRequest.asset.product != null ? assetRequest.asset.product.id : defaultProduct;
+            final tierAccount = assetRequest.asset.tiers.customer != null ? assetRequest.asset.tiers.customer.id : defaultTierAccount;
+            Env.getLogger().setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
+        }
+
+        if(Std.is(request, TierConfigRequest)){
+            final tierRequest = cast(request, TierConfigRequest);
+            final provider = tierRequest.configuration.connection.provider != null ? tierRequest.configuration.connection.provider.id : defaultProvider;
+            final hub = tierRequest.configuration.connection.hub != null ? tierRequest.configuration.connection.hub.id : defaultHub;
+            final marketplace = tierRequest.configuration.marketplace != null ? tierRequest.configuration.marketplace.id : defaultMarketplace;
+            final product = tierRequest.configuration.product != null ? tierRequest.configuration.product.id : defaultProduct;
+            final tierAccount = tierRequest.configuration.account != null ? tierRequest.configuration.account.id : defaultTierAccount;
+            Env.getLogger().setFilename('$provider/$hub/$marketplace/$product/$tierAccount');        }
+
+
+        if(Std.is(request, Listing)){
+            final listingRequest = cast(request, Listing);
+            final provider = listingRequest.provider != null ? listingRequest.provider.id : defaultProvider;
+            final marketplace = listingRequest.contract.marketplace != null ? listingRequest.contract.marketplace.id : defaultMarketplace;
+            Env.getLogger().setFilename('usage/$provider/$marketplace');
+        }
+
+        if(Std.is(request, UsageFile)){
+            final usageRequest = cast(request, UsageFile);
+            final provider = usageRequest.provider != null ? usageRequest.provider.id : defaultProvider;
+            final marketplace = usageRequest.marketplace.id != null ? usageRequest.marketplace.id : defaultMarketplace;
+            Env.getLogger().setFilename('usage/$provider/$marketplace');
+        }
+        
+    }
+
 
     /** @returns The last filename that was set. **/
     public function getFilename():String {

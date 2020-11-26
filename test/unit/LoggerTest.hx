@@ -7,6 +7,10 @@ import connect.logger.LoggerHandler;
 import connect.logger.LoggerConfig;
 import connect.logger.MarkdownLoggerFormatter;
 import connect.models.AssetRequest;
+import connect.models.Asset;
+import connect.models.TierConfigRequest;
+import connect.models.Listing;
+import connect.models.UsageFile;
 import connect.models.Model;
 import connect.Env;
 import connect.util.Collection;
@@ -155,5 +159,129 @@ class LoggerTest {
         final expected = Helper.sortStringObject(AssetRequest, '{"asset":{"params":[{"type":"password","id":"one_param","value":"********"},{"id":"other_param","value":"other_value"}]}}');
         final result = Helper.sortStringObject(AssetRequest, Util.beautify(request.toString(), false, true, false));
         Assert.areEqual(expected, result);
+    }
+
+
+    @Test
+    public function testsetFilenameFromAssetRequest(){
+        final request = Model.parse(AssetRequest, Json.stringify({
+            asset: {
+                connection: {
+                        provider: {
+                            id: 'PROVIDER_ID'
+                        },
+                        hub: {
+                            id: 'HUB_ID'
+                        }
+                        
+                    },
+                    product: {
+                        id: 'PRODUCT_ID'
+                    },
+                    tiers: {
+                        customer: {
+                            id: 'CUSTOMER_ID'
+                        }
+                    }
+            },
+            marketplace: {
+                id: 'MARKETPLACE_ID'
+            }
+        }
+        ));
+        Env.getLogger().setFilenameFromRequest(request);       
+        Assert.areEqual(Env.getLogger().getFilename(),'PROVIDER_ID/HUB_ID/MARKETPLACE_ID/PRODUCT_ID/CUSTOMER_ID'); 
+    }
+
+
+    @Test
+    public function testsetFilenameFromTierRequest(){
+        final request = Model.parse(TierConfigRequest, Json.stringify({
+            configuration: {
+                connection: {
+                        provider: {
+                            id: 'PROVIDER_ID'
+                        },
+                        hub: {
+                            id: 'HUB_ID'
+                        }
+                        
+                    },
+                    product: {
+                        id: 'PRODUCT_ID'
+                    },
+                    account: {
+                            id: 'CUSTOMER_ID'
+                    },
+                    marketplace: {
+                        id: 'MARKETPLACE_ID'
+                    }
+            }
+        }
+        ));
+        Env.getLogger().setFilenameFromRequest(request);       
+        Assert.areEqual(Env.getLogger().getFilename(),'PROVIDER_ID/HUB_ID/MARKETPLACE_ID/PRODUCT_ID/CUSTOMER_ID'); 
+    }
+
+    @Test
+    public function testsetFilenameFromAsset(){
+        final request = Model.parse(Asset, Json.stringify({
+            connection: {
+                        provider: {
+                            id: 'PROVIDER_ID'
+                        },
+                        hub: {
+                            id: 'HUB_ID'
+                        }
+                        
+                    },
+            product: {
+                id: 'PRODUCT_ID'
+            },
+            tiers: {
+                customer: {
+                    id: 'CUSTOMER_ID'
+                }
+            },
+            marketplace: {
+                id: 'MARKETPLACE_ID'
+            }
+        }
+        ));
+        Env.getLogger().setFilenameFromRequest(request);       
+        Assert.areEqual(Env.getLogger().getFilename(),'PROVIDER_ID/HUB_ID/MARKETPLACE_ID/PRODUCT_ID/CUSTOMER_ID'); 
+    }
+
+
+    @Test
+    public function testsetFilenameFromListingRequest(){
+        final request = Model.parse(Listing, Json.stringify({
+            provider: {
+                    id: 'PROVIDER_ID'
+            },
+           contract:{
+                    marketplace: {
+                        id: 'MARKETPLACE_ID'
+                    }
+            }
+        }
+        ));
+        Env.getLogger().setFilenameFromRequest(request);       
+        Assert.areEqual(Env.getLogger().getFilename(),'usage/PROVIDER_ID/MARKETPLACE_ID'); 
+    }
+
+    @Test
+    public function testsetFilenameFromUsageRequest(){
+        final request = Model.parse(UsageFile, Json.stringify({
+            provider: {
+                    id: 'PROVIDER_ID'
+            },
+            marketplace: {
+                id: 'MARKETPLACE_ID'
+            }
+        }
+        ));
+        Env.getLogger().setFilenameFromRequest(request);       
+        Assert.areEqual(Env.getLogger().getFilename(),'usage/PROVIDER_ID/MARKETPLACE_ID'); 
     }
 }
