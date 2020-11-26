@@ -98,8 +98,12 @@ class TierConfigRequest extends IdModel {
         @returns A Collection of TierConfigRequests.
     **/
     public static function list(filters: Query) : Collection<TierConfigRequest> {
-        final requests = Env.getTierApi().listTierConfigRequests(filters);
-        return Model.parseArray(TierConfigRequest, requests);
+        try{
+            final requests = Env.getTierApi().listTierConfigRequests(filters);
+            return Model.parseArray(TierConfigRequest, requests);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
     /** @returns The TierConfigRequest with the given id, or `null` if it was not found. **/
@@ -153,24 +157,28 @@ class TierConfigRequest extends IdModel {
         the same data as `this` TierConfigRequest.
     **/
     public function update(params: Collection<Param>): TierConfigRequest {
-        if (params == null) {
-            final diff = this._toDiff();
-            final hasModifiedFields = Reflect.fields(diff).length > 1;
-            if (hasModifiedFields) {
-                final request = Env.getTierApi().updateTierConfigRequest(
-                    this.id,
-                    prepareUpdateBody(diff));
-                return Model.parse(TierConfigRequest, request);
+        try{
+            if (params == null) {
+                final diff = this._toDiff();
+                final hasModifiedFields = Reflect.fields(diff).length > 1;
+                if (hasModifiedFields) {
+                    final request = Env.getTierApi().updateTierConfigRequest(
+                        this.id,
+                        prepareUpdateBody(diff));
+                    return Model.parse(TierConfigRequest, request);
+                } else {
+                    return this;
+                }
             } else {
+                if (params.length() > 0) {
+                    Env.getTierApi().updateTierConfigRequest(
+                        this.id,
+                        '{"params":${params.toString()}}');
+                }
                 return this;
             }
-        } else {
-            if (params.length() > 0) {
-                Env.getTierApi().updateTierConfigRequest(
-                    this.id,
-                    '{"params":${params.toString()}}');
-            }
-            return this;
+        } catch (ex: Dynamic) {
+            return null;
         }
     }
 

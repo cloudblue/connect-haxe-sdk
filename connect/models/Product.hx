@@ -86,8 +86,12 @@ class Product extends IdModel {
         @returns A Collection of Products.
     **/
     public static function list(filters: Query) : Collection<Product> {
-        final products = Env.getGeneralApi().listProducts(filters);
-        return Model.parseArray(Product, products);
+        try{
+            final products = Env.getGeneralApi().listProducts(filters);
+            return Model.parseArray(Product, products);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
     /** @returns The Product with the given id, or `null` if it was not found. **/

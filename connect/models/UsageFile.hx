@@ -117,9 +117,12 @@ class UsageFile extends IdModel {
         @returns A Collection of Requests.
     **/
     public static function list(filters: Query) : Collection<UsageFile> {
-        final usageFiles = Env.getUsageApi().listUsageFiles(filters);
-        return Model.parseArray(UsageFile, usageFiles);
-    }
+        try{
+            final usageFiles = Env.getUsageApi().listUsageFiles(filters);
+            return Model.parseArray(UsageFile, usageFiles);
+        } catch (ex: Dynamic) {
+            return null;
+        }    }
 
     /** @returns The UsageFile with the given id, or `null` if it was not found. **/
     public static function get(id: String): UsageFile {
@@ -165,15 +168,19 @@ class UsageFile extends IdModel {
         the same data as `this` UsageFile.
     **/
     public function update(): UsageFile {
-        final diff = this._toDiff();
-        final hasModifiedFields = Reflect.fields(diff).length > 1;
-        if (hasModifiedFields) {
-            final usageFile = Env.getUsageApi().updateUsageFile(
-                this.id,
-                haxe.Json.stringify(diff));
-            return Model.parse(UsageFile, usageFile);
-        } else {
-            return this;
+        try{
+            final diff = this._toDiff();
+            final hasModifiedFields = Reflect.fields(diff).length > 1;
+            if (hasModifiedFields) {
+                final usageFile = Env.getUsageApi().updateUsageFile(
+                    this.id,
+                    haxe.Json.stringify(diff));
+                return Model.parse(UsageFile, usageFile);
+            } else {
+                return this;
+            }
+        } catch (ex: Dynamic) {
+            return null;
         }
     }
 
@@ -317,8 +324,12 @@ class UsageFile extends IdModel {
         @returns The UsageFile returned from the server.
     **/
     public function upload(content: Blob): UsageFile {
-        final usageFile = Env.getUsageApi().uploadUsageFile(this.id, content);
-        return Model.parse(UsageFile, usageFile);
+        try{
+            final usageFile = Env.getUsageApi().uploadUsageFile(this.id, content);
+            return Model.parse(UsageFile, usageFile);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
     /**
@@ -327,8 +338,12 @@ class UsageFile extends IdModel {
         @returns The UsageFile returned from the server.
     **/
     public function submit(): UsageFile {
-        final usageFile = Env.getUsageApi().submitUsageFileAction(this.id);
-        return Model.parse(UsageFile, usageFile);
+        try{
+            final usageFile = Env.getUsageApi().submitUsageFileAction(this.id);
+            return Model.parse(UsageFile, usageFile);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
     /**
@@ -337,8 +352,12 @@ class UsageFile extends IdModel {
         @returns The UsageFile returned from the server.
     **/
     public function accept(note: String): UsageFile {
-        final usageFile = Env.getUsageApi().acceptUsageFileAction(this.id, note);
-        return Model.parse(UsageFile, usageFile);
+        try{
+            final usageFile = Env.getUsageApi().acceptUsageFileAction(this.id, note);
+            return Model.parse(UsageFile, usageFile);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
     /**
@@ -347,8 +366,12 @@ class UsageFile extends IdModel {
         @returns The UsageFile returned from the server.
     **/
     public function reject(note: String): UsageFile {
-        final usageFile = Env.getUsageApi().rejectUsageFileAction(this.id, note);
-        return Model.parse(UsageFile, usageFile);
+        try{
+            final usageFile = Env.getUsageApi().rejectUsageFileAction(this.id, note);
+            return Model.parse(UsageFile, usageFile);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
     /**
@@ -357,8 +380,12 @@ class UsageFile extends IdModel {
         @returns The UsageFile returned from the server.
     **/
     public function close(): UsageFile {
-        final usageFile = Env.getUsageApi().closeUsageFileAction(this.id);
-        return Model.parse(UsageFile, usageFile);
+        try{
+            final usageFile = Env.getUsageApi().closeUsageFileAction(this.id);
+            return Model.parse(UsageFile, usageFile);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
     /**
@@ -378,8 +405,12 @@ class UsageFile extends IdModel {
         Gets the product specific file template URL for `this` UsageFile.
     **/
     public function getTemplateLink(): String {
-        final link = haxe.Json.parse(Env.getUsageApi().getProductSpecificUsageFileTemplate(this.id));
-        return link.template_link;
+        try{
+            final link = haxe.Json.parse(Env.getUsageApi().getProductSpecificUsageFileTemplate(this.id));
+            return link.template_link;
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
     /**
@@ -389,8 +420,12 @@ class UsageFile extends IdModel {
         @returns The UsageFile returned from the server.
     **/
     public function uploadReconciliation(content: Blob): UsageFile {
-        final usageFile = Env.getUsageApi().uploadReconciliationFileFromProvider(this.id, content);
-        return Model.parse(UsageFile, usageFile);
+        try{
+            final usageFile = Env.getUsageApi().uploadReconciliationFileFromProvider(this.id, content);
+            return Model.parse(UsageFile, usageFile);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
     /**
@@ -400,7 +435,11 @@ class UsageFile extends IdModel {
         @returns The UsageFile returned from the server.
     **/
     public function reprocess(): UsageFile {
-        final usageFile = Env.getUsageApi().reprocessProcessedFile(this.id);
-        return Model.parse(UsageFile, usageFile);
+        try{
+            final usageFile = Env.getUsageApi().reprocessProcessedFile(this.id);
+            return Model.parse(UsageFile, usageFile);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 }

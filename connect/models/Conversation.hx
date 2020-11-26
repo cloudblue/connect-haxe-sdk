@@ -42,8 +42,12 @@ class Conversation extends IdModel {
         @returns A collection of Conversations.
     **/
     public static function list(filters: Query) : Collection<Conversation> {
-        final convs = Env.getGeneralApi().listConversations(filters);
-        return Model.parseArray(Conversation, convs);
+        try{
+            final convs = Env.getGeneralApi().listConversations(filters);
+            return Model.parseArray(Conversation, convs);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
     
     
@@ -54,11 +58,15 @@ class Conversation extends IdModel {
         @returns The created Conversation.
     **/
     public static function create(instanceId: String, topic: String): Conversation {
-        final conv = Env.getGeneralApi().createConversation(haxe.Json.stringify({
-            instance_id: instanceId,
-            topic: topic
-        }));
-        return Model.parse(Conversation, conv);
+        try{
+            final conv = Env.getGeneralApi().createConversation(haxe.Json.stringify({
+                instance_id: instanceId,
+                topic: topic
+            }));
+            return Model.parse(Conversation, conv);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
 
@@ -81,15 +89,19 @@ class Conversation extends IdModel {
         the same as this one.
     **/
     public function createMessage(text: String): Message {
-        final msg = Env.getGeneralApi().createConversationMessage(
-            this.id,
-            haxe.Json.stringify({ text: text }));
-        final message = Model.parse(Message, msg);
-        if (this.messages == null) {
-            this.messages = new Collection<Message>();
+        try{
+            final msg = Env.getGeneralApi().createConversationMessage(
+                this.id,
+                haxe.Json.stringify({ text: text }));
+            final message = Model.parse(Message, msg);
+            if (this.messages == null) {
+                this.messages = new Collection<Message>();
+            }
+            this.messages.push(message);
+            return message;
+        } catch (ex: Dynamic) {
+            return null;
         }
-        this.messages.push(message);
-        return message;
     }
 
 

@@ -79,8 +79,12 @@ class TierConfig extends IdModel {
         @returns A Collection of TierConfigs.
     **/
     public static function list(filters: Query) : Collection<TierConfig> {
-        final configs = Env.getTierApi().listTierConfigs(filters);
-        return Model.parseArray(TierConfig, configs);
+        try{
+            final configs = Env.getTierApi().listTierConfigs(filters);
+            return Model.parseArray(TierConfig, configs);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
     /** @returns The TierConfig with the given id, or `null` if it was not found. **/

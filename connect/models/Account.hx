@@ -45,8 +45,12 @@ class Account extends IdModel {
         @returns A Collection of Accounts.
     **/
     public static function list(filters: Query): Collection<Account> {
-        final accounts = Env.getGeneralApi().listAccounts(filters);
-        return Model.parseArray(Account, accounts);
+        try{
+            final accounts = Env.getGeneralApi().listAccounts(filters);
+            return Model.parseArray(Account, accounts);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
 
@@ -56,8 +60,12 @@ class Account extends IdModel {
         @returns The created Account.
     **/
     public static function create(): Account {
-        final account = Env.getGeneralApi().createAccount();
-        return Model.parse(Account, account);
+        try{
+            final account = Env.getGeneralApi().createAccount();
+            return Model.parse(Account, account);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
 
@@ -74,8 +82,12 @@ class Account extends IdModel {
 
     /** @returns A Collection of Users of `this` Account. **/
     public function listUsers(): Collection<User> {
-        final users = Env.getGeneralApi().listAccountUsers(this.id);
-        return Model.parseArray(User, users);
+        try{
+            final users = Env.getGeneralApi().listAccountUsers(this.id);
+            return Model.parseArray(User, users);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
 

@@ -88,8 +88,12 @@ class Agreement extends IdModel {
         @returns A Collection of Agreements.
     **/
     public static function list(filters: Query): Collection<Agreement> {
-        final agreements = Env.getMarketplaceApi().listAgreements(filters);
-        return Model.parseArray(Agreement, agreements);
+        try{
+            final agreements = Env.getMarketplaceApi().listAgreements(filters);
+            return Model.parseArray(Agreement, agreements);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
     /** @returns The Agreement with the given id, or `null` if it was not found. **/
@@ -130,15 +134,19 @@ class Agreement extends IdModel {
         the same data as `this` Agreement.
     **/
     public function update(): Agreement {
-        final diff = this._toDiff();
-        final hasModifiedFields = Reflect.fields(diff).length > 1;
-        if (hasModifiedFields) {
-            final agreement = Env.getMarketplaceApi().updateAgreement(
-                this.id,
-                haxe.Json.stringify(diff));
-            return Model.parse(Agreement, agreement);
-        } else {
-            return this;
+        try{
+            final diff = this._toDiff();
+            final hasModifiedFields = Reflect.fields(diff).length > 1;
+            if (hasModifiedFields) {
+                final agreement = Env.getMarketplaceApi().updateAgreement(
+                    this.id,
+                    haxe.Json.stringify(diff));
+                return Model.parse(Agreement, agreement);
+            } else {
+                return this;
+            }
+        } catch (ex: Dynamic) {
+            return null;
         }
     }
 
@@ -162,8 +170,12 @@ class Agreement extends IdModel {
         @returns A Collection of Agreements.
     **/
     public function listVersions(): Collection<Agreement> {
-        final versions = Env.getMarketplaceApi().listAgreementVersions(this.id);
-        return Model.parseArray(Agreement, versions);
+        try{    
+            final versions = Env.getMarketplaceApi().listAgreementVersions(this.id);
+            return Model.parseArray(Agreement, versions);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
     /**
@@ -209,8 +221,12 @@ class Agreement extends IdModel {
      * @return Collection<Agreement>
      */
     public function listSubAgreements(): Collection<Agreement> {
-        final agreements = Env.getMarketplaceApi().listAgreementSubAgreements(this.id);
-        return Model.parseArray(Agreement, agreements);
+        try{
+            final agreements = Env.getMarketplaceApi().listAgreementSubAgreements(this.id);
+            return Model.parseArray(Agreement, agreements);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
     /**
