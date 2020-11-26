@@ -37,12 +37,8 @@ class Category extends IdModel {
         @returns A Collection of Categories.
     **/
     public static function list(filters: Query) : Collection<Category> {
-        try{
-            final categories = Env.getGeneralApi().listCategories(filters);
-            return Model.parseArray(Category, categories);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final categories = Env.getGeneralApi().listCategories(filters);
+        return Model.parseArray(Category, categories);
     }
 
 

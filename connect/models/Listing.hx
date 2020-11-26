@@ -64,12 +64,8 @@ class Listing extends IdModel {
         @returns A Collection of Listings.
     **/
     public static function list(filters: Query): Collection<Listing> {
-        try{
-            final listings = Env.getMarketplaceApi().listListings(filters);
-            return Model.parseArray(Listing, listings);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final listings = Env.getMarketplaceApi().listListings(filters);
+        return Model.parseArray(Listing, listings);
     }
 
     /** @returns The Listing with the given id, or `null` if it was not found. **/
@@ -97,19 +93,15 @@ class Listing extends IdModel {
         the same data as `this` Listing.
     **/
     public function put(): Listing {
-        try{
-            final diff = this._toDiff();
-            final hasModifiedFields = Reflect.fields(diff).length > 1;
-            if (hasModifiedFields) {
-                final listing = Env.getMarketplaceApi().putListing(
-                    this.id,
-                    haxe.Json.stringify(diff));
-                return Model.parse(Listing, listing);
-            } else {
-                return this;
-            }
-        } catch (ex: Dynamic) {
-            return null;
+        final diff = this._toDiff();
+        final hasModifiedFields = Reflect.fields(diff).length > 1;
+        if (hasModifiedFields) {
+            final listing = Env.getMarketplaceApi().putListing(
+                this.id,
+                haxe.Json.stringify(diff));
+            return Model.parse(Listing, listing);
+        } else {
+            return this;
         }
     }
 }

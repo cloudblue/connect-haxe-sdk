@@ -71,12 +71,8 @@ class Marketplace extends IdModel {
         @returns A Collection of Marketplaces.
     **/
     public static function list(filters: Query): Collection<Marketplace> {
-        try{
-            final marketplaces = Env.getMarketplaceApi().listMarketplaces(filters);
-            return Model.parseArray(Marketplace, marketplaces);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final marketplaces = Env.getMarketplaceApi().listMarketplaces(filters);
+        return Model.parseArray(Marketplace, marketplaces);
     }
 
     /** @returns The Marketplace with the given id, or `null` if it was not found. **/
@@ -118,19 +114,15 @@ class Marketplace extends IdModel {
         the same data as `this` Marketplace.
     **/
     public function update(): Marketplace {
-        try{
-            final diff = this._toDiff();
-            final hasModifiedFields = Reflect.fields(diff).length > 1;
-            if (hasModifiedFields) {
-                final marketplace = Env.getMarketplaceApi().updateMarketplace(
-                    this.id,
-                    haxe.Json.stringify(diff));
-                return Model.parse(Marketplace, marketplace);
-            } else {
-                return this;
-            }
-        } catch (ex: Dynamic) {
-            return null;
+        final diff = this._toDiff();
+        final hasModifiedFields = Reflect.fields(diff).length > 1;
+        if (hasModifiedFields) {
+            final marketplace = Env.getMarketplaceApi().updateMarketplace(
+                this.id,
+                haxe.Json.stringify(diff));
+            return Model.parse(Marketplace, marketplace);
+        } else {
+            return this;
         }
     }
 

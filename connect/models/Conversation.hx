@@ -42,12 +42,8 @@ class Conversation extends IdModel {
         @returns A collection of Conversations.
     **/
     public static function list(filters: Query) : Collection<Conversation> {
-        try{
-            final convs = Env.getGeneralApi().listConversations(filters);
-            return Model.parseArray(Conversation, convs);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final convs = Env.getGeneralApi().listConversations(filters);
+        return Model.parseArray(Conversation, convs);
     }
     
     
@@ -58,15 +54,11 @@ class Conversation extends IdModel {
         @returns The created Conversation.
     **/
     public static function create(instanceId: String, topic: String): Conversation {
-        try{
-            final conv = Env.getGeneralApi().createConversation(haxe.Json.stringify({
-                instance_id: instanceId,
-                topic: topic
-            }));
-            return Model.parse(Conversation, conv);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final conv = Env.getGeneralApi().createConversation(haxe.Json.stringify({
+            instance_id: instanceId,
+            topic: topic
+        }));
+        return Model.parse(Conversation, conv);
     }
 
 
@@ -89,19 +81,15 @@ class Conversation extends IdModel {
         the same as this one.
     **/
     public function createMessage(text: String): Message {
-        try{
-            final msg = Env.getGeneralApi().createConversationMessage(
-                this.id,
-                haxe.Json.stringify({ text: text }));
-            final message = Model.parse(Message, msg);
-            if (this.messages == null) {
-                this.messages = new Collection<Message>();
-            }
-            this.messages.push(message);
-            return message;
-        } catch (ex: Dynamic) {
-            return null;
+        final msg = Env.getGeneralApi().createConversationMessage(
+            this.id,
+            haxe.Json.stringify({ text: text }));
+        final message = Model.parse(Message, msg);
+        if (this.messages == null) {
+            this.messages = new Collection<Message>();
         }
+        this.messages.push(message);
+        return message;
     }
 
 

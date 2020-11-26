@@ -97,12 +97,8 @@ class AssetRequest extends IdModel {
         @returns A Collection of AssetRequests.
     **/
     public static function list(filters: Query) : Collection<AssetRequest> {
-        try{
-            final requests = Env.getFulfillmentApi().listRequests(filters);
-            return Model.parseArray(AssetRequest, requests);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final requests = Env.getFulfillmentApi().listRequests(filters);
+        return Model.parseArray(AssetRequest, requests);
     }
 
     /** @returns The AssetRequest with the given id, or `null` if it was not found. **/
@@ -154,28 +150,24 @@ class AssetRequest extends IdModel {
         the same data as `this` AssetRequest.
     **/
     public function update(params: Collection<Param>): AssetRequest {
-        try{
-            if (params == null) {
-                final diff = this._toDiff();
-                final hasModifiedFields = Reflect.fields(diff).length > 1;
-                if (hasModifiedFields) {
-                    final request = Env.getFulfillmentApi().updateRequest(
-                        this.id,
-                        haxe.Json.stringify(addValueToParams(diff)));
-                    return Model.parse(AssetRequest, request);
-                } else {
-                    return this;
-                }
+        if (params == null) {
+            final diff = this._toDiff();
+            final hasModifiedFields = Reflect.fields(diff).length > 1;
+            if (hasModifiedFields) {
+                final request = Env.getFulfillmentApi().updateRequest(
+                    this.id,
+                    haxe.Json.stringify(addValueToParams(diff)));
+                return Model.parse(AssetRequest, request);
             } else {
-                if (params.length() > 0) {
-                    Env.getFulfillmentApi().updateRequest(
-                        this.id,
-                        '{"asset":{"params":${params.toString()}}}');
-                }
                 return this;
             }
-        } catch (ex: Dynamic) {
-            return null;
+        } else {
+            if (params.length() > 0) {
+                Env.getFulfillmentApi().updateRequest(
+                    this.id,
+                    '{"asset":{"params":${params.toString()}}}');
+            }
+            return this;
         }
     }
 
@@ -204,17 +196,13 @@ class AssetRequest extends IdModel {
         the updated status.
     **/
     public function approveByTemplate(id: String): AssetRequest {
-        try{
-            final request = Env.getFulfillmentApi().changeRequestStatus(
-                this.id,
-                'approve',
-                haxe.Json.stringify({template_id: id})
-            );
-            this._updateConversation('Request approved using template $id.');
-            return Model.parse(AssetRequest, request);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final request = Env.getFulfillmentApi().changeRequestStatus(
+            this.id,
+            'approve',
+            haxe.Json.stringify({template_id: id})
+        );
+        this._updateConversation('Request approved using template $id.');
+        return Model.parse(AssetRequest, request);
     }
 
     /**
@@ -228,17 +216,13 @@ class AssetRequest extends IdModel {
         the updated status.
     **/
     public function approveByTile(text: String): AssetRequest {
-        try{
-            final request = Env.getFulfillmentApi().changeRequestStatus(
-                this.id,
-                'approve',
-                haxe.Json.stringify({activation_tile: text})
-            );
-            this._updateConversation('Request approved using custom activation tile.');
-            return Model.parse(AssetRequest, request);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final request = Env.getFulfillmentApi().changeRequestStatus(
+            this.id,
+            'approve',
+            haxe.Json.stringify({activation_tile: text})
+        );
+        this._updateConversation('Request approved using custom activation tile.');
+        return Model.parse(AssetRequest, request);
     }
 
     /**
@@ -251,17 +235,13 @@ class AssetRequest extends IdModel {
         the updated status.
     **/
     public function fail(reason: String): AssetRequest {
-        try{
-            final request = Env.getFulfillmentApi().changeRequestStatus(
-                this.id,
-                'fail',
-                haxe.Json.stringify({reason: reason})
-            );
-            this._updateConversation('Request failed: $reason.');
-            return Model.parse(AssetRequest, request);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final request = Env.getFulfillmentApi().changeRequestStatus(
+            this.id,
+            'fail',
+            haxe.Json.stringify({reason: reason})
+        );
+        this._updateConversation('Request failed: $reason.');
+        return Model.parse(AssetRequest, request);
     }
 
     /**
@@ -275,20 +255,16 @@ class AssetRequest extends IdModel {
         the updated status.
     **/
     public function inquire(templateId: String): AssetRequest {
-        try{
-            final body = (templateId != null)
-                ? {template_id: templateId}
-                : {};
-            final request = Env.getFulfillmentApi().changeRequestStatus(
-                this.id,
-                'inquire',
-                haxe.Json.stringify(body)
-            );
-            this._updateConversation('Request inquired.');
-            return Model.parse(AssetRequest, request);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final body = (templateId != null)
+            ? {template_id: templateId}
+            : {};
+        final request = Env.getFulfillmentApi().changeRequestStatus(
+            this.id,
+            'inquire',
+            haxe.Json.stringify(body)
+        );
+        this._updateConversation('Request inquired.');
+        return Model.parse(AssetRequest, request);
     }
 
     /**
@@ -301,17 +277,13 @@ class AssetRequest extends IdModel {
         the updated status.
     **/
     public function pend(): AssetRequest {
-        try{
-            final request = Env.getFulfillmentApi().changeRequestStatus(
-                this.id,
-                'pend',
-                haxe.Json.stringify({})
-            );
-            this._updateConversation('Request pended.');
-            return Model.parse(AssetRequest, request);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final request = Env.getFulfillmentApi().changeRequestStatus(
+            this.id,
+            'pend',
+            haxe.Json.stringify({})
+        );
+        this._updateConversation('Request pended.');
+        return Model.parse(AssetRequest, request);
     }
 
     /**
@@ -321,16 +293,12 @@ class AssetRequest extends IdModel {
         the updated assignee.
     **/
     public function assign(assigneeId: String): AssetRequest {
-        try{
-            final request = Env.getFulfillmentApi().assignRequest(
-                this.id,
-                assigneeId
-            );
-            this._updateConversation('Request assigned to $assigneeId.');
-            return Model.parse(AssetRequest, request);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final request = Env.getFulfillmentApi().assignRequest(
+            this.id,
+            assigneeId
+        );
+        this._updateConversation('Request assigned to $assigneeId.');
+        return Model.parse(AssetRequest, request);
     }
 
     /**

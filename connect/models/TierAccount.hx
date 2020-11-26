@@ -57,14 +57,9 @@ class TierAccount extends IdModel {
         @returns A Collection of TierAccounts.
     **/
     public static function list(filters: Query) : Collection<TierAccount> {
-        try{
-            final accounts = Env.getTierApi().listTierAccounts(filters);
-            return Model.parseArray(TierAccount, accounts);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final accounts = Env.getTierApi().listTierAccounts(filters);
+        return Model.parseArray(TierAccount, accounts);
     }
-
 
     /** @returns The TierAccount with the given id, or `null` if it was not found. **/
     public static function get(id: String): TierAccount {

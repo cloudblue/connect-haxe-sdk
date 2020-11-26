@@ -61,12 +61,8 @@ class SubscriptionRequest extends IdModel {
         @returns A Collection of SubscriptionRequests.
     **/
     public static function list(filters: Query): Collection<SubscriptionRequest> {
-        try{
-            final requests = Env.getSubscriptionsApi().listBillingRequests(filters);
-            return Model.parseArray(SubscriptionRequest, requests);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final requests = Env.getSubscriptionsApi().listBillingRequests(filters);
+        return Model.parseArray(SubscriptionRequest, requests);
     }
 
 

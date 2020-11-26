@@ -60,12 +60,8 @@ class Subscription extends IdModel {
         @returns A Collection of Subscriptions.
     **/
     public static function list(filters: Query): Collection<Subscription> {
-        try{
-            final subscriptions = Env.getSubscriptionsApi().listRecurringAssets(filters);
-            return Model.parseArray(Subscription, subscriptions);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final subscriptions = Env.getSubscriptionsApi().listRecurringAssets(filters);
+        return Model.parseArray(Subscription, subscriptions);
     }
 
     /** @returns The Subscription with the given id, or `null` if it was not found. **/

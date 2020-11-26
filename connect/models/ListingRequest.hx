@@ -52,12 +52,8 @@ class ListingRequest extends IdModel {
         @returns A Collection of ListingRequests.
     **/
     public static function list(filters: Query): Collection<ListingRequest> {
-        try{
-            final requests = Env.getMarketplaceApi().listListingRequests(filters);
-            return Model.parseArray(ListingRequest, requests);
-        } catch (ex: Dynamic) {
-            return null;
-        }
+        final requests = Env.getMarketplaceApi().listListingRequests(filters);
+        return Model.parseArray(ListingRequest, requests);
     }
 
     /** @returns The ListingRequest with the given id, or `null` if it was not found. **/
