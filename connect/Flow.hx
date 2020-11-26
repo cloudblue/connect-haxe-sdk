@@ -481,7 +481,7 @@ class Flow extends Base {
                 if (this.getAssetRequest() != null) {
                     this.getAssetRequest()._updateConversation(SKIP_MSG + exStr);
                 }
-            } catch (ex:Dynamic){
+            } catch (ex:Dynamic) {
                 Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, "Error updating conversation", '');
             }
 
@@ -491,7 +491,7 @@ class Flow extends Base {
                 } else if (this.getTierConfigRequest() != null) {
                     this.getTierConfigRequest().update(null);
                 }
-            } catch (ex:Dynamic){
+            } catch (ex:Dynamic) {
                 Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, "Error updating request", '');
             }
 
