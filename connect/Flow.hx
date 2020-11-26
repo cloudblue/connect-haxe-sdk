@@ -5,7 +5,6 @@
 
 package connect;
 
-import haxe.macro.Expr.Catch;
 import connect.logger.ILoggerFormatter;
 import connect.logger.Logger;
 import connect.models.AssetRequest;
@@ -477,22 +476,22 @@ class Flow extends Base {
             }
             final exStr = getExceptionMessage(ex);
             Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, exStr, '');
-            
-            try{
+
+            try {
                 if (this.getAssetRequest() != null) {
                     this.getAssetRequest()._updateConversation(SKIP_MSG + exStr);
                 }
-            }catch(ex:Dynamic){
+            } catch (ex:Dynamic){
                 Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, "Error updating conversation", '');
             }
 
-            try{
+            try {
                 if (this.getAssetRequest() != null) {
                     this.getAssetRequest().update(null);
                 } else if (this.getTierConfigRequest() != null) {
                     this.getTierConfigRequest().update(null);
                 }
-            }catch(ex:Dynamic){
+            } catch (ex:Dynamic){
                 Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, "Error updating request", '');
             }
 
