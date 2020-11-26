@@ -482,7 +482,7 @@ class Flow extends Base {
                     this.getAssetRequest()._updateConversation(SKIP_MSG + exStr);
                 }
             } catch (ex:Dynamic) {
-                Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, "Error updating conversation", '');
+                Env.getLogger().error('Error updating conversation');
             }
 
             try {
@@ -492,7 +492,7 @@ class Flow extends Base {
                     this.getTierConfigRequest().update(null);
                 }
             } catch (ex:Dynamic) {
-                Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, "Error updating request", '');
+                Env.getLogger().error('Error updating request');
             }
 
             this.abort();
