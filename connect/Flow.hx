@@ -506,25 +506,8 @@ class Flow extends Base {
         this.originalModelStr = model.toString();
 
         final assetRequest = this.getAssetRequest();
-        final listing = this.getListing();
-        final tierConfigRequest = this.getTierConfigRequest();
-        final usageFile = this.getUsageFile();
         
-        if (assetRequest != null){
-            Env.getLogger().setFilenameFromRequest(assetRequest);
-        }
-
-        if (listing != null){
-            Env.getLogger().setFilenameFromRequest(listing);
-        }
-
-        if (tierConfigRequest != null){
-            Env.getLogger().setFilenameFromRequest(tierConfigRequest);
-        }
-
-        if (usageFile != null){
-            Env.getLogger().setFilenameFromRequest(usageFile);
-        }
+        Env.getLogger().setFilenameFromRequest(this.model);
 
         // Open log section
         Env.getLogger().openSection('Processing request "${this.model.id}" on ${DateTime.now()}');
