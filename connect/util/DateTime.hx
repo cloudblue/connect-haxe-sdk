@@ -61,11 +61,11 @@ class DateTime {
         final timeSplit = (dateTimeSplit.length > 1)
             ? dateTimeSplit[1].split(':')
             : '00:00:00'.split(':');
-        final year = Std.parseInt(dateSplit[0]);
-        if (year == null) {
-            return null;
-        }
         try {
+            final year = Std.parseInt(dateSplit[0]);
+            if (year == null) {
+                return null;
+            }
             final month = (dateSplit.length > 1)
                 ? (Std.parseInt(dateSplit[1]) - 1)
                 : 0;
