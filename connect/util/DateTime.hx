@@ -65,20 +65,24 @@ class DateTime {
         if (year == null) {
             return null;
         }
-        final month = (dateSplit.length > 1)
-            ? (Std.parseInt(dateSplit[1]) - 1)
-            : 0;
-        final day = (dateSplit.length > 2)
-            ? Std.parseInt(dateSplit[2])
-            : 1;
-        final hour = Std.parseInt(timeSplit[0]);
-        final minute = (timeSplit.length > 1)
-            ? Std.parseInt(timeSplit[1])
-            : 0;
-        final second = (timeSplit.length > 2)
-            ? Std.parseInt(timeSplit[2])
-            : 0;
-        return new DateTime(year, month, day, hour, minute, second);
+        try {
+            final month = (dateSplit.length > 1)
+                ? (Std.parseInt(dateSplit[1]) - 1)
+                : 0;
+            final day = (dateSplit.length > 2)
+                ? Std.parseInt(dateSplit[2])
+                : 1;
+            final hour = Std.parseInt(timeSplit[0]);
+            final minute = (timeSplit.length > 1)
+                ? Std.parseInt(timeSplit[1])
+                : 0;
+            final second = (timeSplit.length > 2)
+                ? Std.parseInt(timeSplit[2])
+                : 0;
+            return new DateTime(year, month, day, hour, minute, second);
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
 
