@@ -45,7 +45,7 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
     private final executor:FlowExecutor;
     private final logger:FlowLogger;
     private final store:FlowStore;
-    private var model:IdModel;
+    private var request:IdModel;
     private var data:Dictionary;
     private var firstStep:Int;
     private var lastRequestState:ProcessedRequestInfo;
@@ -65,7 +65,7 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
         this.executor = new FlowExecutor(this, this);
         this.logger = new FlowLogger(this.getClassName());
         this.store = new FlowStore(this);
-        this.model = null;
+        this.request = null;
         this.data = new Dictionary();
         this.firstStep = 0;
         this.lastRequestState = null;
@@ -147,7 +147,7 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
         Fulfillment api.
     **/
     public function getAssetRequest():AssetRequest {
-        return RequestCaster.castAssetRequest(this.model);
+        return RequestCaster.castAssetRequest(this.request);
     }
 
     /**
@@ -158,7 +158,7 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
         Listing api.
     **/
     public function getListing():Listing {
-        return RequestCaster.castListing(this.model);
+        return RequestCaster.castListing(this.request);
     }
 
     /**
@@ -169,7 +169,7 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
         Tier api.
     **/
     public function getTierConfigRequest():TierConfigRequest {
-        return RequestCaster.castTierConfigRequest(this.model);
+        return RequestCaster.castTierConfigRequest(this.request);
     }
 
     /**
@@ -180,7 +180,7 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
         Usage api.
     **/
     public function getUsageFile():UsageFile {
-        return RequestCaster.castUsageFile(this.model);
+        return RequestCaster.castUsageFile(this.request);
     }
 
     /**
@@ -346,7 +346,7 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
         Skips processing of the current request. Pending steps for the request will not be executed,
         and step data will be stored so it can be resumed in the next execution.
     **/
-    public function skip():Void {
+    private function skip():Void {
         this.executor.abort();
     }
 
@@ -354,7 +354,7 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
         Aborts processing of the current request. Pending steps for the request will not be executed,
         and `message` is printed if it is not an empty string or `null`.
     **/
-    public function abort(message:String):Void {
+    private function abort(message:String):Void {
         this.executor.abort((message != null) ? message : '');
     }
 
@@ -384,23 +384,23 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
 
     private function runRequest(request:IdModel):Void {
         this.logger.openRequestSection(request);
-        this.data = new Dictionary();
-        this.firstStep = 0;
-        this.lastRequestState = new ProcessedRequestInfo(null, null);
-        this.stepAttempt = 1;
         if (this.prepareRequest(request) && this.processSetup()) {
             if (this.storesRequestOnFailure()) {
-                this.store.loadStepData(this.model);
+                this.store.loadStepData(this.request);
             }
             this.executor.executeRequest(request, this.data, this.firstStep);
         } else {
-            this.logger.writeMigrationMessage(model);
+            this.logger.writeMigrationMessage(request);
         }
         this.logger.closeRequestSection();
     }
 
-    private function prepareRequest(model:IdModel):Bool {
-        this.model = model;
+    private function prepareRequest(request:IdModel):Bool {
+        this.request = request;
+        this.data = new Dictionary();
+        this.firstStep = 0;
+        this.lastRequestState = new ProcessedRequestInfo(null, null);
+        this.stepAttempt = 1;
         final assetRequest = this.getAssetRequest();
         return assetRequest != null &&
             (!assetRequest.needsMigration() || !skipsRequestOnPendingMigration() || assetRequest.type != 'purchase');
@@ -447,7 +447,7 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
 
     public function onStepBegin(request:IdModel, step:Step, index:Int):Void {
         this.logger.openStepSection(index, step.getDescription());
-        this.logger.writeStepInfo(new ProcessedRequestInfo(this.model, this.data), lastRequestState);
+        this.logger.writeStepInfo(new ProcessedRequestInfo(this.request, this.data), lastRequestState);
     }
 
     public function onStepEnd(request:IdModel, step:Step, index:Int):Void {
@@ -457,7 +457,7 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
     }
 
     public function onStepFail(request:IdModel, step:Step, index:Int, msg:String):Void {
-        this.logger.writeStepError(new ProcessedRequestInfo(this.model, this.data), lastRequestState);
+        this.logger.writeStepError(new ProcessedRequestInfo(this.request, this.data), lastRequestState);
         this.logger.writeException(msg);
         if (this.getAssetRequest() != null) {
             this.getAssetRequest()._updateConversation(SKIP_MSG + msg);
@@ -468,7 +468,7 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
     public function onStepSkip(request:IdModel, step:Step, index:Int):Void {
         this.logger.writeStepSkip(this.storesRequestOnFailure());
         if (this.storesRequestOnFailure()) {
-            this.store.saveStepData(this.model, this.data, index, this.stepAttempt + 1);
+            this.store.saveStepData(this.request, this.data, index, this.stepAttempt + 1);
         }
         this.logger.closeStepSection(index);
     }
