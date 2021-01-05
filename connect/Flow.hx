@@ -5,41 +5,52 @@
 
 package connect;
 
-import connect.logger.ILoggerFormatter;
-import connect.logger.Logger;
+import connect.flow.FlowStoreObserver;
+import connect.flow.FlowStore;
+import connect.flow.ProcessedRequestInfo;
+import connect.flow.Step;
+import connect.flow.FlowExecutor;
+import connect.flow.FlowExecutorObserver;
+import connect.flow.FlowLogger;
+import connect.flow.RequestCaster;
+import connect.flow.StepFunc;
 import connect.models.AssetRequest;
 import connect.models.IdModel;
 import connect.models.Listing;
 import connect.models.Param;
 import connect.models.TierConfigRequest;
 import connect.models.UsageFile;
-import connect.storage.StepData;
-import connect.storage.StepStorage;
 import connect.util.Collection;
-import connect.util.DateTime;
 import connect.util.Dictionary;
-import connect.util.Util;
-import haxe.Json;
 
 #if cslib
 typedef FilterFunc = connect.native.CsFunc<IdModel, Bool>;
-typedef StepFunc = connect.native.CsAction<Flow>;
 #elseif javalib
 typedef FilterFunc = connect.native.JavaFunction<IdModel, Bool>;
-typedef StepFunc = connect.native.JavaConsumer<Flow>;
 #else
 @:dox(hide)
 typedef FilterFunc = (IdModel) -> Bool;
-
-@:dox(hide)
-typedef StepFunc = (Flow) -> Void;
 #end
 
 /**
     A Flow represents a set of steps within a `Processor` which are executed for all requests
     that return `true` for a given function. If `null` is passed, all requests will be processed.
 **/
-class Flow extends Base {
+class Flow extends Base implements FlowExecutorObserver implements FlowStoreObserver {
+    private static final SKIP_MSG = 'Skipping request because an exception was thrown: ';
+
+    private final filterFunc:FilterFunc;
+    private var storeRequestOnFailure:Bool;
+    private var skipRequestOnPendingMigration:Bool;
+    private final executor:FlowExecutor;
+    private final logger:FlowLogger;
+    private final store:FlowStore;
+    private var model:IdModel;
+    private var data:Dictionary;
+    private var firstStep:Int;
+    private var lastRequestState:ProcessedRequestInfo;
+    private var stepAttempt:Int;
+
     /**
         Creates a new Flow.
 
@@ -49,11 +60,30 @@ class Flow extends Base {
     **/
     public function new(filterFunc:FilterFunc) {
         this.filterFunc = filterFunc;
-        this.steps = [];
-        this.data = new Dictionary();
-        this.stepAttempt = 0;
         this.storeRequestOnFailure = true;
         this.skipRequestOnPendingMigration = true;
+        this.executor = new FlowExecutor(this, this);
+        this.logger = new FlowLogger(this.getClassName());
+        this.store = new FlowStore(this);
+        this.model = null;
+        this.data = new Dictionary();
+        this.firstStep = 0;
+        this.lastRequestState = null;
+        this.stepAttempt = 0;
+    }
+
+    private function getClassName():String {
+        #if js
+        final constructorName = js.Syntax.code("{0}.constructor.name", this);
+        final className = (constructorName != 'Object') ? constructorName : Type.getClassName(Type.getClass(this));
+        return className;
+        #elseif php
+        return php.Syntax.code("get_class({0})", this);
+        #elseif python
+        return python.Syntax.code("type({0}).__name__", this);
+        #else
+        return Type.getClassName(Type.getClass(this));
+        #end
     }
 
     /**
@@ -100,14 +130,12 @@ class Flow extends Base {
         Defines a step of `this` Flow. Steps are executed sequentially by the Flow
         when its `run` method is invoked.
 
-        @param description Description of what the step does, so the Flow can indicate it
-        in the log.
-        @param func The function to execute for this step. It receives `this` Flow as argument,
-        and it cannot return a value.
+        @param description Description of what the step does, so the Flow can indicate it in the log.
+        @param func The function to execute for this step. It receives `this` Flow as argument, and it cannot return a value.
         @returns `this` Flow, so calls to this method can be chained.
     **/
     public function step(description:String, func:StepFunc):Flow {
-        this.steps.push(new Step(description, func));
+        this.executor.addStep(description, func);
         return this;
     }
 
@@ -119,11 +147,7 @@ class Flow extends Base {
         Fulfillment api.
     **/
     public function getAssetRequest():AssetRequest {
-        try {
-            return cast(this.model, AssetRequest);
-        } catch (ex:Dynamic) {
-            return null;
-        }
+        return RequestCaster.castAssetRequest(this.model);
     }
 
     /**
@@ -134,11 +158,7 @@ class Flow extends Base {
         Listing api.
     **/
     public function getListing():Listing {
-        try {
-            return cast(this.model, Listing);
-        } catch (ex:Dynamic) {
-            return null;
-        }
+        return RequestCaster.castListing(this.model);
     }
 
     /**
@@ -149,11 +169,7 @@ class Flow extends Base {
         Tier api.
     **/
     public function getTierConfigRequest():TierConfigRequest {
-        try {
-            return cast(this.model, TierConfigRequest);
-        } catch (ex:Dynamic) {
-            return null;
-        }
+        return RequestCaster.castTierConfigRequest(this.model);
     }
 
     /**
@@ -164,11 +180,7 @@ class Flow extends Base {
         Usage api.
     **/
     public function getUsageFile():UsageFile {
-        try {
-            return cast(this.model, UsageFile);
-        } catch (ex:Dynamic) {
-            return null;
-        }
+        return RequestCaster.castUsageFile(this.model);
     }
 
     /**
@@ -219,12 +231,12 @@ class Flow extends Base {
         final request = this.getAssetRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
-            StepStorage.removeStepData(request.id, getStepParam());
+            this.store.removeStepData(request);
             request.update(null);
             request.approveByTemplate(id);
             this.abort('');
         } else if (tcr != null) {
-            StepStorage.removeStepData(tcr.id, getStepParam());
+            this.store.removeStepData(tcr);
             tcr.update(null);
             tcr.approveByTemplate(id);
             this.abort('');
@@ -243,12 +255,12 @@ class Flow extends Base {
         final request = this.getAssetRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
-            StepStorage.removeStepData(request.id, getStepParam());
+            this.store.removeStepData(request);
             request.update(null);
             request.approveByTile(text);
             this.abort('');
         } else if (tcr != null) {
-            StepStorage.removeStepData(tcr.id, getStepParam());
+            this.store.removeStepData(request);
             tcr.update(null);
             tcr.approveByTile(text);
             this.abort('');
@@ -266,12 +278,12 @@ class Flow extends Base {
         final request = this.getAssetRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
-            StepStorage.removeStepData(request.id, getStepParam());
+            this.store.removeStepData(request);
             request.update(null);
             request.fail(reason);
             this.abort('Failing request');
         } else if (tcr != null) {
-            StepStorage.removeStepData(tcr.id, getStepParam());
+            this.store.removeStepData(request);
             tcr.update(null);
             tcr.fail(reason);
             this.abort('Failing request');
@@ -295,12 +307,12 @@ class Flow extends Base {
         final request = this.getAssetRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
-            StepStorage.removeStepData(request.id, getStepParam());
+            this.store.removeStepData(request);
             request.update(params);
             request.inquire(templateId);
             this.abort('Inquiring request');
         } else if (tcr != null) {
-            StepStorage.removeStepData(tcr.id, getStepParam());
+            this.store.removeStepData(request);
             tcr.update(params);
             tcr.inquire();
             this.abort('Inquiring request');
@@ -318,337 +330,178 @@ class Flow extends Base {
         final request = this.getAssetRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
-            StepStorage.removeStepData(request.id, getStepParam());
+            this.store.removeStepData(request);
             request.update(null);
             request.pend();
             this.abort('Pending request');
         } else if (tcr != null) {
-            StepStorage.removeStepData(tcr.id, getStepParam());
+            this.store.removeStepData(request);
             tcr.update(null);
             tcr.pend();
             this.abort('Pending request');
         }
     }
 
-    @:dox(hide)
-    public function _run<T>(list:Collection<T>):Void {
-        Env.getLogger().openSection('Running ${this.getClassName()} on ${DateTime.now()}');
-        // Filter requests
-        final filteredList = (this.filterFunc != null)
-            ? Collection._fromArray(list.toArray().filter(
-                #if cslib
-                (m) -> this.filterFunc.Invoke(cast(m, IdModel))))
-                #elseif javalib
-                (m) -> this.filterFunc.apply(cast(m, IdModel))))
-                #else
-                (m) -> this.filterFunc(cast(m, IdModel))))
-                #end
-            : list;
-        // Process each model
-        for (model in filteredList) {
-            this.process(cast(model, IdModel));
-        }
-        Env.getLogger().closeSection();
+    /**
+        Skips processing of the current request. Pending steps for the request will not be executed,
+        and step data will be stored so it can be resumed in the next execution.
+    **/
+    public function skip():Void {
+        this.executor.abort();
     }
 
     /**
-     * Provide current step attempt
+        Aborts processing of the current request. Pending steps for the request will not be executed,
+        and `message` is printed if it is not an empty string or `null`.
+    **/
+    public function abort(message:String):Void {
+        this.executor.abort((message != null) ? message : '');
+    }
+
+    @:dox(hide)
+    public function _run<T>(list:Collection<T>):Void {
+        this.logger.openFlowSection();
+        final filteredList = this.filterRequests(list);
+        Lambda.iter(filteredList, model -> this.runRequest(cast(model, IdModel)));
+        this.logger.closeFlowSection();
+    }
+
+    private function filterRequests<T>(list:Collection<T>):Collection<T> {
+        return (this.filterFunc != null)
+            ? Collection._fromArray(list.toArray().filter(callRequestFilter))
+            : list;
+    }
+
+    private function callRequestFilter<T>(m:T):Bool {
+    #if cslib
+        return this.filterFunc.Invoke(cast(m, IdModel));
+    #elseif javalib
+        return this.filterFunc.apply(cast(m, IdModel));
+    #else
+        return this.filterFunc(cast(m, IdModel));
+    #end
+    }
+
+    private function runRequest(request:IdModel):Void {
+        this.logger.openRequestSection(request);
+        this.data = new Dictionary();
+        this.firstStep = 0;
+        this.lastRequestState = new ProcessedRequestInfo(null, null);
+        this.stepAttempt = 1;
+        if (this.prepareRequest(request) && this.processSetup()) {
+            if (this.storesRequestOnFailure()) {
+                this.store.loadStepData(this.model);
+            }
+            this.executor.executeRequest(request, this.data, this.firstStep);
+        } else {
+            this.logger.writeMigrationMessage(model);
+        }
+        this.logger.closeRequestSection();
+    }
+
+    private function prepareRequest(model:IdModel):Bool {
+        this.model = model;
+        final assetRequest = this.getAssetRequest();
+        return assetRequest != null &&
+            (!assetRequest.needsMigration() || !skipsRequestOnPendingMigration() || assetRequest.type != 'purchase');
+    }
+
+    private function processSetup():Bool {
+        this.logger.openSetupSection();
+        var ok = true;
+        try {
+            this.setup();
+        } catch (ex:Dynamic) {
+            final exStr = getExceptionMessage(ex);
+            this.logger.writeException(ex);
+            if (this.getAssetRequest() != null) {
+                this.getAssetRequest()._updateConversation(SKIP_MSG + exStr);
+            }
+            ok = false;
+        }
+        this.logger.closeSetupSection();
+        return ok;
+    }
+
+    private static function getExceptionMessage(ex: Dynamic): String {
+    #if php
+        try {
+            return ex.getMessage();
+        } catch (_: Dynamic) {
+            return Std.string(ex);
+        }
+    #elseif python
+        return python.Syntax.code("str({0})", ex);
+    #else
+        return Std.string(ex);
+    #end
+    }
+
+    /**
+     * Provide current step attempt.
      * @return Int Number of times that this step has been executed
     **/
     public function getCurrentAttempt() {
         return this.stepAttempt;
     }
 
-    private static final SKIP_MSG = 'Skipping request because an exception was thrown: ';
-    private static final STEP_PARAM_ID = '__sdk_processor_step';
-    private static final STEP_PARAM_ID_TIER = '__sdk_processor_step_tier';
-    private static final STEP_PARAM_ID_TIER2 = '__sdk_processor_step_tier2';
-
-    private final filterFunc:FilterFunc;
-    private var steps:Array<Step>;
-    private var model:IdModel;
-    private var originalModelStr:String;
-    private var data:Dictionary;
-    private var abortRequested:Bool;
-    private var abortMessage:String;
-    private var stepAttempt:Int;
-    private var storeRequestOnFailure:Bool;
-    private var skipRequestOnPendingMigration:Bool;
-
-    private function process(model:IdModel):Void {
-        if (this.prepareRequestAndOpenLogSection(model)) {
-            if (this.processSetup()) {
-                final stepData = this.loadStepDataIfStored();
-                this.stepAttempt = (stepData.attempt != null) ? stepData.attempt : 0;
-                final steps = [for (i in stepData.firstIndex...this.steps.length) this.steps[i]];
-
-                // Process all steps
-                Lambda.fold(steps, function(step, prev) {
-                    if (prev != null) {
-                        return processStep(step, prev.nextIndex, prev.lastRequestStr, prev.lastDataStr);
-                    } else {
-                        return null;
-                    }
-                }, {nextIndex: stepData.firstIndex, lastRequestStr: '', lastDataStr: '{}'});
-            }
-            Env.getLogger().closeSection();
-        }
+    public function onStepBegin(request:IdModel, step:Step, index:Int):Void {
+        this.logger.openStepSection(index, step.getDescription());
+        this.logger.writeStepInfo(new ProcessedRequestInfo(this.model, this.data), lastRequestState);
     }
 
-    private function processSetup():Bool {
-        Env.getLogger().openSection('Setup');
-        try {
-            this.setup();
-        } catch (ex:Dynamic) {
-            final exStr = getExceptionMessage(ex);
-            Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, exStr, '');
-            if (this.getAssetRequest() != null) {
-                this.getAssetRequest()._updateConversation(SKIP_MSG + exStr);
-            }
-            Env.getLogger().closeSection();
-            return false;
-        }
-        Env.getLogger().closeSection();
-        return true;
+    public function onStepEnd(request:IdModel, step:Step, index:Int):Void {
+        this.stepAttempt = 1;
+        this.store.removeStepData(request);
+        this.logger.closeStepSection(index);
     }
 
-    private static function getExceptionMessage(ex: Dynamic): String {
-#if php
-        try {
-            return ex.getMessage();
-        } catch (_: Dynamic) {
-            return Std.string(ex);
+    public function onStepFail(request:IdModel, step:Step, index:Int, msg:String):Void {
+        this.logger.writeStepError(new ProcessedRequestInfo(this.model, this.data), lastRequestState);
+        this.logger.writeException(msg);
+        if (this.getAssetRequest() != null) {
+            this.getAssetRequest()._updateConversation(SKIP_MSG + msg);
         }
-#elseif python
-        return python.Syntax.code("str({0})", ex);
-#else
-        return Std.string(ex);
-#end
+        this.logger.closeStepSection(index);
     }
 
-    private function loadStepDataIfStored():StepData {
+    public function onStepSkip(request:IdModel, step:Step, index:Int):Void {
+        this.logger.writeStepSkip(this.storesRequestOnFailure());
         if (this.storesRequestOnFailure()) {
-            final stepData = StepStorage.load(this.model.id, getStepParam());
-            this.data = stepData.data;
-            if (stepData.storage != FailedStorage) {
-                Env.getLogger().write(Logger.LEVEL_INFO, 'Resuming request from step ${stepData.firstIndex + 1} with ${stepData.storage}.');
-            }
-            return stepData;
-        } else {
-            return new StepData(0, {}, FailedStorage, 1);
+            this.store.saveStepData(this.model, this.data, index, this.stepAttempt + 1);
         }
+        this.logger.closeStepSection(index);
     }
 
-    private function getStepParam():Param {
-        final assetRequest = this.getAssetRequest();
-        final tierConfigRequest = this.getTierConfigRequest();
-        return
-            (assetRequest != null) ? assetRequest.asset.getParamById(STEP_PARAM_ID) :
-            (tierConfigRequest != null && tierConfigRequest.tierLevel == 1) ? tierConfigRequest.getParamById(STEP_PARAM_ID_TIER) :
-            (tierConfigRequest != null && tierConfigRequest.tierLevel == 2) ? tierConfigRequest.getParamById(STEP_PARAM_ID_TIER2) :
-            null;
-    }
-
-    private function processStep(step:Step, index:Int, lastRequestStr:String, lastDataStr:String):{nextIndex:Int, lastRequestStr:String, lastDataStr:String} {
-        final requestStr = Util.beautifyObject(
-            this.model.toObject(),
-            Env.getLogger().isCompact(),
-            Env.getLogger().getLevel() != Logger.LEVEL_DEBUG,
-            Env.getLogger().isBeautified());
-        final dataStr = Std.string(this.data);
-
-        Env.getLogger().openSection(Std.string(index + 1) + '. ' + step.description);
-
-        logStepData(Logger.LEVEL_INFO, requestStr, dataStr, lastRequestStr, lastDataStr);
-
-        // Execute step
-        try {
-            #if cslib
-            step.func.Invoke(this);
-            #elseif javalib
-            step.func.accept(this);
-            #else
-            step.func(this);
-            #end
-        } catch (ex:Dynamic) {
-            if (Env.getLogger().getLevel() == Logger.LEVEL_ERROR) {
-                logStepData(Logger.LEVEL_ERROR, requestStr, dataStr, lastRequestStr, lastDataStr);
-            }
-            final exStr = getExceptionMessage(ex);
-            Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, exStr, '');
-
-            try {
-                if (this.getAssetRequest() != null) {
-                    this.getAssetRequest()._updateConversation(SKIP_MSG + exStr);
-                }
-            } catch (ex:Dynamic) {
-                Env.getLogger().error('Error updating conversation');
-            }
-
-            try {
-                if (this.getAssetRequest() != null) {
-                    this.getAssetRequest().update(null);
-                } else if (this.getTierConfigRequest() != null) {
-                    this.getTierConfigRequest().update(null);
-                }
-            } catch (ex:Dynamic) {
-                Env.getLogger().error('Error updating request');
-            }
-
-            this.abort();
+    public function onStepAbort(request:IdModel, step:Step, index:Int, msg:String):Void {
+        if (msg != '') {
+            this.logger.writeException(msg);
         }
-
-        return this.processAbortAndCloseLogSection(index, requestStr, dataStr);
+        this.logger.closeStepSection(index);
     }
 
-    private function prepareRequestAndOpenLogSection(model:IdModel):Bool {
-        this.model = model;
-        this.originalModelStr = model.toString();
-
-        final assetRequest = this.getAssetRequest();
-        
-        Env.getLogger().setFilenameFromRequest(this.model);
-
-        // Open log section
-        Env.getLogger().openSection('Processing request "${this.model.id}" on ${DateTime.now()}');
-
-        // For asset requests, check if we must skip due to pending migration
-        if (assetRequest != null && assetRequest.needsMigration() && skipsRequestOnPendingMigration() && assetRequest.type == 'purchase') {
-            Env.getLogger().write(Logger.LEVEL_INFO, 'Skipping request because it is pending migration.');
-            Env.getLogger().closeSection();
-            return false;
-        } else {
-            this.abortRequested = false;
-            this.abortMessage = null;
-            return true;
-        }
+    public function onLoad(request:IdModel, firstStep:Int, data:Dictionary, storageType:String, numAttempts:Int):Void {
+        this.firstStep = firstStep;
+        this.data = data;
+        this.stepAttempt = numAttempts;
+        this.logger.writeLoadedStepData(firstStep, storageType);
     }
 
-    private function processAbortAndCloseLogSection(index:Int, requestStr:String, dataStr:String):{nextIndex:Int, lastRequestStr:String, lastDataStr:String} {
-        if (this.abortRequested) {
-            if (this.abortMessage == null) {
-                // Save step data if request supports it
-                Env.getLogger().write(Logger.LEVEL_INFO, 'Skipping request. Trying to save step data.');
-                final saveResult = this.storesRequestOnFailure()
-                    ? StepStorage.save(
-                        this.model,
-                        new StepData(index, this.data, ConnectStorage, this.stepAttempt + 1),
-                        this.getStepParam(),
-                        Reflect.field(model, 'update'))
-                    : OmittedStorage;
-                switch (saveResult) {
-                    case ConnectStorage:
-                        Env.getLogger().write(Logger.LEVEL_INFO, 'Step data saved in Connect.');
-                    case LocalStorage:
-                        Env.getLogger().write(Logger.LEVEL_INFO, 'Step data saved locally.');
-                    case FailedStorage:
-                        Env.getLogger().write(Logger.LEVEL_INFO, 'Step data could not be saved.');
-                    case OmittedStorage:
-                        Env.getLogger().write(Logger.LEVEL_INFO, 'Step data will not be saved because feature is disabled.');
-                }
-            } else {
-                if (this.abortMessage != '') {
-                    Env.getLogger().write(Logger.LEVEL_INFO, this.abortMessage);
-                }
-            }
-
-            Env.getLogger().closeSection();
-            return null;
-        } else {
-            this.stepAttempt = 1;
-            Env.getLogger().closeSection();
-            return {nextIndex: index + 1, lastRequestStr: requestStr, lastDataStr: dataStr};
-        }
+    public function onFailedLoad(request:IdModel):Void {
+        this.firstStep = 0;
+        this.data = new Dictionary();
+        this.stepAttempt = 1;
     }
 
-    /**
-        Without a message, a skip is performed with the standard skip message, which
-        will try to store step data. If a message is provided, no data is stored, and that message
-        is printed instead as long as it is not an empty string.
-    **/
-    private function abort(?message:String):Void {
-        this.abortRequested = true;
-        this.abortMessage = message;
+    public function onConnectSave(request:IdModel):Void {
+        this.logger.writeStepSavedInConnect();
     }
 
-    private function logStepData(level:Int, request:String, data:String, lastRequest:String, lastData:String) {
-        for (handler in Env.getLogger().getHandlers()) {
-            final list = new Collection<String>().push(getFormattedRequest(request, lastRequest, handler.formatter))
-                .push(getFormattedData(data, lastData, this.data, handler.formatter));
-            Env.getLogger()._writeToHandler(level, handler.formatter.formatList(level,list), handler);
-        }
+    public function onLocalSave(request:IdModel):Void {
+        this.logger.writeStepSavedLocally();
     }
 
-    private static function getFormattedRequest(request:String, lastRequest:String, fmt:ILoggerFormatter):String {
-        if (request != lastRequest) {
-            if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
-                final lastRequestObj = Util.isJsonObject(lastRequest) ? Json.parse(lastRequest) : null;
-                final requestObj = (Util.isJsonObject(request) && lastRequestObj != null) ? Json.parse(request) : null;
-                final diff = (lastRequestObj != null && requestObj != null) ? Util.createObjectDiff(requestObj, lastRequestObj) : null;
-                final requestStr = (diff != null)
-                    ? Util.beautifyObject(
-                        diff,
-                        Env.getLogger().isCompact(),
-                        false,
-                        Env.getLogger().isBeautified())
-                    : request;
-                final requestTitle = (diff != null) ? 'Request (changes):' : 'Request:';
-                return '$requestTitle${fmt.formatCodeBlock(Env.getLogger().getLevel(),Std.string(requestStr), 'json')}';
-            } else {
-                return 'Request (id): ${request}';
-            }
-        } else {
-            return 'Request: Same as in previous step.';
-        }
-    }
-
-    private static function getFormattedData(data:String, lastData:String, dataDict:Dictionary, fmt:ILoggerFormatter):String {
-        if (data != '{}') {
-            if (data != lastData) {
-                if (Env.getLogger().getLevel() == Logger.LEVEL_DEBUG) {
-                    return 'Data:${getDataTable(dataDict, fmt)}';
-                } else {
-                    final keysStr = [for (key in dataDict.keys()) key].join(', ');
-                    return 'Data (keys): $keysStr.';
-                }
-            } else {
-                return 'Data: Same as in previous step.';
-            }
-        } else {
-            return 'Data: Empty.';
-        }
-    }
-
-    private static function getDataTable(data:Dictionary, fmt:ILoggerFormatter):String {
-        final dataKeys = [for (key in data.keys()) key];
-        final dataCol = new Collection<Collection<String>>().push(new Collection<String>().push('Key').push('Value'));
-        Lambda.iter(dataKeys, function(key) {
-            dataCol.push(new Collection<String>().push(key).push(data.get(key)));
-        });
-        return fmt.formatTable(Env.getLogger().getLevel(),dataCol);
-    }
-    
-    private function getClassName():String {
-        #if js
-        final constructorName = js.Syntax.code("{0}.constructor.name", this);
-        final className = (constructorName != 'Object') ? constructorName : Type.getClassName(Type.getClass(this));
-        return className;
-        #elseif php
-        return php.Syntax.code("get_class({0})", this);
-        #elseif python
-        return python.Syntax.code("type({0}).__name__", this);
-        #else
-        return Type.getClassName(Type.getClass(this));
-        #end
-    }
-}
-
-private class Step {
-    public final description:String;
-    public final func:StepFunc;
-
-    public function new(description:String, func:StepFunc) {
-        this.description = description;
-        this.func = func;
+    public function onFailedSave(request:IdModel):Void {
+        this.logger.writeStepSaveFailed();
     }
 }

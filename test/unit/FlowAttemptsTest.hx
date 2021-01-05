@@ -85,15 +85,14 @@ class FlowAttemptsApiClientMock implements IApiClient {
 class TestFlow extends Flow {
     public function new() {
         super(null);
-        this.step("test step 1", this.functionality);
-        this.step("test step 2", this.functionality);
-        this.step("test step 3", this.functionality);
+        this.step("test step 1", TestFlow.functionality);
+        this.step("test step 2", TestFlow.functionality);
+        this.step("test step 3", TestFlow.functionality);
     }
 
-    public function functionality(f:Flow):Void {
-        if(this.getCurrentAttempt()<4){
-            this.abort();
+    public static function functionality(f:Flow):Void {
+        if (f.getCurrentAttempt() < 4) {
+            f.skip();
         }
     }
-    
 }
