@@ -40,7 +40,6 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
     private static final SKIP_MSG = 'Skipping request because an exception was thrown: ';
 
     private final filterFunc:FilterFunc;
-    private var storeRequestOnFailure:Bool;
     private var skipRequestOnPendingMigration:Bool;
     private final executor:FlowExecutor;
     private final logger:FlowLogger;
@@ -60,7 +59,6 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
     **/
     public function new(filterFunc:FilterFunc) {
         this.filterFunc = filterFunc;
-        this.storeRequestOnFailure = true;
         this.skipRequestOnPendingMigration = true;
         this.executor = new FlowExecutor(this, this);
         this.logger = new FlowLogger(this.getClassName());
@@ -90,14 +88,14 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
         Enables or disables storing of request data when the Flow fails execution. Defaults to true.
     **/
     public function setStoreRequestOnFailure(enable:Bool):Void {
-        this.storeRequestOnFailure = enable;
+        this.store.setStoreRequestOnFailure(enable);
     }
 
     /**
         Tells if the flow stores request data when Flow execution fails.
     **/
     public function storesRequestOnFailure():Bool {
-        return this.storeRequestOnFailure;
+        return this.store.storesRequestOnFailure();
     }
 
     /**
@@ -385,9 +383,7 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
     private function runRequest(request:IdModel):Void {
         this.logger.openRequestSection(request);
         if (this.prepareRequest(request) && this.processSetup()) {
-            if (this.storesRequestOnFailure()) {
-                this.store.loadStepData(this.request);
-            }
+            this.store.requestDidBegin(this.request);
             this.executor.executeRequest(request, this.data, this.firstStep);
         } else {
             this.logger.writeMigrationMessage(request);
@@ -467,9 +463,7 @@ class Flow extends Base implements FlowExecutorObserver implements FlowStoreObse
 
     public function onStepSkip(request:IdModel, step:Step, index:Int):Void {
         this.logger.writeStepSkip(this.storesRequestOnFailure());
-        if (this.storesRequestOnFailure()) {
-            this.store.saveStepData(this.request, this.data, index, this.stepAttempt + 1);
-        }
+        this.store.requestDidSkip(this.request, this.data, index, this.stepAttempt + 1);
         this.logger.closeStepSection(index);
     }
 

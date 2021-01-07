@@ -13,34 +13,48 @@ class FlowStore {
     private static final STEP_PARAM_ID_TIER2 = '__sdk_processor_step_tier2';
 
     private final observer:FlowStoreObserver;
+    private var storeRequestOnFailure:Bool;
 
     public function new(observer:Null<FlowStoreObserver>) {
         this.observer = observer;
+        this.storeRequestOnFailure = true;
     }
 
-    public function loadStepData(request:IdModel):Void {
-        final stepData = StepStorage.load(request.id, getStepParam(request));
-        if (this.observer != null) {
-            if (stepData.storage != FailedStorage) {
-                this.observer.onLoad(request, stepData.firstIndex, stepData.data, Std.string(stepData.storage),
-                    (stepData.attempt != null) ? stepData.attempt : 0);
-            } else {
-                this.observer.onFailedLoad(request);
+    public function setStoreRequestOnFailure(enable:Bool):Void {
+        this.storeRequestOnFailure = enable;
+    }
+
+    public function storesRequestOnFailure():Bool {
+        return this.storeRequestOnFailure;
+    }
+
+    public function requestDidBegin(request:IdModel):Void {
+        if (this.storesRequestOnFailure()) {
+            final stepData = StepStorage.load(request.id, getStepParam(request));
+            if (this.observer != null) {
+                if (stepData.storage != FailedStorage) {
+                    this.observer.onLoad(request, stepData.firstIndex, stepData.data, Std.string(stepData.storage),
+                        (stepData.attempt != null) ? stepData.attempt : 0);
+                } else {
+                    this.observer.onFailedLoad(request);
+                }
             }
         }
     }
 
-    public function saveStepData(request:IdModel, data:Dictionary, index:Int, attempt:Int):Void {
-        final result = StepStorage.save(request, new StepData(index, data, ConnectStorage, attempt),
-            this.getStepParam(request), Reflect.field(request, 'update'));
-        if (this.observer != null) {
-            switch (result) {
-                case ConnectStorage:
-                    observer.onConnectSave(request);
-                case LocalStorage:
-                    observer.onLocalSave(request);
-                case FailedStorage:
-                    observer.onFailedSave(request);
+    public function requestDidSkip(request:IdModel, data:Dictionary, index:Int, attempt:Int):Void {
+        if (this.storesRequestOnFailure()) {
+            final result = StepStorage.save(request, new StepData(index, data, ConnectStorage, attempt),
+                this.getStepParam(request), Reflect.field(request, 'update'));
+            if (this.observer != null) {
+                switch (result) {
+                    case ConnectStorage:
+                        observer.onConnectSave(request);
+                    case LocalStorage:
+                        observer.onLocalSave(request);
+                    case FailedStorage:
+                        observer.onFailedSave(request);
+                }
             }
         }
     }
