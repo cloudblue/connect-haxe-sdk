@@ -120,9 +120,7 @@ class Logger extends Base {
         }
     }
 
-
     public function setFilenameFromRequest(request: IdModel) {
-
         final defaultProvider = 'provider';
         final defaultHub = 'hub';
         final defaultMarketplace = 'marketplace';

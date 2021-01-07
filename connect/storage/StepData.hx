@@ -8,15 +8,12 @@ import connect.models.Model;
 import connect.util.Dictionary;
 import haxe.Json;
 
-
 @:dox(hide)
 enum StorageType {
     ConnectStorage;
     LocalStorage;
     FailedStorage;
-    OmittedStorage;
 }
-
 
 @:dox(hide)
 class StepData {

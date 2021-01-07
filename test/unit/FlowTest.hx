@@ -48,62 +48,61 @@ class FlowTest {
 
     @Test
     public function testFlowRunApprove() {
-        final flow = new Flow(null).step('Add dummy data', function(f:Flow):Void {}).step('Trace request data', function(f:Flow):Void {});
+        final flow = new Flow(null)
+            .step('Add dummy data', f -> {})
+            .step('Trace request data', f -> {});
         this.flowRunner(flow);
     }
 
     @Test
     public function testFlowRunInquire() {
-        final flow = new Flow(null).step('Add dummy data', function(f:Flow):Void {
-            f.inquire('TMPL-0001', null);
-        }).step('Trace request data', function(f:Flow):Void {});
+        final flow = new Flow(null)
+            .step('Add dummy data', f -> f.inquire('TMPL-0001', null))
+            .step('Trace request data', f -> {});
         this.flowRunner(flow);
     }
 
     @Test
     public function testFlowRunFail() {
-        final flow = new Flow(null).step('Add dummy data', function(f:Flow):Void {
-            f.fail('Fail by default');
-        }).step('Trace request data', function(f:Flow):Void {});
+        final flow = new Flow(null)
+            .step('Add dummy data', f -> f.fail('Fail by default'))
+            .step('Trace request data', f -> {});
         this.flowRunner(flow);
     }
 
     @Test
     public function testFlowRunPend() {
-        final flow = new Flow(null).step('Add dummy data', function(f:Flow):Void {
-            f.pend();
-        }).step('Trace request data', function(f:Flow):Void {});
+        final flow = new Flow(null)
+            .step('Add dummy data', f -> f.pend())
+            .step('Trace request data', f -> {});
         this.flowRunner(flow);
     }
 
     @Test
     public function testFlowData() {
-        final flow = new Flow(null).step('Add dummy data', function(f:Flow):Void {
-            f.setData("TEST_PARAM", "TEST");
-        }).step('Trace request data', function(f:Flow):Void {});
+        var param = "";
+        final flow = new Flow(null)
+            .step('Add dummy data', f -> f.setData("TEST_PARAM", "TEST"))
+            .step('Trace request data', f -> param = f.getData("TEST_PARAM"));
         this.flowRunner(flow);
-        Assert.areEqual("TEST", flow.getData("TEST_PARAM"));
+        Assert.areEqual("TEST", param);
     }
 
     @Test
     public function testFlowApproveByTile() {
-        final flow = new Flow(null).step('Add dummy data', function(f:Flow):Void {
-            f.approveByTile("TL-00001");
-        });
+        final flow = new Flow(null).step('Add dummy data', f -> f.approveByTile("TL-00001"));
         this.flowRunner(flow);
     }
 
     @Test
     public function testFlowApproveByTemplate() {
-        final flow = new Flow(null).step('Add dummy data', function(f:Flow):Void {
-            f.approveByTemplate("TPL-00001");
-        });
+        final flow = new Flow(null).step('Add dummy data', f -> f.approveByTemplate("TPL-00001"));
         this.flowRunner(flow);
     }
 
     @Test
     public function testGetModels() {
-        final flow = new Flow(null).step('Add dummy data', function(f:Flow):Void {});
+        final flow = new Flow(null).step('Add dummy data', f -> {});
         flow._run(request_list);
         Assert.isType(flow.getAssetRequest(), AssetRequest);
         flow._run(tier_list);
