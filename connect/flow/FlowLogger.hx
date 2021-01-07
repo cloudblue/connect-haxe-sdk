@@ -12,7 +12,6 @@ import connect.models.Listing;
 import connect.models.TierConfigRequest;
 import connect.models.UsageFile;
 import connect.util.DateTime;
-import connect.logger.PlainLoggerFormatter;
 
 @:dox(hide)
 class FlowLogger {
