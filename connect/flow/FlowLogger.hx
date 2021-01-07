@@ -34,63 +34,6 @@ class FlowLogger {
         Env.getLogger().openSection('Processing request "${request.id}" on ${DateTime.now()}');
     }
 
-    private static function getProvider(assetRequest:AssetRequest, listing:Listing, tierConfigRequest:TierConfigRequest, usageFile:UsageFile):String {
-        return
-            (assetRequest != null && assetRequest.asset.connection.provider != null) ?
-                assetRequest.asset.connection.provider.id :
-            (listing != null && listing.provider != null) ?
-                listing.provider.id :
-            (tierConfigRequest != null && tierConfigRequest.configuration.connection.provider != null) ?
-                tierConfigRequest.configuration.connection.provider.id :
-            (usageFile != null && usageFile.provider != null) ?
-                usageFile.provider.id :
-            'provider';
-    }
-
-    private static function getHub(assetRequest:AssetRequest, listing:Listing, tierConfigRequest:TierConfigRequest, usageFile:UsageFile):String {
-        return
-            (assetRequest != null && assetRequest.asset.connection.hub != null) ?
-                assetRequest.asset.connection.hub.id :
-            (tierConfigRequest != null && tierConfigRequest.configuration.connection.hub != null) ?
-                tierConfigRequest.configuration.connection.hub.id :
-            'hub';
-    }
-
-    private static function getMarketplace(assetRequest:AssetRequest, listing:Listing, tierConfigRequest:TierConfigRequest, usageFile:UsageFile):String {
-        return
-            (assetRequest != null && assetRequest.marketplace != null) ?
-                assetRequest.marketplace.id :
-            (listing != null && listing.contract.marketplace != null) ?
-                listing.contract.marketplace.id :
-            (tierConfigRequest != null && tierConfigRequest.configuration.marketplace != null) ?
-                tierConfigRequest.configuration.marketplace.id :
-            (usageFile != null && usageFile.marketplace != null) ?
-                usageFile.marketplace.id :
-            'marketplace';
-    }
-
-    private static function getProduct(assetRequest:AssetRequest, listing:Listing, tierConfigRequest:TierConfigRequest, usageFile:UsageFile):String {
-        return
-            (assetRequest != null && assetRequest.asset.product != null) ?
-                assetRequest.asset.product.id :
-            (listing != null && listing.product != null) ?
-                listing.product.id :
-            (tierConfigRequest != null && tierConfigRequest.configuration.product != null) ?
-                tierConfigRequest.configuration.product.id :
-            (usageFile != null && usageFile.product != null) ?
-                usageFile.product.id :
-            'product';
-    }
-
-    private static function getTierAccount(assetRequest:AssetRequest, listing:Listing, tierConfigRequest:TierConfigRequest, usageFile:UsageFile):String {
-        return
-            (assetRequest != null && assetRequest.asset.tiers.customer != null) ?
-                assetRequest.asset.tiers.customer.id:
-            (tierConfigRequest != null && tierConfigRequest.configuration.account != null) ?
-                tierConfigRequest.configuration.account.id :
-            'tier_account';
-    }
-
     public function closeRequestSection():Void {
         Env.getLogger().closeSection();
     }
