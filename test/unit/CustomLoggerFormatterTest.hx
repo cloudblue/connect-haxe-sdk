@@ -12,6 +12,10 @@ import massive.munit.Assert;
 import connect.Base;
 
 class CustomLoggerFormatter extends Base implements ILoggerFormatter {
+
+    public function setRequest(requestId:Null<String>){}
+
+
     public function formatSection(level:Int, sectionLevel:Int, text:String):String {
         return text;
     }

@@ -30,9 +30,7 @@ class FlowLogger {
         Env.getLogger().closeSection();
         Env.getLogger().setFilename(null);
         for (handler in Env.getLogger().getHandlers()){
-            if (Std.is(handler.formatter, PlainLoggerFormatter)){
-                cast(handler.formatter, PlainLoggerFormatter).resetContextData();
-            }
+                handler.formatter.setRequest(null);
         }
 
 
@@ -40,6 +38,9 @@ class FlowLogger {
 
     public function openRequestSection(request:IdModel):Void {
         Env.getLogger().setFilenameFromRequest(request);
+        for (handler in Env.getLogger().getHandlers()){
+            handler.formatter.setRequest(request.id);
+    }
         Env.getLogger().openSection('Processing request "${request.id}" on ${DateTime.now()}');
     }
 

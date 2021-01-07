@@ -59,4 +59,5 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
     }
 
     public function new() {}
+    public function setRequest(requestId:Null<String>){}
 }
