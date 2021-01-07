@@ -27,8 +27,6 @@ class FlowLogger {
 
     public function closeFlowSection():Void {
         Env.getLogger().closeSection();
-        Env.getLogger().setFilename(null);
-        this.setContextRequest(null);
     }
 
     public function openRequestSection(request:IdModel):Void {
@@ -39,6 +37,8 @@ class FlowLogger {
 
     public function closeRequestSection():Void {
         Env.getLogger().closeSection();
+        Env.getLogger().setFilename(null);
+        this.setContextRequest(null);
     }
 
     public function openSetupSection():Void {
