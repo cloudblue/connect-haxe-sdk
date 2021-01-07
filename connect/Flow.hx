@@ -5,12 +5,12 @@
 
 package connect;
 
-import connect.flow.FlowStoreObserver;
+import connect.flow.FlowStoreDelegate;
 import connect.flow.FlowStore;
 import connect.flow.ProcessedRequestInfo;
 import connect.flow.Step;
 import connect.flow.FlowExecutor;
-import connect.flow.FlowExecutorObserver;
+import connect.flow.FlowExecutorDelegate;
 import connect.flow.FlowLogger;
 import connect.flow.RequestCaster;
 import connect.flow.StepFunc;
@@ -36,7 +36,7 @@ typedef FilterFunc = (IdModel) -> Bool;
     A Flow represents a set of steps within a `Processor` which are executed for all requests
     that return `true` for a given function. If `null` is passed, all requests will be processed.
 **/
-class Flow extends Base implements FlowExecutorObserver implements FlowStoreObserver {
+class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDelegate {
     private static final SKIP_MSG = 'Skipping request because an exception was thrown: ';
 
     private final filterFunc:FilterFunc;

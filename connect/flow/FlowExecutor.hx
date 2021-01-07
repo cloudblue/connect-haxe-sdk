@@ -8,14 +8,14 @@ import connect.util.Util;
 @:dox(hide)
 class FlowExecutor {
     private final flow:Flow;
-    private final observer:Null<FlowExecutorObserver>;
+    private final delegate:Null<FlowExecutorDelegate>;
     private final steps:Array<Step>;
     private var abortRequested:Bool;
     private var abortMessage:Null<String>;
 
-    public function new(flow:Flow, observer:Null<FlowExecutorObserver>) {
+    public function new(flow:Flow, delegate:Null<FlowExecutorDelegate>) {
         this.flow = flow;
-        this.observer = observer;
+        this.delegate = delegate;
         this.steps = [];
         this.abortRequested = false;
         this.abortMessage = null;
@@ -41,8 +41,8 @@ class FlowExecutor {
     }
 
     private function processStep(request:IdModel, step:Step, data:Dictionary, index:Int):Bool {
-        if (this.observer != null) {
-            this.observer.onStepBegin(request, step, index);
+        if (this.delegate != null) {
+            this.delegate.onStepBegin(request, step, index);
         }
         this.callStepFunc(request, step, index);
         return this.processAbortOrEnd(request, step, index);
@@ -58,8 +58,8 @@ class FlowExecutor {
             step.getFunc()(this.flow);
             #end
         } catch (ex:Dynamic) {
-            if (this.observer != null) {
-                this.observer.onStepFail(request, step, index, getExceptionMessage(ex));
+            if (this.delegate != null) {
+                this.delegate.onStepFail(request, step, index, getExceptionMessage(ex));
             }
             this.abort();
         }
@@ -81,18 +81,18 @@ class FlowExecutor {
 
     private function processAbortOrEnd(request:IdModel, step:Step, index:Int):Bool {
         if (this.abortRequested) {
-            if (this.observer != null) {
+            if (this.delegate != null) {
                 if (this.abortMessage == null) {
-                    this.observer.onStepSkip(request, step, index);
+                    this.delegate.onStepSkip(request, step, index);
                 } else {
-                    this.observer.onStepAbort(request, step, index, this.abortMessage);
+                    this.delegate.onStepAbort(request, step, index, this.abortMessage);
                 }
             }
             this.abortRequested = false;
             return false;
         } else {
-            if (this.observer != null) {
-                this.observer.onStepEnd(request, step, index);
+            if (this.delegate != null) {
+                this.delegate.onStepEnd(request, step, index);
             }
             return true;
         }

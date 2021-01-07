@@ -2,7 +2,7 @@ package connect.flow;
 
 import connect.models.IdModel;
 
-interface FlowExecutorObserver {
+interface FlowExecutorDelegate {
     function onStepBegin(request:IdModel, step:Step, index:Int):Void;
     function onStepEnd(request:IdModel, step:Step, index:Int):Void;
     function onStepFail(request:IdModel, step:Step, index:Int, msg:String):Void;

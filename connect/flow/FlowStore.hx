@@ -12,11 +12,11 @@ class FlowStore {
     private static final STEP_PARAM_ID_TIER = '__sdk_processor_step_tier';
     private static final STEP_PARAM_ID_TIER2 = '__sdk_processor_step_tier2';
 
-    private final observer:FlowStoreObserver;
+    private final delegate:FlowStoreDelegate;
     private var storeRequestOnFailure:Bool;
 
-    public function new(observer:Null<FlowStoreObserver>) {
-        this.observer = observer;
+    public function new(delegate:Null<FlowStoreDelegate>) {
+        this.delegate = delegate;
         this.storeRequestOnFailure = true;
     }
 
@@ -31,12 +31,12 @@ class FlowStore {
     public function requestDidBegin(request:IdModel):Void {
         if (this.storesRequestOnFailure()) {
             final stepData = StepStorage.load(request.id, getStepParam(request));
-            if (this.observer != null) {
+            if (this.delegate != null) {
                 if (stepData.storage != FailedStorage) {
-                    this.observer.onLoad(request, stepData.firstIndex, stepData.data, Std.string(stepData.storage),
+                    this.delegate.onLoad(request, stepData.firstIndex, stepData.data, Std.string(stepData.storage),
                         (stepData.attempt != null) ? stepData.attempt : 0);
                 } else {
-                    this.observer.onFailedLoad(request);
+                    this.delegate.onFailedLoad(request);
                 }
             }
         }
@@ -46,14 +46,14 @@ class FlowStore {
         if (this.storesRequestOnFailure()) {
             final result = StepStorage.save(request, new StepData(index, data, ConnectStorage, attempt),
                 this.getStepParam(request), Reflect.field(request, 'update'));
-            if (this.observer != null) {
+            if (this.delegate != null) {
                 switch (result) {
                     case ConnectStorage:
-                        observer.onConnectSave(request);
+                        delegate.onConnectSave(request);
                     case LocalStorage:
-                        observer.onLocalSave(request);
+                        delegate.onLocalSave(request);
                     case FailedStorage:
-                        observer.onFailedSave(request);
+                        delegate.onFailedSave(request);
                 }
             }
         }
