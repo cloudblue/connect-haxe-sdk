@@ -17,6 +17,11 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
     private var currentRequest = NO_REQUEST;
     private var currentRequestLevel = 0;
 
+    public function resetContextData(){
+        this.currentRequest = NO_REQUEST;
+        this.currentRequestLevel = 0;
+    }
+
     public function formatSection(level: Int, sectionLevel: Int, text: String): String {
         final hashes = StringTools.rpad('', '#', sectionLevel);
         final prefix = (hashes != '')

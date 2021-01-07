@@ -12,6 +12,7 @@ import connect.models.Listing;
 import connect.models.TierConfigRequest;
 import connect.models.UsageFile;
 import connect.util.DateTime;
+import connect.logger.PlainLoggerFormatter;
 
 @:dox(hide)
 class FlowLogger {
@@ -27,6 +28,14 @@ class FlowLogger {
 
     public function closeFlowSection():Void {
         Env.getLogger().closeSection();
+        Env.getLogger().setFilename(null);
+        for (handler in Env.getLogger().getHandlers()){
+            if (Std.is(handler.formatter, PlainLoggerFormatter)){
+                cast(handler.formatter, PlainLoggerFormatter).resetContextData();
+            }
+        }
+
+
     }
 
     public function openRequestSection(request:IdModel):Void {
