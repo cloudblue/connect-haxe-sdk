@@ -29,18 +29,12 @@ class FlowLogger {
     public function closeFlowSection():Void {
         Env.getLogger().closeSection();
         Env.getLogger().setFilename(null);
-        for (handler in Env.getLogger().getHandlers()){
-                handler.formatter.setRequest(null);
-        }
-
-
+        this.setContextRequest(null);
     }
 
     public function openRequestSection(request:IdModel):Void {
         Env.getLogger().setFilenameFromRequest(request);
-        for (handler in Env.getLogger().getHandlers()){
-            handler.formatter.setRequest(request.id);
-        }
+        this.setContextRequest(request.id);
         Env.getLogger().openSection('Processing request "${request.id}" on ${DateTime.now()}');
     }
 
@@ -164,5 +158,11 @@ class FlowLogger {
 
     public function writeLoadedStepData(index:Int, storageType:String):Void {
         Env.getLogger().write(Logger.LEVEL_INFO, 'Resuming request from step ${index + 1} with $storageType.');
+    }
+
+    private function setContextRequest(requestId:Null<String>):Void {
+        for (handler in Env.getLogger().getHandlers()){
+            handler.formatter.setRequest(requestId);
+        }
     }
 }
