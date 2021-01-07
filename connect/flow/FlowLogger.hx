@@ -40,7 +40,7 @@ class FlowLogger {
         Env.getLogger().setFilenameFromRequest(request);
         for (handler in Env.getLogger().getHandlers()){
             handler.formatter.setRequest(request.id);
-    }
+        }
         Env.getLogger().openSection('Processing request "${request.id}" on ${DateTime.now()}');
     }
 
