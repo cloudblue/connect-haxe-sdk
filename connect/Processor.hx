@@ -40,10 +40,11 @@ import haxe.Constraints.Function;
     supported target languages.
 **/
 class Processor extends Base {
+    private var flows: Array<Flow>;
+    
     public function new() {
         this.flows = [];
     }
-
 
     /**
         Defines a flow of `this` Processor. Steps in the are executed sequentially by the Processor
@@ -58,7 +59,6 @@ class Processor extends Base {
         return this;
     }
 
-
     /**
         Processes all `AssetRequest` objects that match the given filters,
         executing in sequence all the flows defined for them.
@@ -69,7 +69,6 @@ class Processor extends Base {
     public function processAssetRequests(filters: Query): Void {
         run(AssetRequest, filters);
     }
-
 
     /**
         Processes all `Listing` objects that match the given filters,
@@ -82,7 +81,6 @@ class Processor extends Base {
         run(Listing, filters);
     }
 
-
     /**
         Processes all `TierConfigRequest` objects that match the given filters,
         executing in sequence all the flows defined for them.
@@ -94,7 +92,6 @@ class Processor extends Base {
         run(TierConfigRequest, filters);
     }
 
-
     /**
         Processes all `UsageFile` objects that match the given filters,
         executing in sequence all the flows defined for them.
@@ -105,10 +102,6 @@ class Processor extends Base {
     public function processUsageFiles(filters: Query): Void {
         run(UsageFile, filters);
     }
-
-
-    private var flows: Array<Flow>;
-
 
     private function run<T>(modelClass: Class<T>, filters: Query): Void {
         // On some platforms, a string is received as modelClass, so obtain the real class from it
