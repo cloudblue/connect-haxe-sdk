@@ -13,6 +13,7 @@ import connect.models.UsageFile;
 import connect.util.DateTime;
 import haxe.Constraints.Function;
 
+
 /**
     The Processor helps automating the task of processing a list of requests, and updates the log
     automatically with all operations performed.
@@ -39,35 +40,15 @@ import haxe.Constraints.Function;
     supported target languages.
 **/
 class Processor extends Base {
-    private var flowClasses: Array<Class<Flow>>;
-    private var flows: Array<Flow>;
-
     public function new() {
-        this.flowClasses = [];
         this.flows = [];
     }
 
-    /**
-        Defines a flow of `this` Processor. Steps in the are executed sequentially by the Processor
-        when its `run` method is invoked for all the requests that return `true` in the filter
-        function passed in the creation of the flow.
-
-        @param flow The class that will be used to instantiate the processor.
-        It requires a constructor without arguments.
-        @returns `this` Processor, so calls to this method can be chained.
-    **/
-    public function flowClass(flowClass: Class<Flow>): Processor {
-        this.flowClasses.push(flowClass);
-        return this;
-    }
 
     /**
         Defines a flow of `this` Processor. Steps in the are executed sequentially by the Processor
         when its `run` method is invoked for all the requests that return `true` in the filter
         function passed in the creation of the flow.
-
-        NOTE: The `flowClass` method is the preferred way to define flows. This method is maintained
-        for backwards compatibility only.
 
         @param flow The flow to add to the processor.
         @returns `this` Processor, so calls to this method can be chained.
@@ -76,6 +57,7 @@ class Processor extends Base {
         this.flows.push(flow);
         return this;
     }
+
 
     /**
         Processes all `AssetRequest` objects that match the given filters,
@@ -88,6 +70,7 @@ class Processor extends Base {
         run(AssetRequest, filters);
     }
 
+
     /**
         Processes all `Listing` objects that match the given filters,
         executing in sequence all the flows defined for them.
@@ -98,6 +81,7 @@ class Processor extends Base {
     public function processListings(filters: Query): Void {
         run(Listing, filters);
     }
+
 
     /**
         Processes all `TierConfigRequest` objects that match the given filters,
@@ -110,6 +94,7 @@ class Processor extends Base {
         run(TierConfigRequest, filters);
     }
 
+
     /**
         Processes all `UsageFile` objects that match the given filters,
         executing in sequence all the flows defined for them.
@@ -120,6 +105,10 @@ class Processor extends Base {
     public function processUsageFiles(filters: Query): Void {
         run(UsageFile, filters);
     }
+
+
+    private var flows: Array<Flow>;
+
 
     private function run<T>(modelClass: Class<T>, filters: Query): Void {
         // On some platforms, a string is received as modelClass, so obtain the real class from it
@@ -140,9 +129,10 @@ class Processor extends Base {
             final list = Reflect.callMethod(modelClass, listMethod, [filters]);
             Env.getLogger().closeSection();
             
-            // Run each flow
-            Lambda.iter(this.flowClasses, cls -> Type.createInstance(cls, [])._run(list));
-            Lambda.iter(this.flows, flow -> flow._run(list));
+            // Call each flow
+            for (flow in flows) {
+                flow._run(list);
+            }
         } catch (ex: Dynamic) {
             // Catch exception when listing
             Env.getLogger().writeCodeBlock(Logger.LEVEL_ERROR, Std.string(ex), '');
