@@ -12,10 +12,11 @@ import connect.util.Util;
 @:dox(hide)
 class PlainLoggerFormatter extends Base implements ILoggerFormatter {
     private static final NO_REQUEST = 'NO_REQUEST';
-    private static final REQUEST_PREFIX = 'Processing request "';
-
     private var currentRequest = NO_REQUEST;
-    private var currentRequestLevel = 0;
+
+    public function setRequest(requestId:Null<String>):Void {
+        this.currentRequest = (requestId != null) ? requestId : NO_REQUEST;
+    }
 
     public function formatSection(level: Int, sectionLevel: Int, text: String): String {
         final hashes = StringTools.rpad('', '#', sectionLevel);
@@ -23,20 +24,7 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
             ? (hashes + ' ')
             : '';
         final textStr = Std.string(text);
-        this.parseCurrentRequest(sectionLevel, textStr);
         return '${formatPrefix(level)}$prefix$textStr';
-    }
-
-    private function parseCurrentRequest(sectionLevel: Int, text: String): Void {
-        final textStr = Std.string(text);
-        if (StringTools.startsWith(textStr, REQUEST_PREFIX)) {
-            final request = textStr.split('"')[1];
-            this.currentRequest = (request != '') ? request : NO_REQUEST;
-            this.currentRequestLevel = sectionLevel;
-        } else if (sectionLevel <= this.currentRequestLevel) {
-            this.currentRequest = NO_REQUEST;
-            this.currentRequestLevel = 0;
-        }
     }
 
     private function formatPrefix(level: Int): String {
