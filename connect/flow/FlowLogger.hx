@@ -31,11 +31,14 @@ class FlowLogger {
 
     public function openRequestSection(request:IdModel):Void {
         Env.getLogger().setFilenameFromRequest(request);
+        this.setContextRequest(request.id);
         Env.getLogger().openSection('Processing request "${request.id}" on ${DateTime.now()}');
     }
 
     public function closeRequestSection():Void {
         Env.getLogger().closeSection();
+        Env.getLogger().setFilename(null);
+        this.setContextRequest(null);
     }
 
     public function openSetupSection():Void {
@@ -154,5 +157,11 @@ class FlowLogger {
 
     public function writeLoadedStepData(index:Int, storageType:String):Void {
         Env.getLogger().write(Logger.LEVEL_INFO, 'Resuming request from step ${index + 1} with $storageType.');
+    }
+
+    private function setContextRequest(requestId:Null<String>):Void {
+        for (handler in Env.getLogger().getHandlers()){
+            handler.formatter.setRequest(requestId);
+        }
     }
 }
