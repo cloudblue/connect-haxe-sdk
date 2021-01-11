@@ -126,7 +126,7 @@ class AssetRequest extends IdModel {
     **/
     public function register(): AssetRequest {
         try {
-            final request = Env.getFulfillmentApi().createRequest(this.toString());
+            final request = Env.getFulfillmentApi().createRequest(this);
             return Model.parse(AssetRequest, request);
         } catch (ex: Dynamic) {
             return null;
@@ -156,7 +156,7 @@ class AssetRequest extends IdModel {
             if (hasModifiedFields) {
                 final request = Env.getFulfillmentApi().updateRequest(
                     this.id,
-                    haxe.Json.stringify(addValueToParams(diff)));
+                    haxe.Json.stringify(addValueToParams(diff)),this);
                 return Model.parse(AssetRequest, request);
             } else {
                 return this;
@@ -165,7 +165,7 @@ class AssetRequest extends IdModel {
             if (params.length() > 0) {
                 Env.getFulfillmentApi().updateRequest(
                     this.id,
-                    '{"asset":{"params":${params.toString()}}}');
+                    '{"asset":{"params":${params.toString()}}}',this);
             }
             return this;
         }
@@ -199,7 +199,7 @@ class AssetRequest extends IdModel {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
-            haxe.Json.stringify({template_id: id})
+            haxe.Json.stringify({template_id: id}), this
         );
         this._updateConversation('Request approved using template $id.');
         return Model.parse(AssetRequest, request);
@@ -219,7 +219,7 @@ class AssetRequest extends IdModel {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
-            haxe.Json.stringify({activation_tile: text})
+            haxe.Json.stringify({activation_tile: text}), this
         );
         this._updateConversation('Request approved using custom activation tile.');
         return Model.parse(AssetRequest, request);
@@ -238,7 +238,7 @@ class AssetRequest extends IdModel {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'fail',
-            haxe.Json.stringify({reason: reason})
+            haxe.Json.stringify({reason: reason}), this
         );
         this._updateConversation('Request failed: $reason.');
         return Model.parse(AssetRequest, request);
@@ -261,7 +261,7 @@ class AssetRequest extends IdModel {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'inquire',
-            haxe.Json.stringify(body)
+            haxe.Json.stringify(body), this
         );
         this._updateConversation('Request inquired.');
         return Model.parse(AssetRequest, request);
@@ -280,7 +280,7 @@ class AssetRequest extends IdModel {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'pend',
-            haxe.Json.stringify({})
+            haxe.Json.stringify({}), this
         );
         this._updateConversation('Request pended.');
         return Model.parse(AssetRequest, request);
@@ -295,7 +295,8 @@ class AssetRequest extends IdModel {
     public function assign(assigneeId: String): AssetRequest {
         final request = Env.getFulfillmentApi().assignRequest(
             this.id,
-            assigneeId
+            assigneeId,
+            this
         );
         this._updateConversation('Request assigned to $assigneeId.');
         return Model.parse(AssetRequest, request);

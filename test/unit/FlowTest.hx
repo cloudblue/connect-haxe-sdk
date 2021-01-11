@@ -5,6 +5,7 @@
 import connect.api.IApiClient;
 import connect.api.Response;
 import connect.Env;
+import connect.logger.Logger;
 import connect.Flow;
 import connect.logger.LoggerConfig;
 import connect.logger.MarkdownLoggerFormatter;
@@ -131,7 +132,7 @@ class FlowApiClientMock implements IApiClient {
     public function new() {
     }
 
-    public function syncRequest(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob, certificate:String):Response {
+    public function syncRequestWithLogger(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob, certificate:String, logger: Logger):Response {
         if (StringTools.contains(url, REQUESTS_PATH) && method.toUpperCase() == 'GET') {
             return new Response(200, Json.parse(File.getContent('test/mocks/data/request_list.json')), null);
         }
@@ -141,5 +142,9 @@ class FlowApiClientMock implements IApiClient {
         }
 
         return new Response(200, '[{"life": "The anwser is 42"}]', null);
+    }
+    
+    public function syncRequest(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob, certificate:String):Response {
+        return syncRequestWithLogger(method, url, headers, body,fileArg, fileName, fileContent, certificate, new Logger(null));
     }
 }

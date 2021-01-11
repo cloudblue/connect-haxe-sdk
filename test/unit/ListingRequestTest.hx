@@ -5,6 +5,7 @@
 import connect.api.IApiClient;
 import connect.api.Response;
 import connect.Env;
+import connect.logger.Logger;
 import connect.models.Listing;
 import connect.models.ListingRequest;
 import connect.util.Blob;
@@ -97,9 +98,8 @@ class ListingRequestApiClientMock implements IApiClient {
 
     public function new() {
     }
-
-    public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
+    public function syncRequestWithLogger(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String, logger: Logger) : Response {
         switch (method) {
             case 'GET':
                 switch (url) {
@@ -130,5 +130,9 @@ class ListingRequestApiClientMock implements IApiClient {
                 }
         }
         return new Response(404, null, null);
+    }
+    public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
+        return syncRequestWithLogger(method, url, headers, body,fileArg, fileName, fileContent, certificate, new Logger(null));
     }
 }

@@ -5,6 +5,7 @@
 import connect.api.IApiClient;
 import connect.api.Response;
 import connect.Env;
+import connect.logger.Logger;
 import connect.models.Connection;
 import connect.models.Contract;
 import connect.models.Events;
@@ -106,15 +107,20 @@ class TierConfigApiClientMock implements IApiClient {
 
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
-        if (method == 'GET') {
-            switch (url) {
-                case 'https://api.conn.rocks/public/v1/tier/configs':
-                    return new Response(200, File.getContent(FILE), null);
-                case 'https://api.conn.rocks/public/v1/tier/configs/TC-000-000-000':
-                    final tc = Json.parse(File.getContent(FILE))[0];
-                    return new Response(200, Json.stringify(tc), null);
-            }
-        }
-        return new Response(404, null, null);
+            return syncRequestWithLogger(method, url, headers, body,fileArg, fileName, fileContent, certificate, new Logger(null));
     }
+
+    public function syncRequestWithLogger(method: String, url: String, headers: Dictionary, body: String,
+        fileArg: String, fileName: String, fileContent: Blob, certificate: String, logger:Logger) : Response {
+    if (method == 'GET') {
+        switch (url) {
+            case 'https://api.conn.rocks/public/v1/tier/configs':
+                return new Response(200, File.getContent(FILE), null);
+            case 'https://api.conn.rocks/public/v1/tier/configs/TC-000-000-000':
+                final tc = Json.parse(File.getContent(FILE))[0];
+                return new Response(200, Json.stringify(tc), null);
+        }
+    }
+    return new Response(404, null, null);
+}
 }

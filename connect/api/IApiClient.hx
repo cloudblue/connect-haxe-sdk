@@ -6,7 +6,7 @@ package connect.api;
 
 import connect.util.Blob;
 import connect.util.Dictionary;
-
+import connect.logger.Logger;
 
 interface IApiClient {
     /**
@@ -24,4 +24,7 @@ interface IApiClient {
     **/
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response;
+
+    public function syncRequestWithLogger(method: String, url: String, headers: Dictionary, body: String,
+        fileArg: String, fileName: String, fileContent: Blob, certificate: String, logger:Logger) : Response;
 }

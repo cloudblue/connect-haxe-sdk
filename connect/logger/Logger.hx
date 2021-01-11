@@ -39,6 +39,7 @@ class Logger extends Base {
     private final compact:Bool;
     private final beautify:Bool;
     private var defaultFilename:String;
+    private final intialConfig: LoggerConfig;
 
     /**
         Creates a new Logger object. You don't normally create objects of this class,
@@ -46,6 +47,7 @@ class Logger extends Base {
     **/
     public function new(config:LoggerConfig) {
         config = (config != null) ? config : new LoggerConfig();
+        this.intialConfig = config;
         this.path = (config.path_.charAt(config.path_.length - 1) == '/') ? config.path_ : (config.path_ + '/');
         this.level = Std.int(Math.min(Math.max(config.level_, LEVEL_ERROR), LEVEL_DEBUG));
         this.handlers = config.handlers_.copy();
@@ -57,6 +59,11 @@ class Logger extends Base {
         this.beautify = config.beautify_;
         this.compact = (this.level != LEVEL_DEBUG) ? config.compact_ : false;
         this.defaultFilename = null;
+    }
+
+    /** @returns initial logger configuration**/
+    public function getInitialConfig():LoggerConfig {
+        return this.intialConfig;
     }
 
     /** @returns The path where logs are stored. **/
@@ -120,7 +127,7 @@ class Logger extends Base {
         }
     }
 
-    public function setFilenameFromRequest(request: IdModel) {
+    public function setFilenameForRequest(request: IdModel) {
         final defaultProvider = 'provider';
         final defaultHub = 'hub';
         final defaultMarketplace = 'marketplace';

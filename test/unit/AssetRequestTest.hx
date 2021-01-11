@@ -5,6 +5,7 @@
 import connect.api.IApiClient;
 import connect.api.Response;
 import connect.Env;
+import connect.logger.Logger;
 import connect.models.Asset;
 import connect.models.AssetRequest;
 import connect.models.Contract;
@@ -219,52 +220,57 @@ class AssetRequestApiClientMock implements IApiClient {
 
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
-        switch (method) {
-            case 'GET':
-                switch (url) {
-                    case 'https://api.conn.rocks/public/v1/requests':
-                        return new Response(200, File.getContent(FILE), null);
-                    case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000':
-                        final list = Json.parse(File.getContent(FILE));
-                        return new Response(200, Json.stringify(list[0]), null);
-                    case 'https://api.conn.rocks/public/v1/conversations?instance_id=PR-5852-1608-0000':
-                        return new Response(200, '[]', null);
-                    case 'https://api.conn.rocks/public/v1/conversations?instance_id=PR-5852-1608-0001':
-                        return new Response(200, File.getContent(CONVERSATIONS_FILE), null);
-                    case 'https://api.conn.rocks/public/v1/conversations/CO-000-000-000':
-                        final conv = Json.parse(File.getContent(CONVERSATIONS_FILE))[0];
-                        return new Response(200, Json.stringify(conv), null);
-                }
-            case 'POST':
-                switch (url) {
-                    case 'https://api.conn.rocks/public/v1/requests':
-                        return new Response(200, body, null);
-                    case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000/approve':
-                        final request = Json.parse(File.getContent(FILE))[0];
-                        request.status = 'approved';
-                        return new Response(200, Json.stringify(request), null);
-                    case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000/fail':
-                        final request = Json.parse(File.getContent(FILE))[0];
-                        request.status = 'failed';
-                        return new Response(200, Json.stringify(request), null);
-                    case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000/inquire':
-                        final request = Json.parse(File.getContent(FILE))[0];
-                        request.status = 'inquired';
-                        return new Response(200, Json.stringify(request), null);
-                    case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000/pend':
-                        final request = Json.parse(File.getContent(FILE))[0];
-                        request.status = 'pending';
-                        return new Response(200, Json.stringify(request), null);
-                    case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000/assign/XXX':
-                        final request = Json.parse(File.getContent(FILE))[0];
-                        request.assignee = 'XXX';
-                        return new Response(200, Json.stringify(request), null);
-                }
-            case 'PUT':
-                if (url == 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000') {
-                    return new Response(200, body, null);
-                }
-        }
-        return new Response(404, null, null);
+        return syncRequestWithLogger(method, url, headers, body,fileArg, fileName, fileContent, certificate, new Logger(null));
     }
+
+    public function syncRequestWithLogger(method: String, url: String, headers: Dictionary, body: String,
+        fileArg: String, fileName: String, fileContent: Blob, certificate: String, logger: Logger) : Response {
+    switch (method) {
+        case 'GET':
+            switch (url) {
+                case 'https://api.conn.rocks/public/v1/requests':
+                    return new Response(200, File.getContent(FILE), null);
+                case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000':
+                    final list = Json.parse(File.getContent(FILE));
+                    return new Response(200, Json.stringify(list[0]), null);
+                case 'https://api.conn.rocks/public/v1/conversations?instance_id=PR-5852-1608-0000':
+                    return new Response(200, '[]', null);
+                case 'https://api.conn.rocks/public/v1/conversations?instance_id=PR-5852-1608-0001':
+                    return new Response(200, File.getContent(CONVERSATIONS_FILE), null);
+                case 'https://api.conn.rocks/public/v1/conversations/CO-000-000-000':
+                    final conv = Json.parse(File.getContent(CONVERSATIONS_FILE))[0];
+                    return new Response(200, Json.stringify(conv), null);
+            }
+        case 'POST':
+            switch (url) {
+                case 'https://api.conn.rocks/public/v1/requests':
+                    return new Response(200, body, null);
+                case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000/approve':
+                    final request = Json.parse(File.getContent(FILE))[0];
+                    request.status = 'approved';
+                    return new Response(200, Json.stringify(request), null);
+                case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000/fail':
+                    final request = Json.parse(File.getContent(FILE))[0];
+                    request.status = 'failed';
+                    return new Response(200, Json.stringify(request), null);
+                case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000/inquire':
+                    final request = Json.parse(File.getContent(FILE))[0];
+                    request.status = 'inquired';
+                    return new Response(200, Json.stringify(request), null);
+                case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000/pend':
+                    final request = Json.parse(File.getContent(FILE))[0];
+                    request.status = 'pending';
+                    return new Response(200, Json.stringify(request), null);
+                case 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000/assign/XXX':
+                    final request = Json.parse(File.getContent(FILE))[0];
+                    request.assignee = 'XXX';
+                    return new Response(200, Json.stringify(request), null);
+            }
+        case 'PUT':
+            if (url == 'https://api.conn.rocks/public/v1/requests/PR-5852-1608-0000') {
+                return new Response(200, body, null);
+            }
+    }
+    return new Response(404, null, null);
+}
 }

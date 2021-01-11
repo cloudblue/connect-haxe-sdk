@@ -180,6 +180,13 @@ class Dictionary extends Base {
         return map.keys();
     }
 
+    /**
+        Returns true if `this` Dictionary has not keys
+        @return Bool
+     **/
+    public function isEmpty():Bool{
+        return map.keys() == null || !map.keys().hasNext();
+    }
 
     /**
         Removes the mapping of `key` and returns true if such a mapping existed,

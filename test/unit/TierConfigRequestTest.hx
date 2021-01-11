@@ -5,6 +5,7 @@
 import connect.api.IApiClient;
 import connect.api.Response;
 import connect.Env;
+import connect.logger.Logger;
 import connect.models.Activation;
 import connect.models.Events;
 import connect.models.Param;
@@ -193,37 +194,42 @@ class TierConfigRequestApiClientMock implements IApiClient {
 
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
-        switch (method) {
-            case 'GET':
-                switch (url) {
-                    case 'https://api.conn.rocks/public/v1/tier/config-requests':
-                        return new Response(200, File.getContent(FILE), null);
-                    case 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000':
-                        final request = Json.parse(File.getContent(FILE))[0];
-                        return new Response(200, Json.stringify(request), null);
-                }
-            case 'POST':
-                switch (url) {
-                    case 'https://api.conn.rocks/public/v1/tier/config-requests':
-                        return new Response(200, body, null);
-                    case 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000/approve':
-                        return new Response(200, body, null);
-                    case 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000/fail':
-                        return new Response(204, null, null);
-                    case 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000/inquire':
-                        return new Response(204, null, null);
-                    case 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000/pend':
-                        return new Response(204, null, null);
-                    case 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000/assign':
-                        return new Response(204, null, null);
-                    case 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000/unassign':
-                        return new Response(204, null, null);
-                }
-            case 'PUT':
-                if (url == 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000') {
-                    return new Response(200, body, null);
-                }
-        }
-        return new Response(404, null, null);
+        return syncRequestWithLogger(method, url, headers, body,fileArg, fileName, fileContent, certificate, new Logger(null));
     }
+
+    public function syncRequestWithLogger(method: String, url: String, headers: Dictionary, body: String,
+        fileArg: String, fileName: String, fileContent: Blob, certificate: String, logger: Logger) : Response {
+    switch (method) {
+        case 'GET':
+            switch (url) {
+                case 'https://api.conn.rocks/public/v1/tier/config-requests':
+                    return new Response(200, File.getContent(FILE), null);
+                case 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000':
+                    final request = Json.parse(File.getContent(FILE))[0];
+                    return new Response(200, Json.stringify(request), null);
+            }
+        case 'POST':
+            switch (url) {
+                case 'https://api.conn.rocks/public/v1/tier/config-requests':
+                    return new Response(200, body, null);
+                case 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000/approve':
+                    return new Response(200, body, null);
+                case 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000/fail':
+                    return new Response(204, null, null);
+                case 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000/inquire':
+                    return new Response(204, null, null);
+                case 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000/pend':
+                    return new Response(204, null, null);
+                case 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000/assign':
+                    return new Response(204, null, null);
+                case 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000/unassign':
+                    return new Response(204, null, null);
+            }
+        case 'PUT':
+            if (url == 'https://api.conn.rocks/public/v1/tier/config-requests/TCR-000-000-000') {
+                return new Response(200, body, null);
+            }
+    }
+    return new Response(404, null, null);
+}
 }

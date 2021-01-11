@@ -46,7 +46,7 @@ import connect.util.Dictionary;
 **/
 class Env extends Base {
     private static var config: Config;
-    private static var logger: Logger;
+    private static var logger: Dictionary;
     private static var defaultQuery: Query;
     private static var apiClient: IApiClient;
     private static var fulfillmentApi: FulfillmentApi;
@@ -114,12 +114,29 @@ class Env extends Base {
         @param config The configuration of the logger.
     **/
     public static function initLogger(config: LoggerConfig): Void {
-        if (logger == null) {
-            logger = new Logger(config);
+        if (logger.isEmpty()) {
+            logger.set(null,new Logger(config));
         } else {
             throw "Logger instance is already initialized.";
         }
     }
+
+
+    /**
+        Get logger for given request id, if it doesnt exists it will be created
+        and context specified 
+     **/
+     public static function getLoggerForRequest(request: Dynamic): Logger{
+         if(!logger.exists(request.id) && request != null){
+            var requestLogger = new Logger(logger.get(null).getInitialConfig());
+            logger.set(request.id,requestLogger);
+            logger.get(request.id).setFilenameForRequest(request);
+            for (handler in requestLogger.getHandlers()){
+                handler.formatter.setRequest(request.id);
+            }
+         }
+         return logger.get(request.id);
+     }
 
     /**
         @returns `true` if logger has already been initialized, `false` otherwise.
@@ -173,7 +190,7 @@ class Env extends Base {
         if (!isLoggerInitialized()) {
             initLogger(null);
         }
-        return logger;
+        return logger.get(null);
     }
 
     /**
@@ -238,7 +255,7 @@ class Env extends Base {
     @:dox(hide)
     public static function _reset(?client: IApiClient = null) {
         config = null;
-        logger = null;
+        logger = new Dictionary();
         defaultQuery = null;
         apiClient = client;
         fulfillmentApi = null;

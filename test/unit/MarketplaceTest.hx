@@ -5,6 +5,7 @@
 import connect.api.IApiClient;
 import connect.api.Response;
 import connect.Env;
+import connect.logger.Logger;
 import connect.models.Account;
 import connect.models.Country;
 import connect.models.ExtIdHub;
@@ -107,6 +108,11 @@ class MarketplaceApiClientMock implements IApiClient {
 
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
+        return syncRequestWithLogger(method, url, headers, body,fileArg, fileName, fileContent, certificate, new Logger(null));
+    }
+
+    public function syncRequestWithLogger(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String, logger: Logger) : Response {
         switch (method) {
             case 'GET':
                 switch (url) {
@@ -131,7 +137,7 @@ class MarketplaceApiClientMock implements IApiClient {
                 if (url == 'https://api.conn.rocks/public/v1/marketplaces/MP-12345') {
                     return new Response(204, null, null);
                 }
-        }
-        return new Response(404, null, null);
     }
+    return new Response(404, null, null);
+}
 }
