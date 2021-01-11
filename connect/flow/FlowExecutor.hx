@@ -25,22 +25,22 @@ class FlowExecutor {
         this.steps.push(new Step(description, func));
     }
 
-    public function executeRequest(request:IdModel, data:Dictionary, firstIndex: Int):Void {
+    public function executeRequest(request:IdModel, firstIndex: Int):Void {
         final steps = [for (i in firstIndex...this.steps.length) this.steps[i]];
-        this.processSteps(request, steps, data, firstIndex);
+        this.processSteps(request, steps, firstIndex);
     }
 
-    private function processSteps(request:IdModel, steps:Array<Step>, data:Dictionary, firstIndex:Int):Void {
+    private function processSteps(request:IdModel, steps:Array<Step>, firstIndex:Int):Void {
         Lambda.foldi(steps, function(step, shouldContinue, index) {
             if (shouldContinue) {
-                return processStep(request, step, data, index + firstIndex);
+                return processStep(request, step, index + firstIndex);
             } else {
                 return false;
             }
         }, true);
     }
 
-    private function processStep(request:IdModel, step:Step, data:Dictionary, index:Int):Bool {
+    private function processStep(request:IdModel, step:Step, index:Int):Bool {
         if (this.delegate != null) {
             this.delegate.onStepBegin(request, step, index);
         }

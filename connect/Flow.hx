@@ -46,6 +46,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     private final store:FlowStore;
     private var request:IdModel;
     private var data:Dictionary;
+    private var volatileData:Dictionary;
     private var firstStep:Int;
     private var lastRequestState:ProcessedRequestInfo;
     private var stepAttempt:Int;
@@ -65,6 +66,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         this.store = new FlowStore(this);
         this.request = null;
         this.data = new Dictionary();
+        this.volatileData = new Dictionary();
         this.firstStep = 0;
         this.lastRequestState = null;
         this.stepAttempt = 0;
@@ -202,12 +204,31 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     }
 
     /**
-        Retrieves Flow data previously set with `setData`.
+        This method follows the same goal as `setData`, but the data established with
+        this method never gets saved in case processing fails. So this is ideal
+        for storing data that can be safely recomputed on next execution, and we do
+        not need to retrieve from saved data. If we store a value with both `setVolatileData`
+        and `setData`, then `getData` will retrieve the persistent version set with `setData`,
+        so be careful about that behaviour.
+    **/
+    public function setVolatileData(key:String, value:Dynamic):Flow {
+        this.volatileData.set(key, value);
+        return this;
+    }
+
+    /**
+        Retrieves Flow data previously set with `setData` or `setVolatileData`.
+        If the data has been set both as persistent as volatile, the persistent
+        version is obtained.
         @param key The name of the key that identifies the data to be obtained.
         @returns The value of the data, or `null` if the key does not exist.
     **/
     public function getData(key:String):Dynamic {
-        return this.data.get(key);
+        if (this.data.exists(key)) {
+            return this.data.get(key);
+        } else {
+            return this.volatileData.get(key);
+        }
     }
 
     /**
@@ -384,7 +405,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         this.logger.openRequestSection(request);
         if (this.prepareRequest(request) && this.processSetup()) {
             this.store.requestDidBegin(this.request);
-            this.executor.executeRequest(request, this.data, this.firstStep);
+            this.executor.executeRequest(request, this.firstStep);
         } else {
             this.logger.writeMigrationMessage(request);
         }
