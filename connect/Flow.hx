@@ -415,6 +415,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     private function prepareRequest(request:IdModel):Bool {
         this.request = request;
         this.data = new Dictionary();
+        this.volatileData = new Dictionary();
         this.firstStep = 0;
         this.lastRequestState = new ProcessedRequestInfo(null, null);
         this.stepAttempt = 1;
@@ -498,6 +499,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     public function onLoad(request:IdModel, firstStep:Int, data:Dictionary, storageType:String, numAttempts:Int):Void {
         this.firstStep = firstStep;
         this.data = data;
+        this.volatileData = new Dictionary();
         this.stepAttempt = numAttempts;
         this.logger.writeLoadedStepData(firstStep, storageType);
     }
@@ -505,6 +507,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     public function onFailedLoad(request:IdModel):Void {
         this.firstStep = 0;
         this.data = new Dictionary();
+        this.volatileData = new Dictionary();
         this.stepAttempt = 1;
     }
 
