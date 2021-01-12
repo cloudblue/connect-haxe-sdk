@@ -17,6 +17,7 @@ import connect.logger.Logger;
 import connect.logger.LoggerConfig;
 import connect.util.Collection;
 import connect.util.Dictionary;
+import connect.models.IdModel;
 
 /**
     In order to be able to perform their tasks, many classes in the SDK rely on the global
@@ -114,11 +115,7 @@ class Env extends Base {
         @param config The configuration of the logger.
     **/
     public static function initLogger(config: LoggerConfig): Void {
-        if (logger.isEmpty()) {
-            logger.set(null,new Logger(config));
-        } else {
-            throw "Logger instance is already initialized.";
-        }
+        logger.set("root",new Logger(config));
     }
 
 
@@ -126,16 +123,24 @@ class Env extends Base {
         Get logger for given request id, if it doesnt exists it will be created
         and context specified 
      **/
-     public static function getLoggerForRequest(request: Dynamic): Logger{
-         if(!logger.exists(request.id) && request != null){
-            var requestLogger = new Logger(logger.get(null).getInitialConfig());
-            logger.set(request.id,requestLogger);
-            logger.get(request.id).setFilenameForRequest(request);
-            for (handler in requestLogger.getHandlers()){
-                handler.formatter.setRequest(request.id);
+     public static function getLoggerForRequest(request: Null<IdModel>): Logger{
+         if(request != null){
+             if(!logger.exists(request.id)){
+                var requestLogger = new Logger(logger.get("root").getInitialConfig());
+                logger.set(request.id,requestLogger);
+                logger.get(request.id).setFilenameForRequest(request);
+                for (handler in requestLogger.getHandlers()){
+                    handler.formatter.setRequest(request.id);
+                }
             }
+            return logger.get(request.id);
          }
-         return logger.get(request.id);
+
+         if(!logger.exists("root")){
+            var requestLogger = new Logger(null);
+            logger.set("root",requestLogger);
+         }
+         return logger.get("root");
      }
 
     /**
@@ -190,7 +195,7 @@ class Env extends Base {
         if (!isLoggerInitialized()) {
             initLogger(null);
         }
-        return logger.get(null);
+        return logger.get("root");
     }
 
     /**

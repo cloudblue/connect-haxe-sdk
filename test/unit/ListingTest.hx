@@ -76,7 +76,7 @@ class ListingApiClientMock implements IApiClient {
 
     public function new() {
     }
-    public function syncsyncRequestWithLoggerRequest(method: String, url: String, headers: Dictionary, body: String,
+    public function syncRequestWithLogger(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String, logger: Logger) : Response {
         switch (method) {
             case 'GET':

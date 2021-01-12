@@ -22,8 +22,8 @@ class FulfillmentApi extends Base {
         return ConnectHelper.get(REQUESTS_PATH, id);
     }
 
-    public function createRequest( request: IdModel): String {
-        return ConnectHelper.post(REQUESTS_PATH, null, null, request.toString(), request);
+    public function createRequest( body: String): String {
+        return ConnectHelper.post(REQUESTS_PATH, null, null, body);    
     }
 
     public function updateRequest(id: String, request: String, currentRequest: Null<IdModel>): String {

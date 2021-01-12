@@ -99,7 +99,7 @@ class ConnectHelper {
             ? (rqlParams) ? params.toString() : params.toPlain()
             : '';
         final url = Env.getConfig().getApiUrl() + path + paramsStr;
-        var logger = currentRequest != null ? Env.getLoggerForRequest(currentRequest.id):Env.getLoggerForRequest(null);
+        var logger = currentRequest != null ? Env.getLoggerForRequest(currentRequest):Env.getLoggerForRequest(null);
         return Env.getApiClient().syncRequestWithLogger(method, url, headers, data, fileArg, fileName, fileContent, null, logger);
     }
 

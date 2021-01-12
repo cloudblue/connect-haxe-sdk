@@ -126,7 +126,7 @@ class AssetRequest extends IdModel {
     **/
     public function register(): AssetRequest {
         try {
-            final request = Env.getFulfillmentApi().createRequest(this);
+            final request = Env.getFulfillmentApi().createRequest(this.toString());
             return Model.parse(AssetRequest, request);
         } catch (ex: Dynamic) {
             return null;
