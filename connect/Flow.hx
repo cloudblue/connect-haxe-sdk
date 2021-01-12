@@ -398,8 +398,8 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         this.lastRequestState = new ProcessedRequestInfo(null, null);
         this.stepAttempt = 1;
         final assetRequest = this.getAssetRequest();
-        return assetRequest != null &&
-            (!assetRequest.needsMigration() || !skipsRequestOnPendingMigration() || assetRequest.type != 'purchase');
+        return assetRequest == null ||
+            !assetRequest.needsMigration() || !skipsRequestOnPendingMigration() || assetRequest.type != 'purchase';
     }
 
     private function processSetup():Bool {

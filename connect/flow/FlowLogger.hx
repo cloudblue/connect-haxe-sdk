@@ -16,22 +16,28 @@ import connect.util.DateTime;
 @:dox(hide)
 class FlowLogger {
     private final flowName:String;
-    private var currentRequest:IdModel;
+    private var currentRequest:Null<IdModel>;
 
     public function new(flowName: String) {
         this.flowName = flowName;
     }
 
     public function openFlowSection():Void {
+        var requestLogger = Env.getLoggerForRequest(currentRequest);
+        for (handler in requestLogger.getHandlers()){
+            handler.formatter.setRequest(null);
+        }
         Env.getLoggerForRequest(currentRequest).openSection('Running ${this.flowName} on ${DateTime.now()}');
     }
 
     public function closeFlowSection():Void {
         Env.getLoggerForRequest(currentRequest).closeSection();
+        currentRequest = null;
     }
 
     public function openRequestSection(request:IdModel):Void {
-        Env.getLoggerForRequest(request).openSection('Processing request "${request.id}" on ${DateTime.now()}');
+        currentRequest = request;
+        Env.getLoggerForRequest(currentRequest).openSection('Processing request "${request.id}" on ${DateTime.now()}');
     }
 
     public function closeRequestSection():Void {

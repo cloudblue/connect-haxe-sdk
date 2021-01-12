@@ -47,7 +47,7 @@ import connect.models.IdModel;
 **/
 class Env extends Base {
     private static var config: Config;
-    private static var logger: Dictionary;
+    private static var logger: Dictionary = new Dictionary();
     private static var defaultQuery: Query;
     private static var apiClient: IApiClient;
     private static var fulfillmentApi: FulfillmentApi;
@@ -116,6 +116,7 @@ class Env extends Base {
         @param config The configuration of the logger.
     **/
     public static function initLogger(config: LoggerConfig): Void {
+
         logger.set(rootLogger,new Logger(config));
     }
 
