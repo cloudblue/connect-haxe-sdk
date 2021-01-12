@@ -143,7 +143,7 @@ class UsageFile extends IdModel {
     **/
     public function register(): UsageFile {
         try {
-            final newUsageFile = Env.getUsageApi().createUsageFile(this.toString(), this);
+            final newUsageFile = Env.getUsageApi().createUsageFile(this.toString(),this);
             return Model.parse(UsageFile, newUsageFile);
         } catch (ex: Dynamic) {
             return null;

@@ -129,7 +129,7 @@ class TierConfigRequest extends IdModel {
     **/
     public function register(): TierConfigRequest {
         try {
-            final request = Env.getTierApi().createTierConfigRequest(this.toString(),this);
+            final request = Env.getTierApi().createTierConfigRequest(this.toString());
             return Model.parse(TierConfigRequest, request);
         } catch (ex: Dynamic) {
             return null;

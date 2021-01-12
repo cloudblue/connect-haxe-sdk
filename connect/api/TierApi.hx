@@ -18,8 +18,8 @@ class TierApi extends Base {
         return ConnectHelper.get(TCR_PATH, null, null, filters, true);
     }
 
-    public function createTierConfigRequest(body: String, currentRequest: Null<IdModel>): String {
-        return ConnectHelper.post(TCR_PATH, null, null, body, currentRequest);
+    public function createTierConfigRequest(body: String): String {
+        return ConnectHelper.post(TCR_PATH, null, null, body);
     }
 
     public function getTierConfigRequest(id: String): String {

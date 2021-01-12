@@ -56,6 +56,7 @@ class Env extends Base {
     private static var generalApi: GeneralApi;
     private static var marketplaceApi: MarketplaceApi;
     private static var subscriptionsApi: SubscriptionsApi;
+    private static inline var rootLogger: String = "root";
 
     /**
         Initializes the configuration object. It must have not been previously configured.
@@ -115,7 +116,7 @@ class Env extends Base {
         @param config The configuration of the logger.
     **/
     public static function initLogger(config: LoggerConfig): Void {
-        logger.set("root",new Logger(config));
+        logger.set(rootLogger,new Logger(config));
     }
 
 
@@ -124,9 +125,9 @@ class Env extends Base {
         and context specified 
      **/
      public static function getLoggerForRequest(request: Null<IdModel>): Logger{
-         if(request != null){
+         if(request != null && Reflect.field(request,"id") != null){
              if(!logger.exists(request.id)){
-                var requestLogger = new Logger(logger.get("root").getInitialConfig());
+                var requestLogger = new Logger(logger.get(rootLogger).getInitialConfig());
                 logger.set(request.id,requestLogger);
                 logger.get(request.id).setFilenameForRequest(request);
                 for (handler in requestLogger.getHandlers()){
@@ -136,11 +137,11 @@ class Env extends Base {
             return logger.get(request.id);
          }
 
-         if(!logger.exists("root")){
+         if(!logger.exists(rootLogger)){
             var requestLogger = new Logger(null);
-            logger.set("root",requestLogger);
+            logger.set(rootLogger,requestLogger);
          }
-         return logger.get("root");
+         return logger.get(rootLogger);
      }
 
     /**
@@ -195,7 +196,7 @@ class Env extends Base {
         if (!isLoggerInitialized()) {
             initLogger(null);
         }
-        return logger.get("root");
+        return logger.get(rootLogger);
     }
 
     /**
