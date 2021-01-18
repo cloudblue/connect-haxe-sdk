@@ -153,7 +153,7 @@ class Env extends Base {
         @returns `true` if logger has already been initialized, `false` otherwise.
     **/
     public static function isLoggerInitialized(): Bool {
-        return loggers != null;
+        return loggers.exists(ROOT_LOGGER);
     }
 
     /**
