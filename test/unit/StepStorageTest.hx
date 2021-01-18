@@ -38,6 +38,7 @@ class StepStorageTest {
 
     @Test
     public function testGetStepFilenameWithCustomLogPath() {
+        Env._reset();
         Env.initLogger(new LoggerConfig().path('custom'));
         Assert.areEqual('custom/step.dat', StepStorage.getStepFilename());
     }

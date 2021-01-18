@@ -47,7 +47,7 @@ import connect.models.IdModel;
 **/
 class Env extends Base {
     private static var config: Config;
-    private static var logger: Dictionary = new Dictionary();
+    private static var loggers: Dictionary = new Dictionary();
     private static var defaultQuery: Query;
     private static var apiClient: IApiClient;
     private static var fulfillmentApi: FulfillmentApi;
@@ -56,7 +56,8 @@ class Env extends Base {
     private static var generalApi: GeneralApi;
     private static var marketplaceApi: MarketplaceApi;
     private static var subscriptionsApi: SubscriptionsApi;
-    private static inline var rootLogger: String = "root";
+
+    private static inline var ROOT_LOGGER: String = "root";
 
     /**
         Initializes the configuration object. It must have not been previously configured.
@@ -116,8 +117,11 @@ class Env extends Base {
         @param config The configuration of the logger.
     **/
     public static function initLogger(config: LoggerConfig): Void {
-
-        logger.set(rootLogger,new Logger(config));
+        if(!loggers.exists(ROOT_LOGGER)){
+            loggers.set(ROOT_LOGGER,new Logger(config));
+        } else {
+            throw "Logger instance is already initialized.";
+        }
     }
 
 
@@ -127,29 +131,29 @@ class Env extends Base {
      **/
      public static function getLoggerForRequest(request: Null<IdModel>): Logger{
          if(request != null && Reflect.field(request,"id") != null){
-             if(!logger.exists(request.id)){
-                var requestLogger = new Logger(logger.get(rootLogger).getInitialConfig());
-                logger.set(request.id,requestLogger);
-                logger.get(request.id).setFilenameForRequest(request);
+             if(!loggers.exists(request.id)){
+                var requestLogger = new Logger(loggers.get(ROOT_LOGGER).getInitialConfig());
+                loggers.set(request.id,requestLogger);
+                loggers.get(request.id).setFilenameForRequest(request);
                 for (handler in requestLogger.getHandlers()){
                     handler.formatter.setRequest(request.id);
                 }
             }
-            return logger.get(request.id);
+            return loggers.get(request.id);
          }
 
-         if(!logger.exists(rootLogger)){
+         if(!loggers.exists(ROOT_LOGGER)){
             var requestLogger = new Logger(null);
-            logger.set(rootLogger,requestLogger);
+            loggers.set(ROOT_LOGGER,requestLogger);
          }
-         return logger.get(rootLogger);
+         return loggers.get(ROOT_LOGGER);
      }
 
     /**
         @returns `true` if logger has already been initialized, `false` otherwise.
     **/
     public static function isLoggerInitialized(): Bool {
-        return logger != null;
+        return loggers != null;
     }
 
     /**
@@ -197,7 +201,7 @@ class Env extends Base {
         if (!isLoggerInitialized()) {
             initLogger(null);
         }
-        return logger.get(rootLogger);
+        return loggers.get(ROOT_LOGGER);
     }
 
     /**
@@ -262,7 +266,7 @@ class Env extends Base {
     @:dox(hide)
     public static function _reset(?client: IApiClient = null) {
         config = null;
-        logger = new Dictionary();
+        loggers = new Dictionary();
         defaultQuery = null;
         apiClient = client;
         fulfillmentApi = null;

@@ -69,6 +69,7 @@ class CustomLoggerFormatterTest {
 
     @Test
     public function testFormatter() {
+        Env._reset();
         Env.initLogger(new LoggerConfig().handlers(new Collection<LoggerHandler>().push(new LoggerHandler(new CustomLoggerFormatter("MP-000-000", "HUB-1",
             "1000001"), new ArrayLoggerWriter()))));
         Env.getLogger().error("TEST FORMATTER");
