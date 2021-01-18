@@ -22,9 +22,9 @@ class ConnectHelper {
         @throws String if the request fails.
     **/
     public static function get(resource: String, ?id: String, ?suffix: String,
-            ?params: Query, rqlParams: Bool = false, ?currentRequest: Null<IdModel> = null): String {
+            ?params: Query, rqlParams: Bool = false, ?currentRequest: Null<IdModel> = null, ?logLevel: Null<Int> = null): String {
         return checkResponse(connectSyncRequest('GET', parsePath(resource, id, suffix),
-            getHeaders(), params, rqlParams, currentRequest));
+            getHeaders(), params, rqlParams, currentRequest, logLevel));
     }
 
 
@@ -37,9 +37,9 @@ class ConnectHelper {
         @returns A string with the response.
         @throws String if the request fails.
     **/
-    public static function put(resource: String, id: String, suffix: String, body: String, ?currentRequest: Null<IdModel> = null): String {
+    public static function put(resource: String, id: String, suffix: String, body: String, ?currentRequest: Null<IdModel> = null, ?logLevel: Null<Int> = null): String {
         return checkResponse(connectSyncRequest('PUT', parsePath(resource, id, suffix),
-            getHeaders(), body, currentRequest));
+            getHeaders(), body, currentRequest, logLevel));
     }
 
 
@@ -53,9 +53,9 @@ class ConnectHelper {
         @returns An object.
         @throws String if the request fails.
     **/
-    public static function post(resource: String, ?id: String, ?suffix: String, ?body: String, ?currentRequest: Null<IdModel> = null): String {
+    public static function post(resource: String, ?id: String, ?suffix: String, ?body: String, ?currentRequest: Null<IdModel> = null, ?logLevel: Null<Int> = null): String {
         return checkResponse(connectSyncRequest('POST', parsePath(resource, id, suffix),
-            getHeaders(), body, currentRequest));
+            getHeaders(), body, currentRequest, logLevel));
     }
 
 
@@ -72,9 +72,9 @@ class ConnectHelper {
         @throws String if the request fails.
     **/
     public static function postFile(resource: String, ?id: String, ?suffix: String,
-            fileArg: String, fileName: String, fileContents: Blob, ?currentRequest: Null<IdModel> = null): Dynamic {
+            fileArg: String, fileName: String, fileContents: Blob, ?currentRequest: Null<IdModel> = null, ?logLevel: Null<Int> = null): Dynamic {
         return checkResponse(connectSyncRequest('POST', parsePath(resource, id, suffix),
-            getHeaders(false), null, false, null, fileArg, fileName, fileContents, currentRequest));
+            getHeaders(false), null, false, null, fileArg, fileName, fileContents, currentRequest, logLevel));
     }
 
 
@@ -87,14 +87,14 @@ class ConnectHelper {
         @returns A string with the response.
         @throws String if the request fails.
     **/
-    public static function delete(resource: String, id: String, ?suffix: String, ?currentRequest: Null<IdModel> = null): String {
-        return checkResponse(connectSyncRequest('DELETE', parsePath(resource, id, suffix), getHeaders(), currentRequest));
+    public static function delete(resource: String, id: String, ?suffix: String, ?currentRequest: Null<IdModel> = null, ?logLevel: Null<Int> = null): String {
+        return checkResponse(connectSyncRequest('DELETE', parsePath(resource, id, suffix), getHeaders(), currentRequest, logLevel));
     }
 
 
     private static function connectSyncRequest(method: String, path: String, headers: Dictionary,
             ?params: Query, rqlParams: Bool = false, ?data: String,
-            ?fileArg: String, ?fileName: String, ?fileContent: Blob, currentRequest: Null<IdModel>) : Response {
+            ?fileArg: String, ?fileName: String, ?fileContent: Blob, currentRequest: Null<IdModel>, logLevel: Null<Int> = null) : Response {
         final paramsStr = (params != null)
             ? (rqlParams) ? params.toString() : params.toPlain()
             : '';

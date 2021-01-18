@@ -23,8 +23,8 @@ interface IApiClient {
         @returns A `Response` object.
     **/
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response;
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String, ?logLevel: Null<Int> = null) : Response;
 
     public function syncRequestWithLogger(method: String, url: String, headers: Dictionary, body: String,
-        fileArg: String, fileName: String, fileContent: Blob, certificate: String, logger:Logger) : Response;
+        fileArg: String, fileName: String, fileContent: Blob, certificate: String, logger:Logger, ?logLevel: Null<Int> = null) : Response;
 }
