@@ -23,10 +23,7 @@ class FlowLogger {
     }
 
     public function openFlowSection():Void {
-        var requestLogger = Env.getLoggerForRequest(currentRequest);
-        for (handler in requestLogger.getHandlers()){
-            handler.formatter.setRequest(null);
-        }
+        cleanLogContext();
         Env.getLoggerForRequest(currentRequest).openSection('Running ${this.flowName} on ${DateTime.now()}');
     }
 
@@ -35,6 +32,12 @@ class FlowLogger {
         currentRequest = null;
     }
 
+    private function cleanLogContext(): Void{
+        var requestLogger = Env.getLoggerForRequest(currentRequest);
+        for (handler in requestLogger.getHandlers()){
+            handler.formatter.setRequest(null);
+        }
+    }
     public function openRequestSection(request:IdModel):Void {
         currentRequest = request;
         Env.getLoggerForRequest(currentRequest).openSection('Processing request "${request.id}" on ${DateTime.now()}');
@@ -43,6 +46,7 @@ class FlowLogger {
     public function closeRequestSection():Void {
         Env.getLoggerForRequest(currentRequest).closeSection();
         currentRequest = null;
+        cleanLogContext();
     }
 
     public function openSetupSection():Void {
