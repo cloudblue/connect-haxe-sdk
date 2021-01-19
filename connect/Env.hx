@@ -4,6 +4,7 @@
 */
 package connect;
 
+import connect.logger.ILoggerFormatter;
 import connect.logger.LoggerHandler;
 import connect.api.IApiClient;
 import connect.api.FulfillmentApi;
@@ -166,7 +167,7 @@ class Env extends Base {
         newConfig.regexMaskingList_ = initialConfig.regexMaskingList_;
         var newHandlers:Collection<LoggerHandler> = new Collection<LoggerHandler>();
         for(handler in  initialConfig.handlers_){
-            var newHandler : LoggerHandler = new LoggerHandler(Reflect.copy(handler.formatter),Reflect.copy(handler.writer));
+            var newHandler : LoggerHandler = new LoggerHandler(handler.formatter.copy(),handler.writer.copy());
             newHandlers.push(newHandler);
         }
         newConfig.handlers(newHandlers);

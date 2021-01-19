@@ -114,6 +114,7 @@ class Logger extends Base {
             (this.path != null && filename != null) ? this.path + filename :
             (this.path != null) ? this.path + this.defaultFilename :
             null;
+
         final setFilenameResult = Lambda.fold(this.handlers, function(handler, last) {
             final fullnameWithExt = (fullname != null)
                 ? '$fullname.${handler.formatter.getFileExtension()}'

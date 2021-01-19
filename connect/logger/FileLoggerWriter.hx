@@ -72,4 +72,14 @@ class FileLoggerWriter extends Base implements ILoggerWriter {
         }
         return this.file;
     }
+
+    public function setFile(): Void{
+
+    }
+
+    public function copy(): FileLoggerWriter{
+        var newCopy: FileLoggerWriter =  new FileLoggerWriter();
+        newCopy.setFilename(this.getFilename());
+        return newCopy;
+    }
 }

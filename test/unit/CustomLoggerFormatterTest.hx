@@ -57,6 +57,10 @@ class CustomLoggerFormatter extends Base implements ILoggerFormatter {
     public function getFileExtension():String {
         return 'txt';
     }
+
+    public function copy(): CustomLoggerFormatter{
+        return new CustomLoggerFormatter(this.marketPlace,this.hub,this.customer);
+    }
 }
 
 class CustomLoggerFormatterTest {

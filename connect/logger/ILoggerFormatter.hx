@@ -21,4 +21,5 @@ interface ILoggerFormatter {
     public function formatLine(level:Int, text:String):String;
     public function getFileExtension():String;
     public function setRequest(requestId:Null<String>):Void;
+    public function copy(): ILoggerFormatter;
 }
