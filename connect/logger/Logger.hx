@@ -43,7 +43,7 @@ class Logger extends Base {
 
     /**
         Creates a new Logger object. You don't normally create objects of this class,
-        since the SDK uses the default instance provided by `Env.getLogger()`.
+        since the SDK uses the default instance provided by `Env.getLogger()` or `Env.getLoggerForRequest()`.
     **/
     public function new(config:LoggerConfig) {
         config = (config != null) ? config : new LoggerConfig();
@@ -141,7 +141,7 @@ class Logger extends Base {
             final marketplace = asset.marketplace != null ? asset.marketplace.id : defaultMarketplace;
             final product = asset.product != null ? asset.product.id : defaultProduct;
             final tierAccount = asset.tiers.customer != null ? asset.tiers.customer.id : defaultTierAccount;
-            Env.getLogger().setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
+            this.setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
         }
 
         if(Std.is(request, AssetRequest)){
@@ -151,7 +151,7 @@ class Logger extends Base {
             final marketplace = assetRequest.marketplace != null ? assetRequest.marketplace.id : defaultMarketplace;
             final product = assetRequest.asset.product != null ? assetRequest.asset.product.id : defaultProduct;
             final tierAccount = assetRequest.asset.tiers.customer != null ? assetRequest.asset.tiers.customer.id : defaultTierAccount;
-            Env.getLogger().setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
+            this.setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
         }
 
         if(Std.is(request, TierConfigRequest)){
@@ -161,21 +161,21 @@ class Logger extends Base {
             final marketplace = tierRequest.configuration.marketplace != null ? tierRequest.configuration.marketplace.id : defaultMarketplace;
             final product = tierRequest.configuration.product != null ? tierRequest.configuration.product.id : defaultProduct;
             final tierAccount = tierRequest.configuration.account != null ? tierRequest.configuration.account.id : defaultTierAccount;
-            Env.getLogger().setFilename('$provider/$hub/$marketplace/$product/$tierAccount');        }
+            this.setFilename('$provider/$hub/$marketplace/$product/$tierAccount');        }
 
 
         if(Std.is(request, Listing)){
             final listingRequest = cast(request, Listing);
             final provider = listingRequest.provider != null ? listingRequest.provider.id : defaultProvider;
             final marketplace = listingRequest.contract.marketplace != null ? listingRequest.contract.marketplace.id : defaultMarketplace;
-            Env.getLogger().setFilename('usage/$provider/$marketplace');
+            this.setFilename('usage/$provider/$marketplace');
         }
 
         if(Std.is(request, UsageFile)){
             final usageRequest = cast(request, UsageFile);
             final provider = usageRequest.provider != null ? usageRequest.provider.id : defaultProvider;
             final marketplace = usageRequest.marketplace.id != null ? usageRequest.marketplace.id : defaultMarketplace;
-            Env.getLogger().setFilename('usage/$provider/$marketplace');
+            this.setFilename('usage/$provider/$marketplace');
         }
         
     }

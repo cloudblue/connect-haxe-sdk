@@ -4,6 +4,7 @@
 */
 package connect;
 
+import connect.logger.LoggerHandler;
 import connect.api.IApiClient;
 import connect.api.FulfillmentApi;
 import connect.api.GeneralApi;
@@ -132,7 +133,8 @@ class Env extends Base {
      public static function getLoggerForRequest(request: Null<IdModel>): Logger{
          if(request != null && Reflect.field(request,"id") != null){
              if(!loggers.exists(request.id)){
-                var requestLogger = new Logger(loggers.get(ROOT_LOGGER).getInitialConfig());
+                final originalConfig:LoggerConfig = loggers.get(ROOT_LOGGER).getInitialConfig();
+                var requestLogger = new Logger(copyLoggerConfig(originalConfig));
                 loggers.set(request.id,requestLogger);
                 loggers.get(request.id).setFilenameForRequest(request);
                 for (handler in requestLogger.getHandlers()){
@@ -146,8 +148,31 @@ class Env extends Base {
             var requestLogger = new Logger(null);
             loggers.set(ROOT_LOGGER,requestLogger);
          }
+
          return loggers.get(ROOT_LOGGER);
      }
+
+    /**
+        @returns cloned LoggerConfig object
+    **/
+    private static function copyLoggerConfig(initialConfig: LoggerConfig): LoggerConfig {
+        var newConfig: LoggerConfig = new LoggerConfig();
+        newConfig.path(initialConfig.path_);
+        newConfig.level(initialConfig.level_);
+        newConfig.maskedFields(initialConfig.maskedFields_);
+        newConfig.maskedParams(initialConfig.maskedParams_);
+        newConfig.beautify(initialConfig.beautify_);
+        newConfig.compact(initialConfig.compact_);
+        newConfig.regexMaskingList_ = initialConfig.regexMaskingList_;
+        var newHandlers:Collection<LoggerHandler> = new Collection<LoggerHandler>();
+        for(handler in  initialConfig.handlers_){
+            var newHandler : LoggerHandler = new LoggerHandler(Reflect.copy(handler.formatter),Reflect.copy(handler.writer));
+            newHandlers.push(newHandler);
+        }
+        newConfig.handlers(newHandlers);
+        return newConfig;
+    }
+
 
     /**
         @returns `true` if logger has already been initialized, `false` otherwise.

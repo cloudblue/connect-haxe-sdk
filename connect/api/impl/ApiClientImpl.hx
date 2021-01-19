@@ -18,6 +18,8 @@ import haxe.io.BytesInput;
 class ApiClientImpl extends Base implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
         fileArg: String, fileName: String, fileContent: Blob, certificate:String) : Response {
+            Env.getLogger().error("LOGER DE MIS COJONES");
+            Env.getLogger().error(Std.string(Env.getLogger()));
             return this.syncRequestWithLogger(method, url, headers, body,
                 fileArg, fileName, fileContent, certificate,Env.getLogger());
         }
@@ -39,7 +41,7 @@ class ApiClientImpl extends Base implements IApiClient {
         final level = (response.status >= 400 || response.status == -1)
             ? Logger.LEVEL_ERROR
             : Logger.LEVEL_INFO;
-        logRequest(level, method, url, headers, body, response);
+        logRequest(level, method, url, headers, body, response, logger);
 
         if (response.status != -1) {
             return response;
@@ -259,7 +261,7 @@ class ApiClientImpl extends Base implements IApiClient {
 
 
     private static function logRequest(level: Int, method: String, url: String,
-            headers: Dictionary, body: String, response: Response): Void {
+            headers: Dictionary, body: String, response: Response, ?logger:Null<Logger> = null): Void {
         final firstMessage = 'Http ${method.toUpperCase()} request to ${url}';
         for (handler in Env.getLogger().getHandlers()) {
             final fmt = handler.formatter;
@@ -276,7 +278,8 @@ class ApiClientImpl extends Base implements IApiClient {
             } else {
                 requestList.push(getFormattedData(response.text, 'Exception', fmt));
             }
-            Env.getLogger()._writeToHandler(
+            var requestLogger:Logger = logger != null ? logger : Env.getLogger();
+            requestLogger._writeToHandler(
                 level,
                 fmt.formatBlock(level, '$firstMessage\n${fmt.formatList(level, requestList)}'),
                 handler);
