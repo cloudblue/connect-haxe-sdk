@@ -18,8 +18,6 @@ import haxe.io.BytesInput;
 class ApiClientImpl extends Base implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
         fileArg: String, fileName: String, fileContent: Blob, certificate:String) : Response {
-            Env.getLogger().error("LOGER DE MIS COJONES");
-            Env.getLogger().error(Std.string(Env.getLogger()));
             return this.syncRequestWithLogger(method, url, headers, body,
                 fileArg, fileName, fileContent, certificate,Env.getLogger());
         }
