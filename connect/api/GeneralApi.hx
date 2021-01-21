@@ -4,6 +4,7 @@
 */
 package connect.api;
 
+import connect.models.IdModel;
 class GeneralApi extends Base {
     private static final ACCOUNTS_PATH = 'accounts';
     private static final CONVERSATIONS_PATH = 'conversations';
@@ -33,20 +34,20 @@ class GeneralApi extends Base {
         return ConnectHelper.get(ACCOUNTS_PATH, id, 'users/${userId}');
     }
 
-    public function listConversations(filters: Query): String {
-        return ConnectHelper.get(CONVERSATIONS_PATH, null, null, filters);
+    public function listConversations(filters: Query, request: Null<IdModel>): String {
+        return ConnectHelper.get(CONVERSATIONS_PATH, null, null, filters, request);
     }
 
-    public function createConversation(data: String): String {
+    public function createConversation(data: String, request: Null<IdModel>): String {
         return ConnectHelper.post(CONVERSATIONS_PATH, null, null, data);
     }
 
-    public function getConversation(id: String): String {
-        return ConnectHelper.get(CONVERSATIONS_PATH, id);
+    public function getConversation(id: String, request:Null<IdModel>): String {
+        return ConnectHelper.get(CONVERSATIONS_PATH, id, request);
     }
 
-    public function createConversationMessage(id: String, data: String): String {
-        return ConnectHelper.post(CONVERSATIONS_PATH, id, 'messages', data);
+    public function createConversationMessage(id: String, data: String, request:Null<IdModel>): String {
+        return ConnectHelper.post(CONVERSATIONS_PATH, id, 'messages', data, request);
     }
 
     public function listProducts(filters: Query): String {

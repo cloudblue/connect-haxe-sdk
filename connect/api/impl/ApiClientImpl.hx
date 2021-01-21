@@ -261,7 +261,7 @@ class ApiClientImpl extends Base implements IApiClient {
     private static function logRequest(level: Int, method: String, url: String,
             headers: Dictionary, body: String, response: Response, ?logger:Null<Logger> = null): Void {
         final firstMessage = 'Http ${method.toUpperCase()} request to ${url}';
-        for (handler in Env.getLogger().getHandlers()) {
+        for (handler in logger.getHandlers()) {
             final fmt = handler.formatter;
             final requestList = new Collection<String>();
             if (headers != null) {

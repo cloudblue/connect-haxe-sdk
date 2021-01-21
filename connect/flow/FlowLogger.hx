@@ -78,8 +78,8 @@ class FlowLogger {
     private function writeStep(level:Int, requestInfo:ProcessedRequestInfo, prevRequestInfo:ProcessedRequestInfo):Void {
         for (handler in Env.getLoggerForRequest(currentRequest).getHandlers()) {
             final list = new Collection<String>()
-                .push(getFormattedRequest(requestInfo.getRequestString(), prevRequestInfo.getRequestString(), handler.formatter))
-                .push(getFormattedData(requestInfo.getDataString(), prevRequestInfo.getDataString(), requestInfo.getData(), handler.formatter));
+            .push(getFormattedRequest(requestInfo.getRequestString(), prevRequestInfo.getRequestString(), handler.formatter))
+            .push(getFormattedData(requestInfo.getDataString(), prevRequestInfo.getDataString(), requestInfo.getData(), handler.formatter));
             Env.getLoggerForRequest(currentRequest)._writeToHandler(level, handler.formatter.formatList(level,list), handler);
         }
     }
@@ -91,12 +91,12 @@ class FlowLogger {
                 final requestObj = (Util.isJsonObject(request) && lastRequestObj != null) ? Json.parse(request) : null;
                 final diff = (lastRequestObj != null && requestObj != null) ? Util.createObjectDiff(requestObj, lastRequestObj) : null;
                 final requestStr = (diff != null)
-                    ? Util.beautifyObject(
-                        diff,
-                        Env.getLoggerForRequest(currentRequest).isCompact(),
-                        false,
-                        Env.getLoggerForRequest(currentRequest).isBeautified())
-                    : request;
+                ? Util.beautifyObject(
+                    diff,
+                    Env.getLoggerForRequest(currentRequest).isCompact(),
+                    false,
+                    Env.getLoggerForRequest(currentRequest).isBeautified())
+                : request;
                 final requestTitle = (diff != null) ? 'Request (changes):' : 'Request:';
                 return '$requestTitle${fmt.formatCodeBlock(Env.getLoggerForRequest(currentRequest).getLevel(),Std.string(requestStr), 'json')}';
             } else {

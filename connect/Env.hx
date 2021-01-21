@@ -136,11 +136,11 @@ class Env extends Base {
              if(!loggers.exists(request.id)){
                 final originalConfig:LoggerConfig = loggers.get(ROOT_LOGGER).getInitialConfig();
                 var requestLogger = new Logger(copyLoggerConfig(originalConfig));
+                 for (handler in requestLogger.getHandlers()){
+                     handler.formatter.setRequest(request.id);
+                 }
+                 requestLogger.setFilenameForRequest(request);
                 loggers.set(request.id,requestLogger);
-                loggers.get(request.id).setFilenameForRequest(request);
-                for (handler in requestLogger.getHandlers()){
-                    handler.formatter.setRequest(request.id);
-                }
             }
             return loggers.get(request.id);
          }
