@@ -111,4 +111,8 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
     }
 
     public function new() {}
+
+    public function copy(): PlainLoggerFormatter{
+        return new PlainLoggerFormatter();
+    }
 }

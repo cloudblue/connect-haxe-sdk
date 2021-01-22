@@ -23,10 +23,7 @@ class FlowLogger {
     }
 
     public function openFlowSection():Void {
-        var requestLogger = Env.getLoggerForRequest(currentRequest);
-        for (handler in requestLogger.getHandlers()){
-            handler.formatter.setRequest(null);
-        }
+        cleanLogContext();
         Env.getLoggerForRequest(currentRequest).openSection('Running ${this.flowName} on ${DateTime.now()}');
     }
 
@@ -35,6 +32,12 @@ class FlowLogger {
         currentRequest = null;
     }
 
+    private function cleanLogContext(): Void{
+        final requestLogger = Env.getLoggerForRequest(currentRequest);
+        for (handler in requestLogger.getHandlers()){
+            handler.formatter.setRequest(null);
+        }
+    }
     public function openRequestSection(request:IdModel):Void {
         currentRequest = request;
         Env.getLoggerForRequest(currentRequest).openSection('Processing request "${request.id}" on ${DateTime.now()}');
@@ -43,6 +46,7 @@ class FlowLogger {
     public function closeRequestSection():Void {
         Env.getLoggerForRequest(currentRequest).closeSection();
         currentRequest = null;
+        cleanLogContext();
     }
 
     public function openSetupSection():Void {
@@ -74,8 +78,8 @@ class FlowLogger {
     private function writeStep(level:Int, requestInfo:ProcessedRequestInfo, prevRequestInfo:ProcessedRequestInfo):Void {
         for (handler in Env.getLoggerForRequest(currentRequest).getHandlers()) {
             final list = new Collection<String>()
-                .push(getFormattedRequest(requestInfo.getRequestString(), prevRequestInfo.getRequestString(), handler.formatter))
-                .push(getFormattedData(requestInfo.getDataString(), prevRequestInfo.getDataString(), requestInfo.getData(), handler.formatter));
+            .push(getFormattedRequest(requestInfo.getRequestString(), prevRequestInfo.getRequestString(), handler.formatter))
+            .push(getFormattedData(requestInfo.getDataString(), prevRequestInfo.getDataString(), requestInfo.getData(), handler.formatter));
             Env.getLoggerForRequest(currentRequest)._writeToHandler(level, handler.formatter.formatList(level,list), handler);
         }
     }
@@ -87,12 +91,12 @@ class FlowLogger {
                 final requestObj = (Util.isJsonObject(request) && lastRequestObj != null) ? Json.parse(request) : null;
                 final diff = (lastRequestObj != null && requestObj != null) ? Util.createObjectDiff(requestObj, lastRequestObj) : null;
                 final requestStr = (diff != null)
-                    ? Util.beautifyObject(
-                        diff,
-                        Env.getLoggerForRequest(currentRequest).isCompact(),
-                        false,
-                        Env.getLoggerForRequest(currentRequest).isBeautified())
-                    : request;
+                ? Util.beautifyObject(
+                    diff,
+                    Env.getLoggerForRequest(currentRequest).isCompact(),
+                    false,
+                    Env.getLoggerForRequest(currentRequest).isBeautified())
+                : request;
                 final requestTitle = (diff != null) ? 'Request (changes):' : 'Request:';
                 return '$requestTitle${fmt.formatCodeBlock(Env.getLoggerForRequest(currentRequest).getLevel(),Std.string(requestStr), 'json')}';
             } else {

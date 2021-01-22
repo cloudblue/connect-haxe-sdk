@@ -2,6 +2,13 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
+import connect.models.TierAccount;
+import connect.models.Tiers;
+import connect.models.Product;
+import connect.models.Hub;
+import connect.models.Account;
+import connect.models.Connection;
+import connect.logger.LoggerConfig;
 import connect.api.IApiClient;
 import connect.api.Response;
 import connect.Env;
@@ -205,6 +212,20 @@ class AssetRequestTest {
     public function testGetConversation() {
         final request = new AssetRequest();
         request.id = 'PR-5852-1608-0001';
+        request.asset = new Asset();
+        request.asset.connection = new Connection();
+        request.asset.connection.provider = new Account();
+        request.asset.connection.provider.id = "PROVIDER";
+        request.asset.connection.hub = new Hub();
+        request.asset.connection.hub.id = "HUB";
+        request.marketplace = new Marketplace();
+        request.marketplace.id = "MKP";
+        request.asset.product = new Product();
+        request.asset.product.id = "PRODUCT";
+        request.asset.tiers = new Tiers();
+        request.asset.tiers.customer = new TierAccount();
+        request.asset.tiers.customer.id = "CUSTOMER";
+        Env.initLogger(new LoggerConfig());
         final conv = request.getConversation();
         Assert.isType(conv, Conversation);
         Assert.areEqual('PR-5852-1608-0000', conv.instanceId);

@@ -41,8 +41,8 @@ class Conversation extends IdModel {
 
         @returns A collection of Conversations.
     **/
-    public static function list(filters: Query) : Collection<Conversation> {
-        final convs = Env.getGeneralApi().listConversations(filters);
+    public static function list(filters: Query, ?request: Null<IdModel> = null) : Collection<Conversation> {
+        final convs = Env.getGeneralApi().listConversations(filters, request);
         return Model.parseArray(Conversation, convs);
     }
     
@@ -53,19 +53,19 @@ class Conversation extends IdModel {
 
         @returns The created Conversation.
     **/
-    public static function create(instanceId: String, topic: String): Conversation {
+    public static function create(instanceId: String, topic: String, ?request: Null<IdModel> = null): Conversation {
         final conv = Env.getGeneralApi().createConversation(haxe.Json.stringify({
             instance_id: instanceId,
-            topic: topic
-        }));
+            topic: topic,
+        }),request);
         return Model.parse(Conversation, conv);
     }
 
 
     /** @returns The Conversation with the given id, or `null` if it was not found. **/
-    public static function get(id: String): Conversation {
+    public static function get(id: String, ?request: Null<IdModel> = null): Conversation {
         try {
-            final conv = Env.getGeneralApi().getConversation(id);
+            final conv = Env.getGeneralApi().getConversation(id, request);
             return Model.parse(Conversation, conv);
         } catch (ex: Dynamic) {
             return null;
@@ -80,10 +80,10 @@ class Conversation extends IdModel {
         @returns The created `Message`, or `null` if the last message in the `Conversation` is
         the same as this one.
     **/
-    public function createMessage(text: String): Message {
+    public function createMessage(text: String, ?request: Null<IdModel> = null): Message {
         final msg = Env.getGeneralApi().createConversationMessage(
             this.id,
-            haxe.Json.stringify({ text: text }));
+            haxe.Json.stringify({ text: text }),request);
         final message = Model.parse(Message, msg);
         if (this.messages == null) {
             this.messages = new Collection<Message>();

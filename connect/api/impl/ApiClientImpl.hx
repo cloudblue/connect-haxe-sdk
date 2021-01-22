@@ -35,12 +35,14 @@ class ApiClientImpl extends Base implements IApiClient {
     #else
         final response = syncRequestStd(method, url, headers, body, fileArg, fileName, fileContent, certificate);
     #end
+
         if(logLevel == null){
             logLevel = (response.status >= 400 || response.status == -1)
-                ? Logger.LEVEL_ERROR
-                : Logger.LEVEL_INFO;
+            ? Logger.LEVEL_ERROR
+            : Logger.LEVEL_INFO;
         }
-        logRequest(logLevel, method, url, headers, body, response);
+        logRequest(logLevel, method, url, headers, body, response, logger);
+
         if (response.status != -1) {
             return response;
         } else {
@@ -259,9 +261,9 @@ class ApiClientImpl extends Base implements IApiClient {
 
 
     private static function logRequest(level: Int, method: String, url: String,
-            headers: Dictionary, body: String, response: Response): Void {
+            headers: Dictionary, body: String, response: Response, ?logger:Null<Logger> = null): Void {
         final firstMessage = 'Http ${method.toUpperCase()} request to ${url}';
-        for (handler in Env.getLogger().getHandlers()) {
+        for (handler in logger.getHandlers()) {
             final fmt = handler.formatter;
             final requestList = new Collection<String>();
             if (headers != null) {
@@ -276,7 +278,8 @@ class ApiClientImpl extends Base implements IApiClient {
             } else {
                 requestList.push(getFormattedData(response.text, 'Exception', fmt));
             }
-            Env.getLogger()._writeToHandler(
+            final requestLogger:Logger = logger != null ? logger : Env.getLogger();
+            requestLogger._writeToHandler(
                 level,
                 fmt.formatBlock(level, '$firstMessage\n${fmt.formatList(level, requestList)}'),
                 handler);

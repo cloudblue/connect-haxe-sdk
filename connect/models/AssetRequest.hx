@@ -313,10 +313,10 @@ class AssetRequest extends IdModel {
 
     /** @returns The Conversation assigned to `this` AssetRequest, or `null` if there is none. **/
     public function getConversation(): Conversation {
-        final convs = Conversation.list(new Query().equal('instance_id', this.id));
+        final convs = Conversation.list(new Query().equal('instance_id', this.id), this);
         final conv = (convs.length() > 0) ? convs.get(0) : null;
         if  (conv != null && conv.id != null && conv.id != '') {
-            return Conversation.get(conv.id);
+            return Conversation.get(conv.id, this);
         } else {
             return null;
         }
@@ -327,7 +327,7 @@ class AssetRequest extends IdModel {
         final conversation = this.getConversation();
         if (conversation != null) {
             try {
-                conversation.createMessage(message);
+                conversation.createMessage(message,this);
             } catch (ex: Dynamic) {
                 Env.getLogger().write(
                     connect.logger.Logger.LEVEL_ERROR,
