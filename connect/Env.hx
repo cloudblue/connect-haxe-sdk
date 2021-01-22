@@ -135,18 +135,18 @@ class Env extends Base {
          if(request != null && Reflect.field(request,"id") != null){
              if(!loggers.exists(request.id)){
                 final originalConfig:LoggerConfig = loggers.get(ROOT_LOGGER).getInitialConfig();
-                var requestLogger = new Logger(copyLoggerConfig(originalConfig));
-                 for (handler in requestLogger.getHandlers()){
+                final requestLogger = new Logger(copyLoggerConfig(originalConfig));
+                for (handler in requestLogger.getHandlers()){
                      handler.formatter.setRequest(request.id);
-                 }
-                 requestLogger.setFilenameForRequest(request);
+                }
+                requestLogger.setFilenameForRequest(request);
                 loggers.set(request.id,requestLogger);
             }
             return loggers.get(request.id);
          }
 
          if(!loggers.exists(ROOT_LOGGER)){
-            var requestLogger = new Logger(null);
+            final requestLogger = new Logger(null);
             loggers.set(ROOT_LOGGER,requestLogger);
          }
 
@@ -157,7 +157,7 @@ class Env extends Base {
         @returns cloned LoggerConfig object
     **/
     private static function copyLoggerConfig(initialConfig: LoggerConfig): LoggerConfig {
-        var newConfig: LoggerConfig = new LoggerConfig();
+        final newConfig: LoggerConfig = new LoggerConfig();
         newConfig.path(initialConfig.path_);
         newConfig.level(initialConfig.level_);
         newConfig.maskedFields(initialConfig.maskedFields_);
@@ -165,9 +165,9 @@ class Env extends Base {
         newConfig.beautify(initialConfig.beautify_);
         newConfig.compact(initialConfig.compact_);
         newConfig.regexMaskingList_ = initialConfig.regexMaskingList_;
-        var newHandlers:Collection<LoggerHandler> = new Collection<LoggerHandler>();
+        final newHandlers = new Collection<LoggerHandler>();
         for(handler in  initialConfig.handlers_){
-            var newHandler : LoggerHandler = new LoggerHandler(handler.formatter.copy(),handler.writer.copy());
+            final newHandler = new LoggerHandler(handler.formatter.copy(),handler.writer.copy());
             newHandlers.push(newHandler);
         }
         newConfig.handlers(newHandlers);

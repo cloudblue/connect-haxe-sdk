@@ -33,7 +33,7 @@ class FlowLogger {
     }
 
     private function cleanLogContext(): Void{
-        var requestLogger = Env.getLoggerForRequest(currentRequest);
+        final requestLogger = Env.getLoggerForRequest(currentRequest);
         for (handler in requestLogger.getHandlers()){
             handler.formatter.setRequest(null);
         }

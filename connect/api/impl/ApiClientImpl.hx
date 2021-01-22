@@ -276,7 +276,7 @@ class ApiClientImpl extends Base implements IApiClient {
             } else {
                 requestList.push(getFormattedData(response.text, 'Exception', fmt));
             }
-            var requestLogger:Logger = logger != null ? logger : Env.getLogger();
+            final requestLogger:Logger = logger != null ? logger : Env.getLogger();
             requestLogger._writeToHandler(
                 level,
                 fmt.formatBlock(level, '$firstMessage\n${fmt.formatList(level, requestList)}'),

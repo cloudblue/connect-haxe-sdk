@@ -46,7 +46,7 @@ class ArrayLoggerWriter extends Base implements ILoggerWriter {
     private var lines: Array<String> = new Array<String>();
 
     public function copy(): ArrayLoggerWriter{
-        var newCopy: ArrayLoggerWriter =  new ArrayLoggerWriter();
+        final newCopy = new ArrayLoggerWriter();
         newCopy.setFilename(this.getFilename());
         return newCopy;
     }
