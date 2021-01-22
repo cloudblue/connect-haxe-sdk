@@ -4,6 +4,8 @@
 */
 package connect.api;
 
+import connect.logger.Logger;
+import connect.models.IdModel;
 class GeneralApi extends Base {
     private static final ACCOUNTS_PATH = 'accounts';
     private static final CONVERSATIONS_PATH = 'conversations';
