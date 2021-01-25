@@ -504,12 +504,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         this.logger.writeLoadedStepData(firstStep, storageType);
     }
 
-    public function onFailedLoad(request:IdModel):Void {
-        this.firstStep = 0;
-        this.data = new Dictionary();
-        this.volatileData = new Dictionary();
-        this.stepAttempt = 1;
-    }
+    public function onFailedLoad(request:IdModel):Void { }
 
     public function onConnectSave(request:IdModel):Void {
         this.logger.writeStepSavedInConnect();
