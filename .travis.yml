@@ -67,7 +67,7 @@ after_deploy:
 # Deploy to PyPI
   - echo "*** Deploying to PyPI..."
   - sudo apt install python3-pip -y
-  - sudo -H pip3 install --upgrade pip
+  - sudo -H pip3 install --upgrade pip==20.3.3
   - sudo -H pip3 install wheel
   - sudo -H pip3 install twine
   - cd _build/python
