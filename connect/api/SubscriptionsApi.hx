@@ -4,6 +4,8 @@
 */
 package connect.api;
 
+import connect.models.IdModel;
+
 @:dox(hide)
 class SubscriptionsApi extends Base {
     private static final ASSETS_PATH = 'subscriptions/assets';
@@ -28,7 +30,7 @@ class SubscriptionsApi extends Base {
         return ConnectHelper.get(REQUESTS_PATH, id);
     }
 
-    public function createBillingRequest(data: String): String {
+    public function createBillingRequest(data: String, currentRequest: Null<IdModel>): String {
         return ConnectHelper.post(REQUESTS_PATH, null, null, data);
     }
 

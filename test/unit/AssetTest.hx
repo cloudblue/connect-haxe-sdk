@@ -5,6 +5,7 @@
 import connect.api.IApiClient;
 import connect.api.Response;
 import connect.Env;
+import connect.logger.Logger;
 import connect.api.Query;
 import connect.models.Account;
 import connect.models.Asset;
@@ -315,9 +316,8 @@ class AssetApiClientMock implements IApiClient {
 
     public function new() {
     }
-
-    public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
+    public function syncRequestWithLogger(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String, logger: Logger) : Response {
         if (method == 'GET') {
             switch (url) {
                 case 'https://api.conn.rocks/public/v1/assets':
@@ -336,6 +336,11 @@ class AssetApiClientMock implements IApiClient {
             }
         }
         return new Response(404, null, null);
+    }
+
+    public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
+        return syncRequestWithLogger(method, url, headers, body,fileArg, fileName, fileContent, certificate, new Logger(null));
     }
 
     private static function getAssets(): Array<Dynamic> {

@@ -4,6 +4,8 @@
 */
 package connect.api;
 
+import connect.models.IdModel;
+
 class TierApi extends Base {
     private static final TCR_PATH = 'tier/config-requests';
     private static final TA_PATH = 'tier/accounts';
@@ -24,32 +26,32 @@ class TierApi extends Base {
         return ConnectHelper.get(TCR_PATH, id);
     }
 
-    public function updateTierConfigRequest(id: String, tcr: String): String {
-        return ConnectHelper.put(TCR_PATH, id, null, tcr);
+    public function updateTierConfigRequest(id: String, tcr: String, currentRequest: Null<IdModel>): String {
+        return ConnectHelper.put(TCR_PATH, id, null, tcr, currentRequest);
     }
 
-    public function pendTierConfigRequest(id: String): Void {
-        ConnectHelper.post(TCR_PATH, id, 'pend');
+    public function pendTierConfigRequest(id: String, currentRequest: Null<IdModel>): Void {
+        ConnectHelper.post(TCR_PATH, id, 'pend', currentRequest);
     }
 
-    public function inquireTierConfigRequest(id: String): Void {
-        ConnectHelper.post(TCR_PATH, id, 'inquire');
+    public function inquireTierConfigRequest(id: String, currentRequest: Null<IdModel>): Void {
+        ConnectHelper.post(TCR_PATH, id, 'inquire', currentRequest);
     }
 
-    public function approveTierConfigRequest(id: String, data: String): String {
-        return ConnectHelper.post(TCR_PATH, id, 'approve', data);
+    public function approveTierConfigRequest(id: String, data: String, currentRequest: Null<IdModel>): String {
+        return ConnectHelper.post(TCR_PATH, id, 'approve', data, currentRequest);
     }
 
-    public function failTierConfigRequest(id: String, data: String): Void {
-        ConnectHelper.post(TCR_PATH, id, 'fail', data);
+    public function failTierConfigRequest(id: String, data: String, currentRequest: Null<IdModel>): Void {
+        ConnectHelper.post(TCR_PATH, id, 'fail', data, currentRequest);
     }
 
-    public function assignTierConfigRequest(id: String): Void {
-        ConnectHelper.post(TCR_PATH, id, 'assign');
+    public function assignTierConfigRequest(id: String, currentRequest: Null<IdModel>): Void {
+        ConnectHelper.post(TCR_PATH, id, 'assign', currentRequest);
     }
 
-    public function unassignTierConfigRequest(id: String): Void {
-        ConnectHelper.post(TCR_PATH, id, 'unassign');
+    public function unassignTierConfigRequest(id: String, currentRequest: Null<IdModel>): Void {
+        ConnectHelper.post(TCR_PATH, id, 'unassign', currentRequest);
     }
 
     public function listTierAccounts(filters: Query): String {

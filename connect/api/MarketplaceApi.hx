@@ -4,6 +4,7 @@
 */
 package connect.api;
 
+import connect.models.IdModel;
 import connect.util.Blob;
 
 class MarketplaceApi {
@@ -67,8 +68,8 @@ class MarketplaceApi {
         return ConnectHelper.get(LISTINGS_PATH, id);
     }
 
-    public function putListing(id: String, body: String): String {
-        return ConnectHelper.put(LISTINGS_PATH, id, null, body);
+    public function putListing(id: String, body: String, currentRequest: Null<IdModel>): String {
+        return ConnectHelper.put(LISTINGS_PATH, id, null, body, currentRequest);
     }
 
     public function listListingRequests(filters: Query): String {

@@ -189,7 +189,7 @@ class LoggerTest {
             }
         }
         ));
-        Env.getLogger().setFilenameFromRequest(request);       
+        Env.getLogger().setFilenameForRequest(request);       
         Assert.areEqual(Env.getLogger().getFilename(),'PROVIDER_ID/HUB_ID/MARKETPLACE_ID/PRODUCT_ID/CUSTOMER_ID'); 
     }
 
@@ -219,7 +219,7 @@ class LoggerTest {
             }
         }
         ));
-        Env.getLogger().setFilenameFromRequest(request);       
+        Env.getLogger().setFilenameForRequest(request);       
         Assert.areEqual(Env.getLogger().getFilename(),'PROVIDER_ID/HUB_ID/MARKETPLACE_ID/PRODUCT_ID/CUSTOMER_ID'); 
     }
 
@@ -248,7 +248,7 @@ class LoggerTest {
             }
         }
         ));
-        Env.getLogger().setFilenameFromRequest(request);       
+        Env.getLogger().setFilenameForRequest(request);       
         Assert.areEqual(Env.getLogger().getFilename(),'PROVIDER_ID/HUB_ID/MARKETPLACE_ID/PRODUCT_ID/CUSTOMER_ID'); 
     }
 
@@ -266,7 +266,7 @@ class LoggerTest {
             }
         }
         ));
-        Env.getLogger().setFilenameFromRequest(request);       
+        Env.getLogger().setFilenameForRequest(request);       
         Assert.areEqual(Env.getLogger().getFilename(),'usage/PROVIDER_ID/MARKETPLACE_ID'); 
     }
 
@@ -281,7 +281,7 @@ class LoggerTest {
             }
         }
         ));
-        Env.getLogger().setFilenameFromRequest(request);       
+        Env.getLogger().setFilenameForRequest(request);       
         Assert.areEqual(Env.getLogger().getFilename(),'usage/PROVIDER_ID/MARKETPLACE_ID'); 
     }
 }

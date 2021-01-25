@@ -5,6 +5,7 @@
 import connect.api.IApiClient;
 import connect.api.Response;
 import connect.Env;
+import connect.logger.Logger;
 import connect.models.Account;
 import connect.models.Contract;
 import connect.models.Marketplace;
@@ -207,46 +208,51 @@ class UsageFileApiClientMock implements IApiClient {
 
     public function new() {
     }
-
+    
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
             fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
-        switch (method) {
-            case 'GET':
-                switch (url) {
-                    case 'https://api.conn.rocks/public/v1/usage/files':
-                        return new Response(200, File.getContent(FILE), null);
-                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342':
-                        final usageFile = Json.parse(File.getContent(FILE))[0];
-                        return new Response(200, Json.stringify(usageFile), null);
-                    case 'https://api.conn.rocks/public/v1/usage/products/UF-2018-11-9878764342/template':
-                        return new Response(200, '{"template_link": "https://storage.googleapis.com/apsconnect-rteam.appspot.com/PRD-783-078-030/template/TEMPLATE-PRD-783-078-030?GoogleAccessId=quickstart-usage-collector%40apsconnect-rteam.iam.gserviceaccount.com&Expires=1548767260&Signature=WKiObnvvZjEElgxrOyscXJKI82bZg%2BESUZThnpGXYTNKFkjKwr378TQwbSZlXa41cR4M0x1yCt2KqCbo45zxpgip8WTLpJx05RvMmIiNOGFwLjK6nd1pwfXKRM0aUmkbxQ1B4GF3hLJWMqCzWWzDN8UNP7vKi7mamlV%2F1gv16OGsGgpbHtEDSXHNMciQOHOa0Fue5O12zKmE0gh4j8RxHUA5hl8etss57rWHkoGfOSG0nCJAIKIHS%2FJ2EW2X9o1nIIDIqsNrESrItuekwLad5t6%2FtQW8CkVal3dC9jXhelR%2FzzcGRBlbTrDr6GHw%2FECGfnL8q9RxpH0tk335Wi7zpQ%3D%3D&response-content-disposition=attachment%3B+filename%3D%22TEMPLATE-PRD-783-078-030.csv%22"}', null);
-                }
-            case 'POST':
-                switch (url) {
-                    case 'https://api.conn.rocks/public/v1/usage/files':
-                        return new Response(200, body, null);
-                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/delete':
-                        return new Response(204, null, null);
-                    case 'https://api.conn.rocks/public/v1/usage/files/upload':
-                        return new Response(200, '{}', null);
-                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/upload':
-                        return new Response(200, '{}', null);
-                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/submit':
-                        return new Response(200, '{}', null);
-                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/accept':
-                        return new Response(200, '{}', null);
-                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/reject':
-                        return new Response(200, '{}', null);
-                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/close':
-                        return new Response(200, '{}', null);
-                    case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/reprocess':
-                        return new Response(200, '{}', null);
-                }
-            case 'PUT':
-                if (url == 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342') {
-                    return new Response(200, body, null);
-                }
-        }
-        return new Response(404, null, null);
+        return syncRequestWithLogger(method, url, headers, body,fileArg, fileName, fileContent, certificate, new Logger(null));
     }
+
+    public function syncRequestWithLogger(method: String, url: String, headers: Dictionary, body: String,
+        fileArg: String, fileName: String, fileContent: Blob, certificate: String, logger:Logger) : Response {
+    switch (method) {
+        case 'GET':
+            switch (url) {
+                case 'https://api.conn.rocks/public/v1/usage/files':
+                    return new Response(200, File.getContent(FILE), null);
+                case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342':
+                    final usageFile = Json.parse(File.getContent(FILE))[0];
+                    return new Response(200, Json.stringify(usageFile), null);
+                case 'https://api.conn.rocks/public/v1/usage/products/UF-2018-11-9878764342/template':
+                    return new Response(200, '{"template_link": "https://storage.googleapis.com/apsconnect-rteam.appspot.com/PRD-783-078-030/template/TEMPLATE-PRD-783-078-030?GoogleAccessId=quickstart-usage-collector%40apsconnect-rteam.iam.gserviceaccount.com&Expires=1548767260&Signature=WKiObnvvZjEElgxrOyscXJKI82bZg%2BESUZThnpGXYTNKFkjKwr378TQwbSZlXa41cR4M0x1yCt2KqCbo45zxpgip8WTLpJx05RvMmIiNOGFwLjK6nd1pwfXKRM0aUmkbxQ1B4GF3hLJWMqCzWWzDN8UNP7vKi7mamlV%2F1gv16OGsGgpbHtEDSXHNMciQOHOa0Fue5O12zKmE0gh4j8RxHUA5hl8etss57rWHkoGfOSG0nCJAIKIHS%2FJ2EW2X9o1nIIDIqsNrESrItuekwLad5t6%2FtQW8CkVal3dC9jXhelR%2FzzcGRBlbTrDr6GHw%2FECGfnL8q9RxpH0tk335Wi7zpQ%3D%3D&response-content-disposition=attachment%3B+filename%3D%22TEMPLATE-PRD-783-078-030.csv%22"}', null);
+            }
+        case 'POST':
+            switch (url) {
+                case 'https://api.conn.rocks/public/v1/usage/files':
+                    return new Response(200, body, null);
+                case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/delete':
+                    return new Response(204, null, null);
+                case 'https://api.conn.rocks/public/v1/usage/files/upload':
+                    return new Response(200, '{}', null);
+                case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/upload':
+                    return new Response(200, '{}', null);
+                case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/submit':
+                    return new Response(200, '{}', null);
+                case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/accept':
+                    return new Response(200, '{}', null);
+                case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/reject':
+                    return new Response(200, '{}', null);
+                case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/close':
+                    return new Response(200, '{}', null);
+                case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342/reprocess':
+                    return new Response(200, '{}', null);
+            }
+        case 'PUT':
+            if (url == 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342') {
+                return new Response(200, body, null);
+            }
+    }
+    return new Response(404, null, null);
+}
 }

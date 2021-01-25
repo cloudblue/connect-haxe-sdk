@@ -98,7 +98,7 @@ class Listing extends IdModel {
         if (hasModifiedFields) {
             final listing = Env.getMarketplaceApi().putListing(
                 this.id,
-                haxe.Json.stringify(diff));
+                haxe.Json.stringify(diff),this);
             return Model.parse(Listing, listing);
         } else {
             return this;

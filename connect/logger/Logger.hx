@@ -39,13 +39,15 @@ class Logger extends Base {
     private final compact:Bool;
     private final beautify:Bool;
     private var defaultFilename:String;
+    private final intialConfig: LoggerConfig;
 
     /**
         Creates a new Logger object. You don't normally create objects of this class,
-        since the SDK uses the default instance provided by `Env.getLogger()`.
+        since the SDK uses the default instance provided by `Env.getLogger()` or `Env.getLoggerForRequest()`.
     **/
     public function new(config:LoggerConfig) {
         config = (config != null) ? config : new LoggerConfig();
+        this.intialConfig = config;
         this.path = (config.path_.charAt(config.path_.length - 1) == '/') ? config.path_ : (config.path_ + '/');
         this.level = Std.int(Math.min(Math.max(config.level_, LEVEL_ERROR), LEVEL_DEBUG));
         this.handlers = config.handlers_.copy();
@@ -57,6 +59,11 @@ class Logger extends Base {
         this.beautify = config.beautify_;
         this.compact = (this.level != LEVEL_DEBUG) ? config.compact_ : false;
         this.defaultFilename = null;
+    }
+
+    /** @returns initial logger configuration**/
+    public function getInitialConfig():LoggerConfig {
+        return this.intialConfig;
     }
 
     /** @returns The path where logs are stored. **/
@@ -107,6 +114,7 @@ class Logger extends Base {
             (this.path != null && filename != null) ? this.path + filename :
             (this.path != null) ? this.path + this.defaultFilename :
             null;
+
         final setFilenameResult = Lambda.fold(this.handlers, function(handler, last) {
             final fullnameWithExt = (fullname != null)
                 ? '$fullname.${handler.formatter.getFileExtension()}'
@@ -120,7 +128,7 @@ class Logger extends Base {
         }
     }
 
-    public function setFilenameFromRequest(request: IdModel) {
+    public function setFilenameForRequest(request: IdModel) {
         final defaultProvider = 'provider';
         final defaultHub = 'hub';
         final defaultMarketplace = 'marketplace';
@@ -134,7 +142,7 @@ class Logger extends Base {
             final marketplace = asset.marketplace != null ? asset.marketplace.id : defaultMarketplace;
             final product = asset.product != null ? asset.product.id : defaultProduct;
             final tierAccount = asset.tiers.customer != null ? asset.tiers.customer.id : defaultTierAccount;
-            Env.getLogger().setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
+            this.setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
         }
 
         if(Std.is(request, AssetRequest)){
@@ -144,7 +152,7 @@ class Logger extends Base {
             final marketplace = assetRequest.marketplace != null ? assetRequest.marketplace.id : defaultMarketplace;
             final product = assetRequest.asset.product != null ? assetRequest.asset.product.id : defaultProduct;
             final tierAccount = assetRequest.asset.tiers.customer != null ? assetRequest.asset.tiers.customer.id : defaultTierAccount;
-            Env.getLogger().setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
+            this.setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
         }
 
         if(Std.is(request, TierConfigRequest)){
@@ -154,21 +162,21 @@ class Logger extends Base {
             final marketplace = tierRequest.configuration.marketplace != null ? tierRequest.configuration.marketplace.id : defaultMarketplace;
             final product = tierRequest.configuration.product != null ? tierRequest.configuration.product.id : defaultProduct;
             final tierAccount = tierRequest.configuration.account != null ? tierRequest.configuration.account.id : defaultTierAccount;
-            Env.getLogger().setFilename('$provider/$hub/$marketplace/$product/$tierAccount');        }
+            this.setFilename('$provider/$hub/$marketplace/$product/$tierAccount');        }
 
 
         if(Std.is(request, Listing)){
             final listingRequest = cast(request, Listing);
             final provider = listingRequest.provider != null ? listingRequest.provider.id : defaultProvider;
             final marketplace = listingRequest.contract.marketplace != null ? listingRequest.contract.marketplace.id : defaultMarketplace;
-            Env.getLogger().setFilename('usage/$provider/$marketplace');
+            this.setFilename('usage/$provider/$marketplace');
         }
 
         if(Std.is(request, UsageFile)){
             final usageRequest = cast(request, UsageFile);
             final provider = usageRequest.provider != null ? usageRequest.provider.id : defaultProvider;
             final marketplace = usageRequest.marketplace.id != null ? usageRequest.marketplace.id : defaultMarketplace;
-            Env.getLogger().setFilename('usage/$provider/$marketplace');
+            this.setFilename('usage/$provider/$marketplace');
         }
         
     }

@@ -17,7 +17,13 @@ import haxe.io.BytesInput;
 
 class ApiClientImpl extends Base implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob, certificate:String) : Response {
+        fileArg: String, fileName: String, fileContent: Blob, certificate:String) : Response {
+            return this.syncRequestWithLogger(method, url, headers, body,
+                fileArg, fileName, fileContent, certificate,Env.getLogger());
+        }
+
+    public function syncRequestWithLogger(method: String, url: String, headers: Dictionary, body: String,
+            fileArg: String, fileName: String, fileContent: Blob, certificate:String,logger:Logger) : Response {
     #if cs
         final response = syncRequestCs(method, url, headers, body, fileArg, fileName, fileContent, certificate);
     #elseif js
@@ -33,7 +39,7 @@ class ApiClientImpl extends Base implements IApiClient {
         final level = (response.status >= 400 || response.status == -1)
             ? Logger.LEVEL_ERROR
             : Logger.LEVEL_INFO;
-        logRequest(level, method, url, headers, body, response);
+        logRequest(level, method, url, headers, body, response, logger);
 
         if (response.status != -1) {
             return response;
@@ -253,9 +259,9 @@ class ApiClientImpl extends Base implements IApiClient {
 
 
     private static function logRequest(level: Int, method: String, url: String,
-            headers: Dictionary, body: String, response: Response): Void {
+            headers: Dictionary, body: String, response: Response, ?logger:Null<Logger> = null): Void {
         final firstMessage = 'Http ${method.toUpperCase()} request to ${url}';
-        for (handler in Env.getLogger().getHandlers()) {
+        for (handler in logger.getHandlers()) {
             final fmt = handler.formatter;
             final requestList = new Collection<String>();
             if (headers != null) {
@@ -270,7 +276,8 @@ class ApiClientImpl extends Base implements IApiClient {
             } else {
                 requestList.push(getFormattedData(response.text, 'Exception', fmt));
             }
-            Env.getLogger()._writeToHandler(
+            final requestLogger:Logger = logger != null ? logger : Env.getLogger();
+            requestLogger._writeToHandler(
                 level,
                 fmt.formatBlock(level, '$firstMessage\n${fmt.formatList(level, requestList)}'),
                 handler);

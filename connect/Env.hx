@@ -4,6 +4,8 @@
 */
 package connect;
 
+import connect.logger.ILoggerFormatter;
+import connect.logger.LoggerHandler;
 import connect.api.IApiClient;
 import connect.api.FulfillmentApi;
 import connect.api.GeneralApi;
@@ -17,6 +19,7 @@ import connect.logger.Logger;
 import connect.logger.LoggerConfig;
 import connect.util.Collection;
 import connect.util.Dictionary;
+import connect.models.IdModel;
 
 /**
     In order to be able to perform their tasks, many classes in the SDK rely on the global
@@ -46,7 +49,7 @@ import connect.util.Dictionary;
 **/
 class Env extends Base {
     private static var config: Config;
-    private static var logger: Logger;
+    private static var loggers: Dictionary = new Dictionary();
     private static var defaultQuery: Query;
     private static var apiClient: IApiClient;
     private static var fulfillmentApi: FulfillmentApi;
@@ -55,6 +58,8 @@ class Env extends Base {
     private static var generalApi: GeneralApi;
     private static var marketplaceApi: MarketplaceApi;
     private static var subscriptionsApi: SubscriptionsApi;
+
+    private static inline var ROOT_LOGGER: String = "root";
 
     /**
         Initializes the configuration object. It must have not been previously configured.
@@ -114,18 +119,67 @@ class Env extends Base {
         @param config The configuration of the logger.
     **/
     public static function initLogger(config: LoggerConfig): Void {
-        if (logger == null) {
-            logger = new Logger(config);
+        if(!loggers.exists(ROOT_LOGGER)){
+            loggers.set(ROOT_LOGGER,new Logger(config));
         } else {
             throw "Logger instance is already initialized.";
         }
     }
 
+
+    /**
+        Get logger for given request id, if it doesnt exists it will be created
+        and context specified 
+     **/
+     public static function getLoggerForRequest(request: Null<IdModel>): Logger{
+         if(request != null && Reflect.field(request,"id") != null){
+             if(!loggers.exists(request.id)){
+                final originalConfig:LoggerConfig = loggers.get(ROOT_LOGGER).getInitialConfig();
+                final requestLogger = new Logger(copyLoggerConfig(originalConfig));
+                for (handler in requestLogger.getHandlers()){
+                     handler.formatter.setRequest(request.id);
+                }
+                requestLogger.setFilenameForRequest(request);
+                loggers.set(request.id,requestLogger);
+            }
+            return loggers.get(request.id);
+         }
+
+         if(!loggers.exists(ROOT_LOGGER)){
+            final requestLogger = new Logger(null);
+            loggers.set(ROOT_LOGGER,requestLogger);
+         }
+
+         return loggers.get(ROOT_LOGGER);
+     }
+
+    /**
+        @returns cloned LoggerConfig object
+    **/
+    private static function copyLoggerConfig(initialConfig: LoggerConfig): LoggerConfig {
+        final newConfig: LoggerConfig = new LoggerConfig();
+        newConfig.path(initialConfig.path_);
+        newConfig.level(initialConfig.level_);
+        newConfig.maskedFields(initialConfig.maskedFields_);
+        newConfig.maskedParams(initialConfig.maskedParams_);
+        newConfig.beautify(initialConfig.beautify_);
+        newConfig.compact(initialConfig.compact_);
+        newConfig.regexMaskingList_ = initialConfig.regexMaskingList_;
+        final newHandlers = new Collection<LoggerHandler>();
+        for(handler in  initialConfig.handlers_){
+            final newHandler = new LoggerHandler(handler.formatter.copy(),handler.writer.copy());
+            newHandlers.push(newHandler);
+        }
+        newConfig.handlers(newHandlers);
+        return newConfig;
+    }
+
+
     /**
         @returns `true` if logger has already been initialized, `false` otherwise.
     **/
     public static function isLoggerInitialized(): Bool {
-        return logger != null;
+        return loggers.exists(ROOT_LOGGER);
     }
 
     /**
@@ -173,7 +227,7 @@ class Env extends Base {
         if (!isLoggerInitialized()) {
             initLogger(null);
         }
-        return logger;
+        return loggers.get(ROOT_LOGGER);
     }
 
     /**
@@ -238,7 +292,7 @@ class Env extends Base {
     @:dox(hide)
     public static function _reset(?client: IApiClient = null) {
         config = null;
-        logger = null;
+        loggers = new Dictionary();
         defaultQuery = null;
         apiClient = client;
         fulfillmentApi = null;

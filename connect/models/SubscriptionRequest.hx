@@ -83,7 +83,7 @@ class SubscriptionRequest extends IdModel {
     **/
     public function register(): SubscriptionRequest {
         try {
-            final request = Env.getSubscriptionsApi().createBillingRequest(this.toString());
+            final request = Env.getSubscriptionsApi().createBillingRequest(this.toString(),this);
             return Model.parse(SubscriptionRequest, request);
         } catch (ex: Dynamic) {
             return null;

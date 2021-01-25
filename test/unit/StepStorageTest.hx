@@ -20,6 +20,7 @@ class StepStorageTest {
     @Before
     public function setup() {
         Env._reset();
+        Env.initLogger(new LoggerConfig());
     }
 
     @After
@@ -29,7 +30,7 @@ class StepStorageTest {
             FileSystem.deleteFile(filename);
         }
     }
-
+    
     @Test
     public function testGetStepFilename() {
         Assert.areEqual('logs/step.dat', StepStorage.getStepFilename());
@@ -37,10 +38,11 @@ class StepStorageTest {
 
     @Test
     public function testGetStepFilenameWithCustomLogPath() {
+        Env._reset();
         Env.initLogger(new LoggerConfig().path('custom'));
         Assert.areEqual('custom/step.dat', StepStorage.getStepFilename());
     }
-
+  
     @Test
     public function testLocalSaveAndLoadItem() {
         final constraints = new Constraints();
@@ -74,7 +76,7 @@ class StepStorageTest {
         final actual = Json.stringify(Helper.sortObject(loadedItem.toObject()));
         Assert.areEqual(expected, actual);
     }
-
+   
     @Test
     public function testLocalSaveAndLoadDictionary() {
         final dict = new Dictionary()
@@ -90,7 +92,7 @@ class StepStorageTest {
 
         Assert.isTrue(Std.is(loadedDict, Dictionary));
     }
-
+ 
     @Test
     public function testLocalSaveAndLoadDictionaryWithItem() {
         final param = new Param();

@@ -5,6 +5,7 @@
 import connect.api.IApiClient;
 import connect.api.Response;
 import connect.Env;
+import connect.logger.Logger;
 import connect.Flow;
 import connect.logger.LoggerHandler;
 import connect.logger.LoggerConfig;
@@ -67,9 +68,13 @@ class FlowAttemptsApiClientMock implements IApiClient {
     private static final REQUESTS_PATH = 'requests';
 
     public function new() {
-    }
+    }    
 
     public function syncRequest(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob, certificate:String):Response {
+        return syncRequestWithLogger(method, url, headers, body,fileArg, fileName, fileContent, certificate, new Logger(null));
+    }
+
+    public function syncRequestWithLogger(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob, certificate:String, logger: Logger):Response {
         if (StringTools.contains(url, REQUESTS_PATH) && method.toUpperCase() == 'GET') {
             return new Response(200, Json.parse(File.getContent('test/mocks/data/request_list.json')), null);
         }

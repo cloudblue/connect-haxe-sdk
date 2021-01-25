@@ -156,7 +156,7 @@ class AssetRequest extends IdModel {
             if (hasModifiedFields) {
                 final request = Env.getFulfillmentApi().updateRequest(
                     this.id,
-                    haxe.Json.stringify(addValueToParams(diff)));
+                    haxe.Json.stringify(addValueToParams(diff)),this);
                 return Model.parse(AssetRequest, request);
             } else {
                 return this;
@@ -165,7 +165,7 @@ class AssetRequest extends IdModel {
             if (params.length() > 0) {
                 Env.getFulfillmentApi().updateRequest(
                     this.id,
-                    '{"asset":{"params":${params.toString()}}}');
+                    '{"asset":{"params":${params.toString()}}}',this);
             }
             return this;
         }
@@ -199,7 +199,7 @@ class AssetRequest extends IdModel {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
-            haxe.Json.stringify({template_id: id})
+            haxe.Json.stringify({template_id: id}), this
         );
         this._updateConversation('Request approved using template $id.');
         return Model.parse(AssetRequest, request);
@@ -219,7 +219,7 @@ class AssetRequest extends IdModel {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
-            haxe.Json.stringify({activation_tile: text})
+            haxe.Json.stringify({activation_tile: text}), this
         );
         this._updateConversation('Request approved using custom activation tile.');
         return Model.parse(AssetRequest, request);
@@ -238,7 +238,7 @@ class AssetRequest extends IdModel {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'fail',
-            haxe.Json.stringify({reason: reason})
+            haxe.Json.stringify({reason: reason}), this
         );
         this._updateConversation('Request failed: $reason.');
         return Model.parse(AssetRequest, request);
@@ -261,7 +261,7 @@ class AssetRequest extends IdModel {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'inquire',
-            haxe.Json.stringify(body)
+            haxe.Json.stringify(body), this
         );
         this._updateConversation('Request inquired.');
         return Model.parse(AssetRequest, request);
@@ -280,7 +280,7 @@ class AssetRequest extends IdModel {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'pend',
-            haxe.Json.stringify({})
+            haxe.Json.stringify({}), this
         );
         this._updateConversation('Request pended.');
         return Model.parse(AssetRequest, request);
@@ -295,7 +295,8 @@ class AssetRequest extends IdModel {
     public function assign(assigneeId: String): AssetRequest {
         final request = Env.getFulfillmentApi().assignRequest(
             this.id,
-            assigneeId
+            assigneeId,
+            this
         );
         this._updateConversation('Request assigned to $assigneeId.');
         return Model.parse(AssetRequest, request);
@@ -312,10 +313,10 @@ class AssetRequest extends IdModel {
 
     /** @returns The Conversation assigned to `this` AssetRequest, or `null` if there is none. **/
     public function getConversation(): Conversation {
-        final convs = Conversation.list(new Query().equal('instance_id', this.id));
+        final convs = Conversation.list(new Query().equal('instance_id', this.id), this);
         final conv = (convs.length() > 0) ? convs.get(0) : null;
         if  (conv != null && conv.id != null && conv.id != '') {
-            return Conversation.get(conv.id);
+            return Conversation.get(conv.id, this);
         } else {
             return null;
         }
@@ -326,7 +327,7 @@ class AssetRequest extends IdModel {
         final conversation = this.getConversation();
         if (conversation != null) {
             try {
-                conversation.createMessage(message);
+                conversation.createMessage(message,this);
             } catch (ex: Dynamic) {
                 Env.getLogger().write(
                     connect.logger.Logger.LEVEL_ERROR,

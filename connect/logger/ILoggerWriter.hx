@@ -25,4 +25,7 @@ interface ILoggerWriter {
 
     /** Writes a line to the log output. The new line character is added by the method. **/
     public function writeLine(line: String): Void;
+
+    /** Returns full copy of writter **/
+    public function copy(): ILoggerWriter;
 }

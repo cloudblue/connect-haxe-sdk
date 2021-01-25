@@ -7,7 +7,7 @@ package connect.api;
 import connect.Env;
 import connect.util.Blob;
 import connect.util.Dictionary;
-
+import connect.models.IdModel;
 
 @:dox(hide)
 class ConnectHelper {
@@ -22,9 +22,9 @@ class ConnectHelper {
         @throws String if the request fails.
     **/
     public static function get(resource: String, ?id: String, ?suffix: String,
-            ?params: Query, rqlParams: Bool = false): String {
+            ?params: Query, rqlParams: Bool = false, ?currentRequest: Null<IdModel> = null): String {
         return checkResponse(connectSyncRequest('GET', parsePath(resource, id, suffix),
-            getHeaders(), params, rqlParams));
+            getHeaders(), params, rqlParams, currentRequest));
     }
 
 
@@ -37,9 +37,9 @@ class ConnectHelper {
         @returns A string with the response.
         @throws String if the request fails.
     **/
-    public static function put(resource: String, id: String, suffix: String, body: String): String {
+    public static function put(resource: String, id: String, suffix: String, body: String, ?currentRequest: Null<IdModel> = null): String {
         return checkResponse(connectSyncRequest('PUT', parsePath(resource, id, suffix),
-            getHeaders(), body));
+            getHeaders(), body, currentRequest));
     }
 
 
@@ -53,9 +53,9 @@ class ConnectHelper {
         @returns An object.
         @throws String if the request fails.
     **/
-    public static function post(resource: String, ?id: String, ?suffix: String, ?body: String): String {
+    public static function post(resource: String, ?id: String, ?suffix: String, ?body: String, ?currentRequest: Null<IdModel> = null): String {
         return checkResponse(connectSyncRequest('POST', parsePath(resource, id, suffix),
-            getHeaders(), body));
+            getHeaders(), body, currentRequest));
     }
 
 
@@ -72,9 +72,9 @@ class ConnectHelper {
         @throws String if the request fails.
     **/
     public static function postFile(resource: String, ?id: String, ?suffix: String,
-            fileArg: String, fileName: String, fileContents: Blob): Dynamic {
+            fileArg: String, fileName: String, fileContents: Blob, ?currentRequest: Null<IdModel> = null): Dynamic {
         return checkResponse(connectSyncRequest('POST', parsePath(resource, id, suffix),
-            getHeaders(false), null, false, null, fileArg, fileName, fileContents));
+            getHeaders(false), null, false, null, fileArg, fileName, fileContents, currentRequest));
     }
 
 
@@ -87,19 +87,20 @@ class ConnectHelper {
         @returns A string with the response.
         @throws String if the request fails.
     **/
-    public static function delete(resource: String, id: String, ?suffix: String): String {
-        return checkResponse(connectSyncRequest('DELETE', parsePath(resource, id, suffix), getHeaders()));
+    public static function delete(resource: String, id: String, ?suffix: String, ?currentRequest: Null<IdModel> = null): String {
+        return checkResponse(connectSyncRequest('DELETE', parsePath(resource, id, suffix), getHeaders(), currentRequest));
     }
 
 
     private static function connectSyncRequest(method: String, path: String, headers: Dictionary,
             ?params: Query, rqlParams: Bool = false, ?data: String,
-            ?fileArg: String, ?fileName: String, ?fileContent: Blob) : Response {
+            ?fileArg: String, ?fileName: String, ?fileContent: Blob, currentRequest: Null<IdModel>) : Response {
         final paramsStr = (params != null)
             ? (rqlParams) ? params.toString() : params.toPlain()
             : '';
         final url = Env.getConfig().getApiUrl() + path + paramsStr;
-        return Env.getApiClient().syncRequest(method, url, headers, data, fileArg, fileName, fileContent, null);
+        var logger = currentRequest != null ? Env.getLoggerForRequest(currentRequest):Env.getLoggerForRequest(null);
+        return Env.getApiClient().syncRequestWithLogger(method, url, headers, data, fileArg, fileName, fileContent, null, logger);
     }
 
 
