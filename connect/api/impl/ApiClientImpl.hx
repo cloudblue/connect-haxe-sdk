@@ -17,13 +17,13 @@ import haxe.io.BytesInput;
 
 class ApiClientImpl extends Base implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-        fileArg: String, fileName: String, fileContent: Blob, certificate:String) : Response {
+        fileArg: String, fileName: String, fileContent: Blob, certificate:String, ?logLevel: Null<Int> = null) : Response {
             return this.syncRequestWithLogger(method, url, headers, body,
-                fileArg, fileName, fileContent, certificate,Env.getLogger());
+                fileArg, fileName, fileContent, certificate,Env.getLogger(), logLevel);
         }
 
     public function syncRequestWithLogger(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob, certificate:String,logger:Logger) : Response {
+            fileArg: String, fileName: String, fileContent: Blob, certificate:String,logger:Logger, ?logLevel: Null<Int> = null) : Response {
     #if cs
         final response = syncRequestCs(method, url, headers, body, fileArg, fileName, fileContent, certificate);
     #elseif js
@@ -36,10 +36,12 @@ class ApiClientImpl extends Base implements IApiClient {
         final response = syncRequestStd(method, url, headers, body, fileArg, fileName, fileContent, certificate);
     #end
 
-        final level = (response.status >= 400 || response.status == -1)
+        if(logLevel == null){
+            logLevel = (response.status >= 400 || response.status == -1)
             ? Logger.LEVEL_ERROR
             : Logger.LEVEL_INFO;
-        logRequest(level, method, url, headers, body, response, logger);
+        }
+        logRequest(logLevel, method, url, headers, body, response, logger);
 
         if (response.status != -1) {
             return response;

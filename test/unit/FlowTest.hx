@@ -132,7 +132,7 @@ class FlowApiClientMock implements IApiClient {
     public function new() {
     }
 
-    public function syncRequestWithLogger(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob, certificate:String, logger: Logger):Response {
+    public function syncRequestWithLogger(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob, certificate:String, logger: Logger,  ?logLevel: Null<Int> = null):Response {
         if (StringTools.contains(url, REQUESTS_PATH) && method.toUpperCase() == 'GET') {
             return new Response(200, Json.parse(File.getContent('test/mocks/data/request_list.json')), null);
         }
@@ -144,7 +144,7 @@ class FlowApiClientMock implements IApiClient {
         return new Response(200, '[{"life": "The anwser is 42"}]', null);
     }
     
-    public function syncRequest(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob, certificate:String):Response {
-        return syncRequestWithLogger(method, url, headers, body,fileArg, fileName, fileContent, certificate, new Logger(null));
+    public function syncRequest(method:String, url:String, headers:Dictionary, body:String, fileArg:String, fileName:String, fileContent:Blob, certificate:String,  ?logLevel: Null<Int> = null):Response {
+        return syncRequestWithLogger(method, url, headers, body,fileArg, fileName, fileContent, certificate, new Logger(null),logLevel);
     }
 }

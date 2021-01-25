@@ -43,7 +43,7 @@ class ConfigurationApiClientMock implements IApiClient {
     }
     
     public function syncRequestWithLogger(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob, certificate: String, logger: Logger) : Response {
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String, logger: Logger,  ?logLevel: Null<Int> = null) : Response {
         if (method == 'GET' && url == 'https://api.conn.rocks/public/v1/assets/AS-392-283-000-0') {
             final asset = Json.parse(File.getContent(REQUESTS_FILE))[0].asset;
             return new Response(200, haxe.Json.stringify(asset), null);
@@ -51,7 +51,7 @@ class ConfigurationApiClientMock implements IApiClient {
         return new Response(404, null, null);
     }
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob, certificate: String) : Response {
+            fileArg: String, fileName: String, fileContent: Blob, certificate: String,  ?logLevel: Null<Int> = null) : Response {
         return syncRequestWithLogger(method, url, headers, body,fileArg, fileName, fileContent, certificate, new Logger(null));
     }
 }
