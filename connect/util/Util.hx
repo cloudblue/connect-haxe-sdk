@@ -5,7 +5,6 @@
 package connect.util;
 
 import connect.Env;
-import connect.logger.Logger;
 
 
 @:dox(hide)
