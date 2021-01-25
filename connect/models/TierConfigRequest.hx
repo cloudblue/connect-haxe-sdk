@@ -184,10 +184,12 @@ class TierConfigRequest extends IdModel {
             diff.params = [];
         }
         if (hasTcParams) {
-            diff.params = diff.params.concat(diff.configuration.params);
+            final tcParams:Array<Dynamic> = Lambda.filter(diff.configuration.params, p -> !isParamInList(p, diff.params));
+            diff.params = diff.params.concat(tcParams);
         }
         if (hasConfigParams) {
-            diff.params = diff.params.concat(diff.configuration.configuration.params);
+            final configParams:Array<Dynamic> = Lambda.filter(diff.configuration.configuration.params, p -> !isParamInList(p, diff.params));
+            diff.params = diff.params.concat(configParams);
         }
         if (hasConfiguration) {
             Reflect.deleteField(diff, 'configuration');
@@ -210,6 +212,15 @@ class TierConfigRequest extends IdModel {
             });
         }
         return haxe.Json.stringify(diff);
+    }
+
+    private static function isParamInList(param:Dynamic, list:Array<Dynamic>): Bool {
+        for (p in list) {
+            if (p.id == param.id) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
