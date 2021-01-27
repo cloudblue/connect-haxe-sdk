@@ -1,5 +1,6 @@
 ## JavaScript
 -main TestMain
+-lib diff:1.0.0
 -lib munit
 #-lib hamcrest
 -lib hxnodejs
@@ -11,6 +12,7 @@
 ## Neko
 --next
 -main TestMain
+-lib diff:1.0.0
 -lib munit
 #-lib hamcrest
 -cp test/unit
@@ -21,6 +23,7 @@
 ## CPP
 --next
 -main TestMain
+-lib diff:1.0.0
 -lib munit
 #-lib hamcrest
 -cp test/unit
@@ -32,6 +35,7 @@
 ## Java
 --next
 -main TestMain
+-lib diff:1.0.0
 -lib munit
 #-lib hamcrest
 -cp test/unit
@@ -42,6 +46,7 @@
 ## CSharp
 --next
 -main TestMain
+-lib diff:1.0.0
 -lib munit
 #-lib hamcrest
 -cp test/unit
@@ -52,6 +57,7 @@
 ## Python
 --next
 -main TestMain
+-lib diff:1.0.0
 -lib munit
 #-lib hamcrest
 -cp test/unit
@@ -62,6 +68,7 @@
 ## PHP 7
 --next
 -main TestMain
+-lib diff:1.0.0
 -lib munit
 #-lib hamcrest
 -cp test/unit
@@ -73,6 +80,7 @@
 ## HashLink
 --next
 -main TestMain
+-lib diff:1.0.0
 -lib munit
 #-lib hamcrest
 -cp test/unit

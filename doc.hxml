@@ -1,8 +1,9 @@
 -D doc-gen
 --macro include('connect')
 -dce no
+-lib diff:1.0.0
 -lib dox
 -xml doc/doc.xml
--cmd haxelib run dox -i doc -o doc -in "^connect" -ex "connect.api.impl" -ex "connect.storage" --toplevel-package connect --title "Haxe SDK Documentation" -D version $(cat VERSION) -theme ./doc_theme -D themeColor 0x4275B3 -D website "Ingram Micro Inc." -D logo "https://cloudblue.github.io/connect-haxe-sdk/connect.png" -D source-path "https://github.com/cloudblue/connect-haxe-sdk/tree/master" -D description "This is a version of the SDK for CloudBlue Connect platform, written in Haxe. While it allows to write connectors in Haxe itself, the generated code can be used to write connectors in C#, Java, JavaScript, PHP and Python."
+-cmd haxelib run dox -i doc -o doc -in "^connect" -ex "connect.api.impl" -ex "connect.flow" -ex "connect.storage" --toplevel-package connect --title "Haxe SDK Documentation" -D version $(cat VERSION) -theme ./doc_theme -D themeColor 0x4275B3 -D website "Ingram Micro Inc." -D logo "https://cloudblue.github.io/connect-haxe-sdk/connect.png" -D source-path "https://github.com/cloudblue/connect-haxe-sdk/tree/master" -D description "This is a version of the SDK for CloudBlue Connect platform, written in Haxe. While it allows to write connectors in Haxe itself, the generated code can be used to write connectors in C#, Java, JavaScript, PHP and Python."
 -cmd cp stuff/connect.png doc/connect.png
 -cmd cp stuff/favicon.ico doc/favicon.ico
