@@ -16,7 +16,7 @@ class UsageApi extends Base {
     }
 
     public function listUsageFiles(filters: Query): String {
-        return ConnectHelper.get(USAGE_FILES_PATH, null, null, filters);
+        return ConnectHelper.get(USAGE_FILES_PATH, null, null, filters, true);
     }
 
     public function createUsageFile(body: String, currentRequest: Null<IdModel>): String {
