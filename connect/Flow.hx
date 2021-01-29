@@ -463,17 +463,20 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         return this.stepAttempt;
     }
 
+    @:dox(hide)
     public function onStepBegin(request:IdModel, step:Step, index:Int):Void {
         this.logger.openStepSection(index, step.getDescription());
         this.logger.writeStepInfo(new ProcessedRequestInfo(this.request, this.data), lastRequestState);
     }
 
+    @:dox(hide)
     public function onStepEnd(request:IdModel, step:Step, index:Int):Void {
         this.stepAttempt = 1;
         this.store.removeStepData(request);
         this.logger.closeStepSection(index);
     }
 
+    @:dox(hide)
     public function onStepFail(request:IdModel, step:Step, index:Int, msg:String):Void {
         this.logger.writeStepError(new ProcessedRequestInfo(this.request, this.data), lastRequestState);
         this.logger.writeException(msg);
@@ -483,12 +486,14 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         this.logger.closeStepSection(index);
     }
 
+    @:dox(hide)
     public function onStepSkip(request:IdModel, step:Step, index:Int):Void {
         this.logger.writeStepSkip(this.storesRequestOnFailure());
         this.store.requestDidSkip(this.request, this.data, index, this.stepAttempt + 1);
         this.logger.closeStepSection(index);
     }
 
+    @:dox(hide)
     public function onStepAbort(request:IdModel, step:Step, index:Int, msg:String):Void {
         if (msg != '') {
             this.logger.writeException(msg);
@@ -496,6 +501,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         this.logger.closeStepSection(index);
     }
 
+    @:dox(hide)
     public function onLoad(request:IdModel, firstStep:Int, data:Dictionary, storageType:String, numAttempts:Int):Void {
         this.firstStep = firstStep;
         this.data = data;
@@ -504,16 +510,21 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         this.logger.writeLoadedStepData(firstStep, storageType);
     }
 
-    public function onFailedLoad(request:IdModel):Void { }
+    @:dox(hide)
+    public function onFailedLoad(request:IdModel):Void {
+    }
 
+    @:dox(hide)
     public function onConnectSave(request:IdModel):Void {
         this.logger.writeStepSavedInConnect();
     }
 
+    @:dox(hide)
     public function onLocalSave(request:IdModel):Void {
         this.logger.writeStepSavedLocally();
     }
 
+    @:dox(hide)
     public function onFailedSave(request:IdModel):Void {
         this.logger.writeStepSaveFailed();
     }

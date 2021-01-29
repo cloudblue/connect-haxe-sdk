@@ -179,7 +179,7 @@ class Util {
      */
     public static function createObjectDiff(object:Dynamic, previous:Dynamic):Dynamic {
         return Util.addIdsToObject(
-            new Diff(previous, object).apply({id: object.id}),
+            new diff.Diff(previous, object).apply({id: object.id}),
             previous);
     }
 
