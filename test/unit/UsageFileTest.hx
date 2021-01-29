@@ -3,6 +3,7 @@
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
 import connect.api.IApiClient;
+import connect.api.Query;
 import connect.api.Response;
 import connect.Env;
 import connect.logger.Logger;
@@ -30,7 +31,7 @@ class UsageFileTest {
 
     @Test
     public function testList() {
-        final usageFiles = UsageFile.list(null);
+        final usageFiles = UsageFile.list(new Query().equal('key', 'value'));
         Assert.isType(usageFiles, Collection);
         Assert.areEqual(1, usageFiles.length());
         Assert.isType(usageFiles.get(0), UsageFile);
@@ -219,7 +220,7 @@ class UsageFileApiClientMock implements IApiClient {
     switch (method) {
         case 'GET':
             switch (url) {
-                case 'https://api.conn.rocks/public/v1/usage/files':
+                case 'https://api.conn.rocks/public/v1/usage/files?eq(key,value)':
                     return new Response(200, File.getContent(FILE), null);
                 case 'https://api.conn.rocks/public/v1/usage/files/UF-2018-11-9878764342':
                     final usageFile = Json.parse(File.getContent(FILE))[0];
