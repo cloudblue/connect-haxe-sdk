@@ -1,8 +1,7 @@
 /*
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
- */
-
+*/
 package connect.storage;
 
 import connect.storage.StepData.StorageType;
@@ -16,14 +15,16 @@ import haxe.Json;
 import sys.FileSystem;
 import sys.io.File;
 
+/** Responsible for storing the data that one step received when executing within a `connect.Flow`. **/
 @:dox(hide)
 class StepStorage {
-    public static function getStepFilename():String {
-        final filename = 'step.dat';
-        final logPath = Env.getLogger().getPath();
-        return (logPath != null) ? (logPath + filename) : filename;
-    }
+    /** Loads a stored step data for the given request. It will first try to load it from the local
+        storage file. If it is not found there, it will try to load it from the indicated `param` which
+        must have been retreived from Connect.
 
+        If no data is found on either source, then an empty `StepData` with a `storage` type of
+        `FailedStorage` will be returned. 
+     **/
     public static function load(requestId:String, param:Param):StepData {
         final fileData = loadRequestFromFile(requestId);
         final stepData = (fileData != null)
@@ -63,8 +64,11 @@ class StepStorage {
 
     private static function getRequestField(object:Dynamic, requestId:String, storage:StorageType):StepData {
         if (Reflect.hasField(object, requestId)) {
-            final stepData = Reflect.field(object, requestId);
-            return new StepData(stepData.current_step, stepData.data, storage, stepData.attempt);
+            final stepData:Dynamic = Reflect.field(object, requestId);
+            final attempt = Reflect.hasField(stepData, 'attempt')
+                ? stepData.attempt
+                : 1;
+            return new StepData(stepData.current_step, stepData.data, storage, attempt);
         }
         return null;
     }
@@ -86,14 +90,26 @@ class StepStorage {
         return null;
     }
 
+    /**
+        Saves `stepData` for the given `request`. First, it will try to save the data in the given
+        `param` of the `request`, by calling `updateFunc`, which should try to update the
+        parameter in Connect. If this fails, the method will try to save the data in the local
+        storage file. The type of storage used for saving will be returned (which will be `FailedStorage`
+        if neither worked).
+    **/
     public static function save(request:IdModel, stepData:StepData, param:Param, updateFunc:Function):StorageType {
-        deleteRequestFromFile(request.id);
-        final paramObj = addRequestToObject(loadAllFromParam(param), request.id, stepData);
-        final fileObj = addRequestToObject(loadAllFromFile(), request.id, stepData);
-        if (saveInConnect(request, encodeData(paramObj), param, updateFunc)) {
-            return ConnectStorage;
-        } else if (saveInFile(encodeData(fileObj))) {
-            return LocalStorage;
+        final savedData = load(request.id, param);
+        if (savedData.storage == FailedStorage || savedData.toString() != stepData.toString()) {
+            deleteRequestFromFile(request.id);
+            final paramObj = addRequestToObject(loadAllFromParam(param), request.id, stepData);
+            final fileObj = addRequestToObject(loadAllFromFile(), request.id, stepData);
+            if (saveInConnect(request, encodeData(paramObj), param, updateFunc)) {
+                return ConnectStorage;
+            } else if (saveInFile(encodeData(fileObj))) {
+                return LocalStorage;
+            } else {
+                return FailedStorage;
+            }
         } else {
             return FailedStorage;
         }
@@ -172,14 +188,23 @@ class StepStorage {
 
     private static function addRequestToObject(obj:Dynamic, requestId:String, stepData:StepData):Dynamic {
         final fixedObj = (obj != null) ? obj : {};
-        Reflect.setField(fixedObj, requestId, {
+        final stepDataObj:Dynamic = {
             current_step: stepData.firstIndex,
-            data: stepData.data.toObject(),
-            attempt: stepData.attempt
-        });
+            data: stepData.data.toObject()
+        };
+        if (stepData.attempt != null) {
+            Reflect.setField(stepDataObj, 'attempt', stepData.attempt);
+        }
+        Reflect.setField(fixedObj, requestId, stepDataObj);
         return fixedObj;
     }
 
+    /**
+        Removes the stored `StepData` for the given request id from the local storage file,
+        and if the given `param` contains data for the request, updates its value to remove it.
+        @return `true` if the param has been updated, which means that the request that it belongs to
+        requires updating, or `false` otherwise.
+    **/
     public static function removeStepData(requestId:String, param:Param):Bool {
         deleteRequestFromFile(requestId);
         final paramObj = loadAllFromParam(param);
@@ -188,5 +213,12 @@ class StepStorage {
             return true; // Request needs updating
         }
         return false; // No need to update request
+    }
+
+    /** Returns the file name where steps should be stored. **/
+    public static function getStepFilename():String {
+        final filename = 'step.dat';
+        final logPath = Env.getLogger().getPath();
+        return (logPath != null) ? (logPath + filename) : filename;
     }
 }
