@@ -101,6 +101,22 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     }
 
     /**
+        Enables or disables storing the number of execution attempts when storing request data. If
+        `setStoreRequestOnFailure` is set to `false`, this is ignored.
+    **/
+    public function setStoreNumAttempts(enable:Bool):Void {
+        this.store.setStoreNumAttempts(enable);
+    }
+
+    /**
+        Tells if the number of execution attempts is stored with the rest of request data. If
+        `storesRequestOnFailure` is set to `false`, this is ignored.
+    **/
+    public function storesNumAttempts():Bool {
+        return this.store.storesNumAttempts();
+    }
+
+    /**
         Enables or disables skipping the request when it is pending migration. Defaults to true.
     **/
     public function setSkipRequestOnPendingMigration(enable:Bool):Void {

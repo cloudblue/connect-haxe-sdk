@@ -8,21 +8,45 @@ import connect.models.Model;
 import connect.util.Dictionary;
 import haxe.Json;
 
+/** Indicates how a `StepData` is stored. **/
 @:dox(hide)
 enum StorageType {
+    /** StepData saved in Connect. **/
     ConnectStorage;
+
+    /** StepData saved in a local file. **/
     LocalStorage;
+
+    /** StepData failed to load. **/
     FailedStorage;
 }
 
+/** The data of a `connect.Flow` step. It can be saved and retrieved later to resume execution of the flow. **/
 @:dox(hide)
 class StepData {
+    /** Index of the step. **/
     public final firstIndex: Int;
+
+    /** `connect.Flow` data when the step was last executed. **/
     public final data: Dictionary;
+
+    /** How this step was stored: `ConnectStorage`, `LocalStorage`, `FailedStorage`. **/
     public final storage: StorageType;
+
+    /** Number of attempts that this step has tried to run. **/
     public final attempt: Null<Int>;
 
-    public function new(firstIndex: Int, data: Dynamic, storage: StorageType, attempt:Int) {
+    /**
+        Created a StepData with the passed attributes. The `data` can be of one of these types:
+
+        - `connect.util.Dictionary`: Passed when `this` `StepData` is to be stored.
+          The dictionary will be copied recursively, and all keys will contain a suffix with the
+          class name of the corresponding value, so it can be used in deserialization.
+        - `Dynamic` object: Passed when `this` `StepData` is to be retrieved from file. A new
+          dictionary will be created with the contents of the objects, deserializing the values
+          based on the type indicated on the key suffixes. These suffixes will be removed.
+    **/
+    public function new(firstIndex: Int, data: Dynamic, storage: StorageType, attempt:Null<Int>) {
         this.firstIndex = firstIndex;
         this.data = (Std.is(data, Dictionary))
             ? createDictionaryWithClassnameSuffixes(data)
@@ -65,5 +89,16 @@ class StepData {
             data.set(fieldName, parsedValue);
         }
         return data;
+    }
+
+    public function toString(): String {
+        final dynObj:Dynamic = {
+            current_step: this.firstIndex,
+            data: this.data.toObject()
+        };
+        if (this.attempt != null) {
+            Reflect.setField(dynObj, 'attempt', this.attempt);
+        }
+        return Json.stringify(dynObj);
     }
 }

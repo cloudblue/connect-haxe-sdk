@@ -14,10 +14,12 @@ class FlowStore {
 
     private final delegate:FlowStoreDelegate;
     private var storeRequestOnFailure:Bool;
+    private var storeNumAttempts:Bool;
 
     public function new(delegate:Null<FlowStoreDelegate>) {
         this.delegate = delegate;
         this.storeRequestOnFailure = true;
+        this.storeNumAttempts = true;
     }
 
     public function setStoreRequestOnFailure(enable:Bool):Void {
@@ -26,6 +28,14 @@ class FlowStore {
 
     public function storesRequestOnFailure():Bool {
         return this.storeRequestOnFailure;
+    }
+
+    public function setStoreNumAttempts(enable:Bool):Void {
+        this.storeNumAttempts = enable;
+    }
+
+    public function storesNumAttempts():Bool {
+        return this.storeNumAttempts;
     }
 
     public function requestDidBegin(request:IdModel):Void {
@@ -44,7 +54,8 @@ class FlowStore {
 
     public function requestDidSkip(request:IdModel, data:Dictionary, index:Int, attempt:Int):Void {
         if (this.storesRequestOnFailure()) {
-            final result = StepStorage.save(request, new StepData(index, data, ConnectStorage, attempt),
+            final fixedAttempt = this.storesNumAttempts() ? attempt : null;
+            final result = StepStorage.save(request, new StepData(index, data, ConnectStorage, fixedAttempt),
                 this.getStepParam(request), Reflect.field(request, 'update'));
             if (this.delegate != null) {
                 switch (result) {
