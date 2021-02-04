@@ -204,7 +204,7 @@ def upload_files(profile_id: str, repository_id: str) -> None:
 
 def close_repository(profile_id: str, repository_id: str) -> bool:
     print('*** Waiting until the repository is closed...', flush=True)
-    max_attempts = 10
+    max_attempts = 50
     num_attempts = 0
     status = repository_status(profile_id, repository_id)
     while num_attempts < max_attempts and status != 'closed':
@@ -223,14 +223,7 @@ if __name__ == '__main__':
     upload_files(profile_id, repository_id)
 
     # Wait until the repository gets successfully closed
-    max_attempts = 5
-    num_attempts = 1
     closed = close_repository(profile_id, repository_id)
-    while num_attempts < max_attempts and not closed:
-        num_attempts += 1
-        print('*** Repository could not be closed, retrying... ({}/{})'. \
-            format(num_attempts, max_attempts))
-        closed = close_repository(profile_id, repository_id)
     if not closed:
         raise Exception('Repository could not be closed.')
     else:
