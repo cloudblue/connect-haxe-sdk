@@ -235,13 +235,13 @@ if __name__ == '__main__':
         time.sleep(60)
         result = promote(repository_id)
         try:
-            parsed_result = json_loads(result)
+            parsed_result = json.loads(result)
             if not 'errors' in parsed_result:
                 promoted = True
             else:
                 print(result, flush=True)
         except JSONDecodeError:
             print('Could not decode response: {}'.format(result), flush=True)
-        print(result, fluesh=True)
+        print(result, flush=True)
 
     print('*** Done.', flush=True)
