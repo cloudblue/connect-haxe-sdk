@@ -233,9 +233,19 @@ if __name__ == '__main__':
     else:
         print('*** Repository closed.')
 
-    print('*** Sleeping for 1 minute...', flush=True)
-    time.sleep(60)
-
-    print(promote(repository_id), flush=True)
+    promoted = False
+    while not promoted:
+        print('*** Sleeping for 1 minute...', flush=True)
+        time.sleep(60)
+        result = promote(repository_id)
+        try:
+            parsed_result = json_loads(result)
+            if not 'errors' in parsed_result:
+                promoted = True
+            else:
+                print(result, flush:True)
+        except JSONDecodeError:
+            print('Could not decode response: {}'.format(result), flush=True)
+        print(result, fluesh=True)
 
     print('*** Done.', flush=True)
