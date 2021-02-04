@@ -119,12 +119,15 @@ def finish(profile_id: str, repository_id: str) -> str:
 def repository_status(profile_id: str, repository_id: str) -> str:
     print('*** Getting staging repositories...', flush=True)
     response = curl('/'.join([PROFILE_REPOSITORIES_URL, profile_id]), 'get')
-    root = ElementTree.fromstring(response)
-    if root.tag == 'stagingRepositories':
-        data = root.find('data')
-        repos = [repo for repo in data if repo.find('repositoryId').text == repository_id]
-        return repos[0].find('type').text
-    else:
+    try:
+        root = ElementTree.fromstring(response)
+        if root.tag == 'stagingRepositories':
+            data = root.find('data')
+            repos = [repo for repo in data if repo.find('repositoryId').text == repository_id]
+            return repos[0].find('type').text
+        else:
+            raise Exception('Error getting staging repository: ' + response)
+    except ElementTree.ParseError:
         raise Exception('Error getting staging repository: ' + response)
 
 
