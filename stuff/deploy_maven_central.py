@@ -243,7 +243,7 @@ if __name__ == '__main__':
             if not 'errors' in parsed_result:
                 promoted = True
             else:
-                print(result, flush:True)
+                print(result, flush=True)
         except JSONDecodeError:
             print('Could not decode response: {}'.format(result), flush=True)
         print(result, fluesh=True)
