@@ -125,7 +125,7 @@ def repository_status(profile_id: str, repository_id: str) -> str:
         repos = [repo for repo in data if repo.find('repositoryId').text == repository_id]
         return repos[0].find('type').text
     else:
-        raise Exception(xml_error(root))
+        raise Exception('Error getting staging repository: ' + response)
 
 
 def promote(repository_id: str) -> str:
