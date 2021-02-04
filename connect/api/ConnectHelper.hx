@@ -94,13 +94,17 @@ class ConnectHelper {
 
     private static function connectSyncRequest(method: String, path: String, headers: Dictionary,
             ?params: Query, rqlParams: Bool = false, ?data: String,
-            ?fileArg: String, ?fileName: String, ?fileContent: Blob, currentRequest: Null<IdModel>, logLevel: Null<Int> = null) : Response {
+            ?fileArg: String, ?fileName: String, ?fileContent: Blob, currentRequest: Null<IdModel>,
+            logLevel: Null<Int> = null) : Response {
         final paramsStr = (params != null)
             ? (rqlParams) ? params.toString() : params.toPlain()
             : '';
         final url = Env.getConfig().getApiUrl() + path + paramsStr;
-        var logger = currentRequest != null ? Env.getLoggerForRequest(currentRequest):Env.getLoggerForRequest(null);
-        return Env.getApiClient().syncRequestWithLogger(method, url, headers, data, fileArg, fileName, fileContent, null, logger);
+        var logger = currentRequest != null
+            ? Env.getLoggerForRequest(currentRequest)
+            : Env.getLoggerForRequest(null);
+        return Env.getApiClient().syncRequestWithLogger(method, url, headers, data, fileArg, fileName, fileContent,
+            null, logger, null);
     }
 
 

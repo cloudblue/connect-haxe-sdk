@@ -17,13 +17,13 @@ import haxe.io.BytesInput;
 
 class ApiClientImpl extends Base implements IApiClient {
     public function syncRequest(method: String, url: String, headers: Dictionary, body: String,
-        fileArg: String, fileName: String, fileContent: Blob, certificate:String, ?logLevel: Null<Int> = null) : Response {
+        fileArg: String, fileName: String, fileContent: Blob, certificate:String) : Response {
             return this.syncRequestWithLogger(method, url, headers, body,
-                fileArg, fileName, fileContent, certificate,Env.getLogger(), logLevel);
+                fileArg, fileName, fileContent, certificate, Env.getLogger(), null);
         }
 
     public function syncRequestWithLogger(method: String, url: String, headers: Dictionary, body: String,
-            fileArg: String, fileName: String, fileContent: Blob, certificate:String,logger:Logger, ?logLevel: Null<Int> = null) : Response {
+            fileArg: String, fileName: String, fileContent: Blob, certificate:String, logger:Logger, logLevel: Null<Int>) : Response {
     #if cs
         final response = syncRequestCs(method, url, headers, body, fileArg, fileName, fileContent, certificate);
     #elseif js
