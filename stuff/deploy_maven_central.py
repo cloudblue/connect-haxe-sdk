@@ -4,7 +4,6 @@
 # Developed following the instructions here:
 # https://support.sonatype.com/hc/en-us/articles/213465868?_ga=2.230043868.1594253912.1579542012-1885361292.1578410493
 
-import json
 import os
 import time
 from xml.etree import ElementTree
@@ -240,15 +239,8 @@ if __name__ == '__main__':
     while not promoted:
         print('*** Sleeping for 1 minute...', flush=True)
         time.sleep(60)
-        result = promote(repository_id)
-        try:
-            parsed_result = json.loads(result)
-            if not 'errors' in parsed_result:
-                promoted = True
-            else:
-                print(result, flush=True)
-        except JSONDecodeError:
-            print('Could not decode response: {}'.format(result), flush=True)
+        if promote(repository_id) == '':
+            promoted = True
         print(result, flush=True)
 
     print('*** Done.', flush=True)
