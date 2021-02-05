@@ -295,7 +295,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
             request.approveByTile(text);
             this.abort('');
         } else if (tcr != null) {
-            this.store.removeStepData(request);
+            this.store.removeStepData(tcr);
             tcr.update(null);
             tcr.approveByTile(text);
             this.abort('');
@@ -318,7 +318,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
             request.fail(reason);
             this.abort('Failing request');
         } else if (tcr != null) {
-            this.store.removeStepData(request);
+            this.store.removeStepData(tcr);
             tcr.update(null);
             tcr.fail(reason);
             this.abort('Failing request');
@@ -347,7 +347,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
             request.inquire(templateId);
             this.abort('Inquiring request');
         } else if (tcr != null) {
-            this.store.removeStepData(request);
+            this.store.removeStepData(tcr);
             tcr.update(params);
             tcr.inquire();
             this.abort('Inquiring request');
@@ -370,7 +370,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
             request.pend();
             this.abort('Pending request');
         } else if (tcr != null) {
-            this.store.removeStepData(request);
+            this.store.removeStepData(tcr);
             tcr.update(null);
             tcr.pend();
             this.abort('Pending request');
