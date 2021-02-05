@@ -75,14 +75,17 @@ def start(profile_id: str) -> str:
     </promoteRequest>
     """
     response = curl('/'.join([PROFILES_URL, profile_id, 'start']), 'post', data)
-    root = ElementTree.fromstring(response)
-    if root.tag == 'promoteResponse':
-        return root \
-            .find('data') \
-            .find('stagedRepositoryId') \
-            .text
-    else:
-        raise Exception(xml_error(root))
+    try:
+        root = ElementTree.fromstring(response)
+        if root.tag == 'promoteResponse':
+            return root \
+                .find('data') \
+                .find('stagedRepositoryId') \
+                .text
+        else:
+            raise Exception(xml_error(root))
+    except ElementTree.ParseError:
+        raise Exception('Error starting repository: ' + response)
 
 
 def upload(repository_id: str, filename: str) -> str:
@@ -178,15 +181,18 @@ def sha1(filename: str) -> str:
 def get_profile_id() -> str:
     print('*** Getting profiles...', flush=True)
     response = curl(PROFILES_URL, 'get')
-    root = ElementTree.fromstring(response)
-    if root.tag == 'stagingProfiles':
-        data = root.find('data')
-        profiles = [profile for profile in data if profile.find('name').text == GROUP_ID]
-        profile_id = profiles[0].find('id').text
-        print('*** Found profile id ' + profile_id, flush=True)
-        return profile_id
-    else:
-        raise Exception(xml_error(root))
+    try:
+        root = ElementTree.fromstring(response)
+        if root.tag == 'stagingProfiles':
+            data = root.find('data')
+            profiles = [profile for profile in data if profile.find('name').text == GROUP_ID]
+            profile_id = profiles[0].find('id').text
+            print('*** Found profile id ' + profile_id, flush=True)
+            return profile_id
+        else:
+            raise Exception('Error getting profile id: ' + response)
+    except ElementTree.ParseError:
+        raise Exception('Error getting profile id: ' + response)
 
 
 def upload_files(profile_id: str, repository_id: str) -> None:
