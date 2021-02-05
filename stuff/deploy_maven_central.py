@@ -4,6 +4,7 @@
 # Developed following the instructions here:
 # https://support.sonatype.com/hc/en-us/articles/213465868?_ga=2.230043868.1594253912.1579542012-1885361292.1578410493
 
+import json
 import os
 import time
 from xml.etree import ElementTree
