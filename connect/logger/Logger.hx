@@ -39,7 +39,7 @@ class Logger extends Base {
     private final compact:Bool;
     private final beautify:Bool;
     private var defaultFilename:String;
-    private final intialConfig: LoggerConfig;
+    private final initialConfig: LoggerConfig;
 
     /**
         Creates a new Logger object. You don't normally create objects of this class,
@@ -47,7 +47,7 @@ class Logger extends Base {
     **/
     public function new(config:LoggerConfig) {
         config = (config != null) ? config : new LoggerConfig();
-        this.intialConfig = config;
+        this.initialConfig = config;
         this.path = (config.path_.charAt(config.path_.length - 1) == '/') ? config.path_ : (config.path_ + '/');
         this.level = Std.int(Math.min(Math.max(config.level_, LEVEL_ERROR), LEVEL_DEBUG));
         this.handlers = config.handlers_.copy();
@@ -63,7 +63,7 @@ class Logger extends Base {
 
     /** @returns initial logger configuration**/
     public function getInitialConfig():LoggerConfig {
-        return this.intialConfig;
+        return this.initialConfig;
     }
 
     /** @returns The path where logs are stored. **/
@@ -363,6 +363,23 @@ class Logger extends Base {
                 this.sections[i].written = true;
             }
         }
+    }
+
+    public function copy(): Logger {
+        final config = new LoggerConfig()
+            .path(this.path)
+            .level(this.level)
+            .handlers(this.handlers)
+            .maskedFields(this.maskedFields)
+            .maskedParams(this.maskedParams)
+            .beautify(this.beautify)
+            .compact(this.compact);
+        final logger = new Logger(config);
+        Reflect.setField(logger, 'sections', this.sections.copy());
+        Reflect.setField(logger, 'regexMaskingList', this.regexMaskingList.copy());
+        Reflect.setField(logger, 'defaultFilename', this.defaultFilename);
+        Reflect.setField(logger, 'initialConfig', this.initialConfig);
+        return logger;
     }
 }
 

@@ -4,7 +4,6 @@
 */
 package connect.logger;
 
-
 /**
     Represents the functionality of writing logs to some output. The `Logger` uses an
     instance of a class that implements this interface (`FileLoggerWriter` by default)
@@ -18,10 +17,8 @@ interface ILoggerWriter {
      */
     public function setFilename(filename: String): Bool;
 
-
     /** @returns The last filename that was set. **/
     public function getFilename(): String;
-
 
     /** Writes a line to the log output. The new line character is added by the method. **/
     public function writeLine(line: String): Void;
