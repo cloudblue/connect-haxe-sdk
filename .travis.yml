@@ -1,7 +1,7 @@
 os: linux
 dist: bionic
 language: haxe
-haxe: 4.1.4
+haxe: 4.2.0
 
 install:
 # Get SDK version
