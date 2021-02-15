@@ -239,7 +239,8 @@ if __name__ == '__main__':
     while not promoted:
         print('*** Sleeping for 1 minute...', flush=True)
         time.sleep(60)
-        if promote(repository_id) == '':
+        result = promote(repository_id)
+        if result == '':
             promoted = True
         print(result, flush=True)
 

@@ -69,9 +69,9 @@ class StepStorageTest {
         final loadedData = StepStorage.load(request.id, null);
         final loadedItem = loadedData.data.get('item');
 
-        Assert.isTrue(Std.is(loadedItem, Item));
+        Assert.isTrue(Std.isOfType(loadedItem, Item));
         Assert.areEqual(1, loadedItem.params.length());
-        Assert.isTrue(Std.is(loadedItem.params.get(0), Param));
+        Assert.isTrue(Std.isOfType(loadedItem.params.get(0), Param));
         final expected = Json.stringify(Helper.sortObject(item.toObject()));
         final actual = Json.stringify(Helper.sortObject(loadedItem.toObject()));
         Assert.areEqual(expected, actual);
@@ -90,7 +90,7 @@ class StepStorageTest {
         final loadedData = StepStorage.load(request.id, null);
         final loadedDict = loadedData.data.get('dict');
 
-        Assert.isTrue(Std.is(loadedDict, Dictionary));
+        Assert.isTrue(Std.isOfType(loadedDict, Dictionary));
     }
  
     @Test
@@ -118,9 +118,9 @@ class StepStorageTest {
         final loadedDict = loadedData.data.get('dict');
         final loadedItem = loadedDict.get('item');
 
-        Assert.isTrue(Std.is(loadedItem, Item));
+        Assert.isTrue(Std.isOfType(loadedItem, Item));
         Assert.areEqual(1, loadedItem.params.length());
-        Assert.isTrue(Std.is(loadedItem.params.get(0), Param));
+        Assert.isTrue(Std.isOfType(loadedItem.params.get(0), Param));
         final expected = Json.stringify(Helper.sortObject(item.toObject()));
         final actual = Json.stringify(Helper.sortObject(loadedItem.toObject()));
         Assert.areEqual(expected, actual);

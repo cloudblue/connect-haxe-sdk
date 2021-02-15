@@ -88,12 +88,12 @@ class Util {
                     } else {
                         Reflect.setField(obj, fieldName, StringTools.lpad('', '*', value.length));
                     }
-                } else if (Type.typeof(value) == TObject || Std.is(value, connect.util.Collection) || Std.is(value, Array)) {
+                } else if (Type.typeof(value) == TObject || Std.isOfType(value, connect.util.Collection) || Std.isOfType(value, Array)) {
                     Reflect.setField(obj, fieldName, maskFields(value));
                 }
             }
             return obj;
-        } else if (Std.is(obj, Array)) {
+        } else if (Std.isOfType(obj, Array)) {
             final arr: Array<Dynamic> = obj;
             return arr.map(el -> maskFields(el));
         }
@@ -106,7 +106,7 @@ class Util {
             final maskedParams = Env.getLogger().getMaskedParams();
             for (fieldName in Reflect.fields(obj)) {
                 final value = Reflect.field(obj, fieldName);
-                if (fieldName == 'params' && Std.is(value, Array)) {
+                if (fieldName == 'params' && Std.isOfType(value, Array)) {
                     for (param in cast(value, Array<Dynamic>)) {
                         if (Type.typeof(param) == TObject && Reflect.hasField(param, 'id') && Reflect.hasField(param, 'value')) {
                             final isPassword = Reflect.hasField(param, 'type')
@@ -118,11 +118,11 @@ class Util {
                             }
                         }
                     }
-                } else if (Type.typeof(value) == TObject || Std.is(value, connect.util.Collection) || Std.is(value, Array)) {
+                } else if (Type.typeof(value) == TObject || Std.isOfType(value, connect.util.Collection) || Std.isOfType(value, Array)) {
                     Reflect.setField(obj, fieldName, maskParams(value));
                 }
             }
-        } else if (Std.is(obj, Array)) {
+        } else if (Std.isOfType(obj, Array)) {
             final arr: Array<Dynamic> = obj;
             return arr.map(el -> maskParams(el));
         }
@@ -159,7 +159,7 @@ class Util {
 
     /** @return Whether the passed object is an array. **/
     public static function isArray(value: Dynamic):Bool {
-        return Std.is(value, Array);
+        return Std.isOfType(value, Array);
     }
 
 

@@ -13,6 +13,11 @@ class JavaIterator<T> implements java.util.Iterator<T> {
     }
 
 
+    public function forEachRemaining(param1: java.util.function.Consumer<Dynamic>): Void {
+        throw new java.lang.RuntimeException("JavaIterator.forEachRemaining not implemented.");
+    }
+
+
     public function hasNext(): Bool {
         return index < this.array.length;
     }
@@ -24,7 +29,7 @@ class JavaIterator<T> implements java.util.Iterator<T> {
 
 
     public function remove(): Void {
-        // TODO: Not implemented
+        throw new java.lang.RuntimeException("JavaIterator.remove not implemented.");
     }
 
 
