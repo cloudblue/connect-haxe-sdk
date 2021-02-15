@@ -135,7 +135,7 @@ class Logger extends Base {
         final defaultProduct = 'product';
         final defaultTierAccount = 'tierAccount';
 
-        if(Std.is(request, Asset)){
+        if(Std.isOfType(request, Asset)){
             final asset = cast(request, Asset);
             final provider = asset.connection.provider != null ? asset.connection.provider.id : defaultProvider;
             final hub = asset.connection.hub != null ? asset.connection.hub.id : defaultHub;
@@ -145,7 +145,7 @@ class Logger extends Base {
             this.setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
         }
 
-        if(Std.is(request, AssetRequest)){
+        if(Std.isOfType(request, AssetRequest)){
             final assetRequest = cast(request, AssetRequest);
             final provider = assetRequest.asset.connection.provider != null ? assetRequest.asset.connection.provider.id : defaultProvider;
             final hub = assetRequest.asset.connection.hub != null ? assetRequest.asset.connection.hub.id : defaultHub;
@@ -155,7 +155,7 @@ class Logger extends Base {
             this.setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
         }
 
-        if(Std.is(request, TierConfigRequest)){
+        if(Std.isOfType(request, TierConfigRequest)){
             final tierRequest = cast(request, TierConfigRequest);
             final provider = tierRequest.configuration.connection.provider != null ? tierRequest.configuration.connection.provider.id : defaultProvider;
             final hub = tierRequest.configuration.connection.hub != null ? tierRequest.configuration.connection.hub.id : defaultHub;
@@ -165,14 +165,14 @@ class Logger extends Base {
             this.setFilename('$provider/$hub/$marketplace/$product/$tierAccount');        }
 
 
-        if(Std.is(request, Listing)){
+        if(Std.isOfType(request, Listing)){
             final listingRequest = cast(request, Listing);
             final provider = listingRequest.provider != null ? listingRequest.provider.id : defaultProvider;
             final marketplace = listingRequest.contract.marketplace != null ? listingRequest.contract.marketplace.id : defaultMarketplace;
             this.setFilename('usage/$provider/$marketplace');
         }
 
-        if(Std.is(request, UsageFile)){
+        if(Std.isOfType(request, UsageFile)){
             final usageRequest = cast(request, UsageFile);
             final provider = usageRequest.provider != null ? usageRequest.provider.id : defaultProvider;
             final marketplace = usageRequest.marketplace.id != null ? usageRequest.marketplace.id : defaultMarketplace;

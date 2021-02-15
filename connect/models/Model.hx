@@ -81,7 +81,7 @@ class Model extends Base {
     **/
     public static function parse<T>(modelClass: Class<T>, body: String): T {
         final obj = Json.parse(body);
-        if (Std.is(obj, Array)) {
+        if (Std.isOfType(obj, Array)) {
             throw 'Model.parse cannot parse a Json that contains an array.';
         }
         return _parse(modelClass, obj);
@@ -91,7 +91,7 @@ class Model extends Base {
     /** Parses the given Haxe dynamic object as a Collection of Models of the specified class. **/
     public static function parseArray<T>(modelClass: Class<T>, body: String): Collection<T> {
         final array: Array<Dynamic> = Json.parse(body);
-        if (!Std.is(array, Array)) {
+        if (!Std.isOfType(array, Array)) {
             throw 'Model.parseArray can only parse a Json that contains an array.';
         }
         return _parseArray(modelClass, array);

@@ -48,7 +48,7 @@ class StepData {
     **/
     public function new(firstIndex: Int, data: Dynamic, storage: StorageType, attempt:Null<Int>) {
         this.firstIndex = firstIndex;
-        this.data = (Std.is(data, Dictionary))
+        this.data = (Std.isOfType(data, Dictionary))
             ? createDictionaryWithClassnameSuffixes(data)
             : createDictionaryAndDeserializeContent(data);
         this.storage = storage;
@@ -60,8 +60,8 @@ class StepData {
         for (key in dict.keys()) {
             final value: Dynamic = dict.get(key);
             final className =
-                Std.is(value, Model) ? Type.getClassName(Type.getClass(value)) :
-                Std.is(value, Dictionary) ? 'Dictionary' :
+                Std.isOfType(value, Model) ? Type.getClassName(Type.getClass(value)) :
+                Std.isOfType(value, Dictionary) ? 'Dictionary' :
                 '';
             final fixedValue: Dynamic = (className == 'Dictionary')
                 ? createDictionaryWithClassnameSuffixes(value)

@@ -303,7 +303,7 @@ class Collection<T> extends Base {
         Returns a JSON string representation of `this` Collection.
     **/
     public function toString(): String {
-        if (this.length() > 0 && Std.is(this.get(0), connect.models.Model)) {
+        if (this.length() > 0 && Std.isOfType(this.get(0), connect.models.Model)) {
             return '[${this._array.map(el -> Std.string(el)).join(',')}]';
         } else {
             return haxe.Json.stringify(this._array);
