@@ -12,6 +12,7 @@ import connect.models.TierConfigRequest;
 import connect.models.Listing;
 import connect.models.UsageFile;
 import connect.models.Model;
+import connect.models.ProductConfigurationParam;
 import connect.Env;
 import connect.util.Collection;
 import connect.util.Util;
@@ -161,9 +162,23 @@ class LoggerTest {
         Assert.areEqual(expected, result);
     }
 
+    @Test
+    public function testMaskConfigurationParam() {
+        final config = Model.parse(ProductConfigurationParam, Json.stringify({
+            value: 'This will be masked',
+            parameter: {
+                id: 'my_param',
+                value: 'This will be masked'
+            }
+        }));
+
+        final expected = Helper.sortStringObject(ProductConfigurationParam, '{"parameter": {"id": "my_param", "value": "*******************"}, "value": "*******************"}');
+        final result = Helper.sortStringObject(ProductConfigurationParam, Util.beautify(config.toString(), false, true, false));
+        Assert.areEqual(expected, result);
+    }
 
     @Test
-    public function testsetFilenameFromAssetRequest(){
+    public function testSetFilenameFromAssetRequest(){
         final request = Model.parse(AssetRequest, Json.stringify({
             asset: {
                 connection: {
@@ -193,9 +208,8 @@ class LoggerTest {
         Assert.areEqual(Env.getLogger().getFilename(),'PROVIDER_ID/HUB_ID/MARKETPLACE_ID/PRODUCT_ID/CUSTOMER_ID'); 
     }
 
-
     @Test
-    public function testsetFilenameFromTierRequest(){
+    public function testSetFilenameFromTierRequest(){
         final request = Model.parse(TierConfigRequest, Json.stringify({
             configuration: {
                 connection: {
@@ -224,7 +238,7 @@ class LoggerTest {
     }
 
     @Test
-    public function testsetFilenameFromAsset(){
+    public function testSetFilenameFromAsset(){
         final request = Model.parse(Asset, Json.stringify({
             connection: {
                         provider: {
@@ -252,9 +266,8 @@ class LoggerTest {
         Assert.areEqual(Env.getLogger().getFilename(),'PROVIDER_ID/HUB_ID/MARKETPLACE_ID/PRODUCT_ID/CUSTOMER_ID'); 
     }
 
-
     @Test
-    public function testsetFilenameFromListingRequest(){
+    public function testSetFilenameFromListingRequest(){
         final request = Model.parse(Listing, Json.stringify({
             provider: {
                     id: 'PROVIDER_ID'
@@ -271,7 +284,7 @@ class LoggerTest {
     }
 
     @Test
-    public function testsetFilenameFromUsageRequest(){
+    public function testSetFilenameFromUsageRequest(){
         final request = Model.parse(UsageFile, Json.stringify({
             provider: {
                     id: 'PROVIDER_ID'
