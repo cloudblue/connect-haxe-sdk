@@ -110,7 +110,7 @@ class Util {
         final maskedParams = Env.getLogger().getMaskedParams();
         final hasParameterField = Reflect.hasField(obj, 'parameter');
         for (fieldName in Reflect.fields(obj)) {
-            final value = Reflect.field(obj, fieldName);
+            final value: Dynamic = Reflect.field(obj, fieldName);
             if (fieldName == 'params' && Std.isOfType(value, Array)) {
                 maskParamsArray(value, maskedParams);
             } else if (fieldName == 'value' && hasParameterField) {
