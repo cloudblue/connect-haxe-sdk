@@ -33,7 +33,7 @@ class ArrayLoggerWriter extends Base implements ILoggerWriter {
     }
 
 
-    public function writeLine(line: String): Void {
+    public function writeLine(level: Int, line: String): Void {
         this.lines.push(line);
     }
 

@@ -349,7 +349,7 @@ class Logger extends Base {
     public function _writeToHandler(level:Int, message:String, handler:LoggerHandler):Void {
         if (this.level >= level) {
             this.writeSections(level);
-            handler.writer.writeLine(handler.formatter.formatLine(level, message));
+            handler.writer.writeLine(level, handler.formatter.formatLine(level, message));
         }
     }
     
@@ -358,7 +358,7 @@ class Logger extends Base {
             if (!this.sections[i].written) {
                 for (output in this.handlers) {
                     final section = output.formatter.formatSection(level, i+1, this.sections[i].name);
-                    output.writer.writeLine(section);
+                    output.writer.writeLine(level, section);
                 }
                 this.sections[i].written = true;
             }

@@ -18,13 +18,11 @@ interface ILoggerWriter {
      */
     public function setFilename(filename: String): Bool;
 
-
     /** @returns The last filename that was set. **/
     public function getFilename(): String;
 
-
     /** Writes a line to the log output. The new line character is added by the method. **/
-    public function writeLine(line: String): Void;
+    public function writeLine(level:Int, line: String): Void;
 
     /** Returns full copy of writter **/
     public function copy(): ILoggerWriter;
