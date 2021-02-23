@@ -209,6 +209,7 @@ class Connect {
 
             if (pkg == 'connect') {
                 file.writeString('SYNCREQUEST_PATH = \'connect.autogen.connect_api_impl_ApiClientImpl.syncRequest\'' + EOL + EOL);
+                file.writeString('SYNCREQUESTWITHLOGGER_PATH = \'connect.autogen.connect_api_impl_ApiClientImpl.syncRequestWithLogger\'' + EOL + EOL);
             }
 
             // Write __all__
