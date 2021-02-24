@@ -94,8 +94,8 @@ class Env extends Base {
             final apiKey = dict.get('apiKey');
             final configProducts: Dynamic = dict.get('products');
             final products: Collection<String> =
-                Std.is(configProducts, Collection) ? configProducts :
-                Std.is(configProducts, String) ? Collection._fromArray([configProducts]) :
+                Std.isOfType(configProducts, Collection) ? configProducts :
+                Std.isOfType(configProducts, String) ? Collection._fromArray([configProducts]) :
                 null;
             dict.remove('apiEndpoint');
             dict.remove('apiKey');
