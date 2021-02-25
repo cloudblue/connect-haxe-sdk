@@ -126,30 +126,26 @@ class Env extends Base {
         }
     }
 
-
     /**
         Get logger for given request, if it doesnt exists it will be created and context specified.
      **/
     public static function getLoggerForRequest(request: Null<IdModel>): Logger {
-        if(request != null && Reflect.field(request,"id") != null) {
-            if(!loggers.exists(request.id)) {
-                final originalConfig:LoggerConfig = loggers.get(ROOT_LOGGER).getInitialConfig();
-                final requestLogger = new Logger(copyLoggerConfig(originalConfig));
+        if (!loggers.exists(ROOT_LOGGER)) {
+            loggers.set(ROOT_LOGGER, new Logger(null));
+        }
+        if (request != null && Reflect.field(request, 'id') != null) {
+            if (!loggers.exists(request.id)) {
+                final requestLogger = cast(loggers.get(ROOT_LOGGER), Logger).copy();
                 for (handler in requestLogger.getHandlers()) {
-                        handler.formatter.setRequest(request.id);
+                    handler.formatter.setRequest(request.id);
                 }
                 requestLogger.setFilenameForRequest(request);
-                loggers.set(request.id,requestLogger);
+                loggers.set(request.id, requestLogger);
             }
             return loggers.get(request.id);
+        } else {
+            return loggers.get(ROOT_LOGGER);
         }
-
-        if (!loggers.exists(ROOT_LOGGER)) {
-            final requestLogger = new Logger(null);
-            loggers.set(ROOT_LOGGER,requestLogger);
-        }
-
-        return loggers.get(ROOT_LOGGER);
     }
 
     /**
