@@ -25,6 +25,11 @@ class FlowExecutor {
         this.steps.push(new Step(description, func));
     }
 
+    public function reset():Void {
+        this.abortRequested = false;
+        this.abortMessage = null;
+    }
+
     public function executeRequest(request:IdModel, firstIndex: Int):Void {
         final steps = [for (i in firstIndex...this.steps.length) this.steps[i]];
         this.processSteps(request, steps, firstIndex);

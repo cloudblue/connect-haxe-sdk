@@ -444,6 +444,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         this.logger.openSetupSection();
         var ok = true;
         try {
+            this.executor.reset();
             this.setup();
         } catch (ex:Dynamic) {
             final exStr = getExceptionMessage(ex);

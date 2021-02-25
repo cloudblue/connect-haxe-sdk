@@ -4,7 +4,6 @@
 */
 package connect.logger;
 
-
 /**
     Represents the functionality of writing logs to some output. The `Logger` uses an
     instance of a class that implements this interface (`FileLoggerWriter` by default)
