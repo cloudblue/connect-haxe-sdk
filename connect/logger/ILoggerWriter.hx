@@ -4,6 +4,8 @@
 */
 package connect.logger;
 
+import connect.models.IdModel;
+
 /**
     Represents the functionality of writing logs to some output. The `Logger` uses an
     instance of a class that implements this interface (`FileLoggerWriter` by default)
@@ -22,6 +24,9 @@ interface ILoggerWriter {
 
     /** Writes a line to the log output. The new line character is added by the method. **/
     public function writeLine(level:Int, line: String): Void;
+
+    /** Sets the request currently being processed. **/
+    public function setRequest(request: Null<IdModel>): Void;
 
     /** Returns full copy of writter **/
     public function copy(): ILoggerWriter;

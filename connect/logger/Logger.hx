@@ -206,6 +206,17 @@ class Logger extends Base {
     }
 
     /**
+        Indicates the logger what request is currently being processed. Formatters can use this information
+        to prefix the log or add other information.
+    **/
+    public function setRequest(request:IdModel): Void {
+        for (handler in getHandlers()){
+            handler.formatter.setRequest(request);
+            handler.writer.setRequest(request);
+        }
+    }
+
+    /**
         Opens a new section in the log. This will be output as a Markdown header when using
         this formatting, depending on the number of opened sections. For example, at the beginning
         of a function, a section can be opened, and closed when the function finishes.

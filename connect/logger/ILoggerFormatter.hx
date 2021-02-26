@@ -5,6 +5,7 @@
 
 package connect.logger;
 
+import connect.models.IdModel;
 import connect.util.Collection;
 
 /**
@@ -20,6 +21,6 @@ interface ILoggerFormatter {
     public function formatTable(level:Int, table:Collection<Collection<String>>):String;
     public function formatLine(level:Int, text:String):String;
     public function getFileExtension():String;
-    public function setRequest(requestId:Null<String>):Void;
+    public function setRequest(request:Null<IdModel>):Void;
     public function copy(): ILoggerFormatter;
 }

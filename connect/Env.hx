@@ -136,10 +136,8 @@ class Env extends Base {
         if (request != null && Reflect.field(request, 'id') != null) {
             if (!loggers.exists(request.id)) {
                 final requestLogger = cast(loggers.get(ROOT_LOGGER), Logger).copy();
-                for (handler in requestLogger.getHandlers()) {
-                    handler.formatter.setRequest(request.id);
-                }
                 requestLogger.setFilenameForRequest(request);
+                requestLogger.setRequest(request);
                 loggers.set(request.id, requestLogger);
             }
             return loggers.get(request.id);
@@ -147,28 +145,6 @@ class Env extends Base {
             return loggers.get(ROOT_LOGGER);
         }
     }
-
-    /**
-        @returns cloned LoggerConfig object
-    **/
-    private static function copyLoggerConfig(initialConfig: LoggerConfig): LoggerConfig {
-        final newConfig: LoggerConfig = new LoggerConfig();
-        newConfig.path(initialConfig.path_);
-        newConfig.level(initialConfig.level_);
-        newConfig.maskedFields(initialConfig.maskedFields_);
-        newConfig.maskedParams(initialConfig.maskedParams_);
-        newConfig.beautify(initialConfig.beautify_);
-        newConfig.compact(initialConfig.compact_);
-        newConfig.regexMaskingList_ = initialConfig.regexMaskingList_;
-        final newHandlers = new Collection<LoggerHandler>();
-        for(handler in  initialConfig.handlers_){
-            final newHandler = new LoggerHandler(handler.formatter.copy(),handler.writer.copy());
-            newHandlers.push(newHandler);
-        }
-        newConfig.handlers(newHandlers);
-        return newConfig;
-    }
-
 
     /**
         @returns `true` if logger has already been initialized, `false` otherwise.

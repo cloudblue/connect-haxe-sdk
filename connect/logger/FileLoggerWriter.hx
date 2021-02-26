@@ -7,6 +7,8 @@ package connect.logger;
 import haxe.io.Path;
 import sys.FileSystem;
 
+import connect.models.IdModel;
+
 
 @:dox(hide)
 class FileLoggerWriter extends Base implements ILoggerWriter {
@@ -68,7 +70,11 @@ class FileLoggerWriter extends Base implements ILoggerWriter {
         return this.file;
     }
 
-    public function copy(): FileLoggerWriter{
+    public function setRequest(request: Null<IdModel>): Void {
+
+    }
+
+    public function copy(): FileLoggerWriter {
         final newCopy = new FileLoggerWriter();
         newCopy.setFilename(this.getFilename());
         return newCopy;
