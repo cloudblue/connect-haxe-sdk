@@ -43,10 +43,7 @@ class ArrayLoggerWriter extends Base implements ILoggerWriter {
         return this.lines;
     }
 
-    public function setRequest(request:Null<IdModel>): Void {
-    }
-
-    public function copy(): ArrayLoggerWriter{
+    public function copy(request:Null<IdModel>): ArrayLoggerWriter{
         final newCopy = new ArrayLoggerWriter();
         newCopy.setFilename(this.getFilename());
         return newCopy;

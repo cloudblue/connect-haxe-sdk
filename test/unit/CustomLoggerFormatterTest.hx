@@ -56,11 +56,8 @@ class CustomLoggerFormatter extends Base implements ILoggerFormatter {
         return 'txt';
     }
 
-    public function setRequest(request:Null<IdModel>) {
-    }
-
-    public function copy(): CustomLoggerFormatter{
-        return new CustomLoggerFormatter(this.marketPlace,this.hub,this.customer);
+    public function copy(request:Null<IdModel>): CustomLoggerFormatter{
+        return new CustomLoggerFormatter(this.marketPlace, this.hub, this.customer);
     }
 }
 

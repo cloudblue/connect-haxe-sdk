@@ -158,8 +158,4 @@ class FlowLogger {
     public function writeLoadedStepData(index:Int, storageType:String):Void {
         Env.getLoggerForRequest(currentRequest).write(Logger.LEVEL_INFO, 'Resuming request from step ${index + 1} with $storageType.');
     }
-
-    private function setContextRequest(request:Null<IdModel>):Void {
-        Env.getLoggerForRequest(currentRequest).setRequest(request);
-    }
 }

@@ -206,17 +206,6 @@ class Logger extends Base {
     }
 
     /**
-        Indicates the logger what request is currently being processed. Formatters can use this information
-        to prefix the log or add other information.
-    **/
-    public function setRequest(request:IdModel): Void {
-        for (handler in getHandlers()){
-            handler.formatter.setRequest(request);
-            handler.writer.setRequest(request);
-        }
-    }
-
-    /**
         Opens a new section in the log. This will be output as a Markdown header when using
         this formatting, depending on the number of opened sections. For example, at the beginning
         of a function, a section can be opened, and closed when the function finishes.
@@ -376,11 +365,15 @@ class Logger extends Base {
         }
     }
 
-    public function copy(): Logger {
+    public function copy(request: Null<IdModel>): Logger {
+        final handlers = new Collection<LoggerHandler>();
+        for (handler in this.handlers) {
+            handlers.push(new LoggerHandler(handler.formatter.copy(request), handler.writer.copy(request)));
+        }
         final config = new LoggerConfig()
             .path(this.path)
             .level(this.level)
-            .handlers(this.handlers)
+            .handlers(handlers)
             .maskedFields(this.maskedFields)
             .maskedParams(this.maskedParams)
             .beautify(this.beautify)
@@ -390,6 +383,7 @@ class Logger extends Base {
         Reflect.setField(logger, 'regexMaskingList', this.regexMaskingList.copy());
         Reflect.setField(logger, 'defaultFilename', this.defaultFilename);
         Reflect.setField(logger, 'initialConfig', this.initialConfig);
+        logger.setFilenameForRequest(request);
         return logger;
     }
 }

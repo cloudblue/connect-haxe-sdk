@@ -107,12 +107,10 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
         return 'log';
     }
 
-    public function setRequest(request:Null<IdModel>):Void {
-        this.currentRequest = (request != null) ? request.id : NO_REQUEST;
-    }
-
-    public function copy(): PlainLoggerFormatter{
-        return new PlainLoggerFormatter();
+    public function copy(request:Null<IdModel>): PlainLoggerFormatter{
+        final formatter = new PlainLoggerFormatter();
+        formatter.currentRequest = (request != null) ? request.id : NO_REQUEST;
+        return formatter;
     }
 
     public function new() {}

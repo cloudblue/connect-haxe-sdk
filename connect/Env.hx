@@ -135,10 +135,7 @@ class Env extends Base {
         }
         if (request != null && Reflect.field(request, 'id') != null) {
             if (!loggers.exists(request.id)) {
-                final requestLogger = cast(loggers.get(ROOT_LOGGER), Logger).copy();
-                requestLogger.setFilenameForRequest(request);
-                requestLogger.setRequest(request);
-                loggers.set(request.id, requestLogger);
+                loggers.set(request.id, cast(loggers.get(ROOT_LOGGER), Logger).copy(request));
             }
             return loggers.get(request.id);
         } else {

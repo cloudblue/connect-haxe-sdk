@@ -25,9 +25,6 @@ interface ILoggerWriter {
     /** Writes a line to the log output. The new line character is added by the method. **/
     public function writeLine(level:Int, line: String): Void;
 
-    /** Sets the request currently being processed. **/
-    public function setRequest(request: Null<IdModel>): Void;
-
     /** Returns full copy of writter **/
-    public function copy(): ILoggerWriter;
+    public function copy(request: Null<IdModel>): ILoggerWriter;
 }
