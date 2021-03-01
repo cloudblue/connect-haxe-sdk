@@ -146,9 +146,7 @@ class FlowLogger {
     }
 
     public function writeMigrationMessage(request:IdModel):Void {
-        this.openRequestSection(request);
         Env.getLoggerForRequest(currentRequest).write(Logger.LEVEL_INFO, 'Skipping request because it is pending migration.');
-        this.closeRequestSection();
     }
 
     public function writeException(message:String):Void {
