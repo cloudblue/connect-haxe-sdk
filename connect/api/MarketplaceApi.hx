@@ -18,7 +18,7 @@ class MarketplaceApi {
     }
 
     public function listAgreements(filters: Query): String {
-        return ConnectHelper.get(AGREEMENTS_PATH, null, null, filters, false, Logger.LEVEL_DEBUG);
+        return ConnectHelper.get(AGREEMENTS_PATH, null, null, filters, Logger.LEVEL_DEBUG);
     }
 
     public function createAgreement(body: String): String {
