@@ -4,6 +4,7 @@
 */
 package connect.api;
 
+import connect.logger.Logger;
 import connect.models.IdModel;
 
 class FulfillmentApi extends Base {
@@ -15,7 +16,7 @@ class FulfillmentApi extends Base {
     }
 
     public function listRequests(filters: Query): String {
-        return ConnectHelper.get(REQUESTS_PATH, null, null, filters);
+        return ConnectHelper.get(REQUESTS_PATH, null, null, filters, Logger.LEVEL_DEBUG);
     }
 
     public function getRequest(id: String): String {

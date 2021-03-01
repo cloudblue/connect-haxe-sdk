@@ -4,6 +4,7 @@
 */
 package connect.api;
 
+import connect.logger.Logger;
 import connect.models.IdModel;
 
 @:dox(hide)
@@ -15,7 +16,7 @@ class SubscriptionsApi extends Base {
     }
 
     public function listRecurringAssets(filters: Query) : String {
-        return ConnectHelper.get(ASSETS_PATH, null, null, filters, true);
+        return ConnectHelper.get(ASSETS_PATH, null, null, filters, true, Logger.LEVEL_DEBUG);
     }
 
     public function getRecurringAsset(id: String): String {
@@ -23,7 +24,7 @@ class SubscriptionsApi extends Base {
     }
 
     public function listBillingRequests(filters: Query): String {
-        return ConnectHelper.get(REQUESTS_PATH, null, null, filters, true);
+        return ConnectHelper.get(REQUESTS_PATH, null, null, filters, true, Logger.LEVEL_DEBUG);
     }
 
     public function getBillingRequest(id: String): String {

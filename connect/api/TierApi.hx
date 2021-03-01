@@ -4,6 +4,7 @@
 */
 package connect.api;
 
+import connect.logger.Logger;
 import connect.models.IdModel;
 
 class TierApi extends Base {
@@ -15,7 +16,7 @@ class TierApi extends Base {
     }
 
     public function listTierConfigRequests(filters: Query): String {
-        return ConnectHelper.get(TCR_PATH, null, null, filters, true);
+        return ConnectHelper.get(TCR_PATH, null, null, filters, true, Logger.LEVEL_DEBUG);
     }
 
     public function createTierConfigRequest(body: String): String {

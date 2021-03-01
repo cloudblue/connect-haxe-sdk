@@ -4,6 +4,7 @@
 */
 package connect.api;
 
+import connect.logger.Logger;
 import connect.models.IdModel;
 import connect.util.Blob;
 
@@ -17,7 +18,7 @@ class MarketplaceApi {
     }
 
     public function listAgreements(filters: Query): String {
-        return ConnectHelper.get(AGREEMENTS_PATH, null, null, filters);
+        return ConnectHelper.get(AGREEMENTS_PATH, null, null, filters, Logger.LEVEL_DEBUG);
     }
 
     public function createAgreement(body: String): String {

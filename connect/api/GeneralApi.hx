@@ -17,7 +17,7 @@ class GeneralApi extends Base {
     }
 
     public function listAccounts(filters: Query): String {
-        return ConnectHelper.get(ACCOUNTS_PATH, null, null, filters);
+        return ConnectHelper.get(ACCOUNTS_PATH, null, null, filters, Logger.LEVEL_DEBUG);
     }
 
     public function createAccount(): String {
@@ -29,7 +29,7 @@ class GeneralApi extends Base {
     }
 
     public function listAccountUsers(id: String): String {
-        return ConnectHelper.get(ACCOUNTS_PATH, id, 'users');
+        return ConnectHelper.get(ACCOUNTS_PATH, id, 'users', Logger.LEVEL_DEBUG);
     }
 
     public function getAccountUser(id: String, userId: String): String {
@@ -53,7 +53,7 @@ class GeneralApi extends Base {
     }
 
     public function listProducts(filters: Query): String {
-        return ConnectHelper.get(PRODUCTS_PATH, null, null, filters, true);
+        return ConnectHelper.get(PRODUCTS_PATH, null, null, filters, true, Logger.LEVEL_DEBUG);
     }
 
     public function getProduct(id: String): String {
@@ -61,7 +61,7 @@ class GeneralApi extends Base {
     }
 
     public function listProductActions(id: String, filters: Query): String {
-        return ConnectHelper.get(PRODUCTS_PATH, id, 'actions', filters);
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'actions', filters, Logger.LEVEL_DEBUG);
     }
 
     public function getProductAction(id: String, actionId: String): String {
@@ -79,11 +79,11 @@ class GeneralApi extends Base {
     }
 
     public function listProductItems(id: String, filters: Query): String {
-        return ConnectHelper.get(PRODUCTS_PATH, id, 'items', filters);
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'items', filters, Logger.LEVEL_DEBUG);
     }
 
     public function listProductParameters(id: String, filters: Query): String {
-        return ConnectHelper.get(PRODUCTS_PATH, id, 'parameters', filters);
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'parameters', filters, Logger.LEVEL_DEBUG);
     }
 
     public function getProductParameter(id: String, paramId: String): String {
@@ -157,11 +157,11 @@ class GeneralApi extends Base {
     }
 
     public function listProductAgreements(id: String, filters: Query): String {
-        return ConnectHelper.get(PRODUCTS_PATH, id, 'agreements', filters);
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'agreements', filters, Logger.LEVEL_DEBUG);
     }
 
     public function listProductMedia(id: String, filters: Query): String {
-        return ConnectHelper.get(PRODUCTS_PATH, id, 'media', filters);
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'media', filters, Logger.LEVEL_DEBUG);
     }
 
     public function createProductMedia(id: String): String {
@@ -181,7 +181,7 @@ class GeneralApi extends Base {
     }
 
     public function listCategories(filters: Query): String {
-        return ConnectHelper.get(CATEGORIES_PATH, null, null, filters);
+        return ConnectHelper.get(CATEGORIES_PATH, null, null, filters, Logger.LEVEL_DEBUG);
     }
 
     public function getCategory(id: String): String {

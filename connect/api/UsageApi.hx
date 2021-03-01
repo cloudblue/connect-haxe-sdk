@@ -4,6 +4,7 @@
 */
 package connect.api;
 
+import connect.logger.Logger;
 import connect.util.Blob;
 import connect.models.IdModel;
 
@@ -16,7 +17,7 @@ class UsageApi extends Base {
     }
 
     public function listUsageFiles(filters: Query): String {
-        return ConnectHelper.get(USAGE_FILES_PATH, null, null, filters, true);
+        return ConnectHelper.get(USAGE_FILES_PATH, null, null, filters, true, Logger.LEVEL_DEBUG);
     }
 
     public function createUsageFile(body: String, currentRequest: Null<IdModel>): String {
