@@ -2,19 +2,21 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
-import test.util.ArrayLoggerWriter;
+
+import connect.Base;
+import connect.Env;
 import connect.logger.ILoggerFormatter;
 import connect.logger.LoggerHandler;
 import connect.logger.LoggerConfig;
-import connect.Env;
+import connect.models.IdModel;
 import connect.util.Collection;
 import massive.munit.Assert;
-import connect.Base;
+import test.util.ArrayLoggerWriter;
 
 class CustomLoggerFormatter extends Base implements ILoggerFormatter {
-
-    public function setRequest(requestId:Null<String>) {}
-
+    private final marketPlace:String;
+    private final hub:String;
+    private final customer:String;
 
     public function formatSection(level:Int, sectionLevel:Int, text:String):String {
         return text;
@@ -42,10 +44,6 @@ class CustomLoggerFormatter extends Base implements ILoggerFormatter {
         this.customer = customer;
     }
 
-    private final marketPlace:String;
-    private final hub:String;
-    private final customer:String;
-
     public function formatLine(level:Int, text:String):String {
         var textLevel = "INFO";
         if (level == 0) {
@@ -58,8 +56,8 @@ class CustomLoggerFormatter extends Base implements ILoggerFormatter {
         return 'txt';
     }
 
-    public function copy(): CustomLoggerFormatter{
-        return new CustomLoggerFormatter(this.marketPlace,this.hub,this.customer);
+    public function copy(request:Null<IdModel>): CustomLoggerFormatter{
+        return new CustomLoggerFormatter(this.marketPlace, this.hub, this.customer);
     }
 }
 

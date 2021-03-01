@@ -4,6 +4,7 @@
 */
 package connect.logger;
 
+import connect.models.IdModel;
 import connect.util.Collection;
 import connect.util.Util;
 
@@ -58,10 +59,9 @@ class MarkdownLoggerFormatter extends Base implements ILoggerFormatter {
         return 'md';
     }
 
-    public function new() {}
-    public function setRequest(requestId:Null<String>) {}
-
-    public function copy(): MarkdownLoggerFormatter{
+    public function copy(request:Null<IdModel>): MarkdownLoggerFormatter{
         return new MarkdownLoggerFormatter();
     }
+
+    public function new() {}
 }

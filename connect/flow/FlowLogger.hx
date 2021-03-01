@@ -23,7 +23,6 @@ class FlowLogger {
     }
 
     public function openFlowSection():Void {
-        cleanLogContext();
         Env.getLoggerForRequest(currentRequest).openSection('Running ${this.flowName} on ${DateTime.now()}');
     }
 
@@ -32,12 +31,6 @@ class FlowLogger {
         currentRequest = null;
     }
 
-    private function cleanLogContext(): Void{
-        final requestLogger = Env.getLoggerForRequest(currentRequest);
-        for (handler in requestLogger.getHandlers()){
-            handler.formatter.setRequest(null);
-        }
-    }
     public function openRequestSection(request:IdModel):Void {
         currentRequest = request;
         Env.getLoggerForRequest(currentRequest).openSection('Processing request "${request.id}" on ${DateTime.now()}');
@@ -46,7 +39,6 @@ class FlowLogger {
     public function closeRequestSection():Void {
         Env.getLoggerForRequest(currentRequest).closeSection();
         currentRequest = null;
-        cleanLogContext();
     }
 
     public function openSetupSection():Void {
@@ -165,11 +157,5 @@ class FlowLogger {
 
     public function writeLoadedStepData(index:Int, storageType:String):Void {
         Env.getLoggerForRequest(currentRequest).write(Logger.LEVEL_INFO, 'Resuming request from step ${index + 1} with $storageType.');
-    }
-
-    private function setContextRequest(requestId:Null<String>):Void {
-        for (handler in Env.getLoggerForRequest(currentRequest).getHandlers()){
-            handler.formatter.setRequest(requestId);
-        }
     }
 }

@@ -4,6 +4,7 @@
 */
 package connect.logger;
 
+import connect.models.IdModel;
 import connect.util.Collection;
 import connect.util.DateTime;
 import connect.util.Util;
@@ -13,10 +14,6 @@ import connect.util.Util;
 class PlainLoggerFormatter extends Base implements ILoggerFormatter {
     private static final NO_REQUEST = 'NO_REQUEST';
     private var currentRequest = NO_REQUEST;
-
-    public function setRequest(requestId:Null<String>):Void {
-        this.currentRequest = (requestId != null) ? requestId : NO_REQUEST;
-    }
 
     public function formatSection(level: Int, sectionLevel: Int, text: String): String {
         final hashes = StringTools.rpad('', '#', sectionLevel);
@@ -110,9 +107,11 @@ class PlainLoggerFormatter extends Base implements ILoggerFormatter {
         return 'log';
     }
 
-    public function new() {}
-
-    public function copy(): PlainLoggerFormatter{
-        return new PlainLoggerFormatter();
+    public function copy(request:Null<IdModel>): PlainLoggerFormatter{
+        final formatter = new PlainLoggerFormatter();
+        formatter.currentRequest = (request != null) ? request.id : NO_REQUEST;
+        return formatter;
     }
+
+    public function new() {}
 }

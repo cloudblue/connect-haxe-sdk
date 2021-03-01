@@ -7,16 +7,20 @@ package connect.logger;
 import haxe.io.Path;
 import sys.FileSystem;
 
+import connect.models.IdModel;
+
 
 @:dox(hide)
 class FileLoggerWriter extends Base implements ILoggerWriter {
+    private var filename:String;
+    private var file:sys.io.FileOutput;
+
     public function new() {
         this.filename = null;
         this.file = null;
     }
 
-
-    public function setFilename(filename: String): Bool {
+    public function setFilename(filename:String):Bool {
         final currentFilename = this.filename;
         this.filename = filename;
         if (filename != currentFilename && this.file != null) {
@@ -28,13 +32,11 @@ class FileLoggerWriter extends Base implements ILoggerWriter {
         }
     }
 
-
-    public function getFilename(): String {
+    public function getFilename():String {
         return this.filename;
     }
 
-
-    public function writeLine(line: String): Void {
+    public function writeLine(level:Int, line:String):Void {
         final lineStr = Std.string(line); // Dynamic targets could send another type
         if (this.getFile() != null) {
             this.getFile().writeString(lineStr + '\n');
@@ -46,12 +48,7 @@ class FileLoggerWriter extends Base implements ILoggerWriter {
         } catch (ex: Dynamic) {}
     }
 
-
-    private var filename: String;
-    private var file: sys.io.FileOutput;
-
-
-    private function getFile(): sys.io.FileOutput {
+    private function getFile():sys.io.FileOutput {
         if (this.file == null && this.filename != null) {
             final path = Path.directory(this.filename);
             if (path != '' && !FileSystem.exists(path)) {
@@ -73,11 +70,7 @@ class FileLoggerWriter extends Base implements ILoggerWriter {
         return this.file;
     }
 
-    public function setFile(): Void{
-
-    }
-
-    public function copy(): FileLoggerWriter{
+    public function copy(request: Null<IdModel>): FileLoggerWriter {
         final newCopy = new FileLoggerWriter();
         newCopy.setFilename(this.getFilename());
         return newCopy;

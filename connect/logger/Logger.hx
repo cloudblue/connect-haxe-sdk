@@ -349,7 +349,7 @@ class Logger extends Base {
     public function _writeToHandler(level:Int, message:String, handler:LoggerHandler):Void {
         if (this.level >= level) {
             this.writeSections(level);
-            handler.writer.writeLine(handler.formatter.formatLine(level, message));
+            handler.writer.writeLine(level, handler.formatter.formatLine(level, message));
         }
     }
     
@@ -358,18 +358,22 @@ class Logger extends Base {
             if (!this.sections[i].written) {
                 for (output in this.handlers) {
                     final section = output.formatter.formatSection(level, i+1, this.sections[i].name);
-                    output.writer.writeLine(section);
+                    output.writer.writeLine(level, section);
                 }
                 this.sections[i].written = true;
             }
         }
     }
 
-    public function copy(): Logger {
+    public function copy(request: Null<IdModel>): Logger {
+        final handlers = new Collection<LoggerHandler>();
+        for (handler in this.handlers) {
+            handlers.push(new LoggerHandler(handler.formatter.copy(request), handler.writer.copy(request)));
+        }
         final config = new LoggerConfig()
             .path(this.path)
             .level(this.level)
-            .handlers(this.handlers)
+            .handlers(handlers)
             .maskedFields(this.maskedFields)
             .maskedParams(this.maskedParams)
             .beautify(this.beautify)
@@ -379,6 +383,7 @@ class Logger extends Base {
         Reflect.setField(logger, 'regexMaskingList', this.regexMaskingList.copy());
         Reflect.setField(logger, 'defaultFilename', this.defaultFilename);
         Reflect.setField(logger, 'initialConfig', this.initialConfig);
+        logger.setFilenameForRequest(request);
         return logger;
     }
 }

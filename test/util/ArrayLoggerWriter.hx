@@ -4,16 +4,20 @@
 */
 package test.util;
 
-
-import connect.logger.ILoggerWriter;
 import connect.Base;
+import connect.logger.ILoggerWriter;
+import connect.models.IdModel;
+
 @:dox(hide)
 class ArrayLoggerWriter extends Base implements ILoggerWriter {
+    private var filename: String;
+    private var file: sys.io.FileOutput;
+    private var lines: Array<String> = new Array<String>();
+
     public function new() {
         this.filename = null;
         this.file = null;
     }
-
 
     public function setFilename(filename: String): Bool {
         final currentFilename = this.filename;
@@ -27,13 +31,11 @@ class ArrayLoggerWriter extends Base implements ILoggerWriter {
         }
     }
 
-
     public function getFilename(): String {
         return this.filename;
     }
 
-
-    public function writeLine(line: String): Void {
+    public function writeLine(level: Int, line: String): Void {
         this.lines.push(line);
     }
 
@@ -41,14 +43,9 @@ class ArrayLoggerWriter extends Base implements ILoggerWriter {
         return this.lines;
     }
 
-    private var filename: String;
-    private var file: sys.io.FileOutput;
-    private var lines: Array<String> = new Array<String>();
-
-    public function copy(): ArrayLoggerWriter{
+    public function copy(request:Null<IdModel>): ArrayLoggerWriter{
         final newCopy = new ArrayLoggerWriter();
         newCopy.setFilename(this.getFilename());
         return newCopy;
     }
-
 }
