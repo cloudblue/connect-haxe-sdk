@@ -18,7 +18,7 @@ class MarketplaceApi {
     }
 
     public function listAgreements(filters: Query): String {
-        return ConnectHelper.get(AGREEMENTS_PATH, null, null, filters, Logger.LEVEL_DEBUG);
+        return ConnectHelper.get(AGREEMENTS_PATH, null, null, filters, false, Logger.LEVEL_DEBUG);
     }
 
     public function createAgreement(body: String): String {
@@ -38,7 +38,7 @@ class MarketplaceApi {
     }
 
     public function listAgreementVersions(id: String): String {
-        return ConnectHelper.get(AGREEMENTS_PATH, id, 'versions');
+        return ConnectHelper.get(AGREEMENTS_PATH, id, 'versions', null, false, Logger.LEVEL_DEBUG);
     }
 
     public function newAgreementVersion(id: String, body: String): String {
@@ -54,7 +54,7 @@ class MarketplaceApi {
     }
 
     public function listAgreementSubAgreements(id: String): String {
-        return ConnectHelper.get(AGREEMENTS_PATH, id, AGREEMENTS_PATH);
+        return ConnectHelper.get(AGREEMENTS_PATH, id, AGREEMENTS_PATH, null, false, Logger.LEVEL_DEBUG);
     }
 
     public function createAgreementSubAgreement(id: String, body: String): String {
@@ -62,19 +62,19 @@ class MarketplaceApi {
     }
 
     public function listListings(filters: Query): String {
-        return ConnectHelper.get(LISTINGS_PATH, null, null, filters);
+        return ConnectHelper.get(LISTINGS_PATH, null, null, filters, false, Logger.LEVEL_DEBUG);
     }
 
     public function getListing(id: String): String {
         return ConnectHelper.get(LISTINGS_PATH, id);
     }
 
-    public function putListing(id: String, body: String, currentRequest: Null<IdModel>): String {
-        return ConnectHelper.put(LISTINGS_PATH, id, null, body, currentRequest);
+    public function putListing(id: String, body: String): String {
+        return ConnectHelper.put(LISTINGS_PATH, id, null, body);
     }
 
     public function listListingRequests(filters: Query): String {
-        return ConnectHelper.get(LISTINGREQUESTS_PATH, null, null, filters);
+        return ConnectHelper.get(LISTINGREQUESTS_PATH, null, null, filters, false, Logger.LEVEL_DEBUG);
     }
 
     public function getListingRequest(id: String): String {
@@ -114,7 +114,7 @@ class MarketplaceApi {
     }
 
     public function listMarketplaces(filters: Query): String {
-        return ConnectHelper.get(MARKETPLACES_PATH, null, null, filters);
+        return ConnectHelper.get(MARKETPLACES_PATH, null, null, filters, false, Logger.LEVEL_DEBUG);
     }
 
     public function createMarketplace(body: String): String {

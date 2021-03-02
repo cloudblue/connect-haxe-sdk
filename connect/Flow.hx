@@ -5,6 +5,7 @@
 
 package connect;
 
+import connect.api.ConnectHelper;
 import connect.flow.FlowStoreDelegate;
 import connect.flow.FlowStore;
 import connect.flow.ProcessedRequestInfo;
@@ -75,7 +76,9 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     private function getClassName():String {
         #if js
         final constructorName = js.Syntax.code("{0}.constructor.name", this);
-        final className = (constructorName != 'Object') ? constructorName : Type.getClassName(Type.getClass(this));
+        final className = (constructorName != 'Object')
+            ? constructorName
+            : Type.getClassName(Type.getClass(this));
         return className;
         #elseif php
         return php.Syntax.code("get_class({0})", this);
@@ -418,6 +421,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     }
 
     private function runRequest(request:IdModel):Void {
+        ConnectHelper.setLogger(Env.getLoggerForRequest(request));
         this.logger.openRequestSection(request);
         if (this.prepareRequest(request) && this.processSetup()) {
             this.store.requestDidBegin(this.request);
@@ -426,6 +430,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
             this.logger.writeMigrationMessage(request);
         }
         this.logger.closeRequestSection();
+        ConnectHelper.setLogger(Env.getLogger());
     }
 
     private function prepareRequest(request:IdModel):Bool {

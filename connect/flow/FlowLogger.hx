@@ -1,60 +1,61 @@
 package connect.flow;
 
-import connect.util.Dictionary;
-import haxe.Json;
-import connect.util.Util;
 import connect.logger.ILoggerFormatter;
-import connect.util.Collection;
 import connect.logger.Logger;
 import connect.models.AssetRequest;
 import connect.models.IdModel;
 import connect.models.Listing;
 import connect.models.TierConfigRequest;
 import connect.models.UsageFile;
+import connect.util.Collection;
 import connect.util.DateTime;
+import connect.util.Dictionary;
+import connect.util.Util;
+import haxe.Json;
 
 @:dox(hide)
 class FlowLogger {
     private final flowName:String;
-    private var currentRequest:Null<IdModel>;
+    private var logger:Logger;
 
     public function new(flowName: String) {
         this.flowName = flowName;
+        this.logger = Env.getLogger();
     }
 
     public function openFlowSection():Void {
-        Env.getLoggerForRequest(currentRequest).openSection('Running ${this.flowName} on ${DateTime.now()}');
+        logger.openSection('Running ${this.flowName} on ${DateTime.now()}');
     }
 
     public function closeFlowSection():Void {
-        Env.getLoggerForRequest(currentRequest).closeSection();
-        currentRequest = null;
+        logger.closeSection();
+        logger = Env.getLogger();
     }
 
     public function openRequestSection(request:IdModel):Void {
-        currentRequest = request;
-        Env.getLoggerForRequest(currentRequest).openSection('Processing request "${request.id}" on ${DateTime.now()}');
+        logger = Env.getLoggerForRequest(request);
+        logger.openSection('Processing request "${request.id}" on ${DateTime.now()}');
     }
 
     public function closeRequestSection():Void {
-        Env.getLoggerForRequest(currentRequest).closeSection();
-        currentRequest = null;
+        logger.closeSection();
+        logger = Env.getLogger();
     }
 
     public function openSetupSection():Void {
-        Env.getLoggerForRequest(currentRequest).openSection('Setup');
+        logger.openSection('Setup');
     }
 
     public function closeSetupSection():Void {
-        Env.getLoggerForRequest(currentRequest).closeSection();
+        logger.closeSection();
     }
 
     public function openStepSection(index:Int, description:String):Void {
-        Env.getLoggerForRequest(currentRequest).openSection('${index + 1}. $description');
+        logger.openSection('${index + 1}. $description');
     }
 
     public function closeStepSection(index:Int):Void {
-        Env.getLoggerForRequest(currentRequest).closeSection();
+        logger.closeSection();
     }
 
     public function writeStepInfo(requestInfo:ProcessedRequestInfo, prevRequestInfo:ProcessedRequestInfo) {
@@ -62,35 +63,35 @@ class FlowLogger {
     }
 
     public function writeStepError(requestInfo:ProcessedRequestInfo, prevRequestInfo:ProcessedRequestInfo) {
-        if (Env.getLoggerForRequest(currentRequest).getLevel() == Logger.LEVEL_ERROR) {
+        if (logger.getLevel() == Logger.LEVEL_ERROR) {
             writeStep(Logger.LEVEL_ERROR, requestInfo, prevRequestInfo);
         }
     }
 
     private function writeStep(level:Int, requestInfo:ProcessedRequestInfo, prevRequestInfo:ProcessedRequestInfo):Void {
-        for (handler in Env.getLoggerForRequest(currentRequest).getHandlers()) {
+        for (handler in logger.getHandlers()) {
             final list = new Collection<String>()
-            .push(getFormattedRequest(requestInfo.getRequestString(), prevRequestInfo.getRequestString(), handler.formatter))
-            .push(getFormattedData(requestInfo.getDataString(), prevRequestInfo.getDataString(), requestInfo.getData(), handler.formatter));
-            Env.getLoggerForRequest(currentRequest)._writeToHandler(level, handler.formatter.formatList(level,list), handler);
+                .push(getFormattedRequest(requestInfo.getRequestString(), prevRequestInfo.getRequestString(), handler.formatter))
+                .push(getFormattedData(requestInfo.getDataString(), prevRequestInfo.getDataString(), requestInfo.getData(), handler.formatter));
+            logger._writeToHandler(level, handler.formatter.formatList(level,list), handler);
         }
     }
 
     private function getFormattedRequest(request:String, lastRequest:String, fmt:ILoggerFormatter):String {
         if (request != lastRequest) {
-            if (Env.getLoggerForRequest(currentRequest).getLevel() == Logger.LEVEL_DEBUG) {
+            if (logger.getLevel() == Logger.LEVEL_DEBUG) {
                 final lastRequestObj = Util.isJsonObject(lastRequest) ? Json.parse(lastRequest) : null;
                 final requestObj = (Util.isJsonObject(request) && lastRequestObj != null) ? Json.parse(request) : null;
                 final diff = (lastRequestObj != null && requestObj != null) ? Util.createObjectDiff(requestObj, lastRequestObj) : null;
                 final requestStr = (diff != null)
                 ? Util.beautifyObject(
                     diff,
-                    Env.getLoggerForRequest(currentRequest).isCompact(),
+                    logger.isCompact(),
                     false,
-                    Env.getLoggerForRequest(currentRequest).isBeautified())
+                    logger.isBeautified())
                 : request;
                 final requestTitle = (diff != null) ? 'Request (changes):' : 'Request:';
-                return '$requestTitle${fmt.formatCodeBlock(Env.getLoggerForRequest(currentRequest).getLevel(),Std.string(requestStr), 'json')}';
+                return '$requestTitle${fmt.formatCodeBlock(logger.getLevel(),Std.string(requestStr), 'json')}';
             } else {
                 return 'Request (id): ${request}';
             }
@@ -102,7 +103,7 @@ class FlowLogger {
     private function getFormattedData(data:String, lastData:String, dataDict:Null<Dictionary>, fmt:ILoggerFormatter):String {
         if (data != '{}') {
             if (data != lastData) {
-                if (Env.getLoggerForRequest(currentRequest).getLevel() == Logger.LEVEL_DEBUG) {
+                if (logger.getLevel() == Logger.LEVEL_DEBUG) {
                     return 'Data:${getDataTable(dataDict, fmt)}';
                 } else {
                     final keysStr = [for (key in dataDict.keys()) key].join(', ');
@@ -122,38 +123,38 @@ class FlowLogger {
         Lambda.iter(dataKeys, function(key) {
             dataCol.push(new Collection<String>().push(key).push(data.get(key)));
         });
-        return fmt.formatTable(Env.getLoggerForRequest(currentRequest).getLevel(),dataCol);
+        return fmt.formatTable(logger.getLevel(),dataCol);
     }
 
     public function writeStepSkip(willSave:Bool) {
         if (willSave) {
-            Env.getLoggerForRequest(currentRequest).write(Logger.LEVEL_INFO, 'Skipping request. Trying to save step data.');
+            logger.write(Logger.LEVEL_INFO, 'Skipping request. Trying to save step data.');
         } else {
-            Env.getLoggerForRequest(currentRequest).write(Logger.LEVEL_INFO, 'Skipping request. Step data will not be saved because feature is disabled.');
+            logger.write(Logger.LEVEL_INFO, 'Skipping request. Step data will not be saved because feature is disabled.');
         }
     }
 
     public function writeStepSavedInConnect() {
-        Env.getLoggerForRequest(currentRequest).write(Logger.LEVEL_INFO, 'Step data saved in Connect.');
+        logger.write(Logger.LEVEL_INFO, 'Step data saved in Connect.');
     }
 
     public function writeStepSavedLocally() {
-        Env.getLoggerForRequest(currentRequest).write(Logger.LEVEL_INFO, 'Step data saved locally.');
+        logger.write(Logger.LEVEL_INFO, 'Step data saved locally.');
     }
 
     public function writeStepSaveFailed() {
-        Env.getLoggerForRequest(currentRequest).write(Logger.LEVEL_INFO, 'Step data could not be saved.');
+        logger.write(Logger.LEVEL_INFO, 'Step data could not be saved.');
     }
 
     public function writeMigrationMessage(request:IdModel):Void {
-        Env.getLoggerForRequest(currentRequest).write(Logger.LEVEL_INFO, 'Skipping request because it is pending migration.');
+        logger.write(Logger.LEVEL_INFO, 'Skipping request because it is pending migration.');
     }
 
     public function writeException(message:String):Void {
-        Env.getLoggerForRequest(currentRequest).writeCodeBlock(Logger.LEVEL_ERROR, message, '');
+        logger.writeCodeBlock(Logger.LEVEL_ERROR, message, '');
     }
 
     public function writeLoadedStepData(index:Int, storageType:String):Void {
-        Env.getLoggerForRequest(currentRequest).write(Logger.LEVEL_INFO, 'Resuming request from step ${index + 1} with $storageType.');
+        logger.write(Logger.LEVEL_INFO, 'Resuming request from step ${index + 1} with $storageType.');
     }
 }
