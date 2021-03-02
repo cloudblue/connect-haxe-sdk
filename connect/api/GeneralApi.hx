@@ -17,7 +17,7 @@ class GeneralApi extends Base {
     }
 
     public function listAccounts(filters: Query): String {
-        return ConnectHelper.get(ACCOUNTS_PATH, null, null, filters, Logger.LEVEL_DEBUG);
+        return ConnectHelper.get(ACCOUNTS_PATH, null, null, filters, false, Logger.LEVEL_DEBUG);
     }
 
     public function createAccount(): String {
@@ -29,27 +29,27 @@ class GeneralApi extends Base {
     }
 
     public function listAccountUsers(id: String): String {
-        return ConnectHelper.get(ACCOUNTS_PATH, id, 'users', Logger.LEVEL_DEBUG);
+        return ConnectHelper.get(ACCOUNTS_PATH, id, 'users', null, false, Logger.LEVEL_DEBUG);
     }
 
     public function getAccountUser(id: String, userId: String): String {
         return ConnectHelper.get(ACCOUNTS_PATH, id, 'users/${userId}');
     }
 
-    public function listConversations(filters: Query, request: Null<IdModel>): String {
-        return ConnectHelper.get(CONVERSATIONS_PATH, null, null, filters, request, Logger.LEVEL_DEBUG);
+    public function listConversations(filters: Query): String {
+        return ConnectHelper.get(CONVERSATIONS_PATH, null, null, filters, false, Logger.LEVEL_DEBUG);
     }
 
-    public function createConversation(data: String, request: Null<IdModel>): String {
+    public function createConversation(data: String): String {
         return ConnectHelper.post(CONVERSATIONS_PATH, null, null, data, Logger.LEVEL_DEBUG);
     }
 
-    public function getConversation(id: String, request:Null<IdModel>): String {
-        return ConnectHelper.get(CONVERSATIONS_PATH, id, request, Logger.LEVEL_DEBUG);
+    public function getConversation(id: String): String {
+        return ConnectHelper.get(CONVERSATIONS_PATH, id, null, null, false, Logger.LEVEL_DEBUG);
     }
 
-    public function createConversationMessage(id: String, data: String, request:Null<IdModel>): String {
-        return ConnectHelper.post(CONVERSATIONS_PATH, id, 'messages', data, request, Logger.LEVEL_DEBUG);
+    public function createConversationMessage(id: String, data: String): String {
+        return ConnectHelper.post(CONVERSATIONS_PATH, id, 'messages', data, Logger.LEVEL_DEBUG);
     }
 
     public function listProducts(filters: Query): String {
@@ -61,7 +61,7 @@ class GeneralApi extends Base {
     }
 
     public function listProductActions(id: String, filters: Query): String {
-        return ConnectHelper.get(PRODUCTS_PATH, id, 'actions', filters, Logger.LEVEL_DEBUG);
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'actions', filters, false, Logger.LEVEL_DEBUG);
     }
 
     public function getProductAction(id: String, actionId: String): String {
@@ -69,8 +69,8 @@ class GeneralApi extends Base {
     }
 
     public function getProductActionLink(id: String, actionId: String): String {
-        final response = haxe.Json.parse(ConnectHelper
-            .get(PRODUCTS_PATH, id, 'actions/${actionId}/actionLink'));
+        final response = haxe.Json.parse(
+            ConnectHelper.get(PRODUCTS_PATH, id, 'actions/${actionId}/actionLink'));
         return response.link;
     }
 
@@ -79,11 +79,11 @@ class GeneralApi extends Base {
     }
 
     public function listProductItems(id: String, filters: Query): String {
-        return ConnectHelper.get(PRODUCTS_PATH, id, 'items', filters, Logger.LEVEL_DEBUG);
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'items', filters, false, Logger.LEVEL_DEBUG);
     }
 
     public function listProductParameters(id: String, filters: Query): String {
-        return ConnectHelper.get(PRODUCTS_PATH, id, 'parameters', filters, Logger.LEVEL_DEBUG);
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'parameters', filters, false, Logger.LEVEL_DEBUG);
     }
 
     public function getProductParameter(id: String, paramId: String): String {
@@ -157,11 +157,11 @@ class GeneralApi extends Base {
     }
 
     public function listProductAgreements(id: String, filters: Query): String {
-        return ConnectHelper.get(PRODUCTS_PATH, id, 'agreements', filters, Logger.LEVEL_DEBUG);
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'agreements', filters, false, Logger.LEVEL_DEBUG);
     }
 
     public function listProductMedia(id: String, filters: Query): String {
-        return ConnectHelper.get(PRODUCTS_PATH, id, 'media', filters, Logger.LEVEL_DEBUG);
+        return ConnectHelper.get(PRODUCTS_PATH, id, 'media', filters, false, Logger.LEVEL_DEBUG);
     }
 
     public function createProductMedia(id: String): String {
@@ -181,7 +181,7 @@ class GeneralApi extends Base {
     }
 
     public function listCategories(filters: Query): String {
-        return ConnectHelper.get(CATEGORIES_PATH, null, null, filters, Logger.LEVEL_DEBUG);
+        return ConnectHelper.get(CATEGORIES_PATH, null, null, filters, false, Logger.LEVEL_DEBUG);
     }
 
     public function getCategory(id: String): String {

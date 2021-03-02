@@ -20,70 +20,68 @@ class UsageApi extends Base {
         return ConnectHelper.get(USAGE_FILES_PATH, null, null, filters, true, Logger.LEVEL_DEBUG);
     }
 
-    public function createUsageFile(body: String, currentRequest: Null<IdModel>): String {
-        return ConnectHelper.post(USAGE_FILES_PATH, null, null, body, currentRequest);
+    public function createUsageFile(body: String): String {
+        return ConnectHelper.post(USAGE_FILES_PATH, null, null, body);
     }
 
     public function getUsageFile(id: String): String {
         return ConnectHelper.get(USAGE_FILES_PATH, id);
     }
 
-    public function updateUsageFile(id: String, body: String, currentRequest: Null<IdModel>): String {
-        return ConnectHelper.put(USAGE_FILES_PATH, id, null, body, currentRequest);
+    public function updateUsageFile(id: String, body: String): String {
+        return ConnectHelper.put(USAGE_FILES_PATH, id, null, body);
     }
 
-    public function deleteUsageFile(id: String, currentRequest: Null<IdModel>): Void {
-        ConnectHelper.post(USAGE_FILES_PATH, id, 'delete', currentRequest);
+    public function deleteUsageFile(id: String): Void {
+        ConnectHelper.post(USAGE_FILES_PATH, id, 'delete');
     }
 
-    public function uploadUsageFile(id: String, file: Blob, currentRequest: Null<IdModel>): String {
+    public function uploadUsageFile(id: String, file: Blob): String {
         return ConnectHelper.postFile(
             USAGE_FILES_PATH,
             id,
             'upload',
             'usage_file',
             'usage_file.xlsx',
-            file,
-            currentRequest
+            file
         );
     }
 
-    public function submitUsageFileAction(id: String, currentRequest: Null<IdModel>): String {
-        return ConnectHelper.post(USAGE_FILES_PATH, id, 'submit', currentRequest);
+    public function submitUsageFileAction(id: String): String {
+        return ConnectHelper.post(USAGE_FILES_PATH, id, 'submit');
     }
 
-    public function acceptUsageFileAction(id: String, note: String, currentRequest: Null<IdModel>): String {
+    public function acceptUsageFileAction(id: String, note: String): String {
         return ConnectHelper.post(USAGE_FILES_PATH, id, 'accept',
-            haxe.Json.stringify({acceptance_note: note}), currentRequest);
+            haxe.Json.stringify({acceptance_note: note}));
     }
 
-    public function rejectUsageFileAction(id: String, note: String, currentRequest: Null<IdModel>): String {
+    public function rejectUsageFileAction(id: String, note: String): String {
         return ConnectHelper.post(USAGE_FILES_PATH, id, 'reject',
-            haxe.Json.stringify({rejection_note: note}), currentRequest);
+            haxe.Json.stringify({rejection_note: note}));
     }
 
-    public function closeUsageFileAction(id: String, currentRequest: Null<IdModel>): String {
-        return ConnectHelper.post(USAGE_FILES_PATH, id, 'close', currentRequest);
+    public function closeUsageFileAction(id: String): String {
+        return ConnectHelper.post(USAGE_FILES_PATH, id, 'close');
     }
 
-    public function getProductSpecificUsageFileTemplate(productId: String, currentRequest: Null<IdModel>): String {
-        return ConnectHelper.get(USAGE_PRODUCTS_PATH, productId, 'template', currentRequest);
+    public function getProductSpecificUsageFileTemplate(productId: String): String {
+        return ConnectHelper.get(USAGE_PRODUCTS_PATH, productId, 'template');
     }
 
-    public function uploadReconciliationFileFromProvider(id: String, file: Blob, currentRequest: Null<IdModel>): String {
+    public function uploadReconciliationFileFromProvider(id: String, file: Blob): String {
         return ConnectHelper.postFile(
             USAGE_FILES_PATH,
             id,
             'reconciliation',
             'reconciliation_file',
             'reconciliation_file.xlsx',
-            file,
-            currentRequest
+            file
         );
     }
 
-    public function reprocessProcessedFile(id: String, currentRequest: Null<IdModel>): String {
-        return ConnectHelper.post(USAGE_FILES_PATH, id, 'reprocess', currentRequest);
+    public function reprocessProcessedFile(id: String): String {
+        return ConnectHelper.post(USAGE_FILES_PATH, id, 'reprocess');
     }
 
     public function listUsageRecords(filters: Query): String {

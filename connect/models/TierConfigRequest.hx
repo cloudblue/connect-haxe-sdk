@@ -159,7 +159,7 @@ class TierConfigRequest extends IdModel {
             if (hasModifiedFields) {
                 final request = Env.getTierApi().updateTierConfigRequest(
                     this.id,
-                    prepareUpdateBody(diff), this);
+                    prepareUpdateBody(diff));
                 return Model.parse(TierConfigRequest, request);
             } else {
                 return this;
@@ -168,7 +168,7 @@ class TierConfigRequest extends IdModel {
             if (params.length() > 0) {
                 Env.getTierApi().updateTierConfigRequest(
                     this.id,
-                    '{"params":${params.toString()}}', this);
+                    '{"params":${params.toString()}}');
             }
             return this;
         }
@@ -232,7 +232,7 @@ class TierConfigRequest extends IdModel {
     **/
     public function approveByTemplate(id: String): Bool {
         try {
-            Env.getTierApi().approveTierConfigRequest(this.id, haxe.Json.stringify({template: {id: id}}), this);
+            Env.getTierApi().approveTierConfigRequest(this.id, haxe.Json.stringify({template: {id: id}}));
             return true;
         } catch (ex: Dynamic) {
             return false;
@@ -248,7 +248,7 @@ class TierConfigRequest extends IdModel {
     **/
     public function approveByTile(text: String): TierConfigRequest {
         try {
-            final tcr = Env.getTierApi().approveTierConfigRequest(this.id, haxe.Json.stringify({activation_tile: text}), this);
+            final tcr = Env.getTierApi().approveTierConfigRequest(this.id, haxe.Json.stringify({activation_tile: text}));
             return Model.parse(TierConfigRequest, tcr);
         } catch (ex: Dynamic) {
             return null;
@@ -263,7 +263,7 @@ class TierConfigRequest extends IdModel {
     **/
     public function fail(reason: String): Bool {
         try {
-            Env.getTierApi().failTierConfigRequest(this.id, haxe.Json.stringify({reason: reason}), this);
+            Env.getTierApi().failTierConfigRequest(this.id, haxe.Json.stringify({reason: reason}));
             return true;
         } catch (ex: Dynamic) {
             return false;
@@ -278,7 +278,7 @@ class TierConfigRequest extends IdModel {
     **/
     public function inquire(): Bool {
         try {
-            Env.getTierApi().inquireTierConfigRequest(this.id, this);
+            Env.getTierApi().inquireTierConfigRequest(this.id);
             return true;
         } catch (ex: Dynamic) {
             return false;
@@ -293,7 +293,7 @@ class TierConfigRequest extends IdModel {
     **/
     public function pend(): Bool {
         try {
-            Env.getTierApi().pendTierConfigRequest(this.id, this);
+            Env.getTierApi().pendTierConfigRequest(this.id);
             return true;
         } catch (ex: Dynamic) {
             return false;
@@ -305,7 +305,7 @@ class TierConfigRequest extends IdModel {
     **/
     public function assign(): Bool {
         try {
-            Env.getTierApi().assignTierConfigRequest(this.id, this);
+            Env.getTierApi().assignTierConfigRequest(this.id);
             return true;
         } catch (ex: Dynamic) {
             return false;
@@ -317,7 +317,7 @@ class TierConfigRequest extends IdModel {
     **/
     public function unassign(): Bool {
         try {
-            Env.getTierApi().unassignTierConfigRequest(this.id, this);
+            Env.getTierApi().unassignTierConfigRequest(this.id);
             return true;
         } catch (ex: Dynamic) {
             return false;
