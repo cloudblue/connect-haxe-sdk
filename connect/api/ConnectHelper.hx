@@ -8,15 +8,22 @@ import connect.Env;
 import connect.logger.Logger;
 import connect.util.Blob;
 import connect.util.Dictionary;
-import connect.models.IdModel;
 
 @:dox(hide)
 class ConnectHelper {
-    private static var logger = Env.getLogger();
+    private static var logger:Logger;
 
     /* Sets the logger that will be usef in all subsequent calls */
     public static function setLogger(logger:Logger):Void {
         ConnectHelper.logger = logger;
+    }
+
+    /* Gets the current logger */
+    public static function getLogger():Logger {
+        if (logger == null) {
+            logger = Env.getLogger();
+        }
+        return logger;
     }
 
     /**
@@ -114,7 +121,7 @@ class ConnectHelper {
             : '';
         final url = Env.getConfig().getApiUrl() + path + paramsStr;
         return Env.getApiClient().syncRequestWithLogger(method, url, headers, data,
-            fileArg, fileName, fileContent, null, logger, logLevel);
+            fileArg, fileName, fileContent, null, getLogger(), logLevel);
     }
 
     private static function parsePath(resource:String, ?id:String, ?suffix:String):String {
