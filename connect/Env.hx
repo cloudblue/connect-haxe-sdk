@@ -4,8 +4,6 @@
 */
 package connect;
 
-import connect.logger.ILoggerFormatter;
-import connect.logger.LoggerHandler;
 import connect.api.IApiClient;
 import connect.api.FulfillmentApi;
 import connect.api.GeneralApi;
