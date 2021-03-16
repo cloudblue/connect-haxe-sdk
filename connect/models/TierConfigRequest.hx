@@ -240,22 +240,6 @@ class TierConfigRequest extends IdModel {
     }
 
     /**
-        Changes `this` TierConfigRequest status to "approved", rendering a tile on the portal with
-        the given Markdown `text`.
-
-        When processing requests within a `Flow`, you should use the `Flow.approveByTile`
-        method instead of this one, since it finishes the flow and logs the information.
-    **/
-    public function approveByTile(text: String): TierConfigRequest {
-        try {
-            final tcr = Env.getTierApi().approveTierConfigRequest(this.id, haxe.Json.stringify({activation_tile: text}));
-            return Model.parse(TierConfigRequest, tcr);
-        } catch (ex: Dynamic) {
-            return null;
-        }
-    }
-
-    /**
         Changes the status of `this` TierConfigRequest to "failed".
 
         When processing requests within a `Flow`, you should use the `Flow.fail`
