@@ -139,12 +139,6 @@ class TierConfigRequestTest {
     }
 
     @Test
-    public function testApproveByTile() {
-        final request = TierConfigRequest.get('TCR-000-000-000');
-        Assert.isType(request.approveByTile('Hello, world!'), TierConfigRequest);
-    }
-
-    @Test
     public function testFail() {
         Assert.isTrue(TierConfigRequest.get('TCR-000-000-000').fail("Failing..."));
     }

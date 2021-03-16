@@ -291,16 +291,10 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     **/
     public function approveByTile(text:String):Void {
         final request = this.getAssetRequest();
-        final tcr = this.getTierConfigRequest();
         if (request != null) {
             this.store.removeStepData(request);
             request.update(null);
             request.approveByTile(text);
-            this.abort('');
-        } else if (tcr != null) {
-            this.store.removeStepData(tcr);
-            tcr.update(null);
-            tcr.approveByTile(text);
             this.abort('');
         }
     }
