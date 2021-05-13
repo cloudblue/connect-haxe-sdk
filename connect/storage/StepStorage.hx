@@ -51,15 +51,19 @@ class StepStorage {
     }
 
     private static function decodeData(data:String):Dynamic {
-        final decoded = Base64.decode(data);
-        #if python
-        final decompressed = connect.native.PythonZlib.decompress(decoded);
-        #elseif cs
-        final decompressed = decoded;
-        #else
-        final decompressed = haxe.zip.Uncompress.run(decoded);
-        #end
-        return Json.parse(decompressed.toString());
+        try {
+            final decoded = Base64.decode(data);
+            #if python
+            final decompressed = connect.native.PythonZlib.decompress(decoded);
+            #elseif cs
+            final decompressed = decoded;
+            #else
+            final decompressed = haxe.zip.Uncompress.run(decoded);
+            #end
+            return Json.parse(decompressed.toString());
+        } catch (ex: Dynamic) {
+            return null;
+        }
     }
 
     private static function getRequestField(object:Dynamic, requestId:String, storage:StorageType):StepData {
