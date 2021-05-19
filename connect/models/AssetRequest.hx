@@ -147,27 +147,31 @@ class AssetRequest extends IdModel {
         @param params A collection of parameters to update. If `null` is passed, then the
         parameters that have changed in the request will be sent.
         @returns The AssetRequest returned from the server, which should contain
-        the same data as `this` AssetRequest.
+        the same data as `this` AssetRequest, or `null` if the updating fails.
     **/
     public function update(params: Collection<Param>): AssetRequest {
-        if (params == null) {
-            final diff = this._toDiff();
-            final hasModifiedFields = Reflect.fields(diff).length > 1;
-            if (hasModifiedFields) {
-                final request = Env.getFulfillmentApi().updateRequest(
-                    this.id,
-                    haxe.Json.stringify(addValueToParams(diff)));
-                return Model.parse(AssetRequest, request);
+        try {
+            if (params == null) {
+                final diff = this._toDiff();
+                final hasModifiedFields = Reflect.fields(diff).length > 1;
+                if (hasModifiedFields) {
+                    final request = Env.getFulfillmentApi().updateRequest(
+                        this.id,
+                        haxe.Json.stringify(addValueToParams(diff)));
+                    return Model.parse(AssetRequest, request);
+                } else {
+                    return this;
+                }
             } else {
+                if (params.length() > 0) {
+                    Env.getFulfillmentApi().updateRequest(
+                        this.id,
+                        '{"asset":{"params":${params.toString()}}}');
+                }
                 return this;
             }
-        } else {
-            if (params.length() > 0) {
-                Env.getFulfillmentApi().updateRequest(
-                    this.id,
-                    '{"asset":{"params":${params.toString()}}}');
-            }
-            return this;
+        } catch (ex: Dynamic) {
+            return null;
         }
     }
 

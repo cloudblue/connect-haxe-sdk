@@ -127,18 +127,22 @@ class Agreement extends IdModel {
         ```
 
         @returns The Agreement returned from the server, which should contain
-        the same data as `this` Agreement.
+        the same data as `this` Agreement, or `null` if the updating fails.
     **/
     public function update(): Agreement {
-        final diff = this._toDiff();
-        final hasModifiedFields = Reflect.fields(diff).length > 1;
-        if (hasModifiedFields) {
-            final agreement = Env.getMarketplaceApi().updateAgreement(
-                this.id,
-                haxe.Json.stringify(diff));
-            return Model.parse(Agreement, agreement);
-        } else {
-            return this;
+        try {
+            final diff = this._toDiff();
+            final hasModifiedFields = Reflect.fields(diff).length > 1;
+            if (hasModifiedFields) {
+                final agreement = Env.getMarketplaceApi().updateAgreement(
+                    this.id,
+                    haxe.Json.stringify(diff));
+                return Model.parse(Agreement, agreement);
+            } else {
+                return this;
+            }
+        } catch (ex: Dynamic) {
+            return null;
         }
     }
 
