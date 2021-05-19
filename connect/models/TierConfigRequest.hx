@@ -150,27 +150,31 @@ class TierConfigRequest extends IdModel {
         @param params A collection of parameters to update. If `null` is passed, then the
         parameters that have changed in the request will be sent.
         @returns The TierConfigRequest returned from the server, which should contain
-        the same data as `this` TierConfigRequest.
+        the same data as `this` TierConfigRequest, or `null` if the updating fails.
     **/
     public function update(params: Collection<Param>): TierConfigRequest {
-        if (params == null) {
-            final diff = this._toDiff();
-            final hasModifiedFields = Reflect.fields(diff).length > 1;
-            if (hasModifiedFields) {
-                final request = Env.getTierApi().updateTierConfigRequest(
-                    this.id,
-                    prepareUpdateBody(diff));
-                return Model.parse(TierConfigRequest, request);
+        try {
+            if (params == null) {
+                final diff = this._toDiff();
+                final hasModifiedFields = Reflect.fields(diff).length > 1;
+                if (hasModifiedFields) {
+                    final request = Env.getTierApi().updateTierConfigRequest(
+                        this.id,
+                        prepareUpdateBody(diff));
+                    return Model.parse(TierConfigRequest, request);
+                } else {
+                    return this;
+                }
             } else {
+                if (params.length() > 0) {
+                    Env.getTierApi().updateTierConfigRequest(
+                        this.id,
+                        '{"params":${params.toString()}}');
+                }
                 return this;
             }
-        } else {
-            if (params.length() > 0) {
-                Env.getTierApi().updateTierConfigRequest(
-                    this.id,
-                    '{"params":${params.toString()}}');
-            }
-            return this;
+        } catch (ex: Dynamic) {
+            return null;
         }
     }
 
