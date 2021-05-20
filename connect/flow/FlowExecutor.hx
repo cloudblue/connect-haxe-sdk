@@ -70,7 +70,7 @@ class FlowExecutor {
         }
     }
 
-    private static function getExceptionMessage(ex: Dynamic): String {
+    public static function getExceptionMessage(ex: Dynamic): String {
     #if php
         try {
             return ex.getMessage();
@@ -78,7 +78,8 @@ class FlowExecutor {
             return Std.string(ex);
         }
     #elseif python
-        return python.Syntax.code("str({0})", ex);
+        python.Syntax.code("import traceback");
+        return python.Syntax.code("traceback.format_exc()");
     #else
         return Std.string(ex);
     #end

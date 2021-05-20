@@ -446,8 +446,8 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
             this.executor.reset();
             this.setup();
         } catch (ex:Dynamic) {
-            final exStr = getExceptionMessage(ex);
-            this.logger.writeException(ex);
+            final exStr = FlowExecutor.getExceptionMessage(ex);
+            this.logger.writeException(exStr);
             if (this.getAssetRequest() != null) {
                 this.getAssetRequest()._updateConversation(SKIP_MSG + exStr);
             }
@@ -455,20 +455,6 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         }
         this.logger.closeSetupSection();
         return ok;
-    }
-
-    private static function getExceptionMessage(ex: Dynamic): String {
-    #if php
-        try {
-            return ex.getMessage();
-        } catch (_: Dynamic) {
-            return Std.string(ex);
-        }
-    #elseif python
-        return python.Syntax.code("str({0})", ex);
-    #else
-        return Std.string(ex);
-    #end
     }
 
     /**
