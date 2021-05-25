@@ -300,11 +300,16 @@ class AssetRequest extends IdModel {
 
     /**
         @returns Whether `this` AssetRequest is pending migration. This is indicated by the
-        presence of a parameter (by default name "migration_info") that contains JSON data.
+        presence of a parameter that contains JSON data. By default, it checks the parameter
+        "migration_info" and, if it is not found, it checks for "migration_info_object".
     **/
     public function needsMigration(key: String = 'migration_info'): Bool {
         final param = this.asset.getParamById(key);
-        return param != null && param.value != null && param.value != '';
+        final result = param != null && param.value != null && param.value != '';
+        return
+            result ? true :
+            (key == 'migration_info') ? needsMigration('migration_info_object') :
+            false;
     }
 
     /** @returns The Conversation assigned to `this` AssetRequest, or `null` if there is none. **/
