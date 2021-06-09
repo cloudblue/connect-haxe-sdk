@@ -16,7 +16,7 @@ class FulfillmentApi extends Base {
     }
 
     public function listRequests(filters: Query): String {
-        return ConnectHelper.get(REQUESTS_PATH, null, null, filters, Logger.LEVEL_DEBUG);
+        return ConnectHelper.get(REQUESTS_PATH, null, null, filters, false, Logger.LEVEL_DEBUG);
     }
 
     public function getRequest(id: String): String {
@@ -27,21 +27,21 @@ class FulfillmentApi extends Base {
         return ConnectHelper.post(REQUESTS_PATH, null, null, body);    
     }
 
-    public function updateRequest(id: String, request: String, currentRequest: Null<IdModel>): String {
-        return ConnectHelper.put(REQUESTS_PATH, id, null, request, currentRequest);
+    public function updateRequest(id: String, request: String): String {
+        return ConnectHelper.put(REQUESTS_PATH, id, null, request);
     }
 
-    public function changeRequestStatus(id: String, status: String, data: String, currentRequest: Null<IdModel>): String {
-        return ConnectHelper.post(REQUESTS_PATH, id, status, data, currentRequest);
+    public function changeRequestStatus(id: String, status: String, data: String): String {
+        return ConnectHelper.post(REQUESTS_PATH, id, status, data);
     }
 
-    public function assignRequest(id: String, assignee: String, currentRequest: Null<IdModel>): String {
-        return ConnectHelper.post(REQUESTS_PATH, id, 'assign/' + assignee, null, currentRequest);
+    public function assignRequest(id: String, assignee: String): String {
+        return ConnectHelper.post(REQUESTS_PATH, id, 'assign/' + assignee);
     }
 
-    public function renderTemplate(id: String, request_id: String): String {
+    public function renderTemplate(id: String, requestId: String): String {
         return ConnectHelper.get(TEMPLATES_PATH, id, 'render',
-            new Query().equal('request_id', request_id));
+            new Query().equal('request_id', requestId));
     }
 
     public function listAssets(filters: Query): String {
@@ -52,7 +52,7 @@ class FulfillmentApi extends Base {
         return ConnectHelper.get(ASSETS_PATH, id);
     }
 
-    public function getAssetRequests(id: String, currentRequest: Null<IdModel>): String {
+    public function getAssetRequests(id: String): String {
         return ConnectHelper.get(ASSETS_PATH, id, 'requests');
     }
 }

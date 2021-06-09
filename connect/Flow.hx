@@ -5,6 +5,7 @@
 
 package connect;
 
+import connect.api.ConnectHelper;
 import connect.flow.FlowStoreDelegate;
 import connect.flow.FlowStore;
 import connect.flow.ProcessedRequestInfo;
@@ -75,7 +76,9 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     private function getClassName():String {
         #if js
         final constructorName = js.Syntax.code("{0}.constructor.name", this);
-        final className = (constructorName != 'Object') ? constructorName : Type.getClassName(Type.getClass(this));
+        final className = (constructorName != 'Object')
+            ? constructorName
+            : Type.getClassName(Type.getClass(this));
         return className;
         #elseif php
         return php.Syntax.code("get_class({0})", this);
@@ -288,16 +291,10 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     **/
     public function approveByTile(text:String):Void {
         final request = this.getAssetRequest();
-        final tcr = this.getTierConfigRequest();
         if (request != null) {
             this.store.removeStepData(request);
             request.update(null);
             request.approveByTile(text);
-            this.abort('');
-        } else if (tcr != null) {
-            this.store.removeStepData(tcr);
-            tcr.update(null);
-            tcr.approveByTile(text);
             this.abort('');
         }
     }
@@ -418,6 +415,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     }
 
     private function runRequest(request:IdModel):Void {
+        ConnectHelper.setLogger(Env.getLoggerForRequest(request));
         this.logger.openRequestSection(request);
         if (this.prepareRequest(request) && this.processSetup()) {
             this.store.requestDidBegin(this.request);
@@ -426,6 +424,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
             this.logger.writeMigrationMessage(request);
         }
         this.logger.closeRequestSection();
+        ConnectHelper.setLogger(Env.getLogger());
     }
 
     private function prepareRequest(request:IdModel):Bool {
@@ -447,8 +446,8 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
             this.executor.reset();
             this.setup();
         } catch (ex:Dynamic) {
-            final exStr = getExceptionMessage(ex);
-            this.logger.writeException(ex);
+            final exStr = FlowExecutor.getExceptionMessage(ex);
+            this.logger.writeException(exStr);
             if (this.getAssetRequest() != null) {
                 this.getAssetRequest()._updateConversation(SKIP_MSG + exStr);
             }
@@ -456,20 +455,6 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         }
         this.logger.closeSetupSection();
         return ok;
-    }
-
-    private static function getExceptionMessage(ex: Dynamic): String {
-    #if php
-        try {
-            return ex.getMessage();
-        } catch (_: Dynamic) {
-            return Std.string(ex);
-        }
-    #elseif python
-        return python.Syntax.code("str({0})", ex);
-    #else
-        return Std.string(ex);
-    #end
     }
 
     /**

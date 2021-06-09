@@ -150,32 +150,36 @@ class TierConfigRequest extends IdModel {
         @param params A collection of parameters to update. If `null` is passed, then the
         parameters that have changed in the request will be sent.
         @returns The TierConfigRequest returned from the server, which should contain
-        the same data as `this` TierConfigRequest.
+        the same data as `this` TierConfigRequest, or `null` if the updating fails.
     **/
     public function update(params: Collection<Param>): TierConfigRequest {
-        if (params == null) {
-            final modifiedParams = getModifiedTcrParams();
-            if (modifiedParams != null) {
-                return this.update(modifiedParams);
-            } else {
-                final diff = this._toDiff();
-                final hasModifiedFields = Reflect.fields(diff).length > 1;
-                if (hasModifiedFields) {
-                    final request = Env.getTierApi().updateTierConfigRequest(
-                        this.id,
-                        prepareUpdateBody(diff), this);
-                    return Model.parse(TierConfigRequest, request);
+        try {
+            if (params == null) {
+                final modifiedParams = getModifiedTcrParams();
+                if (modifiedParams != null) {
+                    return this.update(modifiedParams);
                 } else {
-                    return this;
+                    final diff = this._toDiff();
+                    final hasModifiedFields = Reflect.fields(diff).length > 1;
+                    if (hasModifiedFields) {
+                        final request = Env.getTierApi().updateTierConfigRequest(
+                            this.id,
+                            prepareUpdateBody(diff));
+                        return Model.parse(TierConfigRequest, request);
+                    } else {
+                        return this;
+                    }
                 }
+            } else {
+                if (params.length() > 0) {
+                    Env.getTierApi().updateTierConfigRequest(
+                        this.id,
+                        '{"params":${params.toString()}}');
+                }
+                return this;
             }
-        } else {
-            if (params.length() > 0) {
-                Env.getTierApi().updateTierConfigRequest(
-                    this.id,
-                    '{"params":${params.toString()}}', this);
-            }
-            return this;
+        } catch (ex: Dynamic) {
+            return null;
         }
     }
 
@@ -255,26 +259,10 @@ class TierConfigRequest extends IdModel {
     **/
     public function approveByTemplate(id: String): Bool {
         try {
-            Env.getTierApi().approveTierConfigRequest(this.id, haxe.Json.stringify({template: {id: id}}), this);
+            Env.getTierApi().approveTierConfigRequest(this.id, haxe.Json.stringify({template: {id: id}}));
             return true;
         } catch (ex: Dynamic) {
             return false;
-        }
-    }
-
-    /**
-        Changes `this` TierConfigRequest status to "approved", rendering a tile on the portal with
-        the given Markdown `text`.
-
-        When processing requests within a `Flow`, you should use the `Flow.approveByTile`
-        method instead of this one, since it finishes the flow and logs the information.
-    **/
-    public function approveByTile(text: String): TierConfigRequest {
-        try {
-            final tcr = Env.getTierApi().approveTierConfigRequest(this.id, haxe.Json.stringify({activation_tile: text}), this);
-            return Model.parse(TierConfigRequest, tcr);
-        } catch (ex: Dynamic) {
-            return null;
         }
     }
 
@@ -286,7 +274,7 @@ class TierConfigRequest extends IdModel {
     **/
     public function fail(reason: String): Bool {
         try {
-            Env.getTierApi().failTierConfigRequest(this.id, haxe.Json.stringify({reason: reason}), this);
+            Env.getTierApi().failTierConfigRequest(this.id, haxe.Json.stringify({reason: reason}));
             return true;
         } catch (ex: Dynamic) {
             return false;
@@ -301,7 +289,7 @@ class TierConfigRequest extends IdModel {
     **/
     public function inquire(): Bool {
         try {
-            Env.getTierApi().inquireTierConfigRequest(this.id, this);
+            Env.getTierApi().inquireTierConfigRequest(this.id);
             return true;
         } catch (ex: Dynamic) {
             return false;
@@ -316,7 +304,7 @@ class TierConfigRequest extends IdModel {
     **/
     public function pend(): Bool {
         try {
-            Env.getTierApi().pendTierConfigRequest(this.id, this);
+            Env.getTierApi().pendTierConfigRequest(this.id);
             return true;
         } catch (ex: Dynamic) {
             return false;
@@ -328,7 +316,7 @@ class TierConfigRequest extends IdModel {
     **/
     public function assign(): Bool {
         try {
-            Env.getTierApi().assignTierConfigRequest(this.id, this);
+            Env.getTierApi().assignTierConfigRequest(this.id);
             return true;
         } catch (ex: Dynamic) {
             return false;
@@ -340,7 +328,7 @@ class TierConfigRequest extends IdModel {
     **/
     public function unassign(): Bool {
         try {
-            Env.getTierApi().unassignTierConfigRequest(this.id, this);
+            Env.getTierApi().unassignTierConfigRequest(this.id);
             return true;
         } catch (ex: Dynamic) {
             return false;

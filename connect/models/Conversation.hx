@@ -36,16 +36,7 @@ class Conversation extends IdModel {
         @returns A collection of Conversations.
     **/
     public static function list(filters: Query) : Collection<Conversation> {
-        return listForRequest(filters, null);
-    }
-
-    /**
-        Lists conversations, passing the current request so it can be used when logging.
-
-        @returns A collection of Conversations.
-    **/
-    public static function listForRequest(filters: Query, request: Null<IdModel>) : Collection<Conversation> {
-        final convs = Env.getGeneralApi().listConversations(filters, request);
+        final convs = Env.getGeneralApi().listConversations(filters);
         return Model.parseArray(Conversation, convs);
     }
 
@@ -56,37 +47,17 @@ class Conversation extends IdModel {
         @returns The created Conversation.
     **/
     public static function create(instanceId: String, topic: String): Conversation {
-        return createForRequest(instanceId, topic, null);
-    }
-
-    /**
-        Creates a new conversation, linked to the given `instanceId`, with the specified `topic`, and logs to
-        the given `request` log.
-
-        @returns The created Conversation.
-    **/
-    public static function createForRequest(instanceId: String, topic: String, request: Null<IdModel>): Conversation {
         final conv = Env.getGeneralApi().createConversation(haxe.Json.stringify({
             instance_id: instanceId,
             topic: topic,
-        }), request);
+        }));
         return Model.parse(Conversation, conv);
     }
 
     /** @returns The Conversation with the given id, or `null` if it was not found. **/
     public static function get(id: String): Conversation {
-        return getForRequest(id, null);
-    }
-
-    /**
-        Same as `get`, but also gets a `request` so information can be written to the correct
-        log.
-
-        @returns The Conversation with the given id, or `null` if it was not found.
-    **/
-    public static function getForRequest(id: String, request: Null<IdModel>): Conversation {
         try {
-            final conv = Env.getGeneralApi().getConversation(id, request);
+            final conv = Env.getGeneralApi().getConversation(id);
             return Model.parse(Conversation, conv);
         } catch (ex: Dynamic) {
             return null;
@@ -101,21 +72,9 @@ class Conversation extends IdModel {
         the same as this one.
     **/
     public function createMessage(text: String): Message {
-        return createMessageForRequest(text, null);
-    }
-
-    /**
-        Creates a new message in `this` Conversation with the given `text`, as long as the text
-        is not the same as the one in the last `Message`. Logs the information to the given
-        `request`'s log.
-
-        @returns The created `Message`, or `null` if the last message in the `Conversation` is
-        the same as this one.
-    **/
-    public function createMessageForRequest(text: String, request: Null<IdModel>): Message {
         final msg = Env.getGeneralApi().createConversationMessage(
             this.id,
-            haxe.Json.stringify({ text: text }), request);
+            haxe.Json.stringify({ text: text }));
         final message = Model.parse(Message, msg);
         if (this.messages == null) {
             this.messages = new Collection<Message>();

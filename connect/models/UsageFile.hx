@@ -143,7 +143,7 @@ class UsageFile extends IdModel {
     **/
     public function register(): UsageFile {
         try {
-            final newUsageFile = Env.getUsageApi().createUsageFile(this.toString(),this);
+            final newUsageFile = Env.getUsageApi().createUsageFile(this.toString());
             return Model.parse(UsageFile, newUsageFile);
         } catch (ex: Dynamic) {
             return null;
@@ -162,25 +162,29 @@ class UsageFile extends IdModel {
         ```
 
         @returns The UsageFile returned from the server, which should contain
-        the same data as `this` UsageFile.
+        the same data as `this` UsageFile, or `null` if the updating fails.
     **/
     public function update(): UsageFile {
-        final diff = this._toDiff();
-        final hasModifiedFields = Reflect.fields(diff).length > 1;
-        if (hasModifiedFields) {
-            final usageFile = Env.getUsageApi().updateUsageFile(
-                this.id,
-                haxe.Json.stringify(diff), this);
-            return Model.parse(UsageFile, usageFile);
-        } else {
-            return this;
+        try {
+            final diff = this._toDiff();
+            final hasModifiedFields = Reflect.fields(diff).length > 1;
+            if (hasModifiedFields) {
+                final usageFile = Env.getUsageApi().updateUsageFile(
+                    this.id,
+                    haxe.Json.stringify(diff));
+                return Model.parse(UsageFile, usageFile);
+            } else {
+                return this;
+            }
+        } catch (ex: Dynamic) {
+            return null;
         }
     }
 
     /** Deletes `this` UsageFile in the server. **/
     public function delete(): Bool {
         try {
-            Env.getUsageApi().deleteUsageFile(this.id, this);
+            Env.getUsageApi().deleteUsageFile(this.id);
             return true;
         } catch (ex: Dynamic) {
             return false;
@@ -317,7 +321,7 @@ class UsageFile extends IdModel {
         @returns The UsageFile returned from the server.
     **/
     public function upload(content: Blob): UsageFile {
-        final usageFile = Env.getUsageApi().uploadUsageFile(this.id, content, this);
+        final usageFile = Env.getUsageApi().uploadUsageFile(this.id, content);
         return Model.parse(UsageFile, usageFile);
     }
 
@@ -327,7 +331,7 @@ class UsageFile extends IdModel {
         @returns The UsageFile returned from the server.
     **/
     public function submit(): UsageFile {
-        final usageFile = Env.getUsageApi().submitUsageFileAction(this.id, this);
+        final usageFile = Env.getUsageApi().submitUsageFileAction(this.id);
         return Model.parse(UsageFile, usageFile);
     }
 
@@ -337,7 +341,7 @@ class UsageFile extends IdModel {
         @returns The UsageFile returned from the server.
     **/
     public function accept(note: String): UsageFile {
-        final usageFile = Env.getUsageApi().acceptUsageFileAction(this.id, note, this);
+        final usageFile = Env.getUsageApi().acceptUsageFileAction(this.id, note);
         return Model.parse(UsageFile, usageFile);
     }
 
@@ -347,7 +351,7 @@ class UsageFile extends IdModel {
         @returns The UsageFile returned from the server.
     **/
     public function reject(note: String): UsageFile {
-        final usageFile = Env.getUsageApi().rejectUsageFileAction(this.id, note, this);
+        final usageFile = Env.getUsageApi().rejectUsageFileAction(this.id, note);
         return Model.parse(UsageFile, usageFile);
     }
 
@@ -357,7 +361,7 @@ class UsageFile extends IdModel {
         @returns The UsageFile returned from the server.
     **/
     public function close(): UsageFile {
-        final usageFile = Env.getUsageApi().closeUsageFileAction(this.id, this);
+        final usageFile = Env.getUsageApi().closeUsageFileAction(this.id);
         return Model.parse(UsageFile, usageFile);
     }
 
@@ -378,7 +382,7 @@ class UsageFile extends IdModel {
         Gets the product specific file template URL for `this` UsageFile.
     **/
     public function getTemplateLink(): String {
-        final link = haxe.Json.parse(Env.getUsageApi().getProductSpecificUsageFileTemplate(this.id, this));
+        final link = haxe.Json.parse(Env.getUsageApi().getProductSpecificUsageFileTemplate(this.id));
         return link.template_link;
     }
 
@@ -389,7 +393,7 @@ class UsageFile extends IdModel {
         @returns The UsageFile returned from the server.
     **/
     public function uploadReconciliation(content: Blob): UsageFile {
-        final usageFile = Env.getUsageApi().uploadReconciliationFileFromProvider(this.id, content, this);
+        final usageFile = Env.getUsageApi().uploadReconciliationFileFromProvider(this.id, content);
         return Model.parse(UsageFile, usageFile);
     }
 
@@ -400,7 +404,7 @@ class UsageFile extends IdModel {
         @returns The UsageFile returned from the server.
     **/
     public function reprocess(): UsageFile {
-        final usageFile = Env.getUsageApi().reprocessProcessedFile(this.id, this);
+        final usageFile = Env.getUsageApi().reprocessProcessedFile(this.id);
         return Model.parse(UsageFile, usageFile);
     }
 }

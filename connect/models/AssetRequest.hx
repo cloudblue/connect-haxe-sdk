@@ -147,27 +147,31 @@ class AssetRequest extends IdModel {
         @param params A collection of parameters to update. If `null` is passed, then the
         parameters that have changed in the request will be sent.
         @returns The AssetRequest returned from the server, which should contain
-        the same data as `this` AssetRequest.
+        the same data as `this` AssetRequest, or `null` if the updating fails.
     **/
     public function update(params: Collection<Param>): AssetRequest {
-        if (params == null) {
-            final diff = this._toDiff();
-            final hasModifiedFields = Reflect.fields(diff).length > 1;
-            if (hasModifiedFields) {
-                final request = Env.getFulfillmentApi().updateRequest(
-                    this.id,
-                    haxe.Json.stringify(addValueToParams(diff)),this);
-                return Model.parse(AssetRequest, request);
+        try {
+            if (params == null) {
+                final diff = this._toDiff();
+                final hasModifiedFields = Reflect.fields(diff).length > 1;
+                if (hasModifiedFields) {
+                    final request = Env.getFulfillmentApi().updateRequest(
+                        this.id,
+                        haxe.Json.stringify(addValueToParams(diff)));
+                    return Model.parse(AssetRequest, request);
+                } else {
+                    return this;
+                }
             } else {
+                if (params.length() > 0) {
+                    Env.getFulfillmentApi().updateRequest(
+                        this.id,
+                        '{"asset":{"params":${params.toString()}}}');
+                }
                 return this;
             }
-        } else {
-            if (params.length() > 0) {
-                Env.getFulfillmentApi().updateRequest(
-                    this.id,
-                    '{"asset":{"params":${params.toString()}}}',this);
-            }
-            return this;
+        } catch (ex: Dynamic) {
+            return null;
         }
     }
 
@@ -199,7 +203,7 @@ class AssetRequest extends IdModel {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
-            haxe.Json.stringify({template_id: id}), this
+            haxe.Json.stringify({template_id: id})
         );
         this._updateConversation('Request approved using template $id.');
         return Model.parse(AssetRequest, request);
@@ -219,7 +223,7 @@ class AssetRequest extends IdModel {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'approve',
-            haxe.Json.stringify({activation_tile: text}), this
+            haxe.Json.stringify({activation_tile: text})
         );
         this._updateConversation('Request approved using custom activation tile.');
         return Model.parse(AssetRequest, request);
@@ -238,7 +242,7 @@ class AssetRequest extends IdModel {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'fail',
-            haxe.Json.stringify({reason: reason}), this
+            haxe.Json.stringify({reason: reason})
         );
         this._updateConversation('Request failed: $reason.');
         return Model.parse(AssetRequest, request);
@@ -261,7 +265,7 @@ class AssetRequest extends IdModel {
         final request = Env.getFulfillmentApi().changeRequestStatus(
             this.id,
             'inquire',
-            haxe.Json.stringify(body), this
+            haxe.Json.stringify(body)
         );
         this._updateConversation('Request inquired.');
         return Model.parse(AssetRequest, request);
@@ -277,11 +281,7 @@ class AssetRequest extends IdModel {
         the updated status.
     **/
     public function pend(): AssetRequest {
-        final request = Env.getFulfillmentApi().changeRequestStatus(
-            this.id,
-            'pend',
-            haxe.Json.stringify({}), this
-        );
+        final request = Env.getFulfillmentApi().changeRequestStatus(this.id, 'pend', '{}');
         this._updateConversation('Request pended.');
         return Model.parse(AssetRequest, request);
     }
@@ -293,30 +293,31 @@ class AssetRequest extends IdModel {
         the updated assignee.
     **/
     public function assign(assigneeId: String): AssetRequest {
-        final request = Env.getFulfillmentApi().assignRequest(
-            this.id,
-            assigneeId,
-            this
-        );
+        final request = Env.getFulfillmentApi().assignRequest(this.id, assigneeId);
         this._updateConversation('Request assigned to $assigneeId.');
         return Model.parse(AssetRequest, request);
     }
 
     /**
         @returns Whether `this` AssetRequest is pending migration. This is indicated by the
-        presence of a parameter (by default name "migration_info") that contains JSON data.
+        presence of a parameter that contains JSON data. By default, it checks the parameter
+        "migration_info" and, if it is not found, it checks for "migration_info_object".
     **/
     public function needsMigration(key: String = 'migration_info'): Bool {
         final param = this.asset.getParamById(key);
-        return param != null && param.value != null && param.value != '';
+        final result = param != null && param.value != null && param.value != '';
+        return
+            result ? true :
+            (key == 'migration_info') ? needsMigration('migration_info_object') :
+            false;
     }
 
     /** @returns The Conversation assigned to `this` AssetRequest, or `null` if there is none. **/
     public function getConversation(): Conversation {
-        final convs = Conversation.listForRequest(new Query().equal('instance_id', this.id), this);
+        final convs = Conversation.list(new Query().equal('instance_id', this.id));
         final conv = (convs.length() > 0) ? convs.get(0) : null;
         if  (conv != null && conv.id != null && conv.id != '') {
-            return Conversation.getForRequest(conv.id, this);
+            return Conversation.get(conv.id);
         } else {
             return null;
         }
@@ -327,7 +328,7 @@ class AssetRequest extends IdModel {
         final conversation = this.getConversation();
         if (conversation != null) {
             try {
-                conversation.createMessageForRequest(message, this);
+                conversation.createMessage(message);
             } catch (ex: Dynamic) {
                 Env.getLogger().write(
                     connect.logger.Logger.LEVEL_ERROR,
