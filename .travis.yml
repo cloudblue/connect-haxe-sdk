@@ -44,8 +44,9 @@ deploy:
   skip_cleanup: true
   keep_history: false
   on:
+    all_branches: true
     tags: true
-    branch: master
+    condition: $TRAVIS_BRANCH =~ ^master$|^release/.*$
 
 after_deploy:
 # Push Java code
@@ -76,5 +77,4 @@ after_deploy:
   - cd ../..
 
 after_script:
-# Push repository tag when in master branch
-  - python3 stuff/push_tag.py
+# Push repository tag when in master or release/* branches
