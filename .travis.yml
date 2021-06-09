@@ -46,7 +46,7 @@ deploy:
   on:
     all_branches: true
     tags: true
-    condition: $TRAVIS_BRANCH =~ ^master$|^release/.*$
+    condition: $TRAVIS_BRANCH =~ ^(master|release\/.*)$
 
 after_deploy:
 # Push Java code
