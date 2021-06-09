@@ -78,3 +78,4 @@ after_deploy:
 
 after_script:
 # Push repository tag when in master or release/* branches
+  - python3 stuff/push_tag.py
