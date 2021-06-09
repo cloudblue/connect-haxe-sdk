@@ -44,9 +44,8 @@ deploy:
   skip_cleanup: true
   keep_history: false
   on:
-    all_branches: true
+    branch: release/20.3
     tags: true
-    condition: $TRAVIS_BRANCH =~ ^(master|release\/.*)$
 
 after_deploy:
 # Push Java code
