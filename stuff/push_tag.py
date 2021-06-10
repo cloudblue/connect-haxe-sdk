@@ -36,7 +36,7 @@ def run(args: list) -> str:
 
 if __name__ == '__main__':
     branch = os.environ['TRAVIS_BRANCH']
-    if branch == 'master' or branch.startswith('release/'):
+    if branch == 'master':
         print(remove_origin())
         print(add_origin(os.environ['doc_token']))
         tags = get_tags()
@@ -49,4 +49,4 @@ if __name__ == '__main__':
     else:
         print('Tag is not being pushed because this commit has been pushed to '
             + branch
-            + ' branch instead of master or release/*.')
+            + ' branch instead of master.')
