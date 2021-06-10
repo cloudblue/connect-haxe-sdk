@@ -108,15 +108,17 @@ class Util {
 
     private static function maskParamsInObject(obj:Dynamic):Void {
         final maskedParams = Env.getLogger().getMaskedParams();
-        final hasParameterField = Reflect.hasField(obj, 'parameter');
-        for (fieldName in Reflect.fields(obj)) {
-            final value: Dynamic = Reflect.field(obj, fieldName);
-            if (fieldName == 'params' && Std.isOfType(value, Array)) {
-                maskParamsArray(value, maskedParams);
-            } else if (fieldName == 'value' && hasParameterField) {
-                maskConfigParam(obj, Reflect.field(obj, 'parameter'), maskedParams);
-            } else if (Type.typeof(value) == TObject || Std.isOfType(value, connect.util.Collection) || Std.isOfType(value, Array)) {
-                Reflect.setField(obj, fieldName, maskParams(value));
+        if (maskedParams.length() > 0) {
+            final hasParameterField = Reflect.hasField(obj, 'parameter');
+            for (fieldName in Reflect.fields(obj)) {
+                final value: Dynamic = Reflect.field(obj, fieldName);
+                if (fieldName == 'params' && Std.isOfType(value, Array)) {
+                    maskParamsArray(value, maskedParams);
+                } else if (fieldName == 'value' && hasParameterField) {
+                    maskConfigParam(obj, Reflect.field(obj, 'parameter'), maskedParams);
+                } else if (Type.typeof(value) == TObject || Std.isOfType(value, connect.util.Collection) || Std.isOfType(value, Array)) {
+                    Reflect.setField(obj, fieldName, maskParams(value));
+                }
             }
         }
     }
