@@ -155,15 +155,20 @@ class TierConfigRequest extends IdModel {
     public function update(params: Collection<Param>): TierConfigRequest {
         try {
             if (params == null) {
-                final diff = this._toDiff();
-                final hasModifiedFields = Reflect.fields(diff).length > 1;
-                if (hasModifiedFields) {
-                    final request = Env.getTierApi().updateTierConfigRequest(
-                        this.id,
-                        prepareUpdateBody(diff));
-                    return Model.parse(TierConfigRequest, request);
+                final modifiedParams = getModifiedTcrParams();
+                if (modifiedParams != null) {
+                    return this.update(modifiedParams);
                 } else {
-                    return this;
+                    final diff = this._toDiff();
+                    final hasModifiedFields = Reflect.fields(diff).length > 1;
+                    if (hasModifiedFields) {
+                        final request = Env.getTierApi().updateTierConfigRequest(
+                            this.id,
+                            prepareUpdateBody(diff));
+                        return Model.parse(TierConfigRequest, request);
+                    } else {
+                        return this;
+                    }
                 }
             } else {
                 if (params.length() > 0) {
@@ -174,6 +179,24 @@ class TierConfigRequest extends IdModel {
                 return this;
             }
         } catch (ex: Dynamic) {
+            return null;
+        }
+    }
+
+    // If the user has modified the TCR params directly, returns a collection with them.
+    // Otherwise, returns null and modified params should be searched for in TC.
+    private function getModifiedTcrParams(): Null<Collection<Param>> {
+        final oldTcr = Model.parse(TierConfigRequest, this._footprint);
+        if (this.params.length() != oldTcr.params.length()) {
+            final oldParamsAsString = oldTcr.params.toArray().map(p -> p.toString());
+            final result = new Collection<Param>();
+            for (param in this.params.toArray()) {
+                if (oldParamsAsString.indexOf(param.toString()) == -1) {
+                    result.push(param);
+                }
+            }
+            return result;
+        } else {
             return null;
         }
     }
