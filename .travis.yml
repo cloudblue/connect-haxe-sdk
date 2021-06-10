@@ -44,8 +44,8 @@ deploy:
   skip_cleanup: true
   keep_history: false
   on:
-    branch: master
     tags: true
+    branch: master
 
 after_deploy:
 # Push Java code
