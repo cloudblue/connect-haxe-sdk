@@ -87,7 +87,7 @@ class FlowLogger {
                 ? Util.beautifyObject(
                     diff,
                     logger.isCompact(),
-                    false,
+                    Env.getLogger().getLevel() != Logger.LEVEL_DEBUG,
                     logger.isBeautified())
                 : request;
                 final requestTitle = (diff != null) ? 'Request (changes):' : 'Request:';
