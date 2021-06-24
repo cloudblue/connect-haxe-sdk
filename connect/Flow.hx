@@ -446,10 +446,9 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
             this.executor.reset();
             this.setup();
         } catch (ex:Dynamic) {
-            final exStr = FlowExecutor.getExceptionMessage(ex);
-            this.logger.writeException(exStr);
+            this.logger.writeException(FlowExecutor.getStackTrace(ex));
             if (this.getAssetRequest() != null) {
-                this.getAssetRequest()._updateConversation(SKIP_MSG + exStr);
+                this.getAssetRequest()._updateConversation(SKIP_MSG + FlowExecutor.getExceptionMessage(ex));
             }
             ok = false;
         }
