@@ -13,8 +13,6 @@ jobs:
           sudo apt install haxe -y
           mkdir ~/haxelib && haxelib setup ~/haxelib
           yes | haxelib install unittests.hxml
-          yes | haxelib install package.hxml
-          yes | haxelib install doc.hxml
       - name: Install Java 📥
         run: |
           curl -s "https://get.sdkman.io" | bash
@@ -32,6 +30,6 @@ jobs:
       - name: Run tests ⏩
         run: |
           haxelib run munit test -php -coverage -result-exit-code
-          haxelib run munit test -cs -java -python
+          haxelib run munit test -cs -java -python -result-exit-code
       - name: Report coverage ☔
         uses: codecov/codecov-action@v1
