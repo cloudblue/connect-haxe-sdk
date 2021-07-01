@@ -18,7 +18,7 @@ jobs:
       - name: Install Java 📥
         run: |
           curl -s "https://get.sdkman.io" | bash
-          source "`pwd`/.sdkman/bin/sdkman-init.sh"
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
           sdk install java 8.0.275.j9-adpt
       - name: Install Mono 📥
         run: |
