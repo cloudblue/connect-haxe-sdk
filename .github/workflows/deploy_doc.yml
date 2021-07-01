@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy documentation
 on:
   workflow_run:
     workflows: ["Test"]
@@ -6,7 +6,6 @@ on:
       - completed
 jobs:
   deploy-pages:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
