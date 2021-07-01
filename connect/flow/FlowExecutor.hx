@@ -78,10 +78,18 @@ class FlowExecutor {
             return Std.string(ex);
         }
     #elseif python
+        return python.Syntax.code("str({0})", ex);
+    #else
+        return Std.string(ex);
+    #end
+    }
+
+    public static function getStackTrace(ex: Dynamic): String {
+    #if python
         python.Syntax.code("import traceback");
         return python.Syntax.code("traceback.format_exc()");
     #else
-        return Std.string(ex);
+        return getExceptionMessage(ex);
     #end
     }
 

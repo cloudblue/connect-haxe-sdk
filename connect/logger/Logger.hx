@@ -26,7 +26,7 @@ class Logger extends Base {
     /** Only writes compact error & info level messages. **/
     public static final LEVEL_INFO = 2;
 
-    /** Writes detailed messages of all levels. **/
+    /** Writes detailed messages of all levels. Masking of sensitive data is disabled in this level. **/
     public static final LEVEL_DEBUG = 3;
 
     private final path:String;

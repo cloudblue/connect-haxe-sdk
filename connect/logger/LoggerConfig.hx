@@ -102,7 +102,10 @@ class LoggerConfig extends Base {
 
     /**
      * Sets the fields which should be masked in the logs,
-     * by default only Authorization field in header is masked.
+     * by default only Authorization field is masked.
+     *
+     * NOTE: If the logger is in DEBUG level, nothing will get masked.
+     *
      * @param maskedFields Collection of field names (string).
      * @return LoggerConfig `this` instance to support a fluent interface.
      */
@@ -112,7 +115,12 @@ class LoggerConfig extends Base {
     }
 
     /**
-     * Sets the id of the params whose value should be masked in the logs.
+     * Sets the id of the params whose "value" field should be masked in the logs.
+     * This will not mask "structured_value". For that, add the field names to
+     * `maskedFields`.
+     *
+     * NOTE: If the logger is in DEBUG level, nothing will get masked.
+     *
      * @param maskedParams Collection of param ids (string).
      * @return LoggerConfig `this` instance to support a fluent interface.
      */

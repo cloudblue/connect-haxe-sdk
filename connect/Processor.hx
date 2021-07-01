@@ -26,7 +26,7 @@ import haxe.Constraints.Function;
     Then, each flow consist of a series of steps, where each step is a function that receives
     the flow itself as argument (so you can subclass `Flow` and add steps as instance methods).
 
-    Once all flows have been defined, you must call the `Processor.processRequests`,
+    Once all flows have been defined, you must call the `Processor.processAssetRequests`,
     `Processor.processUsageFiles`, or `Processor.processTierConfigRequests` method to process
     requests, depending on the type you want to process.
 
