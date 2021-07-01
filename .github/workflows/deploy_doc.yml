@@ -2,7 +2,6 @@ name: Deploy documentation
 on:
   workflow_run:
     workflows: ["Test"]
-    branches: [master]
     types:
       - completed
 jobs:
