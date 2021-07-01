@@ -130,7 +130,9 @@ class Collection<T> extends Base {
     **/
 #if javalib
     public function forEach(param1: java.util.function.Consumer<Dynamic>): Void {
-        throw new java.lang.RuntimeException("Collection.forEach not implemented.");
+        for (item in this._array) {
+            param1.accept(item);
+        }
     }
 
     public function iterator(): java.util.Iterator<T> {
@@ -138,7 +140,7 @@ class Collection<T> extends Base {
     }
 
     public function spliterator(): java.util.Spliterator<T> {
-        throw new java.lang.RuntimeException("Collection.spliterator not implemented.");
+        return java.util.Arrays.spliterator(java.Lib.nativeArray(this._array, true));
     }
 #else
     public function iterator(): Iterator<T> {
