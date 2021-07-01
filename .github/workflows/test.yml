@@ -17,6 +17,7 @@ jobs:
           yes | haxelib install doc.hxml
       - name: Install Java 📥
         run: |
+          echo `pwd`
           curl -s "https://get.sdkman.io" | bash
           source "/home/travis/.sdkman/bin/sdkman-init.sh"
           sdk install java 8.0.275.j9-adpt
