@@ -1,8 +1,7 @@
 name: Deploy Python
 on:
   workflow_run:
-    workflows: ["Test"]
-    branches: [master]
+    workflows: ["Push tag"]
     types:
       - completed
 jobs:
