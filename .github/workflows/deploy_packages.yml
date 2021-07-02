@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
+      - name: Define VERSION 📝
+        run: echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
       - name: Install Haxe 📥
         run: |
           sudo add-apt-repository ppa:haxe/releases -y
@@ -52,7 +54,7 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-          automatic_release_tag: latest
+          automatic_release_tag: ${{ env.VERSION }}
           files: |
             _build/python/dist/*.tar.gz
             _build/java/*.jar
