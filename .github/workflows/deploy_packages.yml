@@ -31,7 +31,10 @@ jobs:
       - name: Install PHP 📥
         run: sudo apt install php php-mbstring -y
       - name: Build packages 🔧
-        run: haxe package.hxml
+        run: |
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          sdk use java 8.0.292.j9-adpt
+          haxe package.hxml
       - name: Build Python package 🔧
         run: |
           sudo apt install python3-pip -y
