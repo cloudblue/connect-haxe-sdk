@@ -29,6 +29,7 @@ jobs:
         run: sudo apt install php php-mbstring -y
       - name: Run tests ⏩
         run: |
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
           sdk use java 8.0.292.j9-adpt
           echo `java -version`
           haxelib run munit test -php -coverage -result-exit-code
