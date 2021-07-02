@@ -1,0 +1,27 @@
+name: Deploy documentation
+on:
+  push:
+    tags:
+      - "v*"
+jobs:
+  deploy-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+      - name: Install Haxe 📥
+        run: |
+          sudo add-apt-repository ppa:haxe/releases -y
+          sudo apt update
+          sudo apt install haxe -y
+          mkdir ~/haxelib && haxelib setup ~/haxelib
+          yes | haxelib install doc.hxml
+      - name: Build documentation 🔧
+        run: haxe doc.hxml
+      - name: Deploy documentation 🚀
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: doc
+          CLEAN: true

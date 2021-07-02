@@ -1,0 +1,60 @@
+name: Deploy packages
+on:
+  push:
+    tags:
+      - "v*"
+jobs:
+  deploy-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+      - name: Install Haxe 📥
+        run: |
+          sudo add-apt-repository ppa:haxe/releases -y
+          sudo apt update
+          sudo apt install haxe -y
+          mkdir ~/haxelib && haxelib setup ~/haxelib
+          yes | haxelib install package.hxml
+      - name: Install Java 📥
+        run: |
+          curl -s "https://get.sdkman.io" | bash
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          sdk install java 8.0.292.j9-adpt
+      - name: Install Mono 📥
+        run: |
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+          sudo apt install apt-transport-https ca-certificates -y
+          echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+          sudo apt update
+          sudo apt install mono-devel -y
+      - name: Install PHP 📥
+        run: sudo apt install php php-mbstring -y
+      - name: Build packages 🔧
+        run: |
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          sdk use java 8.0.292.j9-adpt
+          haxe package.hxml
+      - name: Build Python package 🔧
+        run: |
+          sudo apt install python3-pip -y
+          sudo -H pip3 install --upgrade pip==20.3.3
+          sudo -H pip3 install wheel
+          sudo -H pip3 install twine
+          cd _build/python
+          python3 setup.py sdist bdist_wheel
+          cd ../..
+      - name: Create release 🚀
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            _build/python/dist/*.tar.gz
+            _build/java/*.jar
+      - name: Deploy to PyPI 🚀
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: ${{ secrets.PYPI_USERNAME }}
+          password: ${{ secrets.PYPI_PASSWORD }}
+          packages_dir: _build/python/dist/
