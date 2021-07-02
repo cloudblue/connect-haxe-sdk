@@ -1,6 +1,6 @@
 <!-- This file can be parsed by haxe.rtti.XmlParser -->
 <haxe>
-	<abstract path="Any" params="" file="/home/travis/haxe/std/Any.hx">
+	<abstract path="Any" params="" file="/usr/share/haxe/std/Any.hx">
 		<from><icast field="__cast"><c path="__cast.T"/></icast></from>
 		<this><d/></this>
 		<to><icast field="__promote"><c path="__promote.T"/></icast></to>
@@ -14,7 +14,7 @@
 	to work with the actual value, it needs to be explicitly promoted
 	to another type.</haxe_doc>
 		<meta><m n=":forward.variance"/></meta>
-		<impl><class path="_Any.Any_Impl_" params="" file="/home/travis/haxe/std/Any.hx" private="1" module="Any" final="1">
+		<impl><class path="_Any.Any_Impl_" params="" file="/usr/share/haxe/std/Any.hx" private="1" module="Any" final="1">
 	<__promote params="T" get="inline" set="null" line="37" static="1">
 		<f a="this">
 			<d/>
@@ -44,7 +44,7 @@
 	</toString>
 </class></impl>
 	</abstract>
-	<class path="_Any.Any_Impl_" params="" file="/home/travis/haxe/std/Any.hx" private="1" module="Any" final="1">
+	<class path="_Any.Any_Impl_" params="" file="/usr/share/haxe/std/Any.hx" private="1" module="Any" final="1">
 		<__promote params="T" get="inline" set="null" line="37" static="1">
 			<f a="this">
 				<d/>
@@ -73,7 +73,7 @@
 			<meta><m n=":noCompletion"/></meta>
 		</toString>
 	</class>
-	<class path="Array" params="T" file="/home/travis/haxe/std/Array.hx" extern="1">
+	<class path="Array" params="T" file="/usr/share/haxe/std/Array.hx" extern="1">
 		<length public="1" set="null">
 			<x path="Int"/>
 			<haxe_doc>The length of `this` Array.</haxe_doc>
@@ -401,7 +401,7 @@
 		</new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<abstract path="Class" params="T" file="/home/travis/haxe/std/Class.hx">
+	<abstract path="Class" params="T" file="/usr/share/haxe/std/Class.hx">
 		<this><x path="Class"><c path="Class.T"/></x></this>
 		<haxe_doc>An abstract type that represents a Class.
 
@@ -413,7 +413,7 @@
 			<m n=":runtimeValue"/>
 		</meta>
 	</abstract>
-	<class path="Date" params="" file="/home/travis/haxe/std/Date.hx" extern="1">
+	<class path="Date" params="" file="/usr/share/haxe/std/Date.hx" extern="1">
 		<now public="1" set="method" static="1">
 			<f a=""><c path="Date"/></f>
 			<haxe_doc>Returns a Date representing the current local time.</haxe_doc>
@@ -567,7 +567,7 @@
 	timestamps outside the range on any target.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="EReg" params="" file="/home/travis/haxe/std/EReg.hx">
+	<class path="EReg" params="" file="/usr/share/haxe/std/EReg.hx">
 		<escape public="1" set="method" line="200" static="1">
 			<f a="s">
 				<c path="String"/>
@@ -751,7 +751,7 @@
 	<https://haxe.org/manual/std-regex.html>]]></haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<abstract path="Enum" params="T" file="/home/travis/haxe/std/Enum.hx">
+	<abstract path="Enum" params="T" file="/usr/share/haxe/std/Enum.hx">
 		<this><x path="Enum"><c path="Enum.T"/></x></this>
 		<haxe_doc>An abstract type that represents an Enum type.
 
@@ -765,14 +765,14 @@
 			<m n=":runtimeValue"/>
 		</meta>
 	</abstract>
-	<abstract path="EnumValue" params="" file="/home/travis/haxe/std/EnumValue.hx">
+	<abstract path="EnumValue" params="" file="/usr/share/haxe/std/EnumValue.hx">
 		<this><x path="EnumValue"/></this>
 		<haxe_doc>An abstract type that represents any enum value.
 	See `Type` for the Haxe Reflection API.
 
 	@see https://haxe.org/manual/types-enum-instance.html</haxe_doc>
 		<meta><m n=":coreType"/></meta>
-		<impl><class path="_EnumValue.EnumValue_Impl_" params="" file="/home/travis/haxe/std/EnumValue.hx" private="1" module="EnumValue" final="1"><match public="1" set="method" line="58" static="1">
+		<impl><class path="_EnumValue.EnumValue_Impl_" params="" file="/usr/share/haxe/std/EnumValue.hx" private="1" module="EnumValue" final="1"><match public="1" set="method" line="58" static="1">
 	<f a="this:pattern">
 		<x path="EnumValue"/>
 		<d/>
@@ -806,7 +806,7 @@
 		for documentation.</haxe_doc>
 </match></class></impl>
 	</abstract>
-	<class path="_EnumValue.EnumValue_Impl_" params="" file="/home/travis/haxe/std/EnumValue.hx" private="1" module="EnumValue" final="1"><match public="1" set="method" line="58" static="1">
+	<class path="_EnumValue.EnumValue_Impl_" params="" file="/usr/share/haxe/std/EnumValue.hx" private="1" module="EnumValue" final="1"><match public="1" set="method" line="58" static="1">
 	<f a="this:pattern">
 		<x path="EnumValue"/>
 		<d/>
@@ -839,7 +839,7 @@
 		This method is implemented in the compiler. This definition exists only
 		for documentation.</haxe_doc>
 </match></class>
-	<class path="IntIterator" params="" file="/home/travis/haxe/std/IntIterator.hx">
+	<class path="IntIterator" params="" file="/usr/share/haxe/std/IntIterator.hx">
 		<min><x path="Int"/></min>
 		<max><x path="Int"/></max>
 		<hasNext public="1" get="inline" set="null" line="53">
@@ -874,7 +874,7 @@
 
 	@see https://haxe.org/manual/lf-iterators.html</haxe_doc>
 	</class>
-	<class path="Lambda" params="" file="/home/travis/haxe/std/Lambda.hx">
+	<class path="Lambda" params="" file="/usr/share/haxe/std/Lambda.hx">
 		<array public="1" params="A" set="method" line="45" static="1">
 			<f a="it">
 				<t path="Iterable"><c path="array.A"/></t>
@@ -1151,12 +1151,12 @@
 	@see https://haxe.org/manual/std-Lambda.html</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<typedef path="List" params="T" file="/home/travis/haxe/std/List.hx"><c path="haxe.ds.List"><c path="List.T"/></c></typedef>
-	<typedef path="Map" params="K:V" file="/home/travis/haxe/std/Map.hx"><x path="haxe.ds.Map">
+	<typedef path="List" params="T" file="/usr/share/haxe/std/List.hx"><c path="haxe.ds.List"><c path="List.T"/></c></typedef>
+	<typedef path="Map" params="K:V" file="/usr/share/haxe/std/Map.hx"><x path="haxe.ds.Map">
 	<c path="Map.K"/>
 	<c path="Map.V"/>
 </x></typedef>
-	<typedef path="IMap" params="K:V" file="/home/travis/haxe/std/Map.hx" module="Map">
+	<typedef path="IMap" params="K:V" file="/usr/share/haxe/std/Map.hx" module="Map">
 		<c path="haxe.IMap">
 			<c path="IMap.K"/>
 			<c path="IMap.V"/>
@@ -1166,7 +1166,7 @@
 			<m n=":deprecated"/>
 		</meta>
 	</typedef>
-	<class path="Math" params="" file="/home/travis/haxe/std/Math.hx" extern="1">
+	<class path="Math" params="" file="/usr/share/haxe/std/Math.hx" extern="1">
 		<PI public="1" set="null" static="1">
 			<x path="Float"/>
 			<haxe_doc>Represents the ratio of the circumference of a circle to its diameter,
@@ -1435,7 +1435,7 @@
 	@see https://haxe.org/manual/std-math.html</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="Reflect" params="" file="/home/travis/haxe/std/Reflect.hx" extern="1">
+	<class path="Reflect" params="" file="/usr/share/haxe/std/Reflect.hx" extern="1">
 		<hasField public="1" set="method" static="1">
 			<f a="o:field">
 				<d/>
@@ -1670,7 +1670,7 @@
 	@see https://haxe.org/manual/std-reflection.html</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="Std" params="" file="/home/travis/haxe/std/Std.hx" extern="1">
+	<class path="Std" params="" file="/usr/share/haxe/std/Std.hx" extern="1">
 		<is public="1" set="method" static="1">
 			<f a="v:t">
 				<d/>
@@ -1803,14 +1803,14 @@
 		<haxe_doc>The Std class provides standard methods for manipulating basic types.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<abstract path="Void" params="" file="/home/travis/haxe/std/StdTypes.hx" module="StdTypes">
+	<abstract path="Void" params="" file="/usr/share/haxe/std/StdTypes.hx" module="StdTypes">
 		<this><x path="Void"/></this>
 		<haxe_doc>The standard `Void` type. Only `null` values can be of the type `Void`.
 
 	@see https://haxe.org/manual/types-void.html</haxe_doc>
 		<meta><m n=":coreType"/></meta>
 	</abstract>
-	<abstract path="Float" params="" file="/home/travis/haxe/std/StdTypes.hx" module="StdTypes">
+	<abstract path="Float" params="" file="/usr/share/haxe/std/StdTypes.hx" module="StdTypes">
 		<this><x path="Float"/></this>
 		<haxe_doc><![CDATA[The standard `Float` type, this is a double-precision IEEE 64bit float.
 
@@ -1828,7 +1828,7 @@
 			<m n=":runtimeValue"/>
 		</meta>
 	</abstract>
-	<abstract path="Int" params="" file="/home/travis/haxe/std/StdTypes.hx" module="StdTypes">
+	<abstract path="Int" params="" file="/usr/share/haxe/std/StdTypes.hx" module="StdTypes">
 		<this><x path="Int"/></this>
 		<to><icast><x path="Float"/></icast></to>
 		<haxe_doc><![CDATA[The standard `Int` type. Its precision depends on the platform.
@@ -1848,7 +1848,7 @@
 			<m n=":runtimeValue"/>
 		</meta>
 	</abstract>
-	<abstract path="Null" params="T" file="/home/travis/haxe/std/StdTypes.hx" module="StdTypes">
+	<abstract path="Null" params="T" file="/usr/share/haxe/std/StdTypes.hx" module="StdTypes">
 		<from><icast><c path="Null.T"/></icast></from>
 		<this><x path="Null"><c path="Null.T"/></x></this>
 		<to><icast><c path="Null.T"/></icast></to>
@@ -1866,7 +1866,7 @@
 			<m n=":coreType"/>
 		</meta>
 	</abstract>
-	<abstract path="Bool" params="" file="/home/travis/haxe/std/StdTypes.hx" module="StdTypes">
+	<abstract path="Bool" params="" file="/usr/share/haxe/std/StdTypes.hx" module="StdTypes">
 		<this><x path="Bool"/></this>
 		<haxe_doc><![CDATA[The standard Boolean type, which can either be `true` or `false`.
 
@@ -1881,7 +1881,7 @@
 			<m n=":runtimeValue"/>
 		</meta>
 	</abstract>
-	<abstract path="Dynamic" params="T" file="/home/travis/haxe/std/StdTypes.hx" module="StdTypes">
+	<abstract path="Dynamic" params="T" file="/usr/share/haxe/std/StdTypes.hx" module="StdTypes">
 		<this><x path="Dynamic"><c path="Dynamic.T"/></x></this>
 		<haxe_doc>`Dynamic` is a special type which is compatible with all other types.
 
@@ -1895,7 +1895,7 @@
 			<m n=":runtimeValue"/>
 		</meta>
 	</abstract>
-	<typedef path="Iterator" params="T" file="/home/travis/haxe/std/StdTypes.hx" module="StdTypes">
+	<typedef path="Iterator" params="T" file="/usr/share/haxe/std/StdTypes.hx" module="StdTypes">
 		<a>
 			<next set="method">
 				<f a=""><c path="Iterator.T"/></f>
@@ -1925,21 +1925,21 @@
 
 	@see https://haxe.org/manual/lf-iterators.html</haxe_doc>
 	</typedef>
-	<typedef path="Iterable" params="T" file="/home/travis/haxe/std/StdTypes.hx" module="StdTypes">
+	<typedef path="Iterable" params="T" file="/usr/share/haxe/std/StdTypes.hx" module="StdTypes">
 		<a><iterator set="method"><f a=""><t path="Iterator"><c path="Iterable.T"/></t></f></iterator></a>
 		<haxe_doc>An `Iterable` is a data structure which has an `iterator()` method.
 	See `Lambda` for generic functions on iterable structures.
 
 	@see https://haxe.org/manual/lf-iterators.html</haxe_doc>
 	</typedef>
-	<typedef path="KeyValueIterator" params="K:V" file="/home/travis/haxe/std/StdTypes.hx" module="StdTypes">
+	<typedef path="KeyValueIterator" params="K:V" file="/usr/share/haxe/std/StdTypes.hx" module="StdTypes">
 		<t path="Iterator"><a>
 	<value><c path="KeyValueIterator.V"/></value>
 	<key><c path="KeyValueIterator.K"/></key>
 </a></t>
 		<haxe_doc>A `KeyValueIterator` is an `Iterator` that has a key and a value.</haxe_doc>
 	</typedef>
-	<typedef path="KeyValueIterable" params="K:V" file="/home/travis/haxe/std/StdTypes.hx" module="StdTypes">
+	<typedef path="KeyValueIterable" params="K:V" file="/usr/share/haxe/std/StdTypes.hx" module="StdTypes">
 		<a><keyValueIterator set="method"><f a=""><t path="KeyValueIterator">
 	<c path="KeyValueIterable.K"/>
 	<c path="KeyValueIterable.V"/>
@@ -1947,7 +1947,7 @@
 		<haxe_doc>A `KeyValueIterable` is a data structure which has a `keyValueIterator()`
 	method to iterate over key-value-pairs.</haxe_doc>
 	</typedef>
-	<class path="ArrayAccess" params="T" file="/home/travis/haxe/std/StdTypes.hx" module="StdTypes" extern="1" interface="1"><haxe_doc>`ArrayAccess` is used to indicate a class that can be accessed using brackets.
+	<class path="ArrayAccess" params="T" file="/usr/share/haxe/std/StdTypes.hx" module="StdTypes" extern="1" interface="1"><haxe_doc>`ArrayAccess` is used to indicate a class that can be accessed using brackets.
 	The type parameter represents the type of the elements stored.
 
 	This interface should be used for externs only. Haxe does not support custom
@@ -1955,7 +1955,7 @@
 	abstract types.
 
 	@see https://haxe.org/manual/types-abstract-array-access.html</haxe_doc></class>
-	<class path="String" params="" file="/home/travis/haxe/std/String.hx" extern="1">
+	<class path="String" params="" file="/usr/share/haxe/std/String.hx" extern="1">
 		<fromCharCode public="1" set="method" static="1">
 			<f a="code">
 				<x path="Int"/>
@@ -2126,7 +2126,7 @@
 	@see https://haxe.org/manual/std-String.html</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="StringBuf" params="" file="/home/travis/haxe/std/StringBuf.hx">
+	<class path="StringBuf" params="" file="/usr/share/haxe/std/StringBuf.hx">
 		<b><c path="String"/></b>
 		<length public="1" get="accessor" set="null">
 			<x path="Int"/>
@@ -2194,7 +2194,7 @@
 	values.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.SysTools" params="" file="/home/travis/haxe/std/haxe/SysTools.hx">
+	<class path="haxe.SysTools" params="" file="/usr/share/haxe/std/haxe/SysTools.hx">
 		<winMetaCharacters final="1" public="1" set="null" expr="[&quot; &quot;.code, &quot;(&quot;.code, &quot;)&quot;.code, &quot;%&quot;.code, &quot;!&quot;.code, &quot;^&quot;.code, &quot;\&quot;&quot;.code, &quot;&lt;&quot;.code, &quot;&gt;&quot;.code, &quot;&amp;&quot;.code, &quot;|&quot;.code, &quot;\n&quot;.code, &quot;\r&quot;.code, &quot;,&quot;.code, &quot;;&quot;.code]" line="9" static="1">
 			<x path="haxe.ds.ReadOnlyArray"><x path="Int"/></x>
 			<meta><m n=":value"><e><![CDATA[[" ".code, "(".code, ")".code, "%".code, "!".code, "^".code, "\"".code, "<".code, ">".code, "&".code, "|".code, "\n".code, "\r".code, ",".code, ";".code]]]></e></m></meta>
@@ -2228,7 +2228,7 @@
 		```</haxe_doc>
 		</quoteWinArg>
 	</class>
-	<class path="StringTools" params="" file="/home/travis/haxe/std/StringTools.hx">
+	<class path="StringTools" params="" file="/usr/share/haxe/std/StringTools.hx">
 		<urlEncode public="1" get="inline" set="null" line="42" static="1">
 			<f a="s">
 				<c path="String"/>
@@ -2554,7 +2554,7 @@
 	unspecified.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="Sys" params="" file="/home/travis/haxe/std/Sys.hx" extern="1">
+	<class path="Sys" params="" file="/usr/share/haxe/std/Sys.hx" extern="1">
 		<print public="1" set="method" static="1">
 			<f a="v">
 				<d/>
@@ -2720,7 +2720,7 @@
 			<m n=":require"><e>sys</e></m>
 		</meta>
 	</class>
-	<class path="Type" params="" file="/home/travis/haxe/std/Type.hx" extern="1">
+	<class path="Type" params="" file="/usr/share/haxe/std/Type.hx" extern="1">
 		<getClass public="1" params="T" set="method" static="1">
 			<f a="o">
 				<c path="getClass.T"/>
@@ -3024,7 +3024,7 @@
 	@see https://haxe.org/manual/std-reflection.html</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<enum path="ValueType" params="" file="/home/travis/haxe/std/Type.hx" module="Type">
+	<enum path="ValueType" params="" file="/usr/share/haxe/std/Type.hx" module="Type">
 		<TNull/>
 		<TInt/>
 		<TFloat/>
@@ -3326,7 +3326,7 @@
     result is unspecified.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.IMap" params="K:V" file="/home/travis/haxe/std/haxe/Constraints.hx" module="haxe.Constraints" interface="1">
+	<class path="haxe.IMap" params="K:V" file="/usr/share/haxe/std/haxe/Constraints.hx" module="haxe.Constraints" interface="1">
 		<get public="1" set="method"><f a="k">
 	<c path="haxe.IMap.K"/>
 	<x path="Null"><c path="haxe.IMap.V"/></x>
@@ -3357,7 +3357,7 @@
 		<toString public="1" set="method"><f a=""><c path="String"/></f></toString>
 		<clear public="1" set="method"><f a=""><x path="Void"/></f></clear>
 	</class>
-	<class path="haxe.ds.StringMap" params="T" file="/home/travis/haxe/std/haxe/ds/StringMap.hx" extern="1">
+	<class path="haxe.ds.StringMap" params="T" file="/usr/share/haxe/std/haxe/ds/StringMap.hx" extern="1">
 		<implements path="haxe.IMap">
 			<c path="String"/>
 			<c path="haxe.ds.StringMap.T"/>
@@ -3928,12 +3928,12 @@
 	<x path="Bool"/>
 </f></prepareRequest>
 		<processSetup set="method" line="442"><f a=""><x path="Bool"/></f></processSetup>
-		<getCurrentAttempt public="1" set="method" line="464">
+		<getCurrentAttempt public="1" set="method" line="463">
 			<f a=""><x path="Int"/></f>
 			<haxe_doc>* Provide current step attempt.
      * @return Int Number of times that this step has been executed</haxe_doc>
 		</getCurrentAttempt>
-		<onStepBegin public="1" set="method" line="469">
+		<onStepBegin public="1" set="method" line="468">
 			<f a="request:step:index">
 				<c path="connect.models.IdModel"/>
 				<c path="connect.flow.Step"/>
@@ -3942,7 +3942,7 @@
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</onStepBegin>
-		<onStepEnd public="1" set="method" line="475">
+		<onStepEnd public="1" set="method" line="474">
 			<f a="request:step:index">
 				<c path="connect.models.IdModel"/>
 				<c path="connect.flow.Step"/>
@@ -3951,7 +3951,7 @@
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</onStepEnd>
-		<onStepFail public="1" set="method" line="482">
+		<onStepFail public="1" set="method" line="481">
 			<f a="request:step:index:msg">
 				<c path="connect.models.IdModel"/>
 				<c path="connect.flow.Step"/>
@@ -3961,7 +3961,7 @@
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</onStepFail>
-		<onStepSkip public="1" set="method" line="492">
+		<onStepSkip public="1" set="method" line="491">
 			<f a="request:step:index">
 				<c path="connect.models.IdModel"/>
 				<c path="connect.flow.Step"/>
@@ -3970,7 +3970,7 @@
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</onStepSkip>
-		<onStepAbort public="1" set="method" line="499">
+		<onStepAbort public="1" set="method" line="498">
 			<f a="request:step:index:msg">
 				<c path="connect.models.IdModel"/>
 				<c path="connect.flow.Step"/>
@@ -3980,7 +3980,7 @@
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</onStepAbort>
-		<onLoad public="1" set="method" line="507">
+		<onLoad public="1" set="method" line="506">
 			<f a="request:firstStep:data:storageType:numAttempts">
 				<c path="connect.models.IdModel"/>
 				<x path="Int"/>
@@ -3991,28 +3991,28 @@
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</onLoad>
-		<onFailedLoad public="1" set="method" line="516">
+		<onFailedLoad public="1" set="method" line="515">
 			<f a="request">
 				<c path="connect.models.IdModel"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</onFailedLoad>
-		<onConnectSave public="1" set="method" line="520">
+		<onConnectSave public="1" set="method" line="519">
 			<f a="request">
 				<c path="connect.models.IdModel"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</onConnectSave>
-		<onLocalSave public="1" set="method" line="525">
+		<onLocalSave public="1" set="method" line="524">
 			<f a="request">
 				<c path="connect.models.IdModel"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</onLocalSave>
-		<onFailedSave public="1" set="method" line="530">
+		<onFailedSave public="1" set="method" line="529">
 			<f a="request">
 				<c path="connect.models.IdModel"/>
 				<x path="Void"/>
@@ -4146,7 +4146,7 @@
     Then, each flow consist of a series of steps, where each step is a function that receives
     the flow itself as argument (so you can subclass `Flow` and add steps as instance methods).
 
-    Once all flows have been defined, you must call the `Processor.processRequests`,
+    Once all flows have been defined, you must call the `Processor.processAssetRequests`,
     `Processor.processUsageFiles`, or `Processor.processTierConfigRequests` method to process
     requests, depending on the type you want to process.
 
@@ -5328,6 +5328,10 @@
 	<d/>
 	<c path="String"/>
 </f></getExceptionMessage>
+		<getStackTrace public="1" set="method" line="87" static="1"><f a="ex">
+	<d/>
+	<c path="String"/>
+</f></getStackTrace>
 		<flow final="1"><c path="connect.Flow"/></flow>
 		<delegate final="1"><x path="Null"><c path="connect.flow.FlowExecutorDelegate"/></x></delegate>
 		<steps final="1"><c path="Array"><c path="connect.flow.Step"/></c></steps>
@@ -5362,13 +5366,13 @@
 	<x path="Int"/>
 	<x path="Void"/>
 </f></callStepFunc>
-		<processAbortOrEnd set="method" line="88"><f a="request:step:index">
+		<processAbortOrEnd set="method" line="96"><f a="request:step:index">
 	<c path="connect.models.IdModel"/>
 	<c path="connect.flow.Step"/>
 	<x path="Int"/>
 	<x path="Bool"/>
 </f></processAbortOrEnd>
-		<abort public="1" set="method" line="112">
+		<abort public="1" set="method" line="120">
 			<f a="?message">
 				<c path="String"/>
 				<x path="Void"/>
@@ -5717,7 +5721,7 @@
 		<LEVEL_DEBUG final="1" public="1" set="null" expr="3" line="30" static="1">
 			<x path="Int"/>
 			<meta><m n=":value"><e>3</e></m></meta>
-			<haxe_doc>Writes detailed messages of all levels.</haxe_doc>
+			<haxe_doc>Writes detailed messages of all levels. Masking of sensitive data is disabled in this level.</haxe_doc>
 		</LEVEL_DEBUG>
 		<path final="1"><c path="String"/></path>
 		<level final="1"><x path="Int"/></level>
@@ -5963,7 +5967,7 @@
 </f></new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.ds._Map.Map_Impl_" params="" file="/home/travis/haxe/std/haxe/ds/Map.hx" private="1" module="haxe.ds.Map" final="1">
+	<class path="haxe.ds._Map.Map_Impl_" params="" file="/usr/share/haxe/std/haxe/ds/Map.hx" private="1" module="haxe.ds.Map" final="1">
 		<_new public="1" set="method" static="1">
 			<f a=""><x path="haxe.ds.Map">
 	<c path="haxe.ds.Map.K"/>
@@ -6308,26 +6312,34 @@
      * @param handlers Collection of handlers.
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</handlers>
-		<maskedFields public="1" set="method" line="109">
+		<maskedFields public="1" set="method" line="112">
 			<f a="maskedFields">
 				<c path="connect.util.Collection"><c path="String"/></c>
 				<c path="connect.logger.LoggerConfig"/>
 			</f>
 			<haxe_doc>* Sets the fields which should be masked in the logs,
-     * by default only Authorization field in header is masked.
+     * by default only Authorization field is masked.
+     *
+     * NOTE: If the logger is in DEBUG level, nothing will get masked.
+     *
      * @param maskedFields Collection of field names (string).
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</maskedFields>
-		<maskedParams public="1" set="method" line="119">
+		<maskedParams public="1" set="method" line="127">
 			<f a="maskedParams">
 				<c path="connect.util.Collection"><c path="String"/></c>
 				<c path="connect.logger.LoggerConfig"/>
 			</f>
-			<haxe_doc>* Sets the id of the params whose value should be masked in the logs.
+			<haxe_doc>* Sets the id of the params whose "value" field should be masked in the logs.
+     * This will not mask "structured_value". For that, add the field names to
+     * `maskedFields`.
+     *
+     * NOTE: If the logger is in DEBUG level, nothing will get masked.
+     *
      * @param maskedParams Collection of param ids (string).
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</maskedParams>
-		<beautify public="1" set="method" line="130">
+		<beautify public="1" set="method" line="138">
 			<f a="enable">
 				<x path="Bool"/>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6337,7 +6349,7 @@
      * @param enable Whether beautified logging should be enabled (defaults to `false`).
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</beautify>
-		<compact public="1" set="method" line="142">
+		<compact public="1" set="method" line="150">
 			<f a="enable">
 				<x path="Bool"/>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6348,7 +6360,7 @@
      * @param enable Whether compact logging should be enabled.
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</compact>
-		<regexMasks public="1" set="method" line="152">
+		<regexMasks public="1" set="method" line="160">
 			<f a="expressions">
 				<c path="connect.util.Collection"><c path="String"/></c>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6357,7 +6369,7 @@
      * @param expressions
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</regexMasks>
-		<markdown public="1" set="method" line="169">
+		<markdown public="1" set="method" line="177">
 			<f a="enable">
 				<x path="Bool"/>
 				<c path="connect.logger.LoggerConfig"/>
@@ -9927,7 +9939,7 @@
 	</class>
 	<class path="connect.util.Collection" params="T" file="connect/util/Collection.hx">
 		<extends path="connect.Base"/>
-		<_fromArray public="1" params="T" set="method" line="336" static="1">
+		<_fromArray public="1" params="T" set="method" line="338" static="1">
 			<f a="array">
 				<c path="Array"><c path="_fromArray.T"/></c>
 				<c path="connect.util.Collection"><c path="_fromArray.T"/></c>
@@ -10021,12 +10033,12 @@
         and including that offset to the end of `this` Collection are moved one index
         ahead.</haxe_doc>
 		</insert>
-		<iterator public="1" set="method" line="144">
+		<iterator public="1" set="method" line="146">
 			<f a=""><t path="Iterator"><c path="connect.util.Collection.T"/></t></f>
 			<haxe_doc>Returns an iterator of the Collection values. This can be used with `for` loops when
         using the SDK within Haxe, and in Java it returns a native iterator.</haxe_doc>
 		</iterator>
-		<join public="1" set="method" line="166">
+		<join public="1" set="method" line="168">
 			<f a="sep">
 				<c path="String"/>
 				<c path="String"/>
@@ -10038,7 +10050,7 @@
         - If `this` has exactly one element, the result is equal to converting the element to string.
         - If `sep` is null, the result is unspecified.</haxe_doc>
 		</join>
-		<lastIndexOf public="1" set="method" line="184">
+		<lastIndexOf public="1" set="method" line="186">
 			<f a="x:?fromIndex">
 				<c path="connect.util.Collection.T"/>
 				<x path="Int"/>
@@ -10056,7 +10068,7 @@
         Collection, the whole array will be searched, if it is less than 0, the function returns
         -1.</haxe_doc>
 		</lastIndexOf>
-		<pop public="1" set="method" line="197">
+		<pop public="1" set="method" line="199">
 			<f a=""><c path="connect.util.Collection.T"/></f>
 			<haxe_doc>Removes the last element of `this` Collection and returns it.
 
@@ -10065,7 +10077,7 @@
         - If `this` has at least one element, `this.length()` will decrease by 1.
         - If `this` is the empty Collection, null is returned and the length remains 0.</haxe_doc>
 		</pop>
-		<push public="1" set="method" line="212">
+		<push public="1" set="method" line="214">
 			<f a="x">
 				<c path="connect.util.Collection.T"/>
 				<c path="connect.util.Collection"><c path="connect.util.Collection.T"/></c>
@@ -10079,7 +10091,7 @@
 
         `this` Collection is returned to allows for fluent programming (method chaining).</haxe_doc>
 		</push>
-		<remove public="1" set="method" line="229">
+		<remove public="1" set="method" line="231">
 			<f a="x">
 				<c path="connect.util.Collection.T"/>
 				<x path="Bool"/>
@@ -10094,7 +10106,7 @@
 
         If `x` is not found, `this` Collection is not changed and the function returns false.</haxe_doc>
 		</remove>
-		<reverse public="1" set="method" line="241">
+		<reverse public="1" set="method" line="243">
 			<f a=""><x path="Void"/></f>
 			<haxe_doc><![CDATA[Reverse the order of elements of `this` Collection.
 
@@ -10102,7 +10114,7 @@
 
         If `this.length() < 2`, `this` remains unchanged.]]></haxe_doc>
 		</reverse>
-		<shift public="1" set="method" line="256">
+		<shift public="1" set="method" line="258">
 			<f a=""><c path="connect.util.Collection.T"/></f>
 			<haxe_doc>Removes the first element of `this` Collection and returns it.
 
@@ -10113,7 +10125,7 @@
 
         If `this` is the empty Collection, `null` is returned and the length remains 0.</haxe_doc>
 		</shift>
-		<slice public="1" set="method" line="279">
+		<slice public="1" set="method" line="281">
 			<f a="pos:?end">
 				<x path="Int"/>
 				<x path="Int"/>
@@ -10136,7 +10148,7 @@
         If `pos` exceeds `this.length()` or if `end` is less than or equals
         `pos`, the result is an empty Collection.</haxe_doc>
 		</slice>
-		<splice public="1" set="method" line="305">
+		<splice public="1" set="method" line="307">
 			<f a="pos:len">
 				<x path="Int"/>
 				<x path="Int"/>
@@ -10162,11 +10174,11 @@
         words, each element of the original `this` Collection either remains in
         `this` Collection or becomes an element of the returned Collection.]]></haxe_doc>
 		</splice>
-		<toString public="1" set="method" line="313">
+		<toString public="1" set="method" line="315">
 			<f a=""><c path="String"/></f>
 			<haxe_doc>Returns a JSON string representation of `this` Collection.</haxe_doc>
 		</toString>
-		<unshift public="1" set="method" line="329">
+		<unshift public="1" set="method" line="331">
 			<f a="x">
 				<c path="connect.util.Collection.T"/>
 				<c path="connect.util.Collection"><c path="connect.util.Collection.T"/></c>
@@ -10517,7 +10529,7 @@
 			<m n=":dox"><e>hide</e></m>
 		</meta>
 	</class>
-	<class path="diff.Diff" params="" file="/home/travis/haxe/lib/diff/1,0,0/diff/Diff.hx">
+	<class path="diff.Diff" params="" file="/home/runner/haxelib/diff/1,0,0/diff/Diff.hx">
 		<isStruct set="method" line="65" static="1"><f a="value">
 	<d/>
 	<x path="Bool"/>
@@ -10603,7 +10615,7 @@
     `apply` to `second` to get `first`.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<enum path="haxe.StackItem" params="" file="/home/travis/haxe/std/haxe/CallStack.hx" module="haxe.CallStack">
+	<enum path="haxe.StackItem" params="" file="/usr/share/haxe/std/haxe/CallStack.hx" module="haxe.CallStack">
 		<CFunction/>
 		<Module a="m"><c path="String"/></Module>
 		<FilePos a="s:file:line:?column">
@@ -10619,7 +10631,7 @@
 		<LocalFunction a="?v"><x path="Int"/></LocalFunction>
 		<haxe_doc>Elements return by `CallStack` methods.</haxe_doc>
 	</enum>
-	<abstract path="haxe.CallStack" params="" file="/home/travis/haxe/std/haxe/CallStack.hx">
+	<abstract path="haxe.CallStack" params="" file="/usr/share/haxe/std/haxe/CallStack.hx">
 		<from><icast><c path="Array"><e path="haxe.StackItem"/></c></icast></from>
 		<this><c path="Array"><e path="haxe.StackItem"/></c></this>
 		<haxe_doc>Get information about the call stack.</haxe_doc>
@@ -10627,7 +10639,7 @@
 			<m n=":allow"><e>haxe.Exception</e></m>
 			<m n=":using"><e>haxe.CallStack</e></m>
 		</meta>
-		<impl><class path="haxe._CallStack.CallStack_Impl_" params="" file="/home/travis/haxe/std/haxe/CallStack.hx" private="1" module="haxe.CallStack" final="1">
+		<impl><class path="haxe._CallStack.CallStack_Impl_" params="" file="/usr/share/haxe/std/haxe/CallStack.hx" private="1" module="haxe.CallStack" final="1">
 	<length public="1" get="accessor" set="null" static="1">
 		<x path="Int"/>
 		<haxe_doc>The length of this stack.</haxe_doc>
@@ -10708,7 +10720,7 @@
 	</meta>
 </class></impl>
 	</abstract>
-	<class path="haxe._CallStack.CallStack_Impl_" params="" file="/home/travis/haxe/std/haxe/CallStack.hx" private="1" module="haxe.CallStack" final="1">
+	<class path="haxe._CallStack.CallStack_Impl_" params="" file="/usr/share/haxe/std/haxe/CallStack.hx" private="1" module="haxe.CallStack" final="1">
 		<length public="1" get="accessor" set="null" static="1">
 			<x path="Int"/>
 			<haxe_doc>The length of this stack.</haxe_doc>
@@ -10788,36 +10800,36 @@
 			<m n=":allow"><e>haxe.Exception</e></m>
 		</meta>
 	</class>
-	<abstract path="haxe.Function" params="" file="/home/travis/haxe/std/haxe/Constraints.hx" module="haxe.Constraints">
+	<abstract path="haxe.Function" params="" file="/usr/share/haxe/std/haxe/Constraints.hx" module="haxe.Constraints">
 		<this><d/></this>
 		<haxe_doc>This type unifies with any function type.
 
 	It is intended to be used as a type parameter constraint. If used as a real
 	type, the underlying type will be `Dynamic`.</haxe_doc>
 		<meta><m n=":callable"/></meta>
-		<impl><class path="haxe._Constraints.Function_Impl_" params="" file="/home/travis/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/></impl>
+		<impl><class path="haxe._Constraints.Function_Impl_" params="" file="/usr/share/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/></impl>
 	</abstract>
-	<class path="haxe._Constraints.Function_Impl_" params="" file="/home/travis/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/>
-	<abstract path="haxe.FlatEnum" params="" file="/home/travis/haxe/std/haxe/Constraints.hx" module="haxe.Constraints">
+	<class path="haxe._Constraints.Function_Impl_" params="" file="/usr/share/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/>
+	<abstract path="haxe.FlatEnum" params="" file="/usr/share/haxe/std/haxe/Constraints.hx" module="haxe.Constraints">
 		<this><d/></this>
 		<haxe_doc>This type unifies with an enum instance if all constructors of the enum
 	require no arguments.
 
 	It is intended to be used as a type parameter constraint. If used as a real
 	type, the underlying type will be `Dynamic`.</haxe_doc>
-		<impl><class path="haxe._Constraints.FlatEnum_Impl_" params="" file="/home/travis/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/></impl>
+		<impl><class path="haxe._Constraints.FlatEnum_Impl_" params="" file="/usr/share/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/></impl>
 	</abstract>
-	<class path="haxe._Constraints.FlatEnum_Impl_" params="" file="/home/travis/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/>
-	<abstract path="haxe.NotVoid" params="" file="/home/travis/haxe/std/haxe/Constraints.hx" module="haxe.Constraints">
+	<class path="haxe._Constraints.FlatEnum_Impl_" params="" file="/usr/share/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/>
+	<abstract path="haxe.NotVoid" params="" file="/usr/share/haxe/std/haxe/Constraints.hx" module="haxe.Constraints">
 		<this><d/></this>
 		<haxe_doc>This type unifies with anything but `Void`.
 
 	It is intended to be used as a type parameter constraint. If used as a real
 	type, the underlying type will be `Dynamic`.</haxe_doc>
-		<impl><class path="haxe._Constraints.NotVoid_Impl_" params="" file="/home/travis/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/></impl>
+		<impl><class path="haxe._Constraints.NotVoid_Impl_" params="" file="/usr/share/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/></impl>
 	</abstract>
-	<class path="haxe._Constraints.NotVoid_Impl_" params="" file="/home/travis/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/>
-	<abstract path="haxe.Constructible" params="T" file="/home/travis/haxe/std/haxe/Constraints.hx" module="haxe.Constraints">
+	<class path="haxe._Constraints.NotVoid_Impl_" params="" file="/usr/share/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/>
+	<abstract path="haxe.Constructible" params="T" file="/usr/share/haxe/std/haxe/Constraints.hx" module="haxe.Constraints">
 		<this><d/></this>
 		<haxe_doc><![CDATA[This type unifies with any instance of classes that have a constructor
 	which
@@ -10831,10 +10843,10 @@
 
 	It is intended to be used as a type parameter constraint. If used as a real
 	type, the underlying type will be `Dynamic`.]]></haxe_doc>
-		<impl><class path="haxe._Constraints.Constructible_Impl_" params="" file="/home/travis/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/></impl>
+		<impl><class path="haxe._Constraints.Constructible_Impl_" params="" file="/usr/share/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/></impl>
 	</abstract>
-	<class path="haxe._Constraints.Constructible_Impl_" params="" file="/home/travis/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/>
-	<class path="haxe.EnumTools" params="" file="/home/travis/haxe/std/haxe/EnumTools.hx" extern="1">
+	<class path="haxe._Constraints.Constructible_Impl_" params="" file="/usr/share/haxe/std/haxe/Constraints.hx" private="1" module="haxe.Constraints" extern="1" final="1"/>
+	<class path="haxe.EnumTools" params="" file="/usr/share/haxe/std/haxe/EnumTools.hx" extern="1">
 		<getName public="1" params="T" get="inline" set="null" line="52" static="1">
 			<f a="e">
 				<x path="Enum"><c path="getName.T"/></x>
@@ -10926,7 +10938,7 @@
 	If the first argument to any of the methods is `null`, the result is
 	unspecified.</haxe_doc>
 	</class>
-	<class path="haxe.EnumValueTools" params="" file="/home/travis/haxe/std/haxe/EnumTools.hx" module="haxe.EnumTools" extern="1">
+	<class path="haxe.EnumValueTools" params="" file="/usr/share/haxe/std/haxe/EnumTools.hx" module="haxe.EnumTools" extern="1">
 		<equals public="1" params="T" get="inline" set="null" line="133" static="1">
 			<f a="a:b">
 				<c path="equals.T"/>
@@ -10985,7 +10997,7 @@
 	If the first argument to any of the methods is `null`, the result is
 	unspecified.</haxe_doc>
 	</class>
-	<class path="haxe.Exception" params="" file="/home/travis/haxe/std/haxe/Exception.hx" extern="1">
+	<class path="haxe.Exception" params="" file="/usr/share/haxe/std/haxe/Exception.hx" extern="1">
 		<caught set="method" static="1">
 			<f a="value">
 				<x path="Any"/>
@@ -11093,8 +11105,8 @@
 	```]]></haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<typedef path="haxe.Http" params="" file="/home/travis/haxe/std/haxe/Http.hx"><c path="sys.Http"/></typedef>
-	<abstract path="haxe.Int32" params="" file="/home/travis/haxe/std/haxe/Int32.hx">
+	<typedef path="haxe.Http" params="" file="/usr/share/haxe/std/haxe/Http.hx"><c path="sys.Http"/></typedef>
+	<abstract path="haxe.Int32" params="" file="/usr/share/haxe/std/haxe/Int32.hx">
 		<from><icast><x path="Int"/></icast></from>
 		<this><x path="Int"/></this>
 		<to>
@@ -11104,7 +11116,7 @@
 		<haxe_doc>Int32 provides a 32-bit integer with consistent overflow behavior across
 	all platforms.</haxe_doc>
 		<meta><m n=":transitive"/></meta>
-		<impl><class path="haxe._Int32.Int32_Impl_" params="" file="/home/travis/haxe/std/haxe/Int32.hx" private="1" module="haxe.Int32" final="1">
+		<impl><class path="haxe._Int32.Int32_Impl_" params="" file="/usr/share/haxe/std/haxe/Int32.hx" private="1" module="haxe.Int32" final="1">
 	<negate get="inline" set="null" line="32" static="1">
 		<f a="this">
 			<x path="Int"/>
@@ -11204,7 +11216,7 @@
 </f></clamp>
 </class></impl>
 	</abstract>
-	<class path="haxe._Int32.Int32_Impl_" params="" file="/home/travis/haxe/std/haxe/Int32.hx" private="1" module="haxe.Int32" final="1">
+	<class path="haxe._Int32.Int32_Impl_" params="" file="/usr/share/haxe/std/haxe/Int32.hx" private="1" module="haxe.Int32" final="1">
 		<negate get="inline" set="null" line="32" static="1">
 			<f a="this">
 				<x path="Int"/>
@@ -11303,7 +11315,7 @@
 	<x path="Int"/>
 </f></clamp>
 	</class>
-	<abstract path="haxe.Int64" params="" file="/home/travis/haxe/std/haxe/Int64.hx">
+	<abstract path="haxe.Int64" params="" file="/usr/share/haxe/std/haxe/Int64.hx">
 		<from>
 			<icast><t path="haxe._Int64.__Int64"/></icast>
 			<icast field="ofInt"><x path="Int"/></icast>
@@ -11313,7 +11325,7 @@
 		<haxe_doc>A cross-platform signed 64-bit integer.
 	Int64 instances can be created from two 32-bit words using `Int64.make()`.</haxe_doc>
 		<meta><m n=":transitive"/></meta>
-		<impl><class path="haxe._Int64.Int64_Impl_" params="" file="/home/travis/haxe/std/haxe/Int64.hx" private="1" module="haxe.Int64" final="1">
+		<impl><class path="haxe._Int64.Int64_Impl_" params="" file="/usr/share/haxe/std/haxe/Int64.hx" private="1" module="haxe.Int64" final="1">
 	<_new get="inline" set="null" line="36" static="1">
 		<f a="x">
 			<t path="haxe._Int64.__Int64"/>
@@ -11821,7 +11833,7 @@
 </f></set_low>
 </class></impl>
 	</abstract>
-	<class path="haxe._Int64.Int64_Impl_" params="" file="/home/travis/haxe/std/haxe/Int64.hx" private="1" module="haxe.Int64" final="1">
+	<class path="haxe._Int64.Int64_Impl_" params="" file="/usr/share/haxe/std/haxe/Int64.hx" private="1" module="haxe.Int64" final="1">
 		<_new get="inline" set="null" line="36" static="1">
 			<f a="x">
 				<t path="haxe._Int64.__Int64"/>
@@ -12328,13 +12340,13 @@
 	<x path="haxe.Int32"/>
 </f></set_low>
 	</class>
-	<typedef path="haxe._Int64.__Int64" params="" file="/home/travis/haxe/std/haxe/Int64.hx" private="1" module="haxe.Int64">
+	<typedef path="haxe._Int64.__Int64" params="" file="/usr/share/haxe/std/haxe/Int64.hx" private="1" module="haxe.Int64">
 		<c path="haxe._Int64.___Int64"/>
 		<haxe_doc>This typedef will fool `@:coreApi` into thinking that we are using
 	the same underlying type, even though it might be different on
 	specific platforms.</haxe_doc>
 	</typedef>
-	<class path="haxe._Int64.___Int64" params="" file="/home/travis/haxe/std/haxe/Int64.hx" private="1" module="haxe.Int64">
+	<class path="haxe._Int64.___Int64" params="" file="/usr/share/haxe/std/haxe/Int64.hx" private="1" module="haxe.Int64">
 		<high public="1"><x path="haxe.Int32"/></high>
 		<low public="1"><x path="haxe.Int32"/></low>
 		<toString public="1" set="method" line="484">
@@ -12349,7 +12361,7 @@
 	<x path="Void"/>
 </f></new>
 	</class>
-	<class path="haxe.Int64Helper" params="" file="/home/travis/haxe/std/haxe/Int64Helper.hx">
+	<class path="haxe.Int64Helper" params="" file="/usr/share/haxe/std/haxe/Int64Helper.hx">
 		<parseString public="1" set="method" line="36" static="1">
 			<f a="sParam">
 				<c path="String"/>
@@ -12366,7 +12378,7 @@
 		</fromFloat>
 		<haxe_doc>Helper for parsing to `Int64` instances.</haxe_doc>
 	</class>
-	<class path="haxe.Json" params="" file="/home/travis/haxe/std/haxe/Json.hx">
+	<class path="haxe.Json" params="" file="/usr/share/haxe/std/haxe/Json.hx">
 		<parse public="1" get="inline" set="null" line="43" static="1">
 			<f a="text">
 				<c path="String"/>
@@ -12409,7 +12421,7 @@
 
 	@see https://haxe.org/manual/std-Json.html</haxe_doc>
 	</class>
-	<class path="haxe.NativeStackTrace" params="" file="/home/travis/haxe/std/haxe/NativeStackTrace.hx" extern="1">
+	<class path="haxe.NativeStackTrace" params="" file="/usr/share/haxe/std/haxe/NativeStackTrace.hx" extern="1">
 		<saveStack public="1" set="method" static="1"><f a="exception">
 	<x path="Any"/>
 	<x path="Void"/>
@@ -12430,7 +12442,7 @@
 			<m n=":noCompletion"/>
 		</meta>
 	</class>
-	<typedef path="haxe.PosInfos" params="" file="/home/travis/haxe/std/haxe/PosInfos.hx">
+	<typedef path="haxe.PosInfos" params="" file="/usr/share/haxe/std/haxe/PosInfos.hx">
 		<a>
 			<methodName><c path="String"/></methodName>
 			<lineNumber><x path="Int"/></lineNumber>
@@ -12451,8 +12463,8 @@
 	This can be used to track positions of calls in e.g. a unit testing
 	framework.</haxe_doc>
 	</typedef>
-	<typedef path="haxe._Rest.NativeRest" params="T" file="/home/travis/haxe/std/haxe/Rest.hx" private="1" module="haxe.Rest"><c path="Array"><c path="haxe._Rest.NativeRest.T"/></c></typedef>
-	<abstract path="haxe.Rest" params="T" file="/home/travis/haxe/std/haxe/Rest.hx">
+	<typedef path="haxe._Rest.NativeRest" params="T" file="/usr/share/haxe/std/haxe/Rest.hx" private="1" module="haxe.Rest"><c path="Array"><c path="haxe._Rest.NativeRest.T"/></c></typedef>
+	<abstract path="haxe.Rest" params="T" file="/usr/share/haxe/std/haxe/Rest.hx">
 		<from><icast field="of"><c path="Array"><c path="of.T"/></c></icast></from>
 		<this><t path="haxe._Rest.NativeRest"><c path="haxe.Rest.T"/></t></this>
 		<to><icast field="toArray"><c path="Array"><c path="haxe.Rest.T"/></c></icast></to>
@@ -12477,7 +12489,7 @@
 	Allows to use array access by index to get values of rest arguments.
 	If the index exceeds the amount of rest arguments passed, the result is unspecified.]]></haxe_doc>
 		<meta><m n=":coreApi"/></meta>
-		<impl><class path="haxe._Rest.Rest_Impl_" params="" file="/home/travis/haxe/std/haxe/Rest.hx" private="1" module="haxe.Rest" final="1">
+		<impl><class path="haxe._Rest.Rest_Impl_" params="" file="/usr/share/haxe/std/haxe/Rest.hx" private="1" module="haxe.Rest" final="1">
 	<length public="1" get="accessor" set="null" static="1">
 		<x path="Int"/>
 		<haxe_doc>Amount of arguments passed as rest arguments</haxe_doc>
@@ -12553,7 +12565,7 @@
 	<meta><m n=":coreApi"/></meta>
 </class></impl>
 	</abstract>
-	<class path="haxe._Rest.Rest_Impl_" params="" file="/home/travis/haxe/std/haxe/Rest.hx" private="1" module="haxe.Rest" final="1">
+	<class path="haxe._Rest.Rest_Impl_" params="" file="/usr/share/haxe/std/haxe/Rest.hx" private="1" module="haxe.Rest" final="1">
 		<length public="1" get="accessor" set="null" static="1">
 			<x path="Int"/>
 			<haxe_doc>Amount of arguments passed as rest arguments</haxe_doc>
@@ -12628,7 +12640,7 @@
 </f></toString>
 		<meta><m n=":coreApi"/></meta>
 	</class>
-	<class path="haxe.crypto.Adler32" params="" file="/home/travis/haxe/std/haxe/crypto/Adler32.hx">
+	<class path="haxe.crypto.Adler32" params="" file="/usr/share/haxe/std/haxe/crypto/Adler32.hx">
 		<read public="1" set="method" line="60" static="1"><f a="i">
 	<c path="haxe.io.Input"/>
 	<c path="haxe.crypto.Adler32"/>
@@ -12655,7 +12667,7 @@
 		<haxe_doc>Calculates the Adler32 of the given Bytes.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.io.Bytes" params="" file="/home/travis/haxe/std/haxe/io/Bytes.hx">
+	<class path="haxe.io.Bytes" params="" file="/usr/share/haxe/std/haxe/io/Bytes.hx">
 		<alloc public="1" set="method" line="549" static="1">
 			<f a="length">
 				<x path="Int"/>
@@ -12897,7 +12909,7 @@
 </f></new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.crypto.Base64" params="" file="/home/travis/haxe/std/haxe/crypto/Base64.hx">
+	<class path="haxe.crypto.Base64" params="" file="/usr/share/haxe/std/haxe/crypto/Base64.hx">
 		<CHARS public="1" set="null" expr="&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;" line="29" static="1">
 			<c path="String"/>
 			<meta><m n=":value"><e>"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"</e></m></meta>
@@ -12949,7 +12961,7 @@
 		<haxe_doc>Allows one to encode/decode String and bytes using Base64 encoding.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.crypto.BaseCode" params="" file="/home/travis/haxe/std/haxe/crypto/BaseCode.hx">
+	<class path="haxe.crypto.BaseCode" params="" file="/usr/share/haxe/std/haxe/crypto/BaseCode.hx">
 		<encode public="1" set="method" line="128" static="1"><f a="s:base">
 	<c path="String"/>
 	<c path="String"/>
@@ -12987,7 +12999,7 @@
 		<haxe_doc>Allows one to encode/decode String and bytes using a power of two base dictionary.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.crypto.Crc32" params="" file="/home/travis/haxe/std/haxe/crypto/Crc32.hx">
+	<class path="haxe.crypto.Crc32" params="" file="/usr/share/haxe/std/haxe/crypto/Crc32.hx">
 		<make public="1" set="method" line="59" static="1">
 			<f a="data">
 				<c path="haxe.io.Bytes"/>
@@ -13011,7 +13023,7 @@
 		<haxe_doc>Calculates the Crc32 of the given Bytes.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.ds.ArraySort" params="" file="/home/travis/haxe/std/haxe/ds/ArraySort.hx">
+	<class path="haxe.ds.ArraySort" params="" file="/usr/share/haxe/std/haxe/ds/ArraySort.hx">
 		<sort public="1" params="T" set="method" line="42" static="1">
 			<f a="a:cmp">
 				<c path="Array"><c path="sort.T"/></c>
@@ -13120,7 +13132,7 @@
 	of equal elements has to be retained on all targets.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.ds.BalancedTree" params="K:V" file="/home/travis/haxe/std/haxe/ds/BalancedTree.hx">
+	<class path="haxe.ds.BalancedTree" params="K:V" file="/usr/share/haxe/std/haxe/ds/BalancedTree.hx">
 		<implements path="haxe.IMap">
 			<c path="haxe.ds.BalancedTree.K"/>
 			<c path="haxe.ds.BalancedTree.V"/>
@@ -13313,7 +13325,7 @@
 	Iteration over keys and values, using `keys` and `iterator` respectively,
 	are in-order.</haxe_doc>
 	</class>
-	<class path="haxe.ds.TreeNode" params="K:V" file="/home/travis/haxe/std/haxe/ds/BalancedTree.hx" module="haxe.ds.BalancedTree">
+	<class path="haxe.ds.TreeNode" params="K:V" file="/usr/share/haxe/std/haxe/ds/BalancedTree.hx" module="haxe.ds.BalancedTree">
 		<left public="1"><c path="haxe.ds.TreeNode">
 	<c path="haxe.ds.TreeNode.K"/>
 	<c path="haxe.ds.TreeNode.V"/>
@@ -13346,7 +13358,7 @@
 		</new>
 		<haxe_doc>A tree node of `haxe.ds.BalancedTree`.</haxe_doc>
 	</class>
-	<class path="haxe.ds.EnumValueMap" params="K:V" file="/home/travis/haxe/std/haxe/ds/EnumValueMap.hx">
+	<class path="haxe.ds.EnumValueMap" params="K:V" file="/usr/share/haxe/std/haxe/ds/EnumValueMap.hx">
 		<extends path="haxe.ds.BalancedTree">
 			<c path="haxe.ds.EnumValueMap.K"/>
 			<c path="haxe.ds.EnumValueMap.V"/>
@@ -13380,7 +13392,7 @@
 	Keys are compared by value and recursively over their parameters. If any
 	parameter is not an enum value, `Reflect.compare` is used to compare them.</haxe_doc>
 	</class>
-	<abstract path="haxe.ds.HashMap" params="K:V" file="/home/travis/haxe/std/haxe/ds/HashMap.hx">
+	<abstract path="haxe.ds.HashMap" params="K:V" file="/usr/share/haxe/std/haxe/ds/HashMap.hx">
 		<this><c path="haxe.ds._HashMap.HashMapData">
 	<c path="haxe.ds.HashMap.K"/>
 	<c path="haxe.ds.HashMap.V"/>
@@ -13390,7 +13402,7 @@
 	See `Map` for documentation details.
 
 	@see https://haxe.org/manual/std-Map.html</haxe_doc>
-		<impl><class path="haxe.ds._HashMap.HashMap_Impl_" params="" file="/home/travis/haxe/std/haxe/ds/HashMap.hx" private="1" module="haxe.ds.HashMap" final="1">
+		<impl><class path="haxe.ds._HashMap.HashMap_Impl_" params="" file="/usr/share/haxe/std/haxe/ds/HashMap.hx" private="1" module="haxe.ds.HashMap" final="1">
 	<_new public="1" get="inline" set="null" line="38" static="1">
 		<f a=""><x path="haxe.ds.HashMap">
 	<c path="haxe.ds.HashMap.K"/>
@@ -13504,7 +13516,7 @@
 	</clear>
 </class></impl>
 	</abstract>
-	<class path="haxe.ds._HashMap.HashMap_Impl_" params="" file="/home/travis/haxe/std/haxe/ds/HashMap.hx" private="1" module="haxe.ds.HashMap" final="1">
+	<class path="haxe.ds._HashMap.HashMap_Impl_" params="" file="/usr/share/haxe/std/haxe/ds/HashMap.hx" private="1" module="haxe.ds.HashMap" final="1">
 		<_new public="1" get="inline" set="null" line="38" static="1">
 			<f a=""><x path="haxe.ds.HashMap">
 	<c path="haxe.ds.HashMap.K"/>
@@ -13617,12 +13629,12 @@
 			<haxe_doc>See `Map.clear`</haxe_doc>
 		</clear>
 	</class>
-	<class path="haxe.ds._HashMap.HashMapData" params="K:V" file="/home/travis/haxe/std/haxe/ds/HashMap.hx" private="1" module="haxe.ds.HashMap">
+	<class path="haxe.ds._HashMap.HashMapData" params="K:V" file="/usr/share/haxe/std/haxe/ds/HashMap.hx" private="1" module="haxe.ds.HashMap">
 		<keys public="1"><c path="haxe.ds.IntMap"><c path="haxe.ds._HashMap.HashMapData.K"/></c></keys>
 		<values public="1"><c path="haxe.ds.IntMap"><c path="haxe.ds._HashMap.HashMapData.V"/></c></values>
 		<new public="1" get="inline" set="null" line="116"><f a=""><x path="Void"/></f></new>
 	</class>
-	<class path="haxe.ds.IntMap" params="T" file="/home/travis/haxe/std/haxe/ds/IntMap.hx" extern="1">
+	<class path="haxe.ds.IntMap" params="T" file="/usr/share/haxe/std/haxe/ds/IntMap.hx" extern="1">
 		<implements path="haxe.IMap">
 			<x path="Int"/>
 			<c path="haxe.ds.IntMap.T"/>
@@ -13700,7 +13712,7 @@
 	@see https://haxe.org/manual/std-Map.html</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.ds.List" params="T" file="/home/travis/haxe/std/haxe/ds/List.hx">
+	<class path="haxe.ds.List" params="T" file="/usr/share/haxe/std/haxe/ds/List.hx">
 		<h><c path="haxe.ds._List.ListNode"><c path="haxe.ds.List.T"/></c></h>
 		<q><c path="haxe.ds._List.ListNode"><c path="haxe.ds.List.T"/></c></q>
 		<length public="1" set="null">
@@ -13823,7 +13835,7 @@
 	@see https://haxe.org/manual/std-List.html</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.ds._List.ListNode" params="T" file="/home/travis/haxe/std/haxe/ds/List.hx" private="1" module="haxe.ds.List">
+	<class path="haxe.ds._List.ListNode" params="T" file="/usr/share/haxe/std/haxe/ds/List.hx" private="1" module="haxe.ds.List">
 		<create public="1" params="T" get="inline" set="null" line="271" static="1"><f a="item:next">
 	<c path="create.T"/>
 	<c path="haxe.ds._List.ListNode"><c path="create.T"/></c>
@@ -13838,7 +13850,7 @@
 </f></new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.ds._List.ListIterator" params="T" file="/home/travis/haxe/std/haxe/ds/List.hx" private="1" module="haxe.ds.List">
+	<class path="haxe.ds._List.ListIterator" params="T" file="/usr/share/haxe/std/haxe/ds/List.hx" private="1" module="haxe.ds.List">
 		<head><c path="haxe.ds._List.ListNode"><c path="haxe.ds._List.ListIterator.T"/></c></head>
 		<hasNext public="1" get="inline" set="null" line="284"><f a=""><x path="Bool"/></f></hasNext>
 		<next public="1" get="inline" set="null" line="288"><f a=""><c path="haxe.ds._List.ListIterator.T"/></f></next>
@@ -13847,7 +13859,7 @@
 	<x path="Void"/>
 </f></new>
 	</class>
-	<class path="haxe.ds._List.ListKeyValueIterator" params="T" file="/home/travis/haxe/std/haxe/ds/List.hx" private="1" module="haxe.ds.List">
+	<class path="haxe.ds._List.ListKeyValueIterator" params="T" file="/usr/share/haxe/std/haxe/ds/List.hx" private="1" module="haxe.ds.List">
 		<idx><x path="Int"/></idx>
 		<head><c path="haxe.ds._List.ListNode"><c path="haxe.ds._List.ListKeyValueIterator.T"/></c></head>
 		<hasNext public="1" get="inline" set="null" line="304"><f a=""><x path="Bool"/></f></hasNext>
@@ -13860,7 +13872,7 @@
 	<x path="Void"/>
 </f></new>
 	</class>
-	<abstract path="haxe.ds.Map" params="K:V" file="/home/travis/haxe/std/haxe/ds/Map.hx">
+	<abstract path="haxe.ds.Map" params="K:V" file="/usr/share/haxe/std/haxe/ds/Map.hx">
 		<from>
 			<icast field="fromStringMap"><c path="haxe.ds.StringMap"><c path="fromStringMap.V"/></c></icast>
 			<icast field="fromIntMap"><c path="haxe.ds.IntMap"><c path="fromIntMap.V"/></c></icast>
@@ -13903,7 +13915,7 @@
 			<m n=":transitive"/>
 			<m n=":multiType"><e>@:followWithAbstracts K</e></m>
 		</meta>
-		<impl><class path="haxe.ds._Map.Map_Impl_" params="" file="/home/travis/haxe/std/haxe/ds/Map.hx" private="1" module="haxe.ds.Map" final="1">
+		<impl><class path="haxe.ds._Map.Map_Impl_" params="" file="/usr/share/haxe/std/haxe/ds/Map.hx" private="1" module="haxe.ds.Map" final="1">
 	<_new public="1" set="method" static="1">
 		<f a=""><x path="haxe.ds.Map">
 	<c path="haxe.ds.Map.K"/>
@@ -14162,7 +14174,7 @@
 	</fromObjectMap>
 </class></impl>
 	</abstract>
-	<class path="haxe.ds.ObjectMap" params="K:V" file="/home/travis/haxe/std/haxe/ds/ObjectMap.hx" extern="1">
+	<class path="haxe.ds.ObjectMap" params="K:V" file="/usr/share/haxe/std/haxe/ds/ObjectMap.hx" extern="1">
 		<implements path="haxe.IMap">
 			<c path="haxe.ds.ObjectMap.K"/>
 			<c path="haxe.ds.ObjectMap.V"/>
@@ -14245,7 +14257,7 @@
 
 	@see https://haxe.org/manual/std-Map.html</haxe_doc>
 	</class>
-	<abstract path="haxe.ds.ReadOnlyArray" params="T" file="/home/travis/haxe/std/haxe/ds/ReadOnlyArray.hx">
+	<abstract path="haxe.ds.ReadOnlyArray" params="T" file="/usr/share/haxe/std/haxe/ds/ReadOnlyArray.hx">
 		<from><icast><c path="Array"><c path="haxe.ds.ReadOnlyArray.T"/></c></icast></from>
 		<this><c path="Array"><c path="haxe.ds.ReadOnlyArray.T"/></c></this>
 		<to><icast><t path="Iterable"><c path="haxe.ds.ReadOnlyArray.T"/></t></icast></to>
@@ -14268,7 +14280,7 @@
 	<e>contains</e>
 	<e>toString</e>
 </m></meta>
-		<impl><class path="haxe.ds._ReadOnlyArray.ReadOnlyArray_Impl_" params="" file="/home/travis/haxe/std/haxe/ds/ReadOnlyArray.hx" private="1" module="haxe.ds.ReadOnlyArray" final="1">
+		<impl><class path="haxe.ds._ReadOnlyArray.ReadOnlyArray_Impl_" params="" file="/usr/share/haxe/std/haxe/ds/ReadOnlyArray.hx" private="1" module="haxe.ds.ReadOnlyArray" final="1">
 	<length public="1" get="accessor" set="null" static="1">
 		<x path="Int"/>
 		<haxe_doc>The length of `this` Array.</haxe_doc>
@@ -14305,7 +14317,7 @@
 	</concat>
 </class></impl>
 	</abstract>
-	<class path="haxe.ds._ReadOnlyArray.ReadOnlyArray_Impl_" params="" file="/home/travis/haxe/std/haxe/ds/ReadOnlyArray.hx" private="1" module="haxe.ds.ReadOnlyArray" final="1">
+	<class path="haxe.ds._ReadOnlyArray.ReadOnlyArray_Impl_" params="" file="/usr/share/haxe/std/haxe/ds/ReadOnlyArray.hx" private="1" module="haxe.ds.ReadOnlyArray" final="1">
 		<length public="1" get="accessor" set="null" static="1">
 			<x path="Int"/>
 			<haxe_doc>The length of `this` Array.</haxe_doc>
@@ -14341,7 +14353,7 @@
 		If `a` is `null`, the result is unspecified.</haxe_doc>
 		</concat>
 	</class>
-	<class path="haxe.ds.WeakMap" params="K:V" file="/home/travis/haxe/std/haxe/ds/WeakMap.hx">
+	<class path="haxe.ds.WeakMap" params="K:V" file="/usr/share/haxe/std/haxe/ds/WeakMap.hx">
 		<implements path="haxe.IMap">
 			<c path="haxe.ds.WeakMap.K"/>
 			<c path="haxe.ds.WeakMap.V"/>
@@ -14417,7 +14429,7 @@
 
 	@see https://haxe.org/manual/std-Map.html</haxe_doc>
 	</class>
-	<class path="haxe.exceptions.PosException" params="" file="/home/travis/haxe/std/haxe/exceptions/PosException.hx">
+	<class path="haxe.exceptions.PosException" params="" file="/usr/share/haxe/std/haxe/exceptions/PosException.hx">
 		<extends path="haxe.Exception"/>
 		<posInfos final="1" public="1">
 			<t path="haxe.PosInfos"/>
@@ -14435,7 +14447,7 @@
 </f></new>
 		<haxe_doc>An exception that carry position information of a place where it was created.</haxe_doc>
 	</class>
-	<class path="haxe.exceptions.NotImplementedException" params="" file="/home/travis/haxe/std/haxe/exceptions/NotImplementedException.hx">
+	<class path="haxe.exceptions.NotImplementedException" params="" file="/usr/share/haxe/std/haxe/exceptions/NotImplementedException.hx">
 		<extends path="haxe.exceptions.PosException"/>
 		<new public="1" set="method" line="7">
 			<f a="?message:?previous:?pos" v="&quot;Not implemented&quot;::">
@@ -14449,7 +14461,7 @@
 		<haxe_doc>An exception that is thrown when requested function or operation does not have an implementation.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<abstract path="haxe.extern.EitherType" params="T1:T2" file="/home/travis/haxe/std/haxe/extern/EitherType.hx">
+	<abstract path="haxe.extern.EitherType" params="T1:T2" file="/usr/share/haxe/std/haxe/extern/EitherType.hx">
 		<from>
 			<icast><c path="haxe.extern.EitherType.T1"/></icast>
 			<icast><c path="haxe.extern.EitherType.T2"/></icast>
@@ -14469,10 +14481,10 @@
 
 	@see <https://haxe.org/manual/lf-externs.html>]]></haxe_doc>
 		<meta><m n=":transitive"/></meta>
-		<impl><class path="haxe.extern._EitherType.EitherType_Impl_" params="" file="/home/travis/haxe/std/haxe/extern/EitherType.hx" private="1" module="haxe.extern.EitherType" extern="1" final="1"/></impl>
+		<impl><class path="haxe.extern._EitherType.EitherType_Impl_" params="" file="/usr/share/haxe/std/haxe/extern/EitherType.hx" private="1" module="haxe.extern.EitherType" extern="1" final="1"/></impl>
 	</abstract>
-	<class path="haxe.extern._EitherType.EitherType_Impl_" params="" file="/home/travis/haxe/std/haxe/extern/EitherType.hx" private="1" module="haxe.extern.EitherType" extern="1" final="1"/>
-	<typedef path="haxe.extern.Rest" params="T" file="/home/travis/haxe/std/haxe/extern/Rest.hx">
+	<class path="haxe.extern._EitherType.EitherType_Impl_" params="" file="/usr/share/haxe/std/haxe/extern/EitherType.hx" private="1" module="haxe.extern.EitherType" extern="1" final="1"/>
+	<typedef path="haxe.extern.Rest" params="T" file="/usr/share/haxe/std/haxe/extern/Rest.hx">
 		<x path="haxe.Rest"><c path="haxe.extern.Rest.T"/></x>
 		<haxe_doc><![CDATA[DEPRECATED: use haxe.Rest instead.
 	
@@ -14482,7 +14494,7 @@
 	passed to that method.
 	@see <https://haxe.org/manual/lf-externs.html>]]></haxe_doc>
 	</typedef>
-	<class path="haxe.format.JsonParser" params="" file="/home/travis/haxe/std/haxe/format/JsonParser.hx">
+	<class path="haxe.format.JsonParser" params="" file="/usr/share/haxe/std/haxe/format/JsonParser.hx">
 		<parse public="1" get="inline" set="null" line="44" static="1">
 			<f a="str">
 				<c path="String"/>
@@ -14524,7 +14536,7 @@
 	@see https://haxe.org/manual/std-Json-parsing.html</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.format.JsonPrinter" params="" file="/home/travis/haxe/std/haxe/format/JsonPrinter.hx">
+	<class path="haxe.format.JsonPrinter" params="" file="/usr/share/haxe/std/haxe/format/JsonPrinter.hx">
 		<print public="1" set="method" line="44" static="1">
 			<f a="o:?replacer:?space">
 				<d/>
@@ -14603,11 +14615,11 @@
 	@see https://haxe.org/manual/std-Json-encoding.html</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<typedef path="haxe.http._HttpBase.StringKeyValue" params="" file="/home/travis/haxe/std/haxe/http/HttpBase.hx" private="1" module="haxe.http.HttpBase"><a>
+	<typedef path="haxe.http._HttpBase.StringKeyValue" params="" file="/usr/share/haxe/std/haxe/http/HttpBase.hx" private="1" module="haxe.http.HttpBase"><a>
 	<value><c path="String"/></value>
 	<name><c path="String"/></name>
 </a></typedef>
-	<class path="haxe.http.HttpBase" params="" file="/home/travis/haxe/std/haxe/http/HttpBase.hx">
+	<class path="haxe.http.HttpBase" params="" file="/usr/share/haxe/std/haxe/http/HttpBase.hx">
 		<url public="1">
 			<c path="String"/>
 			<haxe_doc>The url of `this` request. It is used only by the `request()` method and
@@ -14784,8 +14796,8 @@
 	- create a `new haxe.Http(url)`, register your callbacks for `onData`,
 	`onError` and `onStatus`, then call `request()`.</haxe_doc>
 	</class>
-	<typedef path="haxe.io.ArrayBufferViewData" params="" file="/home/travis/haxe/std/haxe/io/ArrayBufferView.hx" module="haxe.io.ArrayBufferView"><c path="haxe.io.ArrayBufferViewImpl"/></typedef>
-	<class path="haxe.io.ArrayBufferViewImpl" params="" file="/home/travis/haxe/std/haxe/io/ArrayBufferView.hx" module="haxe.io.ArrayBufferView">
+	<typedef path="haxe.io.ArrayBufferViewData" params="" file="/usr/share/haxe/std/haxe/io/ArrayBufferView.hx" module="haxe.io.ArrayBufferView"><c path="haxe.io.ArrayBufferViewImpl"/></typedef>
+	<class path="haxe.io.ArrayBufferViewImpl" params="" file="/usr/share/haxe/std/haxe/io/ArrayBufferView.hx" module="haxe.io.ArrayBufferView">
 		<bytes public="1"><c path="haxe.io.Bytes"/></bytes>
 		<byteOffset public="1"><x path="Int"/></byteOffset>
 		<byteLength public="1"><x path="Int"/></byteLength>
@@ -14807,9 +14819,9 @@
 </f></new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<abstract path="haxe.io.ArrayBufferView" params="" file="/home/travis/haxe/std/haxe/io/ArrayBufferView.hx">
+	<abstract path="haxe.io.ArrayBufferView" params="" file="/usr/share/haxe/std/haxe/io/ArrayBufferView.hx">
 		<this><t path="haxe.io.ArrayBufferViewData"/></this>
-		<impl><class path="haxe.io._ArrayBufferView.ArrayBufferView_Impl_" params="" file="/home/travis/haxe/std/haxe/io/ArrayBufferView.hx" private="1" module="haxe.io.ArrayBufferView" final="1">
+		<impl><class path="haxe.io._ArrayBufferView.ArrayBufferView_Impl_" params="" file="/usr/share/haxe/std/haxe/io/ArrayBufferView.hx" private="1" module="haxe.io.ArrayBufferView" final="1">
 	<buffer public="1" get="accessor" set="null" static="1"><c path="haxe.io.Bytes"/></buffer>
 	<byteOffset public="1" get="accessor" set="null" static="1"><x path="Int"/></byteOffset>
 	<byteLength public="1" get="accessor" set="null" static="1"><x path="Int"/></byteLength>
@@ -14864,7 +14876,7 @@
 	<meta><m n=":directlyUsed"/></meta>
 </class></impl>
 	</abstract>
-	<class path="haxe.io._ArrayBufferView.ArrayBufferView_Impl_" params="" file="/home/travis/haxe/std/haxe/io/ArrayBufferView.hx" private="1" module="haxe.io.ArrayBufferView" final="1">
+	<class path="haxe.io._ArrayBufferView.ArrayBufferView_Impl_" params="" file="/usr/share/haxe/std/haxe/io/ArrayBufferView.hx" private="1" module="haxe.io.ArrayBufferView" final="1">
 		<buffer public="1" get="accessor" set="null" static="1"><c path="haxe.io.Bytes"/></buffer>
 		<byteOffset public="1" get="accessor" set="null" static="1"><x path="Int"/></byteOffset>
 		<byteLength public="1" get="accessor" set="null" static="1"><x path="Int"/></byteLength>
@@ -14918,7 +14930,7 @@
 		</fromBytes>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.io.BytesBuffer" params="" file="/home/travis/haxe/std/haxe/io/BytesBuffer.hx">
+	<class path="haxe.io.BytesBuffer" params="" file="/usr/share/haxe/std/haxe/io/BytesBuffer.hx">
 		<b><c path="Array"><x path="Int"/></c></b>
 		<length public="1" get="accessor" set="null">
 			<x path="Int"/>
@@ -14969,8 +14981,8 @@
 		<new public="1" set="method" line="45"><f a=""><x path="Void"/></f></new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<typedef path="haxe.io.BytesData" params="" file="/home/travis/haxe/std/haxe/io/BytesData.hx"><c path="Array"><x path="Int"/></c></typedef>
-	<class path="haxe.io.Input" params="" file="/home/travis/haxe/std/haxe/io/Input.hx">
+	<typedef path="haxe.io.BytesData" params="" file="/usr/share/haxe/std/haxe/io/BytesData.hx"><c path="Array"><x path="Int"/></c></typedef>
+	<class path="haxe.io.Input" params="" file="/usr/share/haxe/std/haxe/io/Input.hx">
 		<bigEndian public="1" set="accessor">
 			<x path="Bool"/>
 			<haxe_doc>Endianness (word byte order) used when reading numbers.
@@ -15107,7 +15119,7 @@
 	All functions which read data throw `Eof` when the end of the stream
 	is reached.</haxe_doc>
 	</class>
-	<class path="haxe.io.BytesInput" params="" file="/home/travis/haxe/std/haxe/io/BytesInput.hx">
+	<class path="haxe.io.BytesInput" params="" file="/usr/share/haxe/std/haxe/io/BytesInput.hx">
 		<extends path="haxe.io.Input"/>
 		<b><t path="haxe.io.BytesData"/></b>
 		<pos><x path="Int"/></pos>
@@ -15142,7 +15154,7 @@
 </f></new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.io.Output" params="" file="/home/travis/haxe/std/haxe/io/Output.hx">
+	<class path="haxe.io.Output" params="" file="/usr/share/haxe/std/haxe/io/Output.hx">
 		<bigEndian public="1" set="accessor">
 			<x path="Bool"/>
 			<haxe_doc>Endianness (word byte order) used when writing numbers.
@@ -15307,7 +15319,7 @@
 	methods. See `File.write` and `String.write` for two ways of creating an
 	Output.</haxe_doc>
 	</class>
-	<class path="haxe.io.BytesOutput" params="" file="/home/travis/haxe/std/haxe/io/BytesOutput.hx">
+	<class path="haxe.io.BytesOutput" params="" file="/usr/share/haxe/std/haxe/io/BytesOutput.hx">
 		<extends path="haxe.io.Output"/>
 		<b><c path="haxe.io.BytesBuffer"/></b>
 		<length public="1" get="accessor" set="null">
@@ -15335,7 +15347,7 @@
 		<new public="1" set="method" line="35"><f a=""><x path="Void"/></f></new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<enum path="haxe.io.Encoding" params="" file="/home/travis/haxe/std/haxe/io/Encoding.hx">
+	<enum path="haxe.io.Encoding" params="" file="/usr/share/haxe/std/haxe/io/Encoding.hx">
 		<UTF8/>
 		<RawNative><haxe_doc>Output the string the way the platform represent it in memory. This is the most efficient but is platform-specific</haxe_doc></RawNative>
 		<haxe_doc>String binary encoding supported by Haxe I/O</haxe_doc>
@@ -15344,7 +15356,7 @@
 			<m n=":flatEnum"/>
 		</meta>
 	</enum>
-	<class path="haxe.io.Eof" params="" file="/home/travis/haxe/std/haxe/io/Eof.hx">
+	<class path="haxe.io.Eof" params="" file="/usr/share/haxe/std/haxe/io/Eof.hx">
 		<toString set="method" line="32">
 			<f a=""><c path="String"/></f>
 			<meta><m n=":ifFeature"><e>"haxe.io.Eof.*"</e></m></meta>
@@ -15353,7 +15365,7 @@
 		<haxe_doc>This exception is raised when reading while data is no longer available in the `haxe.io.Input`.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<enum path="haxe.io.Error" params="" file="/home/travis/haxe/std/haxe/io/Error.hx">
+	<enum path="haxe.io.Error" params="" file="/usr/share/haxe/std/haxe/io/Error.hx">
 		<Blocked><haxe_doc>The IO is set into nonblocking mode and some data cannot be read or written</haxe_doc></Blocked>
 		<Overflow><haxe_doc>An integer value is outside its allowed range</haxe_doc></Overflow>
 		<OutsideBounds><haxe_doc>An operation on Bytes is outside of its valid range</haxe_doc></OutsideBounds>
@@ -15364,7 +15376,7 @@
 		<haxe_doc>The possible IO errors that can occur</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</enum>
-	<class path="haxe.io.FPHelper" params="" file="/home/travis/haxe/std/haxe/io/FPHelper.hx">
+	<class path="haxe.io.FPHelper" params="" file="/usr/share/haxe/std/haxe/io/FPHelper.hx">
 		<i64tmp expr="Int64.ofInt(0)" line="35" static="1">
 			<x path="haxe.Int64"/>
 			<meta><m n=":value"><e>Int64.ofInt(0)</e></m></meta>
@@ -15415,7 +15427,7 @@
 		<haxe_doc>Helper that converts between floating point and binary representation.
 	Always works in low-endian encoding.</haxe_doc>
 	</class>
-	<class path="haxe.io.Path" params="" file="/home/travis/haxe/std/haxe/io/Path.hx">
+	<class path="haxe.io.Path" params="" file="/usr/share/haxe/std/haxe/io/Path.hx">
 		<withoutExtension public="1" set="method" line="123" static="1">
 			<f a="path">
 				<c path="String"/>
@@ -15602,10 +15614,10 @@
 	- `directory1\directory2\filename.extension`</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<typedef path="haxe.io.UInt8ArrayData" params="" file="/home/travis/haxe/std/haxe/io/UInt8Array.hx" module="haxe.io.UInt8Array"><t path="haxe.io.ArrayBufferViewData"/></typedef>
-	<abstract path="haxe.io.UInt8Array" params="" file="/home/travis/haxe/std/haxe/io/UInt8Array.hx">
+	<typedef path="haxe.io.UInt8ArrayData" params="" file="/usr/share/haxe/std/haxe/io/UInt8Array.hx" module="haxe.io.UInt8Array"><t path="haxe.io.ArrayBufferViewData"/></typedef>
+	<abstract path="haxe.io.UInt8Array" params="" file="/usr/share/haxe/std/haxe/io/UInt8Array.hx">
 		<this><t path="haxe.io.UInt8ArrayData"/></this>
-		<impl><class path="haxe.io._UInt8Array.UInt8Array_Impl_" params="" file="/home/travis/haxe/std/haxe/io/UInt8Array.hx" private="1" module="haxe.io.UInt8Array" final="1">
+		<impl><class path="haxe.io._UInt8Array.UInt8Array_Impl_" params="" file="/usr/share/haxe/std/haxe/io/UInt8Array.hx" private="1" module="haxe.io.UInt8Array" final="1">
 	<BYTES_PER_ELEMENT public="1" get="inline" set="null" expr="1" line="28" static="1">
 		<x path="Int"/>
 		<meta><m n=":value"><e>1</e></m></meta>
@@ -15685,7 +15697,7 @@
 	<meta><m n=":directlyUsed"/></meta>
 </class></impl>
 	</abstract>
-	<class path="haxe.io._UInt8Array.UInt8Array_Impl_" params="" file="/home/travis/haxe/std/haxe/io/UInt8Array.hx" private="1" module="haxe.io.UInt8Array" final="1">
+	<class path="haxe.io._UInt8Array.UInt8Array_Impl_" params="" file="/usr/share/haxe/std/haxe/io/UInt8Array.hx" private="1" module="haxe.io.UInt8Array" final="1">
 		<BYTES_PER_ELEMENT public="1" get="inline" set="null" expr="1" line="28" static="1">
 			<x path="Int"/>
 			<meta><m n=":value"><e>1</e></m></meta>
@@ -15764,7 +15776,7 @@
 		</fromBytes>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.iterators.ArrayIterator" params="T" file="/home/travis/haxe/std/haxe/iterators/ArrayIterator.hx">
+	<class path="haxe.iterators.ArrayIterator" params="T" file="/usr/share/haxe/std/haxe/iterators/ArrayIterator.hx">
 		<array final="1"><c path="Array"><c path="haxe.iterators.ArrayIterator.T"/></c></array>
 		<current expr="0">
 			<x path="Int"/>
@@ -15788,7 +15800,7 @@
 		<haxe_doc><![CDATA[This iterator is used only when `Array<T>` is passed to `Iterable<T>`]]></haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.iterators.ArrayKeyValueIterator" params="T" file="/home/travis/haxe/std/haxe/iterators/ArrayKeyValueIterator.hx">
+	<class path="haxe.iterators.ArrayKeyValueIterator" params="T" file="/usr/share/haxe/std/haxe/iterators/ArrayKeyValueIterator.hx">
 		<current expr="0">
 			<x path="Int"/>
 			<meta><m n=":value"><e>0</e></m></meta>
@@ -15808,7 +15820,7 @@
 	<e>"dynamic_read.keyValueIterator"</e>
 </m></meta>
 	</class>
-	<class path="haxe.iterators.HashMapKeyValueIterator" params="K:V" file="/home/travis/haxe/std/haxe/iterators/HashMapKeyValueIterator.hx">
+	<class path="haxe.iterators.HashMapKeyValueIterator" params="K:V" file="/usr/share/haxe/std/haxe/iterators/HashMapKeyValueIterator.hx">
 		<map final="1"><x path="haxe.ds.HashMap">
 	<c path="haxe.iterators.HashMapKeyValueIterator.K"/>
 	<c path="haxe.iterators.HashMapKeyValueIterator.V"/>
@@ -15833,7 +15845,7 @@
 	<x path="Void"/>
 </f></new>
 	</class>
-	<class path="haxe.iterators.MapKeyValueIterator" params="K:V" file="/home/travis/haxe/std/haxe/iterators/MapKeyValueIterator.hx">
+	<class path="haxe.iterators.MapKeyValueIterator" params="K:V" file="/usr/share/haxe/std/haxe/iterators/MapKeyValueIterator.hx">
 		<map><c path="haxe.IMap">
 	<c path="haxe.iterators.MapKeyValueIterator.K"/>
 	<c path="haxe.iterators.MapKeyValueIterator.V"/>
@@ -15863,7 +15875,7 @@
 	<e>"dynamic_read.keyValueIterator"</e>
 </m></meta>
 	</class>
-	<class path="haxe.iterators.RestIterator" params="T" file="/home/travis/haxe/std/haxe/iterators/RestIterator.hx">
+	<class path="haxe.iterators.RestIterator" params="T" file="/usr/share/haxe/std/haxe/iterators/RestIterator.hx">
 		<args final="1"><x path="haxe.Rest"><c path="haxe.iterators.RestIterator.T"/></x></args>
 		<current expr="0">
 			<x path="Int"/>
@@ -15879,7 +15891,7 @@
 			<meta><m n=":allow"><e>haxe.Rest</e></m></meta>
 		</new>
 	</class>
-	<class path="haxe.iterators.RestKeyValueIterator" params="T" file="/home/travis/haxe/std/haxe/iterators/RestKeyValueIterator.hx">
+	<class path="haxe.iterators.RestKeyValueIterator" params="T" file="/usr/share/haxe/std/haxe/iterators/RestKeyValueIterator.hx">
 		<args final="1"><x path="haxe.Rest"><c path="haxe.iterators.RestKeyValueIterator.T"/></x></args>
 		<current expr="0">
 			<x path="Int"/>
@@ -15898,7 +15910,7 @@
 			<meta><m n=":allow"><e>haxe.Rest</e></m></meta>
 		</new>
 	</class>
-	<class path="haxe.iterators.StringIterator" params="" file="/home/travis/haxe/std/haxe/iterators/StringIterator.hx">
+	<class path="haxe.iterators.StringIterator" params="" file="/usr/share/haxe/std/haxe/iterators/StringIterator.hx">
 		<offset expr="0">
 			<x path="Int"/>
 			<meta><m n=":value"><e>0</e></m></meta>
@@ -15924,7 +15936,7 @@
 	Note that char codes may differ across platforms because of different
 	internal encoding of strings in different of runtimes.</haxe_doc>
 	</class>
-	<class path="haxe.iterators.StringIteratorUnicode" params="" file="/home/travis/haxe/std/haxe/iterators/StringIteratorUnicode.hx">
+	<class path="haxe.iterators.StringIteratorUnicode" params="" file="/usr/share/haxe/std/haxe/iterators/StringIteratorUnicode.hx">
 		<unicodeIterator public="1" get="inline" set="null" line="70" static="1">
 			<f a="s">
 				<c path="String"/>
@@ -15960,7 +15972,7 @@
 	Note that this has different semantics than a standard for-loop over the
 	String's length due to the fact that it deals with surrogate pairs.</haxe_doc>
 	</class>
-	<class path="haxe.iterators.StringKeyValueIterator" params="" file="/home/travis/haxe/std/haxe/iterators/StringKeyValueIterator.hx">
+	<class path="haxe.iterators.StringKeyValueIterator" params="" file="/usr/share/haxe/std/haxe/iterators/StringKeyValueIterator.hx">
 		<offset expr="0">
 			<x path="Int"/>
 			<meta><m n=":value"><e>0</e></m></meta>
@@ -15989,7 +16001,7 @@
 	Note that char codes may differ across platforms because of different
 	internal encoding of strings in different runtimes.</haxe_doc>
 	</class>
-	<class path="haxe.macro.Compiler" params="" file="/home/travis/haxe/std/haxe/macro/Compiler.hx">
+	<class path="haxe.macro.Compiler" params="" file="/usr/share/haxe/std/haxe/macro/Compiler.hx">
 		<getDefine public="1" set="method" static="1">
 			<f a="key">
 				<d/>
@@ -16013,12 +16025,12 @@
 		</getDefine>
 		<haxe_doc>All these methods can be called for compiler configuration macros.</haxe_doc>
 	</class>
-	<abstract path="haxe.macro.IncludePosition" params="" file="/home/travis/haxe/std/haxe/macro/Compiler.hx" module="haxe.macro.Compiler">
+	<abstract path="haxe.macro.IncludePosition" params="" file="/usr/share/haxe/std/haxe/macro/Compiler.hx" module="haxe.macro.Compiler">
 		<from><icast><c path="String"/></icast></from>
 		<this><c path="String"/></this>
 		<to><icast><c path="String"/></icast></to>
 		<meta><m n=":enum"/></meta>
-		<impl><class path="haxe.macro._Compiler.IncludePosition_Impl_" params="" file="/home/travis/haxe/std/haxe/macro/Compiler.hx" private="1" module="haxe.macro.Compiler" extern="1" final="1">
+		<impl><class path="haxe.macro._Compiler.IncludePosition_Impl_" params="" file="/usr/share/haxe/std/haxe/macro/Compiler.hx" private="1" module="haxe.macro.Compiler" extern="1" final="1">
 	<Top public="1" get="inline" set="null" expr="cast &quot;top&quot;" line="510" static="1">
 		<x path="haxe.macro.IncludePosition"/>
 		<meta>
@@ -16051,7 +16063,7 @@
 	<meta><m n=":enum"/></meta>
 </class></impl>
 	</abstract>
-	<class path="haxe.macro._Compiler.IncludePosition_Impl_" params="" file="/home/travis/haxe/std/haxe/macro/Compiler.hx" private="1" module="haxe.macro.Compiler" extern="1" final="1">
+	<class path="haxe.macro._Compiler.IncludePosition_Impl_" params="" file="/usr/share/haxe/std/haxe/macro/Compiler.hx" private="1" module="haxe.macro.Compiler" extern="1" final="1">
 		<Top public="1" get="inline" set="null" expr="cast &quot;top&quot;" line="510" static="1">
 			<x path="haxe.macro.IncludePosition"/>
 			<meta>
@@ -16083,11 +16095,11 @@
 		</Inline>
 		<meta><m n=":enum"/></meta>
 	</class>
-	<abstract path="haxe.macro.NullSafetyMode" params="" file="/home/travis/haxe/std/haxe/macro/Compiler.hx" module="haxe.macro.Compiler">
+	<abstract path="haxe.macro.NullSafetyMode" params="" file="/usr/share/haxe/std/haxe/macro/Compiler.hx" module="haxe.macro.Compiler">
 		<this><c path="String"/></this>
 		<to><icast><c path="String"/></icast></to>
 		<meta><m n=":enum"/></meta>
-		<impl><class path="haxe.macro._Compiler.NullSafetyMode_Impl_" params="" file="/home/travis/haxe/std/haxe/macro/Compiler.hx" private="1" module="haxe.macro.Compiler" extern="1" final="1">
+		<impl><class path="haxe.macro._Compiler.NullSafetyMode_Impl_" params="" file="/usr/share/haxe/std/haxe/macro/Compiler.hx" private="1" module="haxe.macro.Compiler" extern="1" final="1">
 	<Off public="1" get="inline" set="null" expr="cast &quot;Off&quot;" line="1" static="1">
 		<x path="haxe.macro.NullSafetyMode"/>
 		<meta>
@@ -16161,7 +16173,7 @@
 	<meta><m n=":enum"/></meta>
 </class></impl>
 	</abstract>
-	<class path="haxe.macro._Compiler.NullSafetyMode_Impl_" params="" file="/home/travis/haxe/std/haxe/macro/Compiler.hx" private="1" module="haxe.macro.Compiler" extern="1" final="1">
+	<class path="haxe.macro._Compiler.NullSafetyMode_Impl_" params="" file="/usr/share/haxe/std/haxe/macro/Compiler.hx" private="1" module="haxe.macro.Compiler" extern="1" final="1">
 		<Off public="1" get="inline" set="null" expr="cast &quot;Off&quot;" line="1" static="1">
 			<x path="haxe.macro.NullSafetyMode"/>
 			<meta>
@@ -16234,7 +16246,7 @@
 		</StrictThreaded>
 		<meta><m n=":enum"/></meta>
 	</class>
-	<typedef path="haxe.macro.Position" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<typedef path="haxe.macro.Position" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<a>
 			<min>
 				<x path="Int"/>
@@ -16251,12 +16263,12 @@
 		</a>
 		<haxe_doc>Represents a position in a file.</haxe_doc>
 	</typedef>
-	<enum path="haxe.macro.StringLiteralKind" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<enum path="haxe.macro.StringLiteralKind" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<DoubleQuotes/>
 		<SingleQuotes/>
 		<meta><m n=":flatEnum"/></meta>
 	</enum>
-	<enum path="haxe.macro.Constant" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<enum path="haxe.macro.Constant" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<CInt a="v">
 			<c path="String"/>
 			<haxe_doc>Represents an integer literal.</haxe_doc>
@@ -16289,7 +16301,7 @@
 		<haxe_doc>Represents a constant.
 	@see https://haxe.org/manual/expression-constants.html</haxe_doc>
 	</enum>
-	<enum path="haxe.macro.Binop" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<enum path="haxe.macro.Binop" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<OpAdd><haxe_doc>`+`</haxe_doc></OpAdd>
 		<OpMult><haxe_doc>`*`</haxe_doc></OpMult>
 		<OpDiv><haxe_doc>`/`</haxe_doc></OpDiv>
@@ -16320,7 +16332,7 @@
 		<haxe_doc>A binary operator.
 	@see https://haxe.org/manual/types-numeric-operators.html</haxe_doc>
 	</enum>
-	<enum path="haxe.macro.Unop" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<enum path="haxe.macro.Unop" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<OpIncrement><haxe_doc>`++`</haxe_doc></OpIncrement>
 		<OpDecrement><haxe_doc>`--`</haxe_doc></OpDecrement>
 		<OpNot><haxe_doc>`!`</haxe_doc></OpNot>
@@ -16331,7 +16343,7 @@
 	@see https://haxe.org/manual/types-numeric-operators.html</haxe_doc>
 		<meta><m n=":flatEnum"/></meta>
 	</enum>
-	<typedef path="haxe.macro.Expr" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx">
+	<typedef path="haxe.macro.Expr" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx">
 		<a>
 			<pos>
 				<t path="haxe.macro.Position"/>
@@ -16345,13 +16357,13 @@
 		<haxe_doc>Represents a node in the AST.
 	@see https://haxe.org/manual/macro-reification-expression.html</haxe_doc>
 	</typedef>
-	<typedef path="haxe.macro.ExprOf" params="T" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<typedef path="haxe.macro.ExprOf" params="T" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<t path="haxe.macro.Expr"/>
 		<haxe_doc>Represents a AST node identical to `Expr`, but it allows constraining the
 	type of accepted expressions.
 	@see https://haxe.org/manual/macro-ExprOf.html</haxe_doc>
 	</typedef>
-	<typedef path="haxe.macro.Case" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<typedef path="haxe.macro.Case" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<a>
 			<values>
 				<c path="Array"><t path="haxe.macro.Expr"/></c>
@@ -16371,7 +16383,7 @@
 		<haxe_doc>Represents a switch case.
 	@see https://haxe.org/manual/expression-switch.html</haxe_doc>
 	</typedef>
-	<typedef path="haxe.macro.Var" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<typedef path="haxe.macro.Var" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<a>
 			<type>
 				<x path="Null"><e path="haxe.macro.ComplexType"/></x>
@@ -16401,7 +16413,7 @@
 		<haxe_doc>Represents a variable in the AST.
 	@see https://haxe.org/manual/expression-var.html</haxe_doc>
 	</typedef>
-	<typedef path="haxe.macro.Catch" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<typedef path="haxe.macro.Catch" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<a>
 			<type>
 				<x path="Null"><e path="haxe.macro.ComplexType"/></x>
@@ -16420,13 +16432,13 @@
 		<haxe_doc>Represents a catch in the AST.
 	@see https://haxe.org/manual/expression-try-catch.html</haxe_doc>
 	</typedef>
-	<enum path="haxe.macro.QuoteStatus" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<enum path="haxe.macro.QuoteStatus" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<Unquoted><haxe_doc>No quotes</haxe_doc></Unquoted>
 		<Quoted><haxe_doc>Double quotes `"`</haxe_doc></Quoted>
 		<haxe_doc>Represents the way something is quoted.</haxe_doc>
 		<meta><m n=":flatEnum"/></meta>
 	</enum>
-	<typedef path="haxe.macro.ObjectField" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<typedef path="haxe.macro.ObjectField" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<a>
 			<quotes>
 				<x path="Null"><e path="haxe.macro.QuoteStatus"/></x>
@@ -16444,7 +16456,7 @@
 		</a>
 		<haxe_doc>Represents the field of an object declaration.</haxe_doc>
 	</typedef>
-	<enum path="haxe.macro.FunctionKind" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<enum path="haxe.macro.FunctionKind" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<FAnonymous><haxe_doc>Anonymous function</haxe_doc></FAnonymous>
 		<FNamed a="name:?inlined">
 			<c path="String"/>
@@ -16454,7 +16466,7 @@
 		<FArrow><haxe_doc>Arrow function</haxe_doc></FArrow>
 		<haxe_doc>Represents function kind in the AST</haxe_doc>
 	</enum>
-	<enum path="haxe.macro.ExprDef" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<enum path="haxe.macro.ExprDef" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<EConst a="c">
 			<e path="haxe.macro.Constant"/>
 			<haxe_doc>A constant.</haxe_doc>
@@ -16608,14 +16620,14 @@
 		</EIs>
 		<haxe_doc>Represents the kind of a node in the AST.</haxe_doc>
 	</enum>
-	<enum path="haxe.macro.DisplayKind" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<enum path="haxe.macro.DisplayKind" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<DKCall/>
 		<DKDot/>
 		<DKStructure/>
 		<DKMarked/>
 		<DKPattern a="outermost"><x path="Bool"/></DKPattern>
 	</enum>
-	<enum path="haxe.macro.ComplexType" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<enum path="haxe.macro.ComplexType" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<TPath a="p">
 			<t path="haxe.macro.TypePath"/>
 			<haxe_doc>Represents the type path.</haxe_doc>
@@ -16658,7 +16670,7 @@
 		</TIntersection>
 		<haxe_doc>Represents a type syntax in the AST.</haxe_doc>
 	</enum>
-	<typedef path="haxe.macro.TypePath" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<typedef path="haxe.macro.TypePath" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<a>
 			<sub>
 				<x path="Null"><c path="String"/></x>
@@ -16682,7 +16694,7 @@
 		</a>
 		<haxe_doc>Represents a type path in the AST.</haxe_doc>
 	</typedef>
-	<enum path="haxe.macro.TypeParam" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<enum path="haxe.macro.TypeParam" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<TPType a="t"><e path="haxe.macro.ComplexType"/></TPType>
 		<TPExpr a="e"><t path="haxe.macro.Expr"/></TPExpr>
 		<haxe_doc><![CDATA[Represents a concrete type parameter in the AST.
@@ -16691,7 +16703,7 @@
 	`new YourType<["hello", "world"]>`. In that case the value is `TPExpr` while
 	in the normal case it's `TPType`.]]></haxe_doc>
 	</enum>
-	<typedef path="haxe.macro.TypeParamDecl" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<typedef path="haxe.macro.TypeParamDecl" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<a>
 			<params>
 				<x path="Null"><c path="Array"><t path="haxe.macro.TypeParamDecl"/></c></x>
@@ -16715,7 +16727,7 @@
 		</a>
 		<haxe_doc>Represents a type parameter declaration in the AST.</haxe_doc>
 	</typedef>
-	<typedef path="haxe.macro.Function" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<typedef path="haxe.macro.Function" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<a>
 			<ret>
 				<x path="Null"><e path="haxe.macro.ComplexType"/></x>
@@ -16739,7 +16751,7 @@
 		</a>
 		<haxe_doc>Represents a function in the AST.</haxe_doc>
 	</typedef>
-	<typedef path="haxe.macro.FunctionArg" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<typedef path="haxe.macro.FunctionArg" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<a>
 			<value>
 				<x path="Null"><t path="haxe.macro.Expr"/></x>
@@ -16768,7 +16780,7 @@
 		</a>
 		<haxe_doc>Represents a function argument in the AST.</haxe_doc>
 	</typedef>
-	<typedef path="haxe.macro.MetadataEntry" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<typedef path="haxe.macro.MetadataEntry" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<a>
 			<pos>
 				<t path="haxe.macro.Position"/>
@@ -16786,11 +16798,11 @@
 		</a>
 		<haxe_doc>Represents a metadata entry in the AST.</haxe_doc>
 	</typedef>
-	<typedef path="haxe.macro.Metadata" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<typedef path="haxe.macro.Metadata" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<c path="Array"><t path="haxe.macro.MetadataEntry"/></c>
 		<haxe_doc>Represents metadata in the AST.</haxe_doc>
 	</typedef>
-	<typedef path="haxe.macro.Field" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<typedef path="haxe.macro.Field" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<a>
 			<pos>
 				<t path="haxe.macro.Position"/>
@@ -16824,7 +16836,7 @@
 		</a>
 		<haxe_doc>Represents a field in the AST.</haxe_doc>
 	</typedef>
-	<enum path="haxe.macro.Access" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<enum path="haxe.macro.Access" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<APublic><haxe_doc>Public access modifier, grants access from anywhere.
 		@see https://haxe.org/manual/class-field-visibility.html</haxe_doc></APublic>
 		<APrivate><haxe_doc>Private access modifier, grants access to class and its sub-classes
@@ -16849,7 +16861,7 @@
 	@see https://haxe.org/manual/class-field-access-modifier.html</haxe_doc>
 		<meta><m n=":flatEnum"/></meta>
 	</enum>
-	<enum path="haxe.macro.FieldType" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<enum path="haxe.macro.FieldType" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<FVar a="t:?e">
 			<x path="Null"><e path="haxe.macro.ComplexType"/></x>
 			<x path="Null"><t path="haxe.macro.Expr"/></x>
@@ -16868,7 +16880,7 @@
 		</FProp>
 		<haxe_doc>Represents the field type in the AST.</haxe_doc>
 	</enum>
-	<typedef path="haxe.macro.TypeDefinition" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<typedef path="haxe.macro.TypeDefinition" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<a>
 			<pos>
 				<t path="haxe.macro.Position"/>
@@ -16914,7 +16926,7 @@
 		</a>
 		<haxe_doc>Represents a type definition.</haxe_doc>
 	</typedef>
-	<enum path="haxe.macro.TypeDefKind" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<enum path="haxe.macro.TypeDefKind" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<TDEnum><haxe_doc>Represents an enum kind.</haxe_doc></TDEnum>
 		<TDStructure><haxe_doc>Represents a structure kind.</haxe_doc></TDStructure>
 		<TDClass a="?superClass:?interfaces:?isInterface:?isFinal:?isAbstract">
@@ -16942,7 +16954,7 @@
 		</TDField>
 		<haxe_doc>Represents a type definition kind.</haxe_doc>
 	</enum>
-	<class path="haxe.macro.Error" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<class path="haxe.macro.Error" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<extends path="haxe.Exception"/>
 		<pos public="1">
 			<t path="haxe.macro.Position"/>
@@ -16959,7 +16971,7 @@
 		</new>
 		<haxe_doc>This error can be used to handle or produce compilation errors in macros.</haxe_doc>
 	</class>
-	<enum path="haxe.macro.ImportMode" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<enum path="haxe.macro.ImportMode" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<INormal><haxe_doc>Represents a default import `import c`.</haxe_doc></INormal>
 		<IAsName a="alias">
 			<c path="String"/>
@@ -16969,7 +16981,7 @@
 		<haxe_doc>Represents the import mode.
 	@see https://haxe.org/manual/type-system-import.html</haxe_doc>
 	</enum>
-	<typedef path="haxe.macro.ImportExpr" params="" file="/home/travis/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
+	<typedef path="haxe.macro.ImportExpr" params="" file="/usr/share/haxe/std/haxe/macro/Expr.hx" module="haxe.macro.Expr">
 		<a>
 			<path>
 				<c path="Array"><a>
@@ -16985,7 +16997,7 @@
 		</a>
 		<haxe_doc>Represents the import expression.</haxe_doc>
 	</typedef>
-	<class path="haxe.zip.Compress" params="" file="/home/travis/haxe/std/haxe/zip/Compress.hx">
+	<class path="haxe.zip.Compress" params="" file="/usr/share/haxe/std/haxe/zip/Compress.hx">
 		<run public="1" set="method" line="38" static="1"><f a="s:level">
 	<c path="haxe.io.Bytes"/>
 	<x path="Int"/>
@@ -17013,7 +17025,7 @@
 </f></new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<enum path="haxe.zip.ExtraField" params="" file="/home/travis/haxe/std/haxe/zip/Entry.hx" module="haxe.zip.Entry">
+	<enum path="haxe.zip.ExtraField" params="" file="/usr/share/haxe/std/haxe/zip/Entry.hx" module="haxe.zip.Entry">
 		<FUnknown a="tag:bytes">
 			<x path="Int"/>
 			<c path="haxe.io.Bytes"/>
@@ -17024,7 +17036,7 @@
 		</FInfoZipUnicodePath>
 		<FUtf8/>
 	</enum>
-	<typedef path="haxe.zip.Entry" params="" file="/home/travis/haxe/std/haxe/zip/Entry.hx"><a>
+	<typedef path="haxe.zip.Entry" params="" file="/usr/share/haxe/std/haxe/zip/Entry.hx"><a>
 	<fileTime><c path="Date"/></fileTime>
 	<fileSize><x path="Int"/></fileSize>
 	<fileName><c path="String"/></fileName>
@@ -17037,7 +17049,7 @@
 	<crc32><x path="Null"><x path="Int"/></x></crc32>
 	<compressed><x path="Bool"/></compressed>
 </a></typedef>
-	<enum path="haxe.zip.FlushMode" params="" file="/home/travis/haxe/std/haxe/zip/FlushMode.hx">
+	<enum path="haxe.zip.FlushMode" params="" file="/usr/share/haxe/std/haxe/zip/FlushMode.hx">
 		<NO/>
 		<SYNC/>
 		<FULL/>
@@ -17045,7 +17057,7 @@
 		<BLOCK/>
 		<meta><m n=":flatEnum"/></meta>
 	</enum>
-	<enum path="haxe.zip.Huffman" params="" file="/home/travis/haxe/std/haxe/zip/Huffman.hx">
+	<enum path="haxe.zip.Huffman" params="" file="/usr/share/haxe/std/haxe/zip/Huffman.hx">
 		<Found a="i"><x path="Int"/></Found>
 		<NeedBit a="left:right">
 			<e path="haxe.zip.Huffman"/>
@@ -17057,7 +17069,7 @@
 		</NeedBits>
 		<meta><m n=":directlyUsed"/></meta>
 	</enum>
-	<class path="haxe.zip.HuffTools" params="" file="/home/travis/haxe/std/haxe/zip/Huffman.hx" module="haxe.zip.Huffman">
+	<class path="haxe.zip.HuffTools" params="" file="/usr/share/haxe/std/haxe/zip/Huffman.hx" module="haxe.zip.Huffman">
 		<treeDepth set="method" line="34"><f a="t">
 	<e path="haxe.zip.Huffman"/>
 	<x path="Int"/>
@@ -17091,7 +17103,7 @@
 		<new public="1" set="method" line="32"><f a=""><x path="Void"/></f></new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.zip._InflateImpl.Window" params="" file="/home/travis/haxe/std/haxe/zip/InflateImpl.hx" private="1" module="haxe.zip.InflateImpl">
+	<class path="haxe.zip._InflateImpl.Window" params="" file="/usr/share/haxe/std/haxe/zip/InflateImpl.hx" private="1" module="haxe.zip.InflateImpl">
 		<SIZE public="1" get="inline" set="null" expr="1 &lt;&lt; 15" line="29" static="1">
 			<x path="Int"/>
 			<meta><m n=":value"><e><![CDATA[1 << 15]]></e></m></meta>
@@ -17123,7 +17135,7 @@
 </f></new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<enum path="haxe.zip._InflateImpl.State" params="" file="/home/travis/haxe/std/haxe/zip/InflateImpl.hx" private="1" module="haxe.zip.InflateImpl">
+	<enum path="haxe.zip._InflateImpl.State" params="" file="/usr/share/haxe/std/haxe/zip/InflateImpl.hx" private="1" module="haxe.zip.InflateImpl">
 		<Head/>
 		<Block/>
 		<CData/>
@@ -17137,7 +17149,7 @@
 			<m n=":flatEnum"/>
 		</meta>
 	</enum>
-	<class path="haxe.zip.InflateImpl" params="" file="/home/travis/haxe/std/haxe/zip/InflateImpl.hx">
+	<class path="haxe.zip.InflateImpl" params="" file="/usr/share/haxe/std/haxe/zip/InflateImpl.hx">
 		<LEN_EXTRA_BITS_TBL expr="[0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0, -1, -1]" line="97" static="1">
 			<c path="Array"><x path="Int"/></c>
 			<meta><m n=":value"><e>[0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0, -1, -1]</e></m></meta>
@@ -17243,7 +17255,7 @@
 		<haxe_doc>A pure Haxe implementation of the ZLIB Inflate algorithm which allows reading compressed data without any platform-specific support.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.zip.Tools" params="" file="/home/travis/haxe/std/haxe/zip/Tools.hx">
+	<class path="haxe.zip.Tools" params="" file="/usr/share/haxe/std/haxe/zip/Tools.hx">
 		<compress public="1" set="method" line="26" static="1"><f a="f:level">
 	<t path="haxe.zip.Entry"/>
 	<x path="Int"/>
@@ -17255,7 +17267,7 @@
 </f></uncompress>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.zip.Uncompress" params="" file="/home/travis/haxe/std/haxe/zip/Uncompress.hx">
+	<class path="haxe.zip.Uncompress" params="" file="/usr/share/haxe/std/haxe/zip/Uncompress.hx">
 		<run public="1" set="method" line="38" static="1"><f a="src:?bufsize">
 	<c path="haxe.io.Bytes"/>
 	<x path="Int"/>
@@ -17283,7 +17295,7 @@
 </f></new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="haxe.zip.Writer" params="" file="/home/travis/haxe/std/haxe/zip/Writer.hx">
+	<class path="haxe.zip.Writer" params="" file="/usr/share/haxe/std/haxe/zip/Writer.hx">
 		<CENTRAL_DIRECTORY_RECORD_FIELDS_SIZE get="inline" set="null" expr="46" line="35" static="1">
 			<x path="Int"/>
 			<meta><m n=":value"><e>46</e></m></meta>
@@ -17329,7 +17341,7 @@
 </f></new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="python.Syntax" params="" file="/home/travis/haxe/std/python/Syntax.hx" extern="1">
+	<class path="python.Syntax" params="" file="/usr/share/haxe/std/python/Syntax.hx" extern="1">
 		<importModule public="1" set="method" static="1">
 			<f a="module">
 				<d/>
@@ -17547,7 +17559,7 @@
 			<m n=":noClosure"/>
 		</meta>
 	</class>
-	<typedef path="sys.FileStat" params="" file="/home/travis/haxe/std/sys/FileStat.hx">
+	<typedef path="sys.FileStat" params="" file="/usr/share/haxe/std/sys/FileStat.hx">
 		<a>
 			<uid>
 				<x path="Int"/>
@@ -17596,7 +17608,7 @@
 		</a>
 		<haxe_doc>File information, as given by `sys.FileSystem.stat`.</haxe_doc>
 	</typedef>
-	<class path="sys.FileSystem" params="" file="/home/travis/haxe/std/sys/FileSystem.hx" extern="1">
+	<class path="sys.FileSystem" params="" file="/usr/share/haxe/std/sys/FileSystem.hx" extern="1">
 		<exists public="1" set="method" static="1">
 			<f a="path">
 				<c path="String"/>
@@ -17701,7 +17713,7 @@
 	See `sys.io.File` for the complementary file API.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="sys.Http" params="" file="/home/travis/haxe/std/sys/Http.hx">
+	<class path="sys.Http" params="" file="/usr/share/haxe/std/sys/Http.hx">
 		<extends path="haxe.http.HttpBase"/>
 		<PROXY public="1" expr="null" line="46" static="1">
 			<a>
@@ -17804,7 +17816,7 @@
 </f></new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="sys.io.File" params="" file="/home/travis/haxe/std/sys/io/File.hx" extern="1">
+	<class path="sys.io.File" params="" file="/usr/share/haxe/std/sys/io/File.hx" extern="1">
 		<getContent public="1" set="method" static="1">
 			<f a="path">
 				<c path="String"/>
@@ -17941,7 +17953,7 @@
 	See `sys.FileSystem` for the complementary file system API.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="sys.io.FileInput" params="" file="/home/travis/haxe/std/sys/io/FileInput.hx" extern="1">
+	<class path="sys.io.FileInput" params="" file="/usr/share/haxe/std/sys/io/FileInput.hx" extern="1">
 		<extends path="haxe.io.Input"/>
 		<seek public="1" set="method"><f a="p:pos">
 	<x path="Int"/>
@@ -17952,7 +17964,7 @@
 		<eof public="1" set="method"><f a=""><x path="Bool"/></f></eof>
 		<haxe_doc>Use `sys.io.File.read` to create a `FileInput`.</haxe_doc>
 	</class>
-	<class path="sys.io.FileOutput" params="" file="/home/travis/haxe/std/sys/io/FileOutput.hx" extern="1">
+	<class path="sys.io.FileOutput" params="" file="/usr/share/haxe/std/sys/io/FileOutput.hx" extern="1">
 		<extends path="haxe.io.Output"/>
 		<seek public="1" set="method"><f a="p:pos">
 	<x path="Int"/>
@@ -17962,13 +17974,13 @@
 		<tell public="1" set="method"><f a=""><x path="Int"/></f></tell>
 		<haxe_doc>Use `sys.io.File.write` to create a `FileOutput`.</haxe_doc>
 	</class>
-	<enum path="sys.io.FileSeek" params="" file="/home/travis/haxe/std/sys/io/FileSeek.hx">
+	<enum path="sys.io.FileSeek" params="" file="/usr/share/haxe/std/sys/io/FileSeek.hx">
 		<SeekBegin/>
 		<SeekCur/>
 		<SeekEnd/>
 		<meta><m n=":flatEnum"/></meta>
 	</enum>
-	<class path="sys.net.Host" params="" file="/home/travis/haxe/std/sys/net/Host.hx" extern="1">
+	<class path="sys.net.Host" params="" file="/usr/share/haxe/std/sys/net/Host.hx" extern="1">
 		<localhost public="1" set="method" static="1">
 			<f a=""><c path="String"/></f>
 			<haxe_doc>Returns the local computer host name</haxe_doc>
@@ -18000,7 +18012,7 @@
 		<haxe_doc>A given IP host name.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<class path="sys.net.Socket" params="" file="/home/travis/haxe/std/sys/net/Socket.hx" extern="1">
+	<class path="sys.net.Socket" params="" file="/usr/share/haxe/std/sys/net/Socket.hx" extern="1">
 		<select public="1" set="method" static="1">
 			<f a="read:write:others:?timeout">
 				<c path="Array"><c path="sys.net.Socket"/></c>
