@@ -49,6 +49,12 @@ jobs:
           cd _build/python
           python3 setup.py sdist bdist_wheel
           cd ../..
+      - name: Deploy to PyPI 🚀
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: ${{ secrets.PYPI_USERNAME }}
+          password: ${{ secrets.PYPI_PASSWORD }}
+          packages_dir: _build/python/dist/
       - name: Create release 🚀
         uses: marvinpinto/action-automatic-releases@latest
         with:
@@ -58,9 +64,3 @@ jobs:
           files: |
             _build/python/dist/*.tar.gz
             _build/java/*.jar
-      - name: Deploy to PyPI 🚀
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: ${{ secrets.PYPI_USERNAME }}
-          password: ${{ secrets.PYPI_PASSWORD }}
-          packages_dir: _build/python/dist/
