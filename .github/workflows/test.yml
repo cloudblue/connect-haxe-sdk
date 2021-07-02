@@ -18,7 +18,6 @@ jobs:
           curl -s "https://get.sdkman.io" | bash
           source "$HOME/.sdkman/bin/sdkman-init.sh"
           sdk install java 8.0.292.j9-adpt
-          echo `java -version`
       - name: Install Mono 📥
         run: |
           sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
@@ -30,8 +29,9 @@ jobs:
         run: sudo apt install php php-mbstring -y
       - name: Run tests ⏩
         run: |
+          sdk use java 8.0.292.j9-adpt
+          echo `java -version`
           haxelib run munit test -php -coverage -result-exit-code
           haxelib run munit test -cs -java -python -result-exit-code
-          echo `java -version`
       - name: Report coverage ☔
         uses: codecov/codecov-action@v1
