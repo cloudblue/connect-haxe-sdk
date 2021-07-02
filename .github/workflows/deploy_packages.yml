@@ -2,11 +2,12 @@ name: Deploy packages
 on:
   workflow_run:
     workflows: ["Test"]
-    branches: [main]
+    branches: [master]
     types:
       - completed
 jobs:
   deploy-packages:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
