@@ -187,7 +187,7 @@ class TierConfigRequest extends IdModel {
     // Otherwise, returns null and modified params should be searched for in TC.
     private function getModifiedTcrParams(): Null<Collection<Param>> {
         final oldTcr = Model.parse(TierConfigRequest, this._footprint);
-        if (this.params.length() != oldTcr.params.length()) {
+        if (oldTcr.params != null && this.params.length() != oldTcr.params.length()) {
             final oldParamsAsString = oldTcr.params.toArray().map(p -> p.toString());
             final result = new Collection<Param>();
             for (param in this.params.toArray()) {
