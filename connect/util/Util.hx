@@ -33,7 +33,7 @@ class Util {
         try {
             return beautifyObject(haxe.Json.parse(text), compact, masked, beautify);
         } catch (ex:Dynamic) {
-           return replaceStrSensitiveData(text,Env.getLogger().getRegExMaskingList());
+           return replaceStrSensitiveData(text,Env.getLogger()._getRegExMaskingList());
         }
     }
 
@@ -277,5 +277,12 @@ class Util {
      */
     public static function boolToInt(b: Bool): Int {
         return b ? 1 : 0;
+    }
+
+    /** Returns a regular expression from the given string. **/
+    public static function toRegEx(expression:String):EReg {
+        expression = StringTools.startsWith(expression, "(") ? expression : "(" + expression;
+        expression = StringTools.endsWith(expression, ")") ? expression : expression + ")";
+        return new EReg(expression, "g");
     }
 }
