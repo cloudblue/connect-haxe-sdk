@@ -178,7 +178,7 @@ class LoggerTest {
     }
 
     @Test
-    public function testSetFilenameFromAssetRequest(){
+    public function testSetFilenameFromAssetRequest() {
         final request = Model.parse(AssetRequest, Json.stringify({
             asset: {
                 connection: {
@@ -209,7 +209,7 @@ class LoggerTest {
     }
 
     @Test
-    public function testSetFilenameFromTierRequest(){
+    public function testSetFilenameFromTierRequest() {
         final request = Model.parse(TierConfigRequest, Json.stringify({
             configuration: {
                 connection: {
@@ -238,7 +238,7 @@ class LoggerTest {
     }
 
     @Test
-    public function testSetFilenameFromAsset(){
+    public function testSetFilenameFromAsset() {
         final request = Model.parse(Asset, Json.stringify({
             connection: {
                         provider: {
@@ -267,7 +267,7 @@ class LoggerTest {
     }
 
     @Test
-    public function testSetFilenameFromListingRequest(){
+    public function testSetFilenameFromListingRequest() {
         final request = Model.parse(Listing, Json.stringify({
             provider: {
                     id: 'PROVIDER_ID'
@@ -284,7 +284,7 @@ class LoggerTest {
     }
 
     @Test
-    public function testSetFilenameFromUsageRequest(){
+    public function testSetFilenameFromUsageRequest() {
         final request = Model.parse(UsageFile, Json.stringify({
             provider: {
                     id: 'PROVIDER_ID'
@@ -296,5 +296,12 @@ class LoggerTest {
         ));
         Env.getLogger().setFilenameForRequest(request);       
         Assert.areEqual(Env.getLogger().getFilename(),'usage/PROVIDER_ID/MARKETPLACE_ID'); 
+    }
+
+    @Test
+    public function testAddRegExMask() {
+        final numRegexBefore = Env.getLogger()._getRegExMaskingList().length();
+        Env.getLogger().addRegExMask("hello");
+        Assert.areEqual(numRegexBefore + 1, Env.getLogger()._getRegExMaskingList().length());
     }
 }

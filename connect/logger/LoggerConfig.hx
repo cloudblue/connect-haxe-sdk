@@ -6,6 +6,7 @@
 package connect.logger;
 
 import connect.util.Collection;
+import connect.util.Util;
 
 /**
  * Represents the configuration of the logger. An instance can be passed to `Env.initLogger`
@@ -159,9 +160,7 @@ class LoggerConfig extends Base {
      */
     public function regexMasks(expressions:Collection<String>):LoggerConfig {
         for (expression in expressions) {
-            expression = StringTools.startsWith(expression,"(") ? expression : "(" + expression;
-            expression = StringTools.endsWith(expression,")") ? expression : expression + ")";
-            this.regexMaskingList_.push(new EReg(expression, "g"));
+            this.regexMaskingList_.push(Util.toRegEx(expression));
         }
         return this;
     }

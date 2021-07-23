@@ -12,6 +12,7 @@ import connect.models.AssetRequest;
 import connect.models.Listing;
 import connect.models.TierConfigRequest;
 import connect.models.UsageFile;
+import connect.util.Util;
 
 /**
     This class is used to log events to a file and the output console.
@@ -293,10 +294,13 @@ class Logger extends Base {
         return this.maskedParams;
     }
 
-     /**
-     *  Returns a list of regular expression for string data masking purposes
-    **/
-    public function getRegExMaskingList():Collection<EReg> {
+    /** Adds a new regular expression for string data masking purposes. **/
+    public function addRegExMask(expression:String):Void {
+        this.regexMaskingList.push(Util.toRegEx(expression));
+    }
+
+    @:dox(hide)
+    public function _getRegExMaskingList():Collection<EReg> {
         return this.regexMaskingList;
     }
 
