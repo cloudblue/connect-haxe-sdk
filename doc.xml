@@ -5703,22 +5703,22 @@
 	</class>
 	<class path="connect.logger.Logger" params="" file="connect/logger/Logger.hx">
 		<extends path="connect.Base"/>
-		<LEVEL_ERROR final="1" public="1" set="null" expr="0" line="21" static="1">
+		<LEVEL_ERROR final="1" public="1" set="null" expr="0" line="22" static="1">
 			<x path="Int"/>
 			<meta><m n=":value"><e>0</e></m></meta>
 			<haxe_doc>Only writes compact error level messages.</haxe_doc>
 		</LEVEL_ERROR>
-		<LEVEL_WARNING final="1" public="1" set="null" expr="1" line="24" static="1">
+		<LEVEL_WARNING final="1" public="1" set="null" expr="1" line="25" static="1">
 			<x path="Int"/>
 			<meta><m n=":value"><e>1</e></m></meta>
 			<haxe_doc><![CDATA[Only writes compact error & warning level messages.]]></haxe_doc>
 		</LEVEL_WARNING>
-		<LEVEL_INFO final="1" public="1" set="null" expr="2" line="27" static="1">
+		<LEVEL_INFO final="1" public="1" set="null" expr="2" line="28" static="1">
 			<x path="Int"/>
 			<meta><m n=":value"><e>2</e></m></meta>
 			<haxe_doc><![CDATA[Only writes compact error & info level messages.]]></haxe_doc>
 		</LEVEL_INFO>
-		<LEVEL_DEBUG final="1" public="1" set="null" expr="3" line="30" static="1">
+		<LEVEL_DEBUG final="1" public="1" set="null" expr="3" line="31" static="1">
 			<x path="Int"/>
 			<meta><m n=":value"><e>3</e></m></meta>
 			<haxe_doc>Writes detailed messages of all levels. Masking of sensitive data is disabled in this level.</haxe_doc>
@@ -5734,31 +5734,31 @@
 		<beautify final="1"><x path="Bool"/></beautify>
 		<defaultFilename><c path="String"/></defaultFilename>
 		<initialConfig final="1"><c path="connect.logger.LoggerConfig"/></initialConfig>
-		<getInitialConfig public="1" set="method" line="65">
+		<getInitialConfig public="1" set="method" line="66">
 			<f a=""><c path="connect.logger.LoggerConfig"/></f>
 			<haxe_doc>@returns initial logger configuration</haxe_doc>
 		</getInitialConfig>
-		<getPath public="1" set="method" line="70">
+		<getPath public="1" set="method" line="71">
 			<f a=""><c path="String"/></f>
 			<haxe_doc>@returns The path where logs are stored.</haxe_doc>
 		</getPath>
-		<getLevel public="1" set="method" line="78">
+		<getLevel public="1" set="method" line="79">
 			<f a=""><x path="Int"/></f>
 			<haxe_doc>* @return Int The level of the log. One of: `LEVEL_ERROR`, `LEVEL_WARNING`,
      * `LEVEL_INFO`, `LEVEL_DEBUG`.</haxe_doc>
 		</getLevel>
-		<isBeautified public="1" set="method" line="86">
+		<isBeautified public="1" set="method" line="87">
 			<f a=""><x path="Bool"/></f>
 			<haxe_doc>* @return Bool Whether the logs are written in beautified format (this is,
      * for JSON objects use new lines and two space indentation).</haxe_doc>
 		</isBeautified>
-		<isCompact public="1" set="method" line="95">
+		<isCompact public="1" set="method" line="96">
 			<f a=""><x path="Bool"/></f>
 			<haxe_doc>* @return Bool Whether the logs are written in compact format (this is,
      * for JSON objects only print key names or, if it has an 'id' field,
      * only the id)..</haxe_doc>
 		</isCompact>
-		<setFilename public="1" set="method" line="109">
+		<setFilename public="1" set="method" line="110">
 			<f a="filename">
 				<c path="String"/>
 				<x path="Void"/>
@@ -5772,19 +5772,19 @@
         Filename extension must be omitted, since it is provided by the formatters
         used in each handler.</haxe_doc>
 		</setFilename>
-		<setFilenameForRequest public="1" set="method" line="131"><f a="request">
+		<setFilenameForRequest public="1" set="method" line="132"><f a="request">
 	<c path="connect.models.IdModel"/>
 	<x path="Void"/>
 </f></setFilenameForRequest>
-		<getFilename public="1" set="method" line="186">
+		<getFilename public="1" set="method" line="187">
 			<f a=""><c path="String"/></f>
 			<haxe_doc>@returns The last filename that was set.</haxe_doc>
 		</getFilename>
-		<getHandlers public="1" set="method" line="204">
+		<getHandlers public="1" set="method" line="205">
 			<f a=""><c path="connect.util.Collection"><c path="connect.logger.LoggerHandler"/></c></f>
 			<haxe_doc>@returns The defined handlers for this logger. Do not modify this collection.</haxe_doc>
 		</getHandlers>
-		<openSection public="1" set="method" line="213">
+		<openSection public="1" set="method" line="214">
 			<f a="name">
 				<c path="String"/>
 				<x path="Void"/>
@@ -5793,11 +5793,11 @@
         this formatting, depending on the number of opened sections. For example, at the beginning
         of a function, a section can be opened, and closed when the function finishes.</haxe_doc>
 		</openSection>
-		<closeSection public="1" set="method" line="220">
+		<closeSection public="1" set="method" line="221">
 			<f a=""><x path="Void"/></f>
 			<haxe_doc>Closes the last opened section.</haxe_doc>
 		</closeSection>
-		<writeBlock public="1" set="method" line="230">
+		<writeBlock public="1" set="method" line="231">
 			<f a="level:block">
 				<x path="Int"/>
 				<c path="String"/>
@@ -5808,7 +5808,7 @@
      * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_WARNING`, `LEVEL_INFO`, `LEVEL_DEBUG`.
      * @param block Block of text to log. Lines in the text are formatted to appear as a block.</haxe_doc>
 		</writeBlock>
-		<writeCodeBlock public="1" set="method" line="243">
+		<writeCodeBlock public="1" set="method" line="244">
 			<f a="level:code:language">
 				<x path="Int"/>
 				<c path="String"/>
@@ -5821,7 +5821,7 @@
      * @param code Code to log. Text is formatted to appear as a code block.
      * @param language Language used in the block. For example, "json". Can be an empty string.</haxe_doc>
 		</writeCodeBlock>
-		<writeList public="1" set="method" line="255">
+		<writeList public="1" set="method" line="256">
 			<f a="level:list">
 				<x path="Int"/>
 				<c path="connect.util.Collection"><c path="String"/></c>
@@ -5832,7 +5832,7 @@
      * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_WARNING`, `LEVEL_INFO`, `LEVEL_DEBUG`.
      * @param list List to log. Lines are formatted to appear as a list.</haxe_doc>
 		</writeList>
-		<writeTable public="1" set="method" line="268">
+		<writeTable public="1" set="method" line="269">
 			<f a="level:table">
 				<x path="Int"/>
 				<c path="connect.util.Collection"><c path="connect.util.Collection"><c path="String"/></c></c>
@@ -5844,7 +5844,7 @@
      * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_WARNING`, `LEVEL_INFO`, `LEVEL_DEBUG`.
      * @param table Table to log. Rows are formatted to appear as a table.</haxe_doc>
 		</writeTable>
-		<write public="1" set="method" line="280">
+		<write public="1" set="method" line="281">
 			<f a="level:message">
 				<x path="Int"/>
 				<c path="String"/>
@@ -5855,82 +5855,89 @@
      * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_WARNING`, `LEVEL_INFO`, `LEVEL_DEBUG`.
      * @param message Message to log. The message is not formatted.</haxe_doc>
 		</write>
-		<getMaskedFields public="1" set="method" line="287">
+		<getMaskedFields public="1" set="method" line="288">
 			<f a=""><c path="connect.util.Collection"><c path="String"/></c></f>
 			<haxe_doc>Returns a list of fields which should be masked in http requests or responses.</haxe_doc>
 		</getMaskedFields>
-		<getMaskedParams public="1" set="method" line="292">
+		<getMaskedParams public="1" set="method" line="293">
 			<f a=""><c path="connect.util.Collection"><c path="String"/></c></f>
 			<haxe_doc>Returns a list of param ids whose value should be masked in logged requests.</haxe_doc>
 		</getMaskedParams>
-		<getRegExMaskingList public="1" set="method" line="299">
+		<addRegExMask public="1" set="method" line="298">
+			<f a="expression">
+				<c path="String"/>
+				<x path="Void"/>
+			</f>
+			<haxe_doc>Adds a new regular expression for string data masking purposes.</haxe_doc>
+		</addRegExMask>
+		<_getRegExMaskingList public="1" set="method" line="303">
 			<f a=""><c path="connect.util.Collection"><c path="EReg"/></c></f>
-			<haxe_doc>*  Returns a list of regular expression for string data masking purposes</haxe_doc>
-		</getRegExMaskingList>
-		<log public="1" set="method" line="304">
+			<meta><m n=":dox"><e>hide</e></m></meta>
+		</_getRegExMaskingList>
+		<log public="1" set="method" line="308">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</log>
-		<debug public="1" set="method" line="309">
+		<debug public="1" set="method" line="313">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</debug>
-		<info public="1" set="method" line="314">
+		<info public="1" set="method" line="318">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</info>
-		<notice public="1" set="method" line="319">
+		<notice public="1" set="method" line="323">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</notice>
-		<warning public="1" set="method" line="324">
+		<warning public="1" set="method" line="328">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</warning>
-		<error public="1" set="method" line="329">
+		<error public="1" set="method" line="333">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</error>
-		<critical public="1" set="method" line="334">
+		<critical public="1" set="method" line="338">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</critical>
-		<alert public="1" set="method" line="339">
+		<alert public="1" set="method" line="343">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</alert>
-		<emergency public="1" set="method" line="344">
+		<emergency public="1" set="method" line="348">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</emergency>
-		<_writeToHandler public="1" set="method" line="349">
+		<_writeToHandler public="1" set="method" line="353">
 			<f a="level:message:handler">
 				<x path="Int"/>
 				<c path="String"/>
@@ -5939,15 +5946,15 @@
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</_writeToHandler>
-		<writeSections set="method" line="356"><f a="level">
+		<writeSections set="method" line="360"><f a="level">
 	<x path="Int"/>
 	<x path="Void"/>
 </f></writeSections>
-		<copy public="1" set="method" line="368"><f a="request">
+		<copy public="1" set="method" line="372"><f a="request">
 	<x path="Null"><c path="connect.models.IdModel"/></x>
 	<c path="connect.logger.Logger"/>
 </f></copy>
-		<new public="1" set="method" line="48">
+		<new public="1" set="method" line="49">
 			<f a="config">
 				<c path="connect.logger.LoggerConfig"/>
 				<x path="Void"/>
@@ -5961,7 +5968,7 @@
 	<class path="connect.logger._Logger.LoggerSection" params="" file="connect/logger/Logger.hx" private="1" module="connect.logger.Logger">
 		<name final="1" public="1"><c path="String"/></name>
 		<written public="1"><x path="Bool"/></written>
-		<new public="1" set="method" line="395"><f a="name">
+		<new public="1" set="method" line="399"><f a="name">
 	<c path="String"/>
 	<x path="Void"/>
 </f></new>
@@ -6227,7 +6234,7 @@
 	</class>
 	<class path="connect.logger.LoggerConfig" params="" file="connect/logger/LoggerConfig.hx">
 		<extends path="connect.Base"/>
-		<levelTranslation final="1" set="null" expr="[&quot;ERROR&quot; =&gt; Logger.LEVEL_ERROR, &quot;WARNING&quot; =&gt; Logger.LEVEL_WARNING, &quot;INFO&quot; =&gt; Logger.LEVEL_INFO, &quot;DEBUG&quot; =&gt; Logger.LEVEL_DEBUG]" line="32" static="1">
+		<levelTranslation final="1" set="null" expr="[&quot;ERROR&quot; =&gt; Logger.LEVEL_ERROR, &quot;WARNING&quot; =&gt; Logger.LEVEL_WARNING, &quot;INFO&quot; =&gt; Logger.LEVEL_INFO, &quot;DEBUG&quot; =&gt; Logger.LEVEL_DEBUG]" line="33" static="1">
 			<t path="Map">
 				<c path="String"/>
 				<x path="Int"/>
@@ -6267,7 +6274,7 @@
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</beautify_>
 		<customHandlers><x path="Bool"/></customHandlers>
-		<path public="1" set="method" line="61">
+		<path public="1" set="method" line="62">
 			<f a="path">
 				<c path="String"/>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6281,7 +6288,7 @@
      * @param path Path for logs.
      * @return `this` instance to support a fluent interface.</haxe_doc>
 		</path>
-		<level public="1" set="method" line="72">
+		<level public="1" set="method" line="73">
 			<f a="level">
 				<x path="Int"/>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6291,7 +6298,7 @@
      * `Logger.LEVEL_WARNING`, `Logger.LEVEL_INFO`, `Logger.LEVEL_DEBUG`.
      * @return `this` instance to support a fluent interface.</haxe_doc>
 		</level>
-		<levelName public="1" set="method" line="83">
+		<levelName public="1" set="method" line="84">
 			<f a="level">
 				<c path="String"/>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6301,7 +6308,7 @@
      *  One of: `"ERROR"`, `"WARNING"`, `"INFO"`, `"DEBUG"`.
      * @return `this` instance to support a fluent interface.</haxe_doc>
 		</levelName>
-		<handlers public="1" set="method" line="97">
+		<handlers public="1" set="method" line="98">
 			<f a="handlers">
 				<c path="connect.util.Collection"><c path="connect.logger.LoggerHandler"/></c>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6312,7 +6319,7 @@
      * @param handlers Collection of handlers.
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</handlers>
-		<maskedFields public="1" set="method" line="112">
+		<maskedFields public="1" set="method" line="113">
 			<f a="maskedFields">
 				<c path="connect.util.Collection"><c path="String"/></c>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6325,7 +6332,7 @@
      * @param maskedFields Collection of field names (string).
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</maskedFields>
-		<maskedParams public="1" set="method" line="127">
+		<maskedParams public="1" set="method" line="128">
 			<f a="maskedParams">
 				<c path="connect.util.Collection"><c path="String"/></c>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6339,7 +6346,7 @@
      * @param maskedParams Collection of param ids (string).
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</maskedParams>
-		<beautify public="1" set="method" line="138">
+		<beautify public="1" set="method" line="139">
 			<f a="enable">
 				<x path="Bool"/>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6349,7 +6356,7 @@
      * @param enable Whether beautified logging should be enabled (defaults to `false`).
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</beautify>
-		<compact public="1" set="method" line="150">
+		<compact public="1" set="method" line="151">
 			<f a="enable">
 				<x path="Bool"/>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6360,7 +6367,7 @@
      * @param enable Whether compact logging should be enabled.
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</compact>
-		<regexMasks public="1" set="method" line="160">
+		<regexMasks public="1" set="method" line="161">
 			<f a="expressions">
 				<c path="connect.util.Collection"><c path="String"/></c>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6369,7 +6376,7 @@
      * @param expressions
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</regexMasks>
-		<markdown public="1" set="method" line="177">
+		<markdown public="1" set="method" line="176">
 			<f a="enable">
 				<x path="Bool"/>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6380,7 +6387,7 @@
      * @param enable Whether to use the Markdown formatter.
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</markdown>
-		<new public="1" set="method" line="39"><f a=""><x path="Void"/></f></new>
+		<new public="1" set="method" line="40"><f a=""><x path="Void"/></f></new>
 		<haxe_doc>* Represents the configuration of the logger. An instance can be passed to `Env.initLogger`
  * to setup the logger behaviour.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
@@ -10524,6 +10531,13 @@
 			</f>
 			<haxe_doc>* @return Int `1` if the argument is `true`, `0` otherwise.</haxe_doc>
 		</boolToInt>
+		<toRegEx public="1" set="method" line="283" static="1">
+			<f a="expression">
+				<c path="String"/>
+				<c path="EReg"/>
+			</f>
+			<haxe_doc>Returns a regular expression from the given string.</haxe_doc>
+		</toRegEx>
 		<meta>
 			<m n=":directlyUsed"/>
 			<m n=":dox"><e>hide</e></m>
