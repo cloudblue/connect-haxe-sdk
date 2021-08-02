@@ -31,9 +31,6 @@ class LoggerConfig extends Base {
     @:dox(hide)
     public var regexMaskingList_:Collection<EReg>;
 
-    @:dox(hide)
-    public var compact_(default, null):Bool;
-
     private static final levelTranslation:Map<String, Int> = [
         'ERROR' => Logger.LEVEL_ERROR,
         'WARNING' => Logger.LEVEL_WARNING,
@@ -47,7 +44,6 @@ class LoggerConfig extends Base {
         this.handlers_ = new Collection<LoggerHandler>().push(new LoggerHandler(new PlainLoggerFormatter(), new FileLoggerWriter()));
         this.maskedFields_ = new Collection<String>();
         this.maskedParams_ = new Collection<String>();
-        this.compact_ = false;
         this.regexMaskingList_ = new Collection<EReg>();
     }
 
@@ -143,14 +139,16 @@ class LoggerConfig extends Base {
     /**
      * Sets whether the logs must be written in compact format (this is,
      * for JSON objects only prints key names or, if it has an 'id' field,
-     * only the id). This is ignored if the logger is created in LEVEL_DEBUG.
+     * only the id). This is ignored if the logger is created in LEVEL_DEBUG. This method
+     * is deprecated and it has no effect.
      * @param enable Whether compact logging should be enabled.
      * @return LoggerConfig `this` instance to support a fluent interface.
      */
+    /*
     public function compact(enable:Bool):LoggerConfig {
-        this.compact_ = enable;
         return this;
     }
+    */
 
     /**
      * Set list of regexs to replace in logs strings

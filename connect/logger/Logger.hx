@@ -18,13 +18,13 @@ import connect.util.Util;
     This class is used to log events to a file and the output console.
 **/
 class Logger extends Base {
-    /** Only writes compact error level messages. **/
+    /** Only writes error level messages. **/
     public static final LEVEL_ERROR = 0;
 
-    /** Only writes compact error & warning level messages. **/
+    /** Only writes error & warning level messages. **/
     public static final LEVEL_WARNING = 1;
 
-    /** Only writes compact error & info level messages. **/
+    /** Only writes error & info level messages. **/
     public static final LEVEL_INFO = 2;
 
     /** Writes detailed messages of all levels. Masking of sensitive data is disabled in this level. **/
@@ -37,7 +37,6 @@ class Logger extends Base {
     private final maskedFields:Collection<String>;
     private final maskedParams:Collection<String>;
     private final regexMaskingList:Collection<EReg>;
-    private final compact:Bool;
     private var defaultFilename:String;
     private final initialConfig: LoggerConfig;
 
@@ -56,7 +55,6 @@ class Logger extends Base {
         this.maskedParams = config.maskedParams_.copy();
         this.regexMaskingList = config.regexMaskingList_.copy();
         if (this.maskedFields.indexOf('Authorization') == -1) this.maskedFields.push('Authorization');
-        this.compact = (this.level != LEVEL_DEBUG) ? config.compact_ : false;
         this.defaultFilename = null;
     }
 
@@ -80,7 +78,8 @@ class Logger extends Base {
 
     /**
      * @return Bool Whether the logs are written in beautified format (this is,
-     * for JSON objects use new lines and two space indentation).
+     * for JSON objects use new lines and two space indentation). This method
+     * is deprecated and always returns false.
      */
     public function isBeautified(): Bool {
         return false;
@@ -89,10 +88,10 @@ class Logger extends Base {
     /**
      * @return Bool Whether the logs are written in compact format (this is,
      * for JSON objects only print key names or, if it has an 'id' field,
-     * only the id)..
+     * only the id). This method is deprecated and always returns false.
      */
     public function isCompact(): Bool {
-        return this.compact;
+        return false;
     }
 
     /**
@@ -376,8 +375,7 @@ class Logger extends Base {
             .level(this.level)
             .handlers(handlers)
             .maskedFields(this.maskedFields)
-            .maskedParams(this.maskedParams)
-            .compact(this.compact);
+            .maskedParams(this.maskedParams);
         final logger = new Logger(config);
         Reflect.setField(logger, 'sections', this.sections.copy());
         Reflect.setField(logger, 'regexMaskingList', this.regexMaskingList.copy());

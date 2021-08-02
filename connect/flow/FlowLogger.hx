@@ -84,11 +84,8 @@ class FlowLogger {
                 final requestObj = (Util.isJsonObject(request) && lastRequestObj != null) ? Json.parse(request) : null;
                 final diff = (lastRequestObj != null && requestObj != null) ? Util.createObjectDiff(requestObj, lastRequestObj) : null;
                 final requestStr = (diff != null)
-                ? Util.beautifyObject(
-                    diff,
-                    logger.isCompact(),
-                    Env.getLogger().getLevel() != Logger.LEVEL_DEBUG)
-                : request;
+                    ? Util.beautifyObject(diff, Env.getLogger().getLevel() != Logger.LEVEL_DEBUG)
+                    : request;
                 final requestTitle = (diff != null) ? 'Request (changes):' : 'Request:';
                 return '$requestTitle${fmt.formatCodeBlock(logger.getLevel(),Std.string(requestStr), 'json')}';
             } else {

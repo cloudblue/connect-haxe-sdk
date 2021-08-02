@@ -86,7 +86,7 @@ class LoggerTest {
 
     @Test
     public function testMaskDataInObj() {
-        final maskedInfo = Util.beautify(dataTestMaskDataInObj, false, true);
+        final maskedInfo = Util.beautify(dataTestMaskDataInObj, true);
         final result = Helper.sortObject(Json.parse(maskedInfo));
         final expected = Helper.sortObject(Json.parse(resultTestMaskDataInObj));
         Assert.areEqual(Json.stringify(expected), Json.stringify(result));
@@ -94,7 +94,7 @@ class LoggerTest {
 
     @Test
     public function testMaskDataInList() {
-        final maskedList: Array<Dynamic> = Json.parse(Util.beautify(dataTestMaskDataInList, false, true));
+        final maskedList: Array<Dynamic> = Json.parse(Util.beautify(dataTestMaskDataInList, true));
         final expectedList: Array<Dynamic> = Json.parse(resultTestMaskDataInList);
         Assert.areEqual(expectedList.length, maskedList.length);
         for (i in 0...maskedList.length) {
@@ -106,13 +106,13 @@ class LoggerTest {
 
     @Test
     public function testMaskDataInText() {
-        final maskedInfo = Util.beautify(dataTestMaskDataInText, false, true);
+        final maskedInfo = Util.beautify(dataTestMaskDataInText, true);
         Assert.areEqual(resultTestMaskDataInText, maskedInfo);
     }
     
     @Test
     public function testMaskNoDataInText() {
-        final unMaskedInfo = Util.beautify(dataTestNoMaskDataInText, false, true);
+        final unMaskedInfo = Util.beautify(dataTestNoMaskDataInText, true);
         Assert.areEqual(dataTestNoMaskDataInText,unMaskedInfo);
     }
 
@@ -134,7 +134,7 @@ class LoggerTest {
         }));
 
         final expected = Helper.sortStringObject(AssetRequest, '{"asset":{"params":[{"id":"my_param","value":"********"},{"id":"other_param","value":"other_value"}]}}');
-        final result = Helper.sortStringObject(AssetRequest, Util.beautify(request.toString(), false, true));
+        final result = Helper.sortStringObject(AssetRequest, Util.beautify(request.toString(), true));
         Assert.areEqual(expected, result);
     }
 
@@ -158,7 +158,7 @@ class LoggerTest {
         }));
 
         final expected = Helper.sortStringObject(AssetRequest, '{"asset":{"params":[{"type":"password","id":"one_param","value":"********"},{"id":"other_param","value":"other_value"}]}}');
-        final result = Helper.sortStringObject(AssetRequest, Util.beautify(request.toString(), false, true));
+        final result = Helper.sortStringObject(AssetRequest, Util.beautify(request.toString(), true));
         Assert.areEqual(expected, result);
     }
 
@@ -173,7 +173,7 @@ class LoggerTest {
         }));
 
         final expected = Helper.sortStringObject(ProductConfigurationParam, '{"parameter": {"id": "my_param", "value": "*******************"}, "value": "*******************"}');
-        final result = Helper.sortStringObject(ProductConfigurationParam, Util.beautify(config.toString(), false, true));
+        final result = Helper.sortStringObject(ProductConfigurationParam, Util.beautify(config.toString(), true));
         Assert.areEqual(expected, result);
     }
 

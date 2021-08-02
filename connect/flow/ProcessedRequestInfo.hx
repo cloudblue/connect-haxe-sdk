@@ -37,10 +37,7 @@ class ProcessedRequestInfo {
 
     private static function requestToString(request:Null<IdModel>):String {
         return (request != null)
-            ? Util.beautifyObject(
-                request.toObject(),
-                Env.getLogger().isCompact(),
-                Env.getLogger().getLevel() != Logger.LEVEL_DEBUG)
+            ? Util.beautifyObject(request.toObject(), Env.getLogger().getLevel() != Logger.LEVEL_DEBUG)
             : '';
     }
 

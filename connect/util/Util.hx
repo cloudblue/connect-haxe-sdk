@@ -24,13 +24,11 @@ class Util {
 
     /*
         If the text contains a JSON string representation, it returns it beautified using two space
-        indentation. Otherwise, returns the string as-is. If `compact` is `true` and the text
-        contains a JSON string representation, only the id is returned or a string with all the
-        fields if it does not have an id.
+        indentation. Otherwise, returns the string as-is.
     */
-    public static function beautify(text:String, compact:Bool, masked:Bool):String {
+    public static function beautify(text:String, masked:Bool):String {
         try {
-            return beautifyObject(haxe.Json.parse(text), compact, masked);
+            return beautifyObject(haxe.Json.parse(text), masked);
         } catch (ex:Dynamic) {
            return replaceStrSensitiveData(text,Env.getLogger()._getRegExMaskingList());
         }
@@ -38,34 +36,10 @@ class Util {
 
     /*
         @returns The JSON representation of the object beautified using two space indentation.
-        If `compact` is `true` and the text contains a JSON string representation, only the id
-        is returned or a string with all the fields if it does not have an id. If `compact` is
-        false and `masked` is true, all fields in the mask list will be masked.
+        If `masked` is true, all fields in the mask list will be masked.
     */
-    public static function beautifyObject(obj:Dynamic, compact:Bool, masked:Bool):String {
-        if (compact) {
-            if (Type.typeof(obj) == TObject) {
-                // Json contains an object
-                if (Reflect.hasField(obj, 'id')) {
-                    return obj.id;
-                } else {
-                    return '{ ' + Reflect.fields(obj).join(', ') + ' }';
-                }
-            } else {
-                // Json contains an array
-                final arr: Array<Dynamic> = obj;
-                final mapped = arr.map(function(el) {
-                    return Reflect.hasField(el, 'id')
-                        ? el.id
-                        : (Type.typeof(el) == TObject)
-                        ? '{ ' + Reflect.fields(el).join(', ') + ' }'
-                        : Std.string(el);
-                });
-                return haxe.Json.stringify(mapped);
-            }
-        } else {
-            return haxe.Json.stringify(masked ? maskParams(maskFields(obj)) : obj);
-        }
+    public static function beautifyObject(obj:Dynamic, masked:Bool):String {
+        return haxe.Json.stringify(masked ? maskParams(maskFields(obj)) : obj);
     }
 
     public static function maskFields(obj:Dynamic):Dynamic {
