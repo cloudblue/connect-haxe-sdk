@@ -40,8 +40,7 @@ class ProcessedRequestInfo {
             ? Util.beautifyObject(
                 request.toObject(),
                 Env.getLogger().isCompact(),
-                Env.getLogger().getLevel() != Logger.LEVEL_DEBUG,
-                Env.getLogger().isBeautified())
+                Env.getLogger().getLevel() != Logger.LEVEL_DEBUG)
             : '';
     }
 

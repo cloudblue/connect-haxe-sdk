@@ -87,8 +87,7 @@ class FlowLogger {
                 ? Util.beautifyObject(
                     diff,
                     logger.isCompact(),
-                    Env.getLogger().getLevel() != Logger.LEVEL_DEBUG,
-                    logger.isBeautified())
+                    Env.getLogger().getLevel() != Logger.LEVEL_DEBUG)
                 : request;
                 final requestTitle = (diff != null) ? 'Request (changes):' : 'Request:';
                 return '$requestTitle${fmt.formatCodeBlock(logger.getLevel(),Std.string(requestStr), 'json')}';

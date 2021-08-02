@@ -38,7 +38,6 @@ class Logger extends Base {
     private final maskedParams:Collection<String>;
     private final regexMaskingList:Collection<EReg>;
     private final compact:Bool;
-    private final beautify:Bool;
     private var defaultFilename:String;
     private final initialConfig: LoggerConfig;
 
@@ -57,7 +56,6 @@ class Logger extends Base {
         this.maskedParams = config.maskedParams_.copy();
         this.regexMaskingList = config.regexMaskingList_.copy();
         if (this.maskedFields.indexOf('Authorization') == -1) this.maskedFields.push('Authorization');
-        this.beautify = config.beautify_;
         this.compact = (this.level != LEVEL_DEBUG) ? config.compact_ : false;
         this.defaultFilename = null;
     }
@@ -85,7 +83,7 @@ class Logger extends Base {
      * for JSON objects use new lines and two space indentation).
      */
     public function isBeautified(): Bool {
-        return this.beautify;
+        return false;
     }
 
     /**
@@ -379,7 +377,6 @@ class Logger extends Base {
             .handlers(handlers)
             .maskedFields(this.maskedFields)
             .maskedParams(this.maskedParams)
-            .beautify(this.beautify)
             .compact(this.compact);
         final logger = new Logger(config);
         Reflect.setField(logger, 'sections', this.sections.copy());

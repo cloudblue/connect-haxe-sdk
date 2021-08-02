@@ -26,12 +26,11 @@ class Util {
         If the text contains a JSON string representation, it returns it beautified using two space
         indentation. Otherwise, returns the string as-is. If `compact` is `true` and the text
         contains a JSON string representation, only the id is returned or a string with all the
-        fields if it does not have an id. If `beautify` is `true`, the JSON is returned with
-        spacing and indentation.
+        fields if it does not have an id.
     */
-    public static function beautify(text:String, compact:Bool, masked:Bool, beautify:Bool):String {
+    public static function beautify(text:String, compact:Bool, masked:Bool):String {
         try {
-            return beautifyObject(haxe.Json.parse(text), compact, masked, beautify);
+            return beautifyObject(haxe.Json.parse(text), compact, masked);
         } catch (ex:Dynamic) {
            return replaceStrSensitiveData(text,Env.getLogger()._getRegExMaskingList());
         }
@@ -43,8 +42,7 @@ class Util {
         is returned or a string with all the fields if it does not have an id. If `compact` is
         false and `masked` is true, all fields in the mask list will be masked.
     */
-    public static function beautifyObject(obj:Dynamic, compact:Bool, masked:Bool, beautify:Bool):String {
-        final spacing = beautify ? '  ' : null;
+    public static function beautifyObject(obj:Dynamic, compact:Bool, masked:Bool):String {
         if (compact) {
             if (Type.typeof(obj) == TObject) {
                 // Json contains an object
@@ -63,10 +61,10 @@ class Util {
                         ? '{ ' + Reflect.fields(el).join(', ') + ' }'
                         : Std.string(el);
                 });
-                return haxe.Json.stringify(mapped, null, spacing);
+                return haxe.Json.stringify(mapped);
             }
         } else {
-            return haxe.Json.stringify(masked ? maskParams(maskFields(obj)) : obj, null, spacing);
+            return haxe.Json.stringify(masked ? maskParams(maskFields(obj)) : obj);
         }
     }
 

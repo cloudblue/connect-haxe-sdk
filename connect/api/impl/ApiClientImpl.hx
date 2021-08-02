@@ -314,8 +314,7 @@ class ApiClientImpl extends Base implements IApiClient {
                 Util.beautify(
                     data,
                     Env.getLogger().isCompact(),
-                    Env.getLogger().getLevel() != Logger.LEVEL_DEBUG,
-                    Env.getLogger().isBeautified()),
+                    Env.getLogger().getLevel() != Logger.LEVEL_DEBUG),
                 'json');
             return '$prefix$block';
         } else {

@@ -15,26 +15,31 @@ import connect.util.Util;
 class LoggerConfig extends Base {
     @:dox(hide)
     public var path_(default, null):String;
+
     @:dox(hide)
     public var level_(default, null):Int;
+
     @:dox(hide)
     public var handlers_(default, null):Collection<LoggerHandler>;
+
     @:dox(hide)
     public var maskedFields_(default, null):Collection<String>;
+
     @:dox(hide)
     public var maskedParams_(default, null):Collection<String>;
+
     @:dox(hide)
     public var regexMaskingList_:Collection<EReg>;
+
     @:dox(hide)
     public var compact_(default, null):Bool;
-    @:dox(hide)
-    public var beautify_(default, null):Bool;
 
     private static final levelTranslation:Map<String, Int> = [
         'ERROR' => Logger.LEVEL_ERROR,
         'WARNING' => Logger.LEVEL_WARNING,
         'INFO' => Logger.LEVEL_INFO,
-        'DEBUG' => Logger.LEVEL_DEBUG];
+        'DEBUG' => Logger.LEVEL_DEBUG
+    ];
 
     public function new() {
         this.path_ = 'logs';
@@ -43,7 +48,6 @@ class LoggerConfig extends Base {
         this.maskedFields_ = new Collection<String>();
         this.maskedParams_ = new Collection<String>();
         this.compact_ = false;
-        this.beautify_ = false;
         this.regexMaskingList_ = new Collection<EReg>();
     }
 
@@ -127,13 +131,12 @@ class LoggerConfig extends Base {
     }
 
     /**
-     * Set whether the logs must be written in beautified format (this is,
-     * for JSON objects use new lines and two space indentation).
+     * Set whether the logs must be written in beautified format. This method
+     * is deprecated and it has no effect.
      * @param enable Whether beautified logging should be enabled (defaults to `false`).
      * @return LoggerConfig `this` instance to support a fluent interface.
      */
     public function beautify(enable:Bool):LoggerConfig {
-        this.beautify_ = enable;
         return this;
     }
 
