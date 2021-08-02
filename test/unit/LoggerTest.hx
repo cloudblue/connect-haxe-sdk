@@ -5,7 +5,7 @@
 import connect.logger.Logger;
 import connect.logger.LoggerHandler;
 import connect.logger.LoggerConfig;
-import connect.logger.MarkdownLoggerFormatter;
+import connect.logger.PlainLoggerFormatter;
 import connect.models.AssetRequest;
 import connect.models.Asset;
 import connect.models.TierConfigRequest;
@@ -53,7 +53,7 @@ class LoggerTest {
             .push("\\{(.*?)\\}");
         final loggerConfiguration:LoggerConfig = new LoggerConfig()
             .handlers(new Collection<LoggerHandler>()
-                .push(new LoggerHandler(new MarkdownLoggerFormatter(), new ArrayLoggerWriter())));
+                .push(new LoggerHandler(new PlainLoggerFormatter(), new ArrayLoggerWriter())));
         loggerConfiguration.maskedFields(maskedFields);
         loggerConfiguration.maskedParams(maskedParams);
         loggerConfiguration.regexMasks(maskingRegex);

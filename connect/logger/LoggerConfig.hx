@@ -35,7 +35,6 @@ class LoggerConfig extends Base {
         'WARNING' => Logger.LEVEL_WARNING,
         'INFO' => Logger.LEVEL_INFO,
         'DEBUG' => Logger.LEVEL_DEBUG];
-    private var customHandlers:Bool;
 
     public function new() {
         this.path_ = 'logs';
@@ -46,7 +45,6 @@ class LoggerConfig extends Base {
         this.compact_ = false;
         this.beautify_ = false;
         this.regexMaskingList_ = new Collection<EReg>();
-        this.customHandlers = false;
     }
 
     /**
@@ -89,15 +87,13 @@ class LoggerConfig extends Base {
     }
 
     /**
-     * Sets the handlers for the logger. Default is a handler with a plain of Markdown formatter
-     * (depending on whether `markdown` method was called with a `true` argument) and a file
-     * writer.
+     * Sets the handlers for the logger. Default is a handler with a plain formatter
+     * and a file writer.
      * @param handlers Collection of handlers.
      * @return LoggerConfig `this` instance to support a fluent interface.
      */
     public function handlers(handlers:Collection<LoggerHandler>):LoggerConfig {
         this.handlers_ = handlers.copy();
-        this.customHandlers = true;
         return this;
     }
 
@@ -167,19 +163,13 @@ class LoggerConfig extends Base {
 
 
     /**
-     * Sets whether the logger should use the Markdown formatter. By default,
-     * the plain text formatter is used. This property only has effect if no default
-     * set of logger handlers has been set.
+     * Sets whether the logger should use the Markdown formatter. This method
+     * is deprecated and it has no effect. By default, the plain text formatter
+     * is used. 
      * @param enable Whether to use the Markdown formatter.
      * @return LoggerConfig `this` instance to support a fluent interface.
      */
     public function markdown(enable:Bool):LoggerConfig {
-        if (!this.customHandlers) {
-            this.handlers_ = new Collection<LoggerHandler>().push(new LoggerHandler(
-                enable ? new MarkdownLoggerFormatter() : new PlainLoggerFormatter(),
-                new FileLoggerWriter()
-            ));
-        }
         return this;
     }
 }
