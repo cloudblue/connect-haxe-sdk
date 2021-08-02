@@ -24,6 +24,7 @@ import CustomLoggerFormatterTest;
 import FlowTest;
 import ListingRequestTest;
 import SubscriptionRequestTest;
+import DiffTest;
 import ItemTest;
 import MarketplaceTest;
 import TierAccountTest;
@@ -63,6 +64,7 @@ class TestSuite extends massive.munit.TestSuite
 		add(FlowTest);
 		add(ListingRequestTest);
 		add(SubscriptionRequestTest);
+		add(DiffTest);
 		add(ItemTest);
 		add(MarketplaceTest);
 		add(TierAccountTest);

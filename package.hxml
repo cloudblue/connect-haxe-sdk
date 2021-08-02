@@ -1,6 +1,5 @@
 -main Connect
 -dce no
--lib diff:1.0.0
 --each
 
 -D cslib
