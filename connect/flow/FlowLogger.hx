@@ -126,24 +126,8 @@ class FlowLogger {
         return fmt.formatTable(logger.getLevel(),dataCol);
     }
 
-    public function writeStepSkip(willSave:Bool) {
-        if (willSave) {
-            logger.write(Logger.LEVEL_INFO, 'Skipping request. Trying to save step data.');
-        } else {
-            logger.write(Logger.LEVEL_INFO, 'Skipping request. Step data will not be saved because feature is disabled.');
-        }
-    }
-
-    public function writeStepSavedInConnect() {
-        logger.write(Logger.LEVEL_INFO, 'Step data saved in Connect.');
-    }
-
-    public function writeStepSavedLocally() {
-        logger.write(Logger.LEVEL_INFO, 'Step data saved locally.');
-    }
-
-    public function writeStepSaveFailed() {
-        logger.write(Logger.LEVEL_INFO, 'Step data could not be saved.');
+    public function writeStepSkip() {
+        logger.write(Logger.LEVEL_INFO, 'Skipping request.');
     }
 
     public function writeMigrationMessage(request:IdModel):Void {
@@ -152,9 +136,5 @@ class FlowLogger {
 
     public function writeException(message:String):Void {
         logger.writeCodeBlock(Logger.LEVEL_ERROR, message, '');
-    }
-
-    public function writeLoadedStepData(index:Int, storageType:String):Void {
-        logger.write(Logger.LEVEL_INFO, 'Resuming request from step ${index + 1} with $storageType.');
     }
 }
