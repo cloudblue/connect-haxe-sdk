@@ -38,7 +38,7 @@ class Logger extends Base {
     private final maskedParams:Collection<String>;
     private final regexMaskingList:Collection<EReg>;
     private var defaultFilename:String;
-    private final initialConfig: LoggerConfig;
+    private final initialConfig:LoggerConfig;
 
     /**
         Creates a new Logger object. You don't normally create objects of this class,
