@@ -6,8 +6,6 @@
 package connect;
 
 import connect.api.ConnectHelper;
-import connect.flow.FlowStoreDelegate;
-import connect.flow.FlowStore;
 import connect.flow.ProcessedRequestInfo;
 import connect.flow.Step;
 import connect.flow.FlowExecutor;
@@ -37,20 +35,16 @@ typedef FilterFunc = (IdModel) -> Bool;
     A Flow represents a set of steps within a `Processor` which are executed for all requests
     that return `true` for a given function. If `null` is passed, all requests will be processed.
 **/
-class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDelegate {
+class Flow extends Base implements FlowExecutorDelegate {
     private static final SKIP_MSG = 'Skipping request because an exception was thrown: ';
 
     private final filterFunc:FilterFunc;
     private var skipRequestOnPendingMigration:Bool;
     private final executor:FlowExecutor;
     private final logger:FlowLogger;
-    private final store:FlowStore;
     private var request:IdModel;
     private var data:Dictionary;
-    private var volatileData:Dictionary;
-    private var firstStep:Int;
     private var lastRequestState:ProcessedRequestInfo;
-    private var stepAttempt:Int;
 
     /**
         Creates a new Flow.
@@ -64,13 +58,9 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         this.skipRequestOnPendingMigration = true;
         this.executor = new FlowExecutor(this, this);
         this.logger = new FlowLogger(this.getClassName());
-        this.store = new FlowStore(this);
         this.request = null;
         this.data = new Dictionary();
-        this.volatileData = new Dictionary();
-        this.firstStep = 0;
         this.lastRequestState = null;
-        this.stepAttempt = 0;
     }
 
     private function getClassName():String {
@@ -89,34 +79,24 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         #end
     }
 
-    /**
-        Enables or disables storing of request data when the Flow fails execution. Defaults to true.
-    **/
+    /** This method is deprecated and has no effect. **/
     public function setStoreRequestOnFailure(enable:Bool):Void {
-        this.store.setStoreRequestOnFailure(enable);
     }
 
-    /**
-        Tells if the flow stores request data when Flow execution fails.
-    **/
+    /** This method is deprecated and always returns false. **/
     public function storesRequestOnFailure():Bool {
-        return this.store.storesRequestOnFailure();
+        return false;
     }
 
     /**
-        Enables or disables storing the number of execution attempts when storing request data. If
-        `setStoreRequestOnFailure` is set to `false`, this is ignored.
+        This method is deprecated and has no effect.
     **/
     public function setStoreNumAttempts(enable:Bool):Void {
-        this.store.setStoreNumAttempts(enable);
     }
 
-    /**
-        Tells if the number of execution attempts is stored with the rest of request data. If
-        `storesRequestOnFailure` is set to `false`, this is ignored.
-    **/
+    /** This method is deprecated and always returns false. **/
     public function storesNumAttempts():Bool {
-        return this.store.storesNumAttempts();
+        return false;
     }
 
     /**
@@ -134,14 +114,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     }
 
     /**
-        The setup function is always called before executing the steps, independently of what is
-        the first step that will be run. If you need some initialization tasks that you always
-        need to perform independently of whether you are resuming from a previous execution
-        or not, you can override this method and write your initialization tasks.
-
-        If you are resuming from a previous execution and this method writes information with
-        `Flow.setData`, that information will be overridden with the one restored from the
-        previous execution.
+        This method is executed every time a new request is going to begin processing.
     **/
     public function setup():Void {}
 
@@ -206,15 +179,13 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         Steps can pass data to the next one using the return value, but this data could be lost if
         we need to access it several steps later. For this reason, every Flow has a dictionary
         of keys and values to store custom data, that can be set with this method and retreived
-        later on with `getData`. It is VERY important for the correct function of the Flow
-        to only rely on the data set using this mechanism, and NEVER add additional properties
-        when creating a subclass of Flow, since this data would not be automatically saved
-        to support resuming in case processing fails.
+        later on with `getData`. It is recommended for the correct function of the Flow
+        to only rely on the data set using this mechanism, and not to add additional properties
+        when creating a subclass of Flow, since these wouldn't be automatically reset for each request
+        processed.
 
         @param key The name of the key that will be used to identify this data.
-        @param value The value to store. It is recommended to use primitive types, strings,
-        instances of `Model`, or other classes that implement a `toString` method so they
-        can be serialized.
+        @param value The value to store.
         @returns `this` Flow, so calls to this method can be chained.
     **/
     public function setData(key:String, value:Dynamic):Flow {
@@ -222,32 +193,18 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         return this;
     }
 
-    /**
-        This method follows the same goal as `setData`, but the data established with
-        this method never gets saved in case processing fails. So this is ideal
-        for storing data that can be safely recomputed on next execution, and we do
-        not need to retrieve from saved data. If we store a value with both `setVolatileData`
-        and `setData`, then `getData` will retrieve the persistent version set with `setData`,
-        so be careful about that behaviour.
-    **/
+    /** This method is deprecated and currently just calls `setData`. **/
     public function setVolatileData(key:String, value:Dynamic):Flow {
-        this.volatileData.set(key, value);
-        return this;
+        return setData(key, value);
     }
 
     /**
-        Retrieves Flow data previously set with `setData` or `setVolatileData`.
-        If the data has been set both as persistent as volatile, the persistent
-        version is obtained.
+        Retrieves Flow data previously set with `setData`.
         @param key The name of the key that identifies the data to be obtained.
         @returns The value of the data, or `null` if the key does not exist.
     **/
     public function getData(key:String):Dynamic {
-        if (this.data.exists(key)) {
-            return this.data.get(key);
-        } else {
-            return this.volatileData.get(key);
-        }
+        return this.data.get(key);
     }
 
     /**
@@ -262,19 +219,16 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         of a Template to render on the portal.
 
         When using the Flow, this method should be used instead of `AssetRequest.approveByTemplate()` or
-        `TierConfigRequest.approveByTemplate()`, since this take care of cleaning the stored step
-        information, and automatically skips any further steps.
+        `TierConfigRequest.approveByTemplate()`, since this automatically skips any further steps.
     **/
     public function approveByTemplate(id:String):Void {
         final request = this.getAssetRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
-            this.store.removeStepData(request);
             request.update(null);
             request.approveByTemplate(id);
             this.abort('');
         } else if (tcr != null) {
-            this.store.removeStepData(tcr);
             tcr.update(null);
             tcr.approveByTemplate(id);
             this.abort('');
@@ -286,13 +240,11 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         the portal with the given Markdown `text`.
 
         When using the Flow, this method should be used instead of `AssetRequest.approveByTile()` or
-        `TierConfigRequest.approveByTile()`, since this take care of cleaning the stored step
-        information, and automatically skips any further steps.
+        `TierConfigRequest.approveByTile()`, since this automatically skips any further steps.
     **/
     public function approveByTile(text:String):Void {
         final request = this.getAssetRequest();
         if (request != null) {
-            this.store.removeStepData(request);
             request.update(null);
             request.approveByTile(text);
             this.abort('');
@@ -303,19 +255,16 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         Changes the status of the request being processed to "failed".
 
         When using the Flow, this method should be used instead of `AssetRequest.fail()` or
-        `TierConfigRequest.fail()`, since this takes care of cleaning the stored step
-        information, and automatically skips any further steps.
+        `TierConfigRequest.fail()`, since this skips any further steps.
     **/
     public function fail(reason:String):Void {
         final request = this.getAssetRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
-            this.store.removeStepData(request);
             request.update(null);
             request.fail(reason);
             this.abort('Failing request');
         } else if (tcr != null) {
-            this.store.removeStepData(tcr);
             tcr.update(null);
             tcr.fail(reason);
             this.abort('Failing request');
@@ -326,9 +275,8 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         Changes the status of the request being processed to "inquiring".
 
         When using the Flow, this method should be used instead of `AssetRequest.inquire()` or
-        `TierConfigRequest.inquire()`, since this take care of cleaning the stored step
-        information, and automatically skips any further steps. Also, this method calls `update`
-        on the request before changing its status.
+        `TierConfigRequest.inquire()`, since this skips any further steps.
+        Also, this method calls `update` on the request before changing its status.
 
         @param templateId Id of the template to use in the portal, or `null` to not use any. This
         is only used for AssetRequests.
@@ -339,12 +287,10 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         final request = this.getAssetRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
-            this.store.removeStepData(request);
             request.update(params);
             request.inquire(templateId);
             this.abort('Inquiring request');
         } else if (tcr != null) {
-            this.store.removeStepData(tcr);
             tcr.update(params);
             tcr.inquire();
             this.abort('Inquiring request');
@@ -355,19 +301,16 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         Changes the status of the request being processed to "pending".
 
         When using the Flow, this method should be used instead of `AssetRequest.pend()` or
-        `TierConfigRequest.pend()`, since this take care of cleaning the stored step
-        information, and automatically skips any further steps.
+        `TierConfigRequest.pend()`, since this automatically skips any further steps.
     **/
     public function pend():Void {
         final request = this.getAssetRequest();
         final tcr = this.getTierConfigRequest();
         if (request != null) {
-            this.store.removeStepData(request);
             request.update(null);
             request.pend();
             this.abort('Pending request');
         } else if (tcr != null) {
-            this.store.removeStepData(tcr);
             tcr.update(null);
             tcr.pend();
             this.abort('Pending request');
@@ -375,8 +318,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     }
 
     /**
-        Skips processing of the current request. Pending steps for the request will not be executed,
-        and step data will be stored so it can be resumed in the next execution.
+        Skips processing of the current request. Pending steps for the request will not be executed.
     **/
     private function skip():Void {
         this.executor.abort();
@@ -418,8 +360,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
         ConnectHelper.setLogger(Env.getLoggerForRequest(request));
         this.logger.openRequestSection(request);
         if (this.prepareRequest(request) && this.processSetup()) {
-            this.store.requestDidBegin(this.request);
-            this.executor.executeRequest(request, this.firstStep);
+            this.executor.executeRequest(request, 0);
         } else {
             this.logger.writeMigrationMessage(request);
         }
@@ -430,10 +371,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     private function prepareRequest(request:IdModel):Bool {
         this.request = request;
         this.data = new Dictionary();
-        this.volatileData = new Dictionary();
-        this.firstStep = 0;
         this.lastRequestState = new ProcessedRequestInfo(null, null);
-        this.stepAttempt = 1;
         final assetRequest = this.getAssetRequest();
         return assetRequest == null ||
             !assetRequest.needsMigration() || !skipsRequestOnPendingMigration() || assetRequest.type != 'purchase';
@@ -457,11 +395,11 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
     }
 
     /**
-     * Provide current step attempt.
+     * This method is deprecated, and always returns 0.
      * @return Int Number of times that this step has been executed
     **/
     public function getCurrentAttempt() {
-        return this.stepAttempt;
+        return 0;
     }
 
     @:dox(hide)
@@ -472,8 +410,6 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
 
     @:dox(hide)
     public function onStepEnd(request:IdModel, step:Step, index:Int):Void {
-        this.stepAttempt = 1;
-        this.store.removeStepData(request);
         this.logger.closeStepSection(index);
     }
 
@@ -489,8 +425,7 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
 
     @:dox(hide)
     public function onStepSkip(request:IdModel, step:Step, index:Int):Void {
-        this.logger.writeStepSkip(this.storesRequestOnFailure());
-        this.store.requestDidSkip(this.request, this.data, index, this.stepAttempt + 1);
+        this.logger.writeStepSkip();
         this.logger.closeStepSection(index);
     }
 
@@ -500,33 +435,5 @@ class Flow extends Base implements FlowExecutorDelegate implements FlowStoreDele
             this.logger.writeException(msg);
         }
         this.logger.closeStepSection(index);
-    }
-
-    @:dox(hide)
-    public function onLoad(request:IdModel, firstStep:Int, data:Dictionary, storageType:String, numAttempts:Int):Void {
-        this.firstStep = firstStep;
-        this.data = data;
-        this.volatileData = new Dictionary();
-        this.stepAttempt = numAttempts;
-        this.logger.writeLoadedStepData(firstStep, storageType);
-    }
-
-    @:dox(hide)
-    public function onFailedLoad(request:IdModel):Void {
-    }
-
-    @:dox(hide)
-    public function onConnectSave(request:IdModel):Void {
-        this.logger.writeStepSavedInConnect();
-    }
-
-    @:dox(hide)
-    public function onLocalSave(request:IdModel):Void {
-        this.logger.writeStepSavedLocally();
-    }
-
-    @:dox(hide)
-    public function onFailedSave(request:IdModel):Void {
-        this.logger.writeStepSaveFailed();
     }
 }

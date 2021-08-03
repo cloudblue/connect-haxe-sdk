@@ -15,8 +15,6 @@ import UsageFileTest;
 import DateTimeTest;
 import AssetRequestTest;
 import TierConfigTest;
-import FlowAttemptsTest;
-import StepStorageTest;
 import AgreementTest;
 import SubscriptionTest;
 import CustomLoggerFormatterTest;
@@ -54,8 +52,6 @@ class TestSuite extends massive.munit.TestSuite
 		add(DateTimeTest);
 		add(AssetRequestTest);
 		add(TierConfigTest);
-		add(FlowAttemptsTest);
-		add(StepStorageTest);
 		add(AgreementTest);
 		add(SubscriptionTest);
 		add(CustomLoggerFormatterTest);
