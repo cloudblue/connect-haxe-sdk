@@ -31,10 +31,7 @@ import haxe.Constraints.Function;
     requests, depending on the type you want to process.
 
     If an exception is thrown on any step, the rest of the steps will be skipped, and the next
-    time the Processor runs, the request will be processed again. If the `Asset` of the request has
-    a parameter with the id "__sdk_processor_step" (without quotes), the data about the state of
-    the processing will be stored in Connect, and when the request is processed again, it will
-    resume from the step that failed, keeping all the data that was processed up until that point.
+    time the Processor runs, the request will be processed again.
 
     You can check the `examples` folder of the SDK to check how to use the Processor in the
     supported target languages.
