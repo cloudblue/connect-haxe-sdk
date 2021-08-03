@@ -2,14 +2,11 @@ package connect.flow;
 
 import connect.logger.ILoggerFormatter;
 import connect.logger.Logger;
-import connect.models.AssetRequest;
 import connect.models.IdModel;
-import connect.models.Listing;
-import connect.models.TierConfigRequest;
-import connect.models.UsageFile;
 import connect.util.Collection;
 import connect.util.DateTime;
 import connect.util.Dictionary;
+import connect.util.Masker;
 import connect.util.Util;
 import haxe.Json;
 
@@ -83,9 +80,10 @@ class FlowLogger {
                 final lastRequestObj = Util.isJsonObject(lastRequest) ? Json.parse(lastRequest) : null;
                 final requestObj = (Util.isJsonObject(request) && lastRequestObj != null) ? Json.parse(request) : null;
                 final diff = (lastRequestObj != null && requestObj != null) ? Util.createObjectDiff(requestObj, lastRequestObj) : null;
-                final requestStr = (diff != null)
-                    ? Util.beautifyObject(diff, Env.getLogger().getLevel() != Logger.LEVEL_DEBUG)
-                    : request;
+                final requestStr =
+                    (diff == null) ? request :
+                    (Env.getLogger().getLevel() != Logger.LEVEL_DEBUG) ? Masker.maskObject(diff) : 
+                    haxe.Json.stringify(diff);
                 final requestTitle = (diff != null) ? 'Request (changes):' : 'Request:';
                 return '$requestTitle${fmt.formatCodeBlock(logger.getLevel(),Std.string(requestStr), 'json')}';
             } else {

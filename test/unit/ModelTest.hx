@@ -4,7 +4,6 @@
 */
 import connect.models.Param;
 import connect.util.Collection;
-import connect.util.Util;
 import massive.munit.Assert;
 
 class ModelTest {
@@ -13,6 +12,6 @@ class ModelTest {
         final param = new Param();
         param.valueChoice = new Collection<String>().push('My choice');
         final expected = '{"value_choice":["My choice"]}';
-        Assert.areEqual(expected, Util.beautifyObject(param.toObject(), false));
+        Assert.areEqual(expected, param.toString());
     }
 }
