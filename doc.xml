@@ -3609,33 +3609,6 @@
 		</f>
 		<meta><m n=":dox"><e>hide</e></m></meta>
 	</typedef>
-	<class path="connect.flow.FlowStoreDelegate" params="" file="connect/flow/FlowStoreDelegate.hx" interface="1">
-		<onLoad public="1" set="method"><f a="request:firstStep:data:storageType:numAttempts">
-	<c path="connect.models.IdModel"/>
-	<x path="Int"/>
-	<c path="connect.util.Dictionary"/>
-	<c path="String"/>
-	<x path="Int"/>
-	<x path="Void"/>
-</f></onLoad>
-		<onFailedLoad public="1" set="method"><f a="request">
-	<c path="connect.models.IdModel"/>
-	<x path="Void"/>
-</f></onFailedLoad>
-		<onConnectSave public="1" set="method"><f a="request">
-	<c path="connect.models.IdModel"/>
-	<x path="Void"/>
-</f></onConnectSave>
-		<onLocalSave public="1" set="method"><f a="request">
-	<c path="connect.models.IdModel"/>
-	<x path="Void"/>
-</f></onLocalSave>
-		<onFailedSave public="1" set="method"><f a="request">
-	<c path="connect.models.IdModel"/>
-	<x path="Void"/>
-</f></onFailedSave>
-		<meta><m n=":dox"><e>hide</e></m></meta>
-	</class>
 	<class path="connect.flow.FlowExecutorDelegate" params="" file="connect/flow/FlowExecutorDelegate.hx" interface="1">
 		<onStepBegin public="1" set="method"><f a="request:step:index">
 	<c path="connect.models.IdModel"/>
@@ -3673,9 +3646,8 @@
 	</class>
 	<class path="connect.Flow" params="" file="connect/Flow.hx">
 		<extends path="connect.Base"/>
-		<implements path="connect.flow.FlowStoreDelegate"/>
 		<implements path="connect.flow.FlowExecutorDelegate"/>
-		<SKIP_MSG final="1" set="null" expr="&quot;Skipping request because an exception was thrown: &quot;" line="41" static="1">
+		<SKIP_MSG final="1" set="null" expr="&quot;Skipping request because an exception was thrown: &quot;" line="39" static="1">
 			<c path="String"/>
 			<meta><m n=":value"><e>"Skipping request because an exception was thrown: "</e></m></meta>
 		</SKIP_MSG>
@@ -3683,61 +3655,48 @@
 		<skipRequestOnPendingMigration><x path="Bool"/></skipRequestOnPendingMigration>
 		<executor final="1"><c path="connect.flow.FlowExecutor"/></executor>
 		<logger final="1"><c path="connect.flow.FlowLogger"/></logger>
-		<store final="1"><c path="connect.flow.FlowStore"/></store>
 		<request><c path="connect.models.IdModel"/></request>
 		<data><c path="connect.util.Dictionary"/></data>
-		<volatileData><c path="connect.util.Dictionary"/></volatileData>
-		<firstStep><x path="Int"/></firstStep>
 		<lastRequestState><c path="connect.flow.ProcessedRequestInfo"/></lastRequestState>
-		<stepAttempt><x path="Int"/></stepAttempt>
-		<getClassName set="method" line="76"><f a=""><c path="String"/></f></getClassName>
-		<setStoreRequestOnFailure public="1" set="method" line="95">
+		<getClassName set="method" line="66"><f a=""><c path="String"/></f></getClassName>
+		<setStoreRequestOnFailure public="1" set="method" line="83">
 			<f a="enable">
 				<x path="Bool"/>
 				<x path="Void"/>
 			</f>
-			<haxe_doc>Enables or disables storing of request data when the Flow fails execution. Defaults to true.</haxe_doc>
+			<haxe_doc>This method is deprecated and has no effect.</haxe_doc>
 		</setStoreRequestOnFailure>
-		<storesRequestOnFailure public="1" set="method" line="102">
+		<storesRequestOnFailure public="1" set="method" line="87">
 			<f a=""><x path="Bool"/></f>
-			<haxe_doc>Tells if the flow stores request data when Flow execution fails.</haxe_doc>
+			<haxe_doc>This method is deprecated and always returns false.</haxe_doc>
 		</storesRequestOnFailure>
-		<setStoreNumAttempts public="1" set="method" line="110">
+		<setStoreNumAttempts public="1" set="method" line="94">
 			<f a="enable">
 				<x path="Bool"/>
 				<x path="Void"/>
 			</f>
-			<haxe_doc>Enables or disables storing the number of execution attempts when storing request data. If
-        `setStoreRequestOnFailure` is set to `false`, this is ignored.</haxe_doc>
+			<haxe_doc>This method is deprecated and has no effect.</haxe_doc>
 		</setStoreNumAttempts>
-		<storesNumAttempts public="1" set="method" line="118">
+		<storesNumAttempts public="1" set="method" line="98">
 			<f a=""><x path="Bool"/></f>
-			<haxe_doc>Tells if the number of execution attempts is stored with the rest of request data. If
-        `storesRequestOnFailure` is set to `false`, this is ignored.</haxe_doc>
+			<haxe_doc>This method is deprecated and always returns false.</haxe_doc>
 		</storesNumAttempts>
-		<setSkipRequestOnPendingMigration public="1" set="method" line="125">
+		<setSkipRequestOnPendingMigration public="1" set="method" line="105">
 			<f a="enable">
 				<x path="Bool"/>
 				<x path="Void"/>
 			</f>
 			<haxe_doc>Enables or disables skipping the request when it is pending migration. Defaults to true.</haxe_doc>
 		</setSkipRequestOnPendingMigration>
-		<skipsRequestOnPendingMigration public="1" set="method" line="132">
+		<skipsRequestOnPendingMigration public="1" set="method" line="112">
 			<f a=""><x path="Bool"/></f>
 			<haxe_doc>Tells if requests are automatically skipped when they are pending migration.</haxe_doc>
 		</skipsRequestOnPendingMigration>
-		<setup public="1" set="method" line="146">
+		<setup public="1" set="method" line="119">
 			<f a=""><x path="Void"/></f>
-			<haxe_doc>The setup function is always called before executing the steps, independently of what is
-        the first step that will be run. If you need some initialization tasks that you always
-        need to perform independently of whether you are resuming from a previous execution
-        or not, you can override this method and write your initialization tasks.
-
-        If you are resuming from a previous execution and this method writes information with
-        `Flow.setData`, that information will be overridden with the one restored from the
-        previous execution.</haxe_doc>
+			<haxe_doc>This method is executed every time a new request is going to begin processing.</haxe_doc>
 		</setup>
-		<step public="1" set="method" line="156">
+		<step public="1" set="method" line="129">
 			<f a="description:func">
 				<c path="String"/>
 				<t path="connect.flow.StepFunc"/>
@@ -3750,7 +3709,7 @@
         @param func The function to execute for this step. It receives `this` Flow as argument, and it cannot return a value.
         @returns `this` Flow, so calls to this method can be chained.</haxe_doc>
 		</step>
-		<getAssetRequest public="1" set="method" line="168">
+		<getAssetRequest public="1" set="method" line="141">
 			<f a=""><c path="connect.models.AssetRequest"/></f>
 			<haxe_doc>This can be called within your steps to get the request being processed, as long as it
         is of the `AssetRequest` type.
@@ -3758,7 +3717,7 @@
         @returns The `AssetRequest` being processed, or `null` if current request is not of
         Fulfillment api.</haxe_doc>
 		</getAssetRequest>
-		<getListing public="1" set="method" line="179">
+		<getListing public="1" set="method" line="152">
 			<f a=""><c path="connect.models.Listing"/></f>
 			<haxe_doc>This can be called within your steps to get the element being processed, as long as it
         is of the `Listing` type.
@@ -3766,7 +3725,7 @@
         @returns The `Listing` being processed, or `null` if current element is not of
         Listing api.</haxe_doc>
 		</getListing>
-		<getTierConfigRequest public="1" set="method" line="190">
+		<getTierConfigRequest public="1" set="method" line="163">
 			<f a=""><c path="connect.models.TierConfigRequest"/></f>
 			<haxe_doc>This can be called within your steps to get the request being processed, as long as it
         is of the `TierConfigRequest` type.
@@ -3774,7 +3733,7 @@
         @returns The `TierConfigRequest` being processed, or `null` if current request is not of
         Tier api.</haxe_doc>
 		</getTierConfigRequest>
-		<getUsageFile public="1" set="method" line="201">
+		<getUsageFile public="1" set="method" line="174">
 			<f a=""><c path="connect.models.UsageFile"/></f>
 			<haxe_doc>This can be called within your steps to get the request being processed, as long as it
         is of the `UsageFile` type.
@@ -3782,7 +3741,7 @@
         @returns The `UsageFile` being processed, or `null` if current request is not of
         Usage api.</haxe_doc>
 		</getUsageFile>
-		<setData public="1" set="method" line="220">
+		<setData public="1" set="method" line="191">
 			<f a="key:value">
 				<c path="String"/>
 				<d/>
@@ -3791,46 +3750,37 @@
 			<haxe_doc>Steps can pass data to the next one using the return value, but this data could be lost if
         we need to access it several steps later. For this reason, every Flow has a dictionary
         of keys and values to store custom data, that can be set with this method and retreived
-        later on with `getData`. It is VERY important for the correct function of the Flow
-        to only rely on the data set using this mechanism, and NEVER add additional properties
-        when creating a subclass of Flow, since this data would not be automatically saved
-        to support resuming in case processing fails.
+        later on with `getData`. It is recommended for the correct function of the Flow
+        to only rely on the data set using this mechanism, and not to add additional properties
+        when creating a subclass of Flow, since these wouldn't be automatically reset for each request
+        processed.
 
         @param key The name of the key that will be used to identify this data.
-        @param value The value to store. It is recommended to use primitive types, strings,
-        instances of `Model`, or other classes that implement a `toString` method so they
-        can be serialized.
+        @param value The value to store.
         @returns `this` Flow, so calls to this method can be chained.</haxe_doc>
 		</setData>
-		<setVolatileData public="1" set="method" line="233">
+		<setVolatileData public="1" set="method" line="197">
 			<f a="key:value">
 				<c path="String"/>
 				<d/>
 				<c path="connect.Flow"/>
 			</f>
-			<haxe_doc>This method follows the same goal as `setData`, but the data established with
-        this method never gets saved in case processing fails. So this is ideal
-        for storing data that can be safely recomputed on next execution, and we do
-        not need to retrieve from saved data. If we store a value with both `setVolatileData`
-        and `setData`, then `getData` will retrieve the persistent version set with `setData`,
-        so be careful about that behaviour.</haxe_doc>
+			<haxe_doc>This method is deprecated and currently just calls `setData`.</haxe_doc>
 		</setVolatileData>
-		<getData public="1" set="method" line="245">
+		<getData public="1" set="method" line="206">
 			<f a="key">
 				<c path="String"/>
 				<d/>
 			</f>
-			<haxe_doc>Retrieves Flow data previously set with `setData` or `setVolatileData`.
-        If the data has been set both as persistent as volatile, the persistent
-        version is obtained.
+			<haxe_doc>Retrieves Flow data previously set with `setData`.
         @param key The name of the key that identifies the data to be obtained.
         @returns The value of the data, or `null` if the key does not exist.</haxe_doc>
 		</getData>
-		<getDataKeys public="1" set="method" line="256">
+		<getDataKeys public="1" set="method" line="213">
 			<f a=""><c path="connect.util.Collection"><c path="String"/></c></f>
 			<haxe_doc><![CDATA[* @return Collection<String> The keys of all the data stored in the Flow.]]></haxe_doc>
 		</getDataKeys>
-		<approveByTemplate public="1" set="method" line="268">
+		<approveByTemplate public="1" set="method" line="224">
 			<f a="id">
 				<c path="String"/>
 				<x path="Void"/>
@@ -3839,10 +3789,9 @@
         of a Template to render on the portal.
 
         When using the Flow, this method should be used instead of `AssetRequest.approveByTemplate()` or
-        `TierConfigRequest.approveByTemplate()`, since this take care of cleaning the stored step
-        information, and automatically skips any further steps.</haxe_doc>
+        `TierConfigRequest.approveByTemplate()`, since this automatically skips any further steps.</haxe_doc>
 		</approveByTemplate>
-		<approveByTile public="1" set="method" line="292">
+		<approveByTile public="1" set="method" line="245">
 			<f a="text">
 				<c path="String"/>
 				<x path="Void"/>
@@ -3851,10 +3800,9 @@
         the portal with the given Markdown `text`.
 
         When using the Flow, this method should be used instead of `AssetRequest.approveByTile()` or
-        `TierConfigRequest.approveByTile()`, since this take care of cleaning the stored step
-        information, and automatically skips any further steps.</haxe_doc>
+        `TierConfigRequest.approveByTile()`, since this automatically skips any further steps.</haxe_doc>
 		</approveByTile>
-		<fail public="1" set="method" line="309">
+		<fail public="1" set="method" line="260">
 			<f a="reason">
 				<c path="String"/>
 				<x path="Void"/>
@@ -3862,10 +3810,9 @@
 			<haxe_doc>Changes the status of the request being processed to "failed".
 
         When using the Flow, this method should be used instead of `AssetRequest.fail()` or
-        `TierConfigRequest.fail()`, since this takes care of cleaning the stored step
-        information, and automatically skips any further steps.</haxe_doc>
+        `TierConfigRequest.fail()`, since this skips any further steps.</haxe_doc>
 		</fail>
-		<inquire public="1" set="method" line="338">
+		<inquire public="1" set="method" line="286">
 			<f a="templateId:params">
 				<c path="String"/>
 				<c path="connect.util.Collection"><c path="connect.models.Param"/></c>
@@ -3874,29 +3821,26 @@
 			<haxe_doc>Changes the status of the request being processed to "inquiring".
 
         When using the Flow, this method should be used instead of `AssetRequest.inquire()` or
-        `TierConfigRequest.inquire()`, since this take care of cleaning the stored step
-        information, and automatically skips any further steps. Also, this method calls `update`
-        on the request before changing its status.
+        `TierConfigRequest.inquire()`, since this skips any further steps.
+        Also, this method calls `update` on the request before changing its status.
 
         @param templateId Id of the template to use in the portal, or `null` to not use any. This
         is only used for AssetRequests.
         @param params A collection of parameters to update. If `null` is passed, then the
         parameters that have changed in the request will be updated.</haxe_doc>
 		</inquire>
-		<pend public="1" set="method" line="361">
+		<pend public="1" set="method" line="306">
 			<f a=""><x path="Void"/></f>
 			<haxe_doc>Changes the status of the request being processed to "pending".
 
         When using the Flow, this method should be used instead of `AssetRequest.pend()` or
-        `TierConfigRequest.pend()`, since this take care of cleaning the stored step
-        information, and automatically skips any further steps.</haxe_doc>
+        `TierConfigRequest.pend()`, since this automatically skips any further steps.</haxe_doc>
 		</pend>
-		<skip set="method" line="381">
+		<skip set="method" line="323">
 			<f a=""><x path="Void"/></f>
-			<haxe_doc>Skips processing of the current request. Pending steps for the request will not be executed,
-        and step data will be stored so it can be resumed in the next execution.</haxe_doc>
+			<haxe_doc>Skips processing of the current request. Pending steps for the request will not be executed.</haxe_doc>
 		</skip>
-		<abort set="method" line="389">
+		<abort set="method" line="331">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
@@ -3904,36 +3848,36 @@
 			<haxe_doc>Aborts processing of the current request. Pending steps for the request will not be executed,
         and `message` is printed if it is not an empty string or `null`.</haxe_doc>
 		</abort>
-		<_run public="1" params="T" set="method" line="394">
+		<_run public="1" params="T" set="method" line="336">
 			<f a="list">
 				<c path="connect.util.Collection"><c path="_run.T"/></c>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</_run>
-		<filterRequests params="T" set="method" line="401"><f a="list">
+		<filterRequests params="T" set="method" line="343"><f a="list">
 	<c path="connect.util.Collection"><c path="filterRequests.T"/></c>
 	<c path="connect.util.Collection"><c path="filterRequests.T"/></c>
 </f></filterRequests>
-		<callRequestFilter params="T" set="method" line="407"><f a="m">
+		<callRequestFilter params="T" set="method" line="349"><f a="m">
 	<c path="callRequestFilter.T"/>
 	<x path="Bool"/>
 </f></callRequestFilter>
-		<runRequest set="method" line="417"><f a="request">
+		<runRequest set="method" line="359"><f a="request">
 	<c path="connect.models.IdModel"/>
 	<x path="Void"/>
 </f></runRequest>
-		<prepareRequest set="method" line="430"><f a="request">
+		<prepareRequest set="method" line="371"><f a="request">
 	<c path="connect.models.IdModel"/>
 	<x path="Bool"/>
 </f></prepareRequest>
-		<processSetup set="method" line="442"><f a=""><x path="Bool"/></f></processSetup>
-		<getCurrentAttempt public="1" set="method" line="463">
+		<processSetup set="method" line="380"><f a=""><x path="Bool"/></f></processSetup>
+		<getCurrentAttempt public="1" set="method" line="401">
 			<f a=""><x path="Int"/></f>
-			<haxe_doc>* Provide current step attempt.
+			<haxe_doc>* This method is deprecated, and always returns 0.
      * @return Int Number of times that this step has been executed</haxe_doc>
 		</getCurrentAttempt>
-		<onStepBegin public="1" set="method" line="468">
+		<onStepBegin public="1" set="method" line="406">
 			<f a="request:step:index">
 				<c path="connect.models.IdModel"/>
 				<c path="connect.flow.Step"/>
@@ -3942,7 +3886,7 @@
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</onStepBegin>
-		<onStepEnd public="1" set="method" line="474">
+		<onStepEnd public="1" set="method" line="412">
 			<f a="request:step:index">
 				<c path="connect.models.IdModel"/>
 				<c path="connect.flow.Step"/>
@@ -3951,7 +3895,7 @@
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</onStepEnd>
-		<onStepFail public="1" set="method" line="481">
+		<onStepFail public="1" set="method" line="417">
 			<f a="request:step:index:msg">
 				<c path="connect.models.IdModel"/>
 				<c path="connect.flow.Step"/>
@@ -3961,7 +3905,7 @@
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</onStepFail>
-		<onStepSkip public="1" set="method" line="491">
+		<onStepSkip public="1" set="method" line="427">
 			<f a="request:step:index">
 				<c path="connect.models.IdModel"/>
 				<c path="connect.flow.Step"/>
@@ -3970,7 +3914,7 @@
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</onStepSkip>
-		<onStepAbort public="1" set="method" line="498">
+		<onStepAbort public="1" set="method" line="433">
 			<f a="request:step:index:msg">
 				<c path="connect.models.IdModel"/>
 				<c path="connect.flow.Step"/>
@@ -3980,46 +3924,7 @@
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</onStepAbort>
-		<onLoad public="1" set="method" line="506">
-			<f a="request:firstStep:data:storageType:numAttempts">
-				<c path="connect.models.IdModel"/>
-				<x path="Int"/>
-				<c path="connect.util.Dictionary"/>
-				<c path="String"/>
-				<x path="Int"/>
-				<x path="Void"/>
-			</f>
-			<meta><m n=":dox"><e>hide</e></m></meta>
-		</onLoad>
-		<onFailedLoad public="1" set="method" line="515">
-			<f a="request">
-				<c path="connect.models.IdModel"/>
-				<x path="Void"/>
-			</f>
-			<meta><m n=":dox"><e>hide</e></m></meta>
-		</onFailedLoad>
-		<onConnectSave public="1" set="method" line="519">
-			<f a="request">
-				<c path="connect.models.IdModel"/>
-				<x path="Void"/>
-			</f>
-			<meta><m n=":dox"><e>hide</e></m></meta>
-		</onConnectSave>
-		<onLocalSave public="1" set="method" line="524">
-			<f a="request">
-				<c path="connect.models.IdModel"/>
-				<x path="Void"/>
-			</f>
-			<meta><m n=":dox"><e>hide</e></m></meta>
-		</onLocalSave>
-		<onFailedSave public="1" set="method" line="529">
-			<f a="request">
-				<c path="connect.models.IdModel"/>
-				<x path="Void"/>
-			</f>
-			<meta><m n=":dox"><e>hide</e></m></meta>
-		</onFailedSave>
-		<new public="1" set="method" line="62">
+		<new public="1" set="method" line="56">
 			<f a="filterFunc">
 				<t path="connect.FilterFunc"/>
 				<x path="Void"/>
@@ -4070,7 +3975,7 @@
 	<class path="connect.Processor" params="" file="connect/Processor.hx">
 		<extends path="connect.Base"/>
 		<flows><c path="Array"><c path="connect.Flow"/></c></flows>
-		<flow public="1" set="method" line="57">
+		<flow public="1" set="method" line="54">
 			<f a="flow">
 				<c path="connect.Flow"/>
 				<c path="connect.Processor"/>
@@ -4082,7 +3987,7 @@
         @param flow The flow to add to the processor.
         @returns `this` Processor, so calls to this method can be chained.</haxe_doc>
 		</flow>
-		<processAssetRequests public="1" set="method" line="69">
+		<processAssetRequests public="1" set="method" line="66">
 			<f a="filters">
 				<c path="connect.api.Query"/>
 				<x path="Void"/>
@@ -4093,7 +3998,7 @@
         @param filters Filters to be used for listing requests. It can contain
         any of the filters specified for the `AssetRequest.list` method.</haxe_doc>
 		</processAssetRequests>
-		<processListings public="1" set="method" line="80">
+		<processListings public="1" set="method" line="77">
 			<f a="filters">
 				<c path="connect.api.Query"/>
 				<x path="Void"/>
@@ -4104,7 +4009,7 @@
         @param filters Filters to be used for listing requests. It can contain
         any of the filters specified for the `Listing.list` method.</haxe_doc>
 		</processListings>
-		<processTierConfigRequests public="1" set="method" line="91">
+		<processTierConfigRequests public="1" set="method" line="88">
 			<f a="filters">
 				<c path="connect.api.Query"/>
 				<x path="Void"/>
@@ -4115,7 +4020,7 @@
         @param filters Filters to be used for listing requests. It can contain
         any of the filters specified for the `TierConfigRequest.list` method.</haxe_doc>
 		</processTierConfigRequests>
-		<processUsageFiles public="1" set="method" line="102">
+		<processUsageFiles public="1" set="method" line="99">
 			<f a="filters">
 				<c path="connect.api.Query"/>
 				<x path="Void"/>
@@ -4126,7 +4031,7 @@
         @param filters Filters to be used for listing requests. It can contain
         any of the filters specified for the `UsageFile.list` method.</haxe_doc>
 		</processUsageFiles>
-		<run params="T" set="method" line="106">
+		<run params="T" set="method" line="103">
 			<f a="modelClass:filters">
 				<x path="Class"><c path="run.T"/></x>
 				<c path="connect.api.Query"/>
@@ -4134,7 +4039,7 @@
 			</f>
 			<meta><m n=":has_untyped"/></meta>
 		</run>
-		<new public="1" set="method" line="45"><f a=""><x path="Void"/></f></new>
+		<new public="1" set="method" line="42"><f a=""><x path="Void"/></f></new>
 		<haxe_doc>The Processor helps automating the task of processing a list of requests, and updates the log
     automatically with all operations performed.
 
@@ -4151,10 +4056,7 @@
     requests, depending on the type you want to process.
 
     If an exception is thrown on any step, the rest of the steps will be skipped, and the next
-    time the Processor runs, the request will be processed again. If the `Asset` of the request has
-    a parameter with the id "__sdk_processor_step" (without quotes), the data about the state of
-    the processing will be stored in Connect, and when the request is processed again, it will
-    resume from the step that failed, keeping all the data that was processed up until that point.
+    time the Processor runs, the request will be processed again.
 
     You can check the `examples` folder of the SDK to check how to use the Processor in the
     supported target languages.</haxe_doc>
@@ -5257,7 +5159,7 @@
 	<class path="connect.api.impl.ApiClientImpl" params="" file="connect/api/impl/ApiClientImpl.hx">
 		<extends path="connect.Base"/>
 		<implements path="connect.api.IApiClient"/>
-		<logRequest set="method" line="261" static="1">
+		<logRequest set="method" line="262" static="1">
 			<f a="level:method:url:headers:body:response:?logger" v="::::::null">
 				<x path="Int"/>
 				<c path="String"/>
@@ -5270,22 +5172,22 @@
 			</f>
 			<meta><m n=":value"><e>{ logger : null }</e></m></meta>
 		</logRequest>
-		<getHeadersTable set="method" line="286" static="1"><f a="headers:fmt">
+		<getHeadersTable set="method" line="287" static="1"><f a="headers:fmt">
 	<c path="connect.util.Dictionary"/>
 	<c path="connect.logger.ILoggerFormatter"/>
 	<c path="String"/>
 </f></getHeadersTable>
-		<maskHeaders set="method" line="303" static="1"><f a="headers">
+		<maskHeaders set="method" line="304" static="1"><f a="headers">
 	<c path="connect.util.Dictionary"/>
 	<c path="connect.util.Dictionary"/>
 </f></maskHeaders>
-		<getFormattedData set="method" line="308" static="1"><f a="data:title:fmt">
+		<getFormattedData set="method" line="309" static="1"><f a="data:title:fmt">
 	<c path="String"/>
 	<c path="String"/>
 	<c path="connect.logger.ILoggerFormatter"/>
 	<c path="String"/>
 </f></getFormattedData>
-		<syncRequest public="1" set="method" line="20"><f a="method:url:headers:body:fileArg:fileName:fileContent:certificate">
+		<syncRequest public="1" set="method" line="21"><f a="method:url:headers:body:fileArg:fileName:fileContent:certificate">
 	<c path="String"/>
 	<c path="String"/>
 	<c path="connect.util.Dictionary"/>
@@ -5296,7 +5198,7 @@
 	<c path="String"/>
 	<c path="connect.api.Response"/>
 </f></syncRequest>
-		<syncRequestWithLogger public="1" set="method" line="26"><f a="method:url:headers:body:fileArg:fileName:fileContent:certificate:logger:logLevel">
+		<syncRequestWithLogger public="1" set="method" line="27"><f a="method:url:headers:body:fileArg:fileName:fileContent:certificate:logger:logLevel">
 	<c path="String"/>
 	<c path="String"/>
 	<c path="connect.util.Dictionary"/>
@@ -5309,7 +5211,7 @@
 	<x path="Null"><x path="Int"/></x>
 	<c path="connect.api.Response"/>
 </f></syncRequestWithLogger>
-		<syncRequestStd public="1" set="method" line="220"><f a="method:url:headers:body:fileArg:fileName:fileContent:certificate">
+		<syncRequestStd public="1" set="method" line="221"><f a="method:url:headers:body:fileArg:fileName:fileContent:certificate">
 	<c path="String"/>
 	<c path="String"/>
 	<c path="connect.util.Dictionary"/>
@@ -5320,7 +5222,7 @@
 	<c path="String"/>
 	<c path="connect.api.Response"/>
 </f></syncRequestStd>
-		<new public="1" set="method" line="57"><f a=""><x path="Void"/></f></new>
+		<new public="1" set="method" line="58"><f a=""><x path="Void"/></f></new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
 	<class path="connect.flow.FlowExecutor" params="" file="connect/flow/FlowExecutor.hx">
@@ -5394,134 +5296,69 @@
 	<class path="connect.flow.FlowLogger" params="" file="connect/flow/FlowLogger.hx">
 		<flowName final="1"><c path="String"/></flowName>
 		<logger><c path="connect.logger.Logger"/></logger>
-		<openFlowSection public="1" set="method" line="26"><f a=""><x path="Void"/></f></openFlowSection>
-		<closeFlowSection public="1" set="method" line="30"><f a=""><x path="Void"/></f></closeFlowSection>
-		<openRequestSection public="1" set="method" line="35"><f a="request">
+		<openFlowSection public="1" set="method" line="23"><f a=""><x path="Void"/></f></openFlowSection>
+		<closeFlowSection public="1" set="method" line="27"><f a=""><x path="Void"/></f></closeFlowSection>
+		<openRequestSection public="1" set="method" line="32"><f a="request">
 	<c path="connect.models.IdModel"/>
 	<x path="Void"/>
 </f></openRequestSection>
-		<closeRequestSection public="1" set="method" line="40"><f a=""><x path="Void"/></f></closeRequestSection>
-		<openSetupSection public="1" set="method" line="45"><f a=""><x path="Void"/></f></openSetupSection>
-		<closeSetupSection public="1" set="method" line="49"><f a=""><x path="Void"/></f></closeSetupSection>
-		<openStepSection public="1" set="method" line="53"><f a="index:description">
+		<closeRequestSection public="1" set="method" line="37"><f a=""><x path="Void"/></f></closeRequestSection>
+		<openSetupSection public="1" set="method" line="42"><f a=""><x path="Void"/></f></openSetupSection>
+		<closeSetupSection public="1" set="method" line="46"><f a=""><x path="Void"/></f></closeSetupSection>
+		<openStepSection public="1" set="method" line="50"><f a="index:description">
 	<x path="Int"/>
 	<c path="String"/>
 	<x path="Void"/>
 </f></openStepSection>
-		<closeStepSection public="1" set="method" line="57"><f a="index">
+		<closeStepSection public="1" set="method" line="54"><f a="index">
 	<x path="Int"/>
 	<x path="Void"/>
 </f></closeStepSection>
-		<writeStepInfo public="1" set="method" line="61"><f a="requestInfo:prevRequestInfo">
+		<writeStepInfo public="1" set="method" line="58"><f a="requestInfo:prevRequestInfo">
 	<c path="connect.flow.ProcessedRequestInfo"/>
 	<c path="connect.flow.ProcessedRequestInfo"/>
 	<x path="Void"/>
 </f></writeStepInfo>
-		<writeStepError public="1" set="method" line="65"><f a="requestInfo:prevRequestInfo">
+		<writeStepError public="1" set="method" line="62"><f a="requestInfo:prevRequestInfo">
 	<c path="connect.flow.ProcessedRequestInfo"/>
 	<c path="connect.flow.ProcessedRequestInfo"/>
 	<x path="Void"/>
 </f></writeStepError>
-		<writeStep set="method" line="71"><f a="level:requestInfo:prevRequestInfo">
+		<writeStep set="method" line="68"><f a="level:requestInfo:prevRequestInfo">
 	<x path="Int"/>
 	<c path="connect.flow.ProcessedRequestInfo"/>
 	<c path="connect.flow.ProcessedRequestInfo"/>
 	<x path="Void"/>
 </f></writeStep>
-		<getFormattedRequest set="method" line="80"><f a="request:lastRequest:fmt">
+		<getFormattedRequest set="method" line="77"><f a="request:lastRequest:fmt">
 	<c path="String"/>
 	<c path="String"/>
 	<c path="connect.logger.ILoggerFormatter"/>
 	<c path="String"/>
 </f></getFormattedRequest>
-		<getFormattedData set="method" line="103"><f a="data:lastData:dataDict:fmt">
+		<getFormattedData set="method" line="97"><f a="data:lastData:dataDict:fmt">
 	<c path="String"/>
 	<c path="String"/>
 	<x path="Null"><c path="connect.util.Dictionary"/></x>
 	<c path="connect.logger.ILoggerFormatter"/>
 	<c path="String"/>
 </f></getFormattedData>
-		<getDataTable set="method" line="120"><f a="data:fmt">
+		<getDataTable set="method" line="114"><f a="data:fmt">
 	<c path="connect.util.Dictionary"/>
 	<c path="connect.logger.ILoggerFormatter"/>
 	<c path="String"/>
 </f></getDataTable>
-		<writeStepSkip public="1" set="method" line="129"><f a="willSave">
-	<x path="Bool"/>
-	<x path="Void"/>
-</f></writeStepSkip>
-		<writeStepSavedInConnect public="1" set="method" line="137"><f a=""><x path="Void"/></f></writeStepSavedInConnect>
-		<writeStepSavedLocally public="1" set="method" line="141"><f a=""><x path="Void"/></f></writeStepSavedLocally>
-		<writeStepSaveFailed public="1" set="method" line="145"><f a=""><x path="Void"/></f></writeStepSaveFailed>
-		<writeMigrationMessage public="1" set="method" line="149"><f a="request">
+		<writeStepSkip public="1" set="method" line="123"><f a=""><x path="Void"/></f></writeStepSkip>
+		<writeMigrationMessage public="1" set="method" line="127"><f a="request">
 	<c path="connect.models.IdModel"/>
 	<x path="Void"/>
 </f></writeMigrationMessage>
-		<writeException public="1" set="method" line="153"><f a="message">
+		<writeException public="1" set="method" line="131"><f a="message">
 	<c path="String"/>
 	<x path="Void"/>
 </f></writeException>
-		<writeLoadedStepData public="1" set="method" line="157"><f a="index:storageType">
-	<x path="Int"/>
+		<new public="1" set="method" line="18"><f a="flowName">
 	<c path="String"/>
-	<x path="Void"/>
-</f></writeLoadedStepData>
-		<new public="1" set="method" line="21"><f a="flowName">
-	<c path="String"/>
-	<x path="Void"/>
-</f></new>
-		<meta>
-			<m n=":directlyUsed"/>
-			<m n=":dox"><e>hide</e></m>
-		</meta>
-	</class>
-	<class path="connect.flow.FlowStore" params="" file="connect/flow/FlowStore.hx">
-		<STEP_PARAM_ID final="1" set="null" expr="&quot;__sdk_processor_step&quot;" line="11" static="1">
-			<c path="String"/>
-			<meta><m n=":value"><e>"__sdk_processor_step"</e></m></meta>
-		</STEP_PARAM_ID>
-		<STEP_PARAM_ID_TIER final="1" set="null" expr="&quot;__sdk_processor_step_tier&quot;" line="12" static="1">
-			<c path="String"/>
-			<meta><m n=":value"><e>"__sdk_processor_step_tier"</e></m></meta>
-		</STEP_PARAM_ID_TIER>
-		<STEP_PARAM_ID_TIER2 final="1" set="null" expr="&quot;__sdk_processor_step_tier2&quot;" line="13" static="1">
-			<c path="String"/>
-			<meta><m n=":value"><e>"__sdk_processor_step_tier2"</e></m></meta>
-		</STEP_PARAM_ID_TIER2>
-		<delegate final="1"><c path="connect.flow.FlowStoreDelegate"/></delegate>
-		<storeRequestOnFailure><x path="Bool"/></storeRequestOnFailure>
-		<storeNumAttempts><x path="Bool"/></storeNumAttempts>
-		<setStoreRequestOnFailure public="1" set="method" line="25"><f a="enable">
-	<x path="Bool"/>
-	<x path="Void"/>
-</f></setStoreRequestOnFailure>
-		<storesRequestOnFailure public="1" set="method" line="29"><f a=""><x path="Bool"/></f></storesRequestOnFailure>
-		<setStoreNumAttempts public="1" set="method" line="33"><f a="enable">
-	<x path="Bool"/>
-	<x path="Void"/>
-</f></setStoreNumAttempts>
-		<storesNumAttempts public="1" set="method" line="37"><f a=""><x path="Bool"/></f></storesNumAttempts>
-		<requestDidBegin public="1" set="method" line="41"><f a="request">
-	<c path="connect.models.IdModel"/>
-	<x path="Void"/>
-</f></requestDidBegin>
-		<requestDidSkip public="1" set="method" line="55"><f a="request:data:index:attempt">
-	<c path="connect.models.IdModel"/>
-	<c path="connect.util.Dictionary"/>
-	<x path="Int"/>
-	<x path="Int"/>
-	<x path="Void"/>
-</f></requestDidSkip>
-		<removeStepData public="1" set="method" line="73"><f a="request">
-	<c path="connect.models.IdModel"/>
-	<x path="Void"/>
-</f></removeStepData>
-		<getStepParam set="method" line="77"><f a="request">
-	<c path="connect.models.IdModel"/>
-	<c path="connect.models.Param"/>
-</f></getStepParam>
-		<new public="1" set="method" line="19"><f a="delegate">
-	<x path="Null"><c path="connect.flow.FlowStoreDelegate"/></x>
 	<x path="Void"/>
 </f></new>
 		<meta>
@@ -5698,25 +5535,24 @@
 	<c path="connect.logger.ILoggerFormatter"/>
 </f></copy>
 		<haxe_doc>* Represents a log formatter.The `Logger` uses an instance of a class that implements
- * this interface (`PlainLoggerFormatter` or `MarkdownLoggerFormatter` by default,
- * depending on the value of `LoggerConfig.markdown()`) to write log messages.</haxe_doc>
+ * this interface (`PlainLoggerFormatter` by default) to write log messages.</haxe_doc>
 	</class>
 	<class path="connect.logger.Logger" params="" file="connect/logger/Logger.hx">
 		<extends path="connect.Base"/>
 		<LEVEL_ERROR final="1" public="1" set="null" expr="0" line="22" static="1">
 			<x path="Int"/>
 			<meta><m n=":value"><e>0</e></m></meta>
-			<haxe_doc>Only writes compact error level messages.</haxe_doc>
+			<haxe_doc>Only writes error level messages.</haxe_doc>
 		</LEVEL_ERROR>
 		<LEVEL_WARNING final="1" public="1" set="null" expr="1" line="25" static="1">
 			<x path="Int"/>
 			<meta><m n=":value"><e>1</e></m></meta>
-			<haxe_doc><![CDATA[Only writes compact error & warning level messages.]]></haxe_doc>
+			<haxe_doc><![CDATA[Only writes error & warning level messages.]]></haxe_doc>
 		</LEVEL_WARNING>
 		<LEVEL_INFO final="1" public="1" set="null" expr="2" line="28" static="1">
 			<x path="Int"/>
 			<meta><m n=":value"><e>2</e></m></meta>
-			<haxe_doc><![CDATA[Only writes compact error & info level messages.]]></haxe_doc>
+			<haxe_doc><![CDATA[Only writes error & info level messages.]]></haxe_doc>
 		</LEVEL_INFO>
 		<LEVEL_DEBUG final="1" public="1" set="null" expr="3" line="31" static="1">
 			<x path="Int"/>
@@ -5730,35 +5566,34 @@
 		<maskedFields final="1"><c path="connect.util.Collection"><c path="String"/></c></maskedFields>
 		<maskedParams final="1"><c path="connect.util.Collection"><c path="String"/></c></maskedParams>
 		<regexMaskingList final="1"><c path="connect.util.Collection"><c path="EReg"/></c></regexMaskingList>
-		<compact final="1"><x path="Bool"/></compact>
-		<beautify final="1"><x path="Bool"/></beautify>
 		<defaultFilename><c path="String"/></defaultFilename>
 		<initialConfig final="1"><c path="connect.logger.LoggerConfig"/></initialConfig>
-		<getInitialConfig public="1" set="method" line="66">
+		<getInitialConfig public="1" set="method" line="62">
 			<f a=""><c path="connect.logger.LoggerConfig"/></f>
 			<haxe_doc>@returns initial logger configuration</haxe_doc>
 		</getInitialConfig>
-		<getPath public="1" set="method" line="71">
+		<getPath public="1" set="method" line="67">
 			<f a=""><c path="String"/></f>
 			<haxe_doc>@returns The path where logs are stored.</haxe_doc>
 		</getPath>
-		<getLevel public="1" set="method" line="79">
+		<getLevel public="1" set="method" line="75">
 			<f a=""><x path="Int"/></f>
 			<haxe_doc>* @return Int The level of the log. One of: `LEVEL_ERROR`, `LEVEL_WARNING`,
      * `LEVEL_INFO`, `LEVEL_DEBUG`.</haxe_doc>
 		</getLevel>
-		<isBeautified public="1" set="method" line="87">
+		<isBeautified public="1" set="method" line="84">
 			<f a=""><x path="Bool"/></f>
 			<haxe_doc>* @return Bool Whether the logs are written in beautified format (this is,
-     * for JSON objects use new lines and two space indentation).</haxe_doc>
+     * for JSON objects use new lines and two space indentation). This method
+     * is deprecated and always returns false.</haxe_doc>
 		</isBeautified>
-		<isCompact public="1" set="method" line="96">
+		<isCompact public="1" set="method" line="93">
 			<f a=""><x path="Bool"/></f>
 			<haxe_doc>* @return Bool Whether the logs are written in compact format (this is,
      * for JSON objects only print key names or, if it has an 'id' field,
-     * only the id)..</haxe_doc>
+     * only the id). This method is deprecated and always returns false.</haxe_doc>
 		</isCompact>
-		<setFilename public="1" set="method" line="110">
+		<setFilename public="1" set="method" line="107">
 			<f a="filename">
 				<c path="String"/>
 				<x path="Void"/>
@@ -5772,19 +5607,19 @@
         Filename extension must be omitted, since it is provided by the formatters
         used in each handler.</haxe_doc>
 		</setFilename>
-		<setFilenameForRequest public="1" set="method" line="132"><f a="request">
+		<setFilenameForRequest public="1" set="method" line="129"><f a="request">
 	<c path="connect.models.IdModel"/>
 	<x path="Void"/>
 </f></setFilenameForRequest>
-		<getFilename public="1" set="method" line="187">
+		<getFilename public="1" set="method" line="183">
 			<f a=""><c path="String"/></f>
 			<haxe_doc>@returns The last filename that was set.</haxe_doc>
 		</getFilename>
-		<getHandlers public="1" set="method" line="205">
+		<getHandlers public="1" set="method" line="201">
 			<f a=""><c path="connect.util.Collection"><c path="connect.logger.LoggerHandler"/></c></f>
 			<haxe_doc>@returns The defined handlers for this logger. Do not modify this collection.</haxe_doc>
 		</getHandlers>
-		<openSection public="1" set="method" line="214">
+		<openSection public="1" set="method" line="210">
 			<f a="name">
 				<c path="String"/>
 				<x path="Void"/>
@@ -5793,11 +5628,11 @@
         this formatting, depending on the number of opened sections. For example, at the beginning
         of a function, a section can be opened, and closed when the function finishes.</haxe_doc>
 		</openSection>
-		<closeSection public="1" set="method" line="221">
+		<closeSection public="1" set="method" line="217">
 			<f a=""><x path="Void"/></f>
 			<haxe_doc>Closes the last opened section.</haxe_doc>
 		</closeSection>
-		<writeBlock public="1" set="method" line="231">
+		<writeBlock public="1" set="method" line="227">
 			<f a="level:block">
 				<x path="Int"/>
 				<c path="String"/>
@@ -5808,7 +5643,7 @@
      * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_WARNING`, `LEVEL_INFO`, `LEVEL_DEBUG`.
      * @param block Block of text to log. Lines in the text are formatted to appear as a block.</haxe_doc>
 		</writeBlock>
-		<writeCodeBlock public="1" set="method" line="244">
+		<writeCodeBlock public="1" set="method" line="240">
 			<f a="level:code:language">
 				<x path="Int"/>
 				<c path="String"/>
@@ -5821,7 +5656,7 @@
      * @param code Code to log. Text is formatted to appear as a code block.
      * @param language Language used in the block. For example, "json". Can be an empty string.</haxe_doc>
 		</writeCodeBlock>
-		<writeList public="1" set="method" line="256">
+		<writeList public="1" set="method" line="252">
 			<f a="level:list">
 				<x path="Int"/>
 				<c path="connect.util.Collection"><c path="String"/></c>
@@ -5832,7 +5667,7 @@
      * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_WARNING`, `LEVEL_INFO`, `LEVEL_DEBUG`.
      * @param list List to log. Lines are formatted to appear as a list.</haxe_doc>
 		</writeList>
-		<writeTable public="1" set="method" line="269">
+		<writeTable public="1" set="method" line="265">
 			<f a="level:table">
 				<x path="Int"/>
 				<c path="connect.util.Collection"><c path="connect.util.Collection"><c path="String"/></c></c>
@@ -5844,7 +5679,7 @@
      * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_WARNING`, `LEVEL_INFO`, `LEVEL_DEBUG`.
      * @param table Table to log. Rows are formatted to appear as a table.</haxe_doc>
 		</writeTable>
-		<write public="1" set="method" line="281">
+		<write public="1" set="method" line="277">
 			<f a="level:message">
 				<x path="Int"/>
 				<c path="String"/>
@@ -5855,89 +5690,89 @@
      * @param level Message level. One of: `LEVEL_ERROR`, `LEVEL_WARNING`, `LEVEL_INFO`, `LEVEL_DEBUG`.
      * @param message Message to log. The message is not formatted.</haxe_doc>
 		</write>
-		<getMaskedFields public="1" set="method" line="288">
+		<getMaskedFields public="1" set="method" line="284">
 			<f a=""><c path="connect.util.Collection"><c path="String"/></c></f>
 			<haxe_doc>Returns a list of fields which should be masked in http requests or responses.</haxe_doc>
 		</getMaskedFields>
-		<getMaskedParams public="1" set="method" line="293">
+		<getMaskedParams public="1" set="method" line="289">
 			<f a=""><c path="connect.util.Collection"><c path="String"/></c></f>
 			<haxe_doc>Returns a list of param ids whose value should be masked in logged requests.</haxe_doc>
 		</getMaskedParams>
-		<addRegExMask public="1" set="method" line="298">
+		<addRegExMask public="1" set="method" line="294">
 			<f a="expression">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<haxe_doc>Adds a new regular expression for string data masking purposes.</haxe_doc>
 		</addRegExMask>
-		<_getRegExMaskingList public="1" set="method" line="303">
+		<_getRegExMaskingList public="1" set="method" line="299">
 			<f a=""><c path="connect.util.Collection"><c path="EReg"/></c></f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</_getRegExMaskingList>
-		<log public="1" set="method" line="308">
+		<log public="1" set="method" line="304">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</log>
-		<debug public="1" set="method" line="313">
+		<debug public="1" set="method" line="309">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</debug>
-		<info public="1" set="method" line="318">
+		<info public="1" set="method" line="314">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</info>
-		<notice public="1" set="method" line="323">
+		<notice public="1" set="method" line="319">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</notice>
-		<warning public="1" set="method" line="328">
+		<warning public="1" set="method" line="324">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</warning>
-		<error public="1" set="method" line="333">
+		<error public="1" set="method" line="329">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</error>
-		<critical public="1" set="method" line="338">
+		<critical public="1" set="method" line="334">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</critical>
-		<alert public="1" set="method" line="343">
+		<alert public="1" set="method" line="339">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</alert>
-		<emergency public="1" set="method" line="348">
+		<emergency public="1" set="method" line="344">
 			<f a="message">
 				<c path="String"/>
 				<x path="Void"/>
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</emergency>
-		<_writeToHandler public="1" set="method" line="353">
+		<_writeToHandler public="1" set="method" line="349">
 			<f a="level:message:handler">
 				<x path="Int"/>
 				<c path="String"/>
@@ -5946,15 +5781,15 @@
 			</f>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</_writeToHandler>
-		<writeSections set="method" line="360"><f a="level">
+		<writeSections set="method" line="356"><f a="level">
 	<x path="Int"/>
 	<x path="Void"/>
 </f></writeSections>
-		<copy public="1" set="method" line="372"><f a="request">
+		<copy public="1" set="method" line="368"><f a="request">
 	<x path="Null"><c path="connect.models.IdModel"/></x>
 	<c path="connect.logger.Logger"/>
 </f></copy>
-		<new public="1" set="method" line="49">
+		<new public="1" set="method" line="47">
 			<f a="config">
 				<c path="connect.logger.LoggerConfig"/>
 				<x path="Void"/>
@@ -5968,7 +5803,7 @@
 	<class path="connect.logger._Logger.LoggerSection" params="" file="connect/logger/Logger.hx" private="1" module="connect.logger.Logger">
 		<name final="1" public="1"><c path="String"/></name>
 		<written public="1"><x path="Bool"/></written>
-		<new public="1" set="method" line="399"><f a="name">
+		<new public="1" set="method" line="393"><f a="name">
 	<c path="String"/>
 	<x path="Void"/>
 </f></new>
@@ -6234,7 +6069,7 @@
 	</class>
 	<class path="connect.logger.LoggerConfig" params="" file="connect/logger/LoggerConfig.hx">
 		<extends path="connect.Base"/>
-		<levelTranslation final="1" set="null" expr="[&quot;ERROR&quot; =&gt; Logger.LEVEL_ERROR, &quot;WARNING&quot; =&gt; Logger.LEVEL_WARNING, &quot;INFO&quot; =&gt; Logger.LEVEL_INFO, &quot;DEBUG&quot; =&gt; Logger.LEVEL_DEBUG]" line="33" static="1">
+		<levelTranslation final="1" set="null" expr="[&quot;ERROR&quot; =&gt; Logger.LEVEL_ERROR, &quot;WARNING&quot; =&gt; Logger.LEVEL_WARNING, &quot;INFO&quot; =&gt; Logger.LEVEL_INFO, &quot;DEBUG&quot; =&gt; Logger.LEVEL_DEBUG]" line="34" static="1">
 			<t path="Map">
 				<c path="String"/>
 				<x path="Int"/>
@@ -6265,16 +6100,7 @@
 			<c path="connect.util.Collection"><c path="EReg"/></c>
 			<meta><m n=":dox"><e>hide</e></m></meta>
 		</regexMaskingList_>
-		<compact_ public="1" set="null">
-			<x path="Bool"/>
-			<meta><m n=":dox"><e>hide</e></m></meta>
-		</compact_>
-		<beautify_ public="1" set="null">
-			<x path="Bool"/>
-			<meta><m n=":dox"><e>hide</e></m></meta>
-		</beautify_>
-		<customHandlers><x path="Bool"/></customHandlers>
-		<path public="1" set="method" line="62">
+		<path public="1" set="method" line="60">
 			<f a="path">
 				<c path="String"/>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6288,7 +6114,7 @@
      * @param path Path for logs.
      * @return `this` instance to support a fluent interface.</haxe_doc>
 		</path>
-		<level public="1" set="method" line="73">
+		<level public="1" set="method" line="71">
 			<f a="level">
 				<x path="Int"/>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6298,7 +6124,7 @@
      * `Logger.LEVEL_WARNING`, `Logger.LEVEL_INFO`, `Logger.LEVEL_DEBUG`.
      * @return `this` instance to support a fluent interface.</haxe_doc>
 		</level>
-		<levelName public="1" set="method" line="84">
+		<levelName public="1" set="method" line="82">
 			<f a="level">
 				<c path="String"/>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6308,18 +6134,17 @@
      *  One of: `"ERROR"`, `"WARNING"`, `"INFO"`, `"DEBUG"`.
      * @return `this` instance to support a fluent interface.</haxe_doc>
 		</levelName>
-		<handlers public="1" set="method" line="98">
+		<handlers public="1" set="method" line="95">
 			<f a="handlers">
 				<c path="connect.util.Collection"><c path="connect.logger.LoggerHandler"/></c>
 				<c path="connect.logger.LoggerConfig"/>
 			</f>
-			<haxe_doc>* Sets the handlers for the logger. Default is a handler with a plain of Markdown formatter
-     * (depending on whether `markdown` method was called with a `true` argument) and a file
-     * writer.
+			<haxe_doc>* Sets the handlers for the logger. Default is a handler with a plain formatter
+     * and a file writer.
      * @param handlers Collection of handlers.
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</handlers>
-		<maskedFields public="1" set="method" line="113">
+		<maskedFields public="1" set="method" line="109">
 			<f a="maskedFields">
 				<c path="connect.util.Collection"><c path="String"/></c>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6332,7 +6157,7 @@
      * @param maskedFields Collection of field names (string).
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</maskedFields>
-		<maskedParams public="1" set="method" line="128">
+		<maskedParams public="1" set="method" line="124">
 			<f a="maskedParams">
 				<c path="connect.util.Collection"><c path="String"/></c>
 				<c path="connect.logger.LoggerConfig"/>
@@ -6346,48 +6171,40 @@
      * @param maskedParams Collection of param ids (string).
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</maskedParams>
-		<beautify public="1" set="method" line="139">
+		<beautify public="1" set="method" line="135">
 			<f a="enable">
 				<x path="Bool"/>
 				<c path="connect.logger.LoggerConfig"/>
 			</f>
-			<haxe_doc>* Set whether the logs must be written in beautified format (this is,
-     * for JSON objects use new lines and two space indentation).
+			<haxe_doc>* Set whether the logs must be written in beautified format. This method
+     * is deprecated and it has no effect.
      * @param enable Whether beautified logging should be enabled (defaults to `false`).
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</beautify>
-		<compact public="1" set="method" line="151">
-			<f a="enable">
-				<x path="Bool"/>
-				<c path="connect.logger.LoggerConfig"/>
-			</f>
-			<haxe_doc>* Sets whether the logs must be written in compact format (this is,
-     * for JSON objects only prints key names or, if it has an 'id' field,
-     * only the id). This is ignored if the logger is created in LEVEL_DEBUG.
-     * @param enable Whether compact logging should be enabled.
-     * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
-		</compact>
-		<regexMasks public="1" set="method" line="161">
+		<regexMasks public="1" set="method" line="158">
 			<f a="expressions">
 				<c path="connect.util.Collection"><c path="String"/></c>
 				<c path="connect.logger.LoggerConfig"/>
 			</f>
-			<haxe_doc>* Set list of regexs to replace in logs strings
-     * @param expressions
+			<haxe_doc>* Sets whether the logs must be written in compact format (this is,
+     * for JSON objects only prints key names or, if it has an 'id' field,
+     * only the id). This is ignored if the logger is created in LEVEL_DEBUG. This method
+     * is deprecated and it has no effect.
+     * @param enable Whether compact logging should be enabled.
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</regexMasks>
-		<markdown public="1" set="method" line="176">
+		<markdown public="1" set="method" line="173">
 			<f a="enable">
 				<x path="Bool"/>
 				<c path="connect.logger.LoggerConfig"/>
 			</f>
-			<haxe_doc>* Sets whether the logger should use the Markdown formatter. By default,
-     * the plain text formatter is used. This property only has effect if no default
-     * set of logger handlers has been set.
+			<haxe_doc>* Sets whether the logger should use the Markdown formatter. This method
+     * is deprecated and it has no effect. By default, the plain text formatter
+     * is used. 
      * @param enable Whether to use the Markdown formatter.
      * @return LoggerConfig `this` instance to support a fluent interface.</haxe_doc>
 		</markdown>
-		<new public="1" set="method" line="40"><f a=""><x path="Void"/></f></new>
+		<new public="1" set="method" line="41"><f a=""><x path="Void"/></f></new>
 		<haxe_doc>* Represents the configuration of the logger. An instance can be passed to `Env.initLogger`
  * to setup the logger behaviour.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
@@ -6404,52 +6221,6 @@
  * (capable of formatting blocks, tables and lists to a specific syntax, like Markdown)
  * and a writer (capable of writing the formatted message to an output, like a file).</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
-	</class>
-	<class path="connect.logger.MarkdownLoggerFormatter" params="" file="connect/logger/MarkdownLoggerFormatter.hx">
-		<extends path="connect.Base"/>
-		<implements path="connect.logger.ILoggerFormatter"/>
-		<formatSection public="1" set="method" line="14"><f a="level:sectionLevel:text">
-	<x path="Int"/>
-	<x path="Int"/>
-	<c path="String"/>
-	<c path="String"/>
-</f></formatSection>
-		<formatBlock public="1" set="method" line="22"><f a="level:text">
-	<x path="Int"/>
-	<c path="String"/>
-	<c path="String"/>
-</f></formatBlock>
-		<formatCodeBlock public="1" set="method" line="28"><f a="level:text:language">
-	<x path="Int"/>
-	<c path="String"/>
-	<c path="String"/>
-	<c path="String"/>
-</f></formatCodeBlock>
-		<formatList public="1" set="method" line="34"><f a="level:list">
-	<x path="Int"/>
-	<c path="connect.util.Collection"><c path="String"/></c>
-	<c path="String"/>
-</f></formatList>
-		<formatTable public="1" set="method" line="43"><f a="level:table">
-	<x path="Int"/>
-	<c path="connect.util.Collection"><c path="connect.util.Collection"><c path="String"/></c></c>
-	<c path="String"/>
-</f></formatTable>
-		<formatLine public="1" set="method" line="54"><f a="level:text">
-	<x path="Int"/>
-	<c path="String"/>
-	<c path="String"/>
-</f></formatLine>
-		<getFileExtension public="1" set="method" line="58"><f a=""><c path="String"/></f></getFileExtension>
-		<copy public="1" set="method" line="62"><f a="request">
-	<x path="Null"><c path="connect.models.IdModel"/></x>
-	<c path="connect.logger.MarkdownLoggerFormatter"/>
-</f></copy>
-		<new public="1" set="method" line="66"><f a=""><x path="Void"/></f></new>
-		<meta>
-			<m n=":directlyUsed"/>
-			<m n=":dox"><e>hide</e></m>
-		</meta>
 	</class>
 	<class path="connect.logger.PlainLoggerFormatter" params="" file="connect/logger/PlainLoggerFormatter.hx">
 		<extends path="connect.Base"/>
@@ -9713,182 +9484,6 @@
 		<haxe_doc>Represents a user within the platform.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
-	<enum path="connect.storage.StorageType" params="" file="connect/storage/StepData.hx" module="connect.storage.StepData">
-		<ConnectStorage><haxe_doc>StepData saved in Connect.</haxe_doc></ConnectStorage>
-		<LocalStorage><haxe_doc>StepData saved in a local file.</haxe_doc></LocalStorage>
-		<FailedStorage><haxe_doc>StepData failed to load.</haxe_doc></FailedStorage>
-		<haxe_doc>Indicates how a `StepData` is stored.</haxe_doc>
-		<meta>
-			<m n=":directlyUsed"/>
-			<m n=":flatEnum"/>
-			<m n=":dox"><e>hide</e></m>
-		</meta>
-	</enum>
-	<class path="connect.storage.StepData" params="" file="connect/storage/StepData.hx">
-		<createDictionaryWithClassnameSuffixes set="method" line="58" static="1"><f a="dict">
-	<c path="connect.util.Dictionary"/>
-	<c path="connect.util.Dictionary"/>
-</f></createDictionaryWithClassnameSuffixes>
-		<createDictionaryAndDeserializeContent set="method" line="74" static="1"><f a="obj">
-	<d/>
-	<c path="connect.util.Dictionary"/>
-</f></createDictionaryAndDeserializeContent>
-		<firstIndex final="1" public="1">
-			<x path="Int"/>
-			<haxe_doc>Index of the step.</haxe_doc>
-		</firstIndex>
-		<data final="1" public="1">
-			<c path="connect.util.Dictionary"/>
-			<haxe_doc>`connect.Flow` data when the step was last executed.</haxe_doc>
-		</data>
-		<storage final="1" public="1">
-			<e path="connect.storage.StorageType"/>
-			<haxe_doc>How this step was stored: `ConnectStorage`, `LocalStorage`, `FailedStorage`.</haxe_doc>
-		</storage>
-		<attempt final="1" public="1">
-			<x path="Null"><x path="Int"/></x>
-			<haxe_doc>Number of attempts that this step has tried to run.</haxe_doc>
-		</attempt>
-		<toString public="1" set="method" line="94"><f a=""><c path="String"/></f></toString>
-		<new public="1" set="method" line="49">
-			<f a="firstIndex:data:storage:attempt">
-				<x path="Int"/>
-				<d/>
-				<e path="connect.storage.StorageType"/>
-				<x path="Null"><x path="Int"/></x>
-				<x path="Void"/>
-			</f>
-			<haxe_doc>Created a StepData with the passed attributes. The `data` can be of one of these types:
-
-        - `connect.util.Dictionary`: Passed when `this` `StepData` is to be stored.
-          The dictionary will be copied recursively, and all keys will contain a suffix with the
-          class name of the corresponding value, so it can be used in deserialization.
-        - `Dynamic` object: Passed when `this` `StepData` is to be retrieved from file. A new
-          dictionary will be created with the contents of the objects, deserializing the values
-          based on the type indicated on the key suffixes. These suffixes will be removed.</haxe_doc>
-		</new>
-		<haxe_doc>The data of a `connect.Flow` step. It can be saved and retrieved later to resume execution of the flow.</haxe_doc>
-		<meta>
-			<m n=":directlyUsed"/>
-			<m n=":dox"><e>hide</e></m>
-		</meta>
-	</class>
-	<class path="connect.storage.StepStorage" params="" file="connect/storage/StepStorage.hx">
-		<load public="1" set="method" line="28" static="1">
-			<f a="requestId:param">
-				<c path="String"/>
-				<c path="connect.models.Param"/>
-				<c path="connect.storage.StepData"/>
-			</f>
-			<haxe_doc>Loads a stored step data for the given request. It will first try to load it from the local
-        storage file. If it is not found there, it will try to load it from the indicated `param` which
-        must have been retreived from Connect.
-
-        If no data is found on either source, then an empty `StepData` with a `storage` type of
-        `FailedStorage` will be returned.</haxe_doc>
-		</load>
-		<loadRequestFromFile set="method" line="38" static="1"><f a="requestId">
-	<c path="String"/>
-	<c path="connect.storage.StepData"/>
-</f></loadRequestFromFile>
-		<loadAllFromFile set="method" line="45" static="1"><f a=""><d/></f></loadAllFromFile>
-		<decodeData set="method" line="53" static="1"><f a="data">
-	<c path="String"/>
-	<d/>
-</f></decodeData>
-		<getRequestField set="method" line="69" static="1"><f a="object:requestId:storage">
-	<d/>
-	<c path="String"/>
-	<e path="connect.storage.StorageType"/>
-	<c path="connect.storage.StepData"/>
-</f></getRequestField>
-		<loadRequestFromParam set="method" line="80" static="1"><f a="requestId:param">
-	<c path="String"/>
-	<c path="connect.models.Param"/>
-	<c path="connect.storage.StepData"/>
-</f></loadRequestFromParam>
-		<loadAllFromParam set="method" line="88" static="1"><f a="param">
-	<c path="connect.models.Param"/>
-	<d/>
-</f></loadAllFromParam>
-		<save public="1" set="method" line="104" static="1">
-			<f a="request:stepData:param:updateFunc">
-				<c path="connect.models.IdModel"/>
-				<c path="connect.storage.StepData"/>
-				<c path="connect.models.Param"/>
-				<x path="haxe.Function"/>
-				<e path="connect.storage.StorageType"/>
-			</f>
-			<haxe_doc>Saves `stepData` for the given `request`. First, it will try to save the data in the given
-        `param` of the `request`, by calling `updateFunc`, which should try to update the
-        parameter in Connect. If this fails, the method will try to save the data in the local
-        storage file. The type of storage used for saving will be returned (which will be `FailedStorage`
-        if neither worked).</haxe_doc>
-		</save>
-		<deleteRequestFromFile set="method" line="122" static="1"><f a="requestId">
-	<c path="String"/>
-	<x path="Void"/>
-</f></deleteRequestFromFile>
-		<deleteRequestFromObject set="method" line="130" static="1"><f a="obj:requestId">
-	<d/>
-	<c path="String"/>
-	<d/>
-</f></deleteRequestFromObject>
-		<encodeData set="method" line="138" static="1"><f a="data">
-	<d/>
-	<c path="String"/>
-</f></encodeData>
-		<saveInConnect set="method" line="165" static="1">
-			<f a="request:data:param:updateFunc">
-				<c path="connect.models.IdModel"/>
-				<c path="String"/>
-				<c path="connect.models.Param"/>
-				<x path="haxe.Function"/>
-				<x path="Bool"/>
-			</f>
-			<haxe_doc>* Saves data for all requests in Connect.
-     * @param request An AssetRequest or TierConfigRequest whose update method will be called.
-     * @param data Encoded string with all requests for the given asset or TierConfig.
-     * @param param Param to be updated.
-     * @param updateFunc The update function to be called (TODO: Get this using reflection).
-     * @return Bool Whether the data could be saved in Connect or not.</haxe_doc>
-		</saveInConnect>
-		<saveInFile set="method" line="183" static="1">
-			<f a="data">
-				<c path="String"/>
-				<x path="Bool"/>
-			</f>
-			<haxe_doc>* Saves data for all requests in the local file.
-     * @param data Encoded string with all requests for the given asset or TierConfig.
-     * @return Bool Whether the data could be saved in the file or not.</haxe_doc>
-		</saveInFile>
-		<addRequestToObject set="method" line="193" static="1"><f a="obj:requestId:stepData">
-	<d/>
-	<c path="String"/>
-	<c path="connect.storage.StepData"/>
-	<d/>
-</f></addRequestToObject>
-		<removeStepData public="1" set="method" line="212" static="1">
-			<f a="requestId:param">
-				<c path="String"/>
-				<c path="connect.models.Param"/>
-				<x path="Bool"/>
-			</f>
-			<haxe_doc>Removes the stored `StepData` for the given request id from the local storage file,
-        and if the given `param` contains data for the request, updates its value to remove it.
-        @return `true` if the param has been updated, which means that the request that it belongs to
-        requires updating, or `false` otherwise.</haxe_doc>
-		</removeStepData>
-		<getStepFilename public="1" set="method" line="223" static="1">
-			<f a=""><c path="String"/></f>
-			<haxe_doc>Returns the file name where steps should be stored.</haxe_doc>
-		</getStepFilename>
-		<haxe_doc>Responsible for storing the data that one step received when executing within a `connect.Flow`.</haxe_doc>
-		<meta>
-			<m n=":directlyUsed"/>
-			<m n=":dox"><e>hide</e></m>
-		</meta>
-	</class>
 	<class path="connect.util.Blob" params="" file="connect/util/Blob.hx">
 		<extends path="connect.Base"/>
 		<load public="1" set="method" line="17" static="1">
@@ -10320,6 +9915,92 @@
     DateTime handles date and time information in UTC.</haxe_doc>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
+	<class path="connect.util.Diff" params="" file="connect/util/Diff.hx">
+		<isStruct set="method" line="65" static="1"><f a="value">
+	<d/>
+	<x path="Bool"/>
+</f></isStruct>
+		<isArray set="method" line="69" static="1"><f a="value">
+	<d/>
+	<x path="Bool"/>
+</f></isArray>
+		<checkStructs set="method" line="73" static="1"><f a="first:second">
+	<d/>
+	<d/>
+	<x path="Void"/>
+</f></checkStructs>
+		<areEqual set="method" line="80" static="1"><f a="first:second">
+	<d/>
+	<d/>
+	<x path="Bool"/>
+</f></areEqual>
+		<compareArrays set="method" line="85" static="1"><f a="first:second">
+	<c path="Array"><d/></c>
+	<c path="Array"><d/></c>
+	<c path="Array"><c path="Array"><d/></c></c>
+</f></compareArrays>
+		<applyArray set="method" line="153" static="1"><f a="obj:arr">
+	<c path="Array"><d/></c>
+	<c path="Array"><c path="Array"><d/></c></c>
+	<c path="Array"><d/></c>
+</f></applyArray>
+		<swapArray set="method" line="210" static="1"><f a="arr">
+	<c path="Array"><c path="Array"><d/></c></c>
+	<c path="Array"><c path="Array"><d/></c></c>
+</f></swapArray>
+		<mapToObject set="method" line="265" static="1"><f a="map">
+	<c path="haxe.ds.StringMap"><d/></c>
+	<d/>
+</f></mapToObject>
+		<changeArrayToObject set="method" line="272" static="1">
+			<f a="arr">
+				<c path="Array"><c path="Array"><d/></c></c>
+				<c path="Array"><c path="Array"><d/></c></c>
+			</f>
+			<meta><m n=":has_untyped"/></meta>
+		</changeArrayToObject>
+		<a final="1"><c path="haxe.ds.StringMap"><d/></c></a>
+		<d final="1"><c path="haxe.ds.StringMap"><d/></c></d>
+		<c final="1"><c path="haxe.ds.StringMap"><d/></c></c>
+		<apply public="1" set="method" line="117">
+			<f a="obj">
+				<d/>
+				<d/>
+			</f>
+			<haxe_doc>Applies to changes in `this` `Diff` to the dynamic object passed as argument.
+        If this method is called on the `first` object passed when constructing `this`,
+        then an object identical to `second` is returned.</haxe_doc>
+		</apply>
+		<swap public="1" set="method" line="182">
+			<f a=""><c path="connect.util.Diff"/></f>
+			<haxe_doc>Returns a new `Diff` that reverts the changes made by this one. If `apply` is called on
+        the returned `Diff` passing the `second` argument used to construct `this`, then and object
+        identical to the `first` argument used to construct `this` will be returned by `apply`.</haxe_doc>
+		</swap>
+		<toString public="1" set="method" line="238">
+			<f a=""><c path="String"/></f>
+			<haxe_doc>Returns a string with the Json representation of `this` `Diff`.</haxe_doc>
+		</toString>
+		<toObject set="method" line="242"><f a=""><d/></f></toObject>
+		<new public="1" set="method" line="28">
+			<f a="first:second">
+				<d/>
+				<d/>
+				<x path="Void"/>
+			</f>
+			<haxe_doc>Creates a new `Diff` storing the differences between the two objects passed. The differences basically are:
+
+        - Additions: Fields present in `second` that are not present in `first`.
+        - Deletions: Fields present in `first` that are not present in `second`.
+        - Changes: Fields whose value has changed between `first` and `second`.
+
+        The class is capable of tracking changes inside arrays.</haxe_doc>
+		</new>
+		<haxe_doc>The `Diff` class stores the difference between two Haxe dynamic objects `first` and `second`.
+    You can later `apply` the diff object to `first` to obtain `second`, or `swap` the diff and then
+    `apply` to `second` to get `first`.</haxe_doc>
+		<meta><m n=":directlyUsed"/></meta>
+	</class>
 	<typedef path="connect.util.ExcelRow" params="" file="connect/util/ExcelWriter.hx" module="connect.util.ExcelWriter">
 		<c path="Array"><c path="String"/></c>
 		<meta><m n=":dox"><e>hide</e></m></meta>
@@ -10390,55 +10071,59 @@
 			<m n=":dox"><e>hide</e></m>
 		</meta>
 	</class>
-	<class path="connect.util.Util" params="" file="connect/util/Util.hx">
-		<replaceStrSensitiveData public="1" set="method" line="16" static="1">
-			<f a="text:regExData">
+	<class path="connect.util.Masker" params="" file="connect/util/Masker.hx">
+		<maskString public="1" set="method" line="12" static="1">
+			<f a="text">
 				<c path="String"/>
-				<c path="connect.util.Collection"><c path="EReg"/></c>
 				<c path="String"/>
 			</f>
-			<haxe_doc>* Given a list of regex search all in a string and hide this values
-     * @param text 
-     * @param regExData</haxe_doc>
-		</replaceStrSensitiveData>
-		<beautify public="1" set="method" line="32" static="1"><f a="text:compact:masked:beautify">
-	<c path="String"/>
-	<x path="Bool"/>
-	<x path="Bool"/>
-	<x path="Bool"/>
-	<c path="String"/>
-</f></beautify>
-		<beautifyObject public="1" set="method" line="46" static="1"><f a="obj:compact:masked:beautify">
-	<d/>
-	<x path="Bool"/>
-	<x path="Bool"/>
-	<x path="Bool"/>
-	<c path="String"/>
-</f></beautifyObject>
-		<maskFields public="1" set="method" line="73" static="1"><f a="obj">
-	<d/>
-	<d/>
-</f></maskFields>
-		<maskParams public="1" set="method" line="100" static="1"><f a="obj">
+			<haxe_doc>@returns The string with masking applied.</haxe_doc>
+		</maskString>
+		<maskObject public="1" set="method" line="21" static="1">
+			<f a="obj">
+				<d/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>@returns The string representation of the object with masking applied.</haxe_doc>
+		</maskObject>
+		<maskFields public="1" set="method" line="27" static="1">
+			<f a="obj">
+				<d/>
+				<d/>
+			</f>
+			<haxe_doc>@returns A copy of the object with masking of fields applied.</haxe_doc>
+		</maskFields>
+		<maskParams set="method" line="54" static="1"><f a="obj">
 	<d/>
 	<d/>
 </f></maskParams>
-		<maskParamsInObject set="method" line="109" static="1"><f a="obj">
+		<maskParamsInObject set="method" line="63" static="1"><f a="obj">
 	<d/>
 	<x path="Void"/>
 </f></maskParamsInObject>
-		<maskParamsArray set="method" line="126" static="1"><f a="arr:maskedParams">
+		<maskParamsArray set="method" line="80" static="1"><f a="arr:maskedParams">
 	<c path="Array"><d/></c>
 	<c path="connect.util.Collection"><c path="String"/></c>
 	<x path="Void"/>
 </f></maskParamsArray>
-		<maskConfigParam set="method" line="140" static="1"><f a="obj:configParam:maskedParams">
+		<maskConfigParam set="method" line="94" static="1"><f a="obj:configParam:maskedParams">
 	<d/>
 	<d/>
 	<c path="connect.util.Collection"><c path="String"/></c>
 	<x path="Void"/>
 </f></maskConfigParam>
-		<isJson public="1" set="method" line="160" static="1">
+		<replaceStrSensitiveData set="method" line="110" static="1"><f a="text:regExData">
+	<c path="String"/>
+	<c path="connect.util.Collection"><c path="EReg"/></c>
+	<c path="String"/>
+</f></replaceStrSensitiveData>
+		<meta>
+			<m n=":directlyUsed"/>
+			<m n=":dox"><e>hide</e></m>
+		</meta>
+	</class>
+	<class path="connect.util.Util" params="" file="connect/util/Util.hx">
+		<isJson public="1" set="method" line="15" static="1">
 			<f a="text">
 				<c path="String"/>
 				<x path="Bool"/>
@@ -10446,7 +10131,7 @@
 			<haxe_doc>@returns Whether the text seems to contain a JSON object or array.
         NOTE: This function could return `true` even if the JSON string is malformed.</haxe_doc>
 		</isJson>
-		<isJsonObject public="1" set="method" line="168" static="1">
+		<isJsonObject public="1" set="method" line="23" static="1">
 			<f a="text">
 				<c path="String"/>
 				<x path="Bool"/>
@@ -10454,7 +10139,7 @@
 			<haxe_doc>@returns Whether the text seems to contain a JSON object.
         NOTE: This function could return `true` even if the JSON string is malformed.</haxe_doc>
 		</isJsonObject>
-		<isJsonArray public="1" set="method" line="176" static="1">
+		<isJsonArray public="1" set="method" line="31" static="1">
 			<f a="text">
 				<c path="String"/>
 				<x path="Bool"/>
@@ -10462,21 +10147,21 @@
 			<haxe_doc>@returns Whether the text seems to contain a JSON array.
         NOTE: This function could return `true` even if the JSON string is malformed.</haxe_doc>
 		</isJsonArray>
-		<isArray public="1" set="method" line="181" static="1">
+		<isArray public="1" set="method" line="36" static="1">
 			<f a="value">
 				<d/>
 				<x path="Bool"/>
 			</f>
 			<haxe_doc>@return Whether the passed object is an array.</haxe_doc>
 		</isArray>
-		<isStruct public="1" set="method" line="186" static="1">
+		<isStruct public="1" set="method" line="41" static="1">
 			<f a="value">
 				<d/>
 				<x path="Bool"/>
 			</f>
 			<haxe_doc>@return Whether the passed object is a dynamic object.</haxe_doc>
 		</isStruct>
-		<createObjectDiff public="1" set="method" line="198" static="1">
+		<createObjectDiff public="1" set="method" line="53" static="1">
 			<f a="object:previous">
 				<d/>
 				<d/>
@@ -10489,7 +10174,7 @@
      * @param previous The object prior to the updates.
      * @return The object with only the differences.</haxe_doc>
 		</createObjectDiff>
-		<addIdsToObject set="method" line="212" static="1">
+		<addIdsToObject set="method" line="67" static="1">
 			<f a="object:original">
 				<d/>
 				<d/>
@@ -10502,7 +10187,7 @@
      * This method is used for example when updating a request, to send only the modified data.
      * @return A new dynamic object with the updated data.</haxe_doc>
 		</addIdsToObject>
-		<compactArray set="method" line="245" static="1">
+		<compactArray set="method" line="100" static="1">
 			<f a="array:second">
 				<c path="Array"><d/></c>
 				<c path="Array"><d/></c>
@@ -10514,7 +10199,7 @@
      * the value of the same object in the `second` array.
      * @return A new array containing only the modified elements.</haxe_doc>
 		</compactArray>
-		<getLines public="1" set="method" line="269" static="1">
+		<getLines public="1" set="method" line="124" static="1">
 			<f a="text">
 				<c path="String"/>
 				<c path="Array"><c path="String"/></c>
@@ -10524,14 +10209,14 @@
      * @param text 
      * @return Array<String>]]></haxe_doc>
 		</getLines>
-		<boolToInt public="1" set="method" line="278" static="1">
+		<boolToInt public="1" set="method" line="133" static="1">
 			<f a="b">
 				<x path="Bool"/>
 				<x path="Int"/>
 			</f>
 			<haxe_doc>* @return Int `1` if the argument is `true`, `0` otherwise.</haxe_doc>
 		</boolToInt>
-		<toRegEx public="1" set="method" line="283" static="1">
+		<toRegEx public="1" set="method" line="138" static="1">
 			<f a="expression">
 				<c path="String"/>
 				<c path="EReg"/>
@@ -10542,92 +10227,6 @@
 			<m n=":directlyUsed"/>
 			<m n=":dox"><e>hide</e></m>
 		</meta>
-	</class>
-	<class path="diff.Diff" params="" file="/home/runner/haxelib/diff/1,0,0/diff/Diff.hx">
-		<isStruct set="method" line="65" static="1"><f a="value">
-	<d/>
-	<x path="Bool"/>
-</f></isStruct>
-		<isArray set="method" line="69" static="1"><f a="value">
-	<d/>
-	<x path="Bool"/>
-</f></isArray>
-		<checkStructs set="method" line="73" static="1"><f a="first:second">
-	<d/>
-	<d/>
-	<x path="Void"/>
-</f></checkStructs>
-		<areEqual set="method" line="80" static="1"><f a="first:second">
-	<d/>
-	<d/>
-	<x path="Bool"/>
-</f></areEqual>
-		<compareArrays set="method" line="85" static="1"><f a="first:second">
-	<c path="Array"><d/></c>
-	<c path="Array"><d/></c>
-	<c path="Array"><c path="Array"><d/></c></c>
-</f></compareArrays>
-		<applyArray set="method" line="153" static="1"><f a="obj:arr">
-	<c path="Array"><d/></c>
-	<c path="Array"><c path="Array"><d/></c></c>
-	<c path="Array"><d/></c>
-</f></applyArray>
-		<swapArray set="method" line="210" static="1"><f a="arr">
-	<c path="Array"><c path="Array"><d/></c></c>
-	<c path="Array"><c path="Array"><d/></c></c>
-</f></swapArray>
-		<mapToObject set="method" line="265" static="1"><f a="map">
-	<c path="haxe.ds.StringMap"><d/></c>
-	<d/>
-</f></mapToObject>
-		<changeArrayToObject set="method" line="272" static="1">
-			<f a="arr">
-				<c path="Array"><c path="Array"><d/></c></c>
-				<c path="Array"><c path="Array"><d/></c></c>
-			</f>
-			<meta><m n=":has_untyped"/></meta>
-		</changeArrayToObject>
-		<a final="1"><c path="haxe.ds.StringMap"><d/></c></a>
-		<d final="1"><c path="haxe.ds.StringMap"><d/></c></d>
-		<c final="1"><c path="haxe.ds.StringMap"><d/></c></c>
-		<apply public="1" set="method" line="117">
-			<f a="obj">
-				<d/>
-				<d/>
-			</f>
-			<haxe_doc>Applies to changes in `this` `Diff` to the dynamic object passed as argument.
-        If this method is called on the `first` object passed when constructing `this`,
-        then an object identical to `second` is returned.</haxe_doc>
-		</apply>
-		<swap public="1" set="method" line="182">
-			<f a=""><c path="diff.Diff"/></f>
-			<haxe_doc>Returns a new `Diff` that reverts the changes made by this one. If `apply` is called on
-        the returned `Diff` passing the `second` argument used to construct `this`, then and object
-        identical to the `first` argument used to construct `this` will be returned by `apply`.</haxe_doc>
-		</swap>
-		<toString public="1" set="method" line="238">
-			<f a=""><c path="String"/></f>
-			<haxe_doc>Returns a string with the Json representation of `this` `Diff`.</haxe_doc>
-		</toString>
-		<toObject set="method" line="242"><f a=""><d/></f></toObject>
-		<new public="1" set="method" line="28">
-			<f a="first:second">
-				<d/>
-				<d/>
-				<x path="Void"/>
-			</f>
-			<haxe_doc>Creates a new `Diff` storing the differences between the two objects passed. The differences basically are:
-
-        - Additions: Fields present in `second` that are not present in `first`.
-        - Deletions: Fields present in `first` that are not present in `second`.
-        - Changes: Fields whose value has changed between `first` and `second`.
-
-        The class is capable of tracking changes inside arrays.</haxe_doc>
-		</new>
-		<haxe_doc>The `Diff` class stores the difference between two Haxe dynamic objects `first` and `second`.
-    You can later `apply` the diff object to `first` to obtain `second`, or `swap` the diff and then
-    `apply` to `second` to get `first`.</haxe_doc>
-		<meta><m n=":directlyUsed"/></meta>
 	</class>
 	<enum path="haxe.StackItem" params="" file="/usr/share/haxe/std/haxe/CallStack.hx" module="haxe.CallStack">
 		<CFunction/>
@@ -12679,339 +12278,6 @@
 		<toString public="1" set="method" line="56"><f a=""><c path="String"/></f></toString>
 		<new public="1" set="method" line="32"><f a=""><x path="Void"/></f></new>
 		<haxe_doc>Calculates the Adler32 of the given Bytes.</haxe_doc>
-		<meta><m n=":directlyUsed"/></meta>
-	</class>
-	<class path="haxe.io.Bytes" params="" file="/usr/share/haxe/std/haxe/io/Bytes.hx">
-		<alloc public="1" set="method" line="549" static="1">
-			<f a="length">
-				<x path="Int"/>
-				<c path="haxe.io.Bytes"/>
-			</f>
-			<haxe_doc>Returns a new `Bytes` instance with the given `length`. The values of the
-		bytes are not initialized and may not be zero.</haxe_doc>
-		</alloc>
-		<ofString public="1" set="method" line="580" static="1">
-			<f a="s:?encoding">
-				<c path="String"/>
-				<e path="haxe.io.Encoding"/>
-				<c path="haxe.io.Bytes"/>
-			</f>
-			<haxe_doc>Returns the `Bytes` representation of the given `String`, using the
-		specified encoding (UTF-8 by default).</haxe_doc>
-		</ofString>
-		<ofData public="1" set="method" line="656" static="1">
-			<f a="b">
-				<t path="haxe.io.BytesData"/>
-				<c path="haxe.io.Bytes"/>
-			</f>
-			<haxe_doc>Returns the `Bytes` representation of the given `BytesData`.</haxe_doc>
-		</ofData>
-		<ofHex public="1" set="method" line="673" static="1">
-			<f a="s">
-				<c path="String"/>
-				<c path="haxe.io.Bytes"/>
-			</f>
-			<haxe_doc>Converts the given hexadecimal `String` to `Bytes`. `s` must be a string of
-		even length consisting only of hexadecimal digits. For example:
-		`"0FDA14058916052309"`.</haxe_doc>
-		</ofHex>
-		<fastGet public="1" get="inline" set="null" line="694" static="1">
-			<f a="b:pos">
-				<t path="haxe.io.BytesData"/>
-				<x path="Int"/>
-				<x path="Int"/>
-			</f>
-			<haxe_doc>Reads the `pos`-th byte of the given `b` bytes, in the most efficient way
-		possible. Behavior when reading outside of the available data is
-		unspecified.</haxe_doc>
-		</fastGet>
-		<length public="1" set="null"><x path="Int"/></length>
-		<b><t path="haxe.io.BytesData"/></b>
-		<get public="1" get="inline" set="null" line="45">
-			<f a="pos">
-				<x path="Int"/>
-				<x path="Int"/>
-			</f>
-			<haxe_doc>Returns the byte at index `pos`.</haxe_doc>
-		</get>
-		<set public="1" get="inline" set="null" line="64">
-			<f a="pos:v">
-				<x path="Int"/>
-				<x path="Int"/>
-				<x path="Void"/>
-			</f>
-			<haxe_doc>Stores the given byte `v` at the given position `pos`.</haxe_doc>
-		</set>
-		<blit public="1" set="method" line="90">
-			<f a="pos:src:srcpos:len">
-				<x path="Int"/>
-				<c path="haxe.io.Bytes"/>
-				<x path="Int"/>
-				<x path="Int"/>
-				<x path="Void"/>
-			</f>
-			<haxe_doc>Copies `len` bytes from `src` into this instance.
-		@param pos Zero-based location in `this` instance at which to start writing
-			bytes.
-		@param src Source `Bytes` instance from which to copy bytes.
-		@param srcpos Zero-based location at `src` from which bytes will be copied.
-		@param len Number of bytes to be copied.</haxe_doc>
-		</blit>
-		<fill public="1" set="method" line="132">
-			<f a="pos:len:value">
-				<x path="Int"/>
-				<x path="Int"/>
-				<x path="Int"/>
-				<x path="Void"/>
-			</f>
-			<haxe_doc>Sets `len` consecutive bytes starting from index `pos` of `this` instance
-		to `value`.</haxe_doc>
-		</fill>
-		<sub public="1" set="method" line="155">
-			<f a="pos:len">
-				<x path="Int"/>
-				<x path="Int"/>
-				<c path="haxe.io.Bytes"/>
-			</f>
-			<haxe_doc>Returns a new `Bytes` instance that contains a copy of `len` bytes of
-		`this` instance, starting at index `pos`.</haxe_doc>
-		</sub>
-		<compare public="1" set="method" line="194">
-			<f a="other">
-				<c path="haxe.io.Bytes"/>
-				<x path="Int"/>
-			</f>
-			<meta><m n=":has_untyped"/></meta>
-			<haxe_doc>Returns `0` if the bytes of `this` instance and the bytes of `other` are
-		identical.
-
-		Returns a negative value if the `length` of `this` instance is less than
-		the `length` of `other`, or a positive value if the `length` of `this`
-		instance is greater than the `length` of `other`.
-
-		In case of equal `length`s, returns a negative value if the first different
-		value in `other` is greater than the corresponding value in `this`
-		instance; otherwise returns a positive value.</haxe_doc>
-		</compare>
-		<getDouble public="1" set="method" line="246">
-			<f a="pos">
-				<x path="Int"/>
-				<x path="Float"/>
-			</f>
-			<haxe_doc>Returns the IEEE double-precision value at the given position `pos` (in
-		little-endian encoding). Result is unspecified if `pos` is outside the
-		bounds.</haxe_doc>
-		</getDouble>
-		<getFloat public="1" set="method" line="269">
-			<f a="pos">
-				<x path="Int"/>
-				<x path="Float"/>
-			</f>
-			<haxe_doc>Returns the IEEE single-precision value at the given position `pos` (in
-		little-endian encoding). Result is unspecified if `pos` is outside the
-		bounds.</haxe_doc>
-		</getFloat>
-		<setDouble public="1" set="method" line="292">
-			<f a="pos:v">
-				<x path="Int"/>
-				<x path="Float"/>
-				<x path="Void"/>
-			</f>
-			<haxe_doc>Stores the given IEEE double-precision value `v` at the given position
-		`pos` in little-endian encoding. Result is unspecified if writing outside
-		of bounds.</haxe_doc>
-		</setDouble>
-		<setFloat public="1" set="method" line="319">
-			<f a="pos:v">
-				<x path="Int"/>
-				<x path="Float"/>
-				<x path="Void"/>
-			</f>
-			<haxe_doc>Stores the given IEEE single-precision value `v` at the given position
-		`pos` in little-endian encoding. Result is unspecified if writing outside
-		of bounds.</haxe_doc>
-		</setFloat>
-		<getUInt16 public="1" get="inline" set="null" line="340">
-			<f a="pos">
-				<x path="Int"/>
-				<x path="Int"/>
-			</f>
-			<haxe_doc>Returns the 16-bit unsigned integer at the given position `pos` (in
-		little-endian encoding).</haxe_doc>
-		</getUInt16>
-		<setUInt16 public="1" get="inline" set="null" line="352">
-			<f a="pos:v">
-				<x path="Int"/>
-				<x path="Int"/>
-				<x path="Void"/>
-			</f>
-			<haxe_doc>Stores the given 16-bit unsigned integer `v` at the given position `pos`
-		(in little-endian encoding).</haxe_doc>
-		</setUInt16>
-		<getInt32 public="1" get="inline" set="null" line="365">
-			<f a="pos">
-				<x path="Int"/>
-				<x path="Int"/>
-			</f>
-			<haxe_doc>Returns the 32-bit integer at the given position `pos` (in little-endian
-		encoding).</haxe_doc>
-		</getInt32>
-		<getInt64 public="1" get="inline" set="null" line="383">
-			<f a="pos">
-				<x path="Int"/>
-				<x path="haxe.Int64"/>
-			</f>
-			<haxe_doc>Returns the 64-bit integer at the given position `pos` (in little-endian
-		encoding).</haxe_doc>
-		</getInt64>
-		<setInt32 public="1" get="inline" set="null" line="391">
-			<f a="pos:v">
-				<x path="Int"/>
-				<x path="Int"/>
-				<x path="Void"/>
-			</f>
-			<haxe_doc>Stores the given 32-bit integer `v` at the given position `pos` (in
-		little-endian encoding).</haxe_doc>
-		</setInt32>
-		<setInt64 public="1" get="inline" set="null" line="406">
-			<f a="pos:v">
-				<x path="Int"/>
-				<x path="haxe.Int64"/>
-				<x path="Void"/>
-			</f>
-			<haxe_doc>Stores the given 64-bit integer `v` at the given position `pos` (in
-		little-endian encoding).</haxe_doc>
-		</setInt64>
-		<getString public="1" set="method" line="415">
-			<f a="pos:len:?encoding">
-				<x path="Int"/>
-				<x path="Int"/>
-				<e path="haxe.io.Encoding"/>
-				<c path="String"/>
-			</f>
-			<haxe_doc>Returns the `len`-bytes long string stored at the given position `pos`,
-		interpreted with the given `encoding` (UTF-8 by default).</haxe_doc>
-		</getString>
-		<readString public="1" get="inline" set="null" line="495">
-			<f a="pos:len">
-				<x path="Int"/>
-				<x path="Int"/>
-				<c path="String"/>
-			</f>
-			<meta>
-				<m n=":deprecated"><e>"readString is deprecated, use getString instead"</e></m>
-				<m n=":noCompletion"/>
-			</meta>
-		</readString>
-		<toString public="1" set="method" line="502">
-			<f a=""><c path="String"/></f>
-			<haxe_doc>Returns a `String` representation of the bytes interpreted as UTF-8.</haxe_doc>
-		</toString>
-		<toHex public="1" set="method" line="524">
-			<f a=""><c path="String"/></f>
-			<haxe_doc>Returns a hexadecimal `String` representation of the bytes of `this`
-		instance.</haxe_doc>
-		</toHex>
-		<getData public="1" get="inline" set="null" line="541">
-			<f a=""><t path="haxe.io.BytesData"/></f>
-			<haxe_doc>Returns the bytes of `this` instance as `BytesData`.</haxe_doc>
-		</getData>
-		<new set="method" line="34"><f a="length:b">
-	<x path="Int"/>
-	<t path="haxe.io.BytesData"/>
-	<x path="Void"/>
-</f></new>
-		<meta><m n=":directlyUsed"/></meta>
-	</class>
-	<class path="haxe.crypto.Base64" params="" file="/usr/share/haxe/std/haxe/crypto/Base64.hx">
-		<CHARS public="1" set="null" expr="&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;" line="29" static="1">
-			<c path="String"/>
-			<meta><m n=":value"><e>"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"</e></m></meta>
-		</CHARS>
-		<BYTES public="1" set="null" expr="haxe.io.Bytes.ofString(CHARS)" line="30" static="1">
-			<c path="haxe.io.Bytes"/>
-			<meta><m n=":value"><e>haxe.io.Bytes.ofString(CHARS)</e></m></meta>
-		</BYTES>
-		<URL_CHARS public="1" set="null" expr="&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_&quot;" line="32" static="1">
-			<c path="String"/>
-			<meta><m n=":value"><e>"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"</e></m></meta>
-		</URL_CHARS>
-		<URL_BYTES public="1" set="null" expr="haxe.io.Bytes.ofString(URL_CHARS)" line="33" static="1">
-			<c path="haxe.io.Bytes"/>
-			<meta><m n=":value"><e>haxe.io.Bytes.ofString(URL_CHARS)</e></m></meta>
-		</URL_BYTES>
-		<encode public="1" set="method" line="35" static="1">
-			<f a="bytes:?complement" v=":true">
-				<c path="haxe.io.Bytes"/>
-				<x path="Bool"/>
-				<c path="String"/>
-			</f>
-			<meta><m n=":value"><e>{ complement : true }</e></m></meta>
-		</encode>
-		<decode public="1" set="method" line="48" static="1">
-			<f a="str:?complement" v=":true">
-				<c path="String"/>
-				<x path="Bool"/>
-				<c path="haxe.io.Bytes"/>
-			</f>
-			<meta><m n=":value"><e>{ complement : true }</e></m></meta>
-		</decode>
-		<urlEncode public="1" set="method" line="55" static="1">
-			<f a="bytes:?complement" v=":false">
-				<c path="haxe.io.Bytes"/>
-				<x path="Bool"/>
-				<c path="String"/>
-			</f>
-			<meta><m n=":value"><e>{ complement : false }</e></m></meta>
-		</urlEncode>
-		<urlDecode public="1" set="method" line="68" static="1">
-			<f a="str:?complement" v=":false">
-				<c path="String"/>
-				<x path="Bool"/>
-				<c path="haxe.io.Bytes"/>
-			</f>
-			<meta><m n=":value"><e>{ complement : false }</e></m></meta>
-		</urlDecode>
-		<haxe_doc>Allows one to encode/decode String and bytes using Base64 encoding.</haxe_doc>
-		<meta><m n=":directlyUsed"/></meta>
-	</class>
-	<class path="haxe.crypto.BaseCode" params="" file="/usr/share/haxe/std/haxe/crypto/BaseCode.hx">
-		<encode public="1" set="method" line="128" static="1"><f a="s:base">
-	<c path="String"/>
-	<c path="String"/>
-	<c path="String"/>
-</f></encode>
-		<decode public="1" set="method" line="133" static="1"><f a="s:base">
-	<c path="String"/>
-	<c path="String"/>
-	<c path="String"/>
-</f></decode>
-		<base><c path="haxe.io.Bytes"/></base>
-		<nbits><x path="Int"/></nbits>
-		<tbl><c path="Array"><x path="Int"/></c></tbl>
-		<encodeBytes public="1" set="method" line="44"><f a="b">
-	<c path="haxe.io.Bytes"/>
-	<c path="haxe.io.Bytes"/>
-</f></encodeBytes>
-		<initTable set="method" line="72"><f a=""><x path="Void"/></f></initTable>
-		<decodeBytes public="1" set="method" line="81"><f a="b">
-	<c path="haxe.io.Bytes"/>
-	<c path="haxe.io.Bytes"/>
-</f></decodeBytes>
-		<encodeString public="1" set="method" line="112"><f a="s">
-	<c path="String"/>
-	<c path="String"/>
-</f></encodeString>
-		<decodeString public="1" set="method" line="120"><f a="s">
-	<c path="String"/>
-	<c path="String"/>
-</f></decodeString>
-		<new public="1" set="method" line="33"><f a="base">
-	<c path="haxe.io.Bytes"/>
-	<x path="Void"/>
-</f></new>
-		<haxe_doc>Allows one to encode/decode String and bytes using a power of two base dictionary.</haxe_doc>
-		<meta><m n=":directlyUsed"/></meta>
 	</class>
 	<class path="haxe.crypto.Crc32" params="" file="/usr/share/haxe/std/haxe/crypto/Crc32.hx">
 		<make public="1" set="method" line="59" static="1">
@@ -13724,7 +12990,6 @@
 	See `Map` for documentation details.
 
 	@see https://haxe.org/manual/std-Map.html</haxe_doc>
-		<meta><m n=":directlyUsed"/></meta>
 	</class>
 	<class path="haxe.ds.List" params="T" file="/usr/share/haxe/std/haxe/ds/List.hx">
 		<h><c path="haxe.ds._List.ListNode"><c path="haxe.ds.List.T"/></c></h>
@@ -14942,6 +14207,248 @@
 			</f>
 			<meta><m n=":value"><e>{ pos : 0 }</e></m></meta>
 		</fromBytes>
+		<meta><m n=":directlyUsed"/></meta>
+	</class>
+	<class path="haxe.io.Bytes" params="" file="/usr/share/haxe/std/haxe/io/Bytes.hx">
+		<alloc public="1" set="method" line="549" static="1">
+			<f a="length">
+				<x path="Int"/>
+				<c path="haxe.io.Bytes"/>
+			</f>
+			<haxe_doc>Returns a new `Bytes` instance with the given `length`. The values of the
+		bytes are not initialized and may not be zero.</haxe_doc>
+		</alloc>
+		<ofString public="1" set="method" line="580" static="1">
+			<f a="s:?encoding">
+				<c path="String"/>
+				<e path="haxe.io.Encoding"/>
+				<c path="haxe.io.Bytes"/>
+			</f>
+			<haxe_doc>Returns the `Bytes` representation of the given `String`, using the
+		specified encoding (UTF-8 by default).</haxe_doc>
+		</ofString>
+		<ofData public="1" set="method" line="656" static="1">
+			<f a="b">
+				<t path="haxe.io.BytesData"/>
+				<c path="haxe.io.Bytes"/>
+			</f>
+			<haxe_doc>Returns the `Bytes` representation of the given `BytesData`.</haxe_doc>
+		</ofData>
+		<ofHex public="1" set="method" line="673" static="1">
+			<f a="s">
+				<c path="String"/>
+				<c path="haxe.io.Bytes"/>
+			</f>
+			<haxe_doc>Converts the given hexadecimal `String` to `Bytes`. `s` must be a string of
+		even length consisting only of hexadecimal digits. For example:
+		`"0FDA14058916052309"`.</haxe_doc>
+		</ofHex>
+		<fastGet public="1" get="inline" set="null" line="694" static="1">
+			<f a="b:pos">
+				<t path="haxe.io.BytesData"/>
+				<x path="Int"/>
+				<x path="Int"/>
+			</f>
+			<haxe_doc>Reads the `pos`-th byte of the given `b` bytes, in the most efficient way
+		possible. Behavior when reading outside of the available data is
+		unspecified.</haxe_doc>
+		</fastGet>
+		<length public="1" set="null"><x path="Int"/></length>
+		<b><t path="haxe.io.BytesData"/></b>
+		<get public="1" get="inline" set="null" line="45">
+			<f a="pos">
+				<x path="Int"/>
+				<x path="Int"/>
+			</f>
+			<haxe_doc>Returns the byte at index `pos`.</haxe_doc>
+		</get>
+		<set public="1" get="inline" set="null" line="64">
+			<f a="pos:v">
+				<x path="Int"/>
+				<x path="Int"/>
+				<x path="Void"/>
+			</f>
+			<haxe_doc>Stores the given byte `v` at the given position `pos`.</haxe_doc>
+		</set>
+		<blit public="1" set="method" line="90">
+			<f a="pos:src:srcpos:len">
+				<x path="Int"/>
+				<c path="haxe.io.Bytes"/>
+				<x path="Int"/>
+				<x path="Int"/>
+				<x path="Void"/>
+			</f>
+			<haxe_doc>Copies `len` bytes from `src` into this instance.
+		@param pos Zero-based location in `this` instance at which to start writing
+			bytes.
+		@param src Source `Bytes` instance from which to copy bytes.
+		@param srcpos Zero-based location at `src` from which bytes will be copied.
+		@param len Number of bytes to be copied.</haxe_doc>
+		</blit>
+		<fill public="1" set="method" line="132">
+			<f a="pos:len:value">
+				<x path="Int"/>
+				<x path="Int"/>
+				<x path="Int"/>
+				<x path="Void"/>
+			</f>
+			<haxe_doc>Sets `len` consecutive bytes starting from index `pos` of `this` instance
+		to `value`.</haxe_doc>
+		</fill>
+		<sub public="1" set="method" line="155">
+			<f a="pos:len">
+				<x path="Int"/>
+				<x path="Int"/>
+				<c path="haxe.io.Bytes"/>
+			</f>
+			<haxe_doc>Returns a new `Bytes` instance that contains a copy of `len` bytes of
+		`this` instance, starting at index `pos`.</haxe_doc>
+		</sub>
+		<compare public="1" set="method" line="194">
+			<f a="other">
+				<c path="haxe.io.Bytes"/>
+				<x path="Int"/>
+			</f>
+			<meta><m n=":has_untyped"/></meta>
+			<haxe_doc>Returns `0` if the bytes of `this` instance and the bytes of `other` are
+		identical.
+
+		Returns a negative value if the `length` of `this` instance is less than
+		the `length` of `other`, or a positive value if the `length` of `this`
+		instance is greater than the `length` of `other`.
+
+		In case of equal `length`s, returns a negative value if the first different
+		value in `other` is greater than the corresponding value in `this`
+		instance; otherwise returns a positive value.</haxe_doc>
+		</compare>
+		<getDouble public="1" set="method" line="246">
+			<f a="pos">
+				<x path="Int"/>
+				<x path="Float"/>
+			</f>
+			<haxe_doc>Returns the IEEE double-precision value at the given position `pos` (in
+		little-endian encoding). Result is unspecified if `pos` is outside the
+		bounds.</haxe_doc>
+		</getDouble>
+		<getFloat public="1" set="method" line="269">
+			<f a="pos">
+				<x path="Int"/>
+				<x path="Float"/>
+			</f>
+			<haxe_doc>Returns the IEEE single-precision value at the given position `pos` (in
+		little-endian encoding). Result is unspecified if `pos` is outside the
+		bounds.</haxe_doc>
+		</getFloat>
+		<setDouble public="1" set="method" line="292">
+			<f a="pos:v">
+				<x path="Int"/>
+				<x path="Float"/>
+				<x path="Void"/>
+			</f>
+			<haxe_doc>Stores the given IEEE double-precision value `v` at the given position
+		`pos` in little-endian encoding. Result is unspecified if writing outside
+		of bounds.</haxe_doc>
+		</setDouble>
+		<setFloat public="1" set="method" line="319">
+			<f a="pos:v">
+				<x path="Int"/>
+				<x path="Float"/>
+				<x path="Void"/>
+			</f>
+			<haxe_doc>Stores the given IEEE single-precision value `v` at the given position
+		`pos` in little-endian encoding. Result is unspecified if writing outside
+		of bounds.</haxe_doc>
+		</setFloat>
+		<getUInt16 public="1" get="inline" set="null" line="340">
+			<f a="pos">
+				<x path="Int"/>
+				<x path="Int"/>
+			</f>
+			<haxe_doc>Returns the 16-bit unsigned integer at the given position `pos` (in
+		little-endian encoding).</haxe_doc>
+		</getUInt16>
+		<setUInt16 public="1" get="inline" set="null" line="352">
+			<f a="pos:v">
+				<x path="Int"/>
+				<x path="Int"/>
+				<x path="Void"/>
+			</f>
+			<haxe_doc>Stores the given 16-bit unsigned integer `v` at the given position `pos`
+		(in little-endian encoding).</haxe_doc>
+		</setUInt16>
+		<getInt32 public="1" get="inline" set="null" line="365">
+			<f a="pos">
+				<x path="Int"/>
+				<x path="Int"/>
+			</f>
+			<haxe_doc>Returns the 32-bit integer at the given position `pos` (in little-endian
+		encoding).</haxe_doc>
+		</getInt32>
+		<getInt64 public="1" get="inline" set="null" line="383">
+			<f a="pos">
+				<x path="Int"/>
+				<x path="haxe.Int64"/>
+			</f>
+			<haxe_doc>Returns the 64-bit integer at the given position `pos` (in little-endian
+		encoding).</haxe_doc>
+		</getInt64>
+		<setInt32 public="1" get="inline" set="null" line="391">
+			<f a="pos:v">
+				<x path="Int"/>
+				<x path="Int"/>
+				<x path="Void"/>
+			</f>
+			<haxe_doc>Stores the given 32-bit integer `v` at the given position `pos` (in
+		little-endian encoding).</haxe_doc>
+		</setInt32>
+		<setInt64 public="1" get="inline" set="null" line="406">
+			<f a="pos:v">
+				<x path="Int"/>
+				<x path="haxe.Int64"/>
+				<x path="Void"/>
+			</f>
+			<haxe_doc>Stores the given 64-bit integer `v` at the given position `pos` (in
+		little-endian encoding).</haxe_doc>
+		</setInt64>
+		<getString public="1" set="method" line="415">
+			<f a="pos:len:?encoding">
+				<x path="Int"/>
+				<x path="Int"/>
+				<e path="haxe.io.Encoding"/>
+				<c path="String"/>
+			</f>
+			<haxe_doc>Returns the `len`-bytes long string stored at the given position `pos`,
+		interpreted with the given `encoding` (UTF-8 by default).</haxe_doc>
+		</getString>
+		<readString public="1" get="inline" set="null" line="495">
+			<f a="pos:len">
+				<x path="Int"/>
+				<x path="Int"/>
+				<c path="String"/>
+			</f>
+			<meta>
+				<m n=":deprecated"><e>"readString is deprecated, use getString instead"</e></m>
+				<m n=":noCompletion"/>
+			</meta>
+		</readString>
+		<toString public="1" set="method" line="502">
+			<f a=""><c path="String"/></f>
+			<haxe_doc>Returns a `String` representation of the bytes interpreted as UTF-8.</haxe_doc>
+		</toString>
+		<toHex public="1" set="method" line="524">
+			<f a=""><c path="String"/></f>
+			<haxe_doc>Returns a hexadecimal `String` representation of the bytes of `this`
+		instance.</haxe_doc>
+		</toHex>
+		<getData public="1" get="inline" set="null" line="541">
+			<f a=""><t path="haxe.io.BytesData"/></f>
+			<haxe_doc>Returns the bytes of `this` instance as `BytesData`.</haxe_doc>
+		</getData>
+		<new set="method" line="34"><f a="length:b">
+	<x path="Int"/>
+	<t path="haxe.io.BytesData"/>
+	<x path="Void"/>
+</f></new>
 		<meta><m n=":directlyUsed"/></meta>
 	</class>
 	<class path="haxe.io.BytesBuffer" params="" file="/usr/share/haxe/std/haxe/io/BytesBuffer.hx">
@@ -17081,7 +16588,6 @@
 			<x path="Int"/>
 			<c path="Array"><e path="haxe.zip.Huffman"/></c>
 		</NeedBits>
-		<meta><m n=":directlyUsed"/></meta>
 	</enum>
 	<class path="haxe.zip.HuffTools" params="" file="/usr/share/haxe/std/haxe/zip/Huffman.hx" module="haxe.zip.Huffman">
 		<treeDepth set="method" line="34"><f a="t">
@@ -17115,7 +16621,6 @@
 	<e path="haxe.zip.Huffman"/>
 </f></make>
 		<new public="1" set="method" line="32"><f a=""><x path="Void"/></f></new>
-		<meta><m n=":directlyUsed"/></meta>
 	</class>
 	<class path="haxe.zip._InflateImpl.Window" params="" file="/usr/share/haxe/std/haxe/zip/InflateImpl.hx" private="1" module="haxe.zip.InflateImpl">
 		<SIZE public="1" get="inline" set="null" expr="1 &lt;&lt; 15" line="29" static="1">
@@ -17147,7 +16652,6 @@
 	<x path="Bool"/>
 	<x path="Void"/>
 </f></new>
-		<meta><m n=":directlyUsed"/></meta>
 	</class>
 	<enum path="haxe.zip._InflateImpl.State" params="" file="/usr/share/haxe/std/haxe/zip/InflateImpl.hx" private="1" module="haxe.zip.InflateImpl">
 		<Head/>
@@ -17158,10 +16662,7 @@
 		<Dist/>
 		<DistOne/>
 		<Done/>
-		<meta>
-			<m n=":directlyUsed"/>
-			<m n=":flatEnum"/>
-		</meta>
+		<meta><m n=":flatEnum"/></meta>
 	</enum>
 	<class path="haxe.zip.InflateImpl" params="" file="/usr/share/haxe/std/haxe/zip/InflateImpl.hx">
 		<LEN_EXTRA_BITS_TBL expr="[0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0, -1, -1]" line="97" static="1">
@@ -17267,7 +16768,6 @@
 			<meta><m n=":value"><e>{ crc : true, header : true }</e></m></meta>
 		</new>
 		<haxe_doc>A pure Haxe implementation of the ZLIB Inflate algorithm which allows reading compressed data without any platform-specific support.</haxe_doc>
-		<meta><m n=":directlyUsed"/></meta>
 	</class>
 	<class path="haxe.zip.Tools" params="" file="/usr/share/haxe/std/haxe/zip/Tools.hx">
 		<compress public="1" set="method" line="26" static="1"><f a="f:level">
@@ -17307,7 +16807,6 @@
 	<x path="Int"/>
 	<x path="Void"/>
 </f></new>
-		<meta><m n=":directlyUsed"/></meta>
 	</class>
 	<class path="haxe.zip.Writer" params="" file="/usr/share/haxe/std/haxe/zip/Writer.hx">
 		<CENTRAL_DIRECTORY_RECORD_FIELDS_SIZE get="inline" set="null" expr="46" line="35" static="1">
