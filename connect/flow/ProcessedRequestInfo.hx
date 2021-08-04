@@ -1,9 +1,9 @@
 package connect.flow;
 
 import connect.logger.Logger;
-import connect.util.Util;
-import connect.util.Dictionary;
 import connect.models.IdModel;
+import connect.util.Dictionary;
+import connect.util.Masker;
 
 @:dox(hide)
 class ProcessedRequestInfo {
@@ -36,13 +36,13 @@ class ProcessedRequestInfo {
     }
 
     private static function requestToString(request:Null<IdModel>):String {
-        return (request != null)
-            ? Util.beautifyObject(
-                request.toObject(),
-                Env.getLogger().isCompact(),
-                Env.getLogger().getLevel() != Logger.LEVEL_DEBUG,
-                Env.getLogger().isBeautified())
-            : '';
+        if (request != null) {
+            return (Env.getLogger().getLevel() != Logger.LEVEL_DEBUG)
+                ? Masker.maskObject(request.toObject())
+                : haxe.Json.stringify(request.toObject());
+        } else {
+            return '';
+        }
     }
 
     private static function dataToString(data:Null<Dictionary>):String {

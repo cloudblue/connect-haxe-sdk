@@ -8,7 +8,7 @@ import connect.Env;
 import connect.logger.Logger;
 import connect.Flow;
 import connect.logger.LoggerConfig;
-import connect.logger.MarkdownLoggerFormatter;
+import connect.logger.PlainLoggerFormatter;
 import connect.models.AssetRequest;
 import connect.models.TierConfigRequest;
 import connect.models.Listing;
@@ -35,7 +35,7 @@ class FlowTest {
     public function setup() {
         Env._reset(new FlowApiClientMock());
         var maskedFields:Collection<String> = new Collection();
-        Env.initLogger(new LoggerConfig().handlers(new Collection<LoggerHandler>().push(new LoggerHandler(new MarkdownLoggerFormatter(),
+        Env.initLogger(new LoggerConfig().handlers(new Collection<LoggerHandler>().push(new LoggerHandler(new PlainLoggerFormatter(),
             new ArrayLoggerWriter())))
             .maskedFields(maskedFields));
         Env.initConfig("TESTAPIURL", "TESTAPIKEY", new Collection<String>().push("PRD-TEST-0001"));

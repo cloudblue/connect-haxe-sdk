@@ -2,10 +2,12 @@
     This file is part of the Ingram Micro CloudBlue Connect SDK.
     Copyright (c) 2019 Ingram Micro. All Rights Reserved.
 */
+
+import connect.Env;
 import connect.logger.Logger;
 import connect.logger.LoggerHandler;
 import connect.logger.LoggerConfig;
-import connect.logger.MarkdownLoggerFormatter;
+import connect.logger.PlainLoggerFormatter;
 import connect.models.AssetRequest;
 import connect.models.Asset;
 import connect.models.TierConfigRequest;
@@ -13,8 +15,8 @@ import connect.models.Listing;
 import connect.models.UsageFile;
 import connect.models.Model;
 import connect.models.ProductConfigurationParam;
-import connect.Env;
 import connect.util.Collection;
+import connect.util.Masker;
 import connect.util.Util;
 import haxe.Json;
 import massive.munit.Assert;
@@ -53,7 +55,7 @@ class LoggerTest {
             .push("\\{(.*?)\\}");
         final loggerConfiguration:LoggerConfig = new LoggerConfig()
             .handlers(new Collection<LoggerHandler>()
-                .push(new LoggerHandler(new MarkdownLoggerFormatter(), new ArrayLoggerWriter())));
+                .push(new LoggerHandler(new PlainLoggerFormatter(), new ArrayLoggerWriter())));
         loggerConfiguration.maskedFields(maskedFields);
         loggerConfiguration.maskedParams(maskedParams);
         loggerConfiguration.regexMasks(maskingRegex);
@@ -61,7 +63,7 @@ class LoggerTest {
     }
 
     @Test
-    public function setLevel() {
+    public function testSetLevel() {
         var logConfig:LoggerConfig = new LoggerConfig();
         logConfig.level(Logger.LEVEL_ERROR);
         Assert.areEqual(Logger.LEVEL_ERROR, logConfig.level_);
@@ -86,7 +88,7 @@ class LoggerTest {
 
     @Test
     public function testMaskDataInObj() {
-        final maskedInfo = Util.beautify(dataTestMaskDataInObj, false, true, false);
+        final maskedInfo = Masker.maskString(dataTestMaskDataInObj);
         final result = Helper.sortObject(Json.parse(maskedInfo));
         final expected = Helper.sortObject(Json.parse(resultTestMaskDataInObj));
         Assert.areEqual(Json.stringify(expected), Json.stringify(result));
@@ -94,7 +96,7 @@ class LoggerTest {
 
     @Test
     public function testMaskDataInList() {
-        final maskedList: Array<Dynamic> = Json.parse(Util.beautify(dataTestMaskDataInList, false, true, false));
+        final maskedList: Array<Dynamic> = Json.parse(Masker.maskString(dataTestMaskDataInList));
         final expectedList: Array<Dynamic> = Json.parse(resultTestMaskDataInList);
         Assert.areEqual(expectedList.length, maskedList.length);
         for (i in 0...maskedList.length) {
@@ -106,13 +108,13 @@ class LoggerTest {
 
     @Test
     public function testMaskDataInText() {
-        final maskedInfo = Util.beautify(dataTestMaskDataInText, false, true, false);
+        final maskedInfo = Masker.maskString(dataTestMaskDataInText);
         Assert.areEqual(resultTestMaskDataInText, maskedInfo);
     }
     
     @Test
     public function testMaskNoDataInText() {
-        final unMaskedInfo = Util.beautify(dataTestNoMaskDataInText, false, true, false);
+        final unMaskedInfo = Masker.maskString(dataTestNoMaskDataInText);
         Assert.areEqual(dataTestNoMaskDataInText,unMaskedInfo);
     }
 
@@ -134,7 +136,7 @@ class LoggerTest {
         }));
 
         final expected = Helper.sortStringObject(AssetRequest, '{"asset":{"params":[{"id":"my_param","value":"********"},{"id":"other_param","value":"other_value"}]}}');
-        final result = Helper.sortStringObject(AssetRequest, Util.beautify(request.toString(), false, true, false));
+        final result = Helper.sortStringObject(AssetRequest, Masker.maskString(request.toString()));
         Assert.areEqual(expected, result);
     }
 
@@ -158,7 +160,7 @@ class LoggerTest {
         }));
 
         final expected = Helper.sortStringObject(AssetRequest, '{"asset":{"params":[{"type":"password","id":"one_param","value":"********"},{"id":"other_param","value":"other_value"}]}}');
-        final result = Helper.sortStringObject(AssetRequest, Util.beautify(request.toString(), false, true, false));
+        final result = Helper.sortStringObject(AssetRequest, Masker.maskString(request.toString()));
         Assert.areEqual(expected, result);
     }
 
@@ -173,7 +175,7 @@ class LoggerTest {
         }));
 
         final expected = Helper.sortStringObject(ProductConfigurationParam, '{"parameter": {"id": "my_param", "value": "*******************"}, "value": "*******************"}');
-        final result = Helper.sortStringObject(ProductConfigurationParam, Util.beautify(config.toString(), false, true, false));
+        final result = Helper.sortStringObject(ProductConfigurationParam, Masker.maskString(config.toString()));
         Assert.areEqual(expected, result);
     }
 
@@ -182,22 +184,22 @@ class LoggerTest {
         final request = Model.parse(AssetRequest, Json.stringify({
             asset: {
                 connection: {
-                        provider: {
-                            id: 'PROVIDER_ID'
-                        },
-                        hub: {
-                            id: 'HUB_ID'
-                        }
-                        
+                    provider: {
+                        id: 'PROVIDER_ID'
                     },
-                    product: {
-                        id: 'PRODUCT_ID'
-                    },
-                    tiers: {
-                        customer: {
-                            id: 'CUSTOMER_ID'
-                        }
+                    hub: {
+                        id: 'HUB_ID'
                     }
+                    
+                },
+                product: {
+                    id: 'PRODUCT_ID'
+                },
+                tiers: {
+                    customer: {
+                        id: 'CUSTOMER_ID'
+                    }
+                }
             },
             marketplace: {
                 id: 'MARKETPLACE_ID'
@@ -213,23 +215,22 @@ class LoggerTest {
         final request = Model.parse(TierConfigRequest, Json.stringify({
             configuration: {
                 connection: {
-                        provider: {
-                            id: 'PROVIDER_ID'
-                        },
-                        hub: {
-                            id: 'HUB_ID'
-                        }
-                        
+                    provider: {
+                        id: 'PROVIDER_ID'
                     },
-                    product: {
-                        id: 'PRODUCT_ID'
-                    },
-                    account: {
-                            id: 'CUSTOMER_ID'
-                    },
-                    marketplace: {
-                        id: 'MARKETPLACE_ID'
+                    hub: {
+                        id: 'HUB_ID'
                     }
+                },
+                product: {
+                    id: 'PRODUCT_ID'
+                },
+                account: {
+                    id: 'CUSTOMER_ID'
+                },
+                marketplace: {
+                    id: 'MARKETPLACE_ID'
+                }
             }
         }
         ));
@@ -241,14 +242,14 @@ class LoggerTest {
     public function testSetFilenameFromAsset() {
         final request = Model.parse(Asset, Json.stringify({
             connection: {
-                        provider: {
-                            id: 'PROVIDER_ID'
-                        },
-                        hub: {
-                            id: 'HUB_ID'
-                        }
-                        
-                    },
+                provider: {
+                    id: 'PROVIDER_ID'
+                },
+                hub: {
+                    id: 'HUB_ID'
+                }
+                
+            },
             product: {
                 id: 'PRODUCT_ID'
             },
@@ -270,12 +271,12 @@ class LoggerTest {
     public function testSetFilenameFromListingRequest() {
         final request = Model.parse(Listing, Json.stringify({
             provider: {
-                    id: 'PROVIDER_ID'
+                id: 'PROVIDER_ID'
             },
-           contract:{
-                    marketplace: {
-                        id: 'MARKETPLACE_ID'
-                    }
+           contract: {
+                marketplace: {
+                    id: 'MARKETPLACE_ID'
+                }
             }
         }
         ));
@@ -287,7 +288,7 @@ class LoggerTest {
     public function testSetFilenameFromUsageRequest() {
         final request = Model.parse(UsageFile, Json.stringify({
             provider: {
-                    id: 'PROVIDER_ID'
+                id: 'PROVIDER_ID'
             },
             marketplace: {
                 id: 'MARKETPLACE_ID'

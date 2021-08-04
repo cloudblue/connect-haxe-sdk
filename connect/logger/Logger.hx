@@ -18,13 +18,13 @@ import connect.util.Util;
     This class is used to log events to a file and the output console.
 **/
 class Logger extends Base {
-    /** Only writes compact error level messages. **/
+    /** Only writes error level messages. **/
     public static final LEVEL_ERROR = 0;
 
-    /** Only writes compact error & warning level messages. **/
+    /** Only writes error & warning level messages. **/
     public static final LEVEL_WARNING = 1;
 
-    /** Only writes compact error & info level messages. **/
+    /** Only writes error & info level messages. **/
     public static final LEVEL_INFO = 2;
 
     /** Writes detailed messages of all levels. Masking of sensitive data is disabled in this level. **/
@@ -37,10 +37,8 @@ class Logger extends Base {
     private final maskedFields:Collection<String>;
     private final maskedParams:Collection<String>;
     private final regexMaskingList:Collection<EReg>;
-    private final compact:Bool;
-    private final beautify:Bool;
     private var defaultFilename:String;
-    private final initialConfig: LoggerConfig;
+    private final initialConfig:LoggerConfig;
 
     /**
         Creates a new Logger object. You don't normally create objects of this class,
@@ -57,8 +55,6 @@ class Logger extends Base {
         this.maskedParams = config.maskedParams_.copy();
         this.regexMaskingList = config.regexMaskingList_.copy();
         if (this.maskedFields.indexOf('Authorization') == -1) this.maskedFields.push('Authorization');
-        this.beautify = config.beautify_;
-        this.compact = (this.level != LEVEL_DEBUG) ? config.compact_ : false;
         this.defaultFilename = null;
     }
 
@@ -82,19 +78,20 @@ class Logger extends Base {
 
     /**
      * @return Bool Whether the logs are written in beautified format (this is,
-     * for JSON objects use new lines and two space indentation).
+     * for JSON objects use new lines and two space indentation). This method
+     * is deprecated and always returns false.
      */
     public function isBeautified(): Bool {
-        return this.beautify;
+        return false;
     }
 
     /**
      * @return Bool Whether the logs are written in compact format (this is,
      * for JSON objects only print key names or, if it has an 'id' field,
-     * only the id)..
+     * only the id). This method is deprecated and always returns false.
      */
     public function isCompact(): Bool {
-        return this.compact;
+        return false;
     }
 
     /**
@@ -136,7 +133,7 @@ class Logger extends Base {
         final defaultProduct = 'product';
         final defaultTierAccount = 'tierAccount';
 
-        if(Std.isOfType(request, Asset)){
+        if (Std.isOfType(request, Asset)) {
             final asset = cast(request, Asset);
             final provider = asset.connection.provider != null ? asset.connection.provider.id : defaultProvider;
             final hub = asset.connection.hub != null ? asset.connection.hub.id : defaultHub;
@@ -146,7 +143,7 @@ class Logger extends Base {
             this.setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
         }
 
-        if(Std.isOfType(request, AssetRequest)){
+        if (Std.isOfType(request, AssetRequest)) {
             final assetRequest = cast(request, AssetRequest);
             final provider = assetRequest.asset.connection.provider != null ? assetRequest.asset.connection.provider.id : defaultProvider;
             final hub = assetRequest.asset.connection.hub != null ? assetRequest.asset.connection.hub.id : defaultHub;
@@ -156,30 +153,29 @@ class Logger extends Base {
             this.setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
         }
 
-        if(Std.isOfType(request, TierConfigRequest)){
+        if (Std.isOfType(request, TierConfigRequest)) {
             final tierRequest = cast(request, TierConfigRequest);
             final provider = tierRequest.configuration.connection.provider != null ? tierRequest.configuration.connection.provider.id : defaultProvider;
             final hub = tierRequest.configuration.connection.hub != null ? tierRequest.configuration.connection.hub.id : defaultHub;
             final marketplace = tierRequest.configuration.marketplace != null ? tierRequest.configuration.marketplace.id : defaultMarketplace;
             final product = tierRequest.configuration.product != null ? tierRequest.configuration.product.id : defaultProduct;
             final tierAccount = tierRequest.configuration.account != null ? tierRequest.configuration.account.id : defaultTierAccount;
-            this.setFilename('$provider/$hub/$marketplace/$product/$tierAccount');        }
+            this.setFilename('$provider/$hub/$marketplace/$product/$tierAccount');
+        }
 
-
-        if(Std.isOfType(request, Listing)){
+        if (Std.isOfType(request, Listing)) {
             final listingRequest = cast(request, Listing);
             final provider = listingRequest.provider != null ? listingRequest.provider.id : defaultProvider;
             final marketplace = listingRequest.contract.marketplace != null ? listingRequest.contract.marketplace.id : defaultMarketplace;
             this.setFilename('usage/$provider/$marketplace');
         }
 
-        if(Std.isOfType(request, UsageFile)){
+        if (Std.isOfType(request, UsageFile)) {
             final usageRequest = cast(request, UsageFile);
             final provider = usageRequest.provider != null ? usageRequest.provider.id : defaultProvider;
             final marketplace = usageRequest.marketplace.id != null ? usageRequest.marketplace.id : defaultMarketplace;
             this.setFilename('usage/$provider/$marketplace');
         }
-        
     }
 
 
@@ -379,9 +375,7 @@ class Logger extends Base {
             .level(this.level)
             .handlers(handlers)
             .maskedFields(this.maskedFields)
-            .maskedParams(this.maskedParams)
-            .beautify(this.beautify)
-            .compact(this.compact);
+            .maskedParams(this.maskedParams);
         final logger = new Logger(config);
         Reflect.setField(logger, 'sections', this.sections.copy());
         Reflect.setField(logger, 'regexMaskingList', this.regexMaskingList.copy());

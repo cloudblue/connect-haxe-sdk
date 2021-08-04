@@ -11,7 +11,6 @@ import ConversationTest;
 import AssetTest;
 import ModelTest;
 import TierConfigRequestTest;
-import MarkdownLoggerFormatterTest;
 import UsageFileTest;
 import DateTimeTest;
 import AssetRequestTest;
@@ -49,7 +48,6 @@ class TestSuite extends massive.munit.TestSuite
 		add(AssetTest);
 		add(ModelTest);
 		add(TierConfigRequestTest);
-		add(MarkdownLoggerFormatterTest);
 		add(UsageFileTest);
 		add(DateTimeTest);
 		add(AssetRequestTest);

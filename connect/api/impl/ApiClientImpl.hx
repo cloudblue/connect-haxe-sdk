@@ -9,6 +9,7 @@ import connect.logger.Logger;
 import connect.util.Blob;
 import connect.util.Collection;
 import connect.util.Dictionary;
+import connect.util.Masker;
 import connect.util.Util;
 #if !js
 import haxe.io.BytesInput;
@@ -301,28 +302,20 @@ class ApiClientImpl extends Base implements IApiClient {
     }
 
     private static function maskHeaders(headers: Dictionary): Dictionary {
-        return Dictionary.fromObject(Util.maskFields(headers.toObject()));
+        return Dictionary.fromObject(Masker.maskFields(headers.toObject()));
     }
 
     private static function getFormattedData(data: String, title: String, fmt: ILoggerFormatter)
             : String {
-        final compact = Env.getLogger().getLevel() != Logger.LEVEL_DEBUG;
         if (Util.isJson(data)) {
-            final prefix = compact ? '$title (compact): ' : '$title:\n';
-            final block = fmt.formatCodeBlock(
-                Env.getLogger().getLevel(),
-                Util.beautify(
-                    data,
-                    Env.getLogger().isCompact(),
-                    Env.getLogger().getLevel() != Logger.LEVEL_DEBUG,
-                    Env.getLogger().isBeautified()),
-                'json');
+            final maskedData = (Env.getLogger().getLevel() != Logger.LEVEL_DEBUG)
+                ? Masker.maskString(data)
+                : data;
+            final prefix = '$title:\n';
+            final block = fmt.formatCodeBlock(Env.getLogger().getLevel(), maskedData, 'json');
             return '$prefix$block';
         } else {
-            final fixedBody = compact
-                ? StringTools.lpad(data.substr(data.length - 4), '*', data.length)
-                : data;
-            return '$title: $fixedBody';
+            return '$title: $data';
         }
     }
 
