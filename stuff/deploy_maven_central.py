@@ -1,5 +1,5 @@
-# This file is part of the Ingram Micro CloudBlue Connect SDK.
-# Copyright (c) 2019 Ingram Micro. All Rights Reserved.
+# This file is part of the CloudBlue Connect SDK.
+# Copyright (c) 2025 CloudBlue. All Rights Reserved.
 
 # Developed following the instructions here:
 # https://support.sonatype.com/hc/en-us/articles/213465868?_ga=2.230043868.1594253912.1579542012-1885361292.1578410493

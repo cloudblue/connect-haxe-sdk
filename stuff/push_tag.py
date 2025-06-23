@@ -1,5 +1,5 @@
-# This file is part of the Ingram Micro CloudBlue Connect SDK.
-# Copyright (c) 2019 Ingram Micro. All Rights Reserved.
+# This file is part of the CloudBlue Connect SDK.
+# Copyright (c) 2025 CloudBlue. All Rights Reserved.
 
 # This script will push a tag to the main repository whenever a push to master has been made
 # and the value in the VERSION file does not match any tag in the repository.
