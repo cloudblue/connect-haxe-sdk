@@ -1,5 +1,5 @@
-# This file is part of the Ingram Micro CloudBlue Connect SDK.
-# Copyright (c) 2019 Ingram Micro. All Rights Reserved.
+# This file is part of the CloudBlue Connect SDK.
+# Copyright (c) 2025 CloudBlue. All Rights Reserved.
 
 from connect import Env
 from connect import Flow
